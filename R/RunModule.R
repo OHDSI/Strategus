@@ -51,6 +51,8 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   script <- "
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
+    jobContext$moduleExecutionSettings$connectionDetails <- Strategus::retrieveConnectionDetails(jobContext$moduleExecutionSettings$connectionDetailsReference)
+
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
     ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
 
@@ -58,7 +60,6 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
 
     ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
     ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)
-
   "
   script <- gsub("jobContextFileName", sprintf("\"%s\"", jobContextFileName), script)
   tempScriptFile <- tempfile(fileext = ".R")
