@@ -1,6 +1,6 @@
 Package: Strategus
 Type: Package
-Title: Coordinating and executing analytics using HADES modules.
+Title: Coordinating and Executing Analytics Using HADES Modules.
 Version: 0.0.1
 Date: 2022-03-25
 Authors@R: c(
@@ -9,7 +9,6 @@ Authors@R: c(
 Maintainer: Martijn Schuemie <schuemie@ohdsi.org>
 Description: An R package for coordinating and executing analytics using HADES modules.
 License: Apache License 2.0
-VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
@@ -23,7 +22,8 @@ Imports:
 	DatabaseConnector,
 	dplyr,
 	checkmate,
-	keyring
+	keyring,
+	rlang
 Suggests:
 	testthat
 Remotes:
