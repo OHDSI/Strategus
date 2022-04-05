@@ -51,7 +51,10 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   script <- "
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
-    jobContext$moduleExecutionSettings$connectionDetails <- Strategus::retrieveConnectionDetails(jobContext$moduleExecutionSettings$connectionDetailsReference)
+    connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
+    connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
+    connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+    jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
 
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
     ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
@@ -105,6 +108,12 @@ instantiateModule <- function(module, version, moduleFolder) {
 
   script <- "
     renv::restore(prompt = FALSE)
+    if (!require('ParallelLogger', quietly = TRUE)) {
+      install.packages('ParallelLogger')
+    }
+    if (!require('keyring', quietly = TRUE)) {
+      install.packages('keyring')
+    }
   "
   tempScriptFile <- tempfile(fileext = ".R")
   fileConn<-file(tempScriptFile)

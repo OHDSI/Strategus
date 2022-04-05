@@ -45,6 +45,7 @@ ParallelLogger::saveSettingsToJson(executionSettings, "extras/testExecutionSetti
 
 # Note: this environmental variable should be set once for each compute node
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "c:/temp/StrategusInstantiatedModules")
+unlink("_targets", recursive = TRUE)
 
 execute(analysisSpecifications = analysisSpecifications,
         executionSettings = executionSettings)
