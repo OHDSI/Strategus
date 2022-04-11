@@ -4,7 +4,7 @@
 \alias{execute}
 \title{Execute analysis specifications.}
 \usage{
-execute(analysisSpecifications, executionSettings)
+execute(analysisSpecifications, executionSettings, executionFolder = NULL)
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
@@ -12,6 +12,10 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 
 \item{executionSettings}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createExecutionSettings]{createExecutionSettings()}}.}
+
+\item{executionFolder}{Optional: the path to use for storing the execution script.
+when NULL, this function will use a temporary
+file location to create the script to execute.}
 }
 \value{
 Does not return anything. Is called for the side-effect of executing the specified
