@@ -34,6 +34,25 @@ createEmptyAnalysisSpecificiations <- function() {
   return(analysisSpecifications)
 }
 
+#' Add shared resources to analysis specifications
+#'
+#' @param analysisSpecifications An object of type `AnalysisSpecifications` as created
+#'                               by [createEmptyAnalysisSpecificiations()].
+#' @param sharedResources   An object of type `SharedResources`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addSharedResources <- function(analysisSpecifications, sharedResources) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
+  checkmate::assertClass(sharedResources, "SharedResources", add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  analysisSpecifications$sharedResources[[length(analysisSpecifications$sharedResources) + 1]] <- sharedResources
+  return(analysisSpecifications)
+}
 
 #' Add module specifications to analysis specifications
 #'

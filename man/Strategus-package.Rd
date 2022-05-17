@@ -4,7 +4,7 @@
 \name{Strategus-package}
 \alias{Strategus}
 \alias{Strategus-package}
-\title{Strategus: Coordinating and executing analytics using HADES modules.}
+\title{Strategus: Coordinating and Executing Analytics Using HADES Modules.}
 \description{
 An R package for coordinating and executing analytics using HADES modules.
 }

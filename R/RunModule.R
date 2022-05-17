@@ -27,7 +27,9 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
 
   module <- moduleSpecification$module
   version <- moduleSpecification$version
-  moduleFolder <- ensureModuleInstantiated(module, version)
+  remoteRepo <- moduleSpecification$remoteRepo
+  remoteUsername <- moduleSpecification$remoteUsername
+  moduleFolder <- ensureModuleInstantiated(module, version, remoteRepo, remoteUsername)
 
    # Create job context
   moduleExecutionSettings <- executionSettings
@@ -77,19 +79,19 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   return(list(dummy = 123))
 }
 
-ensureModuleInstantiated <- function(module, version) {
+ensureModuleInstantiated <- function(module, version, remoteRepo, remoteUsername) {
   instantiatedModulesFolder <- Sys.getenv("INSTANTIATED_MODULES_FOLDER")
   if (!dir.exists(instantiatedModulesFolder)) {
     dir.create(instantiatedModulesFolder, recursive = TRUE)
   }
-  moduleFolder <- file.path(instantiatedModulesFolder, sprintf("%s_v%s", module, version))
+  moduleFolder <- file.path(instantiatedModulesFolder, sprintf("%s_%s", module, version))
   if (!dir.exists(moduleFolder)) {
-    instantiateModule(module, version, moduleFolder)
+    instantiateModule(module, version, remoteRepo, remoteUsername, moduleFolder)
   }
   return(moduleFolder)
 }
 
-instantiateModule <- function(module, version, moduleFolder) {
+instantiateModule <- function(module, version, remoteRepo, remoteUsername, moduleFolder) {
   # todo: make sure folder is deleted if instantiation fails
   dir.create(moduleFolder)
 
@@ -103,7 +105,21 @@ instantiateModule <- function(module, version, moduleFolder) {
     dir.create(file.path(moduleFolder, "renv"))
     file.copy("extras/TestModules/TestModule1/renv/activate.R", file.path(moduleFolder, "renv"), recursive = TRUE)
   } else {
-    # todo: get module (from GitHub)
+    moduleFile <- file.path(moduleFolder, sprintf("%s_%s.zip", module, version))
+    moduleUrl <- sprintf("https://%s/%s/%s/archive/refs/tags/%s.zip", remoteRepo, remoteUsername, module, version)
+    utils::download.file(url = moduleUrl, destfile = moduleFile)
+    utils::unzip(zipfile = moduleFile, exdir = moduleFolder)
+    # At this point, the unzipped folders will likely exist in a sub folder.
+    # Move all files from that sub folder to the main module folder
+    subFolders <- list.dirs(path = moduleFolder, recursive = FALSE)
+    if (length(subFolders) > 0) {
+      for (i in 1:length(subFolders)) {
+        R.utils::copyDirectory(from = subFolders[i],
+                               to = moduleFolder,
+                               recursive = TRUE)
+        unlink(subFolders[i])
+      }
+    }
   }
 
   script <- "

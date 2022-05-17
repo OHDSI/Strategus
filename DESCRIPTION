@@ -23,7 +23,9 @@ Imports:
 	dplyr,
 	checkmate,
 	keyring,
-	rlang
+	rlang,
+	utils,
+	R.utils
 Suggests:
 	testthat
 Remotes:

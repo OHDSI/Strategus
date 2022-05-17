@@ -27,6 +27,9 @@
 #'                                by [createEmptyAnalysisSpecificiations()].
 #' @param executionSettings       An object of type `ExecutionSettings` as created
 #'                                by [createExecutionSettings()].
+#' @param executionFolder         Optional: the path to use for storing the execution script.
+#'                                when NULL, this function will use a temporary
+#'                                file location to create the script to execute.
 #'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified
@@ -34,19 +37,28 @@
 #'
 #' @export
 execute <- function(analysisSpecifications,
-                    executionSettings) {
+                    executionSettings,
+                    executionFolder = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  tempSettingsFolder <- tempfile("strategusTempSettings")
-  dir.create(tempSettingsFolder)
-  on.exit(unlink(tempSettingsFolder, recursive = TRUE))
+  if (is.null(executionFolder)) {
+    executionFolder <- tempfile("strategusTempSettings")
+    dir.create(executionFolder)
+    on.exit(unlink(executionFolder, recursive = TRUE))
+  } else {
+    if (dir.exists(executionFolder)) {
+      unlink(executionFolder, recursive = TRUE)
+    }
+    dir.create(executionFolder)
+  }
 
   fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,
                                     executionSettings = executionSettings,
-                                    tempSettingsFolder = tempSettingsFolder)
+                                    tempSettingsFolder = executionFolder)
+
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
   targets::tar_make(script = fileName)
