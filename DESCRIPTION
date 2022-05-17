@@ -24,7 +24,8 @@ Imports:
 	keyring,
 	rlang,
 	utils,
-	R.utils
+	R.utils,
+	digest
 Suggests:
 	testthat
 Remotes:
