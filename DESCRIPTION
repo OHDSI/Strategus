@@ -1,6 +1,6 @@
 Package: Strategus
 Type: Package
-Title: Coordinating and Executing Analytics Using HADES Modules.
+Title: Coordinating and Executing Analytics Using HADES Modules
 Version: 0.0.1
 Date: 2022-03-25
 Authors@R: c(
@@ -19,7 +19,6 @@ Imports:
 	targets,
 	renv,
 	ParallelLogger,
-	DatabaseConnector,
 	dplyr,
 	checkmate,
 	keyring,
