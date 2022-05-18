@@ -106,7 +106,7 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     file.copy("extras/TestModules/TestModule1/renv/activate.R", file.path(moduleFolder, "renv"), recursive = TRUE)
   } else {
     moduleFile <- file.path(moduleFolder, sprintf("%s_%s.zip", module, version))
-    moduleUrl <- sprintf("https://%s/%s/%s/archive/refs/tags/%s.zip", remoteRepo, remoteUsername, module, version)
+    moduleUrl <- sprintf("https://%s/%s/%s/archive/refs/tags/v%s.zip", remoteRepo, remoteUsername, module, version)
     utils::download.file(url = moduleUrl, destfile = moduleFile)
     utils::unzip(zipfile = moduleFile, exdir = moduleFolder)
     # At this point, the unzipped folders will likely exist in a sub folder.

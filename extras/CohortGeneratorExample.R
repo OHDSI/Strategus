@@ -7,7 +7,7 @@ library(dplyr)
 # Note: maybe this function should live in the module?
 createCohortGeneratorModuleSpecifications <- function() {
   specifications <- list(module = "CohortGeneratorModule",
-                         version = "v0.0.4",
+                         version = "0.0.4",
                          remoteRepo = "github.com",
                          remoteUsername = "anthonysena",
                          settings = list(incremental = TRUE,
