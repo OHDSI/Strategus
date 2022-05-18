@@ -1,0 +1,17 @@
+{
+  "connectionDetailsReference": "Eunomia",
+  "workDatabaseSchema": "main",
+  "cdmDatabaseSchema": "main",
+  "cohortTableNames": {
+    "cohortTable": "strategus_test",
+    "cohortInclusionTable": "strategus_test_inclusion",
+    "cohortInclusionResultTable": "strategus_test_inclusion_result",
+    "cohortInclusionStatsTable": "strategus_test_inclusion_stats",
+    "cohortSummaryStatsTable": "strategus_test_summary_stats",
+    "cohortCensorStatsTable": "strategus_test_censor_stats"
+  },
+  "workFolder": "c:/temp/strategusWork",
+  "resultsFolder": "c:/temp/strategusOutput",
+  "minCellCount": 5,
+  "attr_class": "ExecutionSettings"
+}
