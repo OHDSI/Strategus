@@ -31,25 +31,30 @@ createDatabaseMetaData <- function(executionSettings) {
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
-  sql <- "SELECT * FROM @cdm_database_schema.cdm_source;"
+  sql <- "SELECT TOP 1 * FROM @cdm_database_schema.cdm_source;"
   cdmSource <- renderTranslateQuerySql(connection = connection,
                                        sql = sql,
                                        snakeCaseToCamelCase = TRUE,
-                                       cdm_database_schema = executionSettings$cdmDatabaseSchema) %>%
-    head(1)
+                                       cdm_database_schema = executionSettings$cdmDatabaseSchema)
 
-  sql <- "SELECT MIN(observation_period_start_date) as min_observation_period_start,
-   MAX(observation_period_end_date) as max_observation_period_end
+  sql <- "SELECT TOP 1 vocabulary_version  FROM @cdm_database_schema.vocabulary WHERE vocabulary_id = 'None';"
+  vocabVersion <- renderTranslateQuerySql(connection = connection,
+                                          sql = sql,
+                                          snakeCaseToCamelCase = TRUE,
+                                          cdm_database_schema = executionSettings$cdmDatabaseSchema)
+
+  sql <- "SELECT MAX(observation_period_end_date) as max_obs_period_end_date
   FROM @cdm_database_schema.observation_period;"
-  observationPeriodMinMax <- renderTranslateQuerySql(connection = connection,
-                                                     sql = sql,
-                                                     snakeCaseToCamelCase = TRUE,
-                                                     cdm_database_schema = executionSettings$cdmDatabaseSchema)
+  observationPeriodMax <- renderTranslateQuerySql(connection = connection,
+                                                  sql = sql,
+                                                  snakeCaseToCamelCase = TRUE,
+                                                  cdm_database_schema = executionSettings$cdmDatabaseSchema)
 
   databaseId <- digest::digest2int(paste(cdmSource$cdmSourceName, cdmSource$cdmReleaseDate))
   database <- cdmSource %>%
-    mutate(databaseId = !!databaseId) %>%
-    bind_cols(observationPeriodMinMax)
+    mutate(vocabularyVersion = vocabVersion$vocabularyVersion,
+           databaseId = !!databaseId) %>%
+    bind_cols(observationPeriodMax)
 
   # TODO: use shared code for exporting CSV files:
   database %>%

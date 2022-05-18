@@ -55,6 +55,8 @@ execute <- function(analysisSpecifications,
     dir.create(executionFolder)
   }
 
+  executionSettings$databaseId <- createDatabaseMetaData(executionSettings)
+
   fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,
                                     executionSettings = executionSettings,
                                     tempSettingsFolder = executionFolder)
