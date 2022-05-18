@@ -59,6 +59,10 @@ createDatabaseMetaData <- function(executionSettings) {
   # TODO: use shared code for exporting CSV files:
   database %>%
     SqlRender::camelCaseToSnakeCaseNames() %>%
-    readr::write_csv(file.path(databaseFolder, "database.csv"))
+    readr::write_csv(file.path(databaseFolder, "database_meta_data.csv"))
+
+  resultsDataModel <- readr::read_csv(file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
+                                      show_col_types = FALSE)
+  readr::write_csv(resultsDataModel, file.path(databaseFolder, "resultsDataModelSpecification.csv"))
   return(databaseId)
 }
