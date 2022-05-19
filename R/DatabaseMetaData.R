@@ -22,9 +22,9 @@
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
 createDatabaseMetaData <- function(executionSettings) {
-  databaseFolder <- file.path(executionSettings$resultsFolder, "Database")
-  if (!dir.exists(databaseFolder)) {
-    dir.create(databaseFolder, recursive = TRUE)
+  databaseMetaDataFolder <- file.path(executionSettings$resultsFolder, "DatabaseMetaData")
+  if (!dir.exists(databaseMetaDataFolder)) {
+    dir.create(databaseMetaDataFolder, recursive = TRUE)
   }
 
   connectionDetails <- retrieveConnectionDetails(executionSettings$connectionDetailsReference)
@@ -59,10 +59,10 @@ createDatabaseMetaData <- function(executionSettings) {
   # TODO: use shared code for exporting CSV files:
   database %>%
     SqlRender::camelCaseToSnakeCaseNames() %>%
-    readr::write_csv(file.path(databaseFolder, "database_meta_data.csv"))
+    readr::write_csv(file.path(databaseMetaDataFolder, "database_meta_data.csv"))
 
   resultsDataModel <- readr::read_csv(file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
                                       show_col_types = FALSE)
-  readr::write_csv(resultsDataModel, file.path(databaseFolder, "resultsDataModelSpecification.csv"))
+  readr::write_csv(resultsDataModel, file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"))
   return(databaseId)
 }

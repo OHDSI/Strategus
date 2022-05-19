@@ -23,11 +23,10 @@
 
 #' Execute analysis specifications.
 #'
-#' @param analysisSpecifications  An object of type `AnalysisSpecifications` as created
-#'                                by [createEmptyAnalysisSpecificiations()].
+#' @template AnalysisSpecifications
 #' @param executionSettings       An object of type `ExecutionSettings` as created
 #'                                by [createExecutionSettings()].
-#' @param executionFolder         Optional: the path to use for storing the execution script.
+#' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
 #'
@@ -38,39 +37,43 @@
 #' @export
 execute <- function(analysisSpecifications,
                     executionSettings,
-                    executionFolder = NULL) {
+                    executionScriptFolder = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  if (is.null(executionFolder)) {
-    executionFolder <- tempfile("strategusTempSettings")
-    dir.create(executionFolder)
-    on.exit(unlink(executionFolder, recursive = TRUE))
+  modules <- ensureAllModulesInstantiated(analysisSpecifications)
+
+  if (is.null(executionScriptFolder)) {
+    executionScriptFolder <- tempfile("strategusTempSettings")
+    dir.create(executionScriptFolder)
+    on.exit(unlink(executionScriptFolder, recursive = TRUE))
   } else {
-    if (dir.exists(executionFolder)) {
-      unlink(executionFolder, recursive = TRUE)
+    if (dir.exists(executionScriptFolder)) {
+      unlink(executionScriptFolder, recursive = TRUE)
     }
-    dir.create(executionFolder)
+    dir.create(executionScriptFolder)
   }
 
   executionSettings$databaseId <- createDatabaseMetaData(executionSettings)
+  dependencies <-extractDependencies(modules)
 
   fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,
                                     executionSettings = executionSettings,
-                                    tempSettingsFolder = executionFolder)
+                                    dependencies = dependencies,
+                                    executionScriptFolder = executionScriptFolder)
 
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
-  targets::tar_make(script = fileName)
+  targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
 }
 
-generateTargetsScript <- function(analysisSpecifications, executionSettings, tempSettingsFolder) {
+generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder) {
   # Store settings objects in the temp folder so they are available in targets
-  analysisSpecificationsFileName <- gsub("\\\\", "/", file.path(tempSettingsFolder, "analysisSpecifications.rds"))
+  analysisSpecificationsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "analysisSpecifications.rds"))
   saveRDS(analysisSpecifications, analysisSpecificationsFileName)
-  executionSettingsFileName <- gsub("\\\\", "/", file.path(tempSettingsFolder, "executionSettings.rds"))
+  executionSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "executionSettings.rds"))
   saveRDS(executionSettings, executionSettingsFileName)
 
 
@@ -102,7 +105,9 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, tem
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
     targetName <- sprintf("%s_%d", moduleSpecification$module, i)
-    dependencyModules <- getModuleDependencies(moduleSpecification$module)
+    dependencyModules <- dependencies %>%
+      filter(.data$module == moduleSpecification$module) %>%
+      pull(.data$dependsOn)
     dependencyTargetNames <- moduleToTargetNames %>%
       filter(.data$module %in% dependencyModules) %>%
       pull(.data$targetName)
@@ -122,16 +127,9 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, tem
 
   lines <- c(lines, ")")
 
-  fileName <- file.path(tempSettingsFolder, "script.R")
+  fileName <- file.path(executionScriptFolder, "script.R")
   sink(fileName)
   cat(paste(lines, collapse = "\n"))
   sink()
   return(fileName)
-}
-
-
-getModuleDependencies <- function(module) {
-  # Magically get dependencies between modules. Could hardcode dependencies, or
-  # retrieve them from modules, which would require early communication with module
-  return(c())
 }

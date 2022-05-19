@@ -3,7 +3,7 @@ library(dplyr)
 
 
 # Create analysis specifications ---------------------------------------------
-source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/main/extras/CreateModuleSpecifications.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/main/SettingsFunctions.R")
 
 createCohortGeneratorModuleSpecifications <- function() {
   specifications <- list(module = "CohortGeneratorModule",
@@ -77,7 +77,8 @@ Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "c:/temp/StrategusInstantiatedModules
 # unlink(x = "c:/temp/StrategusInstantiatedModules", recursive = TRUE)
 # unlink(x = "c:/temp/strategusWork", recursive = TRUE)
 # unlink(x = "c:/temp/strategusOutput", recursive = TRUE)
+# unlink(x = "c:/temp/strategusExecution", recursive = TRUE)
 
 execute(analysisSpecifications = analysisSpecifications,
         executionSettings = executionSettings,
-        executionFolder = "c:/temp/strategusExecution")
+        executionScriptFolder = "c:/temp/strategusExecution")

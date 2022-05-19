@@ -73,72 +73,9 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   close(fileConn)
 
   renv::run(script = tempScriptFile,
+            job = FALSE,
             name = "Running module",
             project = moduleFolder)
 
   return(list(dummy = 123))
 }
-
-ensureModuleInstantiated <- function(module, version, remoteRepo, remoteUsername) {
-  instantiatedModulesFolder <- Sys.getenv("INSTANTIATED_MODULES_FOLDER")
-  if (!dir.exists(instantiatedModulesFolder)) {
-    dir.create(instantiatedModulesFolder, recursive = TRUE)
-  }
-  moduleFolder <- file.path(instantiatedModulesFolder, sprintf("%s_%s", module, version))
-  if (!dir.exists(moduleFolder)) {
-    instantiateModule(module, version, remoteRepo, remoteUsername, moduleFolder)
-  }
-  return(moduleFolder)
-}
-
-instantiateModule <- function(module, version, remoteRepo, remoteUsername, moduleFolder) {
-  # todo: make sure folder is deleted if instantiation fails
-  dir.create(moduleFolder)
-
-  if (module == "TestModule1") {
-    # For demo purposes only: get module from extras folder
-    files <- list.files("extras/TestModules/TestModule1", full.names = TRUE, include.dirs = TRUE, all.files = TRUE)
-    files <- files[!grepl("renv$", files)]
-    files <- files[!grepl("\\.$", files)]
-    files <- files[!grepl(".Rhistory$", files)]
-    file.copy(files, moduleFolder, recursive = TRUE)
-    dir.create(file.path(moduleFolder, "renv"))
-    file.copy("extras/TestModules/TestModule1/renv/activate.R", file.path(moduleFolder, "renv"), recursive = TRUE)
-  } else {
-    moduleFile <- file.path(moduleFolder, sprintf("%s_%s.zip", module, version))
-    moduleUrl <- sprintf("https://%s/%s/%s/archive/refs/tags/v%s.zip", remoteRepo, remoteUsername, module, version)
-    utils::download.file(url = moduleUrl, destfile = moduleFile)
-    utils::unzip(zipfile = moduleFile, exdir = moduleFolder)
-    # At this point, the unzipped folders will likely exist in a sub folder.
-    # Move all files from that sub folder to the main module folder
-    subFolders <- list.dirs(path = moduleFolder, recursive = FALSE)
-    if (length(subFolders) > 0) {
-      for (i in 1:length(subFolders)) {
-        R.utils::copyDirectory(from = subFolders[i],
-                               to = moduleFolder,
-                               recursive = TRUE)
-        unlink(subFolders[i])
-      }
-    }
-  }
-
-  script <- "
-    renv::restore(prompt = FALSE)
-    if (!require('ParallelLogger', quietly = TRUE)) {
-      install.packages('ParallelLogger')
-    }
-    if (!require('keyring', quietly = TRUE)) {
-      install.packages('keyring')
-    }
-  "
-  tempScriptFile <- tempfile(fileext = ".R")
-  fileConn<-file(tempScriptFile)
-  writeLines(script, fileConn)
-  close(fileConn)
-
-  renv::run(script = tempScriptFile,
-            name = "Buidling renv library",
-            project = moduleFolder)
-
-}
-
