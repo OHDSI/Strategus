@@ -1,39 +1,45 @@
 {
-  "sharedResources": [
-    {
-      "cohortDefinitions": [
-        {
+  "sharedResources": {
+    "1": {
+      "cohortDefinitions": {
+        "1": {
           "cohortId": "1",
           "cohortName": "celecoxib",
-          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Celecoxib\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"140587\",\n              \"CONCEPT_ID\": 1118084,\n              \"CONCEPT_NAME\": \"celecoxib\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"First\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"First\"\n  },\n  \"InclusionRules\": [],\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}"
+          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Celecoxib\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"140587\",\n              \"CONCEPT_ID\": 1118084,\n              \"CONCEPT_NAME\": \"celecoxib\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"First\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"First\"\n  },\n  \"InclusionRules\": [],\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}",
+          "attr_class": "list"
         },
-        {
+        "2": {
           "cohortId": "2",
           "cohortName": "celecoxibAge40",
-          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Celecoxib\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"140587\",\n              \"CONCEPT_ID\": 1118084,\n              \"CONCEPT_NAME\": \"celecoxib\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"First\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"First\"\n  },\n  \"InclusionRules\": [\n    {\n      \"name\": \"Age > 40\",\n      \"expression\": {\n        \"Type\": \"ALL\",\n        \"CriteriaList\": [],\n        \"DemographicCriteriaList\": [\n          {\n            \"Age\": {\n              \"Value\": 40,\n              \"Op\": \"gt\"\n            }\n          }\n        ],\n        \"Groups\": []\n      }\n    }\n  ],\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}"
+          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Celecoxib\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"140587\",\n              \"CONCEPT_ID\": 1118084,\n              \"CONCEPT_NAME\": \"celecoxib\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"First\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"First\"\n  },\n  \"InclusionRules\": [\n    {\n      \"name\": \"Age > 40\",\n      \"expression\": {\n        \"Type\": \"ALL\",\n        \"CriteriaList\": [],\n        \"DemographicCriteriaList\": [\n          {\n            \"Age\": {\n              \"Value\": 40,\n              \"Op\": \"gt\"\n            }\n          }\n        ],\n        \"Groups\": []\n      }\n    }\n  ],\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}",
+          "attr_class": "list"
         },
-        {
+        "3": {
           "cohortId": "3",
           "cohortName": "celecoxibAge40Male",
-          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Celecoxib\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"140587\",\n              \"CONCEPT_ID\": 1118084,\n              \"CONCEPT_NAME\": \"celecoxib\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"First\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"First\"\n  },\n  \"InclusionRules\": [\n    {\n      \"name\": \"Age > 40\",\n      \"expression\": {\n        \"Type\": \"ALL\",\n        \"CriteriaList\": [],\n        \"DemographicCriteriaList\": [\n          {\n            \"Age\": {\n              \"Value\": 40,\n              \"Op\": \"gt\"\n            }\n          }\n        ],\n        \"Groups\": []\n      }\n    },\n    {\n      \"name\": \"Gender = MALE\",\n      \"expression\": {\n        \"Type\": \"ALL\",\n        \"CriteriaList\": [],\n        \"DemographicCriteriaList\": [\n          {\n            \"Gender\": [\n              {\n                \"CONCEPT_CODE\": \"M\",\n                \"CONCEPT_ID\": 8507,\n                \"CONCEPT_NAME\": \"MALE\",\n                \"DOMAIN_ID\": \"Gender\",\n                \"VOCABULARY_ID\": \"Gender\"\n              }\n            ]\n          }\n        ],\n        \"Groups\": []\n      }\n    }\n  ],\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}"
-        }
-      ],
+          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Celecoxib\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"140587\",\n              \"CONCEPT_ID\": 1118084,\n              \"CONCEPT_NAME\": \"celecoxib\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"First\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"First\"\n  },\n  \"InclusionRules\": [\n    {\n      \"name\": \"Age > 40\",\n      \"expression\": {\n        \"Type\": \"ALL\",\n        \"CriteriaList\": [],\n        \"DemographicCriteriaList\": [\n          {\n            \"Age\": {\n              \"Value\": 40,\n              \"Op\": \"gt\"\n            }\n          }\n        ],\n        \"Groups\": []\n      }\n    },\n    {\n      \"name\": \"Gender = MALE\",\n      \"expression\": {\n        \"Type\": \"ALL\",\n        \"CriteriaList\": [],\n        \"DemographicCriteriaList\": [\n          {\n            \"Gender\": [\n              {\n                \"CONCEPT_CODE\": \"M\",\n                \"CONCEPT_ID\": 8507,\n                \"CONCEPT_NAME\": \"MALE\",\n                \"DOMAIN_ID\": \"Gender\",\n                \"VOCABULARY_ID\": \"Gender\"\n              }\n            ]\n          }\n        ],\n        \"Groups\": []\n      }\n    }\n  ],\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}",
+          "attr_class": "list"
+        },
+        "attr_class": "list"
+      },
       "attr_class": ["CohortDefinitionSharedResources", "SharedResources"]
-    }
-  ],
-  "moduleSpecifications": [
-    {
+    },
+    "attr_class": "list"
+  },
+  "moduleSpecifications": {
+    "1": {
       "module": "CohortGeneratorModule",
       "version": "0.0.4",
       "remoteRepo": "github.com",
       "remoteUsername": "anthonysena",
       "settings": {
         "incremental": true,
-        "generateStats": true
+        "generateStats": true,
+        "attr_class": "list"
       },
       "attr_class": ["CohortGeneratorModuleSpecifications", "ModuleSpecifications"]
     },
-    {
+    "2": {
       "module": "CohortDiagnosticsModule",
       "version": "0.0.1",
       "remoteRepo": "github.com",
@@ -83,13 +89,15 @@
           "excludedCovariateConceptIds": [],
           "addDescendantsToExclude": false,
           "includedCovariateIds": [],
-          "attr_fun": "getDbDefaultCovariateData",
-          "attr_class": "covariateSettings"
+          "attr_class": "covariateSettings",
+          "attr_fun": "getDbDefaultCovariateData"
         },
-        "incremental": false
+        "incremental": false,
+        "attr_class": "list"
       },
       "attr_class": ["CohortDiagnosticsModuleSpecifications", "ModuleSpecifications"]
-    }
-  ],
+    },
+    "attr_class": "list"
+  },
   "attr_class": "AnalysisSpecifications"
 }

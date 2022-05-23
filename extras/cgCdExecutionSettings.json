@@ -8,7 +8,8 @@
     "cohortInclusionResultTable": "strategus_test_inclusion_result",
     "cohortInclusionStatsTable": "strategus_test_inclusion_stats",
     "cohortSummaryStatsTable": "strategus_test_summary_stats",
-    "cohortCensorStatsTable": "strategus_test_censor_stats"
+    "cohortCensorStatsTable": "strategus_test_censor_stats",
+    "attr_class": "list"
   },
   "workFolder": "c:/temp/strategusWork",
   "resultsFolder": "c:/temp/strategusOutput",

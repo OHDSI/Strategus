@@ -31,7 +31,7 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   remoteUsername <- moduleSpecification$remoteUsername
   moduleFolder <- ensureModuleInstantiated(module, version, remoteRepo, remoteUsername)
 
-   # Create job context
+  # Create job context
   moduleExecutionSettings <- executionSettings
   moduleExecutionSettings$workSubFolder <- file.path(executionSettings$workFolder, sprintf("%s_%d", module, moduleIndex))
   moduleExecutionSettings$resultsSubFolder <- file.path(executionSettings$resultsFolder, sprintf("%s_%d", module, moduleIndex))
@@ -45,12 +45,13 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   jobContext <- list(sharedResources = analysisSpecifications$sharedResources,
                      settings = moduleSpecification$settings,
                      moduleExecutionSettings = moduleExecutionSettings)
-  jobContextFileName <- gsub("\\\\", "/", tempfile(fileext = ".rds"))
-  saveRDS(jobContext, jobContextFileName)
 
+  if (file.exists(file.path(moduleFolder, "renv.lock"))) {
+    jobContextFileName <- gsub("\\\\", "/", tempfile(fileext = ".rds"))
+    saveRDS(jobContext, jobContextFileName)
 
-  # Execute module using settings
-  script <- "
+    # Execute module using settings
+    script <- "
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
     connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
@@ -66,16 +67,40 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
     ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
     ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)
   "
-  script <- gsub("jobContextFileName", sprintf("\"%s\"", jobContextFileName), script)
-  tempScriptFile <- tempfile(fileext = ".R")
-  fileConn<-file(tempScriptFile)
-  writeLines(script, fileConn)
-  close(fileConn)
+    script <- gsub("jobContextFileName", sprintf("\"%s\"", jobContextFileName), script)
+    tempScriptFile <- tempfile(fileext = ".R")
+    fileConn<-file(tempScriptFile)
+    writeLines(script, fileConn)
+    close(fileConn)
 
-  renv::run(script = tempScriptFile,
-            job = FALSE,
-            name = "Running module",
-            project = moduleFolder)
-
+    renv::run(script = tempScriptFile,
+              job = FALSE,
+              name = "Running module",
+              project = moduleFolder)
+  } else {
+    # Run in 1-node cluster to avoid making a mess in the local R environment:
+    print("check 1")
+    cluster <- ParallelLogger::makeCluster(numberOfThreads = 1, singleThreadToMain = FALSE)
+    on.exit(ParallelLogger::stopCluster(cluster))
+    ParallelLogger::clusterApply(cluster, moduleFolder, runModuleInCluster, jobContext = jobContext)
+    print("check 2")
+  }
   return(list(dummy = 123))
+}
+
+runModuleInCluster <- function(moduleFolder, jobContext) {
+  ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
+  ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
+
+  setwd(moduleFolder)
+  source("Main.R")
+  connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
+  connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
+  connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+  jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
+  execute(jobContext)
+
+  ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
+  ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)
+  return(NULL)
 }

@@ -28,12 +28,15 @@
 #' specified modules are also instantiated.
 #'
 #' @template AnalysisSpecifications
+#' @param embeddedModulesOnly  If TRUE, only modules embedded into Strategus are allowed. If
+#'                             the analysis specifications include a module that is not embedded,
+#'                             an error will be thrown.
 #'
 #' @return
 #' A tibble listing the instantiated modules.
 #'
 #' @export
-ensureAllModulesInstantiated <- function(analysisSpecifications) {
+ensureAllModulesInstantiated <- function(analysisSpecifications, embeddedModulesOnly = TRUE) {
 
   modules <- getModuleTable(analysisSpecifications, distinct = TRUE)
 
@@ -45,6 +48,16 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   if (nrow(multipleVersionsPerModule) > 0) {
     stop(sprintf("Only one version per module allowed in a single analyses specification.\nMultiple versions found for module(s) `%s`.",
                  paste(multipleVersionsPerModule$module, collapse = "', '")))
+  }
+
+  # Verify if only embedded modules are included:
+  if (embeddedModulesOnly) {
+    nonEmbedded <- modules %>%
+      anti_join(getEmbeddedModules(), by = c("module", "version"))
+    if (nrow(nonEmbedded) > 0) {
+      stop(sprintf("Requiring all modules are embedded in Strategus, but these modules are not found: `%s`.",
+                   paste(sprintf("%s (%s)", nonEmbedded$module, nonEmbedded$version), collapse = "', '")))
+    }
   }
 
   # Ensure all required modules are instantiated:
@@ -108,7 +121,22 @@ getModuleMetaData <- function(moduleFolder) {
 }
 
 getModuleFolder <- function(module, version) {
-  moduleFolder <- file.path(Sys.getenv("INSTANTIATED_MODULES_FOLDER"), sprintf("%s_%s", module, version))
+  embeddedModule <- getEmbeddedModules() %>%
+    filter(.data$module == !!module & .data$version == !!version)
+  if (nrow(embeddedModule) == 1) {
+    return(embeddedModule$moduleFolder)
+  } else {
+    return(file.path(Sys.getenv("INSTANTIATED_MODULES_FOLDER"), sprintf("%s_%s", module, version)))
+  }
+}
+
+getEmbeddedModules <- function() {
+  moduleFolders <- list.files(system.file("modules", package = "Strategus"), full.names = TRUE)
+  parsed <- strsplit(basename(moduleFolders), "_")
+  tibble(module = sapply(parsed, function(x) x[1]),
+         version = sapply(parsed, function(x) x[2]),
+         moduleFolder = moduleFolders) %>%
+    return()
 }
 
 ensureModuleInstantiated <- function(module, version, remoteRepo, remoteUsername) {
@@ -174,7 +202,7 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 
   renv::run(script = tempScriptFile,
             job = FALSE,
-            name = "Buidling renv library",
+            name = "Building renv library",
             project = moduleFolder)
   success <- TRUE
 }
