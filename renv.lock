@@ -72,14 +72,14 @@
 		},
 		"CohortGenerator" : {
 			"Package" : "CohortGenerator",
-			"Version" : "0.4.0",
+			"Version" : "0.5.0",
 			"Source" : "GitHub",
 			"Remotes" : "ohdsi/CirceR, ohdsi/Eunomia, ohdsi/ROhdsiWebApi",
 			"RemoteType" : "github",
 			"RemoteHost" : "api.github.com",
 			"RemoteRepo" : "CohortGenerator",
 			"RemoteUsername" : "ohdsi",
-			"RemoteRef" : "v0.4.0",
+			"RemoteRef" : "develop",
 			"Requirements" : [
 				"DatabaseConnector",
 				"ParallelLogger",

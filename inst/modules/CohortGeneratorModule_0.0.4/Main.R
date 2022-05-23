@@ -118,8 +118,8 @@ createCohortDefinitionSetFromJobContext <- function(sharedResources, settings) {
     stop("No shared resources found")
   }
   for (i in 1:length(sharedResources)) {
-    if (which(class(jobContext$sharedResources[[i]]) %in% "CohortDefinitionSharedResources") > 0) {
-      cohortDefinitions <- jobContext$sharedResources[[i]]$cohortDefinitions
+    if (which(class(sharedResources[[i]]) %in% "CohortDefinitionSharedResources") > 0) {
+      cohortDefinitions <- sharedResources[[i]]$cohortDefinitions
       break;
     }
   }

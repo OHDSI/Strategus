@@ -73,11 +73,22 @@ ParallelLogger::saveSettingsToJson(executionSettings, "extras/cgCdExecutionSetti
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "c:/temp/StrategusInstantiatedModules")
 
 # Clean up before running
-# unlink(x = "c:/temp/StrategusInstantiatedModules", recursive = TRUE)
-# unlink(x = "c:/temp/strategusWork", recursive = TRUE)
-# unlink(x = "c:/temp/strategusOutput", recursive = TRUE)
-# unlink(x = "c:/temp/strategusExecution", recursive = TRUE)
+unlink(x = "c:/temp/StrategusInstantiatedModules", recursive = TRUE)
+unlink(x = "c:/temp/strategusWork", recursive = TRUE)
+unlink(x = "c:/temp/strategusOutput", recursive = TRUE)
+unlink(x = "c:/temp/strategusExecution", recursive = TRUE)
 
-execute(analysisSpecifications = analysisSpecifications,
-        executionSettings = executionSettings,
-        executionScriptFolder = "c:/temp/strategusExecution")
+Strategus::execute(analysisSpecifications = analysisSpecifications,
+                   executionSettings = executionSettings,
+                   executionScriptFolder = "c:/temp/strategusExecution")
+
+
+# executionSettings$databaseId <- 123
+# Strategus:::runModule(analysisSpecifications = analysisSpecifications,
+#                       moduleIndex = 1,
+#                       executionSettings = executionSettings)
+#
+# Strategus:::runModule(analysisSpecifications = analysisSpecifications,
+#                       moduleIndex = 2,
+#                       executionSettings = executionSettings)
+
