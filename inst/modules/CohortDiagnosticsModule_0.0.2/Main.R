@@ -56,6 +56,8 @@ execute <- function(jobContext) {
   file.rename(file.path(exportFolder, paste0(unique(resultsDataModel$tableName), ".csv")),
               file.path(exportFolder, paste0(unique(newTableNames), ".csv")))
   resultsDataModel$tableName <- newTableNames
+  resultsDataModel <- SqlRender::camelCaseToSnakeCaseNames(resultsDataModel)
+  # TODO: use function in CohortGenerator once released:
   readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
 }
 

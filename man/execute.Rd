@@ -7,7 +7,8 @@
 execute(
   analysisSpecifications,
   executionSettings,
-  executionScriptFolder = NULL
+  executionScriptFolder = NULL,
+  embeddedModulesOnly = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,10 @@ by \code{\link[=createExecutionSettings]{createExecutionSettings()}}.}
 \item{executionScriptFolder}{Optional: the path to use for storing the execution script.
 when NULL, this function will use a temporary
 file location to create the script to execute.}
+
+\item{embeddedModulesOnly}{If TRUE, only modules embedded into Strategus are allowed. If
+the analysis specifications include a module that is not embedded,
+an error will be thrown.}
 }
 \value{
 Does not return anything. Is called for the side-effect of executing the specified

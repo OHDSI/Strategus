@@ -29,6 +29,7 @@
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
+#' @template EmbeddedModulesOnly
 #'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified
@@ -37,7 +38,8 @@
 #' @export
 execute <- function(analysisSpecifications,
                     executionSettings,
-                    executionScriptFolder = NULL) {
+                    executionScriptFolder = NULL,
+                    embeddedModulesOnly = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)

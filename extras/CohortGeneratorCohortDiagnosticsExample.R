@@ -7,10 +7,10 @@ source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/main/Set
 
 createCohortGeneratorModuleSpecifications <- function() {
   specifications <- list(module = "CohortGeneratorModule",
-                         version = "0.0.4",
+                         version = "0.0.1",
                          remoteRepo = "github.com",
-                         remoteUsername = "anthonysena",
-                         settings = list(incremental = TRUE,
+                         remoteUsername = "ohdsi",
+                         settings = list(incremental = FALSE,
                                          generateStats = TRUE))
   class(specifications) <- c("CohortGeneratorModuleSpecifications", "ModuleSpecifications")
   return(specifications)
@@ -81,14 +81,4 @@ unlink(x = "c:/temp/strategusExecution", recursive = TRUE)
 Strategus::execute(analysisSpecifications = analysisSpecifications,
                    executionSettings = executionSettings,
                    executionScriptFolder = "c:/temp/strategusExecution")
-
-
-# executionSettings$databaseId <- 123
-# Strategus:::runModule(analysisSpecifications = analysisSpecifications,
-#                       moduleIndex = 1,
-#                       executionSettings = executionSettings)
-#
-# Strategus:::runModule(analysisSpecifications = analysisSpecifications,
-#                       moduleIndex = 2,
-#                       executionSettings = executionSettings)
 

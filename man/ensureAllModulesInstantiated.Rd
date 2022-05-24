@@ -4,11 +4,18 @@
 \alias{ensureAllModulesInstantiated}
 \title{Ensure all modules are instantiated}
 \usage{
-ensureAllModulesInstantiated(analysisSpecifications)
+ensureAllModulesInstantiated(
+  analysisSpecifications,
+  embeddedModulesOnly = FALSE
+)
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{embeddedModulesOnly}{If TRUE, only modules embedded into Strategus are allowed. If
+the analysis specifications include a module that is not embedded,
+an error will be thrown.}
 }
 \value{
 A tibble listing the instantiated modules.

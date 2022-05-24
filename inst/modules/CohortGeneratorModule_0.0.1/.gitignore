@@ -39,5 +39,5 @@ vignettes/*.pdf
 .Renviron
 
 # Project specific
-/extras/output
+/extras/test/output
 /_targets/

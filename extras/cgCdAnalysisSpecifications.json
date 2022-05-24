@@ -29,11 +29,11 @@
   "moduleSpecifications": {
     "1": {
       "module": "CohortGeneratorModule",
-      "version": "0.0.4",
+      "version": "0.0.1",
       "remoteRepo": "github.com",
-      "remoteUsername": "anthonysena",
+      "remoteUsername": "ohdsi",
       "settings": {
-        "incremental": true,
+        "incremental": false,
         "generateStats": true,
         "attr_class": "list"
       },
@@ -41,7 +41,7 @@
     },
     "2": {
       "module": "CohortDiagnosticsModule",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {

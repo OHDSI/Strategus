@@ -28,15 +28,13 @@
 #' specified modules are also instantiated.
 #'
 #' @template AnalysisSpecifications
-#' @param embeddedModulesOnly  If TRUE, only modules embedded into Strategus are allowed. If
-#'                             the analysis specifications include a module that is not embedded,
-#'                             an error will be thrown.
+#' @template EmbeddedModulesOnly
 #'
 #' @return
 #' A tibble listing the instantiated modules.
 #'
 #' @export
-ensureAllModulesInstantiated <- function(analysisSpecifications, embeddedModulesOnly = TRUE) {
+ensureAllModulesInstantiated <- function(analysisSpecifications, embeddedModulesOnly = FALSE) {
 
   modules <- getModuleTable(analysisSpecifications, distinct = TRUE)
 
