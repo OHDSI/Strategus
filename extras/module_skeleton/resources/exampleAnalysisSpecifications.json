@@ -1,0 +1,28 @@
+{
+  "sharedResources": [
+    {
+      "cohortDefinitions": [
+        {
+          "cohortId": "1",
+          "cohortName": "celecoxib",
+          "cohortDefinition": "...truncated..."
+        }
+      ],
+      "attr_class": ["CohortDefinitionSharedResources", "SharedResources"]
+    }
+  ],
+  "moduleSpecifications": [
+    {
+      "module": "CohortGeneratorModule",
+      "version": "0.0.1",
+      "remoteRepo": "github.com",
+      "remoteUsername": "ohdsi",
+      "settings": {
+        "incremental": true,
+        "generateStats": true
+      },
+      "attr_class": ["CohortGeneratorModuleSpecifications", "ModuleSpecifications"]
+    }
+  ],
+  "attr_class": "AnalysisSpecifications"
+}
