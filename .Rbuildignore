@@ -2,7 +2,7 @@
 ^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-extras
+^extras
 ^\.git
 man-roxygen
 _pkgdown.yml
