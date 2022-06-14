@@ -61,6 +61,8 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
     ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
 
+    #renv::diagnostics()
+    #renv::restore(prompt = FALSE)
     execute(jobContext)
 
     ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)

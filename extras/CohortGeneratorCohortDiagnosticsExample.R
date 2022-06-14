@@ -7,9 +7,9 @@ source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/main/Set
 
 createCohortGeneratorModuleSpecifications <- function() {
   specifications <- list(module = "CohortGeneratorModule",
-                         version = "0.0.4",
+                         version = "0.0.5",
                          remoteRepo = "github.com",
-                         remoteUsername = "anthonysena",
+                         remoteUsername = "ohdsi",
                          settings = list(incremental = TRUE,
                                          generateStats = TRUE))
   class(specifications) <- c("CohortGeneratorModuleSpecifications", "ModuleSpecifications")
@@ -68,16 +68,25 @@ executionSettings <- createExecutionSettings(connectionDetailsReference = connec
 ParallelLogger::saveSettingsToJson(executionSettings, "extras/cgCdExecutionSettings.json")
 
 # Execute analyses -------------------------------------------------------------
+analysisSpecifications <- ParallelLogger::loadSettingsFromJson(fileName = "extras/cgCdAnalysisSpecifications.json")
+executionSettings <- ParallelLogger::loadSettingsFromJson(fileName = "extras/cgCdExecutionSettings.json")
+connectionDetailsReference <- "Eunomia"
+
+# Note: Need to do only once: store connection details in keyring:
+connectionDetails <- Eunomia::getEunomiaConnectionDetails()
+
+storeConnectionDetails(connectionDetails = connectionDetails,
+                       connectionDetailsReference = connectionDetailsReference)
 
 # Note: this environmental variable should be set once for each compute node
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "c:/temp/StrategusInstantiatedModules")
 
 # Clean up before running
-# unlink("_targets", recursive = TRUE)
-# unlink(x = "c:/temp/StrategusInstantiatedModules", recursive = TRUE)
-# unlink(x = "c:/temp/strategusWork", recursive = TRUE)
-# unlink(x = "c:/temp/strategusOutput", recursive = TRUE)
-# unlink(x = "c:/temp/strategusExecution", recursive = TRUE)
+unlink("_targets", recursive = TRUE)
+unlink(x = "c:/temp/StrategusInstantiatedModules", recursive = TRUE)
+unlink(x = "c:/temp/strategusWork", recursive = TRUE)
+unlink(x = "c:/temp/strategusOutput", recursive = TRUE)
+unlink(x = "c:/temp/strategusExecution", recursive = TRUE)
 
 execute(analysisSpecifications = analysisSpecifications,
         executionSettings = executionSettings,
