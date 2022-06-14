@@ -39,6 +39,7 @@ Documentation can be found on the [package website](https://ohdsi.github.io/Stra
 
 PDF versions of the documentation are also available:
 * Package manual: [Strategus.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/extras/Strategus.pdf)
+* Vignette: [Creating Strategus Modules](https://github.com/OHDSI/Strategus/raw/main/inst/doc/CreatingModules.pdf)
 
 Support
 =======

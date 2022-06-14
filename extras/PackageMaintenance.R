@@ -33,6 +33,13 @@ devtools::spell_check()
 unlink("extras/Strategus.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/Strategus.pdf")
 
+rmarkdown::render("vignettes/CreatingModules.Rmd",
+                  output_file = "../inst/doc/CreatingModules.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/CreatingModules.tex")
+
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
 

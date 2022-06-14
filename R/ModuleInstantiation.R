@@ -41,7 +41,7 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   multipleVersionsPerModule <- modules %>%
     group_by(.data$module) %>%
     summarise(versions = n()) %>%
-    filter(versions > 1)
+    filter(.data$versions > 1)
   if (nrow(multipleVersionsPerModule) > 0) {
     stop(sprintf("Only one version per module allowed in a single analyses specification.\nMultiple versions found for module(s) `%s`.",
                  paste(multipleVersionsPerModule$module, collapse = "', '")))
@@ -52,7 +52,7 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
     ensureModuleInstantiated(module = modules$module[i],
                              version = modules$version[i],
                              remoteRepo = modules$remoteRepo[i],
-                             remoteUsernam = modules$remoteUsername[i])
+                             remoteUsername = modules$remoteUsername[i])
   }
 
   # Check required dependencies have been installed:

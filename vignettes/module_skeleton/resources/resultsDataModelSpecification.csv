@@ -1,0 +1,8 @@
+table_name,column_name,data_type,is_required,primary_key,empty_is_na
+my_table,cohort_id,bigint,Yes,Yes,No
+my_table,cohort_name,varchar,Yes,No,No
+my_table,generation_status,varchar,No,No,No
+my_table,start_time,Timestamp,No,No,No
+my_table,end_time,Timestamp,No,No,No
+my_table,database_id,varchar,Yes,Yes,No
+

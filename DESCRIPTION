@@ -25,12 +25,18 @@ Imports:
 	rlang,
 	utils,
 	R.utils,
-	digest
+	digest,
+	SqlRender,
+	readr
 Suggests:
-	testthat
+	testthat,
+	fs,
+	knitr,
+	rmarkdown
 Remotes:
   ohdsi/CohortGenerator
+VignetteBuilder: knitr
 NeedsCompilation: no
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
