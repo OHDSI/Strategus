@@ -24,9 +24,9 @@
   "moduleSpecifications": [
     {
       "module": "CohortGeneratorModule",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "remoteRepo": "github.com",
-      "remoteUsername": "anthonysena",
+      "remoteUsername": "ohdsi",
       "settings": {
         "incremental": true,
         "generateStats": true
@@ -35,7 +35,7 @@
     },
     {
       "module": "CohortDiagnosticsModule",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -76,15 +76,15 @@
           "Dcsi": true,
           "Chads2": true,
           "Chads2Vasc": true,
-          "temporalStartDays": [-9999, -365, -180, -30, -365, -30, 0, 1, 31, -9999],
-          "temporalEndDays": [0, 0, 0, 0, -31, -1, 0, 30, 365, 9999],
+          "temporalStartDays": [-9999.0, -365.0, -180.0, -30.0, -365.0, -30.0, 0.0, 1.0, 31.0, -9999.0],
+          "temporalEndDays": [0.0, 0.0, 0.0, 0.0, -31.0, -1.0, 0.0, 30.0, 365.0, 9999.0],
           "includedCovariateConceptIds": [],
           "addDescendantsToInclude": false,
           "excludedCovariateConceptIds": [],
           "addDescendantsToExclude": false,
           "includedCovariateIds": [],
-          "attr_fun": "getDbDefaultCovariateData",
-          "attr_class": "covariateSettings"
+          "attr_class": "covariateSettings",
+          "attr_fun": "getDbDefaultCovariateData"
         },
         "incremental": false
       },
