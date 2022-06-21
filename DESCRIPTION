@@ -17,7 +17,7 @@ Depends:
 	DatabaseConnector
 Imports:
 	targets,
-	renv,
+	renv (>= 0.15.5),
 	ParallelLogger,
 	dplyr,
 	checkmate,
