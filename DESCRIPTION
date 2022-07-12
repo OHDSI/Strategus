@@ -1,7 +1,7 @@
 Package: Strategus
 Type: Package
 Title: Coordinating and Executing Analytics Using HADES Modules
-Version: 0.0.1
+Version: 0.0.2
 Date: 2022-03-25
 Authors@R: c(
 	person("Martijn", "Schuemie", , "schuemie@ohdsi.org", role = c("aut", "cre"))
@@ -13,8 +13,8 @@ URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
 	R (>= 4.0.0),
-	CohortGenerator,
-	DatabaseConnector
+	CohortGenerator (>= 0.5.0),
+	DatabaseConnector (>= 5.0.4)
 Imports:
 	targets,
 	renv (>= 0.15.5),
@@ -34,7 +34,8 @@ Suggests:
 	knitr,
 	rmarkdown
 Remotes:
-  ohdsi/CohortGenerator
+  ohdsi/CohortGenerator,
+  ohdsi/DatabaseConnector
 VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 7.2.0

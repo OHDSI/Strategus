@@ -56,13 +56,13 @@ createDatabaseMetaData <- function(executionSettings) {
            databaseId = !!databaseId) %>%
     bind_cols(observationPeriodMax)
 
-  # TODO: use shared code for exporting CSV files:
-  database %>%
-    SqlRender::camelCaseToSnakeCaseNames() %>%
-    readr::write_csv(file.path(databaseMetaDataFolder, "database_meta_data.csv"))
+  # Export the csv files:
+  CohortGenerator::writeCsv(x = database,
+                            file = file.path(databaseMetaDataFolder, "database_meta_data.csv"))
 
   resultsDataModel <- readr::read_csv(file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
                                       show_col_types = FALSE)
-  readr::write_csv(resultsDataModel, file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"))
+  CohortGenerator::writeCsv(x = resultsDataModel,
+                            file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"))
   return(databaseId)
 }
