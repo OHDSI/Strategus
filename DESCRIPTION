@@ -1,8 +1,8 @@
 Package: Strategus
 Type: Package
 Title: Coordinating and Executing Analytics Using HADES Modules
-Version: 0.0.2
-Date: 2022-03-25
+Version: 0.0.3
+Date: 2022-07-21
 Authors@R: c(
 	person("Martijn", "Schuemie", , "schuemie@ohdsi.org", role = c("aut", "cre"))
 	)

@@ -2,8 +2,9 @@
 
 export(addModuleSpecifications)
 export(addSharedResources)
+export(createCdmExecutionSettings)
 export(createEmptyAnalysisSpecificiations)
-export(createExecutionSettings)
+export(createResultsExecutionSettings)
 export(ensureAllModulesInstantiated)
 export(execute)
 export(retrieveConnectionDetails)

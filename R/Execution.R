@@ -56,7 +56,9 @@ execute <- function(analysisSpecifications,
     dir.create(executionScriptFolder)
   }
 
-  executionSettings$databaseId <- createDatabaseMetaData(executionSettings)
+  if ("CdmExecutionSettings" %in% class(executionSettings)) {
+    executionSettings$databaseId <- createDatabaseMetaData(executionSettings)
+  }
   dependencies <-extractDependencies(modules)
 
   fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,

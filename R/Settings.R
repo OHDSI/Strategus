@@ -74,7 +74,7 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
   return(analysisSpecifications)
 }
 
-#' Create execution settings
+#' Create CDM execution settings
 #'
 #' @param connectionDetailsReference A string that can be used to retrieve database connection details from a secure local
 #'                                   store.
@@ -94,13 +94,13 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' An object of type `ExecutionSettings`.
 #'
 #' @export
-createExecutionSettings <- function(connectionDetailsReference,
-                                    workDatabaseSchema,
-                                    cdmDatabaseSchema,
-                                    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
-                                    workFolder,
-                                    resultsFolder,
-                                    minCellCount = 5) {
+createCdmExecutionSettings <- function(connectionDetailsReference,
+                                       workDatabaseSchema,
+                                       cdmDatabaseSchema,
+                                       cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
+                                       workFolder,
+                                       resultsFolder,
+                                       minCellCount = 5) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
@@ -118,9 +118,46 @@ createExecutionSettings <- function(connectionDetailsReference,
                             workFolder = workFolder,
                             resultsFolder = resultsFolder,
                             minCellCount = minCellCount)
-  class(executionSettings) <- "ExecutionSettings"
+  class(executionSettings) <- c("CdmExecutionSettings","ExecutionSettings")
   return(executionSettings)
 }
+
+#' Create Results execution settings
+#'
+#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
+#'                                          details from a secure local store.
+#' @param resultsDatabaseSchema      A schema where the results tables are stored
+#' @param workFolder                 A folder in the local file system where intermediate results can be written.
+#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
+#'                                   in results.
+#'
+#' @return
+#' An object of type `ExecutionSettings`.
+#'
+#' @export
+createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
+                                           resultsDatabaseSchema,
+                                           workFolder,
+                                           resultsFolder,
+                                           minCellCount = 5) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(resultsConnectionDetailsReference, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
+  checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  executionSettings <- list(resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+                            resultsDatabaseSchema = resultsDatabaseSchema,
+                            workFolder = workFolder,
+                            resultsFolder = resultsFolder,
+                            minCellCount = minCellCount)
+  class(executionSettings) <- c("ResultsExecutionSettings","ExecutionSettings")
+  return(executionSettings)
+}
+
 
 
 # Note: assuming connectionDetails objects remain stable across the various module
