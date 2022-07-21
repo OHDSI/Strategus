@@ -118,7 +118,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                             workFolder = workFolder,
                             resultsFolder = resultsFolder,
                             minCellCount = minCellCount)
-  class(executionSettings) <- "ExecutionSettings"
+  class(executionSettings) <- c("CdmExecutionSettings","ExecutionSettings")
   return(executionSettings)
 }
 
@@ -154,7 +154,7 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
                             workFolder = workFolder,
                             resultsFolder = resultsFolder,
                             minCellCount = minCellCount)
-  class(executionSettings) <- "ExecutionSettings"
+  class(executionSettings) <- c("ResultsExecutionSettings","ExecutionSettings")
   return(executionSettings)
 }
 

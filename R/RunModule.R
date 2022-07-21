@@ -49,14 +49,33 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   saveRDS(jobContext, jobContextFileName)
 
 
+
   # Execute module using settings
   script <- "
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
-    connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
-    connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
-    connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
-    jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
+
+  "
+
+    # Set the connection information based on the type of execution being
+    # performed
+    if ("CdmExecutionSettings" %in% class(executionSettings)) {
+      script <- paste0(script,
+                       "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
+                       connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
+                       connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+                       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails")
+    } else {
+      script <- paste0(script,
+                       "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference)
+                       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
+                       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
+                       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails")
+    }
+
+    script <- paste0(script,
+    "
+
 
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
     ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
@@ -67,8 +86,8 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
     execute(jobContext)
 
     ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
-    ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)
-  "
+    ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)")
+
   script <- gsub("jobContextFileName", sprintf("\"%s\"", jobContextFileName), script)
   tempScriptFile <- tempfile(fileext = ".R")
   fileConn<-file(tempScriptFile)
