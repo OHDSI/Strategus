@@ -57,13 +57,13 @@ connectionDetails <- Eunomia::getEunomiaConnectionDetails()
 storeConnectionDetails(connectionDetails = connectionDetails,
                        connectionDetailsReference = connectionDetailsReference)
 
-executionSettings <- createExecutionSettings(connectionDetailsReference = connectionDetailsReference,
-                                             workDatabaseSchema = "main",
-                                             cdmDatabaseSchema = "main",
-                                             cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "strategus_test"),
-                                             workFolder = "c:/temp/strategusWork",
-                                             resultsFolder = "c:/temp/strategusOutput",
-                                             minCellCount = 5)
+executionSettings <- createCdmExecutionSettings(connectionDetailsReference = connectionDetailsReference,
+                                                workDatabaseSchema = "main",
+                                                cdmDatabaseSchema = "main",
+                                                cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "strategus_test"),
+                                                workFolder = "c:/temp/strategusWork",
+                                                resultsFolder = "c:/temp/strategusOutput",
+                                                minCellCount = 5)
 
 ParallelLogger::saveSettingsToJson(executionSettings, "extras/cgCdExecutionSettings.json")
 

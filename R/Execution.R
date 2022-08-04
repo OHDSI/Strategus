@@ -25,7 +25,7 @@
 #'
 #' @template AnalysisSpecifications
 #' @param executionSettings       An object of type `ExecutionSettings` as created
-#'                                by [createExecutionSettings()].
+#'                                by [createCdmExecutionSettings()] or [createResultsExecutionSettings()].
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.

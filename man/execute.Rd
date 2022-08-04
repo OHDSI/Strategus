@@ -15,7 +15,7 @@ execute(
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{executionSettings}{An object of type \code{ExecutionSettings} as created
-by \code{\link[=createExecutionSettings]{createExecutionSettings()}}.}
+by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
 
 \item{executionScriptFolder}{Optional: the path to use for storing the execution script.
 when NULL, this function will use a temporary
