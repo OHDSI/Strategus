@@ -22,7 +22,7 @@
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
 runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ...) {
-
+  checkmate::assert_multi_class(x = executionSettings, classes = c("CdmExecutionSettings", "ResultsExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
 
   module <- moduleSpecification$module
@@ -59,18 +59,20 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
 
     # Set the connection information based on the type of execution being
     # performed
-    if ("CdmExecutionSettings" %in% class(executionSettings)) {
+    if (is(executionSettings, "CdmExecutionSettings")) {
       script <- paste0(script,
                        "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
                        connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
                        connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
                        jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails")
-    } else {
+    } else if (is(executionSettings, "ResultsExecutionSettings")) {
       script <- paste0(script,
                        "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference)
                        resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
                        resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
                        jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails")
+    } else {
+      stop("Unhandled executionSettings class! Must be one of the following: CdmExecutionSettings, ResultsExecutionSettings")
     }
 
     script <- paste0(script,
