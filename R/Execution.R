@@ -29,6 +29,9 @@
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
+#' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
+#'                                the same as the `executionScriptFolder` used in the run to restart.
+#'
 #'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified
@@ -37,7 +40,8 @@
 #' @export
 execute <- function(analysisSpecifications,
                     executionSettings,
-                    executionScriptFolder = NULL) {
+                    executionScriptFolder = NULL,
+                    restart = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
@@ -49,7 +53,7 @@ execute <- function(analysisSpecifications,
     executionScriptFolder <- tempfile("strategusTempSettings")
     dir.create(executionScriptFolder)
     on.exit(unlink(executionScriptFolder, recursive = TRUE))
-  } else {
+  } else if (!restart) {
     if (dir.exists(executionScriptFolder)) {
       unlink(executionScriptFolder, recursive = TRUE)
     }
@@ -64,14 +68,19 @@ execute <- function(analysisSpecifications,
   fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,
                                     executionSettings = executionSettings,
                                     dependencies = dependencies,
-                                    executionScriptFolder = executionScriptFolder)
+                                    executionScriptFolder = executionScriptFolder,
+                                    restart = restart)
 
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
   targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
 }
 
-generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder) {
+generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, restart) {
+  fileName <- file.path(executionScriptFolder, "script.R")
+  if (restart) {
+    return(fileName)
+  }
   # Store settings objects in the temp folder so they are available in targets
   analysisSpecificationsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "analysisSpecifications.rds"))
   saveRDS(analysisSpecifications, analysisSpecificationsFileName)
@@ -129,7 +138,6 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
 
   lines <- c(lines, ")")
 
-  fileName <- file.path(executionScriptFolder, "script.R")
   sink(fileName)
   cat(paste(lines, collapse = "\n"))
   sink()
