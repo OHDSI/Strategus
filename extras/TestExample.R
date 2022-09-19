@@ -31,13 +31,13 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "redshift
 storeConnectionDetails(connectionDetails = connectionDetails,
                        connectionDetailsReference = connectionDetailsReference)
 
-executionSettings <- createExecutionSettings(connectionDetailsReference = connectionDetailsReference,
-                                             workDatabaseSchema = "scratch_mschuemi",
-                                             cdmDatabaseSchema = "cdm_truven_mdcd_v1978",
-                                             cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "strategus_test"),
-                                             workFolder = "c:/temp/strategusWork",
-                                             resultsFolder = "c:/temp/strategusOutput",
-                                             minCellCount = 5)
+executionSettings <- createCdmExecutionSettings(connectionDetailsReference = connectionDetailsReference,
+                                                workDatabaseSchema = "scratch_mschuemi",
+                                                cdmDatabaseSchema = "cdm_truven_mdcd_v1978",
+                                                cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "strategus_test"),
+                                                workFolder = "c:/temp/strategusWork",
+                                                resultsFolder = "c:/temp/strategusOutput",
+                                                minCellCount = 5)
 
 ParallelLogger::saveSettingsToJson(executionSettings, "extras/testExecutionSettings.json")
 

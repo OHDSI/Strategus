@@ -7,7 +7,8 @@
 execute(
   analysisSpecifications,
   executionSettings,
-  executionScriptFolder = NULL
+  executionScriptFolder = NULL,
+  restart = FALSE
 )
 }
 \arguments{
@@ -15,11 +16,14 @@ execute(
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{executionSettings}{An object of type \code{ExecutionSettings} as created
-by \code{\link[=createExecutionSettings]{createExecutionSettings()}}.}
+by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
 
 \item{executionScriptFolder}{Optional: the path to use for storing the execution script.
 when NULL, this function will use a temporary
 file location to create the script to execute.}
+
+\item{restart}{Restart run? Requires \code{executionScriptFolder} to be specified, and be
+the same as the \code{executionScriptFolder} used in the run to restart.}
 }
 \value{
 Does not return anything. Is called for the side-effect of executing the specified

@@ -22,7 +22,7 @@
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
 runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ...) {
-
+  checkmate::assert_multi_class(x = executionSettings, classes = c("CdmExecutionSettings", "ResultsExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
 
   module <- moduleSpecification$module
@@ -31,7 +31,7 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   remoteUsername <- moduleSpecification$remoteUsername
   moduleFolder <- ensureModuleInstantiated(module, version, remoteRepo, remoteUsername)
 
-   # Create job context
+  # Create job context
   moduleExecutionSettings <- executionSettings
   moduleExecutionSettings$workSubFolder <- file.path(executionSettings$workFolder, sprintf("%s_%d", module, moduleIndex))
   moduleExecutionSettings$resultsSubFolder <- file.path(executionSettings$resultsFolder, sprintf("%s_%d", module, moduleIndex))
@@ -45,40 +45,74 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   jobContext <- list(sharedResources = analysisSpecifications$sharedResources,
                      settings = moduleSpecification$settings,
                      moduleExecutionSettings = moduleExecutionSettings)
-  jobContextFileName <- gsub("\\\\", "/", tempfile(fileext = ".rds"))
+  jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds")#gsub("\\\\", "/", tempfile(fileext = ".rds"))
   saveRDS(jobContext, jobContextFileName)
+
 
 
   # Execute module using settings
   script <- "
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
-    connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
-    connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
-    connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
-    jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
+  "
 
+  # Set the connection information based on the type of execution being
+  # performed
+  if (is(executionSettings, "CdmExecutionSettings")) {
+    script <- paste0(script,
+                     "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
+                       connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
+                       connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+                       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails")
+  } else if (is(executionSettings, "ResultsExecutionSettings")) {
+    script <- paste0(script,
+                     "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference)
+                       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
+                       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
+                       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails")
+  } else {
+    stop("Unhandled executionSettings class! Must be one of the following: CdmExecutionSettings, ResultsExecutionSettings")
+  }
+
+  script <- paste0(script, "
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
     ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
 
     options(andromedaTempFolder = file.path(jobContext$moduleExecutionSettings$workFolder, 'andromedaTemp'))
 
-    renv::use(lockfile = 'renv.lock')
+    if (Sys.getenv('FORCE_RENV_USE', '') == 'TRUE') {
+      renv::use(lockfile = 'renv.lock')
+    }
     execute(jobContext)
 
     ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
     ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)
-  "
+    writeLines('done', file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'done'))
+    ")
+
   script <- gsub("jobContextFileName", sprintf("\"%s\"", jobContextFileName), script)
-  tempScriptFile <- tempfile(fileext = ".R")
+  tempScriptFile <- jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "StrategusScript.R")#gsub("\\\\", "/", tempfile(fileext = ".R"))
   fileConn<-file(tempScriptFile)
   writeLines(script, fileConn)
   close(fileConn)
 
+  doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "done")
+  if (file.exists(doneFile)) {
+    unlink(doneFile)
+  }
   renv::run(script = tempScriptFile,
             job = FALSE,
             name = "Running module",
             project = moduleFolder)
+  if (!file.exists(doneFile)) {
+    message <- paste(
+      "Module did not complete. To debug:",
+      sprintf("  rstudioapi::openProject('%s', newSession = TRUE)", moduleFolder),
+      sprintf("  file.edit('%s')", tempScriptFile),
+      sep = "\n"
+    )
+    stop(message)
+  }
 
   return(list(dummy = 123))
 }
