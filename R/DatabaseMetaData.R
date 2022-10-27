@@ -60,9 +60,10 @@ createDatabaseMetaData <- function(executionSettings) {
   CohortGenerator::writeCsv(x = database,
                             file = file.path(databaseMetaDataFolder, "database_meta_data.csv"))
 
-  resultsDataModel <- readr::read_csv(file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
-                                      show_col_types = FALSE)
+  resultsDataModel <- CohortGenerator::readCsv(file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
+                                               warnOnCaseMismatch = FALSE)
   CohortGenerator::writeCsv(x = resultsDataModel,
-                            file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"))
+                            file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"),
+                            warnOnFileNameCaseMismatch = FALSE)
   return(databaseId)
 }

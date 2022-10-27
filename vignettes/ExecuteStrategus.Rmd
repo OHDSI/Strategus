@@ -1,0 +1,50 @@
+---
+title: "Execute Strategus"
+author: "Anthony G. Sena"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Execute Strategus}
+  %\VignetteEncoding{UTF-8} 
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+library(webshot)
+webshot::install_phantomjs()
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Executing a study using `Strategus`
+
+This example will show how to run `Strategus` using the example study created [here](CreatingAnalysisSpecification.html)
+
+```{r eval=FALSE}
+# Set this environment variable to control where Strategus stores the module files
+Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "c:/strategus/modules")
+
+analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+  fileName = system.file("testdata/analysisSpecification.json",
+                         package = "Strategus")
+)
+
+executionSettings <- ParallelLogger::loadSettingsFromJson(fileName = "C:/strategus/study/settings/eunomiaExecutionSettings.json")
+
+Strategus::execute(analysisSpecifications = analysisSpecifications,
+                   executionSettings = executionSettings,
+                   executionScriptFolder = "c:/strategus/study/example_study/eunomia/script_folder")
+```
+## View the pipeline
+
+Below the hood, `Strategus` makes use of [targets](https://books.ropensci.org/targets/) to run each HADES module. We can review the pipeline steps and status using the following command:
+
+```{r}
+targets::tar_visnetwork(script = "c:/strategus/study/example_study/eunomia/script_folder/script.R")
+```
