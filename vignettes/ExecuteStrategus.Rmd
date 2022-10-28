@@ -45,6 +45,6 @@ Strategus::execute(analysisSpecifications = analysisSpecifications,
 
 Below the hood, `Strategus` makes use of [targets](https://books.ropensci.org/targets/) to run each HADES module. We can review the pipeline steps and status using the following command:
 
-```{r}
+```{r eval=FALSE}
 targets::tar_visnetwork(script = "c:/strategus/study/example_study/eunomia/script_folder/script.R")
 ```
