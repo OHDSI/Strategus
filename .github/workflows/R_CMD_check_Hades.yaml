@@ -20,8 +20,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: 'release'}
-          - {os: macOS-latest, r: 'release'}
+          #- {os: windows-latest, r: 'release'}
+          #- {os: macOS-latest, r: 'release'}
           - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
@@ -67,10 +67,9 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y libssh-dev
-          sudo apt-get install -y gnome-keyring
           Rscript -e 'install.packages("remotes")'
           Rscript -e 'install.packages("keyring")'
-          Rscript -e 'writeLines(keyring::keyring_create("system", "temp"))'
+          Rscript -e 'writeLines(keyring::has_keyring_support())'
           while read -r cmd
           do
             eval sudo $cmd
