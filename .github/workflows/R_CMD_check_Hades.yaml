@@ -67,6 +67,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y libssh-dev
+          sudo apt-get install -y gnome-keyring
           Rscript -e 'install.packages("remotes")'
           Rscript -e 'install.packages("keyring")'
           Rscript -e 'writeLines(keyring:::b_ss_is_available(report_error = TRUE))'
