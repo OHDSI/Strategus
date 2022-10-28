@@ -69,7 +69,7 @@ jobs:
           sudo apt-get install -y libssh-dev
           Rscript -e 'install.packages(c("remotes", "keyring", "knitr")'
           Rscript -e 'writeLines(as.character(keyring::keyring_create(keyring = "system", password = "foobar")))'
-          Rscript -e 'writeLines(knitr::kable(keyring::keyring_list()))'
+          Rscript -e 'knitr::kable(keyring::keyring_list())'
           while read -r cmd
           do
             eval sudo $cmd
