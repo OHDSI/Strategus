@@ -40,7 +40,7 @@ This walk through will show how to use `Strategus` to define an analysis specifi
 
 To start, we'll need to define cohorts and negative control outcomes to use in our example analysis specification. We've included the cohorts and negative control outcomes in the `Strategus` package for this example and the code below will load them for use when assembling the analysis specification.
 
-```{r, results='hide'}
+```{r, results='hide', eval=FALSE}
 library(CohortGenerator)
 cohortDefinitionSet <- getCohortDefinitionSet(settingsFileName = "testdata/Cohorts.csv",
                                               jsonFolder = "testdata/cohorts",
@@ -54,13 +54,13 @@ ncoCohortSet <-readCsv(file = system.file("testdata/negative_controls_concept_se
 
 This is the list of cohort definitions we will use when assembling the analysis specification for Strategus.
 
-```{r}
+```{r eval=FALSE}
 kable(cohortDefinitionSet[,c("cohortId", "cohortName")])
 ```
 
 And the negative control outcomes when performing empirical calibration.
 
-```{r}
+```{r eval=FALSE}
 kable(ncoCohortSet)
 ```
 
