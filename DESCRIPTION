@@ -35,7 +35,8 @@ Suggests:
 	knitr,
 	rmarkdown,
 	Eunomia,
-	webshot
+	webshot,
+	visNetwork
 Remotes:
   ohdsi/CohortGenerator,
   ohdsi/Eunomia
