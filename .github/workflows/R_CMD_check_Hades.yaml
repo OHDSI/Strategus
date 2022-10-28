@@ -69,7 +69,7 @@ jobs:
           sudo apt-get install -y libssh-dev
           Rscript -e 'install.packages("remotes")'
           Rscript -e 'install.packages("keyring")'
-          Rscript -e 'writeLines(as.character(keyring::has_keyring_support()))'
+          Rscript -e 'writeLines(as.character(keyring::keyring_create()))'
           while read -r cmd
           do
             eval sudo $cmd
