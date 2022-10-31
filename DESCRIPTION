@@ -16,7 +16,7 @@ BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
 	R (>= 4.0.0),
 	CohortGenerator (>= 0.7.0),
-	DatabaseConnector (>= 5.0.4)
+	DatabaseConnector (>= 5.1.0)
 Imports:
 	targets,
 	renv (>= 0.15.5),

@@ -71,6 +71,8 @@ jobs:
           Rscript -e 'install.packages(c("remotes", "keyring"))'
           Rscript -e 'writeLines(paste0("has_keyring_support: ", keyring::has_keyring_support()))'
           Rscript -e 'kb <- keyring::backend_file$new(); kb$keyring_create(keyring = "gha", password = "temp"); kb$keyring_set_default("gha")'
+          Rscript -e 'writeLines("keyring_set")'
+          Rscript -e 'keyring::key_set_with_value("test", password = "foobar")'
           while read -r cmd
           do
             eval sudo $cmd
