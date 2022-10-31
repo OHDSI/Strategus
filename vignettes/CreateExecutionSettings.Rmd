@@ -48,7 +48,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = eunomiaCo
 
 Next we will use `Strategus` to store the connection details and provide a `connectionDetailsReference` that Strategus will use to look up the connection details.
 
-```{r}
+```{r eval=FALSE}
 storeConnectionDetails(connectionDetails = connectionDetails,
                        connectionDetailsReference = "eunomia")
 ```
