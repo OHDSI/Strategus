@@ -1,0 +1,263 @@
+---
+title: "Creating Analysis Specification"
+author: "Anthony G. Sena"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+params:
+  analysisSettingsPath: "C:/git/OHDSI/Strategus/inst/testdata"
+  analysisSettingsFileName: "analysisSpecification.json"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Creating Analysis Specification}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r setup, include=FALSE, echo=FALSE, warning=FALSE}
+library(Strategus)
+library(dplyr)
+library(knitr)
+library(ParallelLogger)
+
+# # Work-around for this error:
+# # Error in globalCallingHandlers(condition = conditionHandler) :
+# #   should not be called with handlers on the stack
+options(loggerSettings = ParallelLogger:::getDefaultLoggerSettings())
+options(width = 200)
+```
+
+
+# Creating an analysis specification
+
+This walk through will show how to use `Strategus` to define an analysis specification on an example study using cohorts from the example problem _What is the risk of gastrointestinal (GI) bleed in new users of celecoxib compared to new users of diclofenac?_ as described in the [Book Of OHDSI Chapter 12 on Population Level Estimation]( https://ohdsi.github.io/TheBookOfOhdsi/PopulationLevelEstimation.html#PopulationLevelEstimation)
+
+## Cohorts for the study
+
+To start, we'll need to define cohorts and negative control outcomes to use in our example analysis specification. We've included the cohorts and negative control outcomes in the `Strategus` package for this example and the code below will load them for use when assembling the analysis specification.
+
+```{r, results='hide', eval=FALSE}
+library(CohortGenerator)
+cohortDefinitionSet <- getCohortDefinitionSet(settingsFileName = "testdata/Cohorts.csv",
+                                              jsonFolder = "testdata/cohorts",
+                                              sqlFolder = "testdata/sql",
+                                              packageName = "Strategus")
+ncoCohortSet <-readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
+                                          package = "Strategus"))
+```
+
+### Cohort Definitions & Negative Control Outcomes
+
+This is the list of cohort definitions we will use when assembling the analysis specification for Strategus.
+
+```{r eval=FALSE}
+kable(cohortDefinitionSet[,c("cohortId", "cohortName")])
+```
+
+And the negative control outcomes when performing empirical calibration.
+
+```{r eval=FALSE}
+kable(ncoCohortSet)
+```
+
+
+# Assembiling HADES modules
+
+The building blocks of the `Strategus` analysis specification are HADES modules. For purposes of this walk through, a module is a specific analytic task you would like to perform. As shown in the subsequent sections, the high-level pattern for using a module consists of:
+
+1. Download the module's settings function.
+2. Create the module specifications using the settings function(s) from the module
+3. Compose the analysis pipeline from one or more module settings
+
+## CohortGenerator Module Settings
+
+The following code downloads the settings functions from the `CohortGeneratorModule` which then activates some additional functions we can use for creating the analysis specification. In the analysis specification, we will add the cohort definitions and negative control outcomes to the `sharedResources` section since these elements may be used by any of the HADES modules. To do this, we will use the `createCohortSharedResourceSpecifications` and `createNegativeControlOutcomeCohortSharedResourceSpecifications` functions respectively. In addition, we will use the  `cohortGeneratorModuleSpecifications` function to specify the cohort generation settings.
+
+```{r eval=FALSE}
+source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.0.13/SettingsFunctions.R")
+
+# Create the cohort definition shared resource element for the analysis specification
+cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(cohortDefinitionSet)
+
+# Create the negative control outcome shared resource element for the analysis specification
+ncoSharedResource <- createNegativeControlOutcomeCohortSharedResourceSpecifications(
+  negativeControlOutcomeCohortSet = ncoCohortSet,
+  occurrenceType = 'all',
+  detectOnDescendants = TRUE)
+
+# Create the module specification
+cohortGeneratorModuleSpecifications <- createCohortGeneratorModuleSpecifications(
+  incremental = TRUE,
+  generateStats = TRUE)
+```
+
+## CohortDiagnostics Module Setttings
+
+The following code creates the `cohortDiagnosticsModuleSpecifications` to run cohort diagnostics on the cohorts in the study.
+
+```{r eval=FALSE}
+source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/v0.0.5/SettingsFunctions.R")
+cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecifications(
+  runInclusionStatistics = TRUE,
+  runIncludedSourceConcepts = TRUE,
+  runOrphanConcepts = TRUE,
+  runTimeSeries = FALSE,
+  runVisitContext = TRUE,
+  runBreakdownIndexEvents = TRUE,
+  runIncidenceRate = TRUE,
+  runCohortRelationship = TRUE,
+  runTemporalCohortCharacterization = TRUE,
+  incremental = FALSE)
+```
+
+## CohortIncidence Module Setttings
+
+The following code creates the `cohortIncidenceModuleSpecifications` to perform an incidence rate analysis for the target cohorts and outcome in this study.
+
+```{r eval=FALSE}
+source("https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.0.4/SettingsFunctions.R")
+library(CohortIncidence)
+targets <- list(createCohortRef(id=1, name="Celecoxib"),
+                createCohortRef(id=2, name="Diclofenac"),
+                createCohortRef(id=4, name="Celecoxib Age >= 30"),
+                createCohortRef(id=5, name="Diclofenac Age >= 30")
+);
+
+outcomes <- list(createOutcomeDef(id=1,name="GI bleed", cohortId=3, cleanWindow=9999))
+
+tars <- list(createTimeAtRiskDef(id=1, startWith="start", endWith="end"),
+             createTimeAtRiskDef(id=2, startWith="start", endWith="start", endOffset = 365)
+);
+
+analysis1 <- createIncidenceAnalysis(targets = c(1,2,4,5),
+                                                      outcomes = c(1),
+                                                      tars = c(1,2))
+
+irDesign <- createIncidenceDesign(targetDefs = targets,
+                                                   outcomeDefs = outcomes,
+                                                   tars=tars,
+                                                   analysisList = list(analysis1),
+                                                   strataSettings = createStrataSettings(byYear=T, byGender=T))
+
+cohortIncidenceModuleSpecifications <- createCohortIncidenceModuleSpecifications(irDesign = irDesign$toList())
+```
+
+## CohortMethod Module Setttings
+
+The following code creates the `cohortMethodModuleSpecifications` to perform a comparative cohort analysis for this study.
+
+```{r eval=FALSE}
+library(CohortMethod)
+source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.0.4/SettingsFunctions.R")
+negativeControlOutcomes <- lapply(
+  X = ncoCohortSet$cohortId, 
+  FUN = createOutcome, 
+  outcomeOfInterest = FALSE, 
+  trueEffectSize = 1, 
+  priorOutcomeLookback = 30
+)
+
+outcomesOfInterest <- lapply(
+  X = 3,
+  FUN = createOutcome,
+  outcomeOfInterest = TRUE
+)
+
+outcomes <- append(
+  negativeControlOutcomes,
+  outcomesOfInterest
+)
+
+tcos1 <- createTargetComparatorOutcomes(
+  targetId = 1,
+  comparatorId = 2,
+  outcomes = outcomes,
+  excludedCovariateConceptIds = c(1118084, 1124300)
+)
+tcos2 <- createTargetComparatorOutcomes(
+  targetId = 4,
+  comparatorId = 5,
+  outcomes = outcomes,
+  excludedCovariateConceptIds = c(1118084, 1124300)
+)
+
+targetComparatorOutcomesList <- list(tcos1, tcos2)
+
+covarSettings <- createDefaultCovariateSettings(addDescendantsToExclude = TRUE)
+
+getDbCmDataArgs <- createGetDbCohortMethodDataArgs(
+  washoutPeriod = 183,
+  firstExposureOnly = TRUE,
+  removeDuplicateSubjects = "remove all",
+  maxCohortSize = 100000,
+  covariateSettings = covarSettings
+)
+
+createStudyPopArgs <- createCreateStudyPopulationArgs(
+  minDaysAtRisk = 1,
+  riskWindowStart = 0,
+  startAnchor = "cohort start",
+  riskWindowEnd = 30,
+  endAnchor = "cohort end"
+)
+
+matchOnPsArgs <- CohortMethod::createMatchOnPsArgs()
+fitOutcomeModelArgs <- CohortMethod::createFitOutcomeModelArgs(modelType = "cox")
+createPsArgs <- CohortMethod::createCreatePsArgs(stopOnError = FALSE,
+                                                 control = Cyclops::createControl(cvRepetitions = 1))
+computeSharedCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs()
+computeCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs(covariateFilter = FeatureExtraction::getDefaultTable1Specifications())
+
+cmAnalysis1 <- createCmAnalysis(
+  analysisId = 1,
+  description = "No matching, simple outcome model",
+  getDbCohortMethodDataArgs = getDbCmDataArgs,
+  createStudyPopArgs = createStudyPopArgs,
+  fitOutcomeModelArgs = fitOutcomeModelArgs
+)
+
+cmAnalysis2 <- createCmAnalysis(
+  analysisId = 2,
+  description = "Matching on ps and covariates, simple outcomeModel",
+  getDbCohortMethodDataArgs = getDbCmDataArgs,
+  createStudyPopArgs = createStudyPopArgs,
+  createPsArgs = createPsArgs,
+  matchOnPsArgs = matchOnPsArgs,
+  computeSharedCovariateBalanceArgs = computeSharedCovBalArgs,
+  computeCovariateBalanceArgs = computeCovBalArgs,
+  fitOutcomeModelArgs = fitOutcomeModelArgs
+)
+
+cmAnalysisList <- list(cmAnalysis1, cmAnalysis2)
+
+analysesToExclude <- NULL
+
+
+cohortMethodModuleSpecifications <- createCohortMethodModuleSpecifications(
+  cmAnalysisList = cmAnalysisList,
+  targetComparatorOutcomesList = targetComparatorOutcomesList,
+  analysesToExclude = analysesToExclude
+)
+```
+
+
+# Strategus Analysis Specifications
+
+Finally, we will use the various shared resources and module specifications to construct the full set of analysis specifications and save it to the file system in JSON format.
+
+```{r eval=FALSE}
+analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
+  addSharedResources(cohortDefinitionSharedResource) %>%
+  addSharedResources(ncoSharedResource) %>%
+  addModuleSpecifications(cohortGeneratorModuleSpecifications) %>%
+  addModuleSpecifications(cohortDiagnosticsModuleSpecifications) %>%
+  addModuleSpecifications(cohortIncidenceModuleSpecifications) %>%
+  addModuleSpecifications(cohortMethodModuleSpecifications)
+
+ParallelLogger::saveSettingsToJson(analysisSpecifications, file.path(params$analysisSettingsPath, params$analysisSettingsFileName))
+```
+

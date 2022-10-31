@@ -21,4 +21,5 @@
 #' @import dplyr
 #' @import CohortGenerator
 #' @import DatabaseConnector
+#' @importFrom methods is
 NULL

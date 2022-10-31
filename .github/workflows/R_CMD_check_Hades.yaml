@@ -67,7 +67,6 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y libssh-dev
-          Rscript -e 'install.packages("remotes")'
           while read -r cmd
           do
             eval sudo $cmd

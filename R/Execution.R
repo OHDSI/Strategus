@@ -57,7 +57,7 @@ execute <- function(analysisSpecifications,
     if (dir.exists(executionScriptFolder)) {
       unlink(executionScriptFolder, recursive = TRUE)
     }
-    dir.create(executionScriptFolder)
+    dir.create(executionScriptFolder, recursive = TRUE)
   }
 
   if (is(executionSettings, "CdmExecutionSettings")) {

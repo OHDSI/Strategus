@@ -1,0 +1,76 @@
+---
+title: "Creating Execution Settings"
+author: "Anthony G. Sena"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Creating Execution Settings}
+  %\VignetteEncoding{UTF-8}  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(Strategus)
+library(Eunomia)
+```
+
+## Execution settings
+
+The execution settings are used to specify the specific environment settings for running the study. In this example, we will make use of the [Eunomia](https://github.com/ohdsi/eunomia) data set which is an OMOP CDM with simulated data used for example purposes. When running this against a real CDM, you will need to specify the database connection details for your environment. To do this, `Strategus` contains a function called `createCdmExecutionSettings` that will use [keyring](https://r-lib.github.io/keyring/index.html) to store the connection information securely so that sensitive information is not stored directly in the `executionSettings` variable. 
+
+### Eunomia example
+
+In this example, we will create a `connectionDetails` reference for Eunomia. In your environment, the `connectionDetails` would be specific to your OMOP CDM connection.
+
+```{r}
+eunomiaConnectionDetails <- Eunomia::getEunomiaConnectionDetails()
+if (!file.exists("c:/strategus/data/eunomia/eunomia.sqlite")) {
+  dir.create(path = "c:/strategus/data/eunomia/", recursive = TRUE, showWarnings = FALSE)
+  file.copy(from = eunomiaConnectionDetails$server(), 
+            to = "c:/strategus/data/eunomia/eunomia.sqlite",
+            overwrite = TRUE)
+}
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = eunomiaConnectionDetails$dbms,
+                                                                user = eunomiaConnectionDetails$user(),
+                                                                password = eunomiaConnectionDetails$password(),
+                                                                server = "c:/strategus/data/eunomia/eunomia.sqlite",
+                                                                port = eunomiaConnectionDetails$port(),
+                                                                extraSettings = eunomiaConnectionDetails$extraSettings)
+
+```
+
+Next we will use `Strategus` to store the connection details and provide a `connectionDetailsReference` that Strategus will use to look up the connection details.
+
+```{r eval=FALSE}
+storeConnectionDetails(connectionDetails = connectionDetails,
+                       connectionDetailsReference = "eunomia")
+```
+
+Next, we will use `Strategus` to create the CDM execution settings.
+
+```{r}
+executionSettings <- createCdmExecutionSettings(connectionDetailsReference = "eunomia",
+                                                workDatabaseSchema = "main",
+                                                cdmDatabaseSchema = "main",
+                                                cohortTableNames = CohortGenerator::getCohortTableNames(),
+                                                workFolder = "c:/strategus/study/example_study/eunomia/work_folder",
+                                                resultsFolder = "c:/strategus/study/example_study/eunomia/results_folder",
+                                                minCellCount = 5)
+```
+
+Finally, we can write out the execution settings to the file system to capture this information.
+
+```{r}
+settingsPath <- "C:/strategus/study/settings/"
+if (!dir.exists(settingsPath)) {
+  dir.create(settingsPath, recursive = T, showWarnings = F)
+}
+ParallelLogger::saveSettingsToJson(executionSettings, file.path(settingsPath, "eunomiaExecutionSettings.json"))
+```
