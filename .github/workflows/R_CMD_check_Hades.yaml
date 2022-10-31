@@ -67,9 +67,11 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y libssh-dev
-          Rscript -e 'install.packages(c("remotes", "keyring", "knitr"))'
-          Rscript -e 'keyring::keyring_create(keyring = "system", password = "foobar")'
-          Rscript -e 'knitr::kable(keyring::keyring_list())'
+          sudo apt-get install -y gnome-keyring
+          Rscript -e 'install.packages(c("remotes", "keyring"))'
+          Rscript -e 'kb <- keyring::backend_secret_service$new()'
+          Rscript -e 'kb$keyring_create("gha")'
+          Rscript -e 'kb$set_default_keyring("gha")'
           while read -r cmd
           do
             eval sudo $cmd
