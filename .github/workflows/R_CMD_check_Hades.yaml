@@ -70,7 +70,7 @@ jobs:
           sudo apt-get install -y gnome-keyring
           Rscript -e 'install.packages(c("remotes", "keyring"))'
           Rscript -e 'writeLines(paste0("has_keyring_support: ", keyring::has_keyring_support()))'
-          Rscript -e 'kb <- keyring::backend_file$new(); kb$keyring_create(keyring = "gha", password = "temp"); kb$set_default_keyring("gha")'
+          Rscript -e 'kb <- keyring::backend_file$new()'
           while read -r cmd
           do
             eval sudo $cmd
