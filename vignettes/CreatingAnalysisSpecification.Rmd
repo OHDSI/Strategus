@@ -81,7 +81,9 @@ The following code downloads the settings functions from the `CohortGeneratorMod
 source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.0.13/SettingsFunctions.R")
 
 # Create the cohort definition shared resource element for the analysis specification
-cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(cohortDefinitionSet)
+cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(
+  cohortDefinitionSet = cohortDefinitionSet
+)
 
 # Create the negative control outcome shared resource element for the analysis specification
 ncoSharedResource <- createNegativeControlOutcomeCohortSharedResourceSpecifications(
@@ -134,16 +136,20 @@ tars <- list(createTimeAtRiskDef(id=1, startWith="start", endWith="end"),
 );
 
 analysis1 <- createIncidenceAnalysis(targets = c(1,2,4,5),
-                                                      outcomes = c(1),
-                                                      tars = c(1,2))
+                                     outcomes = c(1),
+                                     tars = c(1,2))
 
 irDesign <- createIncidenceDesign(targetDefs = targets,
-                                                   outcomeDefs = outcomes,
-                                                   tars=tars,
-                                                   analysisList = list(analysis1),
-                                                   strataSettings = createStrataSettings(byYear=T, byGender=T))
+                                  outcomeDefs = outcomes,
+                                  tars=tars,
+                                  analysisList = list(analysis1),
+                                  strataSettings = createStrataSettings(
+                                    byYear = TRUE, 
+                                    byGender = TRUE))
 
-cohortIncidenceModuleSpecifications <- createCohortIncidenceModuleSpecifications(irDesign = irDesign$toList())
+cohortIncidenceModuleSpecifications <- createCohortIncidenceModuleSpecifications(
+  irDesign = irDesign$toList()
+)
 ```
 
 ## CohortMethod Module Setttings
@@ -207,10 +213,13 @@ createStudyPopArgs <- createCreateStudyPopulationArgs(
 
 matchOnPsArgs <- CohortMethod::createMatchOnPsArgs()
 fitOutcomeModelArgs <- CohortMethod::createFitOutcomeModelArgs(modelType = "cox")
-createPsArgs <- CohortMethod::createCreatePsArgs(stopOnError = FALSE,
-                                                 control = Cyclops::createControl(cvRepetitions = 1))
+createPsArgs <- CohortMethod::createCreatePsArgs(
+  stopOnError = FALSE,
+  control = Cyclops::createControl(cvRepetitions = 1)
+)
 computeSharedCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs()
-computeCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs(covariateFilter = FeatureExtraction::getDefaultTable1Specifications())
+computeCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs(
+  covariateFilter = FeatureExtraction::getDefaultTable1Specifications())
 
 cmAnalysis1 <- createCmAnalysis(
   analysisId = 1,

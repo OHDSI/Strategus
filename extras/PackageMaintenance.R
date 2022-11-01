@@ -33,12 +33,33 @@ devtools::spell_check()
 unlink("extras/Strategus.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/Strategus.pdf")
 
+rmarkdown::render("vignettes/CreatingAnalysisSpecification.Rmd",
+                  output_file = "../inst/doc/CreatingAnalysisSpecification.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/CreatingAnalysisSpecification.tex")
+
 rmarkdown::render("vignettes/CreatingModules.Rmd",
                   output_file = "../inst/doc/CreatingModules.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
                                           toc = TRUE,
                                           number_sections = TRUE))
 unlink("inst/doc/CreatingModules.tex")
+
+rmarkdown::render("vignettes/ExecuteStrategus.Rmd",
+                  output_file = "../inst/doc/ExecuteStrategus.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/ExecuteStrategus.tex")
+
+rmarkdown::render("vignettes/IntroductionToStrategus.Rmd",
+                  output_file = "../inst/doc/IntroductionToStrategus.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/IntroductionToStrategus.tex")
 
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
