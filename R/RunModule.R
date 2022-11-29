@@ -81,8 +81,6 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
     options(andromedaTempFolder = file.path(jobContext$moduleExecutionSettings$workFolder, 'andromedaTemp'))
 
     if (Sys.getenv('FORCE_RENV_RESTORE', '') == 'TRUE') {
-      options(renv.config.cache.symlinks = FALSE)
-      renv::isolate()
       renv::restore(prompt = FALSE)
     }
     if (Sys.getenv('FORCE_RENV_USE', '') == 'TRUE') {
