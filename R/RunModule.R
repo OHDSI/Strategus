@@ -83,6 +83,9 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
     if (Sys.getenv('FORCE_RENV_USE', '') == 'TRUE') {
       renv::use(lockfile = 'renv.lock')
     }
+    if (Sys.getenv('FORCE_RENV_RESTORE', '') == 'TRUE') {
+      renv::restore(prompt = FALSE)
+    }
     execute(jobContext)
 
     ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
