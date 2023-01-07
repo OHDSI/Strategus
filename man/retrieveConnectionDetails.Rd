@@ -4,11 +4,21 @@
 \alias{retrieveConnectionDetails}
 \title{Retrieve connection details from the secure location}
 \usage{
-retrieveConnectionDetails(connectionDetailsReference)
+retrieveConnectionDetails(
+  connectionDetailsReference,
+  keyringName = NULL,
+  keyringPassword = NULL
+)
 }
 \arguments{
 \item{connectionDetailsReference}{A string that can be used to retrieve the settings from
 the secure store.}
+
+\item{keyringName}{The name of the keyring to operate on. This function assumes you have
+created the keyring before calling this function. It defaults to
+NULL to select the default keyring.}
+
+\item{keyringPassword}{The password used to access the keyring if required.}
 }
 \value{
 Returns an object of type \code{connectionDetails}.

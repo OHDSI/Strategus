@@ -8,6 +8,8 @@ execute(
   analysisSpecifications,
   executionSettings,
   executionScriptFolder = NULL,
+  keyringName = NULL,
+  keyringPassword = NULL,
   restart = FALSE
 )
 }
@@ -21,6 +23,12 @@ by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \c
 \item{executionScriptFolder}{Optional: the path to use for storing the execution script.
 when NULL, this function will use a temporary
 file location to create the script to execute.}
+
+\item{keyringName}{The name of the keyring to operate on. This function assumes you have
+created the keyring before calling this function. It defaults to
+NULL to select the default keyring.}
+
+\item{keyringPassword}{The password used to access the keyring if required.}
 
 \item{restart}{Restart run? Requires \code{executionScriptFolder} to be specified, and be
 the same as the \code{executionScriptFolder} used in the run to restart.}

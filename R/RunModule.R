@@ -21,7 +21,7 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ...) {
+runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, executionSettings, ...) {
   checkmate::assert_multi_class(x = executionSettings, classes = c("CdmExecutionSettings", "ResultsExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
 
@@ -44,29 +44,34 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   }
   jobContext <- list(sharedResources = analysisSpecifications$sharedResources,
                      settings = moduleSpecification$settings,
-                     moduleExecutionSettings = moduleExecutionSettings)
+                     moduleExecutionSettings = moduleExecutionSettings,
+                     keyringSettings = keyringSettings)
   jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds")#gsub("\\\\", "/", tempfile(fileext = ".rds"))
   saveRDS(jobContext, jobContextFileName)
-
-
 
   # Execute module using settings
   script <- "
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
+
+    # If the keyring is locked, unlock it, set the value and then re-lock it
+    keyringLocked <- keyring::keyring_is_locked(keyring = jobContext$keyringSettings$keyringName)
+    if (keyringLocked) {
+      keyring::keyring_unlock(keyring = jobContext$keyringSettings$keyringName, password = jobContext$keyringSettings$keyringPassword)
+    }
   "
 
   # Set the connection information based on the type of execution being
   # performed
   if (is(executionSettings, "CdmExecutionSettings")) {
     script <- paste0(script,
-                     "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference)
+                     "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
                        connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
                        connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
                        jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails")
   } else if (is(executionSettings, "ResultsExecutionSettings")) {
     script <- paste0(script,
-                     "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference)
+                     "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
                        resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
                        resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
                        jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails")
@@ -75,6 +80,10 @@ runModule <- function(analysisSpecifications, moduleIndex, executionSettings, ..
   }
 
   script <- paste0(script, "
+    if (keyringLocked) {
+      keyring::keyring_lock(keyring = jobContext$keyringSettings$keyringName)
+    }
+
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
     ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
 

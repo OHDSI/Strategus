@@ -4,7 +4,12 @@
 \alias{storeConnectionDetails}
 \title{Store connection details in a secure location}
 \usage{
-storeConnectionDetails(connectionDetails, connectionDetailsReference)
+storeConnectionDetails(
+  connectionDetails,
+  connectionDetailsReference,
+  keyringName = NULL,
+  keyringPassword = NULL
+)
 }
 \arguments{
 \item{connectionDetails}{An object of type \code{connectionDetails} as created by the
@@ -12,6 +17,12 @@ storeConnectionDetails(connectionDetails, connectionDetailsReference)
 
 \item{connectionDetailsReference}{A string that can be used to retrieve the settings from
 the secure store.}
+
+\item{keyringName}{The name of the keyring to operate on. This function assumes you have
+created the keyring before calling this function. It defaults to
+NULL to select the default keyring.}
+
+\item{keyringPassword}{The password used to access the keyring if required.}
 }
 \value{
 Does not return anything. Is called for the side effect of having the connection details

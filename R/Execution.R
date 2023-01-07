@@ -29,6 +29,13 @@
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
+#'
+#' @param keyringName       The name of the keyring to operate on. This function assumes you have
+#'                      created the keyring before calling this function. It defaults to
+#'                      NULL to select the default keyring.
+#'
+#' @param keyringPassword      The password used to access the keyring if required.
+#'
 #' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
 #'                                the same as the `executionScriptFolder` used in the run to restart.
 #'
@@ -41,10 +48,14 @@
 execute <- function(analysisSpecifications,
                     executionSettings,
                     executionScriptFolder = NULL,
+                    keyringName = NULL,
+                    keyringPassword = NULL,
                     restart = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
+  keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+  checkmate::assertLogical(x = (is.null(keyringName) || keyringName %in% keyringList$keyring), add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
@@ -61,22 +72,26 @@ execute <- function(analysisSpecifications,
   }
 
   if (is(executionSettings, "CdmExecutionSettings")) {
-    executionSettings$databaseId <- createDatabaseMetaData(executionSettings)
+    executionSettings$databaseId <- createDatabaseMetaData(executionSettings = executionSettings,
+                                                           keyringName = keyringName,
+                                                           keyringPassword = keyringPassword)
   }
-  dependencies <-extractDependencies(modules)
+  dependencies <- extractDependencies(modules)
 
   fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,
                                     executionSettings = executionSettings,
                                     dependencies = dependencies,
                                     executionScriptFolder = executionScriptFolder,
-                                    restart = restart)
+                                    restart = restart,
+                                    keyringName = keyringName,
+                                    keyringPassword = keyringPassword)
 
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
   targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
 }
 
-generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, restart) {
+generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, keyringPassword, restart) {
   fileName <- file.path(executionScriptFolder, "script.R")
   if (restart) {
     return(fileName)
@@ -86,6 +101,8 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   saveRDS(analysisSpecifications, analysisSpecificationsFileName)
   executionSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "executionSettings.rds"))
   saveRDS(executionSettings, executionSettingsFileName)
+  keyringSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "keyringSettings.rds"))
+  saveRDS(list(keyringName = keyringName, keyringPassword = keyringPassword), keyringSettingsFileName)
 
 
   # Dynamically generate targets script based on analysis specifications
@@ -100,6 +117,10 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     "  tar_target(",
     "    executionSettings,",
     sprintf("    readRDS('%s')", executionSettingsFileName),
+    "  ),",
+    "  tar_target(",
+    "    keyringSettings,",
+    sprintf("    readRDS('%s')", keyringSettingsFileName),
     "  ),"
   )
   # Generate target names by module type
@@ -123,7 +144,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
       filter(.data$module %in% dependencyModules) %>%
       pull(.data$targetName)
 
-    command <- sprintf("Strategus:::runModule(analysisSpecifications, %d, executionSettings%s)",
+    command <- sprintf("Strategus:::runModule(analysisSpecifications, keyringSettings, %d, executionSettings%s)",
                        i,
                        ifelse(length(dependencyTargetNames) == 0, "", sprintf(", %s", paste(dependencyTargetNames, collapse = ", "))))
 
