@@ -78,7 +78,7 @@ The building blocks of the `Strategus` analysis specification are HADES modules.
 The following code downloads the settings functions from the `CohortGeneratorModule` which then activates some additional functions we can use for creating the analysis specification. In the analysis specification, we will add the cohort definitions and negative control outcomes to the `sharedResources` section since these elements may be used by any of the HADES modules. To do this, we will use the `createCohortSharedResourceSpecifications` and `createNegativeControlOutcomeCohortSharedResourceSpecifications` functions respectively. In addition, we will use the  `cohortGeneratorModuleSpecifications` function to specify the cohort generation settings.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.0.13/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.0.14/SettingsFunctions.R")
 
 # Create the cohort definition shared resource element for the analysis specification
 cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(
@@ -102,7 +102,7 @@ cohortGeneratorModuleSpecifications <- createCohortGeneratorModuleSpecifications
 The following code creates the `cohortDiagnosticsModuleSpecifications` to run cohort diagnostics on the cohorts in the study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/v0.0.5/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/v0.0.6/SettingsFunctions.R")
 cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecifications(
   runInclusionStatistics = TRUE,
   runIncludedSourceConcepts = TRUE,
