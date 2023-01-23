@@ -23,3 +23,6 @@
 #' @import DatabaseConnector
 #' @importFrom methods is
 NULL
+
+# Add custom asssertions
+assertKeyringPassword <- checkmate::makeAssertionFunction(.checkKeyringPasswordSet)

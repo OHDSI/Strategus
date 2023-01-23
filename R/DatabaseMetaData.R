@@ -21,13 +21,14 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-createDatabaseMetaData <- function(executionSettings) {
+createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
   databaseMetaDataFolder <- file.path(executionSettings$resultsFolder, "DatabaseMetaData")
   if (!dir.exists(databaseMetaDataFolder)) {
     dir.create(databaseMetaDataFolder, recursive = TRUE)
   }
 
-  connectionDetails <- retrieveConnectionDetails(executionSettings$connectionDetailsReference)
+  connectionDetails <- retrieveConnectionDetails(connectionDetailsReference = executionSettings$connectionDetailsReference,
+                                                 keyringName = keyringName)
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
