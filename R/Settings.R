@@ -245,6 +245,29 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
   return(connectionDetails)
 }
 
+#' Provides a list of HADES modules to run through Strategus
+#'
+#' @description
+#' This function provides a list of modules and their locations
+#' that may be used with Strategus.
+#'
+#' @return
+#' A data.frame() of modules that work with Strategus. This will contain:
+#' module = The name of the module
+#' version = The version of the module
+#' remote_repo = The remote location of the module (i.e. github.com)
+#' remote_username = The organization of the module (i.e. OHDSI)
+#' module_type = 'cdm' or 'results'. 'cdm' refers to modules that are designed to work against
+#' patient level data in the OMOP CDM format. 'results' refers to modules that are designed
+#' to work against a results database containing output from a 'cdm' module.
+#'
+#' @export
+getModuleList <- function() {
+  moduleList <- CohortGenerator::readCsv(file = system.file("csv/modules.csv",
+                                                            package = "Strategus",
+                                                            mustWork = TRUE))
+  return(moduleList)
+}
 
 #' Helper function to unlock a keyring
 #'

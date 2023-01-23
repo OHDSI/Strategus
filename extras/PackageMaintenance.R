@@ -64,3 +64,63 @@ unlink("inst/doc/IntroductionToStrategus.tex")
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
 
+
+# Maintain a list of supported modules ------------
+
+# CDM Modules
+moduleList <- data.frame(module = "CharacterizationModule",
+                         version = "v0.0.1",
+                         remoteRepo = "github.com",
+                         remoteUsername = "OHDSI",
+                         moduleType = "cdm")
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortDiagnosticsModule",
+                               version = "v0.0.6",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortGeneratorModule",
+                               version = "v0.0.14",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortIncidenceModule",
+                               version = "v0.0.5",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortMethodModule",
+                               version = "v0.0.4",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "PatientLevelPredictionModule",
+                               version = "v0.0.1",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "SelfControlledCaseSeriesModule",
+                               version = "v0.0.2",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+
+# Results Modules
+moduleList <- rbind(moduleList,
+                    data.frame(module = "EvidenceSynthesisModule",
+                               version = "v0.1.0",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "results"))
+
+CohortGenerator::writeCsv(x = moduleList,
+                          file = "inst/csv/modules.csv")
+
+
+
