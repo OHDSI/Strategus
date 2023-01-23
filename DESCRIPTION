@@ -42,6 +42,6 @@ Remotes:
   ohdsi/Eunomia
 VignetteBuilder: knitr
 NeedsCompilation: no
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8

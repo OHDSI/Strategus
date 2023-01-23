@@ -170,11 +170,7 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
 #' @param connectionDetailsReference  A string that can be used to retrieve the settings from
 #'                                    the secure store.
 #'
-#' @param keyringName       The name of the keyring to operate on. This function assumes you have
-#'                      created the keyring before calling this function. It defaults to
-#'                      NULL to select the default keyring.
-#'
-#' @param keyringPassword      The password used to access the keyring if required.
+#' @template keyringName
 #'
 #' @seealso [retrieveConnectionDetails()]
 #'
@@ -183,7 +179,7 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
 #' stored.
 #'
 #' @export
-storeConnectionDetails <- function(connectionDetails, connectionDetailsReference, keyringName = NULL, keyringPassword = NULL) {
+storeConnectionDetails <- function(connectionDetails, connectionDetailsReference, keyringName = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
   # Get the keyring list and verify that the keyring specified exists.
   # In the case of the default NULL keyring, this will be represented as an empty
@@ -191,7 +187,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
   keyringList <- keyring::keyring_list()
   checkmate::assertClass(connectionDetails, "connectionDetails", add = errorMessages)
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
-  checkmate::assertLogical(x = (is.null(keyringName) || keyringName %in% keyringList$keyring), add = errorMessages)
+  checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Evaluate functions used to secure details to allow serialization:
@@ -207,10 +203,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
   }
   connectionDetails <- ParallelLogger::convertSettingsToJson(connectionDetails)
   # If the keyring is locked, unlock it, set the value and then re-lock it
-  keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-  if (keyringLocked) {
-    keyring::keyring_unlock(keyring = keyringName, password = keyringPassword)
-  }
+  keyringLocked <- unlockKeyring(keyringName = keyringName)
   keyring::key_set_with_value(connectionDetailsReference, password = connectionDetails, keyring = keyringName)
   if (keyringLocked) {
     keyring::keyring_lock(keyring = keyringName)
@@ -223,11 +216,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
 #' @param connectionDetailsReference  A string that can be used to retrieve the settings from
 #'                                    the secure store.
 #'
-#' @param keyringName       The name of the keyring to operate on. This function assumes you have
-#'                      created the keyring before calling this function. It defaults to
-#'                      NULL to select the default keyring.
-#'
-#' @param keyringPassword      The password used to access the keyring if required.
+#' @template keyringName
 #'
 #' @seealso [storeConnectionDetails()]
 #'
@@ -235,7 +224,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
 #' Returns an object of type `connectionDetails`.
 #'
 #' @export
-retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = NULL, keyringPassword = NULL) {
+retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = NULL) {
   keyringList <- keyring::keyring_list()
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
@@ -243,10 +232,7 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
   checkmate::reportAssertions(collection = errorMessages)
 
   # If the keyring is locked, unlock it, set the value and then re-lock it
-  keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-  if (keyringLocked) {
-    keyring::keyring_unlock(keyring = keyringName, password = keyringPassword)
-  }
+  keyringLocked <- unlockKeyring(keyringName = keyringName)
 
   connectionDetails <- keyring::key_get(connectionDetailsReference, keyring = keyringName)
   connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
@@ -257,4 +243,38 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
   }
 
   return(connectionDetails)
+}
+
+
+#' Helper function to unlock a keyring
+#'
+#' @description
+#' This helper function is used to unlock a keyring by using the password
+#' stored in Sys.getenv("STRATEGUS_KEYRING_PASSWORD"). It will alert
+#' the user if the environment variable with the password is not set.
+#'
+#' @template keyringName
+#'
+#' @return
+#' Returns TRUE if the keyring was unlocked using the password otherwise
+#' it returns FALSE
+#'
+#' @export
+unlockKeyring <- function(keyringName) {
+  # If the keyring is locked, unlock it, set the value and then re-lock it
+  keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
+  if (keyringLocked) {
+    assertKeyringPassword(x = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"), keyringName = keyringName)
+    keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"))
+  }
+  return(keyringLocked)
+}
+
+#' @keywords internal
+.checkKeyringPasswordSet <- function(x, keyringName = NULL) {
+  if (length(x) == 0 || x == "") {
+    return(paste0("STRATEGUS_KEYRING_PASSWORD NOT FOUND. STRATEGUS_KEYRING_PASSWORD must be set using Sys.setenv(STRATEGUS_KEYRING_PASSWORD = \"<your password>\") to unlock the keyring: ", keyringName))
+  } else {
+    return(TRUE)
+  }
 }
