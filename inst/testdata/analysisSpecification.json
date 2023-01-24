@@ -1286,7 +1286,8 @@
               "useNestingCohort": true,
               "nestingCohortId": 1,
               "deleteCovariatesSmallCount": 0,
-              "studyEndDate": "2019-11-30",
+              "studyStartDate": "",
+              "studyEndDate": "20191130",
               "maxCasesPerOutcome": 1000000,
               "exposureIds": "exposureId",
               "customCovariateIds": "",
@@ -2394,7 +2395,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 17393267,
+                "seed": 6809199,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2409,7 +2410,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 62723,
+            "seed": 67714,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
@@ -2531,7 +2532,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 97434948,
+                "seed": 35259278,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2546,7 +2547,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 39587,
+            "seed": 29619,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"

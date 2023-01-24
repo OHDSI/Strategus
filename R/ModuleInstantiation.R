@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -34,7 +34,6 @@
 #'
 #' @export
 ensureAllModulesInstantiated <- function(analysisSpecifications) {
-
   modules <- getModuleTable(analysisSpecifications, distinct = TRUE)
 
   # Verify only one version per module:
@@ -43,16 +42,20 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
     summarise(versions = n()) %>%
     filter(.data$versions > 1)
   if (nrow(multipleVersionsPerModule) > 0) {
-    stop(sprintf("Only one version per module allowed in a single analyses specification.\nMultiple versions found for module(s) `%s`.",
-                 paste(multipleVersionsPerModule$module, collapse = "', '")))
+    stop(sprintf(
+      "Only one version per module allowed in a single analyses specification.\nMultiple versions found for module(s) `%s`.",
+      paste(multipleVersionsPerModule$module, collapse = "', '")
+    ))
   }
 
   # Ensure all required modules are instantiated:
   for (i in 1:nrow(modules)) {
-    ensureModuleInstantiated(module = modules$module[i],
-                             version = modules$version[i],
-                             remoteRepo = modules$remoteRepo[i],
-                             remoteUsername = modules$remoteUsername[i])
+    ensureModuleInstantiated(
+      module = modules$module[i],
+      version = modules$version[i],
+      remoteRepo = modules$remoteRepo[i],
+      remoteUsername = modules$remoteUsername[i]
+    )
   }
 
   # Check required dependencies have been installed:
@@ -60,9 +63,12 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   missingDependencies <- dependencies %>%
     filter(!.data$dependsOn %in% modules$module)
   if (nrow(missingDependencies) > 0) {
-    message <- paste(c("Detected missing dependencies:",
-                       sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)),
-                     collapse = "\n")
+    message <- paste(c(
+      "Detected missing dependencies:",
+      sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
+    ),
+    collapse = "\n"
+    )
     stop(message)
   }
 
@@ -72,11 +78,17 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
 }
 
 getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
-  modules <- lapply(analysisSpecifications$moduleSpecifications,
-                    function(x) tibble(module = x$module,
-                                       version = x$version,
-                                       remoteRepo = x$remoteRepo,
-                                       remoteUsername = x$remoteUsername)) %>%
+  modules <- lapply(
+    analysisSpecifications$moduleSpecifications,
+    function(x) {
+      tibble(
+        module = x$module,
+        version = x$version,
+        remoteRepo = x$remoteRepo,
+        remoteUsername = x$remoteUsername
+      )
+    }
+  ) %>%
     bind_rows()
   if (distinct) {
     modules <- modules %>%
@@ -89,8 +101,10 @@ extractDependencies <- function(modules) {
   extractDependenciesSingleModule <- function(module) {
     moduleFolder <- getModuleFolder(module$module, module$version)
     metaData <- getModuleMetaData(moduleFolder)
-    dependencies <- tibble(module = module$module,
-                           dependsOn = as.character(metaData$Dependencies))
+    dependencies <- tibble(
+      module = module$module,
+      dependsOn = as.character(metaData$Dependencies)
+    )
     return(dependencies)
   }
   dependencies <- lapply(split(modules, 1:nrow(modules)), extractDependenciesSingleModule) %>%
@@ -150,9 +164,11 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     subFolders <- list.dirs(path = moduleFolder, recursive = FALSE)
     if (length(subFolders) > 0) {
       for (i in 1:length(subFolders)) {
-        R.utils::copyDirectory(from = subFolders[i],
-                               to = moduleFolder,
-                               recursive = TRUE)
+        R.utils::copyDirectory(
+          from = subFolders[i],
+          to = moduleFolder,
+          recursive = TRUE
+        )
         unlink(subFolders[i], recursive = TRUE)
       }
     }
@@ -168,13 +184,15 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
       }
     "
   tempScriptFile <- tempfile(fileext = ".R")
-  fileConn<-file(tempScriptFile)
+  fileConn <- file(tempScriptFile)
   writeLines(script, fileConn)
   close(fileConn)
 
-  renv::run(script = tempScriptFile,
-            job = FALSE,
-            name = "Buidling renv library",
-            project = moduleFolder)
+  renv::run(
+    script = tempScriptFile,
+    job = FALSE,
+    name = "Buidling renv library",
+    project = moduleFolder
+  )
   success <- TRUE
 }

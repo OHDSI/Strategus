@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -27,44 +27,60 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     dir.create(databaseMetaDataFolder, recursive = TRUE)
   }
 
-  connectionDetails <- retrieveConnectionDetails(connectionDetailsReference = executionSettings$connectionDetailsReference,
-                                                 keyringName = keyringName)
+  connectionDetails <- retrieveConnectionDetails(
+    connectionDetailsReference = executionSettings$connectionDetailsReference,
+    keyringName = keyringName
+  )
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
   sql <- "SELECT TOP 1 * FROM @cdm_database_schema.cdm_source;"
-  cdmSource <- renderTranslateQuerySql(connection = connection,
-                                       sql = sql,
-                                       snakeCaseToCamelCase = TRUE,
-                                       cdm_database_schema = executionSettings$cdmDatabaseSchema)
+  cdmSource <- renderTranslateQuerySql(
+    connection = connection,
+    sql = sql,
+    snakeCaseToCamelCase = TRUE,
+    cdm_database_schema = executionSettings$cdmDatabaseSchema
+  )
 
   sql <- "SELECT TOP 1 vocabulary_version  FROM @cdm_database_schema.vocabulary WHERE vocabulary_id = 'None';"
-  vocabVersion <- renderTranslateQuerySql(connection = connection,
-                                          sql = sql,
-                                          snakeCaseToCamelCase = TRUE,
-                                          cdm_database_schema = executionSettings$cdmDatabaseSchema)
+  vocabVersion <- renderTranslateQuerySql(
+    connection = connection,
+    sql = sql,
+    snakeCaseToCamelCase = TRUE,
+    cdm_database_schema = executionSettings$cdmDatabaseSchema
+  )
 
   sql <- "SELECT MAX(observation_period_end_date) as max_obs_period_end_date
   FROM @cdm_database_schema.observation_period;"
-  observationPeriodMax <- renderTranslateQuerySql(connection = connection,
-                                                  sql = sql,
-                                                  snakeCaseToCamelCase = TRUE,
-                                                  cdm_database_schema = executionSettings$cdmDatabaseSchema)
+  observationPeriodMax <- renderTranslateQuerySql(
+    connection = connection,
+    sql = sql,
+    snakeCaseToCamelCase = TRUE,
+    cdm_database_schema = executionSettings$cdmDatabaseSchema
+  )
 
   databaseId <- digest::digest2int(paste(cdmSource$cdmSourceName, cdmSource$cdmReleaseDate))
   database <- cdmSource %>%
-    mutate(vocabularyVersion = vocabVersion$vocabularyVersion,
-           databaseId = !!databaseId) %>%
+    mutate(
+      vocabularyVersion = vocabVersion$vocabularyVersion,
+      databaseId = !!databaseId
+    ) %>%
     bind_cols(observationPeriodMax)
 
   # Export the csv files:
-  CohortGenerator::writeCsv(x = database,
-                            file = file.path(databaseMetaDataFolder, "database_meta_data.csv"))
+  CohortGenerator::writeCsv(
+    x = database,
+    file = file.path(databaseMetaDataFolder, "database_meta_data.csv")
+  )
 
-  resultsDataModel <- CohortGenerator::readCsv(file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
-                                               warnOnCaseMismatch = FALSE)
-  CohortGenerator::writeCsv(x = resultsDataModel,
-                            file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"),
-                            warnOnFileNameCaseMismatch = FALSE)
+  resultsDataModel <- CohortGenerator::readCsv(
+    file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
+    warnOnCaseMismatch = FALSE
+  )
+  CohortGenerator::writeCsv(
+    x = resultsDataModel,
+    file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"),
+    warnOnFileNameCaseMismatch = FALSE
+  )
   return(databaseId)
 }

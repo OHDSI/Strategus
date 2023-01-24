@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
       </span>
     </div>
 
@@ -50,7 +50,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a>
+    </li>
+    <li>
       <a href="../articles/CreatingModules.html">Creating Strategus Modules</a>
+    </li>
+    <li>
+      <a href="../articles/ExecuteStrategus.html">Execute Strategus</a>
+    </li>
+    <li>
+      <a href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a>
     </li>
   </ul>
 </li>
@@ -85,7 +94,7 @@
                         <h4 data-toc-skip class="author">Anthony G.
 Sena</h4>
             
-            <h4 data-toc-skip class="date">2022-06-10</h4>
+            <h4 data-toc-skip class="date">2023-01-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/HEAD/vignettes/CreatingModules.Rmd" class="external-link"><code>vignettes/CreatingModules.Rmd</code></a></small>
       <div class="hidden name"><code>CreatingModules.Rmd</code></div>
@@ -108,13 +117,13 @@ still under development.</p>
 <p>A Strategus analytic module is an R Project which requires the
 following files:</p>
 <pre><code> [01;34mmodule_skeleton [0m
-+--  [32mMain.R [0m
-+-- MetaData.json
-+-- NEWS.md
-+-- README.md
-+-- renv.lock
-+--  [32mSettingsFunctions.R [0m
-\-- YourProjectModule.Rproj</code></pre>
+├──  [32mMain.R [0m
+├── MetaData.json
+├── NEWS.md
+├── README.md
+├── renv.lock
+├──  [32mSettingsFunctions.R [0m
+└── YourProjectModule.Rproj</code></pre>
 <p>Here we will detail how each file is used by Strategus and what is
 required in the contents of the file.</p>
 <div class="section level3">
@@ -158,7 +167,7 @@ released otherwise Strategus will not be able to download it.</li>
 <li>
 <strong>Dependencies</strong>: A list of modules that are required
 to have successfully executed <strong>BEFORE</strong> this module is
-executed. If there are no depenencies, leave this as an empty array
+executed. If there are no dependencies, leave this as an empty array
 <code>[]</code>.</li>
 <li>
 <strong>TablePrefix</strong>: The prefix to use when creating the
@@ -172,22 +181,22 @@ value is used.</li>
 </h3>
 <p>This file holds the main executable for your module. This file must
 contain a function called <code>execute(jobContext)</code>.</p>
-<pre><code><span class="va">execute</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">jobContext</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># VALIDATE THE jobContext</span>
-  <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">inform</a></span><span class="op">(</span><span class="st">"Validating inputs"</span><span class="op">)</span>
-  
-  <span class="co"># YOUR VALIDATION CODE GOES HERE....</span>
-  
-  <span class="co"># EXECUTE THE ANALYTICS</span>
-  <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">inform</a></span><span class="op">(</span><span class="st">"Executing"</span><span class="op">)</span>
-  
-  <span class="co"># YOUR EXECUTION CODE GOES HERE....</span>
-  
-  <span class="co"># ASSEMBLE AND .ZIP THE RESULTS</span>
-  <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">inform</a></span><span class="op">(</span><span class="st">"Export data"</span><span class="op">)</span>
-  
-  <span class="co"># YOUR CODE GOES HERE....</span>
-<span class="op">}</span></code></pre>
+<pre><code><span><span class="va">execute</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">jobContext</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># VALIDATE THE jobContext</span></span>
+<span>  <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">inform</a></span><span class="op">(</span><span class="st">"Validating inputs"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># YOUR VALIDATION CODE GOES HERE....</span></span>
+<span>  </span>
+<span>  <span class="co"># EXECUTE THE ANALYTICS</span></span>
+<span>  <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">inform</a></span><span class="op">(</span><span class="st">"Executing"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># YOUR EXECUTION CODE GOES HERE....</span></span>
+<span>  </span>
+<span>  <span class="co"># ASSEMBLE AND .ZIP THE RESULTS</span></span>
+<span>  <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">inform</a></span><span class="op">(</span><span class="st">"Export data"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># YOUR CODE GOES HERE....</span></span>
+<span><span class="op">}</span></span></code></pre>
 <p>As shown in the code above, your <code>execute(jobContext)</code>
 should handle: validating the <code>jobContext</code> object to ensure
 it has all of the information necessary for your code to function, a
@@ -199,7 +208,7 @@ module must output its results:</p>
 described below.</li>
 <li>Output files are required to be in .CSV format. Use CohortGenerator
 v0.5.0 or higher which contains a helper function for
-<code>writeCsv()</code> which will ensure your output is formatted
+<code><a href="https://ohdsi.github.io/CohortGenerator/reference/writeCsv.html" class="external-link">writeCsv()</a></code> which will ensure your output is formatted
 properly. For more information, please see: <a href="https://ohdsi.github.io/CohortGenerator/reference/writeCsv.html" class="external-link uri">https://ohdsi.github.io/CohortGenerator/reference/writeCsv.html</a>.
 <strong>IMPORTANT:</strong> File names <em>must</em> correspond to the
 table names that are specified in the
@@ -245,24 +254,24 @@ module settings for use in Strategus. We plan to later remove this
 requirement when we can describe the module specification using the <a href="https://swagger.io/specification/" class="external-link">OpenAPI 3.0 Specification</a>.
 For now, your module should contain a function similar to the
 following:</p>
-<pre><code><span class="va">createCohortGeneratorModuleSpecifications</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">incremental</span> <span class="op">=</span> <span class="cn">TRUE</span>,
-                                                      <span class="va">generateStats</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">name</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">createCohortGeneratorModuleSpecifications</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">analysis</span><span class="op">[[</span><span class="va">name</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span>
-  <span class="op">}</span>
-
-  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkFileExists.html" class="external-link">assert_file_exists</a></span><span class="op">(</span><span class="st">"MetaData.json"</span><span class="op">)</span>
-  <span class="va">moduleInfo</span> <span class="op">&lt;-</span> <span class="fu">ParallelLogger</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/ParallelLogger/reference/loadSettingsFromJson.html" class="external-link">loadSettingsFromJson</a></span><span class="op">(</span><span class="st">"MetaData.json"</span><span class="op">)</span>
-  
-  <span class="va">specifications</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>module <span class="op">=</span> <span class="va">moduleInfo</span><span class="op">$</span><span class="va">Name</span>,
-                         version <span class="op">=</span> <span class="va">moduleInfo</span><span class="op">$</span><span class="va">Version</span>,
-                         remoteRepo <span class="op">=</span> <span class="st">"github.com"</span>,
-                         remoteUsername <span class="op">=</span> <span class="st">"ohdsi"</span>,
-                         settings <span class="op">=</span> <span class="va">analysis</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">specifications</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CohortGeneratorModuleSpecifications"</span>, <span class="st">"ModuleSpecifications"</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">specifications</span><span class="op">)</span>
-<span class="op">}</span></code></pre>
+<pre><code><span><span class="va">createCohortGeneratorModuleSpecifications</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">incremental</span> <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                                                      <span class="va">generateStats</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">analysis</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">name</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/formals.html" class="external-link">formals</a></span><span class="op">(</span><span class="va">createCohortGeneratorModuleSpecifications</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">analysis</span><span class="op">[[</span><span class="va">name</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/get.html" class="external-link">get</a></span><span class="op">(</span><span class="va">name</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu">checkmate</span><span class="fu">::</span><span class="fu"><a href="https://mllg.github.io/checkmate/reference/checkFileExists.html" class="external-link">assert_file_exists</a></span><span class="op">(</span><span class="st">"MetaData.json"</span><span class="op">)</span></span>
+<span>  <span class="va">moduleInfo</span> <span class="op">&lt;-</span> <span class="fu">ParallelLogger</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/ParallelLogger/reference/loadSettingsFromJson.html" class="external-link">loadSettingsFromJson</a></span><span class="op">(</span><span class="st">"MetaData.json"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">specifications</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>module <span class="op">=</span> <span class="va">moduleInfo</span><span class="op">$</span><span class="va">Name</span>,</span>
+<span>                         version <span class="op">=</span> <span class="va">moduleInfo</span><span class="op">$</span><span class="va">Version</span>,</span>
+<span>                         remoteRepo <span class="op">=</span> <span class="st">"github.com"</span>,</span>
+<span>                         remoteUsername <span class="op">=</span> <span class="st">"ohdsi"</span>,</span>
+<span>                         settings <span class="op">=</span> <span class="va">analysis</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">specifications</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CohortGeneratorModuleSpecifications"</span>, <span class="st">"ModuleSpecifications"</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">specifications</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre>
 <p>As shown above, this example comes from the
 <code>CohortGeneratorModule</code> and the function name reflects the
 fact that the function will create the settings used to dictate the
@@ -321,19 +330,19 @@ settings JSON for Strategus:</p>
 <h3 id="renv-lock">renv.lock<a class="anchor" aria-label="anchor" href="#renv-lock"></a>
 </h3>
 <p>Each module will make use of <a href="https://rstudio.github.io/renv/articles/renv.html" class="external-link">renv</a> to
-capture its R package dependnecies. Furthermore, Strategus will make use
-of the <code>renv</code> settings in your module to create a runtime
+capture its R package dependencies. Furthermore, Strategus will make use
+of the <code>renv</code> settings in your module to create a run-time
 environment when executing your module to ensure all of the necessary
 dependencies are available to your module.</p>
 <p>TO start, the <code>renv.lock</code> file is generated by running the
 following code:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/createRenvLockFile.html" class="external-link">createRenvLockFile</a></span><span class="op">(</span>
-  rootPackage <span class="op">=</span> <span class="st">"CohortGenerator"</span>,
-  includeRootPackage <span class="op">=</span> <span class="cn">TRUE</span>,
-  mode <span class="op">=</span> <span class="st">"description"</span>,
-  additionalRequiredPackages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"checkmate"</span>, <span class="st">"CirceR"</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/createRenvLockFile.html" class="external-link">createRenvLockFile</a></span><span class="op">(</span></span>
+<span>  rootPackage <span class="op">=</span> <span class="st">"CohortGenerator"</span>,</span>
+<span>  includeRootPackage <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"description"</span>,</span>
+<span>  additionalRequiredPackages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"checkmate"</span>, <span class="st">"CirceR"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>Using <code>OhdsiRTools</code> will create the <code>renv.lock</code>
 file in the root of your project. The <code>rootPackage</code> property
 should correspond to the main HADES package you are using in the module
@@ -345,7 +354,7 @@ automatically.</p>
 <p>Once the <code>renv.lock</code> file is generated, you can create the
 other files necessary for renv to function by running the command:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/init.html" class="external-link">init</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/init.html" class="external-link">init</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Once you run <code><a href="https://rstudio.github.io/renv/reference/init.html" class="external-link">renv::init()</a></code>, renv will create some new
 files in your project:</p>
 <ul>
@@ -370,20 +379,20 @@ We’ll detail those files here:</p>
 <p>This file is used to store utility functions for your module, such as
 the code mentioned earlier for generating the <a href="#renv.lock">renv.lock</a> file. Here is an example of the contents
 of ModuleMaintenance.R:</p>
-<pre><code><span class="co"># Format and check code:</span>
-<span class="fu">styler</span><span class="fu">::</span><span class="fu"><a href="https://styler.r-lib.org/reference/style_dir.html" class="external-link">style_dir</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/updateCopyrightYearFolder.html" class="external-link">updateCopyrightYearFolder</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/findNonAsciiStringsInFolder.html" class="external-link">findNonAsciiStringsInFolder</a></span><span class="op">(</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/spell_check.html" class="external-link">spell_check</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="co"># Generate renv lock file and activate renv:</span>
-<span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/createRenvLockFile.html" class="external-link">createRenvLockFile</a></span><span class="op">(</span>
-  rootPackage <span class="op">=</span> <span class="st">"CohortGenerator"</span>,
-  includeRootPackage <span class="op">=</span> <span class="cn">TRUE</span>,
-  mode <span class="op">=</span> <span class="st">"description"</span>,
-  additionalRequiredPackages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"checkmate"</span>, <span class="st">"CirceR"</span><span class="op">)</span>
-<span class="op">)</span>
-<span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/init.html" class="external-link">init</a></span><span class="op">(</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="co"># Format and check code:</span></span>
+<span><span class="fu">styler</span><span class="fu">::</span><span class="fu"><a href="https://styler.r-lib.org/reference/style_dir.html" class="external-link">style_dir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/updateCopyrightYearFolder.html" class="external-link">updateCopyrightYearFolder</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/findNonAsciiStringsInFolder.html" class="external-link">findNonAsciiStringsInFolder</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/spell_check.html" class="external-link">spell_check</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generate renv lock file and activate renv:</span></span>
+<span><span class="fu">OhdsiRTools</span><span class="fu">::</span><span class="fu"><a href="http://ohdsi.github.io/OhdsiRTools/reference/createRenvLockFile.html" class="external-link">createRenvLockFile</a></span><span class="op">(</span></span>
+<span>  rootPackage <span class="op">=</span> <span class="st">"CohortGenerator"</span>,</span>
+<span>  includeRootPackage <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"description"</span>,</span>
+<span>  additionalRequiredPackages <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"checkmate"</span>, <span class="st">"CirceR"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu">renv</span><span class="fu">::</span><span class="fu"><a href="https://rstudio.github.io/renv/reference/init.html" class="external-link">init</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="test-files">Test Files<a class="anchor" aria-label="anchor" href="#test-files"></a>
@@ -410,12 +419,12 @@ your module:</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Martijn Schuemie.</p>
+<p>Developed by Martijn Schuemie, Anthony Sena.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

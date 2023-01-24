@@ -97,7 +97,7 @@ cohortGeneratorModuleSpecifications <- createCohortGeneratorModuleSpecifications
   generateStats = TRUE)
 ```
 
-## CohortDiagnostics Module Setttings
+## CohortDiagnostics Module Settings
 
 The following code creates the `cohortDiagnosticsModuleSpecifications` to run cohort diagnostics on the cohorts in the study.
 
@@ -116,7 +116,7 @@ cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecificat
   incremental = FALSE)
 ```
 
-## CohortIncidence Module Setttings
+## CohortIncidence Module Settings
 
 The following code creates the `cohortIncidenceModuleSpecifications` to perform an incidence rate analysis for the target cohorts and outcome in this study.
 
@@ -144,7 +144,7 @@ irDesign <- createIncidenceDesign(targetDefs = targets,
                                   tars=tars,
                                   analysisList = list(analysis1),
                                   strataSettings = createStrataSettings(
-                                    byYear = TRUE, 
+                                    byYear = TRUE,
                                     byGender = TRUE))
 
 cohortIncidenceModuleSpecifications <- createCohortIncidenceModuleSpecifications(
@@ -157,37 +157,37 @@ cohortIncidenceModuleSpecifications <- createCohortIncidenceModuleSpecifications
 The following code creates the `characterizationModuleSpecifications` to perform an characterization analysis for the target cohorts and outcome in this study.
 
 
-```{r}
+```{r eval=FALSE}
 source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.0.1/SettingsFunctions.R")
 characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(targetIds = c(1,2),
                                                                                    outcomeIds = 3,
-                                                                                       covariateSettings = 
+                                                                                   covariateSettings =
                                                                                      FeatureExtraction::createCovariateSettings(
-                                                                                         useDemographicsAge = T,
-                                                                                         useDemographicsAgeGroup = T,
-                                                                                         useDemographicsGender = T,
-                                                                                         useDemographicsRace = T,
-                                                                                         useDemographicsEthnicity = T,
-                                                                                         useDemographicsIndexYear = T,
-                                                                                         useDemographicsIndexMonth = T,
-                                                                                         useDemographicsPriorObservationTime = T,
-                                                                                         useDemographicsPostObservationTime = T,
-                                                                                         useDemographicsTimeInCohort = T,
-                                                                                         useConditionGroupEraLongTerm  = T,
-                                                                                         useDrugGroupEraLongTerm = T,
-                                                                                         useProcedureOccurrenceLongTerm = T,
-                                                                                         longTermStartDays = -365,
-                                                                                         endDays = 0),
-                                                                                       dechallengeStopInterval = 30,
-                                                                                       dechallengeEvaluationWindow = 30,
-                                                                                       riskWindowStart = 1,
-                                                                                       startAnchor = "cohort start",
-                                                                                       riskWindowEnd = 0,
-                                                                                       endAnchor = "cohort end")
+                                                                                       useDemographicsAge = T,
+                                                                                       useDemographicsAgeGroup = T,
+                                                                                       useDemographicsGender = T,
+                                                                                       useDemographicsRace = T,
+                                                                                       useDemographicsEthnicity = T,
+                                                                                       useDemographicsIndexYear = T,
+                                                                                       useDemographicsIndexMonth = T,
+                                                                                       useDemographicsPriorObservationTime = T,
+                                                                                       useDemographicsPostObservationTime = T,
+                                                                                       useDemographicsTimeInCohort = T,
+                                                                                       useConditionGroupEraLongTerm  = T,
+                                                                                       useDrugGroupEraLongTerm = T,
+                                                                                       useProcedureOccurrenceLongTerm = T,
+                                                                                       longTermStartDays = -365,
+                                                                                       endDays = 0),
+                                                                                   dechallengeStopInterval = 30,
+                                                                                   dechallengeEvaluationWindow = 30,
+                                                                                   riskWindowStart = 1,
+                                                                                   startAnchor = "cohort start",
+                                                                                   riskWindowEnd = 0,
+                                                                                   endAnchor = "cohort end")
 ```
 
 
-## CohortMethod Module Setttings
+## CohortMethod Module Settings
 
 The following code creates the `cohortMethodModuleSpecifications` to perform a comparative cohort analysis for this study.
 
@@ -195,10 +195,10 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 library(CohortMethod)
 source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.0.4/SettingsFunctions.R")
 negativeControlOutcomes <- lapply(
-  X = ncoCohortSet$cohortId, 
-  FUN = createOutcome, 
-  outcomeOfInterest = FALSE, 
-  trueEffectSize = 1, 
+  X = ncoCohortSet$cohortId,
+  FUN = createOutcome,
+  outcomeOfInterest = FALSE,
+  trueEffectSize = 1,
   priorOutcomeLookback = 30
 )
 
@@ -213,13 +213,13 @@ outcomes <- append(
   outcomesOfInterest
 )
 
-tcos1 <- createTargetComparatorOutcomes(
+tcos1 <- CohortMethod::createTargetComparatorOutcomes(
   targetId = 1,
   comparatorId = 2,
   outcomes = outcomes,
   excludedCovariateConceptIds = c(1118084, 1124300)
 )
-tcos2 <- createTargetComparatorOutcomes(
+tcos2 <- CohortMethod::createTargetComparatorOutcomes(
   targetId = 4,
   comparatorId = 5,
   outcomes = outcomes,
@@ -228,9 +228,9 @@ tcos2 <- createTargetComparatorOutcomes(
 
 targetComparatorOutcomesList <- list(tcos1, tcos2)
 
-covarSettings <- createDefaultCovariateSettings(addDescendantsToExclude = TRUE)
+covarSettings <- FeatureExtraction::createDefaultCovariateSettings(addDescendantsToExclude = TRUE)
 
-getDbCmDataArgs <- createGetDbCohortMethodDataArgs(
+getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(
   washoutPeriod = 183,
   firstExposureOnly = TRUE,
   removeDuplicateSubjects = "remove all",
@@ -238,7 +238,7 @@ getDbCmDataArgs <- createGetDbCohortMethodDataArgs(
   covariateSettings = covarSettings
 )
 
-createStudyPopArgs <- createCreateStudyPopulationArgs(
+createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(
   minDaysAtRisk = 1,
   riskWindowStart = 0,
   startAnchor = "cohort start",
@@ -256,7 +256,7 @@ computeSharedCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs()
 computeCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs(
   covariateFilter = FeatureExtraction::getDefaultTable1Specifications())
 
-cmAnalysis1 <- createCmAnalysis(
+cmAnalysis1 <- CohortMethod::createCmAnalysis(
   analysisId = 1,
   description = "No matching, simple outcome model",
   getDbCohortMethodDataArgs = getDbCmDataArgs,
@@ -264,7 +264,7 @@ cmAnalysis1 <- createCmAnalysis(
   fitOutcomeModelArgs = fitOutcomeModelArgs
 )
 
-cmAnalysis2 <- createCmAnalysis(
+cmAnalysis2 <- CohortMethod::createCmAnalysis(
   analysisId = 2,
   description = "Matching on ps and covariates, simple outcomeModel",
   getDbCohortMethodDataArgs = getDbCmDataArgs,
@@ -288,13 +288,14 @@ cohortMethodModuleSpecifications <- createCohortMethodModuleSpecifications(
 )
 ```
 
-## SelfControlledCaseSeries Module Setttings
 
-The following code creates the `sccsModuleSpecifications` to perform a self-controlled case series analysis for this study.
+## SelfControlledCaseSeries Module Settings
+
+The following code creates the `cohortMethodModuleSpecifications` to perform a comparative cohort analysis for this study.
 
 ```{r eval=FALSE}
 library(SelfControlledCaseSeries)
-source("https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.0.2/SettingsFunctions.R")
+source(url = "https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.0.2/SettingsFunctions.R")
 
 # Exposures-outcomes -----------------------------------------------------------
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
@@ -319,8 +320,8 @@ for (exposureOfInterestId in exposureOfInterestIds) {
 
 # Analysis settings ------------------------------------------------------------
 getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
-  studyStartDate = NULL,
-  studyEndDate = as.Date("2019-11-30"),
+  studyStartDate = "",
+  studyEndDate = "20191130",
   maxCasesPerOutcome = 1e6,
   useNestingCohort = TRUE,
   nestingCohortId = 1,
@@ -400,8 +401,9 @@ sccsModuleSpecifications <- creatSelfControlledCaseSeriesModuleSpecifications(
 )
 ```
 
-
 ## PatientLevelPrediction Module Settings
+
+The following code creates the `plpModuleSpecifications` to perform a self-controlled case series analysis for this study.
 
 ```{r eval=FALSE}
 source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.1/SettingsFunctions.R")

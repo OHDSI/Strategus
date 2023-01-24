@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -42,11 +42,13 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   if (!dir.exists(moduleExecutionSettings$resultsSubFolder)) {
     dir.create(moduleExecutionSettings$resultsSubFolder, recursive = TRUE)
   }
-  jobContext <- list(sharedResources = analysisSpecifications$sharedResources,
-                     settings = moduleSpecification$settings,
-                     moduleExecutionSettings = moduleExecutionSettings,
-                     keyringSettings = keyringSettings)
-  jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds")#gsub("\\\\", "/", tempfile(fileext = ".rds"))
+  jobContext <- list(
+    sharedResources = analysisSpecifications$sharedResources,
+    settings = moduleSpecification$settings,
+    moduleExecutionSettings = moduleExecutionSettings,
+    keyringSettings = keyringSettings
+  )
+  jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
   saveRDS(jobContext, jobContextFileName)
 
   # Execute module using settings
@@ -61,17 +63,21 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   # Set the connection information based on the type of execution being
   # performed
   if (is(executionSettings, "CdmExecutionSettings")) {
-    script <- paste0(script,
-                     "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
+    script <- paste0(
+      script,
+      "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
                        connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
                        connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
-                       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails")
+                       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails"
+    )
   } else if (is(executionSettings, "ResultsExecutionSettings")) {
-    script <- paste0(script,
-                     "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
+    script <- paste0(
+      script,
+      "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
                        resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
                        resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
-                       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails")
+                       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails"
+    )
   } else {
     stop("Unhandled executionSettings class! Must be one of the following: CdmExecutionSettings, ResultsExecutionSettings")
   }
@@ -97,8 +103,8 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     ")
 
   script <- gsub("jobContextFileName", sprintf("\"%s\"", jobContextFileName), script)
-  tempScriptFile <- jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "StrategusScript.R")#gsub("\\\\", "/", tempfile(fileext = ".R"))
-  fileConn<-file(tempScriptFile)
+  tempScriptFile <- jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "StrategusScript.R") # gsub("\\\\", "/", tempfile(fileext = ".R"))
+  fileConn <- file(tempScriptFile)
   writeLines(script, fileConn)
   close(fileConn)
 
@@ -106,10 +112,12 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }
-  renv::run(script = tempScriptFile,
-            job = FALSE,
-            name = "Running module",
-            project = moduleFolder)
+  renv::run(
+    script = tempScriptFile,
+    job = FALSE,
+    name = "Running module",
+    project = moduleFolder
+  )
   if (!file.exists(doneFile)) {
     message <- paste(
       "Module did not complete. To debug:",

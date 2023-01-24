@@ -4,10 +4,19 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/CreatingAnalysisSpecification.html</loc>
+  </url>
+  <url>
     <loc>/articles/CreatingModules.html</loc>
   </url>
   <url>
+    <loc>/articles/ExecuteStrategus.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/IntroductionToStrategus.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -28,16 +37,25 @@
     <loc>/reference/addSharedResources.html</loc>
   </url>
   <url>
+    <loc>/reference/createCdmExecutionSettings.html</loc>
+  </url>
+  <url>
     <loc>/reference/createEmptyAnalysisSpecificiations.html</loc>
   </url>
   <url>
     <loc>/reference/createExecutionSettings.html</loc>
   </url>
   <url>
+    <loc>/reference/createResultsExecutionSettings.html</loc>
+  </url>
+  <url>
     <loc>/reference/ensureAllModulesInstantiated.html</loc>
   </url>
   <url>
     <loc>/reference/execute.html</loc>
+  </url>
+  <url>
+    <loc>/reference/getModuleList.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
@@ -50,5 +68,8 @@
   </url>
   <url>
     <loc>/reference/Strategus-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/unlockKeyring.html</loc>
   </url>
 </urlset>

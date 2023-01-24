@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -21,15 +21,17 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-#' Create an emtpy analysis specifications object.
+#' Create an empty analysis specifications object.
 #'
 #' @return
 #' An object of type `AnalysisSpecifications`.
 #'
 #' @export
 createEmptyAnalysisSpecificiations <- function() {
-  analysisSpecifications <- list(sharedResources = list(),
-                                 moduleSpecifications = list())
+  analysisSpecifications <- list(
+    sharedResources = list(),
+    moduleSpecifications = list()
+  )
   class(analysisSpecifications) <- "AnalysisSpecifications"
   return(analysisSpecifications)
 }
@@ -111,14 +113,16 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  executionSettings <- list(connectionDetailsReference = connectionDetailsReference,
-                            workDatabaseSchema = workDatabaseSchema,
-                            cdmDatabaseSchema = cdmDatabaseSchema,
-                            cohortTableNames = cohortTableNames,
-                            workFolder = workFolder,
-                            resultsFolder = resultsFolder,
-                            minCellCount = minCellCount)
-  class(executionSettings) <- c("CdmExecutionSettings","ExecutionSettings")
+  executionSettings <- list(
+    connectionDetailsReference = connectionDetailsReference,
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = cohortTableNames,
+    workFolder = workFolder,
+    resultsFolder = resultsFolder,
+    minCellCount = minCellCount
+  )
+  class(executionSettings) <- c("CdmExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
 
@@ -149,12 +153,14 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  executionSettings <- list(resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-                            resultsDatabaseSchema = resultsDatabaseSchema,
-                            workFolder = workFolder,
-                            resultsFolder = resultsFolder,
-                            minCellCount = minCellCount)
-  class(executionSettings) <- c("ResultsExecutionSettings","ExecutionSettings")
+  executionSettings <- list(
+    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+    resultsDatabaseSchema = resultsDatabaseSchema,
+    workFolder = workFolder,
+    resultsFolder = resultsFolder,
+    minCellCount = minCellCount
+  )
+  class(executionSettings) <- c("ResultsExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
 
@@ -264,8 +270,9 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
 #' @export
 getModuleList <- function() {
   moduleList <- CohortGenerator::readCsv(file = system.file("csv/modules.csv",
-                                                            package = "Strategus",
-                                                            mustWork = TRUE))
+    package = "Strategus",
+    mustWork = TRUE
+  ))
   return(moduleList)
 }
 

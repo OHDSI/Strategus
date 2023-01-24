@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -67,17 +67,21 @@ execute <- function(analysisSpecifications,
   }
 
   if (is(executionSettings, "CdmExecutionSettings")) {
-    executionSettings$databaseId <- createDatabaseMetaData(executionSettings = executionSettings,
-                                                           keyringName = keyringName)
+    executionSettings$databaseId <- createDatabaseMetaData(
+      executionSettings = executionSettings,
+      keyringName = keyringName
+    )
   }
   dependencies <- extractDependencies(modules)
 
-  fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,
-                                    executionSettings = executionSettings,
-                                    dependencies = dependencies,
-                                    executionScriptFolder = executionScriptFolder,
-                                    restart = restart,
-                                    keyringName = keyringName)
+  fileName <- generateTargetsScript(
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings,
+    dependencies = dependencies,
+    executionScriptFolder = executionScriptFolder,
+    restart = restart,
+    keyringName = keyringName
+  )
 
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
@@ -121,8 +125,10 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
     targetName <- sprintf("%s_%d", moduleSpecification$module, i)
-    moduleToTargetNames[[length(moduleToTargetNames) + 1]] <- tibble(module = moduleSpecification$module,
-                                                                     targetName = targetName)
+    moduleToTargetNames[[length(moduleToTargetNames) + 1]] <- tibble(
+      module = moduleSpecification$module,
+      targetName = targetName
+    )
   }
   moduleToTargetNames <- bind_rows(moduleToTargetNames)
 
@@ -137,17 +143,20 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
       filter(.data$module %in% dependencyModules) %>%
       pull(.data$targetName)
 
-    command <- sprintf("Strategus:::runModule(analysisSpecifications, keyringSettings, %d, executionSettings%s)",
-                       i,
-                       ifelse(length(dependencyTargetNames) == 0, "", sprintf(", %s", paste(dependencyTargetNames, collapse = ", "))))
+    command <- sprintf(
+      "Strategus:::runModule(analysisSpecifications, keyringSettings, %d, executionSettings%s)",
+      i,
+      ifelse(length(dependencyTargetNames) == 0, "", sprintf(", %s", paste(dependencyTargetNames, collapse = ", ")))
+    )
 
 
-    lines <- c(lines,
-               "  tar_target(",
-               sprintf("    %s,", targetName),
-               sprintf("    %s", command),
-               ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),"))
-
+    lines <- c(
+      lines,
+      "  tar_target(",
+      sprintf("    %s,", targetName),
+      sprintf("    %s", command),
+      ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
+    )
   }
 
   lines <- c(lines, ")")

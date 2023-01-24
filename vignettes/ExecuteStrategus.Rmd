@@ -84,9 +84,9 @@ ParallelLogger::saveSettingsToJson(
 
 # Executing the study
 
-## Speciying the instantiated modules folder
+## Specifying the instantiated modules folder
 
-Strategus studies use modules to perform the analytics, and each module has a version. Different studies can use the same modules, but a single study can only use one version of a partical module. These modules need to be instantiated before they can be executed, a sometimes time-consuming task. We must specify a global location where these modules will be instantiated so that, once a module is instantiated, it can be used in all future studies:
+Strategus studies use modules to perform the analytics, and each module has a version. Different studies can use the same modules, but a single study can only use one version of a particular module. These modules need to be instantiated before they can be executed, a sometimes time-consuming task. We must specify a global location where these modules will be instantiated so that, once a module is instantiated, it can be used in all future studies:
 
 ```{r eval=FALSE}
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "c:/strategus/modules")
