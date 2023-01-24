@@ -121,7 +121,7 @@ cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecificat
 The following code creates the `cohortIncidenceModuleSpecifications` to perform an incidence rate analysis for the target cohorts and outcome in this study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.0.4/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.0.5/SettingsFunctions.R")
 library(CohortIncidence)
 targets <- list(createCohortRef(id=1, name="Celecoxib"),
                 createCohortRef(id=2, name="Diclofenac"),
@@ -151,6 +151,41 @@ cohortIncidenceModuleSpecifications <- createCohortIncidenceModuleSpecifications
   irDesign = irDesign$toList()
 )
 ```
+
+## Characterization Module Settings
+
+The following code creates the `characterizationModuleSpecifications` to perform an characterization analysis for the target cohorts and outcome in this study.
+
+
+```{r}
+source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.0.1/SettingsFunctions.R")
+characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(targetIds = c(1,2),
+                                                                                   outcomeIds = 3,
+                                                                                       covariateSettings = 
+                                                                                     FeatureExtraction::createCovariateSettings(
+                                                                                         useDemographicsAge = T,
+                                                                                         useDemographicsAgeGroup = T,
+                                                                                         useDemographicsGender = T,
+                                                                                         useDemographicsRace = T,
+                                                                                         useDemographicsEthnicity = T,
+                                                                                         useDemographicsIndexYear = T,
+                                                                                         useDemographicsIndexMonth = T,
+                                                                                         useDemographicsPriorObservationTime = T,
+                                                                                         useDemographicsPostObservationTime = T,
+                                                                                         useDemographicsTimeInCohort = T,
+                                                                                         useConditionGroupEraLongTerm  = T,
+                                                                                         useDrugGroupEraLongTerm = T,
+                                                                                         useProcedureOccurrenceLongTerm = T,
+                                                                                         longTermStartDays = -365,
+                                                                                         endDays = 0),
+                                                                                       dechallengeStopInterval = 30,
+                                                                                       dechallengeEvaluationWindow = 30,
+                                                                                       riskWindowStart = 1,
+                                                                                       startAnchor = "cohort start",
+                                                                                       riskWindowEnd = 0,
+                                                                                       endAnchor = "cohort end")
+```
+
 
 ## CohortMethod Module Setttings
 
@@ -253,6 +288,166 @@ cohortMethodModuleSpecifications <- createCohortMethodModuleSpecifications(
 )
 ```
 
+## SelfControlledCaseSeries Module Setttings
+
+The following code creates the `sccsModuleSpecifications` to perform a self-controlled case series analysis for this study.
+
+```{r eval=FALSE}
+library(SelfControlledCaseSeries)
+source("https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.0.2/SettingsFunctions.R")
+
+# Exposures-outcomes -----------------------------------------------------------
+negativeControlOutcomeIds <- ncoCohortSet$cohortId
+outcomeOfInterestIds <- c(3)
+exposureOfInterestIds <- c(1,2)
+
+exposuresOutcomeList <- list()
+for (exposureOfInterestId in exposureOfInterestIds) {
+  for (outcomeOfInterestId in outcomeOfInterestIds) {
+    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- createExposuresOutcome(
+      outcomeId = outcomeOfInterestId,
+      exposures = list(createExposure(exposureId = exposureOfInterestId))
+    )
+  }
+  for (negativeControlOutcomeId in negativeControlOutcomeIds) {
+    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- createExposuresOutcome(
+      outcomeId = negativeControlOutcomeId,
+      exposures = list(createExposure(exposureId = exposureOfInterestId, trueEffectSize = 1))
+    )
+  }
+}
+
+# Analysis settings ------------------------------------------------------------
+getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
+  studyStartDate = NULL,
+  studyEndDate = as.Date("2019-11-30"),
+  maxCasesPerOutcome = 1e6,
+  useNestingCohort = TRUE,
+  nestingCohortId = 1,
+  deleteCovariatesSmallCount = 0
+)
+
+createStudyPopulation6AndOlderArgs <- SelfControlledCaseSeries::createCreateStudyPopulationArgs(
+  minAge = 18,
+  naivePeriod = 365
+)
+
+covarPreExp <- SelfControlledCaseSeries::createEraCovariateSettings(
+  label = "Pre-exposure",
+  includeEraIds = "exposureId",
+  start = -30,
+  end = -1,
+  endAnchor = "era start"
+)
+
+covarExposureOfInt <- SelfControlledCaseSeries::createEraCovariateSettings(
+  label = "Main",
+  includeEraIds = "exposureId",
+  start = 1,
+  startAnchor = "era start",
+  end = 0,
+  endAnchor = "era end",
+  profileLikelihood = TRUE,
+  exposureOfInterest = TRUE
+)
+
+calendarTimeSettings <- SelfControlledCaseSeries::createCalendarTimeCovariateSettings(
+  calendarTimeKnots = 5,
+  allowRegularization = TRUE,
+  computeConfidenceIntervals = FALSE
+)
+
+seasonalitySettings <- SelfControlledCaseSeries::createSeasonalityCovariateSettings(
+  seasonKnots = 5,
+  allowRegularization = TRUE,
+  computeConfidenceIntervals = FALSE
+)
+
+createSccsIntervalDataArgs <- SelfControlledCaseSeries::createCreateSccsIntervalDataArgs(
+  eraCovariateSettings = list(covarPreExp, covarExposureOfInt),
+  seasonalityCovariateSettings = seasonalitySettings,
+  calendarTimeCovariateSettings = calendarTimeSettings,
+  minCasesForTimeCovariates = 100000
+)
+
+fitSccsModelArgs <- SelfControlledCaseSeries::createFitSccsModelArgs(
+  control = Cyclops::createControl(
+    cvType = "auto",
+    selectorType = "byPid",
+    startingVariance = 0.1,
+    seed = 1,
+    resetCoefficients = TRUE,
+    noiseLevel = "quiet"
+  )
+)
+
+sccsAnalysis1 <- SelfControlledCaseSeries::createSccsAnalysis(
+  analysisId = 1,
+  description = "SCCS age 18-",
+  getDbSccsDataArgs = getDbSccsDataArgs,
+  createStudyPopulationArgs = createStudyPopulation6AndOlderArgs,
+  createIntervalDataArgs = createSccsIntervalDataArgs,
+  fitSccsModelArgs = fitSccsModelArgs
+)
+
+sccsAnalysisList <- list(sccsAnalysis1)
+
+# SCCS module specs ------------------------------------------------------------
+sccsModuleSpecifications <- creatSelfControlledCaseSeriesModuleSpecifications(
+  sccsAnalysisList = sccsAnalysisList,
+  exposuresOutcomeList = exposuresOutcomeList,
+  combineDataFetchAcrossOutcomes = FALSE
+)
+```
+
+
+## PatientLevelPrediction Module Settings
+
+```{r eval=FALSE}
+source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.1/SettingsFunctions.R")
+
+makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
+  invisible(  PatientLevelPrediction::createModelDesign(
+    targetId = targetId, 
+    outcomeId = outcomeId, 
+    restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(), 
+    populationSettings = popSettings, 
+    covariateSettings = covarSettings, 
+    preprocessSettings = PatientLevelPrediction::createPreprocessSettings(), 
+    modelSettings = PatientLevelPrediction::setLassoLogisticRegression(), 
+    splitSettings = PatientLevelPrediction::createDefaultSplitSetting(), 
+    runCovariateSummary = T
+  ))
+}
+
+plpPopulationSettings <- PatientLevelPrediction::createStudyPopulationSettings(
+  startAnchor = "cohort start",
+  riskWindowStart = 1,
+  endAnchor = "cohort start",
+  riskWindowEnd = 365,
+  minTimeAtRisk = 1
+)
+plpCovarSettings <- FeatureExtraction::createDefaultCovariateSettings()
+
+modelDesignList <- list()
+for (i in 1:length(exposureOfInterestIds)) {
+  for (j in 1:length(outcomeOfInterestIds)) {
+    modelDesignList <- append(
+      modelDesignList,
+      list(
+          makeModelDesignSettings(
+          targetId = exposureOfInterestIds[i],
+          outcomeId = outcomeOfInterestIds[j],
+          popSettings = plpPopulationSettings,
+          covarSettings = plpCovarSettings
+        )
+      )
+    )
+  }
+}
+
+plpModuleSpecifications <- createPatientLevelPredictionModuleSpecifications(modelDesignList = modelDesignList)
+```
 
 # Strategus Analysis Specifications
 
@@ -265,7 +460,10 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
   addModuleSpecifications(cohortGeneratorModuleSpecifications) %>%
   addModuleSpecifications(cohortDiagnosticsModuleSpecifications) %>%
   addModuleSpecifications(cohortIncidenceModuleSpecifications) %>%
-  addModuleSpecifications(cohortMethodModuleSpecifications)
+  addModuleSpecifications(characterizationModuleSpecifications) %>%
+  addModuleSpecifications(cohortMethodModuleSpecifications) %>%
+  addModuleSpecifications(sccsModuleSpecifications) %>%
+  addModuleSpecifications(plpModuleSpecifications)
 
 ParallelLogger::saveSettingsToJson(analysisSpecifications, file.path(params$analysisSettingsPath, params$analysisSettingsFileName))
 ```
