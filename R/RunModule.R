@@ -55,7 +55,11 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     jobContext <- readRDS(jobContextFileName)
 
     # If the keyring is locked, unlock it, set the value and then re-lock it
-    keyringLocked <- Strategus::unlockKeyring(keyringName = jobContext$keyringSettings$keyringName)
+    keyringName <- jobContext$keyringSettings$keyringName
+    keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
+    if (keyringLocked) {
+        keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
+    }
   "
 
   # Set the connection information based on the type of execution being
