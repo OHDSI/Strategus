@@ -56,7 +56,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
-    keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
+    keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
     if (keyringLocked) {
         keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
     }
