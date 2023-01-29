@@ -176,6 +176,7 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 
   script <- "
       renv::restore(prompt = FALSE, library = renv::paths$cache())
+      renv::repair(library = renv::paths$cache())
       if (!require('ParallelLogger', quietly = TRUE)) {
         install.packages('ParallelLogger')
       }

@@ -56,29 +56,13 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
 
-    # Emit the renv diagnostics for debugging
-    renv::diagnostics()
-
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
-    print(keyringName)
-
-    # HACK - force ParallelLogger/keyring install
-    # This should happen when the module is installed...
-    if (!require('DatabaseConnector', quietly = TRUE)) {
-      install.packages('DatabaseConnector')
-    }
-    if (!require('ParallelLogger', quietly = TRUE)) {
-      install.packages('ParallelLogger')
-    }
-    if (!require('keyring', quietly = TRUE)) {
-      install.packages('keyring')
-    }
-
-    keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-    if (keyringLocked) {
-       keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
-    }
+    #print(keyringName)
+    # keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
+    # if (keyringLocked) {
+    #    keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
+    # }
   "
 
   # Set the connection information based on the type of execution being
