@@ -60,7 +60,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     keyringName <- jobContext$keyringSettings$keyringName
     print(keyringName)
     keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-    print(keyringName)
+    print(keyringLocked)
     if (keyringLocked) {
         print('UNLOCK')
         keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
@@ -72,7 +72,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   if (is(executionSettings, "CdmExecutionSettings")) {
     script <- paste0(
       script,
-      "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
+      "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = keyringName)
        connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
        connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
        jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails"
@@ -80,7 +80,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   } else if (is(executionSettings, "ResultsExecutionSettings")) {
     script <- paste0(
       script,
-      "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
+      "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
        resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
        resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
        jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails"
