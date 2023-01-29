@@ -58,8 +58,11 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
+    print(keyringName)
     keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
+    print(keyringName)
     if (keyringLocked) {
+        print('UNLOCK')
         keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
     }
   "
@@ -70,17 +73,17 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     script <- paste0(
       script,
       "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
-                       connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
-                       connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
-                       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails"
+       connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
+       connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails"
     )
   } else if (is(executionSettings, "ResultsExecutionSettings")) {
     script <- paste0(
       script,
       "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
-                       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
-                       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
-                       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails"
+       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
+       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
+       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails"
     )
   } else {
     stop("Unhandled executionSettings class! Must be one of the following: CdmExecutionSettings, ResultsExecutionSettings")
