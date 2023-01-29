@@ -59,6 +59,12 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
     print(keyringName)
+
+    # HACK - force keyring install
+    if (!require('keyring', quietly = TRUE)) {
+      install.packages('keyring')
+    }
+
     #print(installed.packages())
     #keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
     #print(keyringLocked)
