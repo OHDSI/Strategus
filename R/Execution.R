@@ -105,7 +105,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   # Dynamically generate targets script based on analysis specifications
   lines <- c(
     "library(targets)",
-    "tar_option_set(packages = c('Strategus'))",
+    "tar_option_set(packages = c('Strategus', 'keyring'))",
     "list(",
     "  tar_target(",
     "    analysisSpecifications,",
