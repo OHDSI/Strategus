@@ -60,18 +60,19 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     keyringName <- jobContext$keyringSettings$keyringName
     print(keyringName)
 
-    # HACK - force keyring install
+    # HACK - force ParallelLogger/keyring install
+    # This should happen when the module is installed...
+    if (!require('ParallelLogger', quietly = TRUE)) {
+      install.packages('ParallelLogger')
+    }
     if (!require('keyring', quietly = TRUE)) {
       install.packages('keyring')
     }
 
-    #print(installed.packages())
-    #keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-    #print(keyringLocked)
-    #if (keyringLocked) {
-    #    print('UNLOCK')
-    #    keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
-    #}
+    keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
+    if (keyringLocked) {
+       keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
+    }
   "
 
   # Set the connection information based on the type of execution being
