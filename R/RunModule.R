@@ -62,6 +62,9 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
     # HACK - force ParallelLogger/keyring install
     # This should happen when the module is installed...
+    if (!require('DatabaseConnector', quietly = TRUE)) {
+      install.packages('DatabaseConnector')
+    }
     if (!require('ParallelLogger', quietly = TRUE)) {
       install.packages('ParallelLogger')
     }
