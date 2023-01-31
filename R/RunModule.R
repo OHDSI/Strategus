@@ -55,7 +55,8 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   script <- "
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
-    renv::repair(library = renv::paths$cache())
+    #renv::repair(library = renv::paths$cache())
+    renv::repair()
 
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
