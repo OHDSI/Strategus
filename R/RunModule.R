@@ -59,11 +59,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
-    #print(keyringName)
-    # keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-    # if (keyringLocked) {
-    #    keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv('STRATEGUS_KEYRING_PASSWORD'))
-    # }
+    keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
   "
 
   # Set the connection information based on the type of execution being
@@ -89,9 +85,9 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   }
 
   script <- paste0(script, "
-    # if (keyringLocked) {
-    #   keyring::keyring_lock(keyring = jobContext$keyringSettings$keyringName)
-    # }
+    if (keyringLocked) {
+       keyring::keyring_lock(keyring = keyringName)
+    }
 
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
     ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
