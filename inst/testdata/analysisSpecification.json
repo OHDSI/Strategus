@@ -234,7 +234,7 @@
     },
     {
       "module": "CohortDiagnosticsModule",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -285,13 +285,14 @@
           "attr_class": "covariateSettings",
           "attr_fun": "getDbDefaultCovariateData"
         },
+        "minCharacterizationMean": 0.01,
         "incremental": false
       },
       "attr_class": ["CohortDiagnosticsModuleSpecifications", "ModuleSpecifications"]
     },
     {
       "module": "CohortIncidenceModule",
-      "version": "0.0.4",
+      "version": "0.0.6",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -364,7 +365,7 @@
     },
     {
       "module": "CharacterizationModule",
-      "version": "0.0.1",
+      "version": "0.2.1",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -429,7 +430,7 @@
     },
     {
       "module": "CohortMethodModule",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -2285,7 +2286,7 @@
     },
     {
       "module": "PatientLevelPredictionModule",
-      "version": "0.0.1",
+      "version": "0.0.5",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": [
@@ -2395,7 +2396,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 6809199,
+                "seed": 82022361,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2410,7 +2411,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 67714,
+            "seed": 48491,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
@@ -2532,7 +2533,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 35259278,
+                "seed": 61282714,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2547,7 +2548,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 29619,
+            "seed": 9166,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
