@@ -191,7 +191,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
   # In the case of the default NULL keyring, this will be represented as an empty
   # string in the keyring list
   keyringList <- keyring::keyring_list()
-  checkmate::assertClass(connectionDetails, "connectionDetails", add = errorMessages)
+  checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
