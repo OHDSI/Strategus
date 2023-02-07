@@ -174,6 +174,19 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     }
   }
 
+  # Verify the structure of the module to ensure that
+  # it contains the proper files required by renv
+  # before we restore from the renv.lock file
+  missingFiles <- checkRenvDependencies(moduleFolder)
+  if (nrow(missingFiles) > 0) {
+    errorMsg <- paste0("The module ", module, " (v", version, ") is missing the following files required by renv:\n")
+    for (i in 1:nrow(missingFiles)) {
+      errorMsg <- paste0(errorMsg, "     - ", missingFiles[i,]$fileName, "\n")
+    }
+    errorMsg <- paste0(errorMsg, "As a result, Strategus cannot use this module as part of the execution pipeline otherwise it may corrupt your R library.\nPlease check to see if a newer version of this module exists and update your analysis specification to use that module instead.")
+    stop(errorMsg)
+  }
+
   script <- "
       renv::restore(prompt = FALSE)
       if (!require('ParallelLogger', quietly = TRUE)) {
@@ -195,4 +208,20 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     project = moduleFolder
   )
   success <- TRUE
+}
+
+
+checkRenvDependencies <- function(moduleFolder) {
+  renvRequiredFiles <- c(".Rprofile",
+                         "renv.lock",
+                         "renv/activate.R",
+                         "renv/settings.dcf")
+
+  missingFiles <- tibble::enframe(renvRequiredFiles) %>%
+    mutate(fileExists = file.exists(file.path(moduleFolder, .data$value))) %>%
+    rename(fileName = value) %>%
+    select(fileName, fileExists) %>%
+    filter(fileExists == FALSE)
+
+  invisible(missingFiles)
 }
