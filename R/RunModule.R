@@ -57,7 +57,8 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     jobContext <- readRDS(jobContextFileName)
 
     # If the keyring is locked, unlock it, set the value and then re-lock it
-    keyringLocked <- Strategus::unlockKeyring(keyringName = jobContext$keyringSettings$keyringName)
+    keyringName <- jobContext$keyringSettings$keyringName
+    keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
   "
 
   # Set the connection information based on the type of execution being
@@ -65,18 +66,18 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   if (is(executionSettings, "CdmExecutionSettings")) {
     script <- paste0(
       script,
-      "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
-                       connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
-                       connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
-                       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails"
+      "connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = keyringName)
+       connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
+       connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+       jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails"
     )
   } else if (is(executionSettings, "ResultsExecutionSettings")) {
     script <- paste0(
       script,
-      "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = jobContext$keyringSettings$keyringName)
-                       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
-                       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
-                       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails"
+      "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
+       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
+       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
+       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails"
     )
   } else {
     stop("Unhandled executionSettings class! Must be one of the following: CdmExecutionSettings, ResultsExecutionSettings")
@@ -84,7 +85,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
   script <- paste0(script, "
     if (keyringLocked) {
-      keyring::keyring_lock(keyring = jobContext$keyringSettings$keyringName)
+       keyring::keyring_lock(keyring = keyringName)
     }
 
     ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))

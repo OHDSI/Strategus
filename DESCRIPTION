@@ -20,7 +20,7 @@ Depends:
 Imports:
 	targets,
 	renv (>= 0.15.5),
-	ParallelLogger,
+	ParallelLogger (>= 3.1.0),
 	dplyr,
 	checkmate,
 	keyring,
