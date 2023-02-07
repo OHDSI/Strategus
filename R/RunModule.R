@@ -53,7 +53,6 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
   # Execute module using settings
   script <- "
-    #source('renv/activate.R')
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
 

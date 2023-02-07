@@ -223,7 +223,7 @@
   "moduleSpecifications": [
     {
       "module": "CohortGeneratorModule",
-      "version": "0.0.14",
+      "version": "0.0.15",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -1274,7 +1274,7 @@
     },
     {
       "module": "SelfControlledCaseSeriesModule",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -2396,7 +2396,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 82022361,
+                "seed": 58929774,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2411,7 +2411,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 48491,
+            "seed": 11188,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
@@ -2533,7 +2533,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 61282714,
+                "seed": 55428304,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2548,7 +2548,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 9166,
+            "seed": 11266,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
