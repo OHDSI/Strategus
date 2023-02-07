@@ -78,7 +78,7 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
     moduleTablePrefixesInConflict <- moduleTablePrefixes %>%
       group_by(.data$tablePrefix) %>%
       summarise(totalCount = n()) %>%
-      filter(totalCount > 1)
+      filter(.data$totalCount > 1)
 
     message <- paste(c(
       "Detected colliding result table prefixes:",
@@ -239,9 +239,9 @@ getModuleRenvDependencies <- function(moduleFolder) {
 
   missingFiles <- tibble::enframe(renvRequiredFiles) %>%
     mutate(fileExists = file.exists(file.path(moduleFolder, .data$value))) %>%
-    rename(fileName = value) %>%
-    select(fileName, fileExists) %>%
-    filter(fileExists == FALSE)
+    rename(fileName = .data$value) %>%
+    select(.data$fileName, .data$fileExists) %>%
+    filter(.data$fileExists == FALSE)
 
   invisible(missingFiles)
 }

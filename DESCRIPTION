@@ -18,17 +18,18 @@ Depends:
 	CohortGenerator (>= 0.7.0),
 	DatabaseConnector (>= 5.1.0)
 Imports:
-	targets,
-	renv (>= 0.15.5),
-	ParallelLogger (>= 3.1.0),
-	dplyr,
-	checkmate,
-	keyring,
-	rlang,
-	utils,
-	R.utils,
-	digest,
-	methods
+  targets,
+  renv (>= 0.15.5),
+  ParallelLogger (>= 3.1.0),
+  dplyr,
+  checkmate,
+  keyring,
+  rlang,
+  utils,
+  R.utils,
+  digest,
+  methods,
+  tibble
 Suggests:
 	testthat,
 	fs,
