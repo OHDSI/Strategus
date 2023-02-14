@@ -72,7 +72,25 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
     stop(message)
   }
 
-  # TODO: check for colliding result table prefixes
+  # Check for colliding result table prefixes
+  moduleTablePrefixes = getModuleTablePrefixes(moduleList = modules)
+  if (nrow(moduleTablePrefixes) != nrow(unique(moduleTablePrefixes$tablePrefix))) {
+    moduleTablePrefixesInConflict <- moduleTablePrefixes %>%
+      group_by(.data$tablePrefix) %>%
+      summarise(totalCount = n()) %>%
+      filter(.data$totalCount > 1)
+
+    message <- paste(c(
+      "Detected colliding result table prefixes:",
+      sprintf("- Module '%s' (v'%s') table prefix: '%s'",
+              moduleTablePrefixesInConflict$moduleName,
+              moduleTablePrefixesInConflict$moduleVersion,
+              moduleTablePrefixesInConflict$tablePrefix)
+    ),
+    collapse = "\n"
+    )
+    stop(message)
+  }
 
   return(modules)
 }
@@ -174,6 +192,22 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     }
   }
 
+  # Verify the structure of the module to ensure that
+  # it contains the proper files required by renv
+  # before we restore from the renv.lock file
+  renvDependencies <- getModuleRenvDependencies(moduleFolder)
+  if (nrow(renvDependencies) > 0) {
+    message <- paste(c(
+      sprintf("The module '%s' (v%s) is missing the following files required by renv:", module, version),
+      sprintf("- Missing renv dependency '%s'", renvDependencies$fileName),
+      "As a result, Strategus cannot use this module as part of the execution pipeline otherwise it may corrupt your R library.",
+      "Please check to see if a newer version of this module exists and update your analysis specification to use that module instead."
+    ),
+    collapse = "\n"
+    )
+    stop(message)
+  }
+
   script <- "
       renv::restore(prompt = FALSE)
       if (!require('ParallelLogger', quietly = TRUE)) {
@@ -195,4 +229,37 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     project = moduleFolder
   )
   success <- TRUE
+}
+
+getModuleRenvDependencies <- function(moduleFolder) {
+  renvRequiredFiles <- c(".Rprofile",
+                         "renv.lock",
+                         "renv/activate.R",
+                         "renv/settings.dcf")
+
+  missingFiles <- tibble::enframe(renvRequiredFiles) %>%
+    mutate(fileExists = file.exists(file.path(moduleFolder, .data$value))) %>%
+    rename(fileName = .data$value) %>%
+    select(.data$fileName, .data$fileExists) %>%
+    filter(.data$fileExists == FALSE)
+
+  invisible(missingFiles)
+}
+
+getModuleTablePrefixes <- function(moduleList) {
+  moduleTablePrefix <- tibble::tibble()
+  for (i in 1:nrow(moduleList)) {
+    moduleMetaData <- getModuleMetaData(
+      moduleFolder = getModuleFolder(
+        module = moduleList$module[i],
+        version = moduleList$version[i]
+      )
+    )
+    moduleTablePrefix <- moduleTablePrefix %>%
+      bind_rows(tibble::tibble(moduleName = moduleList$module[i],
+                               moduleVersion = moduleList$version[i],
+                               tablePrefix = moduleMetaData$TablePrefix))
+  }
+
+  invisible(moduleTablePrefix)
 }
