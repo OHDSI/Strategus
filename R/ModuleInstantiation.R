@@ -73,8 +73,8 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   }
 
   # Check for colliding result table prefixes
-  moduleTablePrefixes = getModuleTablePrefixes(moduleList = modules)
-  if (nrow(moduleTablePrefixes) != nrow(unique(moduleTablePrefixes$tablePrefix))) {
+  moduleTablePrefixes <- getModuleTablePrefixes(moduleList = modules)
+  if (nrow(moduleTablePrefixes) != length(unique(moduleTablePrefixes$tablePrefix))) {
     moduleTablePrefixesInConflict <- moduleTablePrefixes %>%
       group_by(.data$tablePrefix) %>%
       summarise(totalCount = n()) %>%
