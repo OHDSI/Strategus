@@ -50,7 +50,6 @@ execute <- function(analysisSpecifications,
   keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
-  checkmate::assertClass(resultsExecutionSettings, "resultsExecutionSettings", add = errorMessages, null.ok = TRUE)
   checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
