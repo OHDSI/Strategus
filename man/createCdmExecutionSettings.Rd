@@ -11,7 +11,9 @@ createCdmExecutionSettings(
   cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
   workFolder,
   resultsFolder,
-  minCellCount = 5
+  minCellCount = 5,
+  resultsConnectionDetailsReference = NULL,
+  resultsDatabaseSchema = NULL
 )
 }
 \arguments{
@@ -34,6 +36,11 @@ connection details) will need to have read access to this database schema.}
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included
 in results.}
+
+\item{resultsConnectionDetailsReference}{A string that can be used to retrieve the results database connection
+details from a secure local store.}
+
+\item{resultsDatabaseSchema}{A schema where the results tables are stored}
 }
 \value{
 An object of type \code{ExecutionSettings}.
