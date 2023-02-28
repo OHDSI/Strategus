@@ -177,7 +177,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
 
       lines <- c(
         lines,
-        ",        tar_target(",
+        "  tar_target(",
         sprintf("    %s,", targetName),
         sprintf("    %s", command),
         ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
