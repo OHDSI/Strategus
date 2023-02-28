@@ -131,6 +131,10 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   }
   moduleToTargetNames <- bind_rows(moduleToTargetNames)
 
+  execResultsUpload <- all(c(is(executionSettings, "CdmExecutionSettings"),
+                             !is.null(executionSettings$resultsConnectionDetailsReference),
+                             !is.null(executionSettings$resultsDatabaseSchema)))
+
   # Generate targets code, inserting dependencies
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
@@ -154,14 +158,12 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
       "  tar_target(",
       sprintf("    %s,", targetName),
       sprintf("    %s", command),
-      ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
+      ifelse(execResultsUpload || i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
     )
   }
 
   # Automatic results upload if settings are specified
-  if (is(executionSettings, "CdmExecutionSettings") &
-    !is.null(executionSettings$resultsConnectionDetailsReference) &
-    !is.null(executionSettings$resultsDatabaseSchema)) {
+  if (execResultsUpload) {
     # Generate targets code for results upload, inserting dependencies on parent module
     for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
       moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
@@ -177,7 +179,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
 
       lines <- c(
         lines,
-        ",  tar_target(",
+        "tar_target(",
         sprintf("    %s,", targetName),
         sprintf("    %s", command),
         ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
