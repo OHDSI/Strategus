@@ -50,6 +50,7 @@ execute <- function(analysisSpecifications,
   keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+  checkmate::assertClass(resultsExecutionSettings, "resultsExecutionSettings", add = errorMessages, null.ok = TRUE)
   checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
@@ -82,7 +83,6 @@ execute <- function(analysisSpecifications,
     restart = restart,
     keyringName = keyringName
   )
-
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
   targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
@@ -159,6 +159,32 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     )
   }
 
+  # Automatic results upload if settings are specified
+  if (is(executionSettings, "CdmExecutionSettings") &
+    !is.null(executionSettings$resultsConnectionDetailsReference) &
+    !is.null(executionSettings$resultsDatabaseSchema)) {
+    # Generate targets code for results upload, inserting dependencies on parent module
+    for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
+      moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
+      # The only dependency for a module's results is the module execution itself
+      dependencyTargetNames <- sprintf("%s_%d", moduleSpecification$module, i)
+      targetName <- sprintf("%s_%d_results_upload", moduleSpecification$module, i)
+
+      command <- sprintf(
+        "Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, %d, executionSettings%s)",
+        i,
+        sprintf(", %s", paste(dependencyTargetNames, collapse = ", "))
+      )
+
+      lines <- c(
+        lines,
+        "  tar_target(",
+        sprintf("    %s,", targetName),
+        sprintf("    %s", command),
+        ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
+      )
+    }
+  }
   lines <- c(lines, ")")
 
   sink(fileName)
@@ -166,3 +192,4 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   sink()
   return(fileName)
 }
+

@@ -29,7 +29,8 @@ Imports:
   R.utils,
   digest,
   methods,
-  tibble
+  tibble,
+  ResultModelManager (>= 0.3.0)
 Suggests:
 	testthat,
 	fs,
@@ -40,6 +41,7 @@ Suggests:
 	visNetwork
 Remotes:
   ohdsi/CohortGenerator,
+  ohdsi/ResultModelManager,
   ohdsi/Eunomia
 VignetteBuilder: knitr
 NeedsCompilation: no

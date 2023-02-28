@@ -91,6 +91,9 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
+#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
+#'                                          details from a secure local store.
+#' @param resultsDatabaseSchema      A schema where the results tables are stored
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -102,7 +105,9 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                                        cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
                                        workFolder,
                                        resultsFolder,
-                                       minCellCount = 5) {
+                                       minCellCount = 5,
+                                       resultsConnectionDetailsReference = NULL,
+                                       resultsDatabaseSchema = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
@@ -111,6 +116,8 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::assertCharacter(resultsConnectionDetailsReference, null.ok = TRUE, add = errorMessages)
+  checkmate::assertCharacter(resultsDatabaseSchema, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   executionSettings <- list(
@@ -120,7 +127,9 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
     cohortTableNames = cohortTableNames,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
-    minCellCount = minCellCount
+    minCellCount = minCellCount,
+    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+    resultsDatabaseSchema = resultsDatabaseSchema
   )
   class(executionSettings) <- c("CdmExecutionSettings", "ExecutionSettings")
   return(executionSettings)
