@@ -158,7 +158,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
       "  tar_target(",
       sprintf("    %s,", targetName),
       sprintf("    %s", command),
-      ifelse(execResultsUpload || i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
+      ifelse(!execResultsUpload && i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
     )
   }
 
