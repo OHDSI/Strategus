@@ -105,7 +105,6 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   lines <- c(
     "library(targets)",
     "tar_option_set(packages = c('Strategus', 'keyring'))",
-    "tar_renv(extras = 'Strategus')",
     "list(",
     "  tar_target(",
     "    analysisSpecifications,",
