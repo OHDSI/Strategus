@@ -86,6 +86,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
     if (is.function(uploadResultsCallback)) {
       uploadResultsCallback(jobContext)
     } else {
+      specifications <- NULL
       ResultModelManager::uploadResults(connectionDetails = jobContext$moduleExecutionSettings$resultsConnectionDetails,
                                         schema = jobContext$moduleExecutionSettings$resultsDatabaseSchema,
                                         resultsFolder = jobContext$moduleExecutionSettings$resultsSubFolder,
@@ -109,7 +110,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   writeLines(script, fileConn)
   close(fileConn)
 
-  doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "done")
+  doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "results.uploaded")
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }
