@@ -84,6 +84,7 @@ execute <- function(analysisSpecifications,
   )
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
+  targets::tar_renv()
   targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
 }
 
