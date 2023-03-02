@@ -22,9 +22,9 @@
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
 runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, executionSettings, ...) {
+
   checkmate::assert_multi_class(x = executionSettings, classes = c("CdmExecutionSettings", "ResultsExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
-
   module <- moduleSpecification$module
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
@@ -51,15 +51,18 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
   saveRDS(jobContext, jobContextFileName)
 
+  # Force loading of Strategus from installed location - renv will break on systems otherwise
+  libPath <- file.path(find.package("Strategus"), "../")
   # Execute module using settings
-  script <- "
+  script <- sprintf("
+    library(Strategus, lib.loc = '%s')
     source('Main.R')
     jobContext <- readRDS(jobContextFileName)
 
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
     keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
-  "
+  ", libPath)
 
   # Set the connection information based on the type of execution being
   # performed
@@ -113,12 +116,14 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }
+
   renv::run(
     script = tempScriptFile,
     job = FALSE,
     name = "Running module",
     project = moduleFolder
   )
+
   if (!file.exists(doneFile)) {
     message <- paste(
       "Module did not complete. To debug:",

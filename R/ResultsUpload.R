@@ -17,7 +17,7 @@
 
 #' Results upload callbacks for inserting results in to a database
 runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleIndex, executionSettings, ...) {
-  checkmate::assert_multi_class(x = executionSettings, classes = c("ResultsExecutionSettings"))
+  checkmate::assert_multi_class(x = executionSettings, classes = c("ExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
 
   module <- moduleSpecification$module
@@ -44,17 +44,27 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
   saveRDS(jobContext, jobContextFileName)
 
+  # Ensure that the renv versions loaded are the same as the system versions
+  libPath <- file.path(find.package("Strategus"), "../")
+  rmmLibPath <- file.path(find.package("ResultModelManager"), "../")
+  script <- sprintf("
+  library(Strategus, lib.loc = '%s')
+  library(ResultModelManager, lib.loc = '%s')
+  ", libPath, rmmLibPath)
   # Execute module using settings
-  script <- "
+  script <- paste0(script,"
     uploadResultsCallback <- NULL
+    getSpecifications <- function(...) NULL
     source('Main.R')
     moduleInfo <- ParallelLogger::loadSettingsFromJson('MetaData.json')
     jobContext <- readRDS(jobContextFileName)
 
+    specifications <- getSpecifications(jobContext)
+
     # If the keyring is locked, unlock it, set the value and then re-lock it
     keyringName <- jobContext$keyringSettings$keyringName
     keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
-  "
+  ")
 
   # Set the connection information based on the type of execution being
   # performed
@@ -82,11 +92,13 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
       renv::use(lockfile = 'renv.lock')
     }
 
+    specifications <- getResulsModelSpec(jobContext)
     # Override default behaviour and do module specific upload
     if (is.function(uploadResultsCallback)) {
       uploadResultsCallback(jobContext)
+    } else if (is.null(specifications)) {
+      warning('data model specifications not loaded from module - skipping results upload')
     } else {
-      specifications <- NULL
       ResultModelManager::uploadResults(connectionDetails = jobContext$moduleExecutionSettings$resultsConnectionDetails,
                                         schema = jobContext$moduleExecutionSettings$resultsDatabaseSchema,
                                         resultsFolder = jobContext$moduleExecutionSettings$resultsSubFolder,
@@ -96,7 +108,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
                                         databaseIdentifierFile = 'database_meta_data.csv',
                                         runCheckAndFixCommands = FALSE,
                                         warnOnMissingTable = TRUE,
-                                        specifications)
+                                        specifications = specifications)
     }
 
     ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)

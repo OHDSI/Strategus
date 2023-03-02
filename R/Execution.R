@@ -86,9 +86,7 @@ execute <- function(analysisSpecifications,
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
   targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
-
 }
-
 
 generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, restart) {
   fileName <- file.path(executionScriptFolder, "script.R")
@@ -105,7 +103,6 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     moduleToTargetNames <- readRDS(moduleToTargetNamesFileName)
     dependencies <- readRDS(dependenciesFileName)
 
-    library(Strategus)
     library(dplyr)
     tar_option_set(packages = c('Strategus', 'keyring'), imports = c('Strategus', 'keyring'))
     targetList <- list(
@@ -133,13 +130,15 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
 
       # Use of tar_target_raw allows dynamic names
       targetList[[length(targetList) + 1]] <- tar_target_raw(targetName,
-                                                             quote(Strategus:::runModule(analysisSpecifications, keyringSettings, i, executionSettings)),
+                                                             substitute(Strategus:::runModule(analysisSpecifications, keyringSettings, i, executionSettings),
+                                                                        env = list(i = i)),
                                                              deps = c("analysisSpecifications", "keyringSettings", "executionSettings", dependencyTargetNames))
 
       if (execResultsUpload) {
         resultsTargetName <- paste0(targetName, "_results_upload")
         targetList[[length(targetList) + 1]] <- tar_target_raw(resultsTargetName,
-                                                               quote(Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, i, executionSettings)),
+                                                               substitute(Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, i, executionSettings),
+                                                                          env = list(i = i)),
                                                                deps = c("analysisSpecifications", "keyringSettings", "executionSettings", targetName))
       }
     }
@@ -184,7 +183,6 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     sprintf("moduleToTargetNamesFileName <- '%s'", moduleToTargetNamesFileName),
     sprintf("dependenciesFileName <- '%s'", dependenciesFileName),
     sprintf("execResultsUpload <- '%s'", execResultsUpload),
-    sprintf(sprintf("libPaths <- c(%s)", paste("'", .libPaths(), "'", collapse = ", ", sep = ""))),
     readLines(fileName)
   ), fileName)
 
