@@ -69,44 +69,44 @@ OhdsiRTools::fixHadesLogo()
 
 # CDM Modules
 moduleList <- data.frame(module = "CharacterizationModule",
-                         version = "v0.0.1",
+                         version = "v0.2.3",
                          remoteRepo = "github.com",
                          remoteUsername = "OHDSI",
                          moduleType = "cdm")
 moduleList <- rbind(moduleList,
                     data.frame(module = "CohortDiagnosticsModule",
-                               version = "v0.0.6",
+                               version = "v0.0.7",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
 moduleList <- rbind(moduleList,
                     data.frame(module = "CohortGeneratorModule",
-                               version = "v0.0.14",
+                               version = "v0.0.16",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
 moduleList <- rbind(moduleList,
                     data.frame(module = "CohortIncidenceModule",
-                               version = "v0.0.5",
+                               version = "v0.0.6",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
 
 moduleList <- rbind(moduleList,
                     data.frame(module = "CohortMethodModule",
-                               version = "v0.0.4",
+                               version = "v0.1.0",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
 moduleList <- rbind(moduleList,
                     data.frame(module = "PatientLevelPredictionModule",
-                               version = "v0.0.1",
+                               version = "v0.0.7",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
 moduleList <- rbind(moduleList,
                     data.frame(module = "SelfControlledCaseSeriesModule",
-                               version = "v0.0.2",
+                               version = "v0.1.1",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
@@ -114,7 +114,7 @@ moduleList <- rbind(moduleList,
 # Results Modules
 moduleList <- rbind(moduleList,
                     data.frame(module = "EvidenceSynthesisModule",
-                               version = "v0.1.0",
+                               version = "v0.1.3",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "results"))
