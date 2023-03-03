@@ -32,13 +32,13 @@ Imports:
   tibble,
   SqlRender (>= 1.11.0)
 Suggests:
-	testthat,
-	fs,
-	knitr,
-	rmarkdown,
-	Eunomia,
-	webshot,
-	visNetwork
+    testthat (>= 3.0.0),
+    fs,
+    knitr,
+    rmarkdown,
+    Eunomia,
+    webshot,
+    visNetwork
 Remotes:
   ohdsi/CohortGenerator,
   ohdsi/Eunomia
@@ -47,3 +47,4 @@ NeedsCompilation: no
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
+Config/testthat/edition: 3
