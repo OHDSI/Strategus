@@ -29,7 +29,8 @@ Imports:
   R.utils,
   digest,
   methods,
-  tibble
+  tibble,
+  SqlRender (>= 1.11.0)
 Suggests:
 	testthat,
 	fs,

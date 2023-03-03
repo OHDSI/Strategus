@@ -1,13 +1,14 @@
-table_name,column_name,data_type,is_required,primary_key,empty_is_na,mincellcount,description
-database_meta_data,cdm_source_name,varchar,Yes,No,Yes,No,""
-database_meta_data,cdm_source_abbreviation,varchar,Yes,No,Yes,No,""
-database_meta_data,cdm_holder,varchar,Yes,No,Yes,No,""
-database_meta_data,source_description,varchar,No,No,Yes,No,""
-database_meta_data,source_documentation_reference,varchar,No,No,Yes,No,""
-database_meta_data,cdm_etl_reference,varchar,No,No,Yes,No,""
-database_meta_data,source_release_date,date,Yes,No,Yes,No,""
-database_meta_data,cdm_release_date,date,Yes,No,Yes,No,""
-database_meta_data,cdm_version,varchar,No,No,Yes,No,""
-database_meta_data,vocabulary_version,varchar,Yes,No,Yes,No,""
-database_meta_data,database_id,varchar,Yes,Yes,No,No,""
-database_meta_data,max_obs_period_end_date,date,Yes,No,No,No,""
+table_name,column_name,data_type,is_required,primary_key,min_cell_count,description
+database_meta_data,cdm_source_name,varchar,Yes,No,No,The name of the CDM instance.
+database_meta_data,cdm_source_abbreviation,varchar,Yes,No,No,The abbreviation of the CDM instance.
+database_meta_data,cdm_holder,varchar,Yes,No,No,The holder of the CDM instance.
+database_meta_data,source_description,varchar,No,No,No,The description of the CDM instance.
+database_meta_data,source_documentation_reference,varchar,No,No,No,NA
+database_meta_data,cdm_etl_reference,varchar,No,No,No,Put the link to the CDM version used.
+database_meta_data,source_release_date,date,Yes,No,No,The release date of the source data.
+database_meta_data,cdm_release_date,date,Yes,No,No,The release data of the CDM instance.
+database_meta_data,cdm_version,varchar,No,No,No,NA
+database_meta_data,cdm_version_concept_id,int,No,No,No,The Concept Id representing the version of the CDM.
+database_meta_data,vocabulary_version,varchar,Yes,No,No,NA
+database_meta_data,database_id,varchar,Yes,Yes,No,NA
+database_meta_data,max_obs_period_end_date,date,Yes,No,No,NA
