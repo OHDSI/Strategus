@@ -152,7 +152,7 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
     unlink(doneFile)
   }
   ## code executed inside renv only has scoped variables
-  runInModuleEnv(
+  withModuleRenv(
     code = {
       createDataModelSchema <- NULL
 

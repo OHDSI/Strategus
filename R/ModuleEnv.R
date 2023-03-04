@@ -24,7 +24,10 @@
 #'
 #' Designed to allow more human readable code that is executed inside a module as well as simple variable substituion
 #' for injecting constants (e.g. simple parameters or file paths used inside and outside of modules)
-runInModuleEnv <- function(code,
+#'
+#' This pattern also allows dependency injection which could be used if you don't want to use and renv and (instead)
+#' would like to use docker images or just execution in the base environment for testing/debugging
+withModuleRenv <- function(code,
                            moduleFolder,
                            injectVars = list(),
                            tempScriptFile = tempfile(fileext = ".R"),

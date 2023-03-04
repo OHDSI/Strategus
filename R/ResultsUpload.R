@@ -58,7 +58,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   ##
   # Module space executed code
   ##
-  runInModuleEnv({
+  withModuleRenv({
     uploadResultsCallback <- NULL
 
     getDataModelSpecifications <- function(...) {
