@@ -34,6 +34,11 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
+  resultsDataModel <- CohortGenerator::readCsv(
+    file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
+    warnOnCaseMismatch = FALSE
+  )
+
   sql <- "SELECT TOP 1 * FROM @cdm_database_schema.cdm_source;"
   cdmSource <- renderTranslateQuerySql(
     connection = connection,
@@ -41,6 +46,18 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     snakeCaseToCamelCase = TRUE,
     cdm_database_schema = executionSettings$cdmDatabaseSchema
   )
+
+  # Restrict the cdmSource columns to those that are
+  # expected in the resultsDataModel
+  cdmSource <- cdmSource[,which(names(cdmSource) %in% SqlRender::snakeCaseToCamelCase(resultsDataModel$columnName))]
+
+  # In the case that the CDM is pre v5.4, it will lack the new
+  # cdm_version_concept_id column. In this case, we'll default it to
+  # concept_id == 1147638 which is CDM v5.3.1
+  # Ref: https://ohdsi.github.io/CommonDataModel/cdm54Changes.html
+  if (!"cdmVersionConceptId" %in% names(cdmSource)) {
+    cdmSource$cdmVersionConceptId <- 1147638
+  }
 
   sql <- "SELECT TOP 1 vocabulary_version  FROM @cdm_database_schema.vocabulary WHERE vocabulary_id = 'None';"
   vocabVersion <- renderTranslateQuerySql(
@@ -73,10 +90,6 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     file = file.path(databaseMetaDataFolder, "database_meta_data.csv")
   )
 
-  resultsDataModel <- CohortGenerator::readCsv(
-    file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
-    warnOnCaseMismatch = FALSE
-  )
   CohortGenerator::writeCsv(
     x = resultsDataModel,
     file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"),

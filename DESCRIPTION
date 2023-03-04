@@ -30,7 +30,8 @@ Imports:
   digest,
   methods,
   tibble,
-  ResultModelManager (>= 0.3.0)
+  ResultModelManager (>= 0.3.0),
+  SqlRender (>= 1.11.0)
 Suggests:
 	testthat,
 	fs,
