@@ -31,9 +31,12 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   moduleExecutionSettings$workSubFolder <- file.path(executionSettings$workFolder, sprintf("%s_%d", module, moduleIndex))
   moduleExecutionSettings$resultsSubFolder <- file.path(executionSettings$resultsFolder, sprintf("%s_%d", module, moduleIndex))
 
+  if (!is(executionSettings, "CdmExecutionSettings")) {
+    stop("Unhandled executionSettings class! Must be CdmExecutionSettings instance")
+  }
 
   if (!dir.exists(moduleExecutionSettings$resultsSubFolder)) {
-    stop("reulsts not found")
+    stop("results not found")
   }
   jobContext <- list(
     sharedResources = analysisSpecifications$sharedResources,
@@ -43,95 +46,78 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   )
   jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
   saveRDS(jobContext, jobContextFileName)
-
-  # Ensure that the renv versions loaded are the same as the system versions
-  libPath <- file.path(find.package("Strategus"), "../")
-  rmmLibPath <- file.path(find.package("ResultModelManager"), "../")
-  script <- sprintf("
-  library(Strategus, lib.loc = '%s')
-  library(ResultModelManager, lib.loc = '%s')
-  ", libPath, rmmLibPath)
-  # Execute module using settings
-  script <- paste0(script,"
-    uploadResultsCallback <- NULL
-    getSpecifications <- function(...) NULL
-    source('Main.R')
-    moduleInfo <- ParallelLogger::loadSettingsFromJson('MetaData.json')
-    jobContext <- readRDS(jobContextFileName)
-
-    specifications <- getSpecifications(jobContext)
-
-    # If the keyring is locked, unlock it, set the value and then re-lock it
-    keyringName <- jobContext$keyringSettings$keyringName
-    keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
-  ")
-
-  # Set the connection information based on the type of execution being
-  # performed
-  if (is(executionSettings, "CdmExecutionSettings")) {
-    script <- paste0(
-      script,
-      "resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
-       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
-       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
-       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails"
-    )
-  } else {
-    stop("Unhandled executionSettings class! Must be CdmExecutionSettings instance")
-  }
-
-  script <- paste0(script, "
-    if (keyringLocked) {
-       keyring::keyring_lock(keyring = keyringName)
-    }
-
-    ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
-    ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
-
-    if (Sys.getenv('FORCE_RENV_USE', '') == 'TRUE') {
-      renv::use(lockfile = 'renv.lock')
-    }
-
-    specifications <- getResulsModelSpec(jobContext)
-    # Override default behaviour and do module specific upload
-    if (is.function(uploadResultsCallback)) {
-      uploadResultsCallback(jobContext)
-    } else if (is.null(specifications)) {
-      warning('data model specifications not loaded from module - skipping results upload')
-    } else {
-      ResultModelManager::uploadResults(connectionDetails = jobContext$moduleExecutionSettings$resultsConnectionDetails,
-                                        schema = jobContext$moduleExecutionSettings$resultsDatabaseSchema,
-                                        resultsFolder = jobContext$moduleExecutionSettings$resultsSubFolder,
-                                        tablePrefix = moduleInfo$TablePrefix,
-                                        forceOverWriteOfSpecifications = FALSE,
-                                        purgeSiteDataBeforeUploading = TRUE,
-                                        databaseIdentifierFile = 'database_meta_data.csv',
-                                        runCheckAndFixCommands = FALSE,
-                                        warnOnMissingTable = TRUE,
-                                        specifications = specifications)
-    }
-
-    ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
-    ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)
-    writeLines('results.uploaded', file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'results.uploaded'))
-    ")
-
-  script <- gsub("jobContextFileName", sprintf("\"%s\"", jobContextFileName), script)
-  tempScriptFile <- jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "StrategusResultsScript.R") # gsub("\\\\", "/", tempfile(fileext = ".R"))
-  fileConn <- file(tempScriptFile)
-  writeLines(script, fileConn)
-  close(fileConn)
+  dataModelExportPath <- file.path(moduleExecutionSettings$workSubFolder, "resultsDataModelSpecification.csv")
 
   doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "results.uploaded")
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }
-  renv::run(
-    script = tempScriptFile,
-    job = FALSE,
-    name = "Running results upload",
-    project = moduleFolder
+
+  tempScriptFile <- file.path(moduleExecutionSettings$workSubFolder, "UploadScript.R")
+
+  ##
+  # Module space executed code
+  ##
+  runInModuleEnv({
+    uploadResultsCallback <- NULL
+
+    getDataModelSpecifications <- function(...) {
+      if (file.exists('resultsDataModelSpecification.csv')) {
+        res <- readr::read_csv('resultsDataModelSpecification.csv', show_col_types = FALSE)
+        return(res)
+      }
+      return(NULL)
+    }
+    source('Main.R')
+    moduleInfo <- ParallelLogger::loadSettingsFromJson('MetaData.json')
+    jobContext <- readRDS(jobContextFileName)
+    specifications <- getDataModelSpecifications(jobContext)
+    ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'log.txt'))
+    ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReportR.txt'))
+
+    if (Sys.getenv('FORCE_RENV_USE', '') == 'TRUE') {
+      renv::use(lockfile = 'renv.lock')
+    }
+
+    # Override default behaviour and do module specific upload inside module context?
+    if (is.function(uploadResultsCallback)) {
+      # If the keyring is locked, unlock it, set the value and then re-lock it
+      keyringName <- jobContext$keyringSettings$keyringName
+      keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
+
+      resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
+      resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
+      resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
+      jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails
+
+      uploadResultsCallback(jobContext)
+      if (keyringLocked) {
+        keyring::keyring_lock(keyring = keyringName)
+      }
+      writeLines('results.uploaded', doneFile)
+    } else if (is.null(specifications)) {
+      # NO spect file Status
+      warning('data model specifications not loaded from module - skipping results upload')
+      writeLines('no.spec.found', doneFile)
+    } else {
+      # Spec file written
+      readr::write_csv(specifications, dataModelExportPath)
+      writeLines('specifications.written', doneFile)
+    }
+
+    ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
+    ParallelLogger::unregisterLogger('DEFAULT_ERRORREPORT_LOGGER', silent = TRUE)
+
+  },
+    moduleFolder = moduleFolder,
+    tempScriptFile = tempScriptFile,
+    injectVars = list(jobContextFileName = jobContextFileName,
+                      dataModelExportPath = dataModelExportPath,
+                      doneFile = doneFile)
   )
+  ##
+  # end Module executed code
+  ##
   if (!file.exists(doneFile)) {
     message <- paste(
       "Module did not complete. To debug:",
@@ -140,6 +126,40 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
       sep = "\n"
     )
     stop(message)
+  }
+
+  workStatus <- readLines(doneFile)
+
+  if (workStatus == 'specifications.written') {
+    specifications <- readr::read_csv(dataModelExportPath, show_col_types = FALSE)
+    colnames(specifications) <- SqlRender::snakeCaseToCamelCase(colnames(specifications))
+    moduleInfo <- ParallelLogger::loadSettingsFromJson(file.path(moduleFolder, 'MetaData.json'))
+    keyringName <- jobContext$keyringSettings$keyringName
+    keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
+
+    resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
+    resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
+    resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
+    jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails
+
+    ResultModelManager::uploadResults(connectionDetails = jobContext$moduleExecutionSettings$resultsConnectionDetails,
+                                      schema = jobContext$moduleExecutionSettings$resultsDatabaseSchema,
+                                      resultsFolder = jobContext$moduleExecutionSettings$resultsSubFolder,
+                                      tablePrefix = moduleInfo$TablePrefix,
+                                      forceOverWriteOfSpecifications = FALSE,
+                                      purgeSiteDataBeforeUploading = FALSE,
+                                      databaseIdentifierFile = 'database_meta_data.csv',
+                                      runCheckAndFixCommands = FALSE,
+                                      warnOnMissingTable = TRUE,
+                                      specifications = specifications)
+
+    if (keyringLocked) {
+      keyring::keyring_lock(keyring = keyringName)
+    }
+  } else if (workStatus == 'results.uploaded')  {
+    message("Result upload handled inside module execution envrionment")
+  } else {
+    message("Results not uploaded for module")
   }
 
   return(list(dummy = 123))
