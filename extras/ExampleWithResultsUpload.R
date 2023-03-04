@@ -1,6 +1,6 @@
 library(dplyr)
 library(CohortGenerator)
-library(CohortDiagnostics)
+
 library(ROhdsiWebApi)
 
 baseUrl <- "https://change.me:8443/WebAPI"
@@ -25,54 +25,8 @@ cohortDefinitionSet <- ROhdsiWebApi::exportCohortDefinitionSet(baseUrl = baseUrl
                                                                generateStats = TRUE)
 
 dir.create("tmp", showWarnings = F)
-
-subsetDef <- createCohortSubsetDefinition(
-  name = "Without GI bleed",
-  definitionId = 2,
-  subsetOperators = list(
-    # here we are saying 'first subset to only those patients in cohort 1778213'
-    createCohortSubset(id = 1001,
-                       name = "neg GI BLEED",
-                       # Note that this can be set to any id - if the cohort is empty or doesn't exist this will not error
-                       cohortIds = 5904,
-                       cohortCombinationOperator = "any",
-                       negate = TRUE,
-                       startWindow = createSubsetCohortWindow(startDay = 0,
-                                                              endDay = 30,
-                                                              targetAnchor = "cohortStart"),
-                       endWindow = createSubsetCohortWindow(startDay = 0,
-                                                            endDay = 99999,
-                                                            targetAnchor = "cohortStart"))
-  )
-)
-
-subsetDef2 <- createCohortSubsetDefinition(
-  name ="GI BLEED",
-  definitionId = 1,
-  subsetOperators = list(
-    # here we are saying 'first subset to only those patients in cohort 1778213'
-    createCohortSubset(id = 1001,
-                       name = "GI BLEED",
-                       # Note that this can be set to any id - if the cohort is empty or doesn't exist this will not error
-                       cohortIds = 5904,
-                       cohortCombinationOperator = "any",
-                       negate = FALSE,
-                       startWindow = createSubsetCohortWindow(startDay = 0,
-                                                              endDay = 30,
-                                                              targetAnchor = "cohortStart"),
-                       endWindow = createSubsetCohortWindow(startDay = 0,
-                                                            endDay = 99999,
-                                                            targetAnchor = "cohortStart"))
-  )
-)
-
-cohortDefinitionSet <- cohortDefinitionSet |>
-  addCohortSubsetDefinition(subsetDef2, targetCohortIds = 5903, overwriteExisting = TRUE) |>
-  addCohortSubsetDefinition(subsetDef, targetCohortIds = 5903, overwriteExisting = TRUE)
-
-
 source("https://raw.githubusercontent.com/azimov/CohortDiagnosticsModule/main/SettingsFunctions.R")
-
+library(CohortDiagnostics)
 cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecifications(
   cohortIds = atlasCohortIds,
   runInclusionStatistics = TRUE,
@@ -110,7 +64,10 @@ resultsConnectionReference <- "result-store"
 resultsConnectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "sqlite", server = file.path(normalizePath("tmp"), "results.sqlite"))
 Strategus::storeConnectionDetails(resultsConnectionDetails, resultsConnectionReference)
 
+# Note: this environmental variable should be set once for each compute node
+Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "~/tmp/StrategusInstantiatedModules")
 
+# This should be ran once and only once
 resultsExecutitionSettings <- Strategus::createResultsExecutionSettings(resultsConnectionDetailsReference = "result-store",
                                                                         resultsDatabaseSchema = "main",
                                                                         workFolder = file.path(getwd(), "./tmp/strategusWork"),
@@ -133,9 +90,6 @@ executionSettings <- Strategus::createCdmExecutionSettings(connectionDetailsRefe
 ParallelLogger::saveSettingsToJson(executionSettings, "testExecutionSettings.json")
 
 # Execute analyses -------------------------------------------------------------
-
-# Note: this environmental variable should be set once for each compute node
-Sys.setenv("INSTANTIATED_MODULES_FOLDER" = "~/tmp/StrategusInstantiatedModules")
 unlink("_targets", recursive = TRUE)
 
 Strategus::execute(analysisSpecifications = analysisSpecifications,
