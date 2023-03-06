@@ -27,7 +27,7 @@ test_that("Run Eunomia study", {
 
   # Use this line to limit to only running the CohortGeneratorModule
   # for testing purposes.
-  # analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
+  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
 
   executionSettings <- createCdmExecutionSettings(
     connectionDetailsReference = "eunomia",
