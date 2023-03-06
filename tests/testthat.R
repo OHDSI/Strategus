@@ -8,5 +8,6 @@
 
 library(testthat)
 library(Strategus)
+library(dplyr)
 
 test_check("Strategus")
