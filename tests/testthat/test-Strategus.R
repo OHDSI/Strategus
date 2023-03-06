@@ -31,9 +31,6 @@ test_that("Run Eunomia study", {
                            package = "Strategus")
   )
 
-  # For now limit to CG
-  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
-
   executionSettings <- createCdmExecutionSettings(
     connectionDetailsReference = "eunomia",
     workDatabaseSchema = "main",
