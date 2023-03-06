@@ -3,7 +3,7 @@ test_that("Run Eunomia study", {
   # configuring keyring on non-Windows environments was problematic
   # and also there are known issues with Strategus on non-Windows
   # devices: https://github.com/OHDSI/Strategus/issues/26
-  skip_if_not_win()
+  skip_if_not_linux()
 
   tempDir <- tempfile()
   tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
