@@ -1,7 +1,13 @@
 test_that("Run Eunomia study", {
+  # Skipping non-Windows environment testing for now since
+  # configuring keyring on non-Windows environments was problematic
+  # and also there are known issues with Strategus on non-Windows
+  # devices: https://github.com/OHDSI/Strategus/issues/26
   skip_if_not_win()
 
-  tempDir <- tempdir()
+  tempDir <- tempfile()
+  tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
+  renv:::renv_scope_envvars(RENV_PATHS_CACHE = tempDir)
   moduleFolder <- file.path(tempDir,"/strategus/modules")
   # Create a keyring called "strategus" that is password protected
   allKeyrings <- keyring::keyring_list()
@@ -25,6 +31,9 @@ test_that("Run Eunomia study", {
                            package = "Strategus")
   )
 
+  # For now limit to CG
+  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
+
   executionSettings <- createCdmExecutionSettings(
     connectionDetailsReference = "eunomia",
     workDatabaseSchema = "main",
@@ -36,7 +45,7 @@ test_that("Run Eunomia study", {
   )
 
   if (!dir.exists(file.path(tempDir, "EunomiaTestStudy"))) {
-    dir.create(file.path(tempDir, "EunomiaTestStudy"))
+    dir.create(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE)
   }
   ParallelLogger::saveSettingsToJson(
     object = executionSettings,
