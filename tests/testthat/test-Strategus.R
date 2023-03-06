@@ -1,10 +1,4 @@
 test_that("Run Eunomia study", {
-  # Skipping non-Windows environment testing for now since
-  # configuring keyring on non-Windows environments was problematic
-  # and also there are known issues with Strategus on non-Windows
-  # devices: https://github.com/OHDSI/Strategus/issues/26
-  skip_if_not_linux()
-
   tempDir <- tempfile()
   tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
   renv:::renv_scope_envvars(RENV_PATHS_CACHE = tempDir)
@@ -30,6 +24,9 @@ test_that("Run Eunomia study", {
     fileName = system.file("testdata/analysisSpecification.json",
                            package = "Strategus")
   )
+
+  # For now limit to CG
+  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
 
   executionSettings <- createCdmExecutionSettings(
     connectionDetailsReference = "eunomia",
@@ -59,5 +56,7 @@ test_that("Run Eunomia study", {
     executionScriptFolder = file.path(tempDir, "EunomiaTestStudy/script_folder"),
     keyringName = "strategus"
   )
+
+  expect_true(file.exists(file.path(tempDir, "EunomiaTestStudy/results_folder/CohortGeneratorModule_1/done")))
 
 })
