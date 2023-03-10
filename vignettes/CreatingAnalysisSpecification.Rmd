@@ -81,7 +81,7 @@ The building blocks of the `Strategus` analysis specification are HADES modules.
 The following code downloads the settings functions from the `CohortGeneratorModule` which then activates some additional functions we can use for creating the analysis specification. In the analysis specification, we will add the cohort definitions and negative control outcomes to the `sharedResources` section since these elements may be used by any of the HADES modules. To do this, we will use the `createCohortSharedResourceSpecifications` and `createNegativeControlOutcomeCohortSharedResourceSpecifications` functions respectively. In addition, we will use the  `cohortGeneratorModuleSpecifications` function to specify the cohort generation settings.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.0.16/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.1.0/SettingsFunctions.R")
 
 # Create the cohort definition shared resource element for the analysis specification
 cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(
@@ -192,7 +192,7 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(CohortMethod)
-source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.0.6/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.1.0/SettingsFunctions.R")
 negativeControlOutcomes <- lapply(
   X = ncoCohortSet$cohortId,
   FUN = createOutcome,
@@ -295,7 +295,7 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(SelfControlledCaseSeries)
-source(url = "https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.0.5/SettingsFunctions.R")
+source(url = "https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.1.2/SettingsFunctions.R")
 
 # Exposures-outcomes -----------------------------------------------------------
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
@@ -406,7 +406,7 @@ sccsModuleSpecifications <- creatSelfControlledCaseSeriesModuleSpecifications(
 The following code creates the `plpModuleSpecifications` to perform a self-controlled case series analysis for this study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.6/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.7/SettingsFunctions.R")
 
 makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
   invisible(PatientLevelPrediction::createModelDesign(
