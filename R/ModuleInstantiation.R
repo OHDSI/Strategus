@@ -115,16 +115,17 @@ getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
   return(modules)
 }
 
+extractDependenciesSingleModule <- function(module) {
+  moduleFolder <- getModuleFolder(module$module, module$version)
+  metaData <- getModuleMetaData(moduleFolder)
+  dependencies <- tibble(
+    module = module$module,
+    dependsOn = as.character(metaData$Dependencies)
+  )
+  return(dependencies)
+}
+
 extractDependencies <- function(modules) {
-  extractDependenciesSingleModule <- function(module) {
-    moduleFolder <- getModuleFolder(module$module, module$version)
-    metaData <- getModuleMetaData(moduleFolder)
-    dependencies <- tibble(
-      module = module$module,
-      dependsOn = as.character(metaData$Dependencies)
-    )
-    return(dependencies)
-  }
   dependencies <- lapply(split(modules, 1:nrow(modules)), extractDependenciesSingleModule) %>%
     bind_rows()
   return(dependencies)
@@ -208,7 +209,9 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     stop(message)
   }
 
-  script <- "
+  tempScriptFile <- tempfile(fileext = ".R")
+  withModuleRenv(
+    code = {
       renv::restore(prompt = FALSE)
       if (!require('ParallelLogger', quietly = TRUE)) {
         install.packages('ParallelLogger')
@@ -216,18 +219,12 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
       if (!require('keyring', quietly = TRUE)) {
         install.packages('keyring')
       }
-    "
-  tempScriptFile <- tempfile(fileext = ".R")
-  fileConn <- file(tempScriptFile)
-  writeLines(script, fileConn)
-  close(fileConn)
-
-  renv::run(
-    script = tempScriptFile,
-    job = FALSE,
+    },
     name = "Buidling renv library",
-    project = moduleFolder
+    moduleFolder = moduleFolder,
+    tempScriptFile = tempScriptFile
   )
+
   success <- TRUE
 }
 
