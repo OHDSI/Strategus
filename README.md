@@ -11,7 +11,9 @@ Strategus is an R package for coordinating and executing analytics using HADES m
 
 Features
 ========
-- 
+- Design study analysis specifications
+- Execute study analysis specifications against the OMOP CDM
+- Modular design for encapsulating analytics [vignette](https://ohdsi.github.io/Strategus/articles/CreatingModules.html)
 
 Technology
 ============
@@ -60,4 +62,4 @@ Strategus is being developed in R Studio.
 
 ### Development status
 
-Strategus is under development, and should not be used by anyone.
+Strategus is under active development.
