@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -25,10 +25,16 @@
 #'
 #' @template AnalysisSpecifications
 #' @param executionSettings       An object of type `ExecutionSettings` as created
-#'                                by [createExecutionSettings()].
+#'                                by [createCdmExecutionSettings()] or [createResultsExecutionSettings()].
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
+#'
+#' @template keyringName
+#'
+#' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
+#'                                the same as the `executionScriptFolder` used in the run to restart.
+#'
 #'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified
@@ -37,10 +43,14 @@
 #' @export
 execute <- function(analysisSpecifications,
                     executionSettings,
-                    executionScriptFolder = NULL) {
+                    executionScriptFolder = NULL,
+                    keyringName = NULL,
+                    restart = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
+  keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+  checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
@@ -49,38 +59,53 @@ execute <- function(analysisSpecifications,
     executionScriptFolder <- tempfile("strategusTempSettings")
     dir.create(executionScriptFolder)
     on.exit(unlink(executionScriptFolder, recursive = TRUE))
-  } else {
+  } else if (!restart) {
     if (dir.exists(executionScriptFolder)) {
       unlink(executionScriptFolder, recursive = TRUE)
     }
-    dir.create(executionScriptFolder)
+    dir.create(executionScriptFolder, recursive = TRUE)
   }
 
-  executionSettings$databaseId <- createDatabaseMetaData(executionSettings)
-  dependencies <-extractDependencies(modules)
+  if (is(executionSettings, "CdmExecutionSettings")) {
+    executionSettings$databaseId <- createDatabaseMetaData(
+      executionSettings = executionSettings,
+      keyringName = keyringName
+    )
+  }
+  dependencies <- extractDependencies(modules)
 
-  fileName <- generateTargetsScript(analysisSpecifications = analysisSpecifications,
-                                    executionSettings = executionSettings,
-                                    dependencies = dependencies,
-                                    executionScriptFolder = executionScriptFolder)
+  fileName <- generateTargetsScript(
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings,
+    dependencies = dependencies,
+    executionScriptFolder = executionScriptFolder,
+    restart = restart,
+    keyringName = keyringName
+  )
 
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
   targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
 }
 
-generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder) {
+generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, restart) {
+  fileName <- file.path(executionScriptFolder, "script.R")
+  if (restart) {
+    return(fileName)
+  }
   # Store settings objects in the temp folder so they are available in targets
   analysisSpecificationsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "analysisSpecifications.rds"))
   saveRDS(analysisSpecifications, analysisSpecificationsFileName)
   executionSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "executionSettings.rds"))
   saveRDS(executionSettings, executionSettingsFileName)
+  keyringSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "keyringSettings.rds"))
+  saveRDS(list(keyringName = keyringName), keyringSettingsFileName)
 
 
   # Dynamically generate targets script based on analysis specifications
   lines <- c(
     "library(targets)",
-    "tar_option_set(packages = c('Strategus'))",
+    "tar_option_set(packages = c('Strategus', 'keyring'))",
     "list(",
     "  tar_target(",
     "    analysisSpecifications,",
@@ -89,6 +114,10 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     "  tar_target(",
     "    executionSettings,",
     sprintf("    readRDS('%s')", executionSettingsFileName),
+    "  ),",
+    "  tar_target(",
+    "    keyringSettings,",
+    sprintf("    readRDS('%s')", keyringSettingsFileName),
     "  ),"
   )
   # Generate target names by module type
@@ -96,8 +125,10 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
     targetName <- sprintf("%s_%d", moduleSpecification$module, i)
-    moduleToTargetNames[[length(moduleToTargetNames) + 1]] <- tibble(module = moduleSpecification$module,
-                                                                     targetName = targetName)
+    moduleToTargetNames[[length(moduleToTargetNames) + 1]] <- tibble(
+      module = moduleSpecification$module,
+      targetName = targetName
+    )
   }
   moduleToTargetNames <- bind_rows(moduleToTargetNames)
 
@@ -112,22 +143,24 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
       filter(.data$module %in% dependencyModules) %>%
       pull(.data$targetName)
 
-    command <- sprintf("Strategus:::runModule(analysisSpecifications, %d, executionSettings%s)",
-                       i,
-                       ifelse(length(dependencyTargetNames) == 0, "", sprintf(", %s", paste(dependencyTargetNames, collapse = ", "))))
+    command <- sprintf(
+      "Strategus:::runModule(analysisSpecifications, keyringSettings, %d, executionSettings%s)",
+      i,
+      ifelse(length(dependencyTargetNames) == 0, "", sprintf(", %s", paste(dependencyTargetNames, collapse = ", ")))
+    )
 
 
-    lines <- c(lines,
-               "  tar_target(",
-               sprintf("    %s,", targetName),
-               sprintf("    %s", command),
-               ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),"))
-
+    lines <- c(
+      lines,
+      "  tar_target(",
+      sprintf("    %s,", targetName),
+      sprintf("    %s", command),
+      ifelse(i == length(analysisSpecifications$moduleSpecifications), "  )", "  ),")
+    )
   }
 
   lines <- c(lines, ")")
 
-  fileName <- file.path(executionScriptFolder, "script.R")
   sink(fileName)
   cat(paste(lines, collapse = "\n"))
   sink()

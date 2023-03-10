@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
       </span>
     </div>
 
@@ -32,7 +32,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a>
+    </li>
+    <li>
       <a href="../articles/CreatingModules.html">Creating Strategus Modules</a>
+    </li>
+    <li>
+      <a href="../articles/ExecuteStrategus.html">Execute Strategus</a>
+    </li>
+    <li>
+      <a href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a>
     </li>
   </ul></li>
 <li>
@@ -61,6 +70,22 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.0.3" id="strategus-003">Strategus 0.0.3<a class="anchor" aria-label="anchor" href="#strategus-003"></a></h2>
+<ul><li>Breaking change: removed function <code>createExecutionSettings()</code> and replaced with 2 new functions: <code><a href="../reference/createCdmExecutionSettings.html">createCdmExecutionSettings()</a></code> and <code><a href="../reference/createResultsExecutionSettings.html">createResultsExecutionSettings()</a></code>. (<a href="https://github.com/OHDSI/Strategus/issues/19" class="external-link">#19</a>)</li>
+<li>Added Vignettes (<a href="https://github.com/OHDSI/Strategus/issues/23" class="external-link">#23</a>)</li>
+<li>Provide better support for <code>keyring</code> to handle named/locked keyrings (<a href="https://github.com/OHDSI/Strategus/issues/24" class="external-link">#24</a>)</li>
+<li>Add function to list Strategus modules (<a href="https://github.com/OHDSI/Strategus/issues/30" class="external-link">#30</a>)</li>
+<li>Fixes from testing (<a href="https://github.com/OHDSI/Strategus/issues/36" class="external-link">#36</a>)</li>
+<li>Enforce module structure for proper use with renv (<a href="https://github.com/OHDSI/Strategus/issues/37" class="external-link">#37</a>)</li>
+<li>Support CDM 5.4 source table format (<a href="https://github.com/OHDSI/Strategus/issues/41" class="external-link">#41</a>)</li>
+<li>Add unit tests (<a href="https://github.com/OHDSI/Strategus/issues/47" class="external-link">#47</a>)</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.0.2" id="strategus-002">Strategus 0.0.2<a class="anchor" aria-label="anchor" href="#strategus-002"></a></h2>
+<ul><li>Updates renv to 0.15.5</li>
+<li>Call renv::use() for each module</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.1" id="strategus-001">Strategus 0.0.1<a class="anchor" aria-label="anchor" href="#strategus-001"></a></h2>
 <p>Initial version</p>
 </div>
@@ -74,11 +99,11 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Martijn Schuemie.</p>
+  <p></p><p>Developed by Martijn Schuemie, Anthony Sena.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -21,15 +21,17 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-#' Create an emtpy analysis specifications object.
+#' Create an empty analysis specifications object.
 #'
 #' @return
 #' An object of type `AnalysisSpecifications`.
 #'
 #' @export
 createEmptyAnalysisSpecificiations <- function() {
-  analysisSpecifications <- list(sharedResources = list(),
-                                 moduleSpecifications = list())
+  analysisSpecifications <- list(
+    sharedResources = list(),
+    moduleSpecifications = list()
+  )
   class(analysisSpecifications) <- "AnalysisSpecifications"
   return(analysisSpecifications)
 }
@@ -74,7 +76,7 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
   return(analysisSpecifications)
 }
 
-#' Create execution settings
+#' Create CDM execution settings
 #'
 #' @param connectionDetailsReference A string that can be used to retrieve database connection details from a secure local
 #'                                   store.
@@ -94,13 +96,13 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' An object of type `ExecutionSettings`.
 #'
 #' @export
-createExecutionSettings <- function(connectionDetailsReference,
-                                    workDatabaseSchema,
-                                    cdmDatabaseSchema,
-                                    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
-                                    workFolder,
-                                    resultsFolder,
-                                    minCellCount = 5) {
+createCdmExecutionSettings <- function(connectionDetailsReference,
+                                       workDatabaseSchema,
+                                       cdmDatabaseSchema,
+                                       cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
+                                       workFolder,
+                                       resultsFolder,
+                                       minCellCount = 5) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
@@ -111,16 +113,57 @@ createExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  executionSettings <- list(connectionDetailsReference = connectionDetailsReference,
-                            workDatabaseSchema = workDatabaseSchema,
-                            cdmDatabaseSchema = cdmDatabaseSchema,
-                            cohortTableNames = cohortTableNames,
-                            workFolder = workFolder,
-                            resultsFolder = resultsFolder,
-                            minCellCount = minCellCount)
-  class(executionSettings) <- "ExecutionSettings"
+  executionSettings <- list(
+    connectionDetailsReference = connectionDetailsReference,
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = cohortTableNames,
+    workFolder = workFolder,
+    resultsFolder = resultsFolder,
+    minCellCount = minCellCount
+  )
+  class(executionSettings) <- c("CdmExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
+
+#' Create Results execution settings
+#'
+#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
+#'                                          details from a secure local store.
+#' @param resultsDatabaseSchema      A schema where the results tables are stored
+#' @param workFolder                 A folder in the local file system where intermediate results can be written.
+#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
+#'                                   in results.
+#'
+#' @return
+#' An object of type `ExecutionSettings`.
+#'
+#' @export
+createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
+                                           resultsDatabaseSchema,
+                                           workFolder,
+                                           resultsFolder,
+                                           minCellCount = 5) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(resultsConnectionDetailsReference, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
+  checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  executionSettings <- list(
+    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+    resultsDatabaseSchema = resultsDatabaseSchema,
+    workFolder = workFolder,
+    resultsFolder = resultsFolder,
+    minCellCount = minCellCount
+  )
+  class(executionSettings) <- c("ResultsExecutionSettings", "ExecutionSettings")
+  return(executionSettings)
+}
+
 
 
 # Note: assuming connectionDetails objects remain stable across the various module
@@ -133,6 +176,8 @@ createExecutionSettings <- function(connectionDetailsReference,
 #' @param connectionDetailsReference  A string that can be used to retrieve the settings from
 #'                                    the secure store.
 #'
+#' @template keyringName
+#'
 #' @seealso [retrieveConnectionDetails()]
 #'
 #' @return
@@ -140,10 +185,19 @@ createExecutionSettings <- function(connectionDetailsReference,
 #' stored.
 #'
 #' @export
-storeConnectionDetails <- function(connectionDetails, connectionDetailsReference) {
+storeConnectionDetails <- function(connectionDetails, connectionDetailsReference, keyringName = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
-  checkmate::assertClass(connectionDetails, "connectionDetails", add = errorMessages)
+  # Get the keyring list and verify that the keyring specified exists.
+  # In the case of the default NULL keyring, this will be represented as an empty
+  # string in the keyring list
+  keyringList <- keyring::keyring_list()
+  if (is(connectionDetails, "connectionDetails")) {
+    checkmate::assertClass(connectionDetails, "connectionDetails", add = errorMessages)
+  } else {
+    checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
+  }
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
+  checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Evaluate functions used to secure details to allow serialization:
@@ -158,7 +212,12 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
     }
   }
   connectionDetails <- ParallelLogger::convertSettingsToJson(connectionDetails)
-  keyring::key_set_with_value(connectionDetailsReference, password = connectionDetails)
+  # If the keyring is locked, unlock it, set the value and then re-lock it
+  keyringLocked <- unlockKeyring(keyringName = keyringName)
+  keyring::key_set_with_value(connectionDetailsReference, password = connectionDetails, keyring = keyringName)
+  if (keyringLocked) {
+    keyring::keyring_lock(keyring = keyringName)
+  }
   invisible(NULL)
 }
 
@@ -167,19 +226,89 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
 #' @param connectionDetailsReference  A string that can be used to retrieve the settings from
 #'                                    the secure store.
 #'
+#' @template keyringName
+#'
 #' @seealso [storeConnectionDetails()]
 #'
 #' @return
 #' Returns an object of type `connectionDetails`.
 #'
 #' @export
-retrieveConnectionDetails <- function(connectionDetailsReference) {
+retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = NULL) {
+  keyringList <- keyring::keyring_list()
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
+  checkmate::assertLogical(x = (is.null(keyringName) || keyringName %in% keyringList$keyring), add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  connectionDetails <- keyring::key_get(connectionDetailsReference)
+  # If the keyring is locked, unlock it, set the value and then re-lock it
+  keyringLocked <- unlockKeyring(keyringName = keyringName)
+
+  connectionDetails <- keyring::key_get(connectionDetailsReference, keyring = keyringName)
   connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
   connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+
+  if (keyringLocked) {
+    keyring::keyring_lock(keyring = keyringName)
+  }
+
   return(connectionDetails)
+}
+
+#' Provides a list of HADES modules to run through Strategus
+#'
+#' @description
+#' This function provides a list of modules and their locations
+#' that may be used with Strategus.
+#'
+#' @return
+#' A data.frame() of modules that work with Strategus. This will contain:
+#' module = The name of the module
+#' version = The version of the module
+#' remote_repo = The remote location of the module (i.e. github.com)
+#' remote_username = The organization of the module (i.e. OHDSI)
+#' module_type = 'cdm' or 'results'. 'cdm' refers to modules that are designed to work against
+#' patient level data in the OMOP CDM format. 'results' refers to modules that are designed
+#' to work against a results database containing output from a 'cdm' module.
+#'
+#' @export
+getModuleList <- function() {
+  moduleList <- CohortGenerator::readCsv(file = system.file("csv/modules.csv",
+    package = "Strategus",
+    mustWork = TRUE
+  ))
+  return(moduleList)
+}
+
+#' Helper function to unlock a keyring
+#'
+#' @description
+#' This helper function is used to unlock a keyring by using the password
+#' stored in Sys.getenv("STRATEGUS_KEYRING_PASSWORD"). It will alert
+#' the user if the environment variable with the password is not set.
+#'
+#' @template keyringName
+#'
+#' @return
+#' Returns TRUE if the keyring was unlocked using the password otherwise
+#' it returns FALSE
+#'
+#' @export
+unlockKeyring <- function(keyringName) {
+  # If the keyring is locked, unlock it, set the value and then re-lock it
+  keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
+  if (keyringLocked) {
+    assertKeyringPassword(x = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"), keyringName = keyringName)
+    keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"))
+  }
+  return(keyringLocked)
+}
+
+#' @keywords internal
+.checkKeyringPasswordSet <- function(x, keyringName = NULL) {
+  if (length(x) == 0 || x == "") {
+    return(paste0("STRATEGUS_KEYRING_PASSWORD NOT FOUND. STRATEGUS_KEYRING_PASSWORD must be set using Sys.setenv(STRATEGUS_KEYRING_PASSWORD = \"<your password>\") to unlock the keyring: ", keyringName))
+  } else {
+    return(TRUE)
+  }
 }

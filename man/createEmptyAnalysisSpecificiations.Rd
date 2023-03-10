@@ -2,7 +2,7 @@
 % Please edit documentation in R/Settings.R
 \name{createEmptyAnalysisSpecificiations}
 \alias{createEmptyAnalysisSpecificiations}
-\title{Create an emtpy analysis specifications object.}
+\title{Create an empty analysis specifications object.}
 \usage{
 createEmptyAnalysisSpecificiations()
 }
@@ -10,5 +10,5 @@ createEmptyAnalysisSpecificiations()
 An object of type \code{AnalysisSpecifications}.
 }
 \description{
-Create an emtpy analysis specifications object.
+Create an empty analysis specifications object.
 }

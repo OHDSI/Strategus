@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -21,4 +21,8 @@
 #' @import dplyr
 #' @import CohortGenerator
 #' @import DatabaseConnector
+#' @importFrom methods is
 NULL
+
+# Add custom asssertions
+assertKeyringPassword <- checkmate::makeAssertionFunction(.checkKeyringPasswordSet)

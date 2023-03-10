@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
       </span>
     </div>
 
@@ -32,7 +32,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a>
+    </li>
+    <li>
       <a href="../articles/CreatingModules.html">Creating Strategus Modules</a>
+    </li>
+    <li>
+      <a href="../articles/ExecuteStrategus.html">Execute Strategus</a>
+    </li>
+    <li>
+      <a href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a>
     </li>
   </ul></li>
 <li>
@@ -72,13 +81,17 @@
         </td>
         <td><p>Add shared resources to analysis specifications</p></td>
       </tr><tr><td>
+          <p><code><a href="createCdmExecutionSettings.html">createCdmExecutionSettings()</a></code> </p>
+        </td>
+        <td><p>Create CDM execution settings</p></td>
+      </tr><tr><td>
           <p><code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSpecificiations()</a></code> </p>
         </td>
-        <td><p>Create an emtpy analysis specifications object.</p></td>
+        <td><p>Create an empty analysis specifications object.</p></td>
       </tr><tr><td>
-          <p><code><a href="createExecutionSettings.html">createExecutionSettings()</a></code> </p>
+          <p><code><a href="createResultsExecutionSettings.html">createResultsExecutionSettings()</a></code> </p>
         </td>
-        <td><p>Create execution settings</p></td>
+        <td><p>Create Results execution settings</p></td>
       </tr><tr><td>
           <p><code><a href="ensureAllModulesInstantiated.html">ensureAllModulesInstantiated()</a></code> </p>
         </td>
@@ -88,6 +101,10 @@
         </td>
         <td><p>Execute analysis specifications.</p></td>
       </tr><tr><td>
+          <p><code><a href="getModuleList.html">getModuleList()</a></code> </p>
+        </td>
+        <td><p>Provides a list of HADES modules to run through Strategus</p></td>
+      </tr><tr><td>
           <p><code><a href="retrieveConnectionDetails.html">retrieveConnectionDetails()</a></code> </p>
         </td>
         <td><p>Retrieve connection details from the secure location</p></td>
@@ -95,6 +112,10 @@
           <p><code><a href="storeConnectionDetails.html">storeConnectionDetails()</a></code> </p>
         </td>
         <td><p>Store connection details in a secure location</p></td>
+      </tr><tr><td>
+          <p><code><a href="unlockKeyring.html">unlockKeyring()</a></code> </p>
+        </td>
+        <td><p>Helper function to unlock a keyring</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -104,11 +125,11 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Martijn Schuemie.</p>
+  <p></p><p>Developed by Martijn Schuemie, Anthony Sena.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

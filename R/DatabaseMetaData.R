@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -21,48 +21,79 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-createDatabaseMetaData <- function(executionSettings) {
+createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
   databaseMetaDataFolder <- file.path(executionSettings$resultsFolder, "DatabaseMetaData")
   if (!dir.exists(databaseMetaDataFolder)) {
     dir.create(databaseMetaDataFolder, recursive = TRUE)
   }
 
-  connectionDetails <- retrieveConnectionDetails(executionSettings$connectionDetailsReference)
+  connectionDetails <- retrieveConnectionDetails(
+    connectionDetailsReference = executionSettings$connectionDetailsReference,
+    keyringName = keyringName
+  )
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
+  resultsDataModel <- CohortGenerator::readCsv(
+    file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
+    warnOnCaseMismatch = FALSE
+  )
+
   sql <- "SELECT TOP 1 * FROM @cdm_database_schema.cdm_source;"
-  cdmSource <- renderTranslateQuerySql(connection = connection,
-                                       sql = sql,
-                                       snakeCaseToCamelCase = TRUE,
-                                       cdm_database_schema = executionSettings$cdmDatabaseSchema)
+  cdmSource <- renderTranslateQuerySql(
+    connection = connection,
+    sql = sql,
+    snakeCaseToCamelCase = TRUE,
+    cdm_database_schema = executionSettings$cdmDatabaseSchema
+  )
+
+  # Restrict the cdmSource columns to those that are
+  # expected in the resultsDataModel
+  cdmSource <- cdmSource[, which(names(cdmSource) %in% SqlRender::snakeCaseToCamelCase(resultsDataModel$columnName))]
+
+  # In the case that the CDM is pre v5.4, it will lack the new
+  # cdm_version_concept_id column. In this case, we'll default it to
+  # concept_id == 1147638 which is CDM v5.3.1
+  # Ref: https://ohdsi.github.io/CommonDataModel/cdm54Changes.html
+  if (!"cdmVersionConceptId" %in% names(cdmSource)) {
+    cdmSource$cdmVersionConceptId <- 1147638
+  }
 
   sql <- "SELECT TOP 1 vocabulary_version  FROM @cdm_database_schema.vocabulary WHERE vocabulary_id = 'None';"
-  vocabVersion <- renderTranslateQuerySql(connection = connection,
-                                          sql = sql,
-                                          snakeCaseToCamelCase = TRUE,
-                                          cdm_database_schema = executionSettings$cdmDatabaseSchema)
+  vocabVersion <- renderTranslateQuerySql(
+    connection = connection,
+    sql = sql,
+    snakeCaseToCamelCase = TRUE,
+    cdm_database_schema = executionSettings$cdmDatabaseSchema
+  )
 
   sql <- "SELECT MAX(observation_period_end_date) as max_obs_period_end_date
   FROM @cdm_database_schema.observation_period;"
-  observationPeriodMax <- renderTranslateQuerySql(connection = connection,
-                                                  sql = sql,
-                                                  snakeCaseToCamelCase = TRUE,
-                                                  cdm_database_schema = executionSettings$cdmDatabaseSchema)
+  observationPeriodMax <- renderTranslateQuerySql(
+    connection = connection,
+    sql = sql,
+    snakeCaseToCamelCase = TRUE,
+    cdm_database_schema = executionSettings$cdmDatabaseSchema
+  )
 
   databaseId <- digest::digest2int(paste(cdmSource$cdmSourceName, cdmSource$cdmReleaseDate))
   database <- cdmSource %>%
-    mutate(vocabularyVersion = vocabVersion$vocabularyVersion,
-           databaseId = !!databaseId) %>%
+    mutate(
+      vocabularyVersion = vocabVersion$vocabularyVersion,
+      databaseId = !!databaseId
+    ) %>%
     bind_cols(observationPeriodMax)
 
   # Export the csv files:
-  CohortGenerator::writeCsv(x = database,
-                            file = file.path(databaseMetaDataFolder, "database_meta_data.csv"))
+  CohortGenerator::writeCsv(
+    x = database,
+    file = file.path(databaseMetaDataFolder, "database_meta_data.csv")
+  )
 
-  resultsDataModel <- readr::read_csv(file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
-                                      show_col_types = FALSE)
-  CohortGenerator::writeCsv(x = resultsDataModel,
-                            file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"))
+  CohortGenerator::writeCsv(
+    x = resultsDataModel,
+    file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"),
+    warnOnFileNameCaseMismatch = FALSE
+  )
   return(databaseId)
 }

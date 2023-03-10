@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
       </span>
     </div>
 
@@ -32,7 +32,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a>
+    </li>
+    <li>
       <a href="../articles/CreatingModules.html">Creating Strategus Modules</a>
+    </li>
+    <li>
+      <a href="../articles/ExecuteStrategus.html">Execute Strategus</a>
+    </li>
+    <li>
+      <a href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a>
     </li>
   </ul></li>
 <li>
@@ -66,7 +75,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">addModuleSpecifications</span><span class="op">(</span><span class="va">analysisSpecifications</span>, <span class="va">moduleSpecifications</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">addModuleSpecifications</span><span class="op">(</span><span class="va">analysisSpecifications</span>, <span class="va">moduleSpecifications</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -74,12 +83,17 @@
     <dl><dt>analysisSpecifications</dt>
 <dd><p>An object of type <code>AnalysisSpecifications</code> as created
 by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSpecificiations()</a></code>.</p></dd>
+
+
 <dt>moduleSpecifications</dt>
 <dd><p>An object of type <code>ModuleSpecifications</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns the <code>analysisSpecifications</code> object with the module specifications added.</p>
+    
+
+<p>Returns the <code>analysisSpecifications</code> object with the module specifications added.</p>
     </div>
 
   </div>
@@ -90,11 +104,11 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Martijn Schuemie.</p>
+  <p></p><p>Developed by Martijn Schuemie, Anthony Sena.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.3</span>
       </span>
     </div>
 
@@ -32,7 +32,16 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a>
+    </li>
+    <li>
       <a href="../articles/CreatingModules.html">Creating Strategus Modules</a>
+    </li>
+    <li>
+      <a href="../articles/ExecuteStrategus.html">Execute Strategus</a>
+    </li>
+    <li>
+      <a href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a>
     </li>
   </ul></li>
 <li>
@@ -66,11 +75,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">execute</span><span class="op">(</span>
-  <span class="va">analysisSpecifications</span>,
-  <span class="va">executionSettings</span>,
-  executionScriptFolder <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">execute</span><span class="op">(</span></span>
+<span>  <span class="va">analysisSpecifications</span>,</span>
+<span>  <span class="va">executionSettings</span>,</span>
+<span>  executionScriptFolder <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keyringName <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  restart <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -78,17 +89,38 @@
     <dl><dt>analysisSpecifications</dt>
 <dd><p>An object of type <code>AnalysisSpecifications</code> as created
 by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSpecificiations()</a></code>.</p></dd>
+
+
 <dt>executionSettings</dt>
 <dd><p>An object of type <code>ExecutionSettings</code> as created
-by <code><a href="createExecutionSettings.html">createExecutionSettings()</a></code>.</p></dd>
+by <code><a href="createCdmExecutionSettings.html">createCdmExecutionSettings()</a></code> or <code><a href="createResultsExecutionSettings.html">createResultsExecutionSettings()</a></code>.</p></dd>
+
+
 <dt>executionScriptFolder</dt>
 <dd><p>Optional: the path to use for storing the execution script.
 when NULL, this function will use a temporary
 file location to create the script to execute.</p></dd>
+
+
+<dt>keyringName</dt>
+<dd><p>The name of the keyring to operate on. This function assumes you have
+created the keyring before calling this function. It defaults to
+NULL to select the default keyring. If the keyring is password
+protected, the password must be stored in the environment variable
+STRATEGUS_KEYRING_PASSWORD so it is retrieved using the command
+Sys.getenv("STRATEGUS_KEYRING_PASSWORD")</p></dd>
+
+
+<dt>restart</dt>
+<dd><p>Restart run? Requires <code>executionScriptFolder</code> to be specified, and be
+the same as the <code>executionScriptFolder</code> used in the run to restart.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Does not return anything. Is called for the side-effect of executing the specified
+    
+
+<p>Does not return anything. Is called for the side-effect of executing the specified
 analyses.</p>
     </div>
 
@@ -100,11 +132,11 @@ analyses.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Martijn Schuemie.</p>
+  <p></p><p>Developed by Martijn Schuemie, Anthony Sena.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

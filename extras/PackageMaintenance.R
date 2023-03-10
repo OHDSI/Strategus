@@ -1,4 +1,4 @@
-# Copyright 2022 Observational Health Data Sciences and Informatics
+# Copyright 2023 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -33,6 +33,13 @@ devtools::spell_check()
 unlink("extras/Strategus.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/Strategus.pdf")
 
+rmarkdown::render("vignettes/CreatingAnalysisSpecification.Rmd",
+                  output_file = "../inst/doc/CreatingAnalysisSpecification.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/CreatingAnalysisSpecification.tex")
+
 rmarkdown::render("vignettes/CreatingModules.Rmd",
                   output_file = "../inst/doc/CreatingModules.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",
@@ -40,6 +47,80 @@ rmarkdown::render("vignettes/CreatingModules.Rmd",
                                           number_sections = TRUE))
 unlink("inst/doc/CreatingModules.tex")
 
+rmarkdown::render("vignettes/ExecuteStrategus.Rmd",
+                  output_file = "../inst/doc/ExecuteStrategus.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/ExecuteStrategus.tex")
+
+rmarkdown::render("vignettes/IntroductionToStrategus.Rmd",
+                  output_file = "../inst/doc/IntroductionToStrategus.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/IntroductionToStrategus.tex")
+
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
+
+
+# Maintain a list of supported modules ------------
+
+# CDM Modules
+moduleList <- data.frame(module = "CharacterizationModule",
+                         version = "v0.2.3",
+                         remoteRepo = "github.com",
+                         remoteUsername = "OHDSI",
+                         moduleType = "cdm")
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortDiagnosticsModule",
+                               version = "v0.0.7",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortGeneratorModule",
+                               version = "v0.1.0",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortIncidenceModule",
+                               version = "v0.0.6",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+
+moduleList <- rbind(moduleList,
+                    data.frame(module = "CohortMethodModule",
+                               version = "v0.1.0",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "PatientLevelPredictionModule",
+                               version = "v0.0.7",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+moduleList <- rbind(moduleList,
+                    data.frame(module = "SelfControlledCaseSeriesModule",
+                               version = "v0.1.2",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "cdm"))
+
+# Results Modules
+moduleList <- rbind(moduleList,
+                    data.frame(module = "EvidenceSynthesisModule",
+                               version = "v0.1.3",
+                               remoteRepo = "github.com",
+                               remoteUsername = "OHDSI",
+                               moduleType = "results"))
+
+CohortGenerator::writeCsv(x = moduleList,
+                          file = "inst/csv/modules.csv")
+
+
 
