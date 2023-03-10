@@ -52,8 +52,10 @@ connectionDetails <- Eunomia::getEunomiaConnectionDetails(
 Next we will use `Strategus` to store the connection details and provide a `connectionDetailsReference` that Strategus will use to look up the connection details.
 
 ```{r eval=FALSE}
-storeConnectionDetails(connectionDetails = connectionDetails,
-                       connectionDetailsReference = "eunomia")
+storeConnectionDetails(
+  connectionDetails = connectionDetails,
+  connectionDetailsReference = "eunomia"
+)
 ```
 Note that we only need to store connection details once. We can re-use these details in all future studies.
 
@@ -77,7 +79,7 @@ Finally, we can write out the execution settings to the file system to capture t
 
 ```{r}
 ParallelLogger::saveSettingsToJson(
-  object = executionSettings, 
+  object = executionSettings,
   file.path(outputFolder, "eunomiaExecutionSettings.json")
 )
 ```
@@ -101,7 +103,8 @@ For this study, we will use analysis specifications created elsewhere, and the e
 ```{r}
 analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
   fileName = system.file("testdata/analysisSpecification.json",
-                         package = "Strategus")
+    package = "Strategus"
+  )
 )
 
 executionSettings <- ParallelLogger::loadSettingsFromJson(
