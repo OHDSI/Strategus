@@ -18,8 +18,9 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 skeletonFolder <- ifelse(basename(getwd()) == "vignettes",
-                         "module_skeleton",
-                         file.path("vignettes", "module_skeleton"))
+  "module_skeleton",
+  file.path("vignettes", "module_skeleton")
+)
 ```
 
 # Background
@@ -53,7 +54,7 @@ This is a standard NEWS markdown file that is a change log for your module. See 
 MetaData.json holds information that describes the module and its dependencies:
 
 ```{r comment='', echo=FALSE}
-cat(readLines(file.path(skeletonFolder, "MetaData.json")), sep = '\n')
+cat(readLines(file.path(skeletonFolder, "MetaData.json")), sep = "\n")
 ```
 To detail the contents of the JSON file:
 
@@ -67,7 +68,7 @@ To detail the contents of the JSON file:
 This file holds the main executable for your module. This file must contain a function called `execute(jobContext)`.
 
 ```{r comment='', echo=FALSE}
-cat(readLines(file.path(skeletonFolder, "Main.R")), sep = '\n')
+cat(readLines(file.path(skeletonFolder, "Main.R")), sep = "\n")
 ```
 
 As shown in the code above, your `execute(jobContext)` should handle: validating the `jobContext` object to ensure it has all of the information necessary for your code to function, a section to execute the analytics and finally code to assemble the output. Here we will describe the requirements for the way in which your module must output its results:
@@ -77,7 +78,7 @@ As shown in the code above, your `execute(jobContext)` should handle: validating
 - You must include a file named `resultsModuleSpecification.csv` in your output directory. The format of this file is as follows:
 
 ```{r comment='', echo=FALSE}
-cat(readLines(file.path(skeletonFolder, "resources", "resultsDataModelSpecification.csv")), sep = '\n')
+cat(readLines(file.path(skeletonFolder, "resources", "resultsDataModelSpecification.csv")), sep = "\n")
 ```
 The `resultsModuleSpecification.csv` has the following columns:
 
@@ -93,7 +94,7 @@ The `resultsModuleSpecification.csv` has the following columns:
 This file contains one or more functions required to create the module settings for use in Strategus. We plan to later remove this requirement when we can describe the module specification using the [OpenAPI 3.0 Specification](https://swagger.io/specification/). For now, your module should contain a function similar to the following:
 
 ```{r comment='', echo=FALSE}
-cat(readLines(file.path(skeletonFolder, "SettingsFunctions.R")), sep = '\n')
+cat(readLines(file.path(skeletonFolder, "SettingsFunctions.R")), sep = "\n")
 ```
 
 As shown above, this example comes from the `CohortGeneratorModule` and the function name reflects the fact that the function will create the settings used to dictate the behavior of the module. The parameters of the function will differ based on the requirements of your module - if there are choices to be made when running your module, you should include these as parameters to your module specification function.
@@ -103,7 +104,7 @@ Internal to the function above, the formal parameters to the function are used t
 The following JSON fragment shows how the output of `createCohortGeneratorModuleSpecifications()` is used in the `moduleSpecifications` section of the overall analysis settings JSON for Strategus:
 
 ```{r comment='', echo=FALSE}
-cat(readLines(file.path(skeletonFolder, "resources", "exampleAnalysisSpecifications.json")), sep = '\n')
+cat(readLines(file.path(skeletonFolder, "resources", "exampleAnalysisSpecifications.json")), sep = "\n")
 ```
 
 ## renv.lock
@@ -143,7 +144,7 @@ It is advisable to add an `extras` folder to your project to include other usefu
 This file is used to store utility functions for your module, such as the code mentioned earlier for generating the [renv.lock] file. Here is an example of the contents of ModuleMaintenance.R:
 
 ```{r comment='', echo=FALSE}
-cat(readLines(file.path(skeletonFolder, "extras", "ModuleMaintenance.R")), sep = '\n')
+cat(readLines(file.path(skeletonFolder, "extras", "ModuleMaintenance.R")), sep = "\n")
 ```
 ## Test Files
 

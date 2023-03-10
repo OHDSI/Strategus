@@ -49,7 +49,7 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
 
   # Restrict the cdmSource columns to those that are
   # expected in the resultsDataModel
-  cdmSource <- cdmSource[,which(names(cdmSource) %in% SqlRender::snakeCaseToCamelCase(resultsDataModel$columnName))]
+  cdmSource <- cdmSource[, which(names(cdmSource) %in% SqlRender::snakeCaseToCamelCase(resultsDataModel$columnName))]
 
   # In the case that the CDM is pre v5.4, it will lack the new
   # cdm_version_concept_id column. In this case, we'll default it to
