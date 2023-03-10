@@ -239,7 +239,7 @@ getModuleRenvDependencies <- function(moduleFolder) {
 
   missingFiles <- tibble::enframe(renvRequiredFiles) %>%
     dplyr::mutate(fileExists = file.exists(file.path(moduleFolder, .data$value))) %>%
-    dplyr::rename(.data$fileName = .data$value) %>%
+    dplyr::rename(fileName = .data$value) %>%
     dplyr::select("fileName", "fileExists") %>%
     dplyr::filter(.data$fileExists == FALSE)
 
