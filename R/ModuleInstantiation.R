@@ -145,6 +145,7 @@ getModuleMetaData <- function(moduleFolder) {
 
 getModuleFolder <- function(module, version) {
   moduleFolder <- file.path(Sys.getenv("INSTANTIATED_MODULES_FOLDER"), sprintf("%s_%s", module, version))
+  invisible(moduleFolder)
 }
 
 ensureModuleInstantiated <- function(module, version, remoteRepo, remoteUsername) {

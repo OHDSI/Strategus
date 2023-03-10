@@ -68,7 +68,7 @@ kable(ncoCohortSet)
 ```
 
 
-# Assembiling HADES modules
+# Assembling HADES modules
 
 The building blocks of the `Strategus` analysis specification are HADES modules. For purposes of this walk through, a module is a specific analytic task you would like to perform. As shown in the subsequent sections, the high-level pattern for using a module consists of:
 

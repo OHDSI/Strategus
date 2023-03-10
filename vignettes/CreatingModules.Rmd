@@ -87,7 +87,6 @@ The `resultsModuleSpecification.csv` has the following columns:
 - **data_type**: The data type for the column. See https://www.postgresql.org/docs/current/datatype.html for examples.
 - **is_required**: Will this column allow for NULL values? Yes/No
 - **primary_key**: Is this column part of the table's primary key? Yes/No
-- **empty_is_na**: When importing data into this column, should NA values be interpreted as empty/0 values? Yes/No
 
 ## SettingsFunctions.R
 
@@ -137,7 +136,7 @@ Once you run `renv::init()`, renv will create some new files in your project:
 
 # Extra files
 
-It is advisable to add an `extras` folder to your project to include other useful files for managing and tesitng your module. We'll detail those files here:
+It is advisable to add an `extras` folder to your project to include other useful files for managing and testing your module. We'll detail those files here:
 
 ## ModuleMaintenance.R
 
