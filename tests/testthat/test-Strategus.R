@@ -2,7 +2,7 @@ test_that("Run Eunomia study", {
   tempDir <- tempfile()
   tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
   renv:::renv_scope_envvars(RENV_PATHS_CACHE = tempDir)
-  moduleFolder <- file.path(tempDir,"/strategus/modules")
+  moduleFolder <- file.path(tempDir, "/strategus/modules")
   # Create a keyring called "strategus" that is password protected
   allKeyrings <- keyring::keyring_list()
   if (!"strategus" %in% allKeyrings$keyring) {
@@ -14,15 +14,18 @@ test_that("Run Eunomia study", {
   connectionDetails <- Eunomia::getEunomiaConnectionDetails()
 
   # Using a named and secured keyring
-  Sys.setenv("STRATEGUS_KEYRING_PASSWORD"="foobar")
-  Strategus::storeConnectionDetails(connectionDetails = connectionDetails,
-                                    connectionDetailsReference = "eunomia",
-                                    keyringName = "strategus")
+  Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = "foobar")
+  Strategus::storeConnectionDetails(
+    connectionDetails = connectionDetails,
+    connectionDetailsReference = "eunomia",
+    keyringName = "strategus"
+  )
 
   Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/analysisSpecification.json",
-                           package = "Strategus")
+      package = "Strategus"
+    )
   )
 
   # Use this line to limit to only running the CohortGeneratorModule
@@ -59,5 +62,4 @@ test_that("Run Eunomia study", {
   )
 
   expect_true(file.exists(file.path(tempDir, "EunomiaTestStudy/results_folder/CohortGeneratorModule_1/done")))
-
 })

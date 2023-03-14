@@ -42,12 +42,15 @@ To start, we'll need to define cohorts and negative control outcomes to use in o
 
 ```{r, results='hide', eval=FALSE}
 library(CohortGenerator)
-cohortDefinitionSet <- getCohortDefinitionSet(settingsFileName = "testdata/Cohorts.csv",
-                                              jsonFolder = "testdata/cohorts",
-                                              sqlFolder = "testdata/sql",
-                                              packageName = "Strategus")
-ncoCohortSet <-readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
-                                          package = "Strategus"))
+cohortDefinitionSet <- getCohortDefinitionSet(
+  settingsFileName = "testdata/Cohorts.csv",
+  jsonFolder = "testdata/cohorts",
+  sqlFolder = "testdata/sql",
+  packageName = "Strategus"
+)
+ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
+  package = "Strategus"
+))
 ```
 
 ### Cohort Definitions & Negative Control Outcomes
@@ -55,7 +58,7 @@ ncoCohortSet <-readCsv(file = system.file("testdata/negative_controls_concept_se
 This is the list of cohort definitions we will use when assembling the analysis specification for Strategus.
 
 ```{r eval=FALSE}
-kable(cohortDefinitionSet[,c("cohortId", "cohortName")])
+kable(cohortDefinitionSet[, c("cohortId", "cohortName")])
 ```
 
 And the negative control outcomes when performing empirical calibration.
@@ -65,7 +68,7 @@ kable(ncoCohortSet)
 ```
 
 
-# Assembiling HADES modules
+# Assembling HADES modules
 
 The building blocks of the `Strategus` analysis specification are HADES modules. For purposes of this walk through, a module is a specific analytic task you would like to perform. As shown in the subsequent sections, the high-level pattern for using a module consists of:
 
@@ -78,7 +81,7 @@ The building blocks of the `Strategus` analysis specification are HADES modules.
 The following code downloads the settings functions from the `CohortGeneratorModule` which then activates some additional functions we can use for creating the analysis specification. In the analysis specification, we will add the cohort definitions and negative control outcomes to the `sharedResources` section since these elements may be used by any of the HADES modules. To do this, we will use the `createCohortSharedResourceSpecifications` and `createNegativeControlOutcomeCohortSharedResourceSpecifications` functions respectively. In addition, we will use the  `cohortGeneratorModuleSpecifications` function to specify the cohort generation settings.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.0.16/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.1.0/SettingsFunctions.R")
 
 # Create the cohort definition shared resource element for the analysis specification
 cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(
@@ -88,13 +91,15 @@ cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(
 # Create the negative control outcome shared resource element for the analysis specification
 ncoSharedResource <- createNegativeControlOutcomeCohortSharedResourceSpecifications(
   negativeControlOutcomeCohortSet = ncoCohortSet,
-  occurrenceType = 'all',
-  detectOnDescendants = TRUE)
+  occurrenceType = "all",
+  detectOnDescendants = TRUE
+)
 
 # Create the module specification
 cohortGeneratorModuleSpecifications <- createCohortGeneratorModuleSpecifications(
   incremental = TRUE,
-  generateStats = TRUE)
+  generateStats = TRUE
+)
 ```
 
 ## CohortDiagnostics Module Settings
@@ -113,7 +118,8 @@ cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecificat
   runIncidenceRate = TRUE,
   runCohortRelationship = TRUE,
   runTemporalCohortCharacterization = TRUE,
-  incremental = FALSE)
+  incremental = FALSE
+)
 ```
 
 ## CohortIncidence Module Settings
@@ -123,29 +129,34 @@ The following code creates the `cohortIncidenceModuleSpecifications` to perform 
 ```{r eval=FALSE}
 source("https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.0.6/SettingsFunctions.R")
 library(CohortIncidence)
-targets <- list(createCohortRef(id=1, name="Celecoxib"),
-                createCohortRef(id=2, name="Diclofenac"),
-                createCohortRef(id=4, name="Celecoxib Age >= 30"),
-                createCohortRef(id=5, name="Diclofenac Age >= 30")
-);
+targets <- list(
+  createCohortRef(id = 1, name = "Celecoxib"),
+  createCohortRef(id = 2, name = "Diclofenac"),
+  createCohortRef(id = 4, name = "Celecoxib Age >= 30"),
+  createCohortRef(id = 5, name = "Diclofenac Age >= 30")
+)
+outcomes <- list(createOutcomeDef(id = 1, name = "GI bleed", cohortId = 3, cleanWindow = 9999))
 
-outcomes <- list(createOutcomeDef(id=1,name="GI bleed", cohortId=3, cleanWindow=9999))
+tars <- list(
+  createTimeAtRiskDef(id = 1, startWith = "start", endWith = "end"),
+  createTimeAtRiskDef(id = 2, startWith = "start", endWith = "start", endOffset = 365)
+)
+analysis1 <- createIncidenceAnalysis(
+  targets = c(1, 2, 4, 5),
+  outcomes = c(1),
+  tars = c(1, 2)
+)
 
-tars <- list(createTimeAtRiskDef(id=1, startWith="start", endWith="end"),
-             createTimeAtRiskDef(id=2, startWith="start", endWith="start", endOffset = 365)
-);
-
-analysis1 <- createIncidenceAnalysis(targets = c(1,2,4,5),
-                                     outcomes = c(1),
-                                     tars = c(1,2))
-
-irDesign <- createIncidenceDesign(targetDefs = targets,
-                                  outcomeDefs = outcomes,
-                                  tars=tars,
-                                  analysisList = list(analysis1),
-                                  strataSettings = createStrataSettings(
-                                    byYear = TRUE,
-                                    byGender = TRUE))
+irDesign <- createIncidenceDesign(
+  targetDefs = targets,
+  outcomeDefs = outcomes,
+  tars = tars,
+  analysisList = list(analysis1),
+  strataSettings = createStrataSettings(
+    byYear = TRUE,
+    byGender = TRUE
+  )
+)
 
 cohortIncidenceModuleSpecifications <- createCohortIncidenceModuleSpecifications(
   irDesign = irDesign$toList()
@@ -159,16 +170,19 @@ The following code creates the `characterizationModuleSpecifications` to perform
 
 ```{r eval=FALSE}
 source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.2.3/SettingsFunctions.R")
-characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(targetIds = c(1,2),
-                                                                                   outcomeIds = 3,
-                                                                                   covariateSettings = FeatureExtraction::createDefaultCovariateSettings(),
-                                                                                   dechallengeStopInterval = 30,
-                                                                                   dechallengeEvaluationWindow = 30,
-                                                                                   timeAtRisk = data.frame(
-                                                                                     riskWindowStart = c(1,1),
-                                                                                     startAnchor = c("cohort start","cohort start"),
-                                                                                     riskWindowEnd = c(0,365),
-                                                                                     endAnchor = c("cohort end","cohort end")))
+characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(
+  targetIds = c(1, 2),
+  outcomeIds = 3,
+  covariateSettings = FeatureExtraction::createDefaultCovariateSettings(),
+  dechallengeStopInterval = 30,
+  dechallengeEvaluationWindow = 30,
+  timeAtRisk = data.frame(
+    riskWindowStart = c(1, 1),
+    startAnchor = c("cohort start", "cohort start"),
+    riskWindowEnd = c(0, 365),
+    endAnchor = c("cohort end", "cohort end")
+  )
+)
 ```
 
 
@@ -178,7 +192,7 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(CohortMethod)
-source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.0.6/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.1.0/SettingsFunctions.R")
 negativeControlOutcomes <- lapply(
   X = ncoCohortSet$cohortId,
   FUN = createOutcome,
@@ -239,7 +253,8 @@ createPsArgs <- CohortMethod::createCreatePsArgs(
 )
 computeSharedCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs()
 computeCovBalArgs <- CohortMethod::createComputeCovariateBalanceArgs(
-  covariateFilter = FeatureExtraction::getDefaultTable1Specifications())
+  covariateFilter = FeatureExtraction::getDefaultTable1Specifications()
+)
 
 cmAnalysis1 <- CohortMethod::createCmAnalysis(
   analysisId = 1,
@@ -280,12 +295,12 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(SelfControlledCaseSeries)
-source(url = "https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.0.5/SettingsFunctions.R")
+source(url = "https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.1.2/SettingsFunctions.R")
 
 # Exposures-outcomes -----------------------------------------------------------
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
 outcomeOfInterestIds <- c(3)
-exposureOfInterestIds <- c(1,2)
+exposureOfInterestIds <- c(1, 2)
 
 exposuresOutcomeList <- list()
 for (exposureOfInterestId in exposureOfInterestIds) {
@@ -391,18 +406,18 @@ sccsModuleSpecifications <- creatSelfControlledCaseSeriesModuleSpecifications(
 The following code creates the `plpModuleSpecifications` to perform a self-controlled case series analysis for this study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.6/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.7/SettingsFunctions.R")
 
 makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
-  invisible(  PatientLevelPrediction::createModelDesign(
-    targetId = targetId, 
-    outcomeId = outcomeId, 
-    restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(), 
-    populationSettings = popSettings, 
-    covariateSettings = covarSettings, 
-    preprocessSettings = PatientLevelPrediction::createPreprocessSettings(), 
-    modelSettings = PatientLevelPrediction::setLassoLogisticRegression(), 
-    splitSettings = PatientLevelPrediction::createDefaultSplitSetting(), 
+  invisible(PatientLevelPrediction::createModelDesign(
+    targetId = targetId,
+    outcomeId = outcomeId,
+    restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+    populationSettings = popSettings,
+    covariateSettings = covarSettings,
+    preprocessSettings = PatientLevelPrediction::createPreprocessSettings(),
+    modelSettings = PatientLevelPrediction::setLassoLogisticRegression(),
+    splitSettings = PatientLevelPrediction::createDefaultSplitSetting(),
     runCovariateSummary = T
   ))
 }
@@ -422,7 +437,7 @@ for (i in 1:length(exposureOfInterestIds)) {
     modelDesignList <- append(
       modelDesignList,
       list(
-          makeModelDesignSettings(
+        makeModelDesignSettings(
           targetId = exposureOfInterestIds[i],
           outcomeId = outcomeOfInterestIds[j],
           popSettings = plpPopulationSettings,

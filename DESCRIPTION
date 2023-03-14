@@ -2,7 +2,7 @@ Package: Strategus
 Type: Package
 Title: Coordinating and Executing Analytics Using HADES Modules
 Version: 0.0.3
-Date: 2023-01-24
+Date: 2023-03-10
 Authors@R: c(
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut", "cre")),
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut")),
@@ -37,9 +37,7 @@ Suggests:
     fs,
     knitr,
     rmarkdown,
-    Eunomia,
-    webshot,
-    visNetwork
+    Eunomia
 Remotes:
   ohdsi/CohortGenerator,
   ohdsi/ResultModelManager,

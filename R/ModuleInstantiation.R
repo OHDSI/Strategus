@@ -63,11 +63,12 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   missingDependencies <- dependencies %>%
     filter(!.data$dependsOn %in% modules$module)
   if (nrow(missingDependencies) > 0) {
-    message <- paste(c(
-      "Detected missing dependencies:",
-      sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
-    ),
-    collapse = "\n"
+    message <- paste(
+      c(
+        "Detected missing dependencies:",
+        sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
+      ),
+      collapse = "\n"
     )
     stop(message)
   }
@@ -80,14 +81,17 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
       summarise(totalCount = n()) %>%
       filter(.data$totalCount > 1)
 
-    message <- paste(c(
-      "Detected colliding result table prefixes:",
-      sprintf("- Module '%s' (v'%s') table prefix: '%s'",
-              moduleTablePrefixesInConflict$moduleName,
-              moduleTablePrefixesInConflict$moduleVersion,
-              moduleTablePrefixesInConflict$tablePrefix)
-    ),
-    collapse = "\n"
+    message <- paste(
+      c(
+        "Detected colliding result table prefixes:",
+        sprintf(
+          "- Module '%s' (v'%s') table prefix: '%s'",
+          moduleTablePrefixesInConflict$moduleName,
+          moduleTablePrefixesInConflict$moduleVersion,
+          moduleTablePrefixesInConflict$tablePrefix
+        )
+      ),
+      collapse = "\n"
     )
     stop(message)
   }
@@ -141,6 +145,7 @@ getModuleMetaData <- function(moduleFolder) {
 
 getModuleFolder <- function(module, version) {
   moduleFolder <- file.path(Sys.getenv("INSTANTIATED_MODULES_FOLDER"), sprintf("%s_%s", module, version))
+  invisible(moduleFolder)
 }
 
 ensureModuleInstantiated <- function(module, version, remoteRepo, remoteUsername) {
@@ -197,13 +202,14 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
   # before we restore from the renv.lock file
   renvDependencies <- getModuleRenvDependencies(moduleFolder)
   if (nrow(renvDependencies) > 0) {
-    message <- paste(c(
-      sprintf("The module '%s' (v%s) is missing the following files required by renv:", module, version),
-      sprintf("- Missing renv dependency '%s'", renvDependencies$fileName),
-      "As a result, Strategus cannot use this module as part of the execution pipeline otherwise it may corrupt your R library.",
-      "Please check to see if a newer version of this module exists and update your analysis specification to use that module instead."
-    ),
-    collapse = "\n"
+    message <- paste(
+      c(
+        sprintf("The module '%s' (v%s) is missing the following files required by renv:", module, version),
+        sprintf("- Missing renv dependency '%s'", renvDependencies$fileName),
+        "As a result, Strategus cannot use this module as part of the execution pipeline otherwise it may corrupt your R library.",
+        "Please check to see if a newer version of this module exists and update your analysis specification to use that module instead."
+      ),
+      collapse = "\n"
     )
     stop(message)
   }
@@ -232,10 +238,12 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 }
 
 getModuleRenvDependencies <- function(moduleFolder) {
-  renvRequiredFiles <- c(".Rprofile",
-                         "renv.lock",
-                         "renv/activate.R",
-                         "renv/settings.dcf")
+  renvRequiredFiles <- c(
+    ".Rprofile",
+    "renv.lock",
+    "renv/activate.R",
+    "renv/settings.dcf"
+  )
 
   missingFiles <- tibble::enframe(renvRequiredFiles) %>%
     dplyr::mutate(fileExists = file.exists(file.path(moduleFolder, .data$value))) %>%
@@ -256,9 +264,11 @@ getModuleTablePrefixes <- function(moduleList) {
       )
     )
     moduleTablePrefix <- moduleTablePrefix %>%
-      bind_rows(tibble::tibble(moduleName = moduleList$module[i],
-                               moduleVersion = moduleList$version[i],
-                               tablePrefix = moduleMetaData$TablePrefix))
+      bind_rows(tibble::tibble(
+        moduleName = moduleList$module[i],
+        moduleVersion = moduleList$version[i],
+        tablePrefix = moduleMetaData$TablePrefix
+      ))
   }
 
   invisible(moduleTablePrefix)

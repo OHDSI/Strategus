@@ -81,7 +81,7 @@ moduleList <- rbind(moduleList,
                                moduleType = "cdm"))
 moduleList <- rbind(moduleList,
                     data.frame(module = "CohortGeneratorModule",
-                               version = "v0.0.16",
+                               version = "v0.1.0",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
@@ -106,7 +106,7 @@ moduleList <- rbind(moduleList,
                                moduleType = "cdm"))
 moduleList <- rbind(moduleList,
                     data.frame(module = "SelfControlledCaseSeriesModule",
-                               version = "v0.1.1",
+                               version = "v0.1.2",
                                remoteRepo = "github.com",
                                remoteUsername = "OHDSI",
                                moduleType = "cdm"))
