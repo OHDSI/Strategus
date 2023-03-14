@@ -27,6 +27,15 @@
 #'
 #' This pattern also allows dependency injection which could be used if you don't want to use and renv and (instead)
 #' would like to use docker images or just execution in the base environment for testing/debugging
+#'
+#' @param code              code block to execute
+#' @param moduleFolder      Instantiated Strategus module folder
+#' @param injectVars         list of var names list(name=value) to replace (e.g. replace list(foo = "some string") will
+#'                          find the pattern foo and replace it with the string some string - be careful!
+#' @param tempScriptFile    tempFile to write script to (ret
+#' @param job               run as rstudio job
+#' @param processName       String name for process
+#' @returns NULL invisibly
 withModuleRenv <- function(code,
                            moduleFolder,
                            injectVars = list(),

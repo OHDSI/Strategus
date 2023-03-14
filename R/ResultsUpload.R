@@ -15,7 +15,7 @@
 # limitations under the License.
 
 
-#' Results upload callbacks for inserting results in to a database
+# Results upload callbacks for inserting results in to a database
 runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleIndex, executionSettings, ...) {
   checkmate::assert_multi_class(x = executionSettings, classes = c("ExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
