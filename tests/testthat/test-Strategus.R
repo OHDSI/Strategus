@@ -1,8 +1,7 @@
 test_that("Run Eunomia study", {
-  tempDir <- tempfile()
-  tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
-  renv:::renv_scope_envvars(RENV_PATHS_CACHE = tempDir)
-  moduleFolder <- file.path(tempDir, "/strategus/modules")
+  moduleFolder <- file.path(tempDir, "strategus/modules")
+  # NOTE: Need to set this in each test otherwise it goes out of scope
+  renv:::renv_scope_envvars(RENV_PATHS_CACHE = renvCachePath)
   # Create a keyring called "strategus" that is password protected
   allKeyrings <- keyring::keyring_list()
   if (!"strategus" %in% allKeyrings$keyring) {
@@ -11,13 +10,11 @@ test_that("Run Eunomia study", {
   # Lock the keyring
   keyring::keyring_lock(keyring = "strategus")
 
-  connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-
   # Using a named and secured keyring
   Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = "foobar")
   Strategus::storeConnectionDetails(
     connectionDetails = connectionDetails,
-    connectionDetailsReference = "eunomia",
+    connectionDetailsReference = dbms,
     keyringName = "strategus"
   )
 
@@ -33,9 +30,9 @@ test_that("Run Eunomia study", {
   analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
 
   executionSettings <- createCdmExecutionSettings(
-    connectionDetailsReference = "eunomia",
-    workDatabaseSchema = "main",
-    cdmDatabaseSchema = "main",
+    connectionDetailsReference = dbms,
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
     cohortTableNames = CohortGenerator::getCohortTableNames(),
     workFolder = file.path(tempDir, "EunomiaTestStudy/work_folder"),
     resultsFolder = file.path(tempDir, "EunomiaTestStudy/results_folder"),
@@ -54,6 +51,7 @@ test_that("Run Eunomia study", {
     fileName = file.path(tempDir, "EunomiaTestStudy/eunomiaExecutionSettings.json")
   )
 
+  # debugonce(Strategus::execute)
   Strategus::execute(
     analysisSpecifications = analysisSpecifications,
     executionSettings = executionSettings,
@@ -62,4 +60,7 @@ test_that("Run Eunomia study", {
   )
 
   expect_true(file.exists(file.path(tempDir, "EunomiaTestStudy/results_folder/CohortGeneratorModule_1/done")))
+
+  unlink(moduleFolder, recursive = TRUE, force = TRUE)
+  unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
 })
