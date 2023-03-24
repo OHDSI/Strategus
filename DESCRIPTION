@@ -32,11 +32,12 @@ Imports:
   tibble,
   SqlRender (>= 1.11.0)
 Suggests:
-    testthat (>= 3.0.0),
-    fs,
-    knitr,
-    rmarkdown,
-    Eunomia
+  testthat (>= 3.0.0),
+  fs,
+  knitr,
+  rmarkdown,
+  Eunomia,
+  withr
 Remotes:
   ohdsi/CohortGenerator,
   ohdsi/Eunomia
