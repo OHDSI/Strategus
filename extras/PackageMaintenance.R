@@ -29,6 +29,56 @@ OhdsiRTools::updateCopyrightYearFolder()
 OhdsiRTools::findNonAsciiStringsInFolder()
 devtools::spell_check()
 
+# Update the module version information based on updates found on GitHub
+library(dplyr)
+updateModuleVersionInfo <- function() {
+  modules <- CohortGenerator::readCsv(file = "inst/csv/modules.csv")
+  modules <- modules %>%
+    select(-c("mainPackage", "mainPackageTag"))
+  # Get latest module versions ---------------------------------------------------
+  getLatestModuleVersion <- function(remoteRepo, remoteUsername, module) {
+    urlTemplate <- "https://api.%s/repos/%s/%s/releases/latest"
+    release <- jsonlite::fromJSON(sprintf(urlTemplate, remoteRepo, remoteUsername, module))
+    return(release$tag_name)
+  }
+  versions <- tibble::tibble(
+    module = modules$module,
+    moduleVersion = mapply(getLatestModuleVersion, modules$remoteRepo, modules$remoteUsername, modules$module),
+    mainPackage = "",
+    mainPackageTag = ""
+  )
+  # Get referenced main package tag ----------------------------------------------
+  for (i in 1:nrow(modules)) {
+    module <- versions$module[i]
+    if (module == "CohortIncidenceModule") {
+      urlTemplate <-   "https://raw.githubusercontent.com/OHDSI/%s/master/renv.lock"
+    } else {
+      urlTemplate <-   "https://raw.githubusercontent.com/OHDSI/%s/main/renv.lock"
+    }
+    lock <- jsonlite::fromJSON(sprintf(urlTemplate, module))
+    mainPackage <- gsub("Module", "", module)
+    versions$mainPackage[i] <- mainPackage
+    for (j in seq_along(lock$Packages)) {
+      if (lock$Packages[[j]]$Package == mainPackage) {
+        if (is.null(lock$Packages[[j]]$RemoteRef) || tolower(lock$Packages[[j]]$RemoteRef) == "head") {
+          versions$mainPackageTag[i] <- paste0("v", lock$Packages[[j]]$Version)
+        } else {
+          versions$mainPackageTag[i] <- lock$Packages[[j]]$RemoteRef
+        }
+        break
+      }
+    }
+  }
+  moduleList <- versions %>%
+    dplyr::inner_join(modules, by = c('module' = 'module')) %>%
+    dplyr::mutate(version = moduleVersion) %>%
+    dplyr::select(c(names(modules), "mainPackage", "mainPackageTag"))
+
+  CohortGenerator::writeCsv(x = moduleList,
+                            file = "inst/csv/modules.csv")
+}
+updateModuleVersionInfo()
+
 # Create manual and vignettes:
 unlink("extras/Strategus.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/Strategus.pdf")
@@ -64,63 +114,6 @@ unlink("inst/doc/IntroductionToStrategus.tex")
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
 
-
-# Maintain a list of supported modules ------------
-
-# CDM Modules
-moduleList <- data.frame(module = "CharacterizationModule",
-                         version = "v0.2.3",
-                         remoteRepo = "github.com",
-                         remoteUsername = "OHDSI",
-                         moduleType = "cdm")
-moduleList <- rbind(moduleList,
-                    data.frame(module = "CohortDiagnosticsModule",
-                               version = "v0.0.7",
-                               remoteRepo = "github.com",
-                               remoteUsername = "OHDSI",
-                               moduleType = "cdm"))
-moduleList <- rbind(moduleList,
-                    data.frame(module = "CohortGeneratorModule",
-                               version = "v0.1.0",
-                               remoteRepo = "github.com",
-                               remoteUsername = "OHDSI",
-                               moduleType = "cdm"))
-moduleList <- rbind(moduleList,
-                    data.frame(module = "CohortIncidenceModule",
-                               version = "v0.0.6",
-                               remoteRepo = "github.com",
-                               remoteUsername = "OHDSI",
-                               moduleType = "cdm"))
-
-moduleList <- rbind(moduleList,
-                    data.frame(module = "CohortMethodModule",
-                               version = "v0.1.0",
-                               remoteRepo = "github.com",
-                               remoteUsername = "OHDSI",
-                               moduleType = "cdm"))
-moduleList <- rbind(moduleList,
-                    data.frame(module = "PatientLevelPredictionModule",
-                               version = "v0.0.7",
-                               remoteRepo = "github.com",
-                               remoteUsername = "OHDSI",
-                               moduleType = "cdm"))
-moduleList <- rbind(moduleList,
-                    data.frame(module = "SelfControlledCaseSeriesModule",
-                               version = "v0.1.2",
-                               remoteRepo = "github.com",
-                               remoteUsername = "OHDSI",
-                               moduleType = "cdm"))
-
-# Results Modules
-moduleList <- rbind(moduleList,
-                    data.frame(module = "EvidenceSynthesisModule",
-                               version = "v0.1.3",
-                               remoteRepo = "github.com",
-                               remoteUsername = "OHDSI",
-                               moduleType = "results"))
-
-CohortGenerator::writeCsv(x = moduleList,
-                          file = "inst/csv/modules.csv")
 
 
 

@@ -1,6 +1,9 @@
 test_that("Test DatabaseMetaData error conditions", {
   skip_if_not(dbms == "sqlite")
-  connection <- DatabaseConnector::connect(connectionDetails)
+  skip_if_not_secret_service()
+  # Run this test in isolation as it will make changes to the CDM schema.
+  eunomiaConnectionDetails <- Eunomia::getEunomiaConnectionDetails()
+  connection <- DatabaseConnector::connect(eunomiaConnectionDetails)
   # Rename all required tables
   requiredTables <- c("cdm_source", "vocabulary", "observation_period")
   renameTableSql <- "ALTER TABLE @table RENAME TO @backup_table;"
@@ -24,12 +27,20 @@ test_that("Test DatabaseMetaData error conditions", {
                                                    backup_table = paste0(requiredTables[i], "_bak"),
                                                    cdm_table = requiredTables[i])
     }
+    DatabaseConnector::disconnect(connection)
+    unlink(eunomiaConnectionDetails$server, recursive = TRUE, force = TRUE)
   })
+
+  # Setup keyring for the test
+  Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = keyringPassword)
+  createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
+  on.exit(deleteKeyringForUnitTest())
 
   # Confirm an error is thrown when 1 or more of these tables are missing
   Strategus::storeConnectionDetails(
-    connectionDetails = connectionDetails,
-    connectionDetailsReference = dbms
+    connectionDetails = eunomiaConnectionDetails,
+    connectionDetailsReference = dbms,
+    keyringName = keyringName
   )
   executionSettings <- Strategus::createCdmExecutionSettings(
     connectionDetailsReference = dbms,
@@ -40,7 +51,8 @@ test_that("Test DatabaseMetaData error conditions", {
     resultsFolder = file.path(tempDir, "EunomiaTestStudy/results_folder"),
     minCellCount = 5
   )
-  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings),
+  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings,
+                                                  keyringName = keyringName),
                regexp = "FATAL ERROR: Your OMOP CDM is missing the following required tables: cdm_source, vocabulary, observation_period")
 
   # Create required tables with no information verify this throws an error
@@ -54,7 +66,8 @@ test_that("Test DatabaseMetaData error conditions", {
                                                  cdm_table = requiredTables[i])
   }
 
-  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings),
+  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings,
+                                                  keyringName = keyringName),
                regexp = "FATAL ERROR: The CDM_SOURCE table in your OMOP CDM is empty.")
 
   # Populate the CDM_SOURCE table so we can check that the vocabulary check works
@@ -66,7 +79,8 @@ test_that("Test DatabaseMetaData error conditions", {
                                                cdm_table = "cdm_source",
                                                backup_table = "cdm_source_bak")
 
-  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings),
+  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings,
+                                                  keyringName = keyringName),
                regexp = "FATAL ERROR: The VOCABULARY table in your OMOP CDM is missing the version")
 
   # Populate the VOCABULARY table so we can check that the observation_period check works
@@ -76,6 +90,7 @@ test_that("Test DatabaseMetaData error conditions", {
                                                reportOverallTime = FALSE,
                                                cdm_table = "vocabulary",
                                                backup_table = "vocabulary_bak")
-  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings),
+  expect_error(Strategus:::createDatabaseMetaData(executionSettings = executionSettings,
+                                                  keyringName = keyringName),
                regexp = "FATAL ERROR: The OBSERVATION_PERIOD table in your OMOP CDM lacks a maximum observation_period_end_date")
 })
