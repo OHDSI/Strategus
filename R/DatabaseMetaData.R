@@ -38,8 +38,10 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
   # querying. Then we can stop the processing and provide an informative
   # message to the user.
   requiredTables <- c("cdm_source", "vocabulary", "observation_period")
-  cdmTableList <- DatabaseConnector::getTableNames(connection = connection,
-                                                   databaseSchema = executionSettings$cdmDatabaseSchema)
+  cdmTableList <- DatabaseConnector::getTableNames(
+    connection = connection,
+    databaseSchema = executionSettings$cdmDatabaseSchema
+  )
 
 
   if (!length(cdmTableList[which(x = cdmTableList %in% requiredTables)]) == length(requiredTables)) {

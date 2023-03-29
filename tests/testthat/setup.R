@@ -36,7 +36,7 @@ moduleFolder <- file.path(tempDir, "strategus/modules")
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
 withr::defer(
   {
-    unlink(c(tempDir,renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+    unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
   },
   testthat::teardown_env()
 )
