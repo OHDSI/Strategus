@@ -25,10 +25,12 @@ test_that("Run Eunomia study", {
   cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
   withr::defer(
     {
-      CohortGenerator::dropCohortStatsTables(connectionDetails = connectionDetails,
-                                             cohortDatabaseSchema = workDatabaseSchema,
-                                             cohortTableNames = cohortTableNames,
-                                             dropCohortTable = TRUE)
+      CohortGenerator::dropCohortStatsTables(
+        connectionDetails = connectionDetails,
+        cohortDatabaseSchema = workDatabaseSchema,
+        cohortTableNames = cohortTableNames,
+        dropCohortTable = TRUE
+      )
       unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
     },
     testthat::teardown_env()
