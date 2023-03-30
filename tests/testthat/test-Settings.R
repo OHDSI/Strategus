@@ -42,15 +42,15 @@ test_that("Get module list", {
 
 test_that("Verify that unlocking keyring without password fails", {
   allKeyrings <- keyring::keyring_list()
-  if (!"strategus" %in% allKeyrings$keyring) {
-    keyring::keyring_create(keyring = "strategus", password = "foobar")
+  if (!keyringName %in% allKeyrings$keyring) {
+    keyring::keyring_create(keyring = keyringName, password = keyringPassword)
   }
   # Lock the keyring
-  keyring::keyring_lock(keyring = "strategus")
+  keyring::keyring_lock(keyring = keyringName)
 
   # Remove STRATEGUS_KEYRING_PASSWORD in case it is already set
   Sys.unsetenv("STRATEGUS_KEYRING_PASSWORD")
 
   # Try to unlock and expect error
-  expect_error(unlockKeyring(keyring = "strategus"))
+  expect_error(unlockKeyring(keyring = keyringName))
 })

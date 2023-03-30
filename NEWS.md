@@ -1,3 +1,10 @@
+Strategus 0.0.4
+===============
+
+- Add DB Platform Tests (#53)
+- Add error handling for missing/empty tables (#54)
+- Remove uniqueness check for module table prefix (#55)
+
 Strategus 0.0.3
 ===============
 
