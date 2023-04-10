@@ -62,10 +62,12 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
     uploadResultsCallback <- NULL
 
     getDataModelSpecifications <- function(...) {
+      ParallelLogger::logInfo("Getting result model specification")
       if (file.exists('resultsDataModelSpecification.csv')) {
         res <- readr::read_csv('resultsDataModelSpecification.csv', show_col_types = FALSE)
         return(res)
       }
+      ParallelLogger::logInfo("No result model specification found")
       return(NULL)
     }
     source('Main.R')
@@ -81,26 +83,30 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
 
     # Override default behaviour and do module specific upload inside module context?
     if (is.function(uploadResultsCallback)) {
+      ParallelLogger::logInfo("Calling module result upload functionality")
       # If the keyring is locked, unlock it, set the value and then re-lock it
+      ParallelLogger::logInfo("-- Getting result database credentials")
       keyringName <- jobContext$keyringSettings$keyringName
       keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
-
       resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
       resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
       resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
       jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails
-
+      ParallelLogger::logInfo("-- Executing upload callback")
       uploadResultsCallback(jobContext)
       if (keyringLocked) {
         keyring::keyring_lock(keyring = keyringName)
       }
+      ParallelLogger::logInfo("-- Upload completed")
       writeLines('results.uploaded', doneFile)
     } else if (is.null(specifications)) {
+      ParallelLogger::logInfo("No result specifications found, assuming module has produced no results")
       # NO spect file Status
       warning('data model specifications not loaded from module - skipping results upload')
       writeLines('no.spec.found', doneFile)
     } else {
       # Spec file written
+      ParallelLogger::logInfo("Writing spec for result upload outside of module context")
       readr::write_csv(specifications, dataModelExportPath)
       writeLines('specifications.written', doneFile)
     }
@@ -131,17 +137,21 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   workStatus <- readLines(doneFile)
 
   if (workStatus == 'specifications.written') {
+    ParallelLogger::logInfo("Uploading results according to module specification")
     specifications <- readr::read_csv(dataModelExportPath, show_col_types = FALSE)
     colnames(specifications) <- SqlRender::snakeCaseToCamelCase(colnames(specifications))
     moduleInfo <- ParallelLogger::loadSettingsFromJson(file.path(moduleFolder, 'MetaData.json'))
+
     keyringName <- jobContext$keyringSettings$keyringName
     keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
 
+    ParallelLogger::logInfo("Getting result database credentials")
     resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
     resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
     resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
     jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails
 
+    ParallelLogger::logInfo("Calling RMM for upload")
     ResultModelManager::uploadResults(connectionDetails = jobContext$moduleExecutionSettings$resultsConnectionDetails,
                                       schema = jobContext$moduleExecutionSettings$resultsDatabaseSchema,
                                       resultsFolder = jobContext$moduleExecutionSettings$resultsSubFolder,
@@ -153,6 +163,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
                                       warnOnMissingTable = TRUE,
                                       specifications = specifications)
 
+    ParallelLogger::logInfo("Upload completed")
     if (keyringLocked) {
       keyring::keyring_lock(keyring = keyringName)
     }
