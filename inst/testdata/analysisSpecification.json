@@ -2360,7 +2360,7 @@
     },
     {
       "module": "PatientLevelPredictionModule",
-      "version": "0.0.7",
+      "version": "0.1.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": [
