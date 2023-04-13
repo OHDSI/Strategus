@@ -1,3 +1,9 @@
+Strategus 0.0.5
+===============
+
+- Required metadata tables check fails with DatabaseConnector < 6.0 (#61)
+- Update module references and add script to run Strategus on Eunomia in `extras/ExecuteStrategusOnEunomia.R` (#66)
+
 Strategus 0.0.4
 ===============
 

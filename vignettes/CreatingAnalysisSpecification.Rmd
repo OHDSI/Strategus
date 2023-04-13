@@ -184,7 +184,7 @@ The following code creates the `characterizationModuleSpecifications` to perform
 
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.3.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.3.1/SettingsFunctions.R")
 characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(
   targetIds = c(1, 2),
   outcomeIds = 3,
@@ -421,7 +421,7 @@ sccsModuleSpecifications <- creatSelfControlledCaseSeriesModuleSpecifications(
 The following code creates the `plpModuleSpecifications` to perform a self-controlled case series analysis for this study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.8/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.1.0/SettingsFunctions.R")
 
 makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
   invisible(PatientLevelPrediction::createModelDesign(
