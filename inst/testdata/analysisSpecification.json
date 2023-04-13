@@ -365,7 +365,7 @@
     },
     {
       "module": "CharacterizationModule",
-      "version": "0.2.3",
+      "version": "0.3.1",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {

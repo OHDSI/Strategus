@@ -31,6 +31,7 @@ devtools::spell_check()
 
 # Update the module version information based on updates found on GitHub
 library(dplyr)
+# httr::set_config(httr::config(ssl_verifypeer = FALSE))
 updateModuleVersionInfo <- function() {
   modules <- CohortGenerator::readCsv(file = "inst/csv/modules.csv")
   modules <- modules %>%
