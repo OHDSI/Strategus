@@ -36,6 +36,21 @@ options(width = 200)
 
 This walk through will show how to use `Strategus` to define an analysis specification on an example study using cohorts from the example problem _What is the risk of gastrointestinal (GI) bleed in new users of celecoxib compared to new users of diclofenac?_ as described in the [Book Of OHDSI Chapter 12 on Population Level Estimation]( https://ohdsi.github.io/TheBookOfOhdsi/PopulationLevelEstimation.html#PopulationLevelEstimation)
 
+## Setting up your R environment
+
+To start, we must install the [HADES](https://ohdsi.github.io/Hades/) libraries in order to create the settings for the analysis specification. The following script will install the necessary HADES packages for this vignette.
+
+```{r, eval=FALSE}
+# Install correct versions of HADES packages
+remotes::install_github("ohdsi/CohortGenerator", ref = "v0.8.0")
+remotes::install_github("ohdsi/CohortDiagnostics", ref = "v3.1.2")
+remotes::install_github("ohdsi/Characterization", ref = "v0.1.1")
+remotes::install_github("ohdsi/CohortIncidence", ref = "v3.1.2")
+remotes::install_github("ohdsi/CohortMethod", ref = "74f017107e0cc1b740a2badc82879ab6ad291b23")
+remotes::install_github("ohdsi/SelfControlledCaseSeries", ref = "15918616814b88137f82bf2aa9986e1dcdf39e74")
+remotes::install_github("ohdsi/PatientLevelPrediction", ref = "v6.3.1")
+```
+
 ## Cohorts for the study
 
 To start, we'll need to define cohorts and negative control outcomes to use in our example analysis specification. We've included the cohorts and negative control outcomes in the `Strategus` package for this example and the code below will load them for use when assembling the analysis specification.
@@ -169,7 +184,7 @@ The following code creates the `characterizationModuleSpecifications` to perform
 
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.2.3/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.3.1/SettingsFunctions.R")
 characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(
   targetIds = c(1, 2),
   outcomeIds = 3,
@@ -295,7 +310,7 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(SelfControlledCaseSeries)
-source(url = "https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.1.2/SettingsFunctions.R")
+source(url = "https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.1.3/SettingsFunctions.R")
 
 # Exposures-outcomes -----------------------------------------------------------
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
@@ -406,7 +421,7 @@ sccsModuleSpecifications <- creatSelfControlledCaseSeriesModuleSpecifications(
 The following code creates the `plpModuleSpecifications` to perform a self-controlled case series analysis for this study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.0.7/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.1.0/SettingsFunctions.R")
 
 makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
   invisible(PatientLevelPrediction::createModelDesign(
