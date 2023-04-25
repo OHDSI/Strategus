@@ -1,3 +1,8 @@
+Strategus 0.0.6
+===============
+
+- Update SCCS module reference `inst/testdata/analysisSpecification.json` 
+
 Strategus 0.0.5
 ===============
 
