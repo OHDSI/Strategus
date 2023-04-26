@@ -70,6 +70,11 @@ withModuleRenv <- function(code,
     libPath <- file.path(find.package("Strategus"), "../")
     script <- c(sprintf("library(Strategus, lib.loc = '%s')", libPath),
                 script)
+                
+    libPath <- file.path(find.package("keyring"), "../")
+    script <- c(sprintf("library(keyring, lib.loc = '%s')", libPath),
+                script)
+            
   }
 
   # Write file and execute script inside an renv
