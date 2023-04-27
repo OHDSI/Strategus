@@ -7,7 +7,7 @@ baseUrl <- "https://change.me:8443/WebAPI"
 
 atlasCohortIds <- c(5903, 5904)
 
-username <- "jgilber2" # Set to your atlas username if it differs from your system username
+username <- "changeme" # Set to your atlas username
 dbUsername <- username
 
 if (.Platform$OS.type == "unix") {
