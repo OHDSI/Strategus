@@ -3,6 +3,10 @@ library(Strategus)
 library(Eunomia)
 library(dplyr)
 
+# allows unit tests to run on mac without issue
+baseBackend <- Sys.getenv("R_KEYRING_BACKEND")
+Sys.setenv("R_KEYRING_BACKEND" = "file")
+
 dbms <- getOption("dbms", default = "sqlite")
 message("************* Testing on ", dbms, " *************")
 
@@ -20,6 +24,7 @@ if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
   withr::defer(
     {
       unlink(jdbcDriverFolder, recursive = TRUE, force = TRUE)
+     Sys.setenv("R_KEYRING_BACKEND" = baseBackend)
     },
     testthat::teardown_env()
   )
