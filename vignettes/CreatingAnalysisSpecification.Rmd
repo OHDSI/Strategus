@@ -184,7 +184,7 @@ The following code creates the `characterizationModuleSpecifications` to perform
 
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.3.1/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.3.2/SettingsFunctions.R")
 characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(
   targetIds = c(1, 2),
   outcomeIds = 3,
