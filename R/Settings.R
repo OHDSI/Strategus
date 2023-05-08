@@ -214,7 +214,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
     if (is.function(connectionDetails[[i]])) {
       detail <- connectionDetails[[i]]()
       if (is.null(detail)) {
-        connectionDetails[[i]] <- ""
+        connectionDetails[[i]] <- list(NULL) # Fixes Issue #74
       } else {
         connectionDetails[[i]] <- connectionDetails[[i]]()
       }
