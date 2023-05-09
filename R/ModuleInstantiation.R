@@ -193,12 +193,7 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 
   script <- "
       renv::restore(prompt = FALSE)
-      if (!require('ParallelLogger', quietly = TRUE)) {
-        install.packages('ParallelLogger')
-      }
-      if (!require('keyring', quietly = TRUE)) {
-        install.packages('keyring')
-      }
+      renv::install(c('ParallelLogger', 'keyring'), prompt = FALSE)
     "
   tempScriptFile <- tempfile(fileext = ".R")
   fileConn <- file(tempScriptFile)
