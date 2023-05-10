@@ -9,6 +9,7 @@ createCdmExecutionSettings(
   workDatabaseSchema,
   cdmDatabaseSchema,
   cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
+  tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
   workFolder,
   resultsFolder,
   minCellCount = 5,

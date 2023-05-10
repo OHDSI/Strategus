@@ -87,6 +87,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, 'errorReport.R'))
 
       options(andromedaTempFolder = file.path(jobContext$moduleExecutionSettings$workFolder, 'andromedaTemp'))
+      options(tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema)
 
        if (Sys.getenv('FORCE_RENV_USE', '') == 'TRUE') {
          renv::use(lockfile = 'renv.lock')

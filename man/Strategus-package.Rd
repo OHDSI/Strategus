@@ -23,6 +23,7 @@ Useful links:
 Authors:
 \itemize{
   \item Anthony Sena \email{sena@ohdsi.org}
+  \item Jamie Gilbert
 }
 
 Other contributors:
