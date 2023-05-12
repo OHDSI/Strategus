@@ -117,6 +117,8 @@ getModuleMetaData <- function(moduleFolder) {
     stop(sprintf("Meta-data JSON not found in '%s'.", moduleFolder))
   }
   metaData <- ParallelLogger::loadSettingsFromJson(jsonFileName)
+  checkmate::assertNames(names(metaData), must.include = c("Name", "Version", "Dependencies"))
+
   return(metaData)
 }
 
