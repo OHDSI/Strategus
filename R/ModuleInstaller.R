@@ -34,8 +34,7 @@ checkModuleDependencies <- function(dependencies, moduleSet) {
 #' This returns the set of currently installed in the specifed system path
 #'
 #' @export
-getAvailableModules <- function(installedModulesPath = Sys.getenv("STRATEGUS_INSTALLED_MODULES"),
-                                refreshCache = FALSE) {
+getAvailableModules <- function(installedModulesPath = Sys.getenv("STRATEGUS_INSTALLED_MODULES")) {
 
   if (installedModulesPath == "") {
     warning("No system module path set, set STRATEGUS_INSTALLED_MODULES in your .renviron to enable global modules")
@@ -74,6 +73,10 @@ installLocalModule <- function(pathToModule,
   )
 
   checkmate::assertFileExists(file.path(pathToModule, requiredFiles))
+
+  if (!dir.exists(installedModulesPath)) {
+    dir.create(installedModulesPath)
+  }
   # lock rds object
   installLockFile <- file.path(installedModulesPath, "install_module.lock")
   if (file.exists(installLockFile)) {
@@ -82,7 +85,7 @@ installLocalModule <- function(pathToModule,
   }
 
   # Save a timestamp inside a file to inform when last lock was
-  a <- writeLines(timestamp(), con = installLockFile)
+  writeLines(timestamp(quiet = TRUE), con = installLockFile)
   on.exit(unlink(installLockFile, force = TRUE))
   currentModules <- getAvailableModules(installedModulesPath = installedModulesPath)
   metaData <- getModuleMetaData(pathToModule)
@@ -119,7 +122,7 @@ installLocalModule <- function(pathToModule,
   # Write to install path
   modulesRdsFile <- file.path(installedModulesPath, "installedModules.rds")
   # save rds
-  saveRDS(currentModules, modulesRdsFile)
+  saveRDS(currentModules %>% dplyr::distinct(), modulesRdsFile)
 
   message(paste("Module", iRow$moduleName, "Installed"))
   invisible(NULL)

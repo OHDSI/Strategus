@@ -22,7 +22,7 @@
 #' Returns a list of module info for a given module
 #'
 loadModule <- function(moduleName = null, version = NULL, folder = NULL, instantiate = FALSE) {
-  available <- listAvailableModules()
+  available <- getAvailableModules()
   module <- list(
 
   )
@@ -60,7 +60,7 @@ moduleExec <- function(module, code, substituteVars = list(), useLocalStrategusL
                              tempScriptFile = tempfile(fileext = ".R"),
                              useLocalStrategusLibrary = useLocalStrategusLibrary,
                              job = job,
-                             processName = paste(moduleFolder, "_renv_run"))
+                             processName = paste(module$moduleFolder, "_renv_run"))
 
   unlink(tempFile)
 }
