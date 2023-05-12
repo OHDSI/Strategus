@@ -1,13 +1,13 @@
 library(dplyr)
 library(CohortGenerator)
-
+library(Strategus)
 library(ROhdsiWebApi)
 
 baseUrl <- "https://change.me:8443/WebAPI"
 
 atlasCohortIds <- c(5903, 5904)
 
-username <- "jgilber2" # Set to your atlas username if it differs from your system username
+username <- "changeme" # Set to your atlas username
 dbUsername <- username
 
 if (.Platform$OS.type == "unix") {
@@ -25,8 +25,8 @@ cohortDefinitionSet <- ROhdsiWebApi::exportCohortDefinitionSet(baseUrl = baseUrl
                                                                generateStats = TRUE)
 
 dir.create("tmp", showWarnings = F)
-source("https://raw.githubusercontent.com/azimov/CohortDiagnosticsModule/main/SettingsFunctions.R")
-library(CohortDiagnostics)
+source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/0.0.8/SettingsFunctions.R")
+
 cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecifications(
   cohortIds = atlasCohortIds,
   runInclusionStatistics = TRUE,
@@ -44,7 +44,7 @@ cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecificat
 
 # Create analysis specifications ---------------------------------------------
 
-source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.0.16-3/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/main/SettingsFunctions.R")
 
 cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(cohortDefinitionSet)
 cohortGeneratorModuleSpecifications <- createCohortGeneratorModuleSpecifications(incremental = TRUE,

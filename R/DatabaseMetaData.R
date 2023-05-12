@@ -34,6 +34,21 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
+  # Verify the CDM tables required by this function exist prior to
+  # querying. Then we can stop the processing and provide an informative
+  # message to the user.
+  requiredTables <- c("cdm_source", "vocabulary", "observation_period")
+  cdmTableList <- DatabaseConnector::getTableNames(
+    connection = connection,
+    databaseSchema = executionSettings$cdmDatabaseSchema
+  )
+  cdmTableList <- tolower(cdmTableList)
+
+  if (!length(cdmTableList[which(x = cdmTableList %in% requiredTables)]) == length(requiredTables)) {
+    missingCdmTables <- requiredTables[!(requiredTables %in% cdmTableList)]
+    stop(sprintf("FATAL ERROR: Your OMOP CDM is missing the following required tables: %s", paste(missingCdmTables, collapse = ", ")))
+  }
+
   resultsDataModel <- CohortGenerator::readCsv(
     file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
     warnOnCaseMismatch = FALSE
@@ -47,9 +62,14 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     cdm_database_schema = executionSettings$cdmDatabaseSchema
   )
 
+  # Verify that the cdmSource table has information
+  if (nrow(cdmSource) == 0) {
+    stop("FATAL ERROR: The CDM_SOURCE table in your OMOP CDM is empty. Please populate this table with information about your CDM and organization. For more information, please see: https://ohdsi.github.io/CommonDataModel/cdm53.html#CDM_SOURCE")
+  }
+
   # Restrict the cdmSource columns to those that are
   # expected in the resultsDataModel
-  cdmSource <- cdmSource[,which(names(cdmSource) %in% SqlRender::snakeCaseToCamelCase(resultsDataModel$columnName))]
+  cdmSource <- cdmSource[, which(names(cdmSource) %in% SqlRender::snakeCaseToCamelCase(resultsDataModel$columnName))]
 
   # In the case that the CDM is pre v5.4, it will lack the new
   # cdm_version_concept_id column. In this case, we'll default it to
@@ -67,6 +87,12 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     cdm_database_schema = executionSettings$cdmDatabaseSchema
   )
 
+  # Verify that the vocabulary_version is found
+  if (nrow(vocabVersion) == 0) {
+    stop("FATAL ERROR: The VOCABULARY table in your OMOP CDM is missing the version. Please verify that your process for loading the vocabulary included an entry in the vocabulary table with vocabulary_id == 'None'")
+  }
+
+
   sql <- "SELECT MAX(observation_period_end_date) as max_obs_period_end_date
   FROM @cdm_database_schema.observation_period;"
   observationPeriodMax <- renderTranslateQuerySql(
@@ -75,6 +101,11 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     snakeCaseToCamelCase = TRUE,
     cdm_database_schema = executionSettings$cdmDatabaseSchema
   )
+
+  # Verify that the MAX(observation_period_end_date) is a valid date
+  if (is.na(observationPeriodMax$maxObsPeriodEndDate)) {
+    stop("FATAL ERROR: The OBSERVATION_PERIOD table in your OMOP CDM lacks a maximum observation_period_end_date. This may be a result of an error in the ETL as each person in the OMOP CDM must have an observation period with a valid start and end date.")
+  }
 
   databaseId <- digest::digest2int(paste(cdmSource$cdmSourceName, cdmSource$cdmReleaseDate))
   database <- cdmSource %>%

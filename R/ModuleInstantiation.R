@@ -63,31 +63,12 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   missingDependencies <- dependencies %>%
     filter(!.data$dependsOn %in% modules$module)
   if (nrow(missingDependencies) > 0) {
-    message <- paste(c(
-      "Detected missing dependencies:",
-      sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
-    ),
-    collapse = "\n"
-    )
-    stop(message)
-  }
-
-  # Check for colliding result table prefixes
-  moduleTablePrefixes <- getModuleTablePrefixes(moduleList = modules)
-  if (nrow(moduleTablePrefixes) != length(unique(moduleTablePrefixes$tablePrefix))) {
-    moduleTablePrefixesInConflict <- moduleTablePrefixes %>%
-      group_by(.data$tablePrefix) %>%
-      summarise(totalCount = n()) %>%
-      filter(.data$totalCount > 1)
-
-    message <- paste(c(
-      "Detected colliding result table prefixes:",
-      sprintf("- Module '%s' (v'%s') table prefix: '%s'",
-              moduleTablePrefixesInConflict$moduleName,
-              moduleTablePrefixesInConflict$moduleVersion,
-              moduleTablePrefixesInConflict$tablePrefix)
-    ),
-    collapse = "\n"
+    message <- paste(
+      c(
+        "Detected missing dependencies:",
+        sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
+      ),
+      collapse = "\n"
     )
     stop(message)
   }
@@ -115,17 +96,16 @@ getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
   return(modules)
 }
 
-extractDependenciesSingleModule <- function(module) {
-  moduleFolder <- getModuleFolder(module$module, module$version)
-  metaData <- getModuleMetaData(moduleFolder)
-  dependencies <- tibble(
-    module = module$module,
-    dependsOn = as.character(metaData$Dependencies)
-  )
-  return(dependencies)
-}
-
 extractDependencies <- function(modules) {
+  extractDependenciesSingleModule <- function(module) {
+    moduleFolder <- getModuleFolder(module$module, module$version)
+    metaData <- getModuleMetaData(moduleFolder)
+    dependencies <- tibble(
+      module = module$module,
+      dependsOn = as.character(metaData$Dependencies)
+    )
+    return(dependencies)
+  }
   dependencies <- lapply(split(modules, 1:nrow(modules)), extractDependenciesSingleModule) %>%
     bind_rows()
   return(dependencies)
@@ -142,6 +122,7 @@ getModuleMetaData <- function(moduleFolder) {
 
 getModuleFolder <- function(module, version) {
   moduleFolder <- file.path(Sys.getenv("INSTANTIATED_MODULES_FOLDER"), sprintf("%s_%s", module, version))
+  invisible(moduleFolder)
 }
 
 ensureModuleInstantiated <- function(module, version, remoteRepo, remoteUsername) {
@@ -198,20 +179,19 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
   # before we restore from the renv.lock file
   renvDependencies <- getModuleRenvDependencies(moduleFolder)
   if (nrow(renvDependencies) > 0) {
-    message <- paste(c(
-      sprintf("The module '%s' (v%s) is missing the following files required by renv:", module, version),
-      sprintf("- Missing renv dependency '%s'", renvDependencies$fileName),
-      "As a result, Strategus cannot use this module as part of the execution pipeline otherwise it may corrupt your R library.",
-      "Please check to see if a newer version of this module exists and update your analysis specification to use that module instead."
-    ),
-    collapse = "\n"
+    message <- paste(
+      c(
+        sprintf("The module '%s' (v%s) is missing the following files required by renv:", module, version),
+        sprintf("- Missing renv dependency '%s'", renvDependencies$fileName),
+        "As a result, Strategus cannot use this module as part of the execution pipeline otherwise it may corrupt your R library.",
+        "Please check to see if a newer version of this module exists and update your analysis specification to use that module instead."
+      ),
+      collapse = "\n"
     )
     stop(message)
   }
 
-  tempScriptFile <- tempfile(fileext = ".R")
-  withModuleRenv(
-    code = {
+  script <- "
       renv::restore(prompt = FALSE)
       if (!require('ParallelLogger', quietly = TRUE)) {
         install.packages('ParallelLogger')
@@ -219,24 +199,32 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
       if (!require('keyring', quietly = TRUE)) {
         install.packages('keyring')
       }
-    },
-    name = "Buidling renv library",
-    moduleFolder = moduleFolder,
-    tempScriptFile = tempScriptFile
-  )
+    "
+  tempScriptFile <- tempfile(fileext = ".R")
+  fileConn <- file(tempScriptFile)
+  writeLines(script, fileConn)
+  close(fileConn)
 
+  renv::run(
+    script = tempScriptFile,
+    job = FALSE,
+    name = "Buidling renv library",
+    project = moduleFolder
+  )
   success <- TRUE
 }
 
 getModuleRenvDependencies <- function(moduleFolder) {
-  renvRequiredFiles <- c(".Rprofile",
-                         "renv.lock",
-                         "renv/activate.R",
-                         "renv/settings.dcf")
+  renvRequiredFiles <- c(
+    ".Rprofile",
+    "renv.lock",
+    "renv/activate.R",
+    "renv/settings.dcf"
+  )
 
   missingFiles <- tibble::enframe(renvRequiredFiles) %>%
     dplyr::mutate(fileExists = file.exists(file.path(moduleFolder, .data$value))) %>%
-    dplyr::rename(.data$fileName = .data$value) %>%
+    dplyr::rename(fileName = .data$value) %>%
     dplyr::select("fileName", "fileExists") %>%
     dplyr::filter(.data$fileExists == FALSE)
 
@@ -253,9 +241,11 @@ getModuleTablePrefixes <- function(moduleList) {
       )
     )
     moduleTablePrefix <- moduleTablePrefix %>%
-      bind_rows(tibble::tibble(moduleName = moduleList$module[i],
-                               moduleVersion = moduleList$version[i],
-                               tablePrefix = moduleMetaData$TablePrefix))
+      bind_rows(tibble::tibble(
+        moduleName = moduleList$module[i],
+        moduleVersion = moduleList$version[i],
+        tablePrefix = moduleMetaData$TablePrefix
+      ))
   }
 
   invisible(moduleTablePrefix)

@@ -3,27 +3,27 @@
     {
       "cohortDefinitions": [
         {
-          "cohortId": "1",
+          "cohortId": 1,
           "cohortName": "Celecoxib",
           "cohortDefinition": "{\r\n\t\"cdmVersionRange\" : \">=5.0.0\",\r\n\t\"PrimaryCriteria\" : {\r\n\t\t\"CriteriaList\" : [\r\n\t\t\t{\r\n\t\t\t\t\"DrugEra\" : {\r\n\t\t\t\t\t\"CodesetId\" : 0\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"ObservationWindow\" : {\r\n\t\t\t\"PriorDays\" : 0,\r\n\t\t\t\"PostDays\" : 0\r\n\t\t},\r\n\t\t\"PrimaryCriteriaLimit\" : {\r\n\t\t\t\"Type\" : \"First\"\r\n\t\t}\r\n\t},\r\n\t\"ConceptSets\" : [\r\n\t\t{\r\n\t\t\t\"id\" : 0,\r\n\t\t\t\"name\" : \"Celecoxib\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"items\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"concept\" : {\r\n\t\t\t\t\t\t\t\"CONCEPT_ID\" : 1118084,\r\n\t\t\t\t\t\t\t\"CONCEPT_NAME\" : \"celecoxib\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT\" : \"S\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT_CAPTION\" : \"Standard\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON\" : \"V\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON_CAPTION\" : \"Valid\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CODE\" : \"140587\",\r\n\t\t\t\t\t\t\t\"DOMAIN_ID\" : \"Drug\",\r\n\t\t\t\t\t\t\t\"VOCABULARY_ID\" : \"RxNorm\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CLASS_ID\" : \"Ingredient\"\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t\"isExcluded\" : false,\r\n\t\t\t\t\t\t\"includeDescendants\" : false,\r\n\t\t\t\t\t\t\"includeMapped\" : false\r\n\t\t\t\t\t}\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"QualifiedLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"ExpressionLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"InclusionRules\" : [],\r\n\t\"EndStrategy\" : {\r\n\t\t\"CustomEra\" : {\r\n\t\t\t\"DrugCodesetId\" : 0,\r\n\t\t\t\"GapDays\" : 30,\r\n\t\t\t\"Offset\" : 0\r\n\t\t}\r\n\t},\r\n\t\"CensoringCriteria\" : [],\r\n\t\"CollapseSettings\" : {\r\n\t\t\"CollapseType\" : \"ERA\",\r\n\t\t\"EraPad\" : 0\r\n\t},\r\n\t\"CensorWindow\" : {}\r\n}"
         },
         {
-          "cohortId": "2",
+          "cohortId": 2,
           "cohortName": "Diclofenac",
           "cohortDefinition": "{\r\n\t\"cdmVersionRange\" : \">=5.0.0\",\r\n\t\"PrimaryCriteria\" : {\r\n\t\t\"CriteriaList\" : [\r\n\t\t\t{\r\n\t\t\t\t\"DrugEra\" : {\r\n\t\t\t\t\t\"CodesetId\" : 0\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"ObservationWindow\" : {\r\n\t\t\t\"PriorDays\" : 0,\r\n\t\t\t\"PostDays\" : 0\r\n\t\t},\r\n\t\t\"PrimaryCriteriaLimit\" : {\r\n\t\t\t\"Type\" : \"First\"\r\n\t\t}\r\n\t},\r\n\t\"ConceptSets\" : [\r\n\t\t{\r\n\t\t\t\"id\" : 0,\r\n\t\t\t\"name\" : \"Diclofenac\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"items\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"concept\" : {\r\n\t\t\t\t\t\t\t\"CONCEPT_ID\" : 1124300,\r\n\t\t\t\t\t\t\t\"CONCEPT_NAME\" : \"diclofenac\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT\" : \"S\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT_CAPTION\" : \"Standard\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON\" : \"V\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON_CAPTION\" : \"Valid\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CODE\" : \"3355\",\r\n\t\t\t\t\t\t\t\"DOMAIN_ID\" : \"Drug\",\r\n\t\t\t\t\t\t\t\"VOCABULARY_ID\" : \"RxNorm\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CLASS_ID\" : \"Ingredient\"\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t\"isExcluded\" : false,\r\n\t\t\t\t\t\t\"includeDescendants\" : false,\r\n\t\t\t\t\t\t\"includeMapped\" : false\r\n\t\t\t\t\t}\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"QualifiedLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"ExpressionLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"InclusionRules\" : [],\r\n\t\"EndStrategy\" : {\r\n\t\t\"CustomEra\" : {\r\n\t\t\t\"DrugCodesetId\" : 0,\r\n\t\t\t\"GapDays\" : 30,\r\n\t\t\t\"Offset\" : 0\r\n\t\t}\r\n\t},\r\n\t\"CensoringCriteria\" : [],\r\n\t\"CollapseSettings\" : {\r\n\t\t\"CollapseType\" : \"ERA\",\r\n\t\t\"EraPad\" : 0\r\n\t},\r\n\t\"CensorWindow\" : {}\r\n}"
         },
         {
-          "cohortId": "3",
+          "cohortId": 3,
           "cohortName": "GI bleed",
           "cohortDefinition": "{\r\n\t\"cdmVersionRange\" : \">=5.0.0\",\r\n\t\"PrimaryCriteria\" : {\r\n\t\t\"CriteriaList\" : [\r\n\t\t\t{\r\n\t\t\t\t\"ConditionOccurrence\" : {\r\n\t\t\t\t\t\"CodesetId\" : 0,\r\n\t\t\t\t\t\"ConditionTypeExclude\" : false\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"ObservationWindow\" : {\r\n\t\t\t\"PriorDays\" : 0,\r\n\t\t\t\"PostDays\" : 0\r\n\t\t},\r\n\t\t\"PrimaryCriteriaLimit\" : {\r\n\t\t\t\"Type\" : \"All\"\r\n\t\t}\r\n\t},\r\n\t\"ConceptSets\" : [\r\n\t\t{\r\n\t\t\t\"id\" : 0,\r\n\t\t\t\"name\" : \"GI bleed\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"items\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"concept\" : {\r\n\t\t\t\t\t\t\t\"CONCEPT_ID\" : 192671,\r\n\t\t\t\t\t\t\t\"CONCEPT_NAME\" : \"Gastrointestinal hemorrhage\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT\" : \"S\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT_CAPTION\" : \"Standard\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON\" : \"V\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON_CAPTION\" : \"Valid\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CODE\" : \"74474003\",\r\n\t\t\t\t\t\t\t\"DOMAIN_ID\" : \"Condition\",\r\n\t\t\t\t\t\t\t\"VOCABULARY_ID\" : \"SNOMED\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CLASS_ID\" : \"Clinical Finding\"\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t\"isExcluded\" : false,\r\n\t\t\t\t\t\t\"includeDescendants\" : true,\r\n\t\t\t\t\t\t\"includeMapped\" : false\r\n\t\t\t\t\t}\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"QualifiedLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"ExpressionLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"InclusionRules\" : [],\r\n\t\"EndStrategy\" : {\r\n\t\t\"DateOffset\" : {\r\n\t\t\t\"DateField\" : \"StartDate\",\r\n\t\t\t\"Offset\" : 0\r\n\t\t}\r\n\t},\r\n\t\"CensoringCriteria\" : [],\r\n\t\"CollapseSettings\" : {\r\n\t\t\"CollapseType\" : \"ERA\",\r\n\t\t\"EraPad\" : 0\r\n\t},\r\n\t\"CensorWindow\" : {}\r\n}"
         },
         {
-          "cohortId": "4",
+          "cohortId": 4,
           "cohortName": "Celecoxib age 30 or older",
           "cohortDefinition": "{\r\n\t\"cdmVersionRange\" : \">=5.0.0\",\r\n\t\"PrimaryCriteria\" : {\r\n\t\t\"CriteriaList\" : [\r\n\t\t\t{\r\n\t\t\t\t\"DrugEra\" : {\r\n\t\t\t\t\t\"CodesetId\" : 0\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"ObservationWindow\" : {\r\n\t\t\t\"PriorDays\" : 0,\r\n\t\t\t\"PostDays\" : 0\r\n\t\t},\r\n\t\t\"PrimaryCriteriaLimit\" : {\r\n\t\t\t\"Type\" : \"First\"\r\n\t\t}\r\n\t},\r\n\t\"ConceptSets\" : [\r\n\t\t{\r\n\t\t\t\"id\" : 0,\r\n\t\t\t\"name\" : \"Celecoxib\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"items\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"concept\" : {\r\n\t\t\t\t\t\t\t\"CONCEPT_ID\" : 1118084,\r\n\t\t\t\t\t\t\t\"CONCEPT_NAME\" : \"celecoxib\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT\" : \"S\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT_CAPTION\" : \"Standard\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON\" : \"V\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON_CAPTION\" : \"Valid\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CODE\" : \"140587\",\r\n\t\t\t\t\t\t\t\"DOMAIN_ID\" : \"Drug\",\r\n\t\t\t\t\t\t\t\"VOCABULARY_ID\" : \"RxNorm\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CLASS_ID\" : \"Ingredient\"\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t\"isExcluded\" : false,\r\n\t\t\t\t\t\t\"includeDescendants\" : false,\r\n\t\t\t\t\t\t\"includeMapped\" : false\r\n\t\t\t\t\t}\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"QualifiedLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"ExpressionLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"InclusionRules\" : [\r\n\t\t{\r\n\t\t\t\"name\" : \"Age >= 30\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"Type\" : \"ALL\",\r\n\t\t\t\t\"CriteriaList\" : [],\r\n\t\t\t\t\"DemographicCriteriaList\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"Age\" : {\r\n\t\t\t\t\t\t\t\"Value\" : 30,\r\n\t\t\t\t\t\t\t\"Op\" : \"gte\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t],\r\n\t\t\t\t\"Groups\" : []\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"EndStrategy\" : {\r\n\t\t\"CustomEra\" : {\r\n\t\t\t\"DrugCodesetId\" : 0,\r\n\t\t\t\"GapDays\" : 30,\r\n\t\t\t\"Offset\" : 0\r\n\t\t}\r\n\t},\r\n\t\"CensoringCriteria\" : [],\r\n\t\"CollapseSettings\" : {\r\n\t\t\"CollapseType\" : \"ERA\",\r\n\t\t\"EraPad\" : 0\r\n\t},\r\n\t\"CensorWindow\" : {}\r\n}"
         },
         {
-          "cohortId": "5",
+          "cohortId": 5,
           "cohortName": "Diclofenac age 30 or older",
           "cohortDefinition": "{\r\n\t\"cdmVersionRange\" : \">=5.0.0\",\r\n\t\"PrimaryCriteria\" : {\r\n\t\t\"CriteriaList\" : [\r\n\t\t\t{\r\n\t\t\t\t\"DrugEra\" : {\r\n\t\t\t\t\t\"CodesetId\" : 0\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"ObservationWindow\" : {\r\n\t\t\t\"PriorDays\" : 0,\r\n\t\t\t\"PostDays\" : 0\r\n\t\t},\r\n\t\t\"PrimaryCriteriaLimit\" : {\r\n\t\t\t\"Type\" : \"First\"\r\n\t\t}\r\n\t},\r\n\t\"ConceptSets\" : [\r\n\t\t{\r\n\t\t\t\"id\" : 0,\r\n\t\t\t\"name\" : \"Diclofenac\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"items\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"concept\" : {\r\n\t\t\t\t\t\t\t\"CONCEPT_ID\" : 1124300,\r\n\t\t\t\t\t\t\t\"CONCEPT_NAME\" : \"diclofenac\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT\" : \"S\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT_CAPTION\" : \"Standard\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON\" : \"V\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON_CAPTION\" : \"Valid\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CODE\" : \"3355\",\r\n\t\t\t\t\t\t\t\"DOMAIN_ID\" : \"Drug\",\r\n\t\t\t\t\t\t\t\"VOCABULARY_ID\" : \"RxNorm\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CLASS_ID\" : \"Ingredient\"\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t\"isExcluded\" : false,\r\n\t\t\t\t\t\t\"includeDescendants\" : false,\r\n\t\t\t\t\t\t\"includeMapped\" : false\r\n\t\t\t\t\t}\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"QualifiedLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"ExpressionLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"InclusionRules\" : [\r\n\t\t{\r\n\t\t\t\"name\" : \"Age >= 30\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"Type\" : \"ALL\",\r\n\t\t\t\t\"CriteriaList\" : [],\r\n\t\t\t\t\"DemographicCriteriaList\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"Age\" : {\r\n\t\t\t\t\t\t\t\"Value\" : 30,\r\n\t\t\t\t\t\t\t\"Op\" : \"gte\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t],\r\n\t\t\t\t\"Groups\" : []\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"EndStrategy\" : {\r\n\t\t\"CustomEra\" : {\r\n\t\t\t\"DrugCodesetId\" : 0,\r\n\t\t\t\"GapDays\" : 30,\r\n\t\t\t\"Offset\" : 0\r\n\t\t}\r\n\t},\r\n\t\"CensoringCriteria\" : [],\r\n\t\"CollapseSettings\" : {\r\n\t\t\"CollapseType\" : \"ERA\",\r\n\t\t\"EraPad\" : 0\r\n\t},\r\n\t\"CensorWindow\" : {}\r\n}"
         }
@@ -223,7 +223,7 @@
   "moduleSpecifications": [
     {
       "module": "CohortGeneratorModule",
-      "version": "0.0.16",
+      "version": "0.1.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -365,7 +365,7 @@
     },
     {
       "module": "CharacterizationModule",
-      "version": "0.2.3",
+      "version": "0.3.2",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -1341,7 +1341,7 @@
     },
     {
       "module": "SelfControlledCaseSeriesModule",
-      "version": "0.1.1",
+      "version": "0.1.3",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -2360,7 +2360,7 @@
     },
     {
       "module": "PatientLevelPredictionModule",
-      "version": "0.0.7",
+      "version": "0.1.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": [
@@ -2470,7 +2470,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 85670307,
+                "seed": 14457130,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2485,7 +2485,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 34969,
+            "seed": 58440,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
@@ -2607,7 +2607,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 95377720,
+                "seed": 86642490,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2622,7 +2622,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 88533,
+            "seed": 84168,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
