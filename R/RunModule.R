@@ -95,14 +95,16 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
        # NOTE injected variable isResultsExecution - will look strange outside of Strategus definition
        if (isCdmExecution) {
-         connectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$connectionDetailsReference, keyring = keyringName)
-         connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
-         connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+         connectionDetails <- Strategus::retrieveConnectionDetails(
+           connectionDetailsReference = jobContext$moduleExecutionSettings$connectionDetailsReference,
+           keyringName = keyringName
+         )
          jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
        } else {
-         resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
-         resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
-         resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
+         resultsConnectionDetails <- Strategus::retrieveConnectionDetails(
+           connectionDetailsReference = jobContext$moduleExecutionSettings$resultsConnectionDetailsReference,
+           keyringName = keyringName
+         )
          jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails
        }
        if (keyringLocked) {

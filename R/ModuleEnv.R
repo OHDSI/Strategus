@@ -70,6 +70,13 @@ withModuleRenv <- function(code,
     libPath <- file.path(find.package("Strategus"), "../")
     script <- c(sprintf("library(Strategus, lib.loc = '%s')", libPath),
                 script)
+    # Adding Strategus dependencies to the script
+    libPath <- file.path(find.package("CohortGenerator"), "../")
+    script <- c(sprintf("library(CohortGenerator, lib.loc = '%s')", libPath),
+                script)
+    libPath <- file.path(find.package("DatabaseConnector"), "../")
+    script <- c(sprintf("library(DatabaseConnector, lib.loc = '%s')", libPath),
+                script)
   }
 
   # Write file and execute script inside an renv
