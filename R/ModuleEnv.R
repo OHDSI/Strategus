@@ -80,6 +80,9 @@ withModuleRenv <- function(code,
     libPath <- file.path(find.package("keyring"), "../")
     script <- c(sprintf("library(keyring, lib.loc = '%s')", libPath),
                 script)
+    libPath <- file.path(find.package("openssl"), "../")
+    script <- c(sprintf("library(openssl, lib.loc = '%s')", libPath),
+                script)
   }
 
   # Write file and execute script inside an renv
