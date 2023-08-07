@@ -55,15 +55,16 @@ execute <- function(analysisSpecifications,
 
   # Assert that the temp emulation schema is set if required for the dbms
   # specified by the executionSettings
-  connectionDetails <- retrieveConnectionDetails(
-    connectionDetailsReference = executionSettings$connectionDetailsReference,
-    keyringName = keyringName
-  )
-  DatabaseConnector::assertTempEmulationSchemaSet(
-    dbms = connectionDetails$dbms,
-    tempEmulationSchema = getOption("sqlRenderTempEmulationSchema")
-  )
-
+  if (is(executionSettings, "CdmExecutionSettings")) {
+    connectionDetails <- retrieveConnectionDetails(
+      connectionDetailsReference = executionSettings$connectionDetailsReference,
+      keyringName = keyringName
+    )
+    DatabaseConnector::assertTempEmulationSchemaSet(
+      dbms = connectionDetails$dbms,
+      tempEmulationSchema = getOption("sqlRenderTempEmulationSchema")
+    )
+  }
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
 
   if (is.null(executionScriptFolder)) {
