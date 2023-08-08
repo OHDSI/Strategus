@@ -115,14 +115,14 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     moduleToTargetNames <- readRDS(moduleToTargetNamesFileName)
     dependencies <- readRDS(dependenciesFileName)
 
-    library(dplyr)
-    tar_option_set(packages = c('Strategus', 'keyring'), imports = c('Strategus', 'keyring'))
-    targetList <- list(
-      tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
-      # NOTE Execution settings could be mapped to many different cdms making re-execution across cdms much simpler
-      tar_target(executionSettings, readRDS(executionSettingsFileName)),
-      tar_target(keyringSettings, readRDS(keyringSettingsFileName))
-    )
+      library(dplyr)
+      targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
+      targetList <- list(
+        targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
+        # NOTE Execution settings could be mapped to many different cdms making re-execution across cdms much simpler
+        targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
+        targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
+      )
 
     # factory for producing module targets based on their dependencies
     # This could be inside Strategus as an exported function
@@ -140,18 +140,23 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
         filter(.data$module %in% dependencyModules) %>%
         pull(.data$targetName)
 
-      # Use of tar_target_raw allows dynamic names
-      targetList[[length(targetList) + 1]] <- tar_target_raw(targetName,
-                                                             substitute(Strategus:::runModule(analysisSpecifications, keyringSettings, i, executionSettings),
-                                                                        env = list(i = i)),
-                                                             deps = c("analysisSpecifications", "keyringSettings", "executionSettings", dependencyTargetNames))
+        # Use of tar_target_raw allows dynamic names
+        targetList[[length(targetList) + 1]] <- targets::tar_target_raw(targetName,
+          substitute(Strategus:::runModule(analysisSpecifications, keyringSettings, i, executionSettings),
+            env = list(i = i)
+          ),
+          deps = c("analysisSpecifications", "keyringSettings", "executionSettings", dependencyTargetNames)
+        )
 
-      if (execResultsUpload) {
-        resultsTargetName <- paste0(targetName, "_results_upload")
-        targetList[[length(targetList) + 1]] <- tar_target_raw(resultsTargetName,
-                                                               substitute(Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, i, executionSettings),
-                                                                          env = list(i = i)),
-                                                               deps = c("analysisSpecifications", "keyringSettings", "executionSettings", targetName))
+        if (execResultsUpload) {
+          resultsTargetName <- paste0(targetName, "_results_upload")
+          targetList[[length(targetList) + 1]] <- targets::tar_target_raw(resultsTargetName,
+            substitute(Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, i, executionSettings),
+              env = list(i = i)
+            ),
+            deps = c("analysisSpecifications", "keyringSettings", "executionSettings", targetName)
+          )
+        }
       }
     }
 
