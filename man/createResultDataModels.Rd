@@ -8,8 +8,7 @@ createResultDataModels(
   analysisSpecifications,
   executionSettings,
   executionScriptFolder = NULL,
-  keyringName = NULL,
-  restart = FALSE
+  keyringName = NULL
 )
 }
 \arguments{
@@ -29,9 +28,6 @@ NULL to select the default keyring. If the keyring is password
 protected, the password must be stored in the environment variable
 STRATEGUS_KEYRING_PASSWORD so it is retrieved using the command
 Sys.getenv("STRATEGUS_KEYRING_PASSWORD")}
-
-\item{restart}{Restart run? Requires \code{executionScriptFolder} to be specified, and be
-the same as the \code{executionScriptFolder} used in the run to restart.}
 }
 \description{
 Use this at the study design stage to create data models for modules

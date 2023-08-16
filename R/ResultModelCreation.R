@@ -158,7 +158,9 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
 
       getDataModelSpecifications <- function(...) {
         if (file.exists('resultsDataModelSpecification.csv')) {
-          res <- readr::read_csv('resultsDataModelSpecification.csv', show_col_types = FALSE)
+          res <- CohortGenerator::readCsv(
+            file = 'resultsDataModelSpecification.csv'
+          )
           return(res)
         }
         return(NULL)
@@ -195,11 +197,19 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
         writeLines('schema.created', doneFile)
       } else if (is.data.frame(specifications)) {
         # Export schema to readable location
-        readr::write_csv(specifications, dataModelExportPath)
+        CohortGenerator::writeCsv(
+          x = specifications,
+          file = dataModelExportPath,
+          warnOnCaseMismatch = FALSE
+        )
         writeLines('specifications.written', doneFile)
       } else {
         warning('Module does not include data specifications file or createDataModelSchema function')
-        readr::write_csv(specifications, dataModelExportPath)
+        CohortGenerator::writeCsv(
+          x = specifications,
+          file = dataModelExportPath,
+          warnOnCaseMismatch = FALSE
+        )
         writeLines('specifications.not.written', doneFIle)
       }
 

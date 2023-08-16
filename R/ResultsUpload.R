@@ -64,7 +64,9 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
     getDataModelSpecifications <- function(...) {
       ParallelLogger::logInfo("Getting result model specification")
       if (file.exists('resultsDataModelSpecification.csv')) {
-        res <- readr::read_csv('resultsDataModelSpecification.csv', show_col_types = FALSE)
+        res <- CohortGenerator::readCsv(
+          file = 'resultsDataModelSpecification.csv'
+        )
         return(res)
       }
       ParallelLogger::logInfo("No result model specification found")
@@ -107,7 +109,11 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
     } else {
       # Spec file written
       ParallelLogger::logInfo("Writing spec for result upload outside of module context")
-      readr::write_csv(specifications, dataModelExportPath)
+      CohortGenerator::writeCsv(
+        x = specifications,
+        file = dataModelExportPath,
+        warnOnFileNameCaseMismatch = FALSE
+      )
       writeLines('specifications.written', doneFile)
     }
 
@@ -138,8 +144,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
 
   if (workStatus == 'specifications.written') {
     ParallelLogger::logInfo("Uploading results according to module specification")
-    specifications <- readr::read_csv(dataModelExportPath, show_col_types = FALSE)
-    colnames(specifications) <- SqlRender::snakeCaseToCamelCase(colnames(specifications))
+    specifications <- CohortGenerator::readCsv(dataModelExportPath)
     moduleInfo <- ParallelLogger::loadSettingsFromJson(file.path(moduleFolder, 'MetaData.json'))
 
     keyringName <- jobContext$keyringSettings$keyringName
