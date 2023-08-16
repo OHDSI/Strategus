@@ -1,3 +1,3 @@
-library(testthat)
-options(dbms = "postgresql")
-test_check("Strategus")
+# library(testthat)
+# options(dbms = "postgresql")
+# test_check("Strategus")

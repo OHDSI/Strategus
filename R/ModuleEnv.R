@@ -71,6 +71,11 @@ withModuleRenv <- function(code,
     script <- c(sprintf("library(Strategus, lib.loc = '%s')", libPath),
                 script)
     # Adding Strategus dependencies to the script
+    libPath <- file.path(find.package("R6"), "../")
+    script <- c(
+      sprintf("library(R6, lib.loc = '%s')", libPath),
+      script
+    )
     libPath <- file.path(find.package("CohortGenerator"), "../")
     script <- c(sprintf("library(CohortGenerator, lib.loc = '%s')", libPath),
                 script)
