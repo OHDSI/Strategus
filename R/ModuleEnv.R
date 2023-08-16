@@ -44,9 +44,11 @@
 #'
 #' @param code              code block to execute
 #' @param moduleFolder      Instantiated Strategus module folder
-#' @param injectVars         list of var names list(name=value) to replace (e.g. replace list(foo = "some string") will
+#' @param injectVars        list of var names list(name=value) to replace (e.g. replace list(foo = "some string") will
 #'                          find the pattern foo and replace it with the string some string - be careful!
-#' @param tempScriptFile    tempFile to write script to (ret
+#' @param tempScriptFile    tempFile to write script to
+#' @param useLocalStrategusLibrary Use the locally installed Strategus library? TRUE will use the Strategus
+#'                          installation from the calling R process.
 #' @param job               run as rstudio job
 #' @param processName       String name for process
 #' @returns NULL invisibly

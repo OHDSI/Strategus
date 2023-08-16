@@ -158,9 +158,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
           )
         }
       }
-    }
-
-    targetList
+      targetList
   }, script = fileName)
 
   #Store settings objects in the temp folder so they are available in targets

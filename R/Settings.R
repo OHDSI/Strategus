@@ -87,6 +87,7 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' @param cohortTableNames           An object identifying the various cohort table names that will be created in the
 #'                                   `workDatabaseSchema`. This object can be created using the
 #'                                   [CohortGenerator::getCohortTableNames()] function.
+#' @param tempEmulationSchema        Some database platforms like Oracle and Impala do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included

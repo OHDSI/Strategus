@@ -23,7 +23,10 @@ withModuleRenv(
 \item{injectVars}{list of var names list(name=value) to replace (e.g. replace list(foo = "some string") will
 find the pattern foo and replace it with the string some string - be careful!}
 
-\item{tempScriptFile}{tempFile to write script to (ret}
+\item{tempScriptFile}{tempFile to write script to}
+
+\item{useLocalStrategusLibrary}{Use the locally installed Strategus library? TRUE will use the Strategus
+installation from the calling R process.}
 
 \item{job}{run as rstudio job}
 
