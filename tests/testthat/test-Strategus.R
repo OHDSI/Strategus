@@ -20,13 +20,16 @@ test_that("Run Eunomia study", {
     )
   )
 
+  # Ensure all of the modules are instantiated
+  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
+  ensureAllModulesInstantiated(analysisSpecifications)
+
   # Create a unique set of cohort tables for this test run and
   # ensure they are removed when complete
   cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
 
   # Use this line to limit to only running the CohortGeneratorModule
   # for testing purposes.
-  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
   executionSettings <- createCdmExecutionSettings(
     connectionDetailsReference = dbms,
     workDatabaseSchema = workDatabaseSchema,

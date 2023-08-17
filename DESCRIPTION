@@ -15,7 +15,7 @@ License: Apache License 2.0
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
-	R (>= 4.2.3),
+	R (>= 4.2.0),
 	CohortGenerator (>= 0.8.0),
 	DatabaseConnector (>= 6.2.3)
 Imports:
