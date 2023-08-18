@@ -103,6 +103,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                                        workDatabaseSchema,
                                        cdmDatabaseSchema,
                                        cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
+                                       tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
                                        workFolder,
                                        resultsFolder,
                                        minCellCount = 5,
@@ -125,6 +126,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
     workDatabaseSchema = workDatabaseSchema,
     cdmDatabaseSchema = cdmDatabaseSchema,
     cohortTableNames = cohortTableNames,
+    tempEmulationSchema = tempEmulationSchema,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
     minCellCount = minCellCount,
@@ -214,7 +216,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
     if (is.function(connectionDetails[[i]])) {
       detail <- connectionDetails[[i]]()
       if (is.null(detail)) {
-        connectionDetails[[i]] <- ""
+        connectionDetails[[i]] <- list(NULL) # Fixes Issue #74
       } else {
         connectionDetails[[i]] <- connectionDetails[[i]]()
       }
@@ -255,6 +257,15 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
 
   connectionDetails <- keyring::key_get(connectionDetailsReference, keyring = keyringName)
   connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
+
+  # Ensure that NA values are converted to NULL prior to calling
+  # DatabaseConnector
+  for (i in 1:length(connectionDetails)) {
+    if (isTRUE(is.na(connectionDetails[[i]]))) {
+      connectionDetails[[i]] <- list(NULL) # Fixes Issue #74
+    }
+  }
+
   connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
 
   if (keyringLocked) {

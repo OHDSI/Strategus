@@ -53,6 +53,18 @@ execute <- function(analysisSpecifications,
   checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # Assert that the temp emulation schema is set if required for the dbms
+  # specified by the executionSettings
+  if (is(executionSettings, "CdmExecutionSettings")) {
+    connectionDetails <- retrieveConnectionDetails(
+      connectionDetailsReference = executionSettings$connectionDetailsReference,
+      keyringName = keyringName
+    )
+    DatabaseConnector::assertTempEmulationSchemaSet(
+      dbms = connectionDetails$dbms,
+      tempEmulationSchema = getOption("sqlRenderTempEmulationSchema")
+    )
+  }
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
 
   if (is.null(executionScriptFolder)) {
@@ -170,7 +182,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
 
   dependenciesFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "dependencies.rds"))
   saveRDS(dependencies, dependenciesFileName)
-  
+
   execResultsUpload <- all(c(is(executionSettings, "CdmExecutionSettings"),
                              !is.null(executionSettings$resultsConnectionDetailsReference),
                              !is.null(executionSettings$resultsDatabaseSchema)))

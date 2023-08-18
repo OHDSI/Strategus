@@ -42,7 +42,7 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     connection = connection,
     databaseSchema = executionSettings$cdmDatabaseSchema
   )
-  cdmTableList <- tolower(cdmTableList)
+  cdmTableList <- unique(tolower(cdmTableList))
 
   if (!length(cdmTableList[which(x = cdmTableList %in% requiredTables)]) == length(requiredTables)) {
     missingCdmTables <- requiredTables[!(requiredTables %in% cdmTableList)]
