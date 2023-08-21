@@ -15,7 +15,7 @@ test_that("Run Eunomia study", {
   )
 
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
-    fileName = system.file("testdata/testModuleAnalysisSpecification.json",
+    fileName = system.file("testdata/unitTestAnalysisSpecification.json",
       package = "Strategus"
     )
   )
