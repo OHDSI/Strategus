@@ -39,7 +39,6 @@ tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
-#print(paste0("DEBUG: ", Sys.getenv("INSTANTIATED_MODULES_FOLDER")))
 withr::defer(
   {
     unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)

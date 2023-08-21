@@ -15,18 +15,33 @@ test_that("Run Eunomia study", {
   )
 
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
-    fileName = system.file("testdata/analysisSpecification.json",
+    fileName = system.file("testdata/testModuleAnalysisSpecification.json",
       package = "Strategus"
     )
   )
 
   # Ensure all of the modules are instantiated
-  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
   ensureAllModulesInstantiated(analysisSpecifications)
 
   # Create a unique set of cohort tables for this test run and
   # ensure they are removed when complete
   cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
+  withr::defer(
+    {
+      # Only drop tables when the dbms is NOT SQLite
+      # since the DB will be destroyed after the test is over
+      if (dbms != "sqlite") {
+        CohortGenerator::dropCohortStatsTables(
+          connectionDetails = connectionDetails,
+          cohortDatabaseSchema = workDatabaseSchema,
+          cohortTableNames = cohortTableNames,
+          dropCohortTable = TRUE
+        )
+      }
+      unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
+    },
+    testthat::teardown_env()
+  )
 
   # Use this line to limit to only running the CohortGeneratorModule
   # for testing purposes.
@@ -59,18 +74,5 @@ test_that("Run Eunomia study", {
     keyringName = keyringName
   )
 
-  expect_true(file.exists(file.path(tempDir, "EunomiaTestStudy/results_folder/CohortGeneratorModule_1/done")))
-
-  withr::defer(
-    {
-      CohortGenerator::dropCohortStatsTables(
-        connectionDetails = connectionDetails,
-        cohortDatabaseSchema = workDatabaseSchema,
-        cohortTableNames = cohortTableNames,
-        dropCohortTable = TRUE
-      )
-      unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
-    },
-    testthat::teardown_env()
-  )
+  expect_true(file.exists(file.path(tempDir, "EunomiaTestStudy/results_folder/TestModule1_1/done")))
 })

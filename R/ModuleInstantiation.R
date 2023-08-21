@@ -145,14 +145,23 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
   success <- FALSE
   on.exit(if (!success) unlink(moduleFolder, recursive = TRUE))
   if (module == "TestModule1") {
-    # For demo purposes only: get module from extras folder
-    files <- list.files("extras/TestModules/TestModule1", full.names = TRUE, include.dirs = TRUE, all.files = TRUE)
-    files <- files[!grepl("renv$", files)]
+    # For test purposes only: get module from extras folder
+    files <- list.files(
+      system.file(
+        "testdata/TestModules/TestModule1",
+        package = "Strategus"
+      ),
+      full.names = TRUE,
+      include.dirs = TRUE,
+      all.files = TRUE
+    )
+    files <- c(files, list.files("extras/TestModules/TestModule1/renv", full.names = TRUE, include.dirs = FALSE, all.files = TRUE))
+    #files <- files[!grepl("extras/TestModules/TestModule1/renv/library", files)]
     files <- files[!grepl("\\.$", files)]
     files <- files[!grepl(".Rhistory$", files)]
     file.copy(files, moduleFolder, recursive = TRUE)
-    dir.create(file.path(moduleFolder, "renv"))
-    file.copy("extras/TestModules/TestModule1/renv/activate.R", file.path(moduleFolder, "renv"), recursive = TRUE)
+    #dir.create(file.path(moduleFolder, "renv"))
+    #file.copy("extras/TestModules/TestModule1/renv/activate.R", file.path(moduleFolder, "renv"), recursive = TRUE)
   } else {
     moduleFile <- file.path(moduleFolder, sprintf("%s_%s.zip", module, version))
     moduleUrl <- sprintf("https://%s/%s/%s/archive/refs/tags/v%s.zip", remoteRepo, remoteUsername, module, version)
@@ -193,14 +202,13 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 
   script <- paste(
     c(
-      #"renv::install(c('ParallelLogger', 'keyring'), prompt = FALSE)",
-      #sprintf("ParallelLogger::addDefaultFileLogger(file.path('%s', 'moduleInitLog.txt'))", moduleFolder),
-      #sprintf("ParallelLogger::addDefaultErrorReportLogger(fileName = file.path('%s', 'moduleInitErrorReport.txt'))", moduleFolder),
+      "renv::install(c('ParallelLogger', 'keyring'), prompt = FALSE)",
+      sprintf("ParallelLogger::addDefaultFileLogger(file.path('%s', 'moduleInitLog.txt'))", moduleFolder),
+      sprintf("ParallelLogger::addDefaultErrorReportLogger(fileName = file.path('%s', 'moduleInitErrorReport.txt'))", moduleFolder),
       "renv::restore(prompt = FALSE)"
      ),
     collapse = "\n"
   )
-  print(paste0("DEBUG: ", script))
   tempScriptFile <- tempfile(fileext = ".R")
   fileConn <- file(tempScriptFile)
   writeLines(script, fileConn)
