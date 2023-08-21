@@ -224,6 +224,7 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 }
 
 getModuleRenvDependencies <- function(moduleFolder) {
+  print(paste0("DEBUG: ", moduleFolder))
   renvRequiredFiles <- c(
     ".Rprofile",
     "renv.lock",
