@@ -156,9 +156,11 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
       all.files = TRUE
     )
     files <- c(files, list.files("extras/TestModules/TestModule1/renv", full.names = TRUE, include.dirs = FALSE, all.files = TRUE))
+    print(paste0("DEBUG 1: ", files))
     #files <- files[!grepl("extras/TestModules/TestModule1/renv/library", files)]
     files <- files[!grepl("\\.$", files)]
     files <- files[!grepl(".Rhistory$", files)]
+    print(paste0("DEBUG 2: ", files))
     file.copy(files, moduleFolder, recursive = TRUE)
     #dir.create(file.path(moduleFolder, "renv"))
     #file.copy("extras/TestModules/TestModule1/renv/activate.R", file.path(moduleFolder, "renv"), recursive = TRUE)
@@ -224,7 +226,7 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 }
 
 getModuleRenvDependencies <- function(moduleFolder) {
-  print(paste0("DEBUG: ", list.files(moduleFolder, all.files = TRUE, full.names = TRUE, include.dirs = TRUE)))
+  print(paste0("DEBUG 3: ", list.files(moduleFolder, all.files = TRUE, full.names = TRUE, include.dirs = TRUE)))
   renvRequiredFiles <- c(
     ".Rprofile",
     "renv.lock",
