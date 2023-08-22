@@ -21,6 +21,7 @@
 #' If recreate is set to TRUE all existing data will be removed, otherwise
 #'
 #' @inheritParams execute
+#'
 #' @export
 createResultDataModels <- function(analysisSpecifications,
                                    executionSettings,
@@ -58,13 +59,12 @@ createResultDataModels <- function(analysisSpecifications,
     ##
     analysisSpecificationsLoad <- readRDS(analysisSpecificationsFileName)
 
-      library(dplyr)
-      targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
-      targetList <- list(
-        targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
-        targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
-        targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
-      )
+    targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
+    targetList <- list(
+      targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
+      targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
+      targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
+    )
 
     for (i in 1:length(analysisSpecificationsLoad$moduleSpecifications)) {
       moduleSpecification <- analysisSpecificationsLoad$moduleSpecifications[[i]]
@@ -118,7 +118,20 @@ createResultDataModels <- function(analysisSpecifications,
 }
 
 
-#' Results upload callbacks for inserting results in to a database
+#' Create module(s) result data model
+#' @description
+#' This function will create the results data model for the modules in the
+#' `analysisSpecifications`. A module can implement its own results data model
+#' creation function by implementing the function `createDataModelSchema` in
+#' its Main.R. The default behavior is to use the `ResultsModelManager` to create
+#' the results data model based on the `resultsDataModelSpecification.csv` in the
+#' module's results folder.
+#'
+#' @template AnalysisSpecifications
+#' @param keyringSettings The keyringSettings from the executionSettings context
+#' @param moduleIndex The index of the module in the analysis specification
+#' @template executionSettings
+#' @param ... For future expansion
 runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleIndex, executionSettings, ...) {
   checkmate::assert_multi_class(x = executionSettings, classes = c("ResultsExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
@@ -215,7 +228,7 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
           file = dataModelExportPath,
           warnOnCaseMismatch = FALSE
         )
-        writeLines('specifications.not.written', doneFIle)
+        writeLines('specifications.not.written', doneFile)
       }
 
       ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)

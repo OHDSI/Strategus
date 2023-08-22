@@ -24,18 +24,13 @@
 #' Execute analysis specifications.
 #'
 #' @template AnalysisSpecifications
-#' @param executionSettings       An object of type `ExecutionSettings` as created
-#'                                by [createCdmExecutionSettings()] or [createResultsExecutionSettings()].
+#' @template executionSettings
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
-#'
 #' @template keyringName
-#'
 #' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
 #'                                the same as the `executionScriptFolder` used in the run to restart.
-#'
-#'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified
 #' analyses.
@@ -115,14 +110,13 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     moduleToTargetNames <- readRDS(moduleToTargetNamesFileName)
     dependencies <- readRDS(dependenciesFileName)
 
-      library(dplyr)
-      targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
-      targetList <- list(
-        targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
-        # NOTE Execution settings could be mapped to many different cdms making re-execution across cdms much simpler
-        targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
-        targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
-      )
+    targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
+    targetList <- list(
+      targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
+      # NOTE Execution settings could be mapped to many different cdms making re-execution across cdms much simpler
+      targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
+      targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
+    )
 
     # factory for producing module targets based on their dependencies
     # This could be inside Strategus as an exported function
@@ -132,13 +126,15 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     for (i in 1:length(analysisSpecificationsLoad$moduleSpecifications)) {
       moduleSpecification <- analysisSpecificationsLoad$moduleSpecifications[[i]]
       targetName <- sprintf("%s_%d", moduleSpecification$module, i)
-      dependencyModules <- dependencies %>%
-        filter(.data$module == moduleSpecification$module) %>%
-        pull(.data$dependsOn)
+      dependencyModules <- dependencies[dependencies$module == moduleSpecification$module,]$dependsOn
+        #%>%
+        #filter(.data$module == moduleSpecification$module) %>%
+        #pull(.data$dependsOn)
 
-      dependencyTargetNames <- moduleToTargetNames %>%
-        filter(.data$module %in% dependencyModules) %>%
-        pull(.data$targetName)
+      dependencyTargetNames <- moduleToTargetNames[moduleToTargetNames$module %in% dependencyModules,]$targetName
+      #%>%
+      #  filter(.data$module %in% dependencyModules) %>%
+      #  pull(.data$targetName)
 
         # Use of tar_target_raw allows dynamic names
         targetList[[length(targetList) + 1]] <- targets::tar_target_raw(targetName,
