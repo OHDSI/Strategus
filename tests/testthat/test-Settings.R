@@ -54,3 +54,36 @@ test_that("Verify that unlocking keyring without password fails", {
   # Try to unlock and expect error
   expect_error(unlockKeyring(keyring = keyringName))
 })
+
+test_that("Store and retrieve connection details", {
+  # Setup keyring for the test
+  Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = keyringPassword)
+  createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
+  on.exit(deleteKeyringForUnitTest())
+
+  # Verify that the connection details are valid
+  # by connecting to the DB
+  conn <- DatabaseConnector::connect(
+    connectionDetails
+  )
+  on.exit(DatabaseConnector::disconnect(conn))
+
+  # Store the connection details in keyring
+  storeConnectionDetails(
+    connectionDetails = connectionDetails,
+    connectionDetailsReference = dbms,
+    keyringName = keyringName
+  )
+
+  connectionDetailsFromKeyring <- retrieveConnectionDetails(
+    connectionDetailsReference = dbms,
+    keyringName = keyringName
+  )
+
+  # Verify that the connection details retrieved
+  # allow for a connection to the DB
+  connFromKeyring <- DatabaseConnector::connect(
+    connectionDetailsFromKeyring
+  )
+  on.exit(DatabaseConnector::disconnect(connFromKeyring))
+})

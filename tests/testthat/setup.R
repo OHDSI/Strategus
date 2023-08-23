@@ -15,20 +15,20 @@ if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
 } else {
   jdbcDriverFolder <- "~/.jdbcDrivers"
   dir.create(jdbcDriverFolder, showWarnings = FALSE)
-  DatabaseConnector::downloadJdbcDrivers("postgresql", pathToDriver = jdbcDriverFolder)
-
-  if (!dbms %in% c("postgresql", "sqlite")) {
-    DatabaseConnector::downloadJdbcDrivers(dbms, pathToDriver = jdbcDriverFolder)
-  }
-
-  withr::defer(
-    {
-      unlink(jdbcDriverFolder, recursive = TRUE, force = TRUE)
-     Sys.setenv("R_KEYRING_BACKEND" = baseBackend)
-    },
-    testthat::teardown_env()
-  )
 }
+
+if (dbms != "sqlite") {
+  DatabaseConnector::downloadJdbcDrivers(dbms, pathToDriver = jdbcDriverFolder)
+}
+
+withr::defer(
+  {
+    unlink(jdbcDriverFolder, recursive = TRUE, force = TRUE)
+   Sys.setenv("R_KEYRING_BACKEND" = baseBackend)
+  },
+  testthat::teardown_env()
+)
+
 
 # Create a unique ID for the table identifiers
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))

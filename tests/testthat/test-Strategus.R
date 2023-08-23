@@ -1,4 +1,4 @@
-test_that("Run Eunomia study", {
+test_that("Run unit test study", {
   # NOTE: Need to set this in each test otherwise it goes out of scope
   renv:::renv_scope_envvars(RENV_PATHS_CACHE = renvCachePath)
 
@@ -20,24 +20,8 @@ test_that("Run Eunomia study", {
     )
   )
 
-  # Ensure all of the modules are instantiated
-  ensureAllModulesInstantiated(analysisSpecifications)
-
-  # Create a unique set of cohort tables for this test run and
-  # ensure they are removed when complete
-  cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
   withr::defer(
     {
-      # Only drop tables when the dbms is NOT SQLite
-      # since the DB will be destroyed after the test is over
-      if (dbms != "sqlite") {
-        CohortGenerator::dropCohortStatsTables(
-          connectionDetails = connectionDetails,
-          cohortDatabaseSchema = workDatabaseSchema,
-          cohortTableNames = cohortTableNames,
-          dropCohortTable = TRUE
-        )
-      }
       unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
     },
     testthat::teardown_env()
@@ -49,7 +33,7 @@ test_that("Run Eunomia study", {
     connectionDetailsReference = dbms,
     workDatabaseSchema = workDatabaseSchema,
     cdmDatabaseSchema = cdmDatabaseSchema,
-    cohortTableNames = cohortTableNames,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix)),
     workFolder = file.path(tempDir, "EunomiaTestStudy/work_folder"),
     resultsFolder = file.path(tempDir, "EunomiaTestStudy/results_folder"),
     minCellCount = 5

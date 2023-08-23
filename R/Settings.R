@@ -217,7 +217,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
     if (is.function(connectionDetails[[i]])) {
       detail <- connectionDetails[[i]]()
       if (is.null(detail)) {
-        connectionDetails[[i]] <- list(NULL) # Fixes Issue #74
+        connectionDetails[[i]] <- .nullList() # Fixes Issue #74
       } else {
         connectionDetails[[i]] <- connectionDetails[[i]]()
       }
@@ -260,14 +260,19 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
   connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
 
   # Ensure that NA values are converted to NULL prior to calling
-  # DatabaseConnector
+  # DatabaseConnector. To do this, we'll construct a new connectionDetails
+  # list from keyring where the connectionDetails are NOT NA. This will
+  # allow for calling DatabaseConnector::createConnectionDetails with
+  # NULL values where NAs are present in the serialized version of the
+  # connectionDetails from keyring.
+  connectionDetailsConstructedFromKeyring <- list()
   for (i in 1:length(connectionDetails)) {
-    if (isTRUE(is.na(connectionDetails[[i]]))) {
-      connectionDetails[[i]] <- list(NULL) # Fixes Issue #74
+    if (isFALSE(is.na(connectionDetails[[i]]))) {
+      connectionDetailsConstructedFromKeyring[names(connectionDetails)[i]] <- connectionDetails[[i]]
     }
   }
 
-  connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+  connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetailsConstructedFromKeyring)
 
   if (keyringLocked) {
     keyring::keyring_lock(keyring = keyringName)
@@ -332,4 +337,11 @@ unlockKeyring <- function(keyringName) {
   } else {
     return(TRUE)
   }
+}
+
+#' Used when serializing connection details to retain NULL values
+#'
+#' @keywords internal
+.nullList <- function() {
+  invisible(list(NULL))
 }
