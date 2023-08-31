@@ -10,6 +10,24 @@ jobContext <- readRDS("tests/testJobContext.rds")
 jobContext$moduleExecutionSettings$workSubFolder <- workFolder
 jobContext$moduleExecutionSettings$resultsSubFolder <- resultsfolder
 jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
+jobContext$moduleExecutionSettings$resultsConnectionDetails <- connectionDetails
+jobContext$moduleExecutionSettings$resultsDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
+
+test_that("Test createDataModelSchema", {
+  source("Main.R")
+  createDataModelSchema(jobContext)
+
+  # Verify that the table(s) are created
+  connection <- DatabaseConnector::connect(
+    connectionDetails = jobContext$moduleExecutionSettings$resultsConnectionDetails
+  )
+  on.exit(DatabaseConnector::disconnect(connection))
+  tableList <- DatabaseConnector::getTableNames(
+    connection = connection
+  )
+  resultsTablesCreated <- tableList[grep(getModuleInfo()$TablePrefix, tableList)]
+  expect_true(length(resultsTablesCreated) > 0)
+})
 
 test_that("Run module", {
   source("Main.R")

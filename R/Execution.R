@@ -127,14 +127,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
       moduleSpecification <- analysisSpecificationsLoad$moduleSpecifications[[i]]
       targetName <- sprintf("%s_%d", moduleSpecification$module, i)
       dependencyModules <- dependencies[dependencies$module == moduleSpecification$module,]$dependsOn
-        #%>%
-        #filter(.data$module == moduleSpecification$module) %>%
-        #pull(.data$dependsOn)
-
       dependencyTargetNames <- moduleToTargetNames[moduleToTargetNames$module %in% dependencyModules,]$targetName
-      #%>%
-      #  filter(.data$module %in% dependencyModules) %>%
-      #  pull(.data$targetName)
 
         # Use of tar_target_raw allows dynamic names
         targetList[[length(targetList) + 1]] <- targets::tar_target_raw(targetName,

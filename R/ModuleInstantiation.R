@@ -38,9 +38,9 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
 
   # Verify only one version per module:
   multipleVersionsPerModule <- modules %>%
-    group_by(.data$module) %>%
+    group_by(module) %>%
     summarise(versions = n()) %>%
-    filter(.data$versions > 1)
+    filter(versions > 1)
   if (nrow(multipleVersionsPerModule) > 0) {
     stop(sprintf(
       "Only one version per module allowed in a single analyses specification.\nMultiple versions found for module(s) `%s`.",
@@ -61,7 +61,7 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   # Check required dependencies have been installed:
   dependencies <- extractDependencies(modules)
   missingDependencies <- dependencies %>%
-    filter(!.data$dependsOn %in% modules$module)
+    filter(!dependsOn %in% modules$module)
   if (nrow(missingDependencies) > 0) {
     message <- paste(
       c(
@@ -91,7 +91,7 @@ getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
     bind_rows()
   if (distinct) {
     modules <- modules %>%
-      distinct(.data$module, .data$version, .keep_all = TRUE)
+      distinct(module, version, .keep_all = TRUE)
   }
   return(modules)
 }
@@ -223,10 +223,10 @@ getModuleRenvDependencies <- function(moduleFolder) {
   )
 
   missingFiles <- tibble::enframe(renvRequiredFiles) %>%
-    dplyr::mutate(fileExists = file.exists(file.path(moduleFolder, .data$value))) %>%
-    dplyr::rename(fileName = .data$value) %>%
+    dplyr::mutate(fileExists = file.exists(file.path(moduleFolder, value))) %>%
+    dplyr::rename(fileName = value) %>%
     dplyr::select("fileName", "fileExists") %>%
-    dplyr::filter(.data$fileExists == FALSE)
+    dplyr::filter(fileExists == FALSE)
 
   invisible(missingFiles)
 }

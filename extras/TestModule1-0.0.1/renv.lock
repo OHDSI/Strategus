@@ -153,7 +153,7 @@
     },
     "DatabaseConnector": {
       "Package": "DatabaseConnector",
-      "Version": "6.1.0",
+      "Version": "6.2.3",
       "Source": "Repository",
       "Repository": "CRAN"
     },
@@ -437,7 +437,7 @@
     },
     "SqlRender": {
       "Package": "SqlRender",
-      "Version": "1.13.1",
+      "Version": "1.15.2",
       "Source": "Repository",
       "Repository": "CRAN"
     },
@@ -1216,7 +1216,7 @@
     },
     "reticulate": {
       "Package": "reticulate",
-      "Version": "1.28",
+      "Version": "1.31",
       "Source": "Repository",
       "Repository": "CRAN"
     },

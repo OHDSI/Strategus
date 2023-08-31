@@ -78,19 +78,19 @@ test_that("Run unit test study", {
       fileName = file.path(studyRootFolder, "eunomiaExecutionSettings.json")
     )
 
-    # if (dbms == "sqlite") {
-    #   resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
-    #     resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-    #     resultsDatabaseSchema = resultsDatabaseSchema,
-    #     workFolder = workFolder,
-    #     resultsFolder = resultsFolder
-    #   )
-    #   Strategus::createResultDataModels(
-    #     analysisSpecifications = analysisSpecifications,
-    #     executionSettings = resultsExecutionSettings,
-    #     keyringName = keyringName
-    #   )
-    # }
+    if (dbms == "sqlite") {
+      resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+        resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+        resultsDatabaseSchema = resultsDatabaseSchema,
+        workFolder = workFolder,
+        resultsFolder = resultsFolder
+      )
+      Strategus::createResultDataModels(
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = resultsExecutionSettings,
+        keyringName = keyringName
+      )
+    }
 
     Strategus::execute(
       analysisSpecifications = analysisSpecifications,

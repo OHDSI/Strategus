@@ -69,7 +69,50 @@ execute <- function(jobContext) {
   fileName <- file.path(resultsFolder, paste0(moduleInfo$TablePrefix, "data.csv"))
   readr::write_csv(data, fileName)
 
+  # Set the table names in resultsDataModelSpecification.csv
+  moduleInfo <- getModuleInfo()
+  resultsDataModel <- CohortGenerator::readCsv(
+    file = "resultsDataModelSpecification.csv",
+    warnOnCaseMismatch = FALSE
+  )
+  resultsDataModel$tableName <- paste0(moduleInfo$TablePrefix, resultsDataModel$tableName)
+  CohortGenerator::writeCsv(
+    x = resultsDataModel,
+    file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
+    warnOnCaseMismatch = FALSE,
+    warnOnFileNameCaseMismatch = FALSE,
+    warnOnUploadRuleViolations = FALSE
+  )
+
   ParallelLogger::logTrace("Finished TestModule1")
+}
+
+createDataModelSchema <- function(jobContext) {
+  checkmate::assert_class(jobContext$moduleExecutionSettings$resultsConnectionDetails, "ConnectionDetails")
+  checkmate::assert_string(jobContext$moduleExecutionSettings$resultsDatabaseSchema)
+  connectionDetails <- jobContext$moduleExecutionSettings$resultsConnectionDetails
+  moduleInfo <- getModuleInfo()
+  tablePrefix <- moduleInfo$TablePrefix
+  resultsDatabaseSchema <- jobContext$moduleExecutionSettings$resultsDatabaseSchema
+  resultsDataModel <- ResultModelManager::loadResultsDataModelSpecifications(
+    filePath = "resultsDataModelSpecification.csv"
+  )
+  resultsDataModel$tableName <- paste0(tablePrefix, resultsDataModel$tableName)
+  sql <- ResultModelManager::generateSqlSchema(
+    schemaDefinition = resultsDataModel
+  )
+  sql <- SqlRender::render(
+    sql = sql,
+    database_schema = resultsDatabaseSchema
+  )
+  connection <- DatabaseConnector::connect(
+    connectionDetails = connectionDetails
+  )
+  on.exit(DatabaseConnector::disconnect(connection))
+  DatabaseConnector::executeSql(
+    connection = connection,
+    sql = sql
+  )
 }
 
 # Private methods -------------------------
