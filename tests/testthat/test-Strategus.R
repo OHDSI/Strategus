@@ -13,12 +13,13 @@ test_that("Run unit test study", {
     )
   )
 
-  # withr::defer(
-  #   {
-  #     unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
-  #   },
-  #   testthat::teardown_env()
-  # )
+  withr::defer(
+    {
+      unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
+    },
+    testthat::teardown_env()
+  )
+
   for (i in 1:length(connectionDetailsList)) {
     connectionDetails <- connectionDetailsList[[i]]$connectionDetails
     dbms <- connectionDetailsList[[i]]$connectionDetails$dbms

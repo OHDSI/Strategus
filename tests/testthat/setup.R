@@ -6,37 +6,45 @@ library(dplyr)
 # allows unit tests to run on mac without issue
 baseBackend <- Sys.getenv("R_KEYRING_BACKEND")
 Sys.setenv("R_KEYRING_BACKEND" = "file")
+withr::defer(
+  {
+    Sys.setenv("R_KEYRING_BACKEND" = baseBackend)
+  },
+  testthat::teardown_env()
+)
 
 if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
   jdbcDriverFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
 } else {
   jdbcDriverFolder <- "~/.jdbcDrivers"
   dir.create(jdbcDriverFolder, showWarnings = FALSE)
+  baseDatabaseConnectorJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+  Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = jdbcDriverFolder)
+  withr::defer(
+    {
+      unlink(jdbcDriverFolder, recursive = TRUE, force = TRUE)
+      Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = baseDatabaseConnectorJarFolder)
+    },
+    testthat::teardown_env()
+  )
 }
 
-withr::defer(
-  {
-    unlink(jdbcDriverFolder, recursive = TRUE, force = TRUE)
-   Sys.setenv("R_KEYRING_BACKEND" = baseBackend)
-  },
-  testthat::teardown_env()
-)
 
 # Create a unique ID for the table identifiers
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))
 
-tempDir <-  "D:" #tempfile()
+tempDir <-  tempfile() #"D:"
 tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
-# withr::defer(
-#   {
-#     unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
-#   },
-#   testthat::teardown_env()
-# )
+withr::defer(
+  {
+    unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+  },
+  testthat::teardown_env()
+)
 
 # Assemble a list of connectionDetails for the tests -----------
 connectionDetailsList <- list()
