@@ -7,18 +7,11 @@ library(dplyr)
 baseBackend <- Sys.getenv("R_KEYRING_BACKEND")
 Sys.setenv("R_KEYRING_BACKEND" = "file")
 
-dbms <- getOption("dbms", default = "sqlite")
-message("************* Testing on ", dbms, " *************")
-
 if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
   jdbcDriverFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
 } else {
   jdbcDriverFolder <- "~/.jdbcDrivers"
   dir.create(jdbcDriverFolder, showWarnings = FALSE)
-}
-
-if (dbms != "sqlite") {
-  DatabaseConnector::downloadJdbcDrivers(dbms, pathToDriver = jdbcDriverFolder)
 }
 
 withr::defer(
@@ -29,92 +22,149 @@ withr::defer(
   testthat::teardown_env()
 )
 
-
 # Create a unique ID for the table identifiers
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))
 
-tempDir <-  tempfile()
+tempDir <-  "D:" #tempfile()
 tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
+# withr::defer(
+#   {
+#     unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+#   },
+#   testthat::teardown_env()
+# )
+
+# Assemble a list of connectionDetails for the tests -----------
+connectionDetailsList <- list()
+
+# SQLite
+eunomiaDbFile <- file.path(tempDir, "data", "testEunomia.sqlite")
+if (!dir.exists(file.path(tempDir, "data"))) {
+  dir.create(file.path(tempDir, "data"), recursive = T, showWarnings = F)
+}
+connectionDetails <- Eunomia::getEunomiaConnectionDetails(
+  databaseFile = eunomiaDbFile
+)
 withr::defer(
   {
-    unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+    unlink(eunomiaDbFile, recursive = TRUE, force = TRUE)
   },
   testthat::teardown_env()
 )
+cdmDatabaseSchema <- "main"
+workDatabaseSchema <- "main"
+vocabularyDatabaseSchema <- workDatabaseSchema
+cohortTable <- "cohort"
+tempEmulationSchema <- NULL
 
-if (dbms == "sqlite") {
-  eunomiaDbFile <- file.path(tempDir, "data", "testEunomia.sqlite")
-  if (!dir.exists(file.path(tempDir, "data"))) {
-    dir.create(file.path(tempDir, "data"), recursive = T, showWarnings = F)
-  }
-  connectionDetails <- Eunomia::getEunomiaConnectionDetails(
-    databaseFile = eunomiaDbFile
-  )
-  withr::defer(
-    {
-      unlink(eunomiaDbFile, recursive = TRUE, force = TRUE)
-    },
-    testthat::teardown_env()
-  )
-  cdmDatabaseSchema <- "main"
-  workDatabaseSchema <- "main"
-  vocabularyDatabaseSchema <- workDatabaseSchema
-  cohortTable <- "cohort"
-  tempEmulationSchema <- NULL
-} else {
-  if (dbms == "postgresql") {
-    dbUser <- Sys.getenv("CDM5_POSTGRESQL_USER")
-    dbPassword <- Sys.getenv("CDM5_POSTGRESQL_PASSWORD")
-    dbServer <- Sys.getenv("CDM5_POSTGRESQL_SERVER")
-    dbPort <- 5432
-    cdmDatabaseSchema <- Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA")
-    vocabularyDatabaseSchema <- Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA")
-    tempEmulationSchema <- NULL
-    workDatabaseSchema <- Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA")
-  } else if (dbms == "oracle") {
-    dbUser <- Sys.getenv("CDM5_ORACLE_USER")
-    dbPassword <- Sys.getenv("CDM5_ORACLE_PASSWORD")
-    dbServer <- Sys.getenv("CDM5_ORACLE_SERVER")
-    dbPort <- 1521
-    cdmDatabaseSchema <- Sys.getenv("CDM5_ORACLE_CDM_SCHEMA")
-    vocabularyDatabaseSchema <- Sys.getenv("CDM5_ORACLE_CDM_SCHEMA")
-    tempEmulationSchema <- Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA")
-    workDatabaseSchema <- Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA")
-    options(sqlRenderTempEmulationSchema = tempEmulationSchema)
-  } else if (dbms == "redshift") {
-    dbUser <- Sys.getenv("CDM5_REDSHIFT_USER")
-    dbPassword <- Sys.getenv("CDM5_REDSHIFT_PASSWORD")
-    dbServer <- Sys.getenv("CDM5_REDSHIFT_SERVER")
-    dbPort <- 5439
-    cdmDatabaseSchema <- Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA")
-    vocabularyDatabaseSchema <- Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA")
-    tempEmulationSchema <- NULL
-    workDatabaseSchema <- Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA")
-  } else if (dbms == "sql server") {
-    dbUser <- Sys.getenv("CDM5_SQL_SERVER_USER")
-    dbPassword <- Sys.getenv("CDM5_SQL_SERVER_PASSWORD")
-    dbServer <- Sys.getenv("CDM5_SQL_SERVER_SERVER")
-    dbPort <- 1433
-    cdmDatabaseSchema <- Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA")
-    vocabularyDatabaseSchema <- Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA")
-    tempEmulationSchema <- NULL
-    workDatabaseSchema <- Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA")
-  }
+connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+  connectionDetails = connectionDetails,
+  cdmDatabaseSchema = "main",
+  workDatabaseSchema = "main",
+  vocabularyDatabaseSchema = "main",
+  cohortTable = "cohort",
+  tempEmulationSchema = NULL
+)
 
-  connectionDetails <- DatabaseConnector::createConnectionDetails(
-    dbms = dbms,
-    user = dbUser,
-    password = URLdecode(dbPassword),
-    server = dbServer,
-    port = dbPort,
-    pathToDriver = jdbcDriverFolder
+# PostgreSQL
+if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == ""
+      & Sys.getenv("CDM5_POSTGRESQL_PASSWORD") == ""
+      & Sys.getenv("CDM5_POSTGRESQL_SERVER") == ""
+      & Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA") == ""
+      & Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("postgresql")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "postgresql",
+      user = Sys.getenv("CDM5_POSTGRESQL_USER"),
+      password = URLdecode(Sys.getenv("CDM5_POSTGRESQL_PASSWORD")),
+      server = Sys.getenv("CDM5_POSTGRESQL_SERVER"),
+      port = 5432,
+      pathToDriver = jdbcDriverFolder
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA"),
+    cohortTable = "cohort",
+    tempEmulationSchema = NULL
   )
 }
 
+# Oracle
+if (!(Sys.getenv("CDM5_ORACLE_USER") == ""
+      & Sys.getenv("CDM5_ORACLE_PASSWORD") == ""
+      & Sys.getenv("CDM5_ORACLE_SERVER") == ""
+      & Sys.getenv("CDM5_ORACLE_CDM_SCHEMA") == ""
+      & Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("oracle")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "oracle",
+      user = Sys.getenv("CDM5_ORACLE_USER"),
+      password = URLdecode(Sys.getenv("CDM5_ORACLE_PASSWORD")),
+      server = Sys.getenv("CDM5_ORACLE_SERVER"),
+      port = 1521,
+      pathToDriver = jdbcDriverFolder
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
+    cohortTable = "cohort",
+    tempEmulationSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA")
+  )
+}
+
+# RedShift
+if (!(Sys.getenv("CDM5_REDSHIFT_USER") == ""
+      & Sys.getenv("CDM5_REDSHIFT_PASSWORD") == ""
+      & Sys.getenv("CDM5_REDSHIFT_SERVER") == ""
+      & Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == ""
+      & Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("redshift")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "redshift",
+      user = Sys.getenv("CDM5_REDSHIFT_USER"),
+      password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
+      server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
+      port = 5439,
+      pathToDriver = jdbcDriverFolder
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+    cohortTable = "cohort",
+    tempEmulationSchema = NULL
+  )
+}
+
+# SQL Server
+if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == ""
+      & Sys.getenv("CDM5_SQL_SERVER_PASSWORD") == ""
+      & Sys.getenv("CDM5_SQL_SERVER_SERVER") == ""
+      & Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA") == ""
+      & Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("sql server")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "sql server",
+      user = Sys.getenv("CDM5_SQL_SERVER_USER"),
+      password = URLdecode(Sys.getenv("CDM5_SQL_SERVER_PASSWORD")),
+      server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
+      port = 1433,
+      pathToDriver = jdbcDriverFolder
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
+    cohortTable = "cohort",
+    tempEmulationSchema = NULL
+  )
+}
 
 # Keyring helpers --------------
 # Set the keyring name & password for testing

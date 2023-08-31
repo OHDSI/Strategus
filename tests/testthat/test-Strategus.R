@@ -7,56 +7,97 @@ test_that("Run unit test study", {
   createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
   on.exit(deleteKeyringForUnitTest())
 
-  # Using a named and secured keyring
-  Strategus::storeConnectionDetails(
-    connectionDetails = connectionDetails,
-    connectionDetailsReference = dbms,
-    keyringName = keyringName
-  )
-
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/unitTestAnalysisSpecification.json",
       package = "Strategus"
     )
   )
 
-  withr::defer(
-    {
-      unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
-    },
-    testthat::teardown_env()
-  )
+  # withr::defer(
+  #   {
+  #     unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
+  #   },
+  #   testthat::teardown_env()
+  # )
+  for (i in 1:length(connectionDetailsList)) {
+    connectionDetails <- connectionDetailsList[[i]]$connectionDetails
+    dbms <- connectionDetailsList[[i]]$connectionDetails$dbms
+    workDatabaseSchema <- connectionDetailsList[[i]]$workDatabaseSchema
+    cdmDatabaseSchema <- connectionDetailsList[[i]]$cdmDatabaseSchema
+    tempEmulationSchema <- connectionDetailsList[[i]]$tempEmulationSchema
+    studyRootFolder <- file.path(tempDir, "EunomiaTestStudy", dbms)
+    workFolder <- file.path(studyRootFolder, "work_folder")
+    resultsFolder <- file.path(studyRootFolder, "results_folder")
+    scriptFolder <- file.path(studyRootFolder, "script_folder")
 
-  # Use this line to limit to only running the CohortGeneratorModule
-  # for testing purposes.
-  executionSettings <- createCdmExecutionSettings(
-    connectionDetailsReference = dbms,
-    workDatabaseSchema = workDatabaseSchema,
-    cdmDatabaseSchema = cdmDatabaseSchema,
-    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix)),
-    workFolder = file.path(tempDir, "EunomiaTestStudy/work_folder"),
-    resultsFolder = file.path(tempDir, "EunomiaTestStudy/results_folder"),
-    minCellCount = 5
-  )
+    message("************* Running Strategus on ", dbms, " *************")
 
-  if (!dir.exists(file.path(tempDir, "EunomiaTestStudy"))) {
-    dir.create(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE)
+    # Using a named and secured keyring
+    Strategus::storeConnectionDetails(
+      connectionDetails = connectionDetails,
+      connectionDetailsReference = dbms,
+      keyringName = keyringName
+    )
+
+    resultsConnectionDetailsReference <- NULL
+    resultsDatabaseSchema <- NULL
+
+    if (dbms == "sqlite") {
+      resultsConnectionDetailsReference <- "result-store"
+      resultsDatabaseSchema <- "main"
+      Strategus::storeConnectionDetails(
+        connectionDetails,
+        resultsConnectionDetailsReference,
+        keyringName = keyringName
+      )
+    }
+
+    executionSettings <- createCdmExecutionSettings(
+      connectionDetailsReference = dbms,
+      workDatabaseSchema = workDatabaseSchema,
+      cdmDatabaseSchema = cdmDatabaseSchema,
+      tempEmulationSchema = tempEmulationSchema,
+      cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix)),
+      workFolder = workFolder,
+      resultsFolder = resultsFolder,
+      minCellCount = 5,
+      resultsDatabaseSchema = resultsDatabaseSchema,
+      resultsConnectionDetailsReference = resultsConnectionDetailsReference
+    )
+
+    if (!dir.exists(studyRootFolder)) {
+      dir.create(studyRootFolder, recursive = TRUE)
+    }
+    ParallelLogger::saveSettingsToJson(
+      object = executionSettings,
+      file.path(studyRootFolder, "eunomiaExecutionSettings.json")
+    )
+
+    executionSettings <- ParallelLogger::loadSettingsFromJson(
+      fileName = file.path(studyRootFolder, "eunomiaExecutionSettings.json")
+    )
+
+    # if (dbms == "sqlite") {
+    #   resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+    #     resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+    #     resultsDatabaseSchema = resultsDatabaseSchema,
+    #     workFolder = workFolder,
+    #     resultsFolder = resultsFolder
+    #   )
+    #   Strategus::createResultDataModels(
+    #     analysisSpecifications = analysisSpecifications,
+    #     executionSettings = resultsExecutionSettings,
+    #     keyringName = keyringName
+    #   )
+    # }
+
+    Strategus::execute(
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings,
+      executionScriptFolder = scriptFolder,
+      keyringName = keyringName
+    )
+
+    expect_true(file.exists(file.path(resultsFolder, "TestModule1_1", "done")))
   }
-  ParallelLogger::saveSettingsToJson(
-    object = executionSettings,
-    file.path(tempDir, "EunomiaTestStudy/eunomiaExecutionSettings.json")
-  )
-
-  executionSettings <- ParallelLogger::loadSettingsFromJson(
-    fileName = file.path(tempDir, "EunomiaTestStudy/eunomiaExecutionSettings.json")
-  )
-
-  Strategus::execute(
-    analysisSpecifications = analysisSpecifications,
-    executionSettings = executionSettings,
-    executionScriptFolder = file.path(tempDir, "EunomiaTestStudy/script_folder"),
-    keyringName = keyringName
-  )
-
-  expect_true(file.exists(file.path(tempDir, "EunomiaTestStudy/results_folder/TestModule1_1/done")))
 })

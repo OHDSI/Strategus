@@ -61,29 +61,36 @@ test_that("Store and retrieve connection details", {
   createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
   on.exit(deleteKeyringForUnitTest())
 
-  # Verify that the connection details are valid
-  # by connecting to the DB
-  conn <- DatabaseConnector::connect(
-    connectionDetails
-  )
-  on.exit(DatabaseConnector::disconnect(conn))
+  for (i in 1:length(connectionDetailsList)) {
+    connectionDetails <- connectionDetailsList[[i]]$connectionDetails
+    dbms <- connectionDetailsList[[i]]$connectionDetails$dbms
 
-  # Store the connection details in keyring
-  storeConnectionDetails(
-    connectionDetails = connectionDetails,
-    connectionDetailsReference = dbms,
-    keyringName = keyringName
-  )
+    message("************* Store connection details for ", dbms, " *************")
 
-  connectionDetailsFromKeyring <- retrieveConnectionDetails(
-    connectionDetailsReference = dbms,
-    keyringName = keyringName
-  )
+    # Verify that the connection details are valid
+    # by connecting to the DB
+    conn <- DatabaseConnector::connect(
+      connectionDetails
+    )
+    DatabaseConnector::disconnect(conn)
 
-  # Verify that the connection details retrieved
-  # allow for a connection to the DB
-  connFromKeyring <- DatabaseConnector::connect(
-    connectionDetailsFromKeyring
-  )
-  on.exit(DatabaseConnector::disconnect(connFromKeyring))
+    # Store the connection details in keyring
+    storeConnectionDetails(
+      connectionDetails = connectionDetails,
+      connectionDetailsReference = dbms,
+      keyringName = keyringName
+    )
+
+    connectionDetailsFromKeyring <- retrieveConnectionDetails(
+      connectionDetailsReference = dbms,
+      keyringName = keyringName
+    )
+
+    # Verify that the connection details retrieved
+    # allow for a connection to the DB
+    connFromKeyring <- DatabaseConnector::connect(
+      connectionDetailsFromKeyring
+    )
+    DatabaseConnector::disconnect(connFromKeyring)
+  }
 })

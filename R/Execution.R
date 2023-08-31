@@ -57,7 +57,7 @@ execute <- function(analysisSpecifications,
     )
     DatabaseConnector::assertTempEmulationSchemaSet(
       dbms = connectionDetails$dbms,
-      tempEmulationSchema = getOption("sqlRenderTempEmulationSchema")
+      tempEmulationSchema = executionSettings$tempEmulationSchema
     )
   }
   modules <- ensureAllModulesInstantiated(analysisSpecifications)

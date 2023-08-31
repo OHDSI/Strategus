@@ -1,5 +1,4 @@
 test_that("Test DatabaseMetaData error conditions", {
-  skip_if_not(dbms == "sqlite")
   skip_if_not_secret_service()
   # Run this test in isolation as it will make changes to the CDM schema.
   eunomiaConnectionDetails <- Eunomia::getEunomiaConnectionDetails()
@@ -18,22 +17,25 @@ test_that("Test DatabaseMetaData error conditions", {
     )
   }
 
-  on.exit(expr = {
-    # Put the DB back the way we found it
-    restoreTableSql <- "DROP TABLE IF EXISTS @cdm_table; ALTER TABLE @backup_table RENAME TO @cdm_table;"
-    for (i in 1:length(requiredTables)) {
-      DatabaseConnector::renderTranslateExecuteSql(
-        connection = connection,
-        sql = restoreTableSql,
-        progressBar = FALSE,
-        reportOverallTime = FALSE,
-        backup_table = paste0(requiredTables[i], "_bak"),
-        cdm_table = requiredTables[i]
-      )
-    }
-    DatabaseConnector::disconnect(connection)
-    unlink(eunomiaConnectionDetails$server, recursive = TRUE, force = TRUE)
-  })
+  withr::defer(
+    {
+      # Put the DB back the way we found it
+      restoreTableSql <- "DROP TABLE IF EXISTS @cdm_table; ALTER TABLE @backup_table RENAME TO @cdm_table;"
+      for (i in 1:length(requiredTables)) {
+        DatabaseConnector::renderTranslateExecuteSql(
+          connection = connection,
+          sql = restoreTableSql,
+          progressBar = FALSE,
+          reportOverallTime = FALSE,
+          backup_table = paste0(requiredTables[i], "_bak"),
+          cdm_table = requiredTables[i]
+        )
+      }
+      DatabaseConnector::disconnect(connection)
+      unlink(eunomiaConnectionDetails$server, recursive = TRUE, force = TRUE)
+    },
+    testthat::teardown_env()
+  )
 
   # Setup keyring for the test
   Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = keyringPassword)
