@@ -92,6 +92,8 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
+#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
+#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
 #' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
 #'                                          details from a secure local store.
 #' @param resultsDatabaseSchema      A schema where the results tables are stored
@@ -108,6 +110,8 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                                        workFolder,
                                        resultsFolder,
                                        minCellCount = 5,
+                                       integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
+                                       integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
                                        resultsConnectionDetailsReference = NULL,
                                        resultsDatabaseSchema = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
@@ -118,6 +122,8 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
+  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsConnectionDetailsReference, null.ok = TRUE, add = errorMessages)
   checkmate::assertCharacter(resultsDatabaseSchema, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
@@ -131,6 +137,8 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
     minCellCount = minCellCount,
+    integerAsNumeric = integerAsNumeric,
+    integer64AsNumeric = integer64AsNumeric,
     resultsConnectionDetailsReference = resultsConnectionDetailsReference,
     resultsDatabaseSchema = resultsDatabaseSchema
   )
@@ -147,6 +155,8 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
+#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
+#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -156,13 +166,17 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
                                            resultsDatabaseSchema,
                                            workFolder,
                                            resultsFolder,
-                                           minCellCount = 5) {
+                                           minCellCount = 5,
+                                           integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
+                                           integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsConnectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
+  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   executionSettings <- list(
@@ -170,7 +184,9 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
     resultsDatabaseSchema = resultsDatabaseSchema,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
-    minCellCount = minCellCount
+    minCellCount = minCellCount,
+    integerAsNumeric = integerAsNumeric,
+    integer64AsNumeric = integer64AsNumeric
   )
   class(executionSettings) <- c("ResultsExecutionSettings", "ExecutionSettings")
   return(executionSettings)
