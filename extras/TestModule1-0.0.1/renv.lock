@@ -109,13 +109,13 @@
     },
     "CohortMethod": {
       "Package": "CohortMethod",
-      "Version": "5.0.0",
+      "Version": "5.1.0",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "CohortMethod",
       "RemoteUsername": "ohdsi",
-      "RemoteRef": "v5.0.0"
+      "RemoteRef": "v5.1.0"
     },
     "CompQuadForm": {
       "Package": "CompQuadForm",
