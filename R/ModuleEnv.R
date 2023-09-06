@@ -69,27 +69,14 @@ withModuleRenv <- function(code,
 
   # Enforce attachment of Strategus from calling process - note one inside the renv
   if (useLocalStrategusLibrary) {
-    libPath <- file.path(find.package("Strategus"), "../")
-    script <- c(sprintf("library(Strategus, lib.loc = '%s')", libPath),
-                script)
+    script <- c(.getLocalLibraryScipt("Strategus"), script)
     # Adding Strategus dependencies to the script
-    libPath <- file.path(find.package("R6"), "../")
-    script <- c(
-      sprintf("library(R6, lib.loc = '%s')", libPath),
-      script
-    )
-    libPath <- file.path(find.package("CohortGenerator"), "../")
-    script <- c(sprintf("library(CohortGenerator, lib.loc = '%s')", libPath),
-                script)
-    libPath <- file.path(find.package("DatabaseConnector"), "../")
-    script <- c(sprintf("library(DatabaseConnector, lib.loc = '%s')", libPath),
-                script)
-    libPath <- file.path(find.package("keyring"), "../")
-    script <- c(sprintf("library(keyring, lib.loc = '%s')", libPath),
-                script)
-    libPath <- file.path(find.package("openssl"), "../")
-    script <- c(sprintf("library(openssl, lib.loc = '%s')", libPath),
-                script)
+    c(.getLocalLibraryScipt("R6"), script)
+    c(.getLocalLibraryScipt("CohortGenerator"), script)
+    c(.getLocalLibraryScipt("DatabaseConnector"), script)
+    c(.getLocalLibraryScipt("keyring"), script)
+    c(.getLocalLibraryScipt("openssl"), script)
+    c(.getLocalLibraryScipt("dplyr"), script)
   }
 
   # Write file and execute script inside an renv
@@ -103,4 +90,9 @@ withModuleRenv <- function(code,
     project = moduleFolder
   )
   return(invisible(NULL))
+}
+
+.getLocalLibraryScipt <- function(x) {
+  libPath <- file.path(find.package(x), "../")
+  sprintf("library(%s, lib.loc = '%s')", x, libPath)
 }
