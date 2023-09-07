@@ -1,4 +1,4 @@
-test_that("Run Eunomia study", {
+test_that("Run unit test study", {
   # NOTE: Need to set this in each test otherwise it goes out of scope
   renv:::renv_scope_envvars(RENV_PATHS_CACHE = renvCachePath)
 
@@ -7,66 +7,98 @@ test_that("Run Eunomia study", {
   createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
   on.exit(deleteKeyringForUnitTest())
 
-  # Using a named and secured keyring
-  Strategus::storeConnectionDetails(
-    connectionDetails = connectionDetails,
-    connectionDetailsReference = dbms,
-    keyringName = keyringName
-  )
-
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
-    fileName = system.file("testdata/analysisSpecification.json",
+    fileName = system.file("testdata/unitTestAnalysisSpecification.json",
       package = "Strategus"
     )
   )
 
-  # Create a unique set of cohort tables for this test run and
-  # ensure they are removed when complete
-  cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
   withr::defer(
     {
-      CohortGenerator::dropCohortStatsTables(
-        connectionDetails = connectionDetails,
-        cohortDatabaseSchema = workDatabaseSchema,
-        cohortTableNames = cohortTableNames,
-        dropCohortTable = TRUE
-      )
       unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
     },
     testthat::teardown_env()
   )
 
-  # Use this line to limit to only running the CohortGeneratorModule
-  # for testing purposes.
-  analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[-c(2:length(analysisSpecifications$moduleSpecifications))]
-  executionSettings <- createCdmExecutionSettings(
-    connectionDetailsReference = dbms,
-    workDatabaseSchema = workDatabaseSchema,
-    cdmDatabaseSchema = cdmDatabaseSchema,
-    cohortTableNames = cohortTableNames,
-    workFolder = file.path(tempDir, "EunomiaTestStudy/work_folder"),
-    resultsFolder = file.path(tempDir, "EunomiaTestStudy/results_folder"),
-    minCellCount = 5
-  )
+  for (i in 1:length(connectionDetailsList)) {
+    connectionDetails <- connectionDetailsList[[i]]$connectionDetails
+    dbms <- connectionDetailsList[[i]]$connectionDetails$dbms
+    workDatabaseSchema <- connectionDetailsList[[i]]$workDatabaseSchema
+    cdmDatabaseSchema <- connectionDetailsList[[i]]$cdmDatabaseSchema
+    tempEmulationSchema <- connectionDetailsList[[i]]$tempEmulationSchema
+    studyRootFolder <- file.path(tempDir, "EunomiaTestStudy", dbms)
+    workFolder <- file.path(studyRootFolder, "work_folder")
+    resultsFolder <- file.path(studyRootFolder, "results_folder")
+    scriptFolder <- file.path(studyRootFolder, "script_folder")
 
-  if (!dir.exists(file.path(tempDir, "EunomiaTestStudy"))) {
-    dir.create(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE)
+    message("************* Running Strategus on ", dbms, " *************")
+
+    # Using a named and secured keyring
+    Strategus::storeConnectionDetails(
+      connectionDetails = connectionDetails,
+      connectionDetailsReference = dbms,
+      keyringName = keyringName
+    )
+
+    resultsConnectionDetailsReference <- NULL
+    resultsDatabaseSchema <- NULL
+
+    if (dbms == "sqlite") {
+      resultsConnectionDetailsReference <- "result-store"
+      resultsDatabaseSchema <- "main"
+      Strategus::storeConnectionDetails(
+        connectionDetails,
+        resultsConnectionDetailsReference,
+        keyringName = keyringName
+      )
+    }
+
+    executionSettings <- createCdmExecutionSettings(
+      connectionDetailsReference = dbms,
+      workDatabaseSchema = workDatabaseSchema,
+      cdmDatabaseSchema = cdmDatabaseSchema,
+      tempEmulationSchema = tempEmulationSchema,
+      cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix)),
+      workFolder = workFolder,
+      resultsFolder = resultsFolder,
+      minCellCount = 5,
+      resultsDatabaseSchema = resultsDatabaseSchema,
+      resultsConnectionDetailsReference = resultsConnectionDetailsReference
+    )
+
+    if (!dir.exists(studyRootFolder)) {
+      dir.create(studyRootFolder, recursive = TRUE)
+    }
+    ParallelLogger::saveSettingsToJson(
+      object = executionSettings,
+      file.path(studyRootFolder, "eunomiaExecutionSettings.json")
+    )
+
+    executionSettings <- ParallelLogger::loadSettingsFromJson(
+      fileName = file.path(studyRootFolder, "eunomiaExecutionSettings.json")
+    )
+
+    if (dbms == "sqlite") {
+      resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+        resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+        resultsDatabaseSchema = resultsDatabaseSchema,
+        workFolder = workFolder,
+        resultsFolder = resultsFolder
+      )
+      Strategus::createResultDataModels(
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = resultsExecutionSettings,
+        keyringName = keyringName
+      )
+    }
+
+    Strategus::execute(
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings,
+      executionScriptFolder = scriptFolder,
+      keyringName = keyringName
+    )
+
+    expect_true(file.exists(file.path(resultsFolder, "TestModule1_1", "done")))
   }
-  ParallelLogger::saveSettingsToJson(
-    object = executionSettings,
-    file.path(tempDir, "EunomiaTestStudy/eunomiaExecutionSettings.json")
-  )
-
-  executionSettings <- ParallelLogger::loadSettingsFromJson(
-    fileName = file.path(tempDir, "EunomiaTestStudy/eunomiaExecutionSettings.json")
-  )
-
-  Strategus::execute(
-    analysisSpecifications = analysisSpecifications,
-    executionSettings = executionSettings,
-    executionScriptFolder = file.path(tempDir, "EunomiaTestStudy/script_folder"),
-    keyringName = keyringName
-  )
-
-  expect_true(file.exists(file.path(tempDir, "EunomiaTestStudy/results_folder/CohortGeneratorModule_1/done")))
 })

@@ -115,6 +115,32 @@ unlink("inst/doc/IntroductionToStrategus.tex")
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
 
+# Repackage the test module for unit testing
+# NOTE: This is only necessary when the TestModule
+# has been updated
+testModuleRootFolder <- "extras/TestModule1-0.0.1"
+targetModuleZipFile <- "TestModule1_0.0.1.zip"
+testModuleFilesToRemove <- c(
+  file.path(testModuleRootFolder, ".RData"),
+  file.path(testModuleRootFolder, ".Rhistory")
+)
+testModuleDirToRemove <- c(
+  file.path(testModuleRootFolder, ".Rproj.user"),
+  file.path(testModuleRootFolder, "renv/library")
+)
+unlink(testModuleFilesToRemove)
+unlink(testModuleDirToRemove, recursive = TRUE)
 
-
-
+oldwd <- getwd()
+setwd("extras")
+zip::zip(
+  zipfile = targetModuleZipFile,
+  files = list.files("TestModule1-0.0.1", all.files = TRUE, recursive = TRUE, include.dirs = TRUE, full.names = TRUE)
+)
+file.copy(
+  from = targetModuleZipFile,
+  to = file.path("../inst/testdata", targetModuleZipFile),
+  overwrite = TRUE
+)
+file.remove(targetModuleZipFile)
+setwd(oldwd)

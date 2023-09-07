@@ -24,18 +24,13 @@
 #' Execute analysis specifications.
 #'
 #' @template AnalysisSpecifications
-#' @param executionSettings       An object of type `ExecutionSettings` as created
-#'                                by [createCdmExecutionSettings()] or [createResultsExecutionSettings()].
+#' @template executionSettings
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
-#'
 #' @template keyringName
-#'
 #' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
 #'                                the same as the `executionScriptFolder` used in the run to restart.
-#'
-#'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified
 #' analyses.
@@ -62,7 +57,7 @@ execute <- function(analysisSpecifications,
     )
     DatabaseConnector::assertTempEmulationSchemaSet(
       dbms = connectionDetails$dbms,
-      tempEmulationSchema = getOption("sqlRenderTempEmulationSchema")
+      tempEmulationSchema = executionSettings$tempEmulationSchema
     )
   }
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
@@ -115,13 +110,12 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     moduleToTargetNames <- readRDS(moduleToTargetNamesFileName)
     dependencies <- readRDS(dependenciesFileName)
 
-    library(dplyr)
-    tar_option_set(packages = c('Strategus', 'keyring'), imports = c('Strategus', 'keyring'))
+    targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
     targetList <- list(
-      tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
+      targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
       # NOTE Execution settings could be mapped to many different cdms making re-execution across cdms much simpler
-      tar_target(executionSettings, readRDS(executionSettingsFileName)),
-      tar_target(keyringSettings, readRDS(keyringSettingsFileName))
+      targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
+      targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
     )
 
     # factory for producing module targets based on their dependencies
@@ -132,30 +126,28 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     for (i in 1:length(analysisSpecificationsLoad$moduleSpecifications)) {
       moduleSpecification <- analysisSpecificationsLoad$moduleSpecifications[[i]]
       targetName <- sprintf("%s_%d", moduleSpecification$module, i)
-      dependencyModules <- dependencies %>%
-        filter(.data$module == moduleSpecification$module) %>%
-        pull(.data$dependsOn)
+      dependencyModules <- dependencies[dependencies$module == moduleSpecification$module,]$dependsOn
+      dependencyTargetNames <- moduleToTargetNames[moduleToTargetNames$module %in% dependencyModules,]$targetName
 
-      dependencyTargetNames <- moduleToTargetNames %>%
-        filter(.data$module %in% dependencyModules) %>%
-        pull(.data$targetName)
+        # Use of tar_target_raw allows dynamic names
+        targetList[[length(targetList) + 1]] <- targets::tar_target_raw(targetName,
+          substitute(Strategus:::runModule(analysisSpecifications, keyringSettings, i, executionSettings),
+            env = list(i = i)
+          ),
+          deps = c("analysisSpecifications", "keyringSettings", "executionSettings", dependencyTargetNames)
+        )
 
-      # Use of tar_target_raw allows dynamic names
-      targetList[[length(targetList) + 1]] <- tar_target_raw(targetName,
-                                                             substitute(Strategus:::runModule(analysisSpecifications, keyringSettings, i, executionSettings),
-                                                                        env = list(i = i)),
-                                                             deps = c("analysisSpecifications", "keyringSettings", "executionSettings", dependencyTargetNames))
-
-      if (execResultsUpload) {
-        resultsTargetName <- paste0(targetName, "_results_upload")
-        targetList[[length(targetList) + 1]] <- tar_target_raw(resultsTargetName,
-                                                               substitute(Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, i, executionSettings),
-                                                                          env = list(i = i)),
-                                                               deps = c("analysisSpecifications", "keyringSettings", "executionSettings", targetName))
+        if (execResultsUpload) {
+          resultsTargetName <- paste0(targetName, "_results_upload")
+          targetList[[length(targetList) + 1]] <- targets::tar_target_raw(resultsTargetName,
+            substitute(Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, i, executionSettings),
+              env = list(i = i)
+            ),
+            deps = c("analysisSpecifications", "keyringSettings", "executionSettings", targetName)
+          )
+        }
       }
-    }
-
-    targetList
+      targetList
   }, script = fileName)
 
   #Store settings objects in the temp folder so they are available in targets

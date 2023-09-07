@@ -44,9 +44,11 @@
 #'
 #' @param code              code block to execute
 #' @param moduleFolder      Instantiated Strategus module folder
-#' @param injectVars         list of var names list(name=value) to replace (e.g. replace list(foo = "some string") will
+#' @param injectVars        list of var names list(name=value) to replace (e.g. replace list(foo = "some string") will
 #'                          find the pattern foo and replace it with the string some string - be careful!
-#' @param tempScriptFile    tempFile to write script to (ret
+#' @param tempScriptFile    tempFile to write script to
+#' @param useLocalStrategusLibrary Use the locally installed Strategus library? TRUE will use the Strategus
+#'                          installation from the calling R process.
 #' @param job               run as rstudio job
 #' @param processName       String name for process
 #' @returns NULL invisibly
@@ -67,22 +69,14 @@ withModuleRenv <- function(code,
 
   # Enforce attachment of Strategus from calling process - note one inside the renv
   if (useLocalStrategusLibrary) {
-    libPath <- file.path(find.package("Strategus"), "../")
-    script <- c(sprintf("library(Strategus, lib.loc = '%s')", libPath),
-                script)
+    script <- c(.getLocalLibraryScipt("Strategus"), script)
     # Adding Strategus dependencies to the script
-    libPath <- file.path(find.package("CohortGenerator"), "../")
-    script <- c(sprintf("library(CohortGenerator, lib.loc = '%s')", libPath),
-                script)
-    libPath <- file.path(find.package("DatabaseConnector"), "../")
-    script <- c(sprintf("library(DatabaseConnector, lib.loc = '%s')", libPath),
-                script)
-    libPath <- file.path(find.package("keyring"), "../")
-    script <- c(sprintf("library(keyring, lib.loc = '%s')", libPath),
-                script)
-    libPath <- file.path(find.package("openssl"), "../")
-    script <- c(sprintf("library(openssl, lib.loc = '%s')", libPath),
-                script)
+    c(.getLocalLibraryScipt("R6"), script)
+    c(.getLocalLibraryScipt("CohortGenerator"), script)
+    c(.getLocalLibraryScipt("DatabaseConnector"), script)
+    c(.getLocalLibraryScipt("keyring"), script)
+    c(.getLocalLibraryScipt("openssl"), script)
+    c(.getLocalLibraryScipt("dplyr"), script)
   }
 
   # Write file and execute script inside an renv
@@ -96,4 +90,9 @@ withModuleRenv <- function(code,
     project = moduleFolder
   )
   return(invisible(NULL))
+}
+
+.getLocalLibraryScipt <- function(x) {
+  libPath <- file.path(find.package(x), "../")
+  sprintf("library(%s, lib.loc = '%s')", x, libPath)
 }

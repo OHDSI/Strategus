@@ -2,7 +2,7 @@
 % Please edit documentation in R/ResultModelCreation.R
 \name{runSchemaCreation}
 \alias{runSchemaCreation}
-\title{Results upload callbacks for inserting results in to a database}
+\title{Create module(s) result data model}
 \usage{
 runSchemaCreation(
   analysisSpecifications,
@@ -12,6 +12,24 @@ runSchemaCreation(
   ...
 )
 }
+\arguments{
+\item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{keyringSettings}{The keyringSettings from the executionSettings context}
+
+\item{moduleIndex}{The index of the module in the analysis specification}
+
+\item{executionSettings}{An object of type \code{ExecutionSettings} as created
+by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+
+\item{...}{For future expansion}
+}
 \description{
-Results upload callbacks for inserting results in to a database
+This function will create the results data model for the modules in the
+\code{analysisSpecifications}. A module can implement its own results data model
+creation function by implementing the function \code{createDataModelSchema} in
+its Main.R. The default behavior is to use the \code{ResultsModelManager} to create
+the results data model based on the \code{resultsDataModelSpecification.csv} in the
+module's results folder.
 }

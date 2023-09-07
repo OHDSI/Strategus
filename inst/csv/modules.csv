@@ -1,9 +1,9 @@
 module,version,remote_repo,remote_username,module_type,main_package,main_package_tag
-CharacterizationModule,v0.3.1,github.com,OHDSI,cdm,Characterization,v0.1.1
-CohortDiagnosticsModule,v0.0.7,github.com,OHDSI,cdm,CohortDiagnostics,v3.1.2
-CohortGeneratorModule,v0.1.0,github.com,OHDSI,cdm,CohortGenerator,v0.8.0
-CohortIncidenceModule,v0.0.6,github.com,OHDSI,cdm,CohortIncidence,v3.1.2
-CohortMethodModule,v0.1.0,github.com,OHDSI,cdm,CohortMethod,74f017107e0cc1b740a2badc82879ab6ad291b23
-PatientLevelPredictionModule,v0.1.0,github.com,OHDSI,cdm,PatientLevelPrediction,v6.3.1
-SelfControlledCaseSeriesModule,v0.1.3,github.com,OHDSI,cdm,SelfControlledCaseSeries,15918616814b88137f82bf2aa9986e1dcdf39e74
-EvidenceSynthesisModule,v0.1.3,github.com,OHDSI,results,EvidenceSynthesis,v0.4.0
+CharacterizationModule,v0.4.0,github.com,OHDSI,cdm,Characterization,v0.1.1
+CohortDiagnosticsModule,v0.1.0,github.com,OHDSI,cdm,CohortDiagnostics,v3.2.3
+CohortGeneratorModule,v0.2.0,github.com,OHDSI,cdm,CohortGenerator,v0.8.0
+CohortIncidenceModule,v0.1.0,github.com,OHDSI,cdm,CohortIncidence,v3.1.5
+CohortMethodModule,v0.2.0,github.com,OHDSI,cdm,CohortMethod,v5.1.0
+PatientLevelPredictionModule,v0.2.0,github.com,OHDSI,cdm,PatientLevelPrediction,v6.3.4
+SelfControlledCaseSeriesModule,v0.2.0,github.com,OHDSI,cdm,SelfControlledCaseSeries,v4.2.0
+EvidenceSynthesisModule,v0.2.0,github.com,OHDSI,results,EvidenceSynthesis,v0.5.0

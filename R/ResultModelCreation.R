@@ -21,11 +21,13 @@
 #' If recreate is set to TRUE all existing data will be removed, otherwise
 #'
 #' @inheritParams execute
+#'
 #' @export
 createResultDataModels <- function(analysisSpecifications,
                                    executionSettings,
                                    executionScriptFolder = NULL,
-                                   keyringName = NULL) {
+                                   keyringName = NULL,
+                                   restart = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
   keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
@@ -57,26 +59,29 @@ createResultDataModels <- function(analysisSpecifications,
     ##
     analysisSpecificationsLoad <- readRDS(analysisSpecificationsFileName)
 
-    library(dplyr)
-    tar_option_set(packages = c('Strategus', 'keyring'), imports = c('Strategus', 'keyring'))
+    targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
     targetList <- list(
-      tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
-      tar_target(executionSettings, readRDS(executionSettingsFileName)),
-      tar_target(keyringSettings, readRDS(keyringSettingsFileName))
+      targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
+      targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
+      targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
     )
 
     for (i in 1:length(analysisSpecificationsLoad$moduleSpecifications)) {
       moduleSpecification <- analysisSpecificationsLoad$moduleSpecifications[[i]]
       targetName <- sprintf("%s_%d_schema_creation", moduleSpecification$module, i)
 
-      # Use of tar_target_raw allows dynamic names
-      targetList[[length(targetList) + 1]] <- tar_target_raw(targetName,
-                                                             substitute(Strategus:::runSchemaCreation(analysisSpecifications, keyringSettings, i, executionSettings),
-                                                                        env = list(i = i)),
-                                                             deps = c("analysisSpecifications", "keyringSettings", "executionSettings"))
-    }
-    targetList
-  }, script = script)
+        # Use of tar_target_raw allows dynamic names
+        targetList[[length(targetList) + 1]] <- targets::tar_target_raw(targetName,
+          substitute(Strategus:::runSchemaCreation(analysisSpecifications, keyringSettings, i, executionSettings),
+            env = list(i = i)
+          ),
+          deps = c("analysisSpecifications", "keyringSettings", "executionSettings")
+        )
+      }
+      targetList
+    },
+    script = script
+  )
 
   #Store settings objects in the temp folder so they are available in targets
   analysisSpecificationsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "analysisSpecifications.rds"))
@@ -113,7 +118,20 @@ createResultDataModels <- function(analysisSpecifications,
 }
 
 
-#' Results upload callbacks for inserting results in to a database
+#' Create module(s) result data model
+#' @description
+#' This function will create the results data model for the modules in the
+#' `analysisSpecifications`. A module can implement its own results data model
+#' creation function by implementing the function `createDataModelSchema` in
+#' its Main.R. The default behavior is to use the `ResultsModelManager` to create
+#' the results data model based on the `resultsDataModelSpecification.csv` in the
+#' module's results folder.
+#'
+#' @template AnalysisSpecifications
+#' @param keyringSettings The keyringSettings from the executionSettings context
+#' @param moduleIndex The index of the module in the analysis specification
+#' @template executionSettings
+#' @param ... For future expansion
 runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleIndex, executionSettings, ...) {
   checkmate::assert_multi_class(x = executionSettings, classes = c("ResultsExecutionSettings"))
   moduleSpecification <- analysisSpecifications$moduleSpecifications[[moduleIndex]]
@@ -158,7 +176,9 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
 
       getDataModelSpecifications <- function(...) {
         if (file.exists('resultsDataModelSpecification.csv')) {
-          res <- readr::read_csv('resultsDataModelSpecification.csv', show_col_types = FALSE)
+          res <- CohortGenerator::readCsv(
+            file = 'resultsDataModelSpecification.csv'
+          )
           return(res)
         }
         return(NULL)
@@ -195,12 +215,20 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
         writeLines('schema.created', doneFile)
       } else if (is.data.frame(specifications)) {
         # Export schema to readable location
-        readr::write_csv(specifications, dataModelExportPath)
+        CohortGenerator::writeCsv(
+          x = specifications,
+          file = dataModelExportPath,
+          warnOnCaseMismatch = FALSE
+        )
         writeLines('specifications.written', doneFile)
       } else {
-        warning('Module does not include data specifications file or createDataModelSchema function')
-        readr::write_csv(specifications, dataModelExportPath)
-        writeLines('specifications.not.written', doneFIle)
+        warning("Module does not include data specifications file or createDataModelSchema function")
+        CohortGenerator::writeCsv(
+          x = specifications,
+          file = dataModelExportPath,
+          warnOnCaseMismatch = FALSE
+        )
+        writeLines('specifications.not.written', doneFile)
       }
 
       ParallelLogger::unregisterLogger('DEFAULT_FILE_LOGGER', silent = TRUE)
