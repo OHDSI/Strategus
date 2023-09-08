@@ -6,4 +6,4 @@ CohortIncidenceModule,v0.1.0,github.com,OHDSI,cdm,CohortIncidence,v3.1.5
 CohortMethodModule,v0.2.0,github.com,OHDSI,cdm,CohortMethod,v5.1.0
 PatientLevelPredictionModule,v0.2.0,github.com,OHDSI,cdm,PatientLevelPrediction,v6.3.4
 SelfControlledCaseSeriesModule,v0.2.0,github.com,OHDSI,cdm,SelfControlledCaseSeries,v4.2.0
-EvidenceSynthesisModule,v0.2.0,github.com,OHDSI,results,EvidenceSynthesis,v0.5.0
+EvidenceSynthesisModule,v0.2.1,github.com,OHDSI,results,EvidenceSynthesis,v0.5.0
