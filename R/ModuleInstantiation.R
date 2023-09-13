@@ -191,25 +191,18 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
     stop(message)
   }
 
-  script <- paste(
-    c(
-      "renv::install(c('ParallelLogger', 'keyring'), prompt = FALSE)",
-      sprintf("ParallelLogger::addDefaultFileLogger(file.path('%s', 'moduleInitLog.txt'))", moduleFolder),
-      sprintf("ParallelLogger::addDefaultErrorReportLogger(fileName = file.path('%s', 'moduleInitErrorReport.txt'))", moduleFolder),
-      "renv::restore(prompt = FALSE)"
-     ),
-    collapse = "\n"
-  )
-  tempScriptFile <- tempfile(fileext = ".R")
-  fileConn <- file(tempScriptFile)
-  writeLines(script, fileConn)
-  close(fileConn)
-
-  renv::run(
-    script = tempScriptFile,
-    job = FALSE,
-    name = "Buidling renv library",
-    project = moduleFolder
+  withModuleRenv(
+    code = {
+      ParallelLogger::addDefaultFileLogger(
+        fileName = file.path(moduleFolder, 'moduleInitLog.txt')
+      )
+      ParallelLogger::addDefaultErrorReportLogger(
+        fileName = file.path(moduleFolder, 'moduleInitErrorReport.txt')
+      )
+      renv::restore(prompt = FALSE)
+    },
+    moduleFolder = moduleFolder,
+    injectVars = list(moduleFolder = moduleFolder)
   )
   success <- TRUE
 }

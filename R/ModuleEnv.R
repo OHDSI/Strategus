@@ -85,12 +85,13 @@ withModuleRenv <- function(code,
   if (useLocalStrategusLibrary) {
     script <- c(.getLocalLibraryScipt("Strategus"), script)
     # Adding Strategus dependencies to the script
-    c(.getLocalLibraryScipt("R6"), script)
-    c(.getLocalLibraryScipt("CohortGenerator"), script)
-    c(.getLocalLibraryScipt("DatabaseConnector"), script)
-    c(.getLocalLibraryScipt("keyring"), script)
-    c(.getLocalLibraryScipt("openssl"), script)
-    c(.getLocalLibraryScipt("dplyr"), script)
+    script <- c(.getLocalLibraryScipt("ParallelLogger"), script)
+    script <- c(.getLocalLibraryScipt("CohortGenerator"), script)
+    script <- c(.getLocalLibraryScipt("DatabaseConnector"), script)
+    script <- c(.getLocalLibraryScipt("keyring"), script)
+    script <- c(.getLocalLibraryScipt("openssl"), script)
+    script <- c(.getLocalLibraryScipt("dplyr"), script)
+    script <- c(.getLocalLibraryScipt("R6"), script)
   }
 
   # Write file and execute script inside an renv
