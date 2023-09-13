@@ -67,6 +67,20 @@ withModuleRenv <- function(code,
     script <- gsub(name, rep, script)
   }
 
+  # Attach renv options() from the calling environment to the renv::run context
+  # renv options are prefixed with "renv." as described in
+  # https://rstudio.github.io/renv/reference/config.html
+  envOptions <- options()
+  renvOptions <- envOptions[grepl("renv\\.", names(envOptions))]
+  if (length(renvOptions) > 0) {
+    for (i in 1:length(renvOptions)) {
+      script <- c(.copyOptionForScript(
+        optionName = names(renvOptions)[[i]],
+        optionValue = renvOptions[[i]]
+      ), script)
+    }
+  }
+
   # Enforce attachment of Strategus from calling process - note one inside the renv
   if (useLocalStrategusLibrary) {
     script <- c(.getLocalLibraryScipt("Strategus"), script)
@@ -95,4 +109,16 @@ withModuleRenv <- function(code,
 .getLocalLibraryScipt <- function(x) {
   libPath <- file.path(find.package(x), "../")
   sprintf("library(%s, lib.loc = '%s')", x, libPath)
+}
+
+.copyOptionForScript <- function(optionName, optionValue) {
+  if (is.logical(optionValue) || is.numeric(optionValue)) {
+    sprintf("options(%s = %s)", optionName, optionValue)
+  } else if (is.character(optionValue) && length(optionValue) == 1) {
+    sprintf("options(%s = '%s')", optionName, optionValue)
+  } else if (is.character(optionValue) && length(optionValue) > 1) {
+    sprintf("options(%s = c('%s'))", optionName, paste(optionValue, collapse = "','"))
+  } else {
+    paste0("# option = ", optionName, " - could not be passed to this file, likely because it is a function.")
+  }
 }
