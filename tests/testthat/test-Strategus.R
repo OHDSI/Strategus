@@ -43,7 +43,9 @@ test_that("Run unit test study", {
     resultsConnectionDetailsReference <- NULL
     resultsDatabaseSchema <- NULL
 
-    if (dbms == "sqlite") {
+    # Only run this code if we're testing on SQLite
+    # AND we're not running code coverage checks
+    if (dbms == "sqlite" && identical(tolower(Sys.getenv("R_COVR")), "false")) {
       resultsConnectionDetailsReference <- "result-store"
       resultsDatabaseSchema <- "main"
       Strategus::storeConnectionDetails(
