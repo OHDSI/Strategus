@@ -64,6 +64,8 @@ jobs:
           rtools-version: ${{ matrix.config.rtools }}
 
       - uses: r-lib/actions/setup-renv@v2
+        with:
+          bypass-cache: true
 
       - uses: r-lib/actions/setup-tinytex@v2
 
