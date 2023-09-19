@@ -45,12 +45,23 @@ test_that("Run unit test study", {
 
     # Only run this code if we're testing on SQLite
     # AND we're not running code coverage checks
-    if (dbms == "sqlite" && identical(tolower(Sys.getenv("R_COVR")), "false")) {
+    if (dbms == "sqlite" && !identical(tolower(Sys.getenv("R_COVR")), "true")) {
       resultsConnectionDetailsReference <- "result-store"
       resultsDatabaseSchema <- "main"
       Strategus::storeConnectionDetails(
         connectionDetails,
         resultsConnectionDetailsReference,
+        keyringName = keyringName
+      )
+      resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+        resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+        resultsDatabaseSchema = resultsDatabaseSchema,
+        workFolder = workFolder,
+        resultsFolder = resultsFolder
+      )
+      Strategus::createResultDataModels(
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = resultsExecutionSettings,
         keyringName = keyringName
       )
     }
@@ -79,20 +90,6 @@ test_that("Run unit test study", {
     executionSettings <- ParallelLogger::loadSettingsFromJson(
       fileName = file.path(studyRootFolder, "eunomiaExecutionSettings.json")
     )
-
-    if (dbms == "sqlite") {
-      resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
-        resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-        resultsDatabaseSchema = resultsDatabaseSchema,
-        workFolder = workFolder,
-        resultsFolder = resultsFolder
-      )
-      Strategus::createResultDataModels(
-        analysisSpecifications = analysisSpecifications,
-        executionSettings = resultsExecutionSettings,
-        keyringName = keyringName
-      )
-    }
 
     Strategus::execute(
       analysisSpecifications = analysisSpecifications,
