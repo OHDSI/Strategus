@@ -43,12 +43,24 @@ test_that("Run unit test study", {
     resultsConnectionDetailsReference <- NULL
     resultsDatabaseSchema <- NULL
 
+    # Only run this code if we're testing on SQLite
     if (dbms == "sqlite") {
       resultsConnectionDetailsReference <- "result-store"
       resultsDatabaseSchema <- "main"
       Strategus::storeConnectionDetails(
         connectionDetails,
         resultsConnectionDetailsReference,
+        keyringName = keyringName
+      )
+      resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+        resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+        resultsDatabaseSchema = resultsDatabaseSchema,
+        workFolder = workFolder,
+        resultsFolder = resultsFolder
+      )
+      Strategus::createResultDataModels(
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = resultsExecutionSettings,
         keyringName = keyringName
       )
     }
@@ -77,20 +89,6 @@ test_that("Run unit test study", {
     executionSettings <- ParallelLogger::loadSettingsFromJson(
       fileName = file.path(studyRootFolder, "eunomiaExecutionSettings.json")
     )
-
-    if (dbms == "sqlite") {
-      resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
-        resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-        resultsDatabaseSchema = resultsDatabaseSchema,
-        workFolder = workFolder,
-        resultsFolder = resultsFolder
-      )
-      Strategus::createResultDataModels(
-        analysisSpecifications = analysisSpecifications,
-        executionSettings = resultsExecutionSettings,
-        keyringName = keyringName
-      )
-    }
 
     Strategus::execute(
       analysisSpecifications = analysisSpecifications,
