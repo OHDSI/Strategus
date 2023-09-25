@@ -55,7 +55,7 @@ remotes::install_github("ohdsi/PatientLevelPrediction", ref = "v6.3.4")
 
 To start, we'll need to define cohorts and negative control outcomes to use in our example analysis specification. We've included the cohorts and negative control outcomes in the `Strategus` package for this example and the code below will load them for use when assembling the analysis specification.
 
-```{r, results='hide', eval=TRUE}
+```{r, results='hide', eval=FALSE}
 library(CohortGenerator)
 cohortDefinitionSet <- getCohortDefinitionSet(
   settingsFileName = "testdata/Cohorts.csv",
@@ -72,13 +72,13 @@ ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_s
 
 This is the list of cohort definitions we will use when assembling the analysis specification for Strategus.
 
-```{r eval=TRUE}
+```{r eval=FALSE}
 kable(cohortDefinitionSet[, c("cohortId", "cohortName")])
 ```
 
 And the negative control outcomes when performing empirical calibration.
 
-```{r eval=TRUE}
+```{r eval=FALSE}
 kable(ncoCohortSet)
 ```
 
