@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
                         <h4 data-toc-skip class="author">Anthony G.
 Sena</h4>
             
-            <h4 data-toc-skip class="date">2023-04-25</h4>
+            <h4 data-toc-skip class="date">2023-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/HEAD/vignettes/CreatingAnalysisSpecification.Rmd" class="external-link"><code>vignettes/CreatingAnalysisSpecification.Rmd</code></a></small>
       <div class="hidden name"><code>CreatingAnalysisSpecification.Rmd</code></div>
@@ -121,12 +121,12 @@ will install the necessary HADES packages for this vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install correct versions of HADES packages</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortGenerator"</span>, ref <span class="op">=</span> <span class="st">"v0.8.0"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortDiagnostics"</span>, ref <span class="op">=</span> <span class="st">"v3.1.2"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortDiagnostics"</span>, ref <span class="op">=</span> <span class="st">"v3.2.3"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/Characterization"</span>, ref <span class="op">=</span> <span class="st">"v0.1.1"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortIncidence"</span>, ref <span class="op">=</span> <span class="st">"v3.1.2"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortMethod"</span>, ref <span class="op">=</span> <span class="st">"74f017107e0cc1b740a2badc82879ab6ad291b23"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/SelfControlledCaseSeries"</span>, ref <span class="op">=</span> <span class="st">"15918616814b88137f82bf2aa9986e1dcdf39e74"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/PatientLevelPrediction"</span>, ref <span class="op">=</span> <span class="st">"v6.3.1"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortIncidence"</span>, ref <span class="op">=</span> <span class="st">"v3.1.5"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortMethod"</span>, ref <span class="op">=</span> <span class="st">"v5.1.0"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/SelfControlledCaseSeries"</span>, ref <span class="op">=</span> <span class="st">"v4.2.0"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/PatientLevelPrediction"</span>, ref <span class="op">=</span> <span class="st">"v6.3.4"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="cohorts-for-the-study">Cohorts for the study<a class="anchor" aria-label="anchor" href="#cohorts-for-the-study"></a>
@@ -154,10 +154,227 @@ the analysis specification.</p>
 the analysis specification for Strategus.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">kable</span><span class="op">(</span><span class="va">cohortDefinitionSet</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cohortId"</span>, <span class="st">"cohortName"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">cohortId</th>
+<th align="left">cohortName</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">Celecoxib</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">Diclofenac</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="left">GI bleed</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="left">Celecoxib age 30 or older</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="left">Diclofenac age 30 or older</td>
+</tr>
+</tbody>
+</table>
 <p>And the negative control outcomes when performing empirical
 calibration.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">kable</span><span class="op">(</span><span class="va">ncoCohortSet</span><span class="op">)</span></span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">cohortId</th>
+<th align="left">cohortName</th>
+<th align="right">outcomeConceptId</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">1001</td>
+<td align="left">Acute pancreatitis</td>
+<td align="right">199074</td>
+</tr>
+<tr class="even">
+<td align="right">1002</td>
+<td align="left">Alcohol abuse</td>
+<td align="right">433753</td>
+</tr>
+<tr class="odd">
+<td align="right">1003</td>
+<td align="left">Allergic rhinitis</td>
+<td align="right">257007</td>
+</tr>
+<tr class="even">
+<td align="right">1004</td>
+<td align="left">Amenorrhea</td>
+<td align="right">443800</td>
+</tr>
+<tr class="odd">
+<td align="right">1005</td>
+<td align="left">Bipolar disorder</td>
+<td align="right">436665</td>
+</tr>
+<tr class="even">
+<td align="right">1006</td>
+<td align="left">Candida infection of genital region</td>
+<td align="right">4084966</td>
+</tr>
+<tr class="odd">
+<td align="right">1007</td>
+<td align="left">Candidiasis of mouth</td>
+<td align="right">29735</td>
+</tr>
+<tr class="even">
+<td align="right">1008</td>
+<td align="left">Cardiomegaly</td>
+<td align="right">314658</td>
+</tr>
+<tr class="odd">
+<td align="right">1009</td>
+<td align="left">Carotid artery obstruction</td>
+<td align="right">4288310</td>
+</tr>
+<tr class="even">
+<td align="right">1010</td>
+<td align="left">Carpal tunnel syndrome</td>
+<td align="right">380094</td>
+</tr>
+<tr class="odd">
+<td align="right">1011</td>
+<td align="left">Chronic obstructive lung disease</td>
+<td align="right">255573</td>
+</tr>
+<tr class="even">
+<td align="right">1012</td>
+<td align="left">Conduct disorder</td>
+<td align="right">443617</td>
+</tr>
+<tr class="odd">
+<td align="right">1013</td>
+<td align="left">Dysplasia of cervix</td>
+<td align="right">192367</td>
+</tr>
+<tr class="even">
+<td align="right">1014</td>
+<td align="left">Gastrointestinal hemorrhage</td>
+<td align="right">192671</td>
+</tr>
+<tr class="odd">
+<td align="right">1015</td>
+<td align="left">Hirsutism</td>
+<td align="right">134718</td>
+</tr>
+<tr class="even">
+<td align="right">1016</td>
+<td align="left">Hydronephrosis</td>
+<td align="right">433811</td>
+</tr>
+<tr class="odd">
+<td align="right">1017</td>
+<td align="left">Hypersomnia</td>
+<td align="right">438134</td>
+</tr>
+<tr class="even">
+<td align="right">1018</td>
+<td align="left">Hypoglycemia</td>
+<td align="right">24609</td>
+</tr>
+<tr class="odd">
+<td align="right">1019</td>
+<td align="left">Infectious mononucleosis</td>
+<td align="right">437784</td>
+</tr>
+<tr class="even">
+<td align="right">1020</td>
+<td align="left">Ingrowing nail</td>
+<td align="right">139099</td>
+</tr>
+<tr class="odd">
+<td align="right">1021</td>
+<td align="left">Injury of hand</td>
+<td align="right">80004</td>
+</tr>
+<tr class="even">
+<td align="right">1022</td>
+<td align="left">Lipoma (clinical)</td>
+<td align="right">440358</td>
+</tr>
+<tr class="odd">
+<td align="right">1023</td>
+<td align="left">Lymphadenitis</td>
+<td align="right">316084</td>
+</tr>
+<tr class="even">
+<td align="right">1024</td>
+<td align="left">Metabolic syndrome X</td>
+<td align="right">436940</td>
+</tr>
+<tr class="odd">
+<td align="right">1025</td>
+<td align="left">Mitral valve disorder</td>
+<td align="right">319843</td>
+</tr>
+<tr class="even">
+<td align="right">1026</td>
+<td align="left">Obsessive-compulsive disorder</td>
+<td align="right">440374</td>
+</tr>
+<tr class="odd">
+<td align="right">1027</td>
+<td align="left">Ovarian failure</td>
+<td align="right">193739</td>
+</tr>
+<tr class="even">
+<td align="right">1028</td>
+<td align="left">Perforation of tympanic membrane</td>
+<td align="right">375292</td>
+</tr>
+<tr class="odd">
+<td align="right">1029</td>
+<td align="left">Peripheral venous insufficiency</td>
+<td align="right">321596</td>
+</tr>
+<tr class="even">
+<td align="right">1030</td>
+<td align="left">Posttraumatic stress disorder</td>
+<td align="right">436676</td>
+</tr>
+<tr class="odd">
+<td align="right">1031</td>
+<td align="left">Prostatitis</td>
+<td align="right">194997</td>
+</tr>
+<tr class="even">
+<td align="right">1032</td>
+<td align="left">Restless legs</td>
+<td align="right">73754</td>
+</tr>
+<tr class="odd">
+<td align="right">1033</td>
+<td align="left">Senile hyperkeratosis</td>
+<td align="right">141932</td>
+</tr>
+<tr class="even">
+<td align="right">1034</td>
+<td align="left">Sensorineural hearing loss</td>
+<td align="right">374366</td>
+</tr>
+<tr class="odd">
+<td align="right">1035</td>
+<td align="left">Sleep apnea</td>
+<td align="right">313459</td>
+</tr>
+<tr class="even">
+<td align="right">1036</td>
+<td align="left">Uterine leiomyoma</td>
+<td align="right">197236</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -217,7 +434,7 @@ cohort generation settings.</p>
 <code>cohortDiagnosticsModuleSpecifications</code> to run cohort
 diagnostics on the cohorts in the study.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/v0.0.7/SettingsFunctions.R"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/v0.1.0/SettingsFunctions.R"</span><span class="op">)</span></span>
 <span><span class="va">cohortDiagnosticsModuleSpecifications</span> <span class="op">&lt;-</span> <span class="fu">createCohortDiagnosticsModuleSpecifications</span><span class="op">(</span></span>
 <span>  runInclusionStatistics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  runIncludedSourceConcepts <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -238,7 +455,7 @@ diagnostics on the cohorts in the study.</p>
 <code>cohortIncidenceModuleSpecifications</code> to perform an incidence
 rate analysis for the target cohorts and outcome in this study.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.0.6/SettingsFunctions.R"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.2.0/SettingsFunctions.R"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/CohortIncidence" class="external-link">CohortIncidence</a></span><span class="op">)</span></span>
 <span><span class="va">targets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, name <span class="op">=</span> <span class="st">"Celecoxib"</span><span class="op">)</span>,</span>
@@ -281,7 +498,7 @@ rate analysis for the target cohorts and outcome in this study.</p>
 characterization analysis for the target cohorts and outcome in this
 study.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.3.1/SettingsFunctions.R"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.4.0/SettingsFunctions.R"</span><span class="op">)</span></span>
 <span><span class="va">characterizationModuleSpecifications</span> <span class="op">&lt;-</span> <span class="fu">createCharacterizationModuleSpecifications</span><span class="op">(</span></span>
 <span>  targetIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  outcomeIds <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -304,7 +521,7 @@ study.</p>
 cohort analysis for this study.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/CohortMethod" class="external-link">CohortMethod</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.1.0/SettingsFunctions.R"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.2.0/SettingsFunctions.R"</span><span class="op">)</span></span>
 <span><span class="va">negativeControlOutcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
 <span>  X <span class="op">=</span> <span class="va">ncoCohortSet</span><span class="op">$</span><span class="va">cohortId</span>,</span>
 <span>  FUN <span class="op">=</span> <span class="va">createOutcome</span>,</span>
@@ -407,7 +624,7 @@ cohort analysis for this study.</p>
 cohort analysis for this study.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/SelfControlledCaseSeries" class="external-link">SelfControlledCaseSeries</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.1.3/SettingsFunctions.R"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.2.0/SettingsFunctions.R"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Exposures-outcomes -----------------------------------------------------------</span></span>
 <span><span class="va">negativeControlOutcomeIds</span> <span class="op">&lt;-</span> <span class="va">ncoCohortSet</span><span class="op">$</span><span class="va">cohortId</span></span>
@@ -518,7 +735,7 @@ cohort analysis for this study.</p>
 <p>The following code creates the <code>plpModuleSpecifications</code>
 to perform a self-controlled case series analysis for this study.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.1.0/SettingsFunctions.R"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.2.0/SettingsFunctions.R"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">makeModelDesignSettings</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">targetId</span>, <span class="va">outcomeId</span>, <span class="va">popSettings</span>, <span class="va">covarSettings</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">PatientLevelPrediction</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/PatientLevelPrediction/reference/createModelDesign.html" class="external-link">createModelDesign</a></span><span class="op">(</span></span>
@@ -597,7 +814,7 @@ save it to the file system in JSON format.</p>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Martijn Schuemie, Anthony Sena.</p>
+<p>Developed by Martijn Schuemie, Anthony Sena, Jamie Gilbert.</p>
 </div>
 
 <div class="pkgdown">

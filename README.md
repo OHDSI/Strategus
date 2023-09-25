@@ -7,7 +7,7 @@ Strategus
 
 Introduction
 ============
-Strategus is an R package for coordinating and executing analytics using HADES modules.
+Strategus is an R package for coordinating and executing analytics using HADES modules. Please see the [Introduction To Strategus](https://ohdsi.github.io/Strategus/articles/IntroductionToStrategus.html) for more details.
 
 Features
 ========
@@ -21,11 +21,11 @@ Strategus is an R package.
 
 System Requirements
 ============
-Requires R (version 4.0.0 or higher). Installation on Windows requires [RTools](https://cran.r-project.org/bin/windows/Rtools/). Libraries used in Strategus require Java.
+Requires R (version 4.2.0 or higher). Installation on Windows requires [RTools](https://cran.r-project.org/bin/windows/Rtools/). Libraries used in Strategus require Java. Strategus requires you to setup your GitHub Personal Access Token as described [here](https://ohdsi.github.io/Hades/rSetup.html#GitHub_Personal_Access_Token)
 
 Installation
 =============
-1. See the instructions [here](https://ohdsi.github.io/Hades/rSetup.html) for configuring your R environment, including RTools and Java.
+1. See the instructions [here](https://ohdsi.github.io/Hades/rSetup.html) for configuring your R environment, including RTools, Java and your GitHub Personal Access Token.
 
 2. In R, use the following commands to download and install Strategus:
 

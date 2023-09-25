@@ -14,12 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.handleInjectVar <- function (x) {
+.handleInjectVar <- function(x) {
   hVar <- function(x) {
     if (is.character(x)) {
       return(sprintf('"%s"', x))
     } else {
-      return(sprintf('%s', x))
+      return(sprintf("%s", x))
     }
   }
 
