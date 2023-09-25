@@ -33,7 +33,15 @@ Installation
   install.packages("remotes")
   remotes::install_github("ohdsi/Strategus")
   ```
-  
+3. If using Linux, please refer to the [keyring Linux secret service setup](https://r-lib.github.io/keyring/index.html#linux) as this is required to execute studies using Strategus. In addition to those instructions, members of the OHDSI community have shared the following guidance:
+
+Run in a terminal the following before installing keyring:
+
+```bash
+sudo yum install libsodium libsodium-devel
+sudo yum install libsecret libsecret-devel
+sudo chmod 777 /home/idies/.config 
+```
 
 User Documentation
 ==================
