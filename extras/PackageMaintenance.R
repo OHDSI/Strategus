@@ -84,6 +84,7 @@ updateModuleVersionInfo()
 unlink("extras/Strategus.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/Strategus.pdf")
 
+dir.create("inst/doc")
 rmarkdown::render("vignettes/CreatingAnalysisSpecification.Rmd",
                   output_file = "../inst/doc/CreatingAnalysisSpecification.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",

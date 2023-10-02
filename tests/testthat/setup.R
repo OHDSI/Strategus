@@ -34,7 +34,7 @@ if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))
 
-tempDir <- tempfile() #"D:"
+tempDir <- tempfile() # "D:"
 tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")
@@ -79,11 +79,11 @@ connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
 )
 
 # PostgreSQL
-if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == ""
-      & Sys.getenv("CDM5_POSTGRESQL_PASSWORD") == ""
-      & Sys.getenv("CDM5_POSTGRESQL_SERVER") == ""
-      & Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA") == ""
-      & Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA") == "")) {
+if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == "" &
+  Sys.getenv("CDM5_POSTGRESQL_PASSWORD") == "" &
+  Sys.getenv("CDM5_POSTGRESQL_SERVER") == "" &
+  Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA") == "")) {
   DatabaseConnector::downloadJdbcDrivers("postgresql")
   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
     connectionDetails = DatabaseConnector::createConnectionDetails(
@@ -103,11 +103,11 @@ if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == ""
 }
 
 # Oracle
-if (!(Sys.getenv("CDM5_ORACLE_USER") == ""
-      & Sys.getenv("CDM5_ORACLE_PASSWORD") == ""
-      & Sys.getenv("CDM5_ORACLE_SERVER") == ""
-      & Sys.getenv("CDM5_ORACLE_CDM_SCHEMA") == ""
-      & Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA") == "")) {
+if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
+  Sys.getenv("CDM5_ORACLE_PASSWORD") == "" &
+  Sys.getenv("CDM5_ORACLE_SERVER") == "" &
+  Sys.getenv("CDM5_ORACLE_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA") == "")) {
   DatabaseConnector::downloadJdbcDrivers("oracle")
   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
     connectionDetails = DatabaseConnector::createConnectionDetails(
@@ -127,11 +127,11 @@ if (!(Sys.getenv("CDM5_ORACLE_USER") == ""
 }
 
 # RedShift
-if (!(Sys.getenv("CDM5_REDSHIFT_USER") == ""
-      & Sys.getenv("CDM5_REDSHIFT_PASSWORD") == ""
-      & Sys.getenv("CDM5_REDSHIFT_SERVER") == ""
-      & Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == ""
-      & Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
+if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
+  Sys.getenv("CDM5_REDSHIFT_PASSWORD") == "" &
+  Sys.getenv("CDM5_REDSHIFT_SERVER") == "" &
+  Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
   DatabaseConnector::downloadJdbcDrivers("redshift")
   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
     connectionDetails = DatabaseConnector::createConnectionDetails(
@@ -151,11 +151,11 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == ""
 }
 
 # SQL Server
-if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == ""
-      & Sys.getenv("CDM5_SQL_SERVER_PASSWORD") == ""
-      & Sys.getenv("CDM5_SQL_SERVER_SERVER") == ""
-      & Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA") == ""
-      & Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA") == "")) {
+if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_PASSWORD") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_SERVER") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA") == "")) {
   DatabaseConnector::downloadJdbcDrivers("sql server")
   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
     connectionDetails = DatabaseConnector::createConnectionDetails(

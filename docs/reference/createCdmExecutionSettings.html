@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -80,9 +80,14 @@
 <span>  <span class="va">workDatabaseSchema</span>,</span>
 <span>  <span class="va">cdmDatabaseSchema</span>,</span>
 <span>  cohortTableNames <span class="op">=</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortTableNames.html" class="external-link">getCohortTableNames</a></span><span class="op">(</span>cohortTable <span class="op">=</span> <span class="st">"cohort"</span><span class="op">)</span>,</span>
+<span>  tempEmulationSchema <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sqlRenderTempEmulationSchema"</span><span class="op">)</span>,</span>
 <span>  <span class="va">workFolder</span>,</span>
 <span>  <span class="va">resultsFolder</span>,</span>
-<span>  minCellCount <span class="op">=</span> <span class="fl">5</span></span>
+<span>  minCellCount <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  integerAsNumeric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"databaseConnectorIntegerAsNumeric"</span>, default <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  integer64AsNumeric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"databaseConnectorInteger64AsNumeric"</span>, default <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  resultsConnectionDetailsReference <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  resultsDatabaseSchema <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -109,6 +114,10 @@ connection details) will need to have read access to this database schema.</p></
 <code><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortTableNames.html" class="external-link">CohortGenerator::getCohortTableNames()</a></code> function.</p></dd>
 
 
+<dt>tempEmulationSchema</dt>
+<dd><p>Some database platforms like Oracle and Impala do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.</p></dd>
+
+
 <dt>workFolder</dt>
 <dd><p>A folder in the local file system where intermediate results can be written.</p></dd>
 
@@ -120,6 +129,23 @@ connection details) will need to have read access to this database schema.</p></
 <dt>minCellCount</dt>
 <dd><p>The minimum number of subjects contributing to a count before it can be included
 in results.</p></dd>
+
+
+<dt>integerAsNumeric</dt>
+<dd><p>Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native <code>Integer</code> class. Default is TRUE</p></dd>
+
+
+<dt>integer64AsNumeric</dt>
+<dd><p>Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using <code><a href="https://rdrr.io/pkg/bit64/man/bit64-package.html" class="external-link">bit64::integer64</a></code>.  Default is TRUE</p></dd>
+
+
+<dt>resultsConnectionDetailsReference</dt>
+<dd><p>A string that can be used to retrieve the results database connection
+details from a secure local store.</p></dd>
+
+
+<dt>resultsDatabaseSchema</dt>
+<dd><p>A schema where the results tables are stored</p></dd>
 
 </dl></div>
     <div id="value">
@@ -137,7 +163,7 @@ in results.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Martijn Schuemie, Anthony Sena.</p>
+  <p></p><p>Developed by Martijn Schuemie, Anthony Sena, Jamie Gilbert.</p>
 </div>
 
 <div class="pkgdown">

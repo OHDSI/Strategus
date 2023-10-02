@@ -2,7 +2,7 @@ module,version,remote_repo,remote_username,module_type,main_package,main_package
 CharacterizationModule,v0.4.0,github.com,OHDSI,cdm,Characterization,v0.1.1
 CohortDiagnosticsModule,v0.1.0,github.com,OHDSI,cdm,CohortDiagnostics,v3.2.3
 CohortGeneratorModule,v0.2.0,github.com,OHDSI,cdm,CohortGenerator,v0.8.0
-CohortIncidenceModule,v0.1.0,github.com,OHDSI,cdm,CohortIncidence,v3.1.5
+CohortIncidenceModule,v0.2.0,github.com,OHDSI,cdm,CohortIncidence,v3.2.0
 CohortMethodModule,v0.2.0,github.com,OHDSI,cdm,CohortMethod,v5.1.0
 PatientLevelPredictionModule,v0.2.0,github.com,OHDSI,cdm,PatientLevelPrediction,v6.3.4
 SelfControlledCaseSeriesModule,v0.2.0,github.com,OHDSI,cdm,SelfControlledCaseSeries,v4.2.0
