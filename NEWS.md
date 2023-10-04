@@ -1,3 +1,19 @@
+Strategus 0.1.0
+===============
+
+- Adds an initial implementation for uploading results to a results database (#72)
+- Robust handling of connection details via keyring (#74)
+- Ensures uniqueness of all CDM tables when gathering database metadata (#82)
+- `tempEmulationSchema` added to execution settings and passed properly to modules (#82)
+- Adding logging to module initalization to detect `renv` restore errors (#82)
+- Adopt HADES-wide lock file in latest versions of all modules (#83)
+- Use renv >= v1.0.0 for all modules and Strategus (#83)
+- Add GitHub unit tests for HADES adopted version (currently v4.2.3) and the latest R versions for all modules and Strategus. (#83)
+- Ensure all Strategus GitHub unit tests run on all operating systems and available OHDSI test database platforms (#83)
+- Use CDM v5.4 schemas for all unit tests (#85)
+- Allow for passing `renv`configuration options when running Strategus (#88)
+- Adds SQL for test cohorts to package (#1)
+
 Strategus 0.0.6
 ===============
 
