@@ -46,7 +46,13 @@
     <loc>/reference/createExecutionSettings.html</loc>
   </url>
   <url>
+    <loc>/reference/createResultDataModels.html</loc>
+  </url>
+  <url>
     <loc>/reference/createResultsExecutionSettings.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dot-nullList.html</loc>
   </url>
   <url>
     <loc>/reference/ensureAllModulesInstantiated.html</loc>
@@ -64,6 +70,9 @@
     <loc>/reference/retrieveConnectionDetails.html</loc>
   </url>
   <url>
+    <loc>/reference/runSchemaCreation.html</loc>
+  </url>
+  <url>
     <loc>/reference/storeConnectionDetails.html</loc>
   </url>
   <url>
@@ -71,5 +80,8 @@
   </url>
   <url>
     <loc>/reference/unlockKeyring.html</loc>
+  </url>
+  <url>
+    <loc>/reference/withModuleRenv.html</loc>
   </url>
 </urlset>

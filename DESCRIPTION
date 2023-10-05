@@ -1,11 +1,12 @@
 Package: Strategus
 Type: Package
 Title: Coordinating and Executing Analytics Using HADES Modules
-Version: 0.0.6
-Date: 2023-04-25
+Version: 0.1.0
+Date: 2023-10-04
 Authors@R: c(
-	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut", "cre")),
-	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut")),
+	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
+	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
+	person("Jamie", "Gilbert", role = c("aut")),
 	person("Observational Health Data Science and Informatics", role = c("cph"))
   )
 Maintainer: Anthony Sena <sena@ohdsi.org>
@@ -14,12 +15,12 @@ License: Apache License 2.0
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
-	R (>= 4.0.0),
-	CohortGenerator (>= 0.7.0),
-	DatabaseConnector (>= 5.1.0)
+	R (>= 4.2.0),
+	CohortGenerator (>= 0.8.0),
+	DatabaseConnector (>= 6.2.3)
 Imports:
   targets,
-  renv (>= 0.15.5),
+  renv (>= 1.0.0),
   ParallelLogger (>= 3.1.0),
   dplyr,
   checkmate,
@@ -30,6 +31,7 @@ Imports:
   digest,
   methods,
   tibble,
+  ResultModelManager (>= 0.3.0),
   SqlRender (>= 1.11.0)
 Suggests:
   testthat (>= 3.0.0),
@@ -40,6 +42,7 @@ Suggests:
   withr
 Remotes:
   ohdsi/CohortGenerator,
+  ohdsi/ResultModelManager,
   ohdsi/Eunomia
 VignetteBuilder: knitr
 NeedsCompilation: no

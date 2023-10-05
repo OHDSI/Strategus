@@ -1,0 +1,3 @@
+table_name,column_name,data_type,is_required,primary_key,min_cell_count,description
+unit_test,codeset_id,bigint,Yes,Yes,No,The codeset id
+unit_test,concept_id,bigint,Yes,Yes,No,The concept id

@@ -87,10 +87,16 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' @param cohortTableNames           An object identifying the various cohort table names that will be created in the
 #'                                   `workDatabaseSchema`. This object can be created using the
 #'                                   [CohortGenerator::getCohortTableNames()] function.
+#' @param tempEmulationSchema        Some database platforms like Oracle and Impala do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
+#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
+#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
+#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
+#'                                          details from a secure local store.
+#' @param resultsDatabaseSchema      A schema where the results tables are stored
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -100,9 +106,14 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                                        workDatabaseSchema,
                                        cdmDatabaseSchema,
                                        cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
+                                       tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
                                        workFolder,
                                        resultsFolder,
-                                       minCellCount = 5) {
+                                       minCellCount = 5,
+                                       integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
+                                       integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
+                                       resultsConnectionDetailsReference = NULL,
+                                       resultsDatabaseSchema = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
@@ -111,6 +122,10 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
+  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsConnectionDetailsReference, null.ok = TRUE, add = errorMessages)
+  checkmate::assertCharacter(resultsDatabaseSchema, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   executionSettings <- list(
@@ -118,9 +133,14 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
     workDatabaseSchema = workDatabaseSchema,
     cdmDatabaseSchema = cdmDatabaseSchema,
     cohortTableNames = cohortTableNames,
+    tempEmulationSchema = tempEmulationSchema,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
-    minCellCount = minCellCount
+    minCellCount = minCellCount,
+    integerAsNumeric = integerAsNumeric,
+    integer64AsNumeric = integer64AsNumeric,
+    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
+    resultsDatabaseSchema = resultsDatabaseSchema
   )
   class(executionSettings) <- c("CdmExecutionSettings", "ExecutionSettings")
   return(executionSettings)
@@ -135,6 +155,8 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
+#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
+#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -144,13 +166,17 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
                                            resultsDatabaseSchema,
                                            workFolder,
                                            resultsFolder,
-                                           minCellCount = 5) {
+                                           minCellCount = 5,
+                                           integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
+                                           integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsConnectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
+  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   executionSettings <- list(
@@ -158,7 +184,9 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
     resultsDatabaseSchema = resultsDatabaseSchema,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
-    minCellCount = minCellCount
+    minCellCount = minCellCount,
+    integerAsNumeric = integerAsNumeric,
+    integer64AsNumeric = integer64AsNumeric
   )
   class(executionSettings) <- c("ResultsExecutionSettings", "ExecutionSettings")
   return(executionSettings)
@@ -205,7 +233,7 @@ storeConnectionDetails <- function(connectionDetails, connectionDetailsReference
     if (is.function(connectionDetails[[i]])) {
       detail <- connectionDetails[[i]]()
       if (is.null(detail)) {
-        connectionDetails[[i]] <- ""
+        connectionDetails[[i]] <- .nullList() # Fixes Issue #74
       } else {
         connectionDetails[[i]] <- connectionDetails[[i]]()
       }
@@ -246,7 +274,21 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
 
   connectionDetails <- keyring::key_get(connectionDetailsReference, keyring = keyringName)
   connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
-  connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetails)
+
+  # Ensure that NA values are converted to NULL prior to calling
+  # DatabaseConnector. To do this, we'll construct a new connectionDetails
+  # list from keyring where the connectionDetails are NOT NA. This will
+  # allow for calling DatabaseConnector::createConnectionDetails with
+  # NULL values where NAs are present in the serialized version of the
+  # connectionDetails from keyring.
+  connectionDetailsConstructedFromKeyring <- list()
+  for (i in 1:length(connectionDetails)) {
+    if (isFALSE(is.na(connectionDetails[[i]]))) {
+      connectionDetailsConstructedFromKeyring[names(connectionDetails)[i]] <- connectionDetails[[i]]
+    }
+  }
+
+  connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetailsConstructedFromKeyring)
 
   if (keyringLocked) {
     keyring::keyring_lock(keyring = keyringName)
@@ -311,4 +353,11 @@ unlockKeyring <- function(keyringName) {
   } else {
     return(TRUE)
   }
+}
+
+#' Used when serializing connection details to retain NULL values
+#'
+#' @keywords internal
+.nullList <- function() {
+  invisible(list(NULL))
 }

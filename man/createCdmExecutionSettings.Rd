@@ -9,9 +9,14 @@ createCdmExecutionSettings(
   workDatabaseSchema,
   cdmDatabaseSchema,
   cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
+  tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
   workFolder,
   resultsFolder,
-  minCellCount = 5
+  minCellCount = 5,
+  integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
+  integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
+  resultsConnectionDetailsReference = NULL,
+  resultsDatabaseSchema = NULL
 )
 }
 \arguments{
@@ -28,12 +33,23 @@ connection details) will need to have read access to this database schema.}
 \code{workDatabaseSchema}. This object can be created using the
 \code{\link[CohortGenerator:getCohortTableNames]{CohortGenerator::getCohortTableNames()}} function.}
 
+\item{tempEmulationSchema}{Some database platforms like Oracle and Impala do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.}
+
 \item{workFolder}{A folder in the local file system where intermediate results can be written.}
 
 \item{resultsFolder}{A folder in the local file system where the module output will be written.}
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included
 in results.}
+
+\item{integerAsNumeric}{Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native \code{Integer} class. Default is TRUE}
+
+\item{integer64AsNumeric}{Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using \code{bit64::integer64}.  Default is TRUE}
+
+\item{resultsConnectionDetailsReference}{A string that can be used to retrieve the results database connection
+details from a secure local store.}
+
+\item{resultsDatabaseSchema}{A schema where the results tables are stored}
 }
 \value{
 An object of type \code{ExecutionSettings}.

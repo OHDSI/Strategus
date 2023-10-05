@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -70,6 +70,22 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.0" id="strategus-010">Strategus 0.1.0<a class="anchor" aria-label="anchor" href="#strategus-010"></a></h2>
+<ul><li>Adds an initial implementation for uploading results to a results database (<a href="https://github.com/OHDSI/Strategus/issues/72" class="external-link">#72</a>)</li>
+<li>Robust handling of connection details via keyring (<a href="https://github.com/OHDSI/Strategus/issues/74" class="external-link">#74</a>)</li>
+<li>Ensures uniqueness of all CDM tables when gathering database metadata (<a href="https://github.com/OHDSI/Strategus/issues/82" class="external-link">#82</a>)</li>
+<li>
+<code>tempEmulationSchema</code> added to execution settings and passed properly to modules (<a href="https://github.com/OHDSI/Strategus/issues/82" class="external-link">#82</a>)</li>
+<li>Adding logging to module initalization to detect <code>renv</code> restore errors (<a href="https://github.com/OHDSI/Strategus/issues/82" class="external-link">#82</a>)</li>
+<li>Adopt HADES-wide lock file in latest versions of all modules (<a href="https://github.com/OHDSI/Strategus/issues/83" class="external-link">#83</a>)</li>
+<li>Use renv &gt;= v1.0.0 for all modules and Strategus (<a href="https://github.com/OHDSI/Strategus/issues/83" class="external-link">#83</a>)</li>
+<li>Add GitHub unit tests for HADES adopted version (currently v4.2.3) and the latest R versions for all modules and Strategus. (<a href="https://github.com/OHDSI/Strategus/issues/83" class="external-link">#83</a>)</li>
+<li>Ensure all Strategus GitHub unit tests run on all operating systems and available OHDSI test database platforms (<a href="https://github.com/OHDSI/Strategus/issues/83" class="external-link">#83</a>)</li>
+<li>Use CDM v5.4 schemas for all unit tests (<a href="https://github.com/OHDSI/Strategus/issues/85" class="external-link">#85</a>)</li>
+<li>Allow for passing <code>renv</code>configuration options when running Strategus (<a href="https://github.com/OHDSI/Strategus/issues/88" class="external-link">#88</a>)</li>
+<li>Adds SQL for test cohorts to package (<a href="https://github.com/OHDSI/Strategus/issues/1" class="external-link">#1</a>)</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.6" id="strategus-006">Strategus 0.0.6<a class="anchor" aria-label="anchor" href="#strategus-006"></a></h2>
 <ul><li>Update SCCS module reference <code>inst/testdata/analysisSpecification.json</code>
 </li>
@@ -115,7 +131,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Martijn Schuemie, Anthony Sena.</p>
+  <p></p><p>Developed by Martijn Schuemie, Anthony Sena, Jamie Gilbert.</p>
 </div>
 
 <div class="pkgdown">

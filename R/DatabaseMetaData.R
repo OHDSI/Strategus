@@ -42,7 +42,11 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
     connection = connection,
     databaseSchema = executionSettings$cdmDatabaseSchema
   )
-  cdmTableList <- tolower(cdmTableList)
+  cdmTableList <- unique(tolower(cdmTableList))
+
+  if (length(cdmTableList) == 0) {
+    stop(sprintf("FATAL ERROR: No tables found in your OMOP CDM. Please confirm you are using the proper connection information, in particular the CDM schema name."))
+  }
 
   if (!length(cdmTableList[which(x = cdmTableList %in% requiredTables)]) == length(requiredTables)) {
     missingCdmTables <- requiredTables[!(requiredTables %in% cdmTableList)]

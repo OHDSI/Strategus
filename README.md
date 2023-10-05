@@ -7,7 +7,7 @@ Strategus
 
 Introduction
 ============
-Strategus is an R package for coordinating and executing analytics using HADES modules.
+Strategus is an R package for coordinating and executing analytics using HADES modules. Please see the [Introduction To Strategus](https://ohdsi.github.io/Strategus/articles/IntroductionToStrategus.html) for more details.
 
 Features
 ========
@@ -21,11 +21,11 @@ Strategus is an R package.
 
 System Requirements
 ============
-Requires R (version 4.0.0 or higher). Installation on Windows requires [RTools](https://cran.r-project.org/bin/windows/Rtools/). Libraries used in Strategus require Java.
+Requires R (version 4.2.0 or higher). Installation on Windows requires [RTools](https://cran.r-project.org/bin/windows/Rtools/). Libraries used in Strategus require Java. Strategus requires you to setup your GitHub Personal Access Token as described [here](https://ohdsi.github.io/Hades/rSetup.html#GitHub_Personal_Access_Token)
 
 Installation
 =============
-1. See the instructions [here](https://ohdsi.github.io/Hades/rSetup.html) for configuring your R environment, including RTools and Java.
+1. See the instructions [here](https://ohdsi.github.io/Hades/rSetup.html) for configuring your R environment, including RTools, Java and your GitHub Personal Access Token.
 
 2. In R, use the following commands to download and install Strategus:
 
@@ -33,7 +33,15 @@ Installation
   install.packages("remotes")
   remotes::install_github("ohdsi/Strategus")
   ```
-  
+3. If using Linux, please refer to the [keyring Linux secret service setup](https://r-lib.github.io/keyring/index.html#linux) as this is required to execute studies using Strategus. In addition to those instructions, members of the OHDSI community have shared the following guidance:
+
+Run in a terminal the following before installing keyring:
+
+```bash
+sudo yum install libsodium libsodium-devel
+sudo yum install libsecret libsecret-devel
+sudo chmod 777 /home/idies/.config 
+```
 
 User Documentation
 ==================
