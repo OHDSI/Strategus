@@ -1,7 +1,7 @@
 Strategus
 =========
 
-[![Build Status](https://github.com/OHDSI/Strategus/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/Strategus/actions?query=workflow%3AR-CMD-check)
+[![Build Status](https://github.com/OHDSI/Strategus/actions/workflows/R_CMD_check_Hades.yaml/badge.svg?branch=main)](https://github.com/OHDSI/Strategus/actions/workflows/R_CMD_check_Hades.yaml/badge.svg?branch=main)
 [![codecov.io](https://codecov.io/github/OHDSI/Strategus/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Strategus?branch=main)
 
 
