@@ -39,7 +39,9 @@ Suggests:
   knitr,
   rmarkdown,
   Eunomia,
-  withr
+  withr,
+  getPass,
+  cli
 Remotes:
   ohdsi/CohortGenerator,
   ohdsi/ResultModelManager,
