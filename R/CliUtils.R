@@ -50,12 +50,16 @@ appendToRenviron <- function(varName, value, environFile = "~/.Renviron") {
 #'                                      in strategus executions to reference your database.
 #' @param connectionDetails             (optional) connectionDetails object to store in keyring. If not set user will be
 #'                                      prompted for one.
-createStrategusKeyring <- function(keyringName = "HowOften",
-                                   connectionDetailsReference = 'myDatasourceKey',
+createStrategusKeyring <- function(keyringName,
+                                   connectionDetailsReference,
                                    connectionDetails = NULL) {
   if (!interactive()) {
     stop("Requires interactive session")
   }
+
+  checkmate::assertString(keyringName)
+  checkmate::assertString(connectionDetailsReference)
+  checkmate::assertClass(connectionDetails, "ConnectionDetails", null.ok = TRUE)
 
   # These packages are optional for this wizard
   requiredPackages <- c("keyring", "cli", "getPass")
@@ -106,7 +110,9 @@ createStrategusKeyring <- function(keyringName = "HowOften",
   cli::cli_alert_info("Creating file {tempconnectionFile} for Database credentials - this file will be automaticaly removed when completed and the settings saved securly")
   on.exit(unlink(tempconnectionFile, force = TRUE))
 
-  rscript <- "# Enter your database connection values here and press save
+  ## These lines will be converted to a string. Substitue is used for readability only
+  rscript <- substitute({
+# Enter your database connection values here and press save
 # the connection will be tested
 connectionDetails <-
   DatabaseConnector::createConnectionDetails(
@@ -119,8 +125,8 @@ connectionDetails <-
     connectionString = NULL,
     pathToDriver = Sys.getenv('DATABASECONNECTOR_JAR_FOLDER')
   )
-"
-
+  })
+  rscript <- as.character(rscript)[-1]
   writeLines(rscript, con = tempconnectionFile)
   connectionValid <- FALSE
 
@@ -171,23 +177,19 @@ connectionDetails <-
   allKeyrings <- keyring::keyring_list()
   if (keyringName %in% allKeyrings$keyring) {
     if (keyring::keyring_is_locked(keyring = keyringName)) {
-      keyring::keyring_unlock(keyring = keyringName, password = keyringPassword)
+      tryCatch(
+      {
+        keyring::keyring_unlock(keyring = keyringName, password = keyringPassword)
+      }, function(error) {
+        cli::cli_alert_warning("STRATEGUS_KEYRING_PASSWORD value did not unlock keyring.")
+        cli::cli_alert(message)
+      })
     }
-    # Delete all keys from the keyring so we can delete it
-    message(paste0("Delete existing keyring: ", keyringName))
-    keys <- keyring::key_list(keyring = keyringName)
-    if (nrow(keys) > 0) {
-      for (i in 1:nrow(keys)) {
-        keyring::key_delete(keys$service[i], keyring = keyringName)
-      }
-    }
-    keyring::keyring_delete(keyring = keyringName)
+  } else {
+    keyring::keyring_create(keyring = keyringName, password = keyringPassword)
   }
-
-  keyring::keyring_create(keyring = keyringName, password = keyringPassword)
-
   # excecute this for each connectionDetails/ConnectionDetailsReference you are going to use
-  Strategus::storeConnectionDetails(
+  storeConnectionDetails(
     connectionDetails = connectionDetails,
     connectionDetailsReference = connectionDetailsReference,
     keyringName = keyringName
