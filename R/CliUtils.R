@@ -43,15 +43,16 @@ appendToRenviron <- function(varName, value, environFile = "~/.Renviron") {
 #' This will perform the required setup for secure credentials inside a study.
 #'
 #' Creates a system wide keyring password if not already present.
-#' Adds connectionDetails to
+#' Adds connectionDetails to it.
 #' @export
 #' @param keyringName                   string name for keyring on system to store credentials inside of
-#' @param connectionDetailsReference    string reference name for connection details e.g. "myCdmName". This will be used
-#'                                      in strategus executions to reference your database.
+#' @param connectionDetailsReference    string reference name for connection details e.g. "defautCdm". This will be used
+#'                                      in strategus executions to reference your database. Connection details stored for this
+#'                                      will be overriden if they already exist.
 #' @param connectionDetails             (optional) connectionDetails object to store in keyring. If not set user will be
 #'                                      prompted for one.
 createStrategusKeyring <- function(keyringName,
-                                   connectionDetailsReference,
+                                   connectionDetailsReference = "defautCdm",
                                    connectionDetails = NULL) {
   if (!interactive()) {
     stop("Requires interactive session")
