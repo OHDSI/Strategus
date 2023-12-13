@@ -355,6 +355,15 @@ unlockKeyring <- function(keyringName) {
   }
 }
 
+#' @keywords internal
+.checkModuleFolderSetting <- function(x) {
+  if (length(x) == 0 || x == "") {
+    return(paste0("INSTANTIATED_MODULES_FOLDER environment variable has not been set. INSTANTIATED_MODULES_FOLDER must be set using Sys.setenv(INSTANTIATED_MODULES_FOLDER = \"/somepath\")"))
+  } else {
+    return(TRUE)
+  }
+}
+
 #' Used when serializing connection details to retain NULL values
 #'
 #' @keywords internal

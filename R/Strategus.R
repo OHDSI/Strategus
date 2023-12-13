@@ -26,3 +26,4 @@ NULL
 
 # Add custom asssertions
 assertKeyringPassword <- checkmate::makeAssertionFunction(.checkKeyringPasswordSet)
+assertModulesFolderSetting <- checkmate::makeAssertionFunction(.checkModuleFolderSetting)

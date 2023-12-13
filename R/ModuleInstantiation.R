@@ -73,7 +73,205 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
     stop(message)
   }
 
+  # Verify all modules are properly installed
+  moduleInstallStatus <- list()
+  for (i in 1:nrow(modules)) {
+    status <- verifyModuleInstallation(
+      module = modules$module[i],
+      version = modules$version[i]
+    )
+    moduleInstallStatus <- append(status, moduleInstallStatus)
+  }
+  attr(modules, 'moduleInstallStatus') <- moduleInstallStatus
+
   return(modules)
+}
+
+
+#' Verify a module is properly installed
+#'
+#' @description
+#' In some instances a module may fail to instantiate and install due to problems
+#' when calling renv::restore for the module's renv.lock file. This function
+#' will allow you to surface inconsistencies between the module renv.lock file
+#' and the module's renv project library. This function will check to that a
+#' module has been properly installed using internal functions of the `renv`
+#' package. If a module is verified to work via this function, the hash of
+#' the module's renv.lock file will be written to a text file in the module
+#' directory to indicate that it is ready for use. This will allow subsequent
+#' calls to work faster since the initial verification process can take some
+#' time.It is possible to re-run the verification of a module
+#' by using the `forceVerification` parameter.
+#'
+#' To fix issues with a module, you will need to open the module's .Rproj in
+#' RStudio instance and debug the issues when calling renv::restore().
+#'
+#' @param module The name of the module to verify (i.e. "CohortGeneratorModule")
+#'
+#' @param version The version of the module to verify (i.e. "0.2.1")
+#'
+#' @param forceVerification When set to TRUE, the verification process is forced
+#' to re-evaluate if the module is properly installed. The default is FALSE
+#' since if the module is successfully validated by this function, it will cache
+#' the hash value of the module's renv.lock file in the file system so it can
+#' by-pass running this check every time.
+#'
+#' @return
+#' A list with the output of the consistency check
+#'
+#' @export
+verifyModuleInstallation <- function(module, version, forceVerification = FALSE) {
+  # Internal helper function
+  verifyModuleInstallationReturnValue <- function(moduleFolder, moduleInstalled, issues = NULL) {
+    returnVal <- list(
+      moduleFolder = moduleFolder,
+      moduleInstalled = moduleInstalled,
+      issues = issues
+    )
+    return(returnVal)
+  }
+
+  moduleFolder <- getModuleFolder(module, version)
+  if (!dir.exists(moduleFolder)) {
+    warn("Module ", module, ", Version: ", version, " not found at: ", moduleFolder, ". This means the module was never installed.")
+    return(
+      verifyModuleInstallationReturnValue(
+        moduleFolder = moduleFolder,
+        moduleInstalled = FALSE
+        )
+    )
+  }
+
+  message("Verifying module: ", module, ", (", version, ") at ", moduleFolder, "...", appendLF = F)
+
+  moduleStatusFileName <- "moduleStatus.txt"
+  renvLockFileName <- "renv.lock"
+
+  # If the lock file doesn't exist, we're not sure if we're dealing with a module.
+  if (!file.exists(file.path(moduleFolder, renvLockFileName))) {
+    message("ERROR - renv.lock file missing.")
+    return(
+      verifyModuleInstallationReturnValue(
+        moduleFolder = moduleFolder,
+        moduleInstalled = FALSE
+      )
+    )
+  }
+
+  # Check to see if we've already performed the verification by looking at the
+  # moduleStatus.txt file to see if the md5 in that file matches the one
+  # created by hashing the renv.lock file
+  lockfileContents <- ParallelLogger::loadSettingsFromJson(
+    fileName = file.path(moduleFolder, renvLockFileName)
+  )
+  lockfileHash <- digest::digest(
+    object = lockfileContents,
+    algo = "md5"
+  )
+  if (!forceVerification && file.exists(file.path(moduleFolder, moduleStatusFileName))) {
+    lockfileHashFromModuleStatusFile <- SqlRender::readSql(
+      sourceFile = file.path(moduleFolder, moduleStatusFileName)
+    )
+
+    # If the values match, the module is installed correctly
+    # return and exit
+    if (lockfileHashFromModuleStatusFile == lockfileHash) {
+      message("MODULE READY!")
+      return(
+        verifyModuleInstallationReturnValue(
+          moduleFolder = moduleFolder,
+          moduleInstalled = TRUE
+          )
+      )
+    }
+  }
+
+
+  # Now perform the consistency check to verify that the renv::restore()
+  # process executed successfully. We must do this in the module's context
+  Strategus:::withModuleRenv(
+    code = {
+      # Start by turning off verbose output to hide renv output
+      verboseOption <- getOption("renv.verbose")
+      options(renv.verbose = FALSE)
+      on.exit(options(renv.verbose = verboseOption))
+
+      # Get the renv project status and then identify the packages used
+      # in the project to determine if there were issues when restoring
+      # the project from the renv.lock file.
+      projectStatus <- renv::status()
+
+      # Get the packages in the project - adapted from
+      # https://github.com/rstudio/renv/blob/v1.0.3/R/status.R
+      project <- renv:::renv_project_resolve()
+      libpaths <- renv:::renv_libpaths_resolve()
+      dependencies <- renv:::renv_snapshot_dependencies(project, dev = FALSE)
+      packages <- sort(union(dependencies, "renv"))
+      paths <- renv:::renv_package_dependencies(packages, libpaths = libpaths, project = project)
+      packages <- as.character(names(paths))
+      # remove ignored packages
+      ignored <- c(
+        renv:::renv_project_ignored_packages(project),
+        renv:::renv_packages_base()
+      )
+      packages <- setdiff(packages, ignored)
+      projectStatus$packages <- packages
+      saveRDS(projectStatus, file="projectStatus.rds")
+    },
+    moduleFolder = moduleFolder
+  )
+
+  # The module's project status is written to the
+  # file system. Now we can get the module status and use the information
+  # to determine the restoration status
+  projectStatus <- readRDS(file.path(moduleFolder, "projectStatus.rds"))
+
+  library <- names(projectStatus$library$Packages)
+  lockfile <- names(projectStatus$lockfile$Packages)
+
+  packages <- sort(unique(c(library, lockfile, projectStatus$packages)))
+
+  packageStatus <- data.frame(
+    package = packages,
+    installed = packages %in% library,
+    recorded = packages %in% lockfile,
+    used = packages %in% packages
+  )
+
+  # If all of the used & recorded packages are installed, then
+  # return TRUE for the module installed status. If not, return
+  # FALSE and set an attribute of the list that contains the issues
+  # discovered
+  ok <- packageStatus$installed & (packageStatus$used == packageStatus$recorded)
+  issues <- packageStatus[!ok, , drop = FALSE]
+  missing <- !issues$installed
+  issues$installed <- ifelse(issues$installed, "y", "n")
+  issues$recorded <- ifelse(issues$recorded, "y", "n")
+  issues$used <- ifelse(issues$used, "y", if (any(missing)) "?" else "n")
+  issues <- issues[issues$installed == "n" & issues$recorded == "y" & issues$used == "y", ]
+
+  moduleInstalled <- nrow(issues) == 0
+
+  if (isTRUE(moduleInstalled)) {
+    message("MODULE READY!")
+    # Write the contents of the md5 hash of the module's
+    # renv.lock file to the file system to note that the
+    # module's install status was successful and verified
+    SqlRender::writeSql(
+      sql = lockfileHash,
+      targetFile = file.path(moduleFolder, "moduleStatus.txt")
+    )
+  } else {
+    message("MODULE HAS ISSUES!")
+  }
+
+  return(
+    verifyModuleInstallationReturnValue(
+      moduleFolder = moduleFolder,
+      moduleInstalled = moduleInstalled,
+      issues = issues
+    )
+  )
 }
 
 getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
@@ -121,15 +319,14 @@ getModuleMetaData <- function(moduleFolder) {
 }
 
 getModuleFolder <- function(module, version) {
+  assertModulesFolderSetting(x = Sys.getenv("INSTANTIATED_MODULES_FOLDER"))
   moduleFolder <- file.path(Sys.getenv("INSTANTIATED_MODULES_FOLDER"), sprintf("%s_%s", module, version))
   invisible(moduleFolder)
 }
 
 ensureModuleInstantiated <- function(module, version, remoteRepo, remoteUsername) {
+  assertModulesFolderSetting(x = Sys.getenv("INSTANTIATED_MODULES_FOLDER"))
   instantiatedModulesFolder <- Sys.getenv("INSTANTIATED_MODULES_FOLDER")
-  if (instantiatedModulesFolder == "") {
-    stop("The INSTANTIATED_MODULES_FOLDER environment variable has not been set.")
-  }
   if (!dir.exists(instantiatedModulesFolder)) {
     dir.create(instantiatedModulesFolder, recursive = TRUE)
   }

@@ -34,17 +34,17 @@ if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))
 
-tempDir <- tempfile() # "D:"
+tempDir <- "C:/TEMP/strategus_test" #tempfile()
 tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
-withr::defer(
-  {
-    unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
-  },
-  testthat::teardown_env()
-)
+# withr::defer(
+#   {
+#     unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+#   },
+#   testthat::teardown_env()
+# )
 
 # Assemble a list of connectionDetails for the tests -----------
 connectionDetailsList <- list()

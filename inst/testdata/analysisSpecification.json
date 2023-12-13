@@ -223,7 +223,7 @@
   "moduleSpecifications": [
     {
       "module": "CohortGeneratorModule",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -292,7 +292,7 @@
     },
     {
       "module": "CohortIncidenceModule",
-      "version": "0.1.0",
+      "version": "0.3.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -489,7 +489,7 @@
     },
     {
       "module": "CohortMethodModule",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -1341,7 +1341,7 @@
     },
     {
       "module": "SelfControlledCaseSeriesModule",
-      "version": "0.2.0",
+      "version": "0.3.2",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -2360,7 +2360,7 @@
     },
     {
       "module": "PatientLevelPredictionModule",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": [
