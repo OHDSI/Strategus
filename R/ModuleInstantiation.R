@@ -37,7 +37,7 @@
 #' the instantiated modules.
 #'
 #' @export
-ensureAllModulesInstantiated <- function(analysisSpecifications, force = FALSE) {
+ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerification = FALSE) {
   modules <- getModuleTable(analysisSpecifications, distinct = TRUE)
 
   # Verify only one version per module:
