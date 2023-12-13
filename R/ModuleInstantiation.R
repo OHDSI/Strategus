@@ -29,11 +29,15 @@
 #'
 #' @template AnalysisSpecifications
 #'
+#' @template forceVerification
+#'
 #' @return
-#' A tibble listing the instantiated modules.
+#' A list containing the install status of all modules
+#' (TRUE if all are installed properly) and a tibble listing
+#' the instantiated modules.
 #'
 #' @export
-ensureAllModulesInstantiated <- function(analysisSpecifications) {
+ensureAllModulesInstantiated <- function(analysisSpecifications, force = FALSE) {
   modules <- getModuleTable(analysisSpecifications, distinct = TRUE)
 
   # Verify only one version per module:
@@ -78,13 +82,30 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
   for (i in 1:nrow(modules)) {
     status <- verifyModuleInstallation(
       module = modules$module[i],
-      version = modules$version[i]
+      version = modules$version[i],
+      forceVerification = forceVerification
     )
-    moduleInstallStatus <- append(status, moduleInstallStatus)
+    moduleInstallStatus[[length(moduleInstallStatus) + 1]] <- status
   }
   attr(modules, 'moduleInstallStatus') <- moduleInstallStatus
 
-  return(modules)
+  installStatus <- unlist(lapply(moduleInstallStatus, FUN = function(x) { x$moduleInstalled }))
+  if (!all(installStatus)) {
+    problemModules <- status[!installStatus]
+    message("There were ", length(problemModules), " issue(s) found with your Strategus modules!")
+    for (i in seq_along(problemModules)) {
+      message("Issue #", i, ": Module ", problemModules[[i]]$moduleFolder, " could not install the following R packages:")
+      print(problemModules[[i]]$issues)
+    }
+    message("To fix these issues, open the module project at the path specified above and re-run \"renv::restore()\" and correct all issues")
+  }
+
+  return(
+    list(
+      allModulesInstalled = all(installStatus),
+      modules = modules
+    )
+  )
 }
 
 
@@ -110,17 +131,15 @@ ensureAllModulesInstantiated <- function(analysisSpecifications) {
 #'
 #' @param version The version of the module to verify (i.e. "0.2.1")
 #'
-#' @param forceVerification When set to TRUE, the verification process is forced
-#' to re-evaluate if the module is properly installed. The default is FALSE
-#' since if the module is successfully validated by this function, it will cache
-#' the hash value of the module's renv.lock file in the file system so it can
-#' by-pass running this check every time.
+#' @param silent When TRUE output of this verification process is suppressed
+#'
+#' @template forceVerification
 #'
 #' @return
 #' A list with the output of the consistency check
 #'
 #' @export
-verifyModuleInstallation <- function(module, version, forceVerification = FALSE) {
+verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerification = FALSE) {
   # Internal helper function
   verifyModuleInstallationReturnValue <- function(moduleFolder, moduleInstalled, issues = NULL) {
     returnVal <- list(
@@ -133,7 +152,9 @@ verifyModuleInstallation <- function(module, version, forceVerification = FALSE)
 
   moduleFolder <- getModuleFolder(module, version)
   if (!dir.exists(moduleFolder)) {
-    warn("Module ", module, ", Version: ", version, " not found at: ", moduleFolder, ". This means the module was never installed.")
+    if (!silent) {
+      warn("Module ", module, ", Version: ", version, " not found at: ", moduleFolder, ". This means the module was never installed.")
+    }
     return(
       verifyModuleInstallationReturnValue(
         moduleFolder = moduleFolder,
@@ -142,14 +163,17 @@ verifyModuleInstallation <- function(module, version, forceVerification = FALSE)
     )
   }
 
-  message("Verifying module: ", module, ", (", version, ") at ", moduleFolder, "...", appendLF = F)
-
+  if (!silent) {
+    message("Verifying module: ", module, ", (", version, ") at ", moduleFolder, "...", appendLF = F)
+  }
   moduleStatusFileName <- "moduleStatus.txt"
   renvLockFileName <- "renv.lock"
 
   # If the lock file doesn't exist, we're not sure if we're dealing with a module.
   if (!file.exists(file.path(moduleFolder, renvLockFileName))) {
-    message("ERROR - renv.lock file missing.")
+    if (!silent) {
+      message("ERROR - renv.lock file missing.")
+    }
     return(
       verifyModuleInstallationReturnValue(
         moduleFolder = moduleFolder,
@@ -176,7 +200,9 @@ verifyModuleInstallation <- function(module, version, forceVerification = FALSE)
     # If the values match, the module is installed correctly
     # return and exit
     if (lockfileHashFromModuleStatusFile == lockfileHash) {
-      message("MODULE READY!")
+      if (!silent) {
+        message("MODULE READY!")
+      }
       return(
         verifyModuleInstallationReturnValue(
           moduleFolder = moduleFolder,
@@ -253,7 +279,9 @@ verifyModuleInstallation <- function(module, version, forceVerification = FALSE)
   moduleInstalled <- nrow(issues) == 0
 
   if (isTRUE(moduleInstalled)) {
-    message("MODULE READY!")
+    if (!silent) {
+      message("MODULE READY!")
+    }
     # Write the contents of the md5 hash of the module's
     # renv.lock file to the file system to note that the
     # module's install status was successful and verified
@@ -262,7 +290,9 @@ verifyModuleInstallation <- function(module, version, forceVerification = FALSE)
       targetFile = file.path(moduleFolder, "moduleStatus.txt")
     )
   } else {
-    message("MODULE HAS ISSUES!")
+    if (!silent) {
+      message("MODULE HAS ISSUES!")
+    }
   }
 
   return(

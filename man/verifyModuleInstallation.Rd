@@ -4,22 +4,28 @@
 \alias{verifyModuleInstallation}
 \title{Verify a module is properly installed}
 \usage{
-verifyModuleInstallation(module, version, forceVerification = FALSE)
+verifyModuleInstallation(
+  module,
+  version,
+  silent = FALSE,
+  forceVerification = FALSE
+)
 }
 \arguments{
 \item{module}{The name of the module to verify (i.e. "CohortGeneratorModule")}
 
 \item{version}{The version of the module to verify (i.e. "0.2.1")}
 
+\item{silent}{When TRUE output of this verification process is suppressed}
+
 \item{forceVerification}{When set to TRUE, the verification process is forced
-to re-evaluate if the module is properly installed. The default is FALSE
-since if the module is successfully validated by this function, it will cache
+to re-evaluate if a module is properly installed. The default is FALSE
+since if a module is successfully validated, the module will contain
 the hash value of the module's renv.lock file in the file system so it can
 by-pass running this check every time.}
 }
 \value{
-A list with an attribute for the installation status and the
-output of the consistency check
+A list with the output of the consistency check
 }
 \description{
 In some instances a module may fail to instantiate and install due to problems

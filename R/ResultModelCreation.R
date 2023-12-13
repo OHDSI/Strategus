@@ -36,6 +36,9 @@ createResultDataModels <- function(analysisSpecifications,
   checkmate::reportAssertions(collection = errorMessages)
 
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
+  if (isFALSE(modules$allModulesInstalled)) {
+    stop("Stopping execution due to module issues")
+  }
 
 
   if (is.null(executionScriptFolder)) {
