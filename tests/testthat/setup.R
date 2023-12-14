@@ -90,7 +90,7 @@ if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_POSTGRESQL_PASSWORD")),
       server = Sys.getenv("CDM5_POSTGRESQL_SERVER"),
       port = 5432,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA"),
@@ -114,7 +114,7 @@ if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_ORACLE_PASSWORD")),
       server = Sys.getenv("CDM5_ORACLE_SERVER"),
       port = 1521,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA"),
@@ -138,7 +138,7 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
       server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
       port = 5439,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
@@ -162,7 +162,7 @@ if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_SQL_SERVER_PASSWORD")),
       server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
       port = 1433,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
