@@ -97,13 +97,13 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
 
       # NOTE injected variable isResultsExecution - will look strange outside of Strategus definition
       if (isCdmExecution) {
-        connectionDetails <- Strategus::retrieveConnectionDetails(
+        connectionDetails <- retrieveConnectionDetails(
           connectionDetailsReference = jobContext$moduleExecutionSettings$connectionDetailsReference,
           keyringName = keyringName
         )
         jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
       } else {
-        resultsConnectionDetails <- Strategus::retrieveConnectionDetails(
+        resultsConnectionDetails <- retrieveConnectionDetails(
           connectionDetailsReference = jobContext$moduleExecutionSettings$resultsConnectionDetailsReference,
           keyringName = keyringName
         )

@@ -47,8 +47,6 @@
 #' @param injectVars        list of var names list(name=value) to replace (e.g. replace list(foo = "some string") will
 #'                          find the pattern foo and replace it with the string some string - be careful!
 #' @param tempScriptFile    tempFile to write script to
-#' @param useLocalStrategusLibrary Use the locally installed Strategus library? TRUE will use the Strategus
-#'                          installation from the calling R process.
 #' @param job               run as rstudio job
 #' @param processName       String name for process
 #' @returns NULL invisibly
@@ -56,7 +54,6 @@ withModuleRenv <- function(code,
                            moduleFolder,
                            injectVars = list(),
                            tempScriptFile = tempfile(fileext = ".R"),
-                           useLocalStrategusLibrary = TRUE,
                            job = FALSE,
                            processName = paste(moduleFolder, "_renv_run")) {
   # convert human readable code to a string for writing
@@ -81,18 +78,9 @@ withModuleRenv <- function(code,
     }
   }
 
-  # Enforce attachment of Strategus from calling process - note one inside the renv
-  if (useLocalStrategusLibrary) {
-    script <- c(.getLocalLibraryScipt("Strategus"), script)
-    # Adding Strategus dependencies to the script
-    script <- c(.getLocalLibraryScipt("ParallelLogger"), script)
-    script <- c(.getLocalLibraryScipt("CohortGenerator"), script)
-    script <- c(.getLocalLibraryScipt("DatabaseConnector"), script)
-    script <- c(.getLocalLibraryScipt("keyring"), script)
-    script <- c(.getLocalLibraryScipt("openssl"), script)
-    script <- c(.getLocalLibraryScipt("dplyr"), script)
-    script <- c(.getLocalLibraryScipt("R6"), script)
-  }
+  # Import the Strategus function we need to retrieve the
+  # connection details and embed it into the module script
+  script <- c("retrieveConnectionDetails <- ", base::deparse(Strategus::retrieveConnectionDetails), script)
 
   # Write file and execute script inside an renv
   fileConn <- file(tempScriptFile)
