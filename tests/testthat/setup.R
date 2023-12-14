@@ -125,28 +125,28 @@ if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
 }
 
 # RedShift
-if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
-  Sys.getenv("CDM5_REDSHIFT_PASSWORD") == "" &
-  Sys.getenv("CDM5_REDSHIFT_SERVER") == "" &
-  Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == "" &
-  Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
-  DatabaseConnector::downloadJdbcDrivers("redshift")
-  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
-    connectionDetails = DatabaseConnector::createConnectionDetails(
-      dbms = "redshift",
-      user = Sys.getenv("CDM5_REDSHIFT_USER"),
-      password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
-      server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
-      port = 5439,
-      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-    ),
-    cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-    workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
-    vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-    cohortTable = "cohort",
-    tempEmulationSchema = NULL
-  )
-}
+# if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
+#   Sys.getenv("CDM5_REDSHIFT_PASSWORD") == "" &
+#   Sys.getenv("CDM5_REDSHIFT_SERVER") == "" &
+#   Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == "" &
+#   Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
+#   DatabaseConnector::downloadJdbcDrivers("redshift")
+#   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+#     connectionDetails = DatabaseConnector::createConnectionDetails(
+#       dbms = "redshift",
+#       user = Sys.getenv("CDM5_REDSHIFT_USER"),
+#       password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
+#       server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
+#       port = 5439,
+#       pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+#     ),
+#     cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+#     workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
+#     vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+#     cohortTable = "cohort",
+#     tempEmulationSchema = NULL
+#   )
+# }
 
 # SQL Server
 if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
