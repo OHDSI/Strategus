@@ -78,9 +78,9 @@ withModuleRenv <- function(code,
     }
   }
 
-  # Import the Strategus function we need to retrieve the
-  # connection details and embed it into the module script
+  # Import the Strategus functions we need to use in the module scripts
   script <- c("retrieveConnectionDetails <- ", base::deparse(Strategus::retrieveConnectionDetails), script)
+  script <- c("unlockKeyring <- ", base::deparse(Strategus::unlockKeyring), script)
 
   # Write file and execute script inside an renv
   fileConn <- file(tempScriptFile)

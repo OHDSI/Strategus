@@ -71,16 +71,8 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       source("Main.R")
       jobContext <- readRDS(jobContextFileName)
 
-      unlockKeyring <- function(keyringName) {
-        # If the keyring is locked, unlock it, set the value and then re-lock it
-        keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-        if (keyringLocked) {
-          keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"))
-        }
-        return(keyringLocked)
-      }
-
       keyringName <- jobContext$keyringSettings$keyringName
+      # unlockKeyring will be injected automatically
       keyringLocked <- unlockKeyring(keyringName = keyringName)
 
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
@@ -95,7 +87,8 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
         renv::use(lockfile = "renv.lock")
       }
 
-      # NOTE injected variable isResultsExecution - will look strange outside of Strategus definition
+      # NOTE: injected variable isResultsExecution - will look strange outside of Strategus definition
+      # NOTE: retrieveConnectionDetails function is injected by withModuleRenv
       if (isCdmExecution) {
         connectionDetails <- retrieveConnectionDetails(
           connectionDetailsReference = jobContext$moduleExecutionSettings$connectionDetailsReference,

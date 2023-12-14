@@ -340,19 +340,13 @@ unlockKeyring <- function(keyringName) {
   # If the keyring is locked, unlock it, set the value and then re-lock it
   keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
   if (keyringLocked) {
-    assertKeyringPassword(x = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"), keyringName = keyringName)
+    x <- Sys.getenv("STRATEGUS_KEYRING_PASSWORD")
+    if (length(x) == 0 || x == "") {
+      stop(paste0("STRATEGUS_KEYRING_PASSWORD NOT FOUND. STRATEGUS_KEYRING_PASSWORD must be set using Sys.setenv(STRATEGUS_KEYRING_PASSWORD = \"<your password>\") to unlock the keyring: ", keyringName))
+    }
     keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"))
   }
   return(keyringLocked)
-}
-
-#' @keywords internal
-.checkKeyringPasswordSet <- function(x, keyringName = NULL) {
-  if (length(x) == 0 || x == "") {
-    return(paste0("STRATEGUS_KEYRING_PASSWORD NOT FOUND. STRATEGUS_KEYRING_PASSWORD must be set using Sys.setenv(STRATEGUS_KEYRING_PASSWORD = \"<your password>\") to unlock the keyring: ", keyringName))
-  } else {
-    return(TRUE)
-  }
 }
 
 #' Used when serializing connection details to retain NULL values
