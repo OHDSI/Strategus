@@ -91,13 +91,13 @@ ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerificati
 
   installStatus <- unlist(lapply(moduleInstallStatus, FUN = function(x) { x$moduleInstalled }))
   if (!all(installStatus)) {
-    problemModules <- status[!installStatus]
+    problemModules <- moduleInstallStatus[!installStatus]
     message("There were ", length(problemModules), " issue(s) found with your Strategus modules!")
     for (i in seq_along(problemModules)) {
       message("Issue #", i, ": Module ", problemModules[[i]]$moduleFolder, " could not install the following R packages:")
       print(problemModules[[i]]$issues)
     }
-    message("To fix these issues, open the module project at the path specified above and re-run \"renv::restore()\" and correct all issues")
+    message("To fix these issues, open the module project (.Rproj file) at the path specified above and re-run \"renv::restore()\" and correct all issues")
   }
 
   return(
@@ -227,22 +227,21 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
       # the project from the renv.lock file.
       projectStatus <- renv::status()
 
-      # Get the packages in the project - adapted from
-      # https://github.com/rstudio/renv/blob/v1.0.3/R/status.R
-      project <- renv:::renv_project_resolve()
-      libpaths <- renv:::renv_libpaths_resolve()
-      dependencies <- renv:::renv_snapshot_dependencies(project, dev = FALSE)
-      packages <- sort(union(dependencies, "renv"))
-      paths <- renv:::renv_package_dependencies(packages, libpaths = libpaths, project = project)
-      packages <- as.character(names(paths))
-      # remove ignored packages
-      ignored <- c(
-        renv:::renv_project_ignored_packages(project),
-        renv:::renv_packages_base()
-      )
-      packages <- setdiff(packages, ignored)
+      # Identify the list of package dependencies by using
+      # the data returned from renv::status() and
+      # renv::dependencies for the project.
+      library <- names(projectStatus$library$Packages)
+      lockfile <- names(projectStatus$lockfile$Packages)
+      packages <- sort(union(renv::dependencies(quiet = TRUE)$Package, "renv"))
+      packages <- sort(unique(c(library, lockfile, packages)))
       projectStatus$packages <- packages
-      saveRDS(projectStatus, file="projectStatus.rds")
+      saveRDS(object = list(
+        library = library,
+        lockfile = lockfile,
+        packages = packages
+        ),
+        file="projectStatus.rds"
+      )
     },
     moduleFolder = moduleFolder
   )
@@ -252,10 +251,9 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
   # to determine the restoration status
   projectStatus <- readRDS(file.path(moduleFolder, "projectStatus.rds"))
 
-  library <- names(projectStatus$library$Packages)
-  lockfile <- names(projectStatus$lockfile$Packages)
-
-  packages <- sort(unique(c(library, lockfile, projectStatus$packages)))
+  library <- projectStatus$library
+  lockfile <- projectStatus$lockfile
+  packages <- projectStatus$packages
 
   packageStatus <- data.frame(
     package = packages,
