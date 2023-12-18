@@ -207,7 +207,7 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
       if (is.function(createDataModelSchema)) {
         # If the keyring is locked, unlock it, set the value and then re-lock it
         keyringName <- jobContext$keyringSettings$keyringName
-        keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
+        keyringLocked <- unlockKeyring(keyringName = keyringName)
 
         resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
         resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
