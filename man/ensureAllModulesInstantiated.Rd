@@ -4,14 +4,22 @@
 \alias{ensureAllModulesInstantiated}
 \title{Ensure all modules are instantiated}
 \usage{
-ensureAllModulesInstantiated(analysisSpecifications)
+ensureAllModulesInstantiated(analysisSpecifications, forceVerification = FALSE)
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{forceVerification}{When set to TRUE, the verification process is forced
+to re-evaluate if a module is properly installed. The default is FALSE
+since if a module is successfully validated, the module will contain
+the hash value of the module's renv.lock file in the file system so it can
+by-pass running this check every time.}
 }
 \value{
-A tibble listing the instantiated modules.
+A list containing the install status of all modules
+(TRUE if all are installed properly) and a tibble listing
+the instantiated modules.
 }
 \description{
 Ensure that all modules referenced in the analysis specifications are instantiated

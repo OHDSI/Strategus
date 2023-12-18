@@ -24,7 +24,11 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
   remoteUsername <- moduleSpecification$remoteUsername
-  moduleFolder <- ensureModuleInstantiated(module, version, remoteRepo, remoteUsername)
+  moduleInstallation <- verifyModuleInstallation(module, version)
+  moduleFolder <- moduleInstallation$moduleFolder
+  if (isFALSE(moduleInstallation$moduleInstalled)) {
+    stop("Stopping since module is not properly installed!")
+  }
 
   # Create job context
   moduleExecutionSettings <- executionSettings

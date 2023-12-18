@@ -36,6 +36,9 @@ createResultDataModels <- function(analysisSpecifications,
   checkmate::reportAssertions(collection = errorMessages)
 
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
+  if (isFALSE(modules$allModulesInstalled)) {
+    stop("Stopping execution due to module issues")
+  }
 
 
   if (is.null(executionScriptFolder)) {
@@ -141,7 +144,11 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
   remoteUsername <- moduleSpecification$remoteUsername
-  moduleFolder <- ensureModuleInstantiated(module, version, remoteRepo, remoteUsername)
+  moduleInstallation <- verifyModuleInstallation(module, version)
+  moduleFolder <- moduleInstallation$moduleFolder
+  if (isFALSE(moduleInstallation$moduleInstalled)) {
+    stop("Stopping since module is not properly installed!")
+  }
 
   # Create job context
   moduleExecutionSettings <- executionSettings

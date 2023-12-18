@@ -32,7 +32,7 @@ if (Sys.getenv("DONT_DOWNLOAD_JDBC_DRIVERS", "") != "TRUE") {
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))
 
-tempDir <- tempfile() # "D:"
+tempDir <- tempfile()
 tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")

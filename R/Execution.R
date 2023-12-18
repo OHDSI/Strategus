@@ -61,6 +61,9 @@ execute <- function(analysisSpecifications,
     )
   }
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
+  if (isFALSE(modules$allModulesInstalled)) {
+    stop("Stopping execution due to module issues")
+  }
 
   if (is.null(executionScriptFolder)) {
     executionScriptFolder <- tempfile("strategusTempSettings")
@@ -79,7 +82,7 @@ execute <- function(analysisSpecifications,
       keyringName = keyringName
     )
   }
-  dependencies <- extractDependencies(modules)
+  dependencies <- extractDependencies(modules$modules)
 
 
   fileName <- generateTargetsScript(
