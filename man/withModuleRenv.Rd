@@ -10,7 +10,6 @@ withModuleRenv(
   moduleFolder,
   injectVars = list(),
   tempScriptFile = tempfile(fileext = ".R"),
-  useLocalStrategusLibrary = TRUE,
   job = FALSE,
   processName = paste(moduleFolder, "_renv_run")
 )
@@ -24,9 +23,6 @@ withModuleRenv(
 find the pattern foo and replace it with the string some string - be careful!}
 
 \item{tempScriptFile}{tempFile to write script to}
-
-\item{useLocalStrategusLibrary}{Use the locally installed Strategus library? TRUE will use the Strategus
-installation from the calling R process.}
 
 \item{job}{run as rstudio job}
 
