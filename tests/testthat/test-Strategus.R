@@ -15,7 +15,9 @@ test_that("Run unit test study", {
 
   withr::defer(
     {
-      unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
+      if (usingTempDir) {
+        unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
+      }
     },
     testthat::teardown_env()
   )
