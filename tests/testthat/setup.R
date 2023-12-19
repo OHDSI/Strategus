@@ -16,7 +16,7 @@ withr::defer(
 if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
   jdbcDriverFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
 } else {
-  jdbcDriverFolder <- "~/.jdbcDrivers"
+  jdbcDriverFolder <- "~/jdbcDrivers"
   dir.create(jdbcDriverFolder, showWarnings = FALSE)
   baseDatabaseConnectorJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
   Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = jdbcDriverFolder)
@@ -147,6 +147,9 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
     cohortTable = "cohort",
     tempEmulationSchema = NULL
   )
+
+  # DEBUG:
+  Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
 }
 
 # # SQL Server
