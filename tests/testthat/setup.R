@@ -152,29 +152,29 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
   )
 }
 
-# # SQL Server
-# if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_PASSWORD") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_SERVER") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA") == "")) {
-#   DatabaseConnector::downloadJdbcDrivers("sql server")
-#   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
-#     connectionDetails = DatabaseConnector::createConnectionDetails(
-#       dbms = "sql server",
-#       user = Sys.getenv("CDM5_SQL_SERVER_USER"),
-#       password = URLdecode(Sys.getenv("CDM5_SQL_SERVER_PASSWORD")),
-#       server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
-#       port = 1433,
-#       pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-#     ),
-#     cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
-#     workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
-#     vocabularyDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
-#     cohortTable = "cohort",
-#     tempEmulationSchema = NULL
-#   )
-# }
+# SQL Server
+if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_PASSWORD") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_SERVER") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("sql server")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "sql server",
+      user = Sys.getenv("CDM5_SQL_SERVER_USER"),
+      password = URLdecode(Sys.getenv("CDM5_SQL_SERVER_PASSWORD")),
+      server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
+      port = 1433,
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
+    cohortTable = "cohort",
+    tempEmulationSchema = NULL
+  )
+}
 
 # Keyring helpers --------------
 # Set the keyring name & password for testing
