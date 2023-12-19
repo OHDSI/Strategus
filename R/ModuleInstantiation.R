@@ -418,12 +418,6 @@ instantiateModule <- function(module, version, remoteRepo, remoteUsername, modul
 
   withModuleRenv(
     code = {
-      ParallelLogger::addDefaultFileLogger(
-        fileName = file.path(moduleFolder, "moduleInitLog.txt")
-      )
-      ParallelLogger::addDefaultErrorReportLogger(
-        fileName = file.path(moduleFolder, "moduleInitErrorReport.txt")
-      )
       renv::restore(prompt = FALSE)
     },
     moduleFolder = moduleFolder,
