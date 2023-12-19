@@ -150,6 +150,8 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
 
   # DEBUG:
   print(dir(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")))
+  conn  <- DatabaseConnector::connect(connectionDetails = connectionDetailsList[[length(connectionDetailsList)]]$connectionDetails)
+  DatabaseConnector::disconnect(conn)
 }
 
 # # SQL Server
