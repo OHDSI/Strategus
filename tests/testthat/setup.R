@@ -13,33 +13,37 @@ withr::defer(
   testthat::teardown_env()
 )
 
-if (Sys.getenv("DONT_DOWNLOAD_JDBC_DRIVERS", "") != "TRUE") {
-  oldJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-  Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = tempfile("jdbcDrivers"))
-  dir.create(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))
-
-  if (testthat::is_testing()) {
-    withr::defer({
-      unlink(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"), recursive = TRUE, force = TRUE)
-      Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = oldJarFolder)
+if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
+  jdbcDriverFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+} else {
+  jdbcDriverFolder <- "~/jdbcDrivers"
+  dir.create(jdbcDriverFolder, showWarnings = FALSE)
+  baseDatabaseConnectorJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+  Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = jdbcDriverFolder)
+  withr::defer(
+    {
+      unlink(jdbcDriverFolder, recursive = TRUE, force = TRUE)
+      Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = baseDatabaseConnectorJarFolder)
     },
     testthat::teardown_env()
-    )
-  }
+  )
 }
 
 # Create a unique ID for the table identifiers
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))
 
-tempDir <- tempfile()
+usingTempDir <- Sys.getenv("STRATEGUS_UNIT_TEST_FOLDER") == ""
+tempDir <- ifelse(usingTempDir, tempfile(), Sys.getenv("STRATEGUS_UNIT_TEST_FOLDER"))
 tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
 withr::defer(
   {
-    unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+    if (usingTempDir) {
+      unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+    }
   },
   testthat::teardown_env()
 )
@@ -125,28 +129,28 @@ if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
 }
 
 # RedShift
-# if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_PASSWORD") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_SERVER") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
-#   DatabaseConnector::downloadJdbcDrivers("redshift")
-#   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
-#     connectionDetails = DatabaseConnector::createConnectionDetails(
-#       dbms = "redshift",
-#       user = Sys.getenv("CDM5_REDSHIFT_USER"),
-#       password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
-#       server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
-#       port = 5439,
-#       pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-#     ),
-#     cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-#     workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
-#     vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-#     cohortTable = "cohort",
-#     tempEmulationSchema = NULL
-#   )
-# }
+if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
+  Sys.getenv("CDM5_REDSHIFT_PASSWORD") == "" &
+  Sys.getenv("CDM5_REDSHIFT_SERVER") == "" &
+  Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("redshift")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "redshift",
+      user = Sys.getenv("CDM5_REDSHIFT_USER"),
+      password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
+      server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
+      port = 5439,
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+    cohortTable = "cohort",
+    tempEmulationSchema = NULL
+  )
+}
 
 # SQL Server
 if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
