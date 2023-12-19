@@ -149,7 +149,7 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
   )
 
   # DEBUG:
-  Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+  print(dir(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")))
 }
 
 # # SQL Server
