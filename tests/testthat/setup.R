@@ -13,19 +13,20 @@ withr::defer(
   testthat::teardown_env()
 )
 
-if (Sys.getenv("DONT_DOWNLOAD_JDBC_DRIVERS", "") != "TRUE") {
-  oldJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-  Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = tempfile("jdbcDrivers"))
-  dir.create(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))
-
-  if (testthat::is_testing()) {
-    withr::defer({
-      unlink(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"), recursive = TRUE, force = TRUE)
-      Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = oldJarFolder)
+if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
+  jdbcDriverFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+} else {
+  jdbcDriverFolder <- "~/.jdbcDrivers"
+  dir.create(jdbcDriverFolder, showWarnings = FALSE)
+  baseDatabaseConnectorJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+  Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = jdbcDriverFolder)
+  withr::defer(
+    {
+      unlink(jdbcDriverFolder, recursive = TRUE, force = TRUE)
+      Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = baseDatabaseConnectorJarFolder)
     },
     testthat::teardown_env()
-    )
-  }
+  )
 }
 
 # Create a unique ID for the table identifiers
@@ -48,33 +49,33 @@ withr::defer(
 connectionDetailsList <- list()
 
 # SQLite
-eunomiaDbFile <- file.path(tempDir, "data", "testEunomia.sqlite")
-if (!dir.exists(file.path(tempDir, "data"))) {
-  dir.create(file.path(tempDir, "data"), recursive = T, showWarnings = F)
-}
-connectionDetails <- Eunomia::getEunomiaConnectionDetails(
-  databaseFile = eunomiaDbFile
-)
-withr::defer(
-  {
-    unlink(eunomiaDbFile, recursive = TRUE, force = TRUE)
-  },
-  testthat::teardown_env()
-)
-cdmDatabaseSchema <- "main"
-workDatabaseSchema <- "main"
-vocabularyDatabaseSchema <- workDatabaseSchema
-cohortTable <- "cohort"
-tempEmulationSchema <- NULL
-
-connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
-  connectionDetails = connectionDetails,
-  cdmDatabaseSchema = "main",
-  workDatabaseSchema = "main",
-  vocabularyDatabaseSchema = "main",
-  cohortTable = "cohort",
-  tempEmulationSchema = NULL
-)
+# eunomiaDbFile <- file.path(tempDir, "data", "testEunomia.sqlite")
+# if (!dir.exists(file.path(tempDir, "data"))) {
+#   dir.create(file.path(tempDir, "data"), recursive = T, showWarnings = F)
+# }
+# connectionDetails <- Eunomia::getEunomiaConnectionDetails(
+#   databaseFile = eunomiaDbFile
+# )
+# withr::defer(
+#   {
+#     unlink(eunomiaDbFile, recursive = TRUE, force = TRUE)
+#   },
+#   testthat::teardown_env()
+# )
+# cdmDatabaseSchema <- "main"
+# workDatabaseSchema <- "main"
+# vocabularyDatabaseSchema <- workDatabaseSchema
+# cohortTable <- "cohort"
+# tempEmulationSchema <- NULL
+#
+# connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+#   connectionDetails = connectionDetails,
+#   cdmDatabaseSchema = "main",
+#   workDatabaseSchema = "main",
+#   vocabularyDatabaseSchema = "main",
+#   cohortTable = "cohort",
+#   tempEmulationSchema = NULL
+# )
 
 # # PostgreSQL
 # if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == "" &
