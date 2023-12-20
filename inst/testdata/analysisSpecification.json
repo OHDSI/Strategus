@@ -1355,7 +1355,7 @@
               "nestingCohortId": 1,
               "deleteCovariatesSmallCount": 0,
               "studyStartDate": "",
-              "studyEndDate": "20191130",
+              "studyEndDate": "",
               "maxCasesPerOutcome": 1000000,
               "exposureIds": "exposureId",
               "customCovariateIds": "",
