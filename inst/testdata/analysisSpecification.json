@@ -227,7 +227,7 @@
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
-        "incremental": true,
+        "incremental": false,
         "generateStats": true
       },
       "attr_class": ["CohortGeneratorModuleSpecifications", "ModuleSpecifications"]
