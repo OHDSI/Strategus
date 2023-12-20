@@ -83,7 +83,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReport.R"))
 
       options(andromedaTempFolder = file.path(jobContext$moduleExecutionSettings$workFolder, "andromedaTemp"))
-      options(tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema)
+      options(sqlRenderTempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema)
       options(databaseConnectorIntegerAsNumeric = jobContext$moduleExecutionSettings$integerAsNumeric)
       options(databaseConnectorInteger64AsNumeric = jobContext$moduleExecutionSettings$integer64AsNumeric)
 
