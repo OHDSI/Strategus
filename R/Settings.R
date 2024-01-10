@@ -269,6 +269,10 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
   checkmate::assertLogical(x = (is.null(keyringName) || keyringName %in% keyringList$keyring), add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  if (!connectionDetailsReference %in% keyring::key_list(keyring = keyringName)$service) {
+    stop("Connection details with connectionDetailsReference = \"", connectionDetailsReference, "\" were not found in your keyring. Please check that you have used the Strategus storeConnectionDetails function to save your connection details with this connectionDetailsReference name.")
+  }
+
   # If the keyring is locked, unlock it, set the value and then re-lock it
   keyringLocked <- unlockKeyring(keyringName = keyringName)
 
