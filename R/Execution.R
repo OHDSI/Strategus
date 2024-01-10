@@ -48,9 +48,10 @@ execute <- function(analysisSpecifications,
   checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  # Assert that the temp emulation schema is set if required for the dbms
-  # specified by the executionSettings
+  # Validate the execution settings
   if (is(executionSettings, "CdmExecutionSettings")) {
+    # Assert that the temp emulation schema is set if required for the dbms
+    # specified by the executionSettings
     connectionDetails <- retrieveConnectionDetails(
       connectionDetailsReference = executionSettings$connectionDetailsReference,
       keyringName = keyringName
@@ -59,7 +60,41 @@ execute <- function(analysisSpecifications,
       dbms = connectionDetails$dbms,
       tempEmulationSchema = executionSettings$tempEmulationSchema
     )
+
+    # Validate that the table names specified in the execution settings
+    # do not violate the maximum table length. To do this we will render
+    # a query using the execution settings so that SqlRender can provide
+    # the appropriate warning. Only stop execution if we are running on
+    # Oracle; otherwise it is unclear if the table name length will have
+    # an impact
+    cohortTableChecks <- lapply(
+      X = executionSettings$cohortTableNames,
+      FUN = function(tableName) {
+        sql <- SqlRender::render(
+          sql = "CREATE TABLE @table;",
+          table =  tableName
+        )
+        tryCatch({
+          SqlRender::translate(
+            sql = sql,
+            targetDialect = connectionDetails$dbms
+          )
+          return(TRUE)
+        }, warning = function(w) {
+          warning(w)
+          return(FALSE)
+        })
+      }
+    )
+
+    # Since the warning is thrown for all dbms systems, only stop if
+    # we are executing on Oracle
+    if (tolower(connectionDetails$dbms) == "oracle" && !all(unlist(cohortTableChecks))) {
+      stop("Your cohort table names are too long for Oracle. Please update your executionSettings to use shorter cohort table names and try again.")
+    }
   }
+
+  # Validate the modules
   modules <- ensureAllModulesInstantiated(analysisSpecifications)
   if (isFALSE(modules$allModulesInstalled)) {
     stop("Stopping execution due to module issues")
