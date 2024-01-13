@@ -153,7 +153,7 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
   moduleFolder <- getModuleFolder(module, version)
   if (!dir.exists(moduleFolder)) {
     if (!silent) {
-      warn("Module ", module, ", Version: ", version, " not found at: ", moduleFolder, ". This means the module was never installed.")
+      warning("Module ", module, ", Version: ", version, " not found at: ", moduleFolder, ". This means the module was never installed.")
     }
     return(
       verifyModuleInstallationReturnValue(
@@ -217,11 +217,6 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
   # process executed successfully. We must do this in the module's context
   Strategus:::withModuleRenv(
     code = {
-      # Start by turning off verbose output to hide renv output
-      verboseOption <- getOption("renv.verbose")
-      options(renv.verbose = FALSE)
-      on.exit(options(renv.verbose = verboseOption))
-
       # Get the renv project status and then identify the packages used
       # in the project to determine if there were issues when restoring
       # the project from the renv.lock file.

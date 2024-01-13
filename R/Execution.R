@@ -110,6 +110,8 @@ execute <- function(analysisSpecifications,
     }
     dir.create(executionScriptFolder, recursive = TRUE)
   }
+  # Normalize path to convert from relative to absolute path
+  executionScriptFolder <- normalizePath(executionScriptFolder, mustWork = F)
 
   if (is(executionSettings, "CdmExecutionSettings")) {
     executionSettings$databaseId <- createDatabaseMetaData(
@@ -192,11 +194,11 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
   )
 
   # Store settings objects in the temp folder so they are available in targets
-  analysisSpecificationsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "analysisSpecifications.rds"))
+  analysisSpecificationsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "analysisSpecifications.rds"))
   saveRDS(analysisSpecifications, analysisSpecificationsFileName)
-  executionSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "executionSettings.rds"))
+  executionSettingsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "executionSettings.rds"))
   saveRDS(executionSettings, executionSettingsFileName)
-  keyringSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "keyringSettings.rds"))
+  keyringSettingsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "keyringSettings.rds"))
   saveRDS(list(keyringName = keyringName), keyringSettingsFileName)
 
   # Generate target names by module type
@@ -210,10 +212,10 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     )
   }
   moduleToTargetNames <- bind_rows(moduleToTargetNames)
-  moduleToTargetNamesFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "moduleTargetNames.rds"))
+  moduleToTargetNamesFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "moduleTargetNames.rds"))
   saveRDS(moduleToTargetNames, moduleToTargetNamesFileName)
 
-  dependenciesFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "dependencies.rds"))
+  dependenciesFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "dependencies.rds"))
   saveRDS(dependencies, dependenciesFileName)
 
   execResultsUpload <- all(c(
