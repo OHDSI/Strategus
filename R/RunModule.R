@@ -28,7 +28,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
   remoteUsername <- moduleSpecification$remoteUsername
-  moduleInstallation <- verifyModuleInstallation(module, version)
+  moduleInstallation <- verifyModuleInstallation(module, version, silent = TRUE)
   moduleFolder <- moduleInstallation$moduleFolder
   if (isFALSE(moduleInstallation$moduleInstalled)) {
     stop("Stopping since module is not properly installed!")
@@ -51,11 +51,11 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     moduleExecutionSettings = moduleExecutionSettings,
     keyringSettings = keyringSettings
   )
-  jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
+  jobContextFileName <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds"))
   saveRDS(jobContext, jobContextFileName)
 
-  tempScriptFile <- file.path(moduleExecutionSettings$workSubFolder, "StrategusScript.R")
-  doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "done")
+  tempScriptFile <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "StrategusScript.R"))
+  doneFile <- .formatAndNormalizeFilePathForScript(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "done"))
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }

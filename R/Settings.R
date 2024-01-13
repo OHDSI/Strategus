@@ -128,6 +128,10 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertCharacter(resultsDatabaseSchema, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # Normalize paths to convert relative paths to absolute paths
+  workFolder <- normalizePath(workFolder, mustWork = F)
+  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+
   executionSettings <- list(
     connectionDetailsReference = connectionDetailsReference,
     workDatabaseSchema = workDatabaseSchema,
@@ -178,6 +182,10 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
   checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
+
+  # Normalize paths to convert relative paths to absolute paths
+  workFolder <- normalizePath(workFolder, mustWork = F)
+  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
 
   executionSettings <- list(
     resultsConnectionDetailsReference = resultsConnectionDetailsReference,

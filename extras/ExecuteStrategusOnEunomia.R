@@ -26,20 +26,9 @@ connectionDetails <- Eunomia::getEunomiaConnectionDetails(
 Strategus::storeConnectionDetails(connectionDetails = connectionDetails,
                                   connectionDetailsReference = "eunomia")
 
-executionSettings <- Strategus::createCdmExecutionSettings(
-  connectionDetailsReference = "eunomia",
-  workDatabaseSchema = "main",
-  cdmDatabaseSchema = "main",
-  cohortTableNames = CohortGenerator::getCohortTableNames(),
-  workFolder = file.path(studyFolder, "work_folder"),
-  resultsFolder = file.path(studyFolder, "results_folder"),
-  minCellCount = 5
-)
-
-ParallelLogger::saveSettingsToJson(
-  object = executionSettings,
-  file.path(studyFolder, "eunomiaExecutionSettings.json")
-)
+# Set the working directory to studyFolder
+# and use relative paths to test
+setwd(studyFolder)
 
 # Execute the study ---------
 analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
@@ -47,8 +36,42 @@ analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
                          package = "Strategus")
 )
 
+resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+  resultsConnectionDetailsReference = "eunomia",
+  resultsDatabaseSchema = "main",
+  workFolder = file.path("schema_creation", "work_folder"),
+  resultsFolder = file.path("schema_creation", "results_folder")
+)
+
+executionSettings <- Strategus::createCdmExecutionSettings(
+  connectionDetailsReference = "eunomia",
+  workDatabaseSchema = "main",
+  cdmDatabaseSchema = "main",
+  cohortTableNames = CohortGenerator::getCohortTableNames(),
+  workFolder = "work_folder",
+  resultsFolder = "results_folder",
+  minCellCount = 5,
+  resultsConnectionDetailsReference = "eunomia",
+  resultsDatabaseSchema = "main"
+)
+
+ParallelLogger::saveSettingsToJson(
+  object = executionSettings,
+  file.path(studyFolder, "eunomiaExecutionSettings.json")
+)
+
 executionSettings <- ParallelLogger::loadSettingsFromJson(
   fileName = file.path(studyFolder, "eunomiaExecutionSettings.json")
+)
+
+Strategus::storeConnectionDetails(
+  connectionDetails,
+  resultsConnectionDetailsReference
+)
+
+Strategus::createResultDataModels(
+  analysisSpecifications = analysisSpecifications,
+  executionSettings = resultsExecutionSettings
 )
 
 Strategus::execute(

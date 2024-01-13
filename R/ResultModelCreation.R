@@ -51,6 +51,8 @@ createResultDataModels <- function(analysisSpecifications,
     }
     dir.create(executionScriptFolder, recursive = TRUE)
   }
+  # Normalize path to convert from relative to absolute path
+  executionScriptFolder <- normalizePath(executionScriptFolder, mustWork = F)
 
   script <- file.path(executionScriptFolder, "SchemaScript.R")
   ##
@@ -88,11 +90,11 @@ createResultDataModels <- function(analysisSpecifications,
   )
 
   # Store settings objects in the temp folder so they are available in targets
-  analysisSpecificationsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "analysisSpecifications.rds"))
+  analysisSpecificationsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "analysisSpecifications.rds"))
   saveRDS(analysisSpecifications, analysisSpecificationsFileName)
-  executionSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "executionSettings.rds"))
+  executionSettingsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "executionSettings.rds"))
   saveRDS(executionSettings, executionSettingsFileName)
-  keyringSettingsFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "keyringSettings.rds"))
+  keyringSettingsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "keyringSettings.rds"))
   saveRDS(list(keyringName = keyringName), keyringSettingsFileName)
 
   # Generate target names by module type
@@ -106,7 +108,7 @@ createResultDataModels <- function(analysisSpecifications,
     )
   }
   moduleToTargetNames <- bind_rows(moduleToTargetNames)
-  moduleToTargetNamesFileName <- gsub("\\\\", "/", file.path(executionScriptFolder, "moduleTargetNames.rds"))
+  moduleToTargetNamesFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "moduleTargetNames.rds"))
   saveRDS(moduleToTargetNames, moduleToTargetNamesFileName)
 
   # Settings required inside script. There is probably a much cleaner way of doing this
@@ -144,7 +146,7 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
   remoteUsername <- moduleSpecification$remoteUsername
-  moduleInstallation <- verifyModuleInstallation(module, version)
+  moduleInstallation <- verifyModuleInstallation(module, version, silent = TRUE)
   moduleFolder <- moduleInstallation$moduleFolder
   if (isFALSE(moduleInstallation$moduleInstalled)) {
     stop("Stopping since module is not properly installed!")
@@ -168,12 +170,12 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
     moduleExecutionSettings = moduleExecutionSettings,
     keyringSettings = keyringSettings
   )
-  jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
+  jobContextFileName <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds"))
   saveRDS(jobContext, jobContextFileName)
-  dataModelExportPath <- file.path(moduleExecutionSettings$workSubFolder, "resultsDataModelSpecification.csv")
+  dataModelExportPath <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "resultsDataModelSpecification.csv"))
 
 
-  doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "schema.creation")
+  doneFile <- .formatAndNormalizeFilePathForScript(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "schema.creation"))
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }

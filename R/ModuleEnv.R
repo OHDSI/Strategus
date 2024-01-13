@@ -78,6 +78,12 @@ withModuleRenv <- function(code,
     }
   }
 
+  # Turning off verbose output to hide renv output
+  # unless the user has set this option to TRUE.
+  if (!getOption(x = "renv.verbose", default = FALSE)) {
+    options(renv.verbose = FALSE)
+  }
+
   # Import the Strategus functions we need to use in the module scripts
   script <- c("retrieveConnectionDetails <- ", base::deparse(Strategus::retrieveConnectionDetails), script)
   script <- c("unlockKeyring <- ", base::deparse(Strategus::unlockKeyring), script)
@@ -110,4 +116,8 @@ withModuleRenv <- function(code,
   } else {
     paste0("# option = ", optionName, " - could not be passed to this file, likely because it is a function.")
   }
+}
+
+.formatAndNormalizeFilePathForScript <- function(filePath) {
+  return(gsub("\\\\", "/", normalizePath(path = filePath, mustWork = F)))
 }
