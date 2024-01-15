@@ -7,8 +7,12 @@
     "apiVersion": {
       "type": "string"
     },
-    "studyName": {"type" : "string"},
-    "studyDescription": {"type" : "string"},
+    "studyName": {
+      "type": "string"
+    },
+    "studyDescription": {
+      "type": "string"
+    },
     "sharedResources": {
       "type": "array",
       "items": {
@@ -38,7 +42,9 @@
                                   }
                                 }
                               },
-                              "required": ["self"]
+                              "required": [
+                                "self"
+                              ]
                             },
                             "cohortName": {
                               "type": "string"
@@ -47,19 +53,33 @@
                               "type": "integer"
                             }
                           },
-                          "required": ["_links", "cohortName", "cohortDefinitionId"]
+                          "required": [
+                            "_links",
+                            "cohortName",
+                            "cohortDefinitionId"
+                          ]
                         },
                         {
                           "type": "object",
                           "properties": {
-                            "cohortDefinitionId": {"type": "integer"},
-                            "targetCohortDefinitionId": {"type": "integer"},
-                            "subsetDefinitionId": {"type": "integer"},
-                             "cohortName": {
+                            "cohortDefinitionId": {
+                              "type": "integer"
+                            },
+                            "targetCohortDefinitionId": {
+                              "type": "integer"
+                            },
+                            "subsetDefinitionId": {
+                              "type": "integer"
+                            },
+                            "cohortName": {
                               "type": "string"
                             }
                           },
-                          "required": ["cohortDefinitionId", "targetCohortDefinitionId", "subsetDefinitionId"]
+                          "required": [
+                            "cohortDefinitionId",
+                            "targetCohortDefinitionId",
+                            "subsetDefinitionId"
+                          ]
                         }
                       ]
                     }
@@ -72,21 +92,43 @@
                         "_links": {
                           "type": "object",
                           "properties": {
-                            "self": {"type": "object", "properties": {"href": {"type": "string"}}}
+                            "self": {
+                              "type": "object",
+                              "properties": {
+                                "href": {
+                                  "type": "string"
+                                }
+                              }
+                            }
                           },
-                          "required": ["self"]
+                          "required": [
+                            "self"
+                          ]
                         },
-                        "subsetDefinitionName": {"type": "string"},
-                        "subsetDefinitionId": {"type": "integer"}
+                        "subsetDefinitionName": {
+                          "type": "string"
+                        },
+                        "subsetDefinitionId": {
+                          "type": "integer"
+                        }
                       },
-                      "required": ["_links", "subsetDefinitionName", "subsetDefinitionId"]
+                      "required": [
+                        "_links",
+                        "subsetDefinitionName",
+                        "subsetDefinitionId"
+                      ]
                     }
                   }
                 },
-                "required": ["cohortDefinitions", "subsetDefinitions"]
+                "required": [
+                  "cohortDefinitions",
+                  "subsetDefinitions"
+                ]
               }
             },
-            "required": ["cohortDefinitionSet"]
+            "required": [
+              "cohortDefinitionSet"
+            ]
           },
           {
             "type": "object",
@@ -94,36 +136,93 @@
               "conceptSetDefinition": {
                 "type": "object",
                 "properties": {
-                  "id": {"type": "integer"},
-                  "conceptSetName": {"type": "string"},
-                  "isNegativeControlConceptSet": {"type": "boolean"},
+                  "id": {
+                    "type": "integer"
+                  },
+                  "conceptSetName": {
+                    "type": "string"
+                  },
+                  "isNegativeControlConceptSet": {
+                    "type": "boolean"
+                  },
                   "concepts": {
                     "type": "array",
                     "items": {
                       "type": "object",
                       "properties": {
-                        "conceptId": {"type": "integer"},
-                        "conceptName": {"type": "string"},
-                        "standardConcept": {"type": "string", "enum": ["S", "NS"]},
-                        "standardConceptCaption": {"type": "string"},
-                        "invalidReason": {"type": "string"},
-                        "invalidReasonCaption": {"type": "string"},
-                        "conceptCode": {"type": "string"},
-                        "domainId": {"type": "integer"},
-                        "vocabularyId": {"type": "integer"},
-                        "conceptClassId": {"type": "integer"},
-                        "validStartDate": {"type": "string", "format": "date"},
-                        "validEndDate": {"type": "string", "format": "date"},
-                        "cohortDefinitionId": {"type": "integer"}
+                        "conceptId": {
+                          "type": "integer"
+                        },
+                        "conceptName": {
+                          "type": "string"
+                        },
+                        "standardConcept": {
+                          "type": "string",
+                          "enum": [
+                            "S",
+                            "NS"
+                          ]
+                        },
+                        "standardConceptCaption": {
+                          "type": "string"
+                        },
+                        "invalidReason": {
+                          "type": "string"
+                        },
+                        "invalidReasonCaption": {
+                          "type": "string"
+                        },
+                        "conceptCode": {
+                          "type": "string"
+                        },
+                        "domainId": {
+                          "type": "integer"
+                        },
+                        "vocabularyId": {
+                          "type": "integer"
+                        },
+                        "conceptClassId": {
+                          "type": "integer"
+                        },
+                        "validStartDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "validEndDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "cohortDefinitionId": {
+                          "type": "integer"
+                        }
                       },
-                      "required": ["conceptId", "conceptName", "standardConcept", "standardConceptCaption", "invalidReason", "invalidReasonCaption", "conceptCode", "domainId", "vocabularyId", "conceptClassId", "validStartDate", "validEndDate"]
+                      "required": [
+                        "conceptId",
+                        "conceptName",
+                        "standardConcept",
+                        "standardConceptCaption",
+                        "invalidReason",
+                        "invalidReasonCaption",
+                        "conceptCode",
+                        "domainId",
+                        "vocabularyId",
+                        "conceptClassId",
+                        "validStartDate",
+                        "validEndDate"
+                      ]
                     }
                   }
                 },
-                "required": ["id", "conceptSetName", "concepts"]
+                "required": [
+                  "id",
+                  "conceptSetName",
+                  "concepts"
+                ]
               }
             },
-            "required": ["conceptSetDefinition"]
+            "required": [
+              "conceptSetDefinition"
+            ]
           },
           {
             "type": "object",
@@ -131,13 +230,23 @@
               "sharedResource": {
                 "type": "object",
                 "properties": {
-                  "name": {"type": "string"},
-                  "schemaRef": {"type": "string", "format": "uri"}
+                  "name": {
+                    "type": "string"
+                  },
+                  "schemaRef": {
+                    "type": "string",
+                    "format": "uri"
+                  }
                 },
-                "required": ["name", "schemaRef"]
+                "required": [
+                  "name",
+                  "schemaRef"
+                ]
               }
             },
-            "required": ["sharedResource"]
+            "required": [
+              "sharedResource"
+            ]
           }
         ]
       }
@@ -148,23 +257,43 @@
         "_links": {
           "type": "object",
           "properties": {
-            "self": {"type": "object", "properties": {"href": {"type": "string"}}}
+            "self": {
+              "type": "object",
+              "properties": {
+                "href": {
+                  "type": "string"
+                }
+              }
+            }
           },
-          "required": ["self"]
+          "required": [
+            "self"
+          ]
         }
       },
-      "required": ["_links"]
+      "required": [
+        "_links"
+      ]
     },
     "modules": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
-          "module": {"type": "string"},
-          "version": {"type": "string"},
-          "schemaRef": {"type": "string", "format": "uri"},
-          "settings": {"$ref": "#"},
-          "renv" : {
+          "module": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "schemaRef": {
+            "type": "string",
+            "format": "uri"
+          },
+          "settings": {
+            "$ref": "#"
+          },
+          "renv": {
             "type": "object",
             "properties": {
               "_links": {
@@ -179,13 +308,25 @@
                     }
                   }
                 },
-                "required": ["self"]
+                "required": [
+                  "self"
+                ]
               }
             }
-        },
-        "required": ["module", "version", "schemaRef", "settings"]
+          },
+          "required": [
+            "module",
+            "version",
+            "schemaRef",
+            "settings"
+          ]
+        }
       }
-    }
-  },
-  "required": ["apiVersion", "sharedResources", "renv", "modules"]
-}
+    },
+    "required": [
+      "apiVersion",
+      "sharedResources",
+      "renv",
+      "modules"
+    ]
+  }
