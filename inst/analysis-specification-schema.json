@@ -100,7 +100,7 @@
                       "properties": {
                         "conceptId": {"type": "integer"},
                         "conceptName": {"type": "string"},
-                        "standardConcept": {"type": "boolean"},
+                        "standardConcept": {"type": "string", "enum": ["S", "NS"]},
                         "standardConceptCaption": {"type": "string"},
                         "invalidReason": {"type": "string"},
                         "invalidReasonCaption": {"type": "string"},
@@ -159,7 +159,25 @@
           "module": {"type": "string"},
           "version": {"type": "string"},
           "schemaRef": {"type": "string", "format": "uri"},
-          "settings": {"$ref": "#"}
+          "settings": {"$ref": "#"},
+          "renv" : {
+            "type": "object",
+            "properties": {
+              "_links": {
+                "type": "object",
+                "properties": {
+                  "self": {
+                    "type": "object",
+                    "properties": {
+                      "href": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": ["self"]
+              }
+            }
         },
         "required": ["module", "version", "schemaRef", "settings"]
       }
