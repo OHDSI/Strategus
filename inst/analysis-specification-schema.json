@@ -293,6 +293,10 @@
           "settings": {
             "$ref": "#"
           },
+          "callingFunction": {
+            "type": "string",
+            "description": "calling function within package to pass settings to (e.g executeAnalyses). Defaults to `execute`"
+          },
           "renv": {
             "type": "object",
             "properties": {
