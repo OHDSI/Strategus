@@ -20,12 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: windows-latest, r: '4.2.3', rtools: '42', rspm: "https://cloud.r-project.org"}
+          #- {os: windows-latest, r: '4.2.3', rtools: '42', rspm: "https://cloud.r-project.org"}
           - {os: macOS-latest, r: '4.2.3', rtools: '42', rspm: "https://cloud.r-project.org"}
-          - {os: ubuntu-20.04, r: '4.2.3', rtools: '42', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: windows-latest, r: 'release', rtools: '', rspm: "https://cloud.r-project.org"}
-          - {os: macOS-latest, r: 'release', rtools: '', rspm: "https://cloud.r-project.org"}
-          - {os: ubuntu-20.04, r: 'release', rtools: '', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          #- {os: ubuntu-20.04, r: '4.2.3', rtools: '42', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          #- {os: windows-latest, r: 'release', rtools: '', rspm: "https://cloud.r-project.org"}
+          #- {os: macOS-latest, r: 'release', rtools: '', rspm: "https://cloud.r-project.org"}
+          #- {os: ubuntu-20.04, r: 'release', rtools: '', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
     env:
       GITHUB_PAT: ${{ secrets.GH_TOKEN }}
@@ -54,6 +54,7 @@ jobs:
       CDM5_SPARK_USER: ${{ secrets.CDM5_SPARK_USER }}
       CDM5_SPARK_PASSWORD: ${{ secrets.CDM5_SPARK_PASSWORD }}
       CDM5_SPARK_CONNECTION_STRING: ${{ secrets.CDM5_SPARK_CONNECTION_STRING }}
+      ACTIONS_STEP_DEBUG: true
 
     steps:
       - uses: actions/checkout@v3
