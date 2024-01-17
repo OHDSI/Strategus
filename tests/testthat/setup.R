@@ -104,77 +104,77 @@ if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == "" &
   )
 }
 
-# # Oracle
-# if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
-#   Sys.getenv("CDM5_ORACLE_PASSWORD") == "" &
-#   Sys.getenv("CDM5_ORACLE_SERVER") == "" &
-#   Sys.getenv("CDM5_ORACLE_CDM_SCHEMA") == "" &
-#   Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA") == "")) {
-#   DatabaseConnector::downloadJdbcDrivers("oracle")
-#   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
-#     connectionDetails = DatabaseConnector::createConnectionDetails(
-#       dbms = "oracle",
-#       user = Sys.getenv("CDM5_ORACLE_USER"),
-#       password = URLdecode(Sys.getenv("CDM5_ORACLE_PASSWORD")),
-#       server = Sys.getenv("CDM5_ORACLE_SERVER"),
-#       port = 1521,
-#       pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-#     ),
-#     cdmDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
-#     workDatabaseSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA"),
-#     vocabularyDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
-#     cohortTableNames = cohortTableNames,
-#     tempEmulationSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA")
-#   )
-# }
-#
-# # RedShift
-# if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_PASSWORD") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_SERVER") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == "" &
-#   Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
-#   DatabaseConnector::downloadJdbcDrivers("redshift")
-#   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
-#     connectionDetails = DatabaseConnector::createConnectionDetails(
-#       dbms = "redshift",
-#       user = Sys.getenv("CDM5_REDSHIFT_USER"),
-#       password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
-#       server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
-#       port = 5439,
-#       pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-#     ),
-#     cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-#     workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
-#     vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-#     cohortTableNames = cohortTableNames,
-#     tempEmulationSchema = NULL
-#   )
-# }
-#
-# # SQL Server
-# if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_PASSWORD") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_SERVER") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA") == "" &
-#   Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA") == "")) {
-#   DatabaseConnector::downloadJdbcDrivers("sql server")
-#   connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
-#     connectionDetails = DatabaseConnector::createConnectionDetails(
-#       dbms = "sql server",
-#       user = Sys.getenv("CDM5_SQL_SERVER_USER"),
-#       password = URLdecode(Sys.getenv("CDM5_SQL_SERVER_PASSWORD")),
-#       server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
-#       port = 1433,
-#       pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
-#     ),
-#     cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
-#     workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
-#     vocabularyDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
-#     cohortTableNames = cohortTableNames,
-#     tempEmulationSchema = NULL
-#   )
-# }
+# Oracle
+if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
+  Sys.getenv("CDM5_ORACLE_PASSWORD") == "" &
+  Sys.getenv("CDM5_ORACLE_SERVER") == "" &
+  Sys.getenv("CDM5_ORACLE_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("oracle")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "oracle",
+      user = Sys.getenv("CDM5_ORACLE_USER"),
+      password = URLdecode(Sys.getenv("CDM5_ORACLE_PASSWORD")),
+      server = Sys.getenv("CDM5_ORACLE_SERVER"),
+      port = 1521,
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
+    cohortTableNames = cohortTableNames,
+    tempEmulationSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA")
+  )
+}
+
+# RedShift
+if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
+  Sys.getenv("CDM5_REDSHIFT_PASSWORD") == "" &
+  Sys.getenv("CDM5_REDSHIFT_SERVER") == "" &
+  Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("redshift")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "redshift",
+      user = Sys.getenv("CDM5_REDSHIFT_USER"),
+      password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
+      server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
+      port = 5439,
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
+    cohortTableNames = cohortTableNames,
+    tempEmulationSchema = NULL
+  )
+}
+
+# SQL Server
+if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_PASSWORD") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_SERVER") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA") == "" &
+  Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA") == "")) {
+  DatabaseConnector::downloadJdbcDrivers("sql server")
+  connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
+    connectionDetails = DatabaseConnector::createConnectionDetails(
+      dbms = "sql server",
+      user = Sys.getenv("CDM5_SQL_SERVER_USER"),
+      password = URLdecode(Sys.getenv("CDM5_SQL_SERVER_PASSWORD")),
+      server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
+      port = 1433,
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
+    ),
+    cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
+    workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
+    vocabularyDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
+    cohortTableNames = cohortTableNames,
+    tempEmulationSchema = NULL
+  )
+}
 
 # Keyring helpers --------------
 # Set the keyring name & password for testing
