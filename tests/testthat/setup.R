@@ -68,7 +68,7 @@ withr::defer(
 cdmDatabaseSchema <- "main"
 workDatabaseSchema <- "main"
 vocabularyDatabaseSchema <- workDatabaseSchema
-cohortTable <- "cohort"
+cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
 tempEmulationSchema <- NULL
 
 connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
@@ -76,7 +76,7 @@ connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
   cdmDatabaseSchema = "main",
   workDatabaseSchema = "main",
   vocabularyDatabaseSchema = "main",
-  cohortTable = "cohort",
+  cohortTableNames = cohortTableNames,
   tempEmulationSchema = NULL
 )
 
@@ -99,7 +99,7 @@ if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == "" &
     cdmDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = NULL
   )
 }
@@ -123,7 +123,7 @@ if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
     cdmDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA")
   )
 }
@@ -147,7 +147,7 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
     cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = NULL
   )
 }
@@ -171,7 +171,7 @@ if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
     cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = NULL
   )
 }
