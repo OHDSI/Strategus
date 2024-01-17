@@ -20,6 +20,10 @@
           {
             "type": "object",
             "properties": {
+              "resourceName" : {
+                "type": "string",
+                "description": "unique name for resource"
+              },
               "cohortDefinitionSet": {
                 "type": "object",
                 "properties": {
@@ -133,6 +137,10 @@
           {
             "type": "object",
             "properties": {
+              "resourceName" : {
+                "type": "string",
+                "description": "unique name for resource"
+              },
               "conceptSetDefinition": {
                 "type": "object",
                 "properties": {
@@ -141,9 +149,6 @@
                   },
                   "conceptSetName": {
                     "type": "string"
-                  },
-                  "isNegativeControlConceptSet": {
-                    "type": "boolean"
                   },
                   "concepts": {
                     "type": "array",
@@ -227,6 +232,102 @@
           {
             "type": "object",
             "properties": {
+              "resourceName" : {
+                "type": "string",
+                "description": "unique name for resource"
+              },
+              "negativeControlConceptSetDefinition": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "conceptSetName": {
+                    "type": "string"
+                  },
+                  "concepts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "conceptId": {
+                          "type": "integer"
+                        },
+                        "conceptName": {
+                          "type": "string"
+                        },
+                        "standardConcept": {
+                          "type": "string",
+                          "enum": [
+                            "S",
+                            "NS"
+                          ]
+                        },
+                        "standardConceptCaption": {
+                          "type": "string"
+                        },
+                        "invalidReason": {
+                          "type": "string"
+                        },
+                        "invalidReasonCaption": {
+                          "type": "string"
+                        },
+                        "conceptCode": {
+                          "type": "string"
+                        },
+                        "domainId": {
+                          "type": "integer"
+                        },
+                        "vocabularyId": {
+                          "type": "integer"
+                        },
+                        "conceptClassId": {
+                          "type": "integer"
+                        },
+                        "validStartDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "validEndDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "cohortDefinitionId": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "conceptId",
+                        "conceptName",
+                        "standardConcept",
+                        "standardConceptCaption",
+                        "invalidReason",
+                        "invalidReasonCaption",
+                        "conceptCode",
+                        "domainId",
+                        "vocabularyId",
+                        "conceptClassId",
+                        "validStartDate",
+                        "validEndDate",
+                        "cohortDefinitionId"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "conceptSetName",
+                  "concepts"
+                ]
+              }
+            },
+            "required": [
+              "negativeControlConceptSetDefinition"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
               "sharedResource": {
                 "type": "object",
                 "properties": {
@@ -293,9 +394,16 @@
           "settings": {
             "$ref": "#"
           },
+          "requiredSharedResources" : {
+            "type": "array",
+            "description": "Shared resource labels required for this object",
+            "items": {
+              "type": "string"
+            }
+          },
           "callingFunction": {
             "type": "string",
-            "description": "calling function within package to pass settings to (e.g executeAnalyses). Defaults to `execute`"
+            "description": "Optional calling function within package to pass settings to (e.g executeAnalyses). Defaults to `execute`"
           },
           "renv": {
             "type": "object",
@@ -322,7 +430,8 @@
             "module",
             "version",
             "schemaRef",
-            "settings"
+            "settings",
+            "requiredSharedResources"
           ]
         }
       }
