@@ -28,6 +28,7 @@ test_that("Run unit test study", {
     workDatabaseSchema <- connectionDetailsList[[i]]$workDatabaseSchema
     cdmDatabaseSchema <- connectionDetailsList[[i]]$cdmDatabaseSchema
     tempEmulationSchema <- connectionDetailsList[[i]]$tempEmulationSchema
+    cohortTableNames <- connectionDetailsList[[i]]$cohortTableNames
     studyRootFolder <- file.path(tempDir, "EunomiaTestStudy", dbms)
     workFolder <- file.path(studyRootFolder, "work_folder")
     resultsFolder <- file.path(studyRootFolder, "results_folder")
@@ -72,7 +73,7 @@ test_that("Run unit test study", {
       workDatabaseSchema = workDatabaseSchema,
       cdmDatabaseSchema = cdmDatabaseSchema,
       tempEmulationSchema = tempEmulationSchema,
-      cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix)),
+      cohortTableNames = cohortTableNames,
       workFolder = workFolder,
       resultsFolder = resultsFolder,
       minCellCount = 5,

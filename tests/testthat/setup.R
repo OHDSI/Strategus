@@ -68,7 +68,7 @@ withr::defer(
 cdmDatabaseSchema <- "main"
 workDatabaseSchema <- "main"
 vocabularyDatabaseSchema <- workDatabaseSchema
-cohortTable <- "cohort"
+cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
 tempEmulationSchema <- NULL
 
 connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
@@ -76,7 +76,7 @@ connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
   cdmDatabaseSchema = "main",
   workDatabaseSchema = "main",
   vocabularyDatabaseSchema = "main",
-  cohortTable = "cohort",
+  cohortTableNames = cohortTableNames,
   tempEmulationSchema = NULL
 )
 #
