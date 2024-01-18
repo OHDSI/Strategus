@@ -401,31 +401,6 @@
               "type": "string"
             }
           },
-          "callingFunction": {
-            "type": "string",
-            "description": "Optional calling function within package to pass settings to (e.g executeAnalyses). Defaults to `execute`"
-          },
-          "renv": {
-            "type": "object",
-            "properties": {
-              "_links": {
-                "type": "object",
-                "properties": {
-                  "self": {
-                    "type": "object",
-                    "properties": {
-                      "href": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "required": [
-                  "self"
-                ]
-              }
-            }
-          },
           "required": [
             "module",
             "version",
