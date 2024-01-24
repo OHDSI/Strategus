@@ -7,7 +7,7 @@
 
 #Run the Eunomia study ---------
 # Set the folder & environment variable for module storage
-moduleFolder <- "C:/temp/strategus/modules"
+moduleFolder <- "C:/temp/strategus/modules_dev"
 studyFolder <- "C:/temp/strategus/EunomiaTestStudy"
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
 
@@ -35,6 +35,10 @@ analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
   fileName = system.file("testdata/analysisSpecification.json",
                          package = "Strategus")
 )
+
+# Update to use the newer version of CG
+analysisSpecifications$moduleSpecifications[[1]]$version <- "0.2.2-7"
+analysisSpecifications$moduleSpecifications <- list(analysisSpecifications$moduleSpecifications[[1]])
 
 resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
   resultsConnectionDetailsReference = "eunomia",
@@ -66,7 +70,7 @@ executionSettings <- ParallelLogger::loadSettingsFromJson(
 
 Strategus::storeConnectionDetails(
   connectionDetails,
-  resultsConnectionDetailsReference
+  "eunomia"
 )
 
 Strategus::createResultDataModels(
