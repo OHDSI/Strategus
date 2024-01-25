@@ -127,7 +127,8 @@ testModuleFilesToRemove <- c(
 )
 testModuleDirToRemove <- c(
   file.path(testModuleRootFolder, ".Rproj.user"),
-  file.path(testModuleRootFolder, "renv/library")
+  file.path(testModuleRootFolder, "renv/library"),
+  file.path(testModuleRootFolder, "renv/profiles/dev/renv/library")
 )
 unlink(testModuleFilesToRemove)
 unlink(testModuleDirToRemove, recursive = TRUE)

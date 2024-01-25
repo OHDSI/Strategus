@@ -74,6 +74,10 @@ compareLockFiles <- function(filename1, filename2) {
 #' @param targetLockFileName The target renv.lock file that will be synced with
 #'                           the source of truth
 #'
+#' @return
+#' A data.frame containing the different packages and their version that
+#' were involved in the synchronization process
+#'
 #' @export
 syncLockFile <- function(sourceOfTruthLockFileName, targetLockFileName) {
   findPackageByName <- function(list, packageName) {
@@ -139,4 +143,6 @@ syncLockFile <- function(sourceOfTruthLockFileName, targetLockFileName) {
     lockfile = targetLockFile,
     file = targetLockFileName
   )
+
+  invisible(return(verDiffs))
 }
