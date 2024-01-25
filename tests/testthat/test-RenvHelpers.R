@@ -53,3 +53,51 @@ test_that("Check renv.lock sync works", {
   )
   expect_equal(tempLf$Packages$zip$Version, expectedVersion)
 })
+
+test_that("Test renv.lock validation", {
+  tmp <- tempfile()
+  on.exit(unlink(tmp))
+  file.copy(
+    from = system.file("testdata/renv.lock", package = "Strategus"),
+    to = tmp
+  )
+
+  # All tests must pass on our internal lock file
+  expect_message(
+    object = Strategus::validateLockFile(
+      filename = tmp
+      ),
+    regexp = "PASSED"
+  )
+
+  # Remove the mandatory dependency
+  tmpLockFile <- renv::lockfile_read(file = tmp)
+  tmpLockFile$Packages$renv <- NULL
+  invisible(renv::lockfile_write(lockfile = tmpLockFile, file = tmp))
+  expect_message(
+    object = Strategus::validateLockFile(
+      filename = tmp
+    ),
+    regexp = "FAILED"
+  )
+
+  # Remove suggested packages
+  tmpLockFile$Packages$RSQLite <- NULL
+  invisible(renv::lockfile_write(lockfile = tmpLockFile, file = tmp))
+  expect_message(
+    object = Strategus::validateLockFile(
+      filename = tmp
+    ),
+    regexp = "FAILED"
+  )
+
+  # Mess up the CohortGenerator package to use a "HEAD" ref
+  tmpLockFile$Packages$CohortGenerator$RemoteRef <- "HEAD"
+  invisible(renv::lockfile_write(lockfile = tmpLockFile, file = tmp))
+  invisible(expect_message(
+    object = Strategus::validateLockFile(
+      filename = tmp
+    ),
+    regexp = "FAILED"
+  ))
+})

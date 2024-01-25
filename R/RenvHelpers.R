@@ -23,22 +23,6 @@ compareLockFiles <- function(filename1, filename2) {
     file = filename2
   )
 
-  # internal function to read lock file into data frame
-  lockFileToDataFrame <- function(lf) {
-    df <- data.frame()
-    for (i in 1:length(lf$Packages)) {
-      df <- rbind(
-        df,
-        data.frame(
-          Name = lf$Packages[[i]]$Package,
-          Version = lf$Packages[[i]]$Version,
-          RemoteRef = ifelse(is.null(lf$Packages[[i]]$RemoteRef), yes = NA, no = lf$Packages[[i]]$RemoteRef)
-        )
-      )
-    }
-    return(df)
-  }
-
   # Compare lock files
   lockfile1Packages <- lockFileToDataFrame(lockfile1)
   names(lockfile1Packages) <- paste0("lockfile1", names(lockfile1Packages))
@@ -144,5 +128,98 @@ syncLockFile <- function(sourceOfTruthLockFileName, targetLockFileName) {
     file = targetLockFileName
   )
 
-  invisible(return(verDiffs))
+  return(invisible(verDiffs))
 }
+
+#' Validate an renv.lock file to ensure it is ready for use by Strategus
+#'
+#' @description
+#' Will check an renv.lock file for a module to verify that it only references
+#' tagged packages and includes the packages required by Strategus. It will
+#' also check for suggested packages that are useful for testing, such as
+#' RSQLite.
+#'
+#' @param filename The renv.lock file to validate
+#'
+#' @export
+validateLockFile <- function(filename) {
+  # Read the lock file
+  lockFile <- renv::lockfile_read(
+    file = filename
+  )
+  # Create a data.frame from the renv.lock file
+  df <- lockFileToDataFrame(
+    lf = lockFile
+  )
+
+  # Check that the mandatory dependencies are met
+  message("Checking mandatory packages...", appendLF = F)
+  if (length(mandatoryPackages()) != nrow(df[df$Name %in% mandatoryPackages(),])) {
+    missingPkgs <- setdiff(mandatoryPackages(), df[df$Name %in% mandatoryPackages(),]$Name)
+    message("FAILED!")
+    message(" -- Missing the mandatory packages: ", paste(missingPkgs, collapse = ", "))
+    message(" Please record these missing dependencies in your renv.lock file.")
+  } else {
+    message("PASSED!")
+  }
+
+  # Check for suggested packages
+  message("Checking suggested packages...", appendLF = F)
+  if (length(suggestedPacakges()) != nrow(df[df$Name %in% suggestedPacakges(),])) {
+    missingPkgs <- setdiff(suggestedPacakges(), df[df$Name %in% suggestedPacakges(),]$Name)
+    message("WARNING!")
+    message(" -- Missing the suggested packages: ", paste(missingPkgs, collapse = ", "))
+    message(" This is an optional set of dependencies so you may decide if you wish to have them in your renv.lock file.")
+  } else {
+    message("PASSED!")
+  }
+
+  # Check that we're using declared versions of all packages
+  message("Checking all package using tagged versions in RemoteRef...", appendLF = F)
+  # Start by filtering out the CRAN Repository entries
+  dfFiltered <- df[tolower(df$Source) != "repository",]
+  if (!all(grepl("^(v)?\\d+(\\.\\d+){2}$", dfFiltered$RemoteRef))) {
+    message("FAILED! Please check the following packages:")
+    problemPkgs <- dfFiltered[!grepl("^(v)?\\d+(\\.\\d+){2}$", dfFiltered$RemoteRef),]
+    for (i in 1:nrow(problemPkgs)) {
+      message(paste0(" -- Package: ", problemPkgs$Name[[i]], "; RemoteRef: ", problemPkgs$RemoteRef[[i]]))
+    }
+    message(" Please ensure you are only including tagged versions of package dependencies in your renv.lock file.")
+  } else {
+    message("PASSED!")
+  }
+}
+
+mandatoryPackages <- function() {
+  return(c(
+    "CohortGenerator",
+    "DatabaseConnector",
+    "keyring",
+    "ParallelLogger",
+    "renv",
+    "SqlRender"
+  ))
+}
+
+suggestedPacakges <- function() {
+  return(c("RSQLite"))
+}
+
+
+# internal function to read lock file into data frame
+lockFileToDataFrame <- function(lf) {
+  df <- data.frame()
+  for (i in 1:length(lf$Packages)) {
+    df <- rbind(
+      df,
+      data.frame(
+        Name = lf$Packages[[i]]$Package,
+        Version = lf$Packages[[i]]$Version,
+        Source = lf$Packages[[i]]$Source,
+        RemoteRef = ifelse(is.null(lf$Packages[[i]]$RemoteRef), yes = NA, no = lf$Packages[[i]]$RemoteRef)
+      )
+    )
+  }
+  return(df)
+}
+

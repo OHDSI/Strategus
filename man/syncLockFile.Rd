@@ -14,6 +14,10 @@ truth}
 \item{targetLockFileName}{The target renv.lock file that will be synced with
 the source of truth}
 }
+\value{
+A data.frame containing the different packages and their version that
+were involved in the synchronization process
+}
 \description{
 Used to synchronize the values from the "source of truth" renv.lock file to
 the target renv.lock file. Packages are compared (by name) and if the version
