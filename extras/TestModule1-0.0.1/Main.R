@@ -1,4 +1,4 @@
-# Copyright 2023 Observational Health Data Sciences and Informatics
+# Copyright 2024 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -13,6 +13,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Adding library references that are required for Strategus
+library(CohortGenerator)
+library(DatabaseConnector)
+library(keyring)
+library(ParallelLogger)
+library(SqlRender)
+
+# Adding RSQLite so that we can test modules with Eunomia
+library(RSQLite)
 
 execute <- function(jobContext) {
   rlang::inform("Validating inputs")
@@ -66,7 +76,7 @@ execute <- function(jobContext) {
   message("Exporting data")
   moduleInfo <- getModuleInfo()
   resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
-  fileName <- file.path(resultsFolder, paste0(moduleInfo$TablePrefix, "data.csv"))
+  fileName <- file.path(resultsFolder, paste0(moduleInfo$TablePrefix, "unit_test.csv"))
   readr::write_csv(data, fileName)
 
   # Set the table names in resultsDataModelSpecification.csv
