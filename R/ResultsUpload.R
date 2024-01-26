@@ -94,7 +94,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
         # If the keyring is locked, unlock it, set the value and then re-lock it
         ParallelLogger::logInfo("-- Getting result database credentials")
         keyringName <- jobContext$keyringSettings$keyringName
-        keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
+        keyringLocked <- unlockKeyring(keyringName = keyringName)
         resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
         resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
         resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)

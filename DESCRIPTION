@@ -32,7 +32,8 @@ Imports:
   methods,
   tibble,
   ResultModelManager (>= 0.3.0),
-  SqlRender (>= 1.11.0)
+  SqlRender (>= 1.11.0),
+  semver
 Suggests:
   testthat (>= 3.0.0),
   fs,

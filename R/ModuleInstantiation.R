@@ -426,7 +426,7 @@ getModuleRenvDependencies <- function(moduleFolder) {
     ".Rprofile",
     "renv.lock",
     "renv/activate.R",
-    "renv/settings.dcf"
+    "renv/settings.json"
   )
 
   missingFiles <- tibble::enframe(renvRequiredFiles) %>%
