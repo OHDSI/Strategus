@@ -118,7 +118,7 @@ syncLockFile <- function(sourceOfTruthLockFileName, targetLockFileName) {
         rlang::warn(paste0("Package: [", verDiffs[i, ]$lockfile1Name, "] - version number could not be parsed. Please inspect manually as it may require an upgrade."))
       }
     }, error = function(err) {
-      rlang::inform("An error occurred:", str(err), "\n")
+      rlang::inform("An error occurred:", utils::str(err), "\n")
     })
   }
 
@@ -190,6 +190,9 @@ validateLockFile <- function(filename) {
   }
 }
 
+#' List of mandatory packages for a Strategus module
+#'
+#' @keywords internal
 mandatoryPackages <- function() {
   return(c(
     "CohortGenerator",
@@ -201,12 +204,17 @@ mandatoryPackages <- function() {
   ))
 }
 
+#' List of suggested packages for a Strategus module
+#'
+#' @keywords internal
 suggestedPacakges <- function() {
   return(c("RSQLite"))
 }
 
 
-# internal function to read lock file into data frame
+#' Convert a lock file to a data.frame
+#'
+#' @keywords internal
 lockFileToDataFrame <- function(lf) {
   df <- data.frame()
   for (i in 1:length(lf$Packages)) {

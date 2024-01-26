@@ -20,7 +20,7 @@ for injecting constants (e.g. simple parameters or file paths used inside and ou
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -85,7 +85,6 @@ for injecting constants (e.g. simple parameters or file paths used inside and ou
 <span>  <span class="va">moduleFolder</span>,</span>
 <span>  injectVars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  tempScriptFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".R"</span><span class="op">)</span>,</span>
-<span>  useLocalStrategusLibrary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  job <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  processName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">moduleFolder</span>, <span class="st">"_renv_run"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -108,11 +107,6 @@ find the pattern foo and replace it with the string some string - be careful!</p
 
 <dt>tempScriptFile</dt>
 <dd><p>tempFile to write script to</p></dd>
-
-
-<dt>useLocalStrategusLibrary</dt>
-<dd><p>Use the locally installed Strategus library? TRUE will use the Strategus
-installation from the calling R process.</p></dd>
 
 
 <dt>job</dt>

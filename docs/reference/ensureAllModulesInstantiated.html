@@ -23,7 +23,7 @@ specified modules are also instantiated."><!-- mathjax --><script src="https://c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -87,7 +87,7 @@ specified modules are also instantiated.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ensureAllModulesInstantiated</span><span class="op">(</span><span class="va">analysisSpecifications</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ensureAllModulesInstantiated</span><span class="op">(</span><span class="va">analysisSpecifications</span>, forceVerification <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -96,12 +96,22 @@ specified modules are also instantiated.</p>
 <dd><p>An object of type <code>AnalysisSpecifications</code> as created
 by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSpecificiations()</a></code>.</p></dd>
 
+
+<dt>forceVerification</dt>
+<dd><p>When set to TRUE, the verification process is forced
+to re-evaluate if a module is properly installed. The default is FALSE
+since if a module is successfully validated, the module will contain
+the hash value of the module's renv.lock file in the file system so it can
+by-pass running this check every time.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>A tibble listing the instantiated modules.</p>
+<p>A list containing the install status of all modules
+(TRUE if all are installed properly) and a tibble listing
+the instantiated modules.</p>
     </div>
 
   </div>
