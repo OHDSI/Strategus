@@ -72,18 +72,21 @@ execute <- function(analysisSpecifications,
       FUN = function(tableName) {
         sql <- SqlRender::render(
           sql = "CREATE TABLE @table;",
-          table =  tableName
+          table = tableName
         )
-        tryCatch({
-          SqlRender::translate(
-            sql = sql,
-            targetDialect = connectionDetails$dbms
-          )
-          return(TRUE)
-        }, warning = function(w) {
-          warning(w)
-          return(FALSE)
-        })
+        tryCatch(
+          {
+            SqlRender::translate(
+              sql = sql,
+              targetDialect = connectionDetails$dbms
+            )
+            return(TRUE)
+          },
+          warning = function(w) {
+            warning(w)
+            return(FALSE)
+          }
+        )
       }
     )
 

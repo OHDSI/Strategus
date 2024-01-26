@@ -116,9 +116,11 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
   connectionDetails <- DatabaseConnector::createConnectionDetails(
     dbms = "oracle"
   )
-  Strategus::storeConnectionDetails(connectionDetails = connectionDetails,
-                                    connectionDetailsReference = "oracle-test",
-                                    keyringName = keyringName)
+  Strategus::storeConnectionDetails(
+    connectionDetails = connectionDetails,
+    connectionDetailsReference = "oracle-test",
+    keyringName = keyringName
+  )
   executionSettings <- Strategus::createCdmExecutionSettings(
     connectionDetailsReference = "oracle-test",
     workDatabaseSchema = "does_not_matter",
@@ -131,7 +133,7 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
 
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/unitTestAnalysisSpecification.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -140,6 +142,6 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
       analysisSpecifications = analysisSpecifications,
       executionSettings = executionSettings,
       keyringName = keyringName
-      )
+    )
   )
 })
