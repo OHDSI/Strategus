@@ -1,4 +1,4 @@
-# Copyright 2023 Observational Health Data Sciences and Informatics
+# Copyright 2024 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -128,6 +128,10 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertCharacter(resultsDatabaseSchema, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # Normalize paths to convert relative paths to absolute paths
+  workFolder <- normalizePath(workFolder, mustWork = F)
+  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+
   executionSettings <- list(
     connectionDetailsReference = connectionDetailsReference,
     workDatabaseSchema = workDatabaseSchema,
@@ -178,6 +182,10 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
   checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
+
+  # Normalize paths to convert relative paths to absolute paths
+  workFolder <- normalizePath(workFolder, mustWork = F)
+  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
 
   executionSettings <- list(
     resultsConnectionDetailsReference = resultsConnectionDetailsReference,
@@ -269,6 +277,10 @@ retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = 
   checkmate::assertLogical(x = (is.null(keyringName) || keyringName %in% keyringList$keyring), add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  if (!connectionDetailsReference %in% keyring::key_list(keyring = keyringName)$service) {
+    stop("Connection details with connectionDetailsReference = \"", connectionDetailsReference, "\" were not found in your keyring. Please check that you have used the Strategus storeConnectionDetails function to save your connection details with this connectionDetailsReference name.")
+  }
+
   # If the keyring is locked, unlock it, set the value and then re-lock it
   keyringLocked <- unlockKeyring(keyringName = keyringName)
 
@@ -340,16 +352,19 @@ unlockKeyring <- function(keyringName) {
   # If the keyring is locked, unlock it, set the value and then re-lock it
   keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
   if (keyringLocked) {
-    assertKeyringPassword(x = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"), keyringName = keyringName)
+    x <- Sys.getenv("STRATEGUS_KEYRING_PASSWORD")
+    if (length(x) == 0 || x == "") {
+      stop(paste0("STRATEGUS_KEYRING_PASSWORD NOT FOUND. STRATEGUS_KEYRING_PASSWORD must be set using Sys.setenv(STRATEGUS_KEYRING_PASSWORD = \"<your password>\") to unlock the keyring: ", keyringName))
+    }
     keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"))
   }
   return(keyringLocked)
 }
 
 #' @keywords internal
-.checkKeyringPasswordSet <- function(x, keyringName = NULL) {
+.checkModuleFolderSetting <- function(x) {
   if (length(x) == 0 || x == "") {
-    return(paste0("STRATEGUS_KEYRING_PASSWORD NOT FOUND. STRATEGUS_KEYRING_PASSWORD must be set using Sys.setenv(STRATEGUS_KEYRING_PASSWORD = \"<your password>\") to unlock the keyring: ", keyringName))
+    return(paste0("INSTANTIATED_MODULES_FOLDER environment variable has not been set. INSTANTIATED_MODULES_FOLDER must be set using Sys.setenv(INSTANTIATED_MODULES_FOLDER = \"/somepath\")"))
   } else {
     return(TRUE)
   }

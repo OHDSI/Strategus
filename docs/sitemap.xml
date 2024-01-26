@@ -37,6 +37,9 @@
     <loc>/reference/addSharedResources.html</loc>
   </url>
   <url>
+    <loc>/reference/compareLockFiles.html</loc>
+  </url>
+  <url>
     <loc>/reference/createCdmExecutionSettings.html</loc>
   </url>
   <url>
@@ -67,6 +70,12 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/lockFileToDataFrame.html</loc>
+  </url>
+  <url>
+    <loc>/reference/mandatoryPackages.html</loc>
+  </url>
+  <url>
     <loc>/reference/retrieveConnectionDetails.html</loc>
   </url>
   <url>
@@ -79,7 +88,19 @@
     <loc>/reference/Strategus-package.html</loc>
   </url>
   <url>
+    <loc>/reference/suggestedPacakges.html</loc>
+  </url>
+  <url>
+    <loc>/reference/syncLockFile.html</loc>
+  </url>
+  <url>
     <loc>/reference/unlockKeyring.html</loc>
+  </url>
+  <url>
+    <loc>/reference/validateLockFile.html</loc>
+  </url>
+  <url>
+    <loc>/reference/verifyModuleInstallation.html</loc>
   </url>
   <url>
     <loc>/reference/withModuleRenv.html</loc>

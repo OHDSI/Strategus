@@ -10,7 +10,7 @@ output:
     number_sections: yes
     toc: yes
 params:
-  analysisSettingsPath: "C:/git/OHDSI/Strategus/inst/testdata"
+  analysisSettingsPath: "D:/git/OHDSI/Strategus/inst/testdata"
   analysisSettingsFileName: "analysisSpecification.json"
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -42,13 +42,13 @@ To start, we must install the [HADES](https://ohdsi.github.io/Hades/) libraries 
 
 ```{r, eval=FALSE}
 # Install correct versions of HADES packages
-remotes::install_github("ohdsi/CohortGenerator", ref = "v0.8.0")
-remotes::install_github("ohdsi/CohortDiagnostics", ref = "v3.2.3")
-remotes::install_github("ohdsi/Characterization", ref = "v0.1.1")
-remotes::install_github("ohdsi/CohortIncidence", ref = "v3.1.5")
-remotes::install_github("ohdsi/CohortMethod", ref = "v5.1.0")
-remotes::install_github("ohdsi/SelfControlledCaseSeries", ref = "v4.2.0")
-remotes::install_github("ohdsi/PatientLevelPrediction", ref = "v6.3.4")
+remotes::install_github("ohdsi/CohortGenerator", ref = "v0.8.1")
+remotes::install_github("ohdsi/CohortDiagnostics", ref = "v3.2.5")
+remotes::install_github("ohdsi/Characterization", ref = "v0.1.3")
+remotes::install_github("ohdsi/CohortIncidence", ref = "v3.3.0")
+remotes::install_github("ohdsi/CohortMethod", ref = "v5.2.0")
+remotes::install_github("ohdsi/SelfControlledCaseSeries", ref = "v5.1.0")
+remotes::install_github("ohdsi/PatientLevelPrediction", ref = "v6.3.6")
 ```
 
 ## Cohorts for the study
@@ -96,7 +96,7 @@ The building blocks of the `Strategus` analysis specification are HADES modules.
 The following code downloads the settings functions from the `CohortGeneratorModule` which then activates some additional functions we can use for creating the analysis specification. In the analysis specification, we will add the cohort definitions and negative control outcomes to the `sharedResources` section since these elements may be used by any of the HADES modules. To do this, we will use the `createCohortSharedResourceSpecifications` and `createNegativeControlOutcomeCohortSharedResourceSpecifications` functions respectively. In addition, we will use the  `cohortGeneratorModuleSpecifications` function to specify the cohort generation settings.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.1.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortGeneratorModule/v0.3.0/SettingsFunctions.R")
 
 # Create the cohort definition shared resource element for the analysis specification
 cohortDefinitionSharedResource <- createCohortSharedResourceSpecifications(
@@ -122,7 +122,7 @@ cohortGeneratorModuleSpecifications <- createCohortGeneratorModuleSpecifications
 The following code creates the `cohortDiagnosticsModuleSpecifications` to run cohort diagnostics on the cohorts in the study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/v0.1.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortDiagnosticsModule/v0.2.0/SettingsFunctions.R")
 cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecifications(
   runInclusionStatistics = TRUE,
   runIncludedSourceConcepts = TRUE,
@@ -142,7 +142,7 @@ cohortDiagnosticsModuleSpecifications <- createCohortDiagnosticsModuleSpecificat
 The following code creates the `cohortIncidenceModuleSpecifications` to perform an incidence rate analysis for the target cohorts and outcome in this study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.2.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortIncidenceModule/v0.4.0/SettingsFunctions.R")
 library(CohortIncidence)
 targets <- list(
   createCohortRef(id = 1, name = "Celecoxib"),
@@ -184,7 +184,7 @@ The following code creates the `characterizationModuleSpecifications` to perform
 
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.4.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CharacterizationModule/v0.5.0/SettingsFunctions.R")
 characterizationModuleSpecifications <- createCharacterizationModuleSpecifications(
   targetIds = c(1, 2),
   outcomeIds = 3,
@@ -207,7 +207,7 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(CohortMethod)
-source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.2.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/CohortMethodModule/v0.3.0/SettingsFunctions.R")
 negativeControlOutcomes <- lapply(
   X = ncoCohortSet$cohortId,
   FUN = createOutcome,
@@ -310,7 +310,7 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(SelfControlledCaseSeries)
-source("https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.2.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.4.0/SettingsFunctions.R")
 
 # Exposures-outcomes -----------------------------------------------------------
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
@@ -336,7 +336,7 @@ for (exposureOfInterestId in exposureOfInterestIds) {
 # Analysis settings ------------------------------------------------------------
 getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
   studyStartDate = "",
-  studyEndDate = "20191130",
+  studyEndDate = "",
   maxCasesPerOutcome = 1e6,
   useNestingCohort = TRUE,
   nestingCohortId = 1,
@@ -359,7 +359,7 @@ covarPreExp <- SelfControlledCaseSeries::createEraCovariateSettings(
 covarExposureOfInt <- SelfControlledCaseSeries::createEraCovariateSettings(
   label = "Main",
   includeEraIds = "exposureId",
-  start = 1,
+  start = 0,
   startAnchor = "era start",
   end = 0,
   endAnchor = "era end",
@@ -421,7 +421,7 @@ sccsModuleSpecifications <- creatSelfControlledCaseSeriesModuleSpecifications(
 The following code creates the `plpModuleSpecifications` to perform a self-controlled case series analysis for this study.
 
 ```{r eval=FALSE}
-source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.2.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/PatientLevelPredictionModule/v0.3.0/SettingsFunctions.R")
 
 makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
   invisible(PatientLevelPrediction::createModelDesign(

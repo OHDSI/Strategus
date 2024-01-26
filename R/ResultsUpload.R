@@ -1,4 +1,4 @@
-# Copyright 2023 Observational Health Data Sciences and Informatics
+# Copyright 2024 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -24,12 +24,16 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
   remoteUsername <- moduleSpecification$remoteUsername
-  moduleFolder <- ensureModuleInstantiated(module, version, remoteRepo, remoteUsername)
+  moduleInstallation <- verifyModuleInstallation(module, version, silent = TRUE)
+  moduleFolder <- moduleInstallation$moduleFolder
+  if (isFALSE(moduleInstallation$moduleInstalled)) {
+    stop("Stopping since module is not properly installed!")
+  }
 
   # Create job context
   moduleExecutionSettings <- executionSettings
-  moduleExecutionSettings$workSubFolder <- file.path(executionSettings$workFolder, sprintf("%s_%d", module, moduleIndex))
-  moduleExecutionSettings$resultsSubFolder <- file.path(executionSettings$resultsFolder, sprintf("%s_%d", module, moduleIndex))
+  moduleExecutionSettings$workSubFolder <- normalizePath(file.path(executionSettings$workFolder, sprintf("%s_%d", module, moduleIndex)), mustWork = F)
+  moduleExecutionSettings$resultsSubFolder <- normalizePath(file.path(executionSettings$resultsFolder, sprintf("%s_%d", module, moduleIndex)), mustWork = F)
 
   if (!is(executionSettings, "CdmExecutionSettings")) {
     stop("Unhandled executionSettings class! Must be CdmExecutionSettings instance")
@@ -44,11 +48,11 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
     moduleExecutionSettings = moduleExecutionSettings,
     keyringSettings = keyringSettings
   )
-  jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
+  jobContextFileName <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds"))
   saveRDS(jobContext, jobContextFileName)
-  dataModelExportPath <- file.path(moduleExecutionSettings$workSubFolder, "resultsDataModelSpecification.csv")
+  dataModelExportPath <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "resultsDataModelSpecification.csv"))
 
-  doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "results.uploaded")
+  doneFile <- .formatAndNormalizeFilePathForScript(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "results.uploaded"))
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }
@@ -90,7 +94,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
         # If the keyring is locked, unlock it, set the value and then re-lock it
         ParallelLogger::logInfo("-- Getting result database credentials")
         keyringName <- jobContext$keyringSettings$keyringName
-        keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
+        keyringLocked <- unlockKeyring(keyringName = keyringName)
         resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
         resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
         resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)

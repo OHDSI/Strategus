@@ -1,3 +1,6 @@
+# Use this profile when testing
+#Sys.setenv(RENV_PROFILE = "dev")
+#renv::restore(prompt = FALSE)
 library(testthat)
 library(Eunomia)
 connectionDetails <- getEunomiaConnectionDetails()
@@ -33,7 +36,7 @@ test_that("Run module", {
   source("Main.R")
   execute(jobContext)
   resultsFiles <- list.files(resultsfolder)
-  expect_true("tm1_data.csv" %in% resultsFiles)
+  expect_true("tm1_unit_test.csv" %in% resultsFiles)
 })
 
 unlink(workFolder)

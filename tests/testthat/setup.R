@@ -16,7 +16,7 @@ withr::defer(
 if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
   jdbcDriverFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
 } else {
-  jdbcDriverFolder <- "~/.jdbcDrivers"
+  jdbcDriverFolder <- "~/jdbcDrivers"
   dir.create(jdbcDriverFolder, showWarnings = FALSE)
   baseDatabaseConnectorJarFolder <- Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
   Sys.setenv("DATABASECONNECTOR_JAR_FOLDER" = jdbcDriverFolder)
@@ -29,19 +29,21 @@ if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
   )
 }
 
-
 # Create a unique ID for the table identifiers
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))
 
-tempDir <- tempfile() # "D:"
+usingTempDir <- Sys.getenv("STRATEGUS_UNIT_TEST_FOLDER") == ""
+tempDir <- ifelse(usingTempDir, tempfile(), Sys.getenv("STRATEGUS_UNIT_TEST_FOLDER"))
 tempDir <- gsub("\\\\", "/", tempDir) # Correct windows path
 renvCachePath <- file.path(tempDir, "strategus/renv")
 moduleFolder <- file.path(tempDir, "strategus/modules")
 Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
 withr::defer(
   {
-    unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+    if (usingTempDir) {
+      unlink(c(tempDir, renvCachePath, moduleFolder), recursive = TRUE, force = TRUE)
+    }
   },
   testthat::teardown_env()
 )
@@ -66,7 +68,7 @@ withr::defer(
 cdmDatabaseSchema <- "main"
 workDatabaseSchema <- "main"
 vocabularyDatabaseSchema <- workDatabaseSchema
-cohortTable <- "cohort"
+cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix))
 tempEmulationSchema <- NULL
 
 connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
@@ -74,7 +76,7 @@ connectionDetailsList[[length(connectionDetailsList) + 1]] <- list(
   cdmDatabaseSchema = "main",
   workDatabaseSchema = "main",
   vocabularyDatabaseSchema = "main",
-  cohortTable = "cohort",
+  cohortTableNames = cohortTableNames,
   tempEmulationSchema = NULL
 )
 
@@ -92,12 +94,12 @@ if (!(Sys.getenv("CDM5_POSTGRESQL_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_POSTGRESQL_PASSWORD")),
       server = Sys.getenv("CDM5_POSTGRESQL_SERVER"),
       port = 5432,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_POSTGRESQL_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = NULL
   )
 }
@@ -116,12 +118,12 @@ if (!(Sys.getenv("CDM5_ORACLE_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_ORACLE_PASSWORD")),
       server = Sys.getenv("CDM5_ORACLE_SERVER"),
       port = 1521,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_ORACLE_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = Sys.getenv("CDM5_ORACLE_OHDSI_SCHEMA")
   )
 }
@@ -140,12 +142,12 @@ if (!(Sys.getenv("CDM5_REDSHIFT_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_REDSHIFT_PASSWORD")),
       server = Sys.getenv("CDM5_REDSHIFT_SERVER"),
       port = 5439,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_REDSHIFT_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = NULL
   )
 }
@@ -164,12 +166,12 @@ if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
       password = URLdecode(Sys.getenv("CDM5_SQL_SERVER_PASSWORD")),
       server = Sys.getenv("CDM5_SQL_SERVER_SERVER"),
       port = 1433,
-      pathToDriver = jdbcDriverFolder
+      pathToDriver = Sys.getenv("DATABASECONNECTOR_JAR_FOLDER")
     ),
     cdmDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
     workDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_OHDSI_SCHEMA"),
     vocabularyDatabaseSchema = Sys.getenv("CDM5_SQL_SERVER_CDM_SCHEMA"),
-    cohortTable = "cohort",
+    cohortTableNames = cohortTableNames,
     tempEmulationSchema = NULL
   )
 }

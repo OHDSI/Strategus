@@ -91,6 +91,14 @@ test_that("Store and retrieve connection details", {
     connFromKeyring <- DatabaseConnector::connect(
       connectionDetailsFromKeyring
     )
-    DatabaseConnector::disconnect(connFromKeyring)
+    expect_silent(DatabaseConnector::disconnect(connFromKeyring))
   }
+})
+
+test_that("Retrieve connection details that do not exists throws informative error", {
+  # Setup keyring for the test
+  Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = keyringPassword)
+  createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
+  on.exit(deleteKeyringForUnitTest())
+  expect_error(retrieveConnectionDetails(connectionDetailsReference = "does-not-exist", keyringName = keyringName))
 })

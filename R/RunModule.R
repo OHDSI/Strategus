@@ -1,4 +1,4 @@
-# Copyright 2023 Observational Health Data Sciences and Informatics
+# Copyright 2024 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -28,7 +28,11 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
   remoteUsername <- moduleSpecification$remoteUsername
-  moduleFolder <- ensureModuleInstantiated(module, version, remoteRepo, remoteUsername)
+  moduleInstallation <- verifyModuleInstallation(module, version)
+  moduleFolder <- moduleInstallation$moduleFolder
+  if (isFALSE(moduleInstallation$moduleInstalled)) {
+    stop(paste0("Stopping since module is not properly installed! Module folder: ", moduleInstallation$moduleFolder))
+  }
 
   # Create job context
   moduleExecutionSettings <- executionSettings
@@ -47,11 +51,11 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     moduleExecutionSettings = moduleExecutionSettings,
     keyringSettings = keyringSettings
   )
-  jobContextFileName <- file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds") # gsub("\\\\", "/", tempfile(fileext = ".rds"))
+  jobContextFileName <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "jobContext.rds"))
   saveRDS(jobContext, jobContextFileName)
 
-  tempScriptFile <- file.path(moduleExecutionSettings$workSubFolder, "StrategusScript.R")
-  doneFile <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "done")
+  tempScriptFile <- .formatAndNormalizeFilePathForScript(file.path(moduleExecutionSettings$workSubFolder, "StrategusScript.R"))
+  doneFile <- .formatAndNormalizeFilePathForScript(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "done"))
   if (file.exists(doneFile)) {
     unlink(doneFile)
   }
@@ -71,23 +75,15 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       source("Main.R")
       jobContext <- readRDS(jobContextFileName)
 
-      unlockKeyring <- function(keyringName) {
-        # If the keyring is locked, unlock it, set the value and then re-lock it
-        keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-        if (keyringLocked) {
-          keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"))
-        }
-        return(keyringLocked)
-      }
-
       keyringName <- jobContext$keyringSettings$keyringName
+      # unlockKeyring will be injected automatically
       keyringLocked <- unlockKeyring(keyringName = keyringName)
 
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReport.R"))
 
       options(andromedaTempFolder = file.path(jobContext$moduleExecutionSettings$workFolder, "andromedaTemp"))
-      options(tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema)
+      options(sqlRenderTempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema)
       options(databaseConnectorIntegerAsNumeric = jobContext$moduleExecutionSettings$integerAsNumeric)
       options(databaseConnectorInteger64AsNumeric = jobContext$moduleExecutionSettings$integer64AsNumeric)
 
@@ -95,15 +91,16 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
         renv::use(lockfile = "renv.lock")
       }
 
-      # NOTE injected variable isResultsExecution - will look strange outside of Strategus definition
+      # NOTE: injected variable isResultsExecution - will look strange outside of Strategus definition
+      # NOTE: retrieveConnectionDetails function is injected by withModuleRenv
       if (isCdmExecution) {
-        connectionDetails <- Strategus::retrieveConnectionDetails(
+        connectionDetails <- retrieveConnectionDetails(
           connectionDetailsReference = jobContext$moduleExecutionSettings$connectionDetailsReference,
           keyringName = keyringName
         )
         jobContext$moduleExecutionSettings$connectionDetails <- connectionDetails
       } else {
-        resultsConnectionDetails <- Strategus::retrieveConnectionDetails(
+        resultsConnectionDetails <- retrieveConnectionDetails(
           connectionDetailsReference = jobContext$moduleExecutionSettings$resultsConnectionDetailsReference,
           keyringName = keyringName
         )

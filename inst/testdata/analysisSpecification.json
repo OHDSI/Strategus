@@ -223,7 +223,7 @@
   "moduleSpecifications": [
     {
       "module": "CohortGeneratorModule",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -234,7 +234,7 @@
     },
     {
       "module": "CohortDiagnosticsModule",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -286,13 +286,14 @@
           "attr_fun": "getDbDefaultCovariateData"
         },
         "minCharacterizationMean": 0.01,
+        "irWashoutPeriod": 0,
         "incremental": false
       },
       "attr_class": ["CohortDiagnosticsModuleSpecifications", "ModuleSpecifications"]
     },
     {
       "module": "CohortIncidenceModule",
-      "version": "0.1.0",
+      "version": "0.4.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -365,7 +366,7 @@
     },
     {
       "module": "CharacterizationModule",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -389,6 +390,7 @@
           {
             "targetIds": [1, 2],
             "outcomeIds": 3,
+            "minPriorObservation": 0,
             "riskWindowStart": 1,
             "startAnchor": "cohort start",
             "riskWindowEnd": 0,
@@ -437,6 +439,7 @@
           {
             "targetIds": [1, 2],
             "outcomeIds": 3,
+            "minPriorObservation": 0,
             "riskWindowStart": 1,
             "startAnchor": "cohort start",
             "riskWindowEnd": 365,
@@ -489,7 +492,7 @@
     },
     {
       "module": "CohortMethodModule",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -1333,7 +1336,7 @@
           "easeThreshold": 0.25,
           "sdmThreshold": 0.1,
           "equipoiseThreshold": 0.2,
-          "attritionFractionThreshold": 1,
+          "generalizabilitySdmThreshold": 1,
           "attr_class": "CmDiagnosticThresholds"
         }
       },
@@ -1341,7 +1344,7 @@
     },
     {
       "module": "SelfControlledCaseSeriesModule",
-      "version": "0.2.0",
+      "version": "0.4.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -1355,7 +1358,7 @@
               "nestingCohortId": 1,
               "deleteCovariatesSmallCount": 0,
               "studyStartDate": "",
-              "studyEndDate": "20191130",
+              "studyEndDate": "",
               "maxCasesPerOutcome": 1000000,
               "exposureIds": "exposureId",
               "customCovariateIds": "",
@@ -1388,7 +1391,7 @@
                   "includeEraIds": "exposureId",
                   "label": "Main",
                   "stratifyById": false,
-                  "start": 1,
+                  "start": 0,
                   "startAnchor": "era start",
                   "end": 0,
                   "endAnchor": "era end",
@@ -2360,7 +2363,7 @@
     },
     {
       "module": "PatientLevelPredictionModule",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": [
@@ -2470,7 +2473,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 14457130,
+                "seed": 17037306,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2485,7 +2488,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 58440,
+            "seed": 74734,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
@@ -2607,7 +2610,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 86642490,
+                "seed": 22792170,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2622,7 +2625,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 84168,
+            "seed": 14402,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"

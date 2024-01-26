@@ -15,7 +15,9 @@ test_that("Run unit test study", {
 
   withr::defer(
     {
-      unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
+      if (usingTempDir) {
+        unlink(file.path(tempDir, "EunomiaTestStudy"), recursive = TRUE, force = TRUE)
+      }
     },
     testthat::teardown_env()
   )
@@ -26,6 +28,7 @@ test_that("Run unit test study", {
     workDatabaseSchema <- connectionDetailsList[[i]]$workDatabaseSchema
     cdmDatabaseSchema <- connectionDetailsList[[i]]$cdmDatabaseSchema
     tempEmulationSchema <- connectionDetailsList[[i]]$tempEmulationSchema
+    cohortTableNames <- connectionDetailsList[[i]]$cohortTableNames
     studyRootFolder <- file.path(tempDir, "EunomiaTestStudy", dbms)
     workFolder <- file.path(studyRootFolder, "work_folder")
     resultsFolder <- file.path(studyRootFolder, "results_folder")
@@ -70,7 +73,7 @@ test_that("Run unit test study", {
       workDatabaseSchema = workDatabaseSchema,
       cdmDatabaseSchema = cdmDatabaseSchema,
       tempEmulationSchema = tempEmulationSchema,
-      cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = paste0("s", tableSuffix)),
+      cohortTableNames = cohortTableNames,
       workFolder = workFolder,
       resultsFolder = resultsFolder,
       minCellCount = 5,
@@ -99,4 +102,46 @@ test_that("Run unit test study", {
 
     expect_true(file.exists(file.path(resultsFolder, "TestModule1_1", "done")))
   }
+})
+
+test_that("Execute on Oracle stops if table names exceed length limit", {
+  sqlRenderTempEmulationSchema <- getOption("sqlRenderTempEmulationSchema", default = "")
+  options(sqlRenderTempEmulationSchema = "some_schema")
+  on.exit(options(sqlRenderTempEmulationSchema = sqlRenderTempEmulationSchema))
+
+  Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = keyringPassword)
+  createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
+  on.exit(deleteKeyringForUnitTest())
+
+  connectionDetails <- DatabaseConnector::createConnectionDetails(
+    dbms = "oracle"
+  )
+  Strategus::storeConnectionDetails(
+    connectionDetails = connectionDetails,
+    connectionDetailsReference = "oracle-test",
+    keyringName = keyringName
+  )
+  executionSettings <- Strategus::createCdmExecutionSettings(
+    connectionDetailsReference = "oracle-test",
+    workDatabaseSchema = "does_not_matter",
+    cdmDatabaseSchema = "does_not_matter",
+    cohortTableNames = CohortGenerator::getCohortTableNames("some_really_long_table_name_for_testing_that_oracle_throws_a_warning"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder"),
+    minCellCount = 5
+  )
+
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/unitTestAnalysisSpecification.json",
+      package = "Strategus"
+    )
+  )
+
+  expect_error(
+    Strategus::execute(
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings,
+      keyringName = keyringName
+    )
+  )
 })
