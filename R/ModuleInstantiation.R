@@ -1,4 +1,4 @@
-# Copyright 2023 Observational Health Data Sciences and Informatics
+# Copyright 2024 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -87,9 +87,11 @@ ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerificati
     )
     moduleInstallStatus[[length(moduleInstallStatus) + 1]] <- status
   }
-  attr(modules, 'moduleInstallStatus') <- moduleInstallStatus
+  attr(modules, "moduleInstallStatus") <- moduleInstallStatus
 
-  installStatus <- unlist(lapply(moduleInstallStatus, FUN = function(x) { x$moduleInstalled }))
+  installStatus <- unlist(lapply(moduleInstallStatus, FUN = function(x) {
+    x$moduleInstalled
+  }))
   if (!all(installStatus)) {
     problemModules <- moduleInstallStatus[!installStatus]
     message("There were ", length(problemModules), " issue(s) found with your Strategus modules!")
@@ -159,7 +161,7 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
       verifyModuleInstallationReturnValue(
         moduleFolder = moduleFolder,
         moduleInstalled = FALSE
-        )
+      )
     )
   }
 
@@ -207,7 +209,7 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
         verifyModuleInstallationReturnValue(
           moduleFolder = moduleFolder,
           moduleInstalled = TRUE
-          )
+        )
       )
     }
   }
@@ -230,12 +232,13 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
       packages <- sort(union(renv::dependencies(quiet = TRUE)$Package, "renv"))
       packages <- sort(unique(c(library, lockfile, packages)))
       projectStatus$packages <- packages
-      saveRDS(object = list(
-        library = library,
-        lockfile = lockfile,
-        packages = packages
+      saveRDS(
+        object = list(
+          library = library,
+          lockfile = lockfile,
+          packages = packages
         ),
-        file="projectStatus.rds"
+        file = "projectStatus.rds"
       )
     },
     moduleFolder = moduleFolder

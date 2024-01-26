@@ -1,8 +1,8 @@
 Package: Strategus
 Type: Package
 Title: Coordinating and Executing Analytics Using HADES Modules
-Version: 0.1.0
-Date: 2023-10-04
+Version: 0.2.0
+Date: 2023-01-26
 Authors@R: c(
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
@@ -47,7 +47,7 @@ Remotes:
   ohdsi/Eunomia
 VignetteBuilder: knitr
 NeedsCompilation: no
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Config/testthat/edition: 3

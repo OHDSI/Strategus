@@ -1,3 +1,14 @@
+Strategus 0.2.0
+===============
+- Add functions for developers to help with renv.lock file validation (#69)
+- Use renv project profiles for modules (#94)
+- Convert relative paths to absolute path before passing to a module (#99)
+- Address missing package dependencies in modules (#99)
+- Throw informative error message when connection detail reference not set in keyring (#100)
+- Validate execution settings (#101)
+- Pass temp emulation schema properly (#76)
+- Remove local library package dependencies (#96)
+
 Strategus 0.1.0
 ===============
 

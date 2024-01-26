@@ -4,7 +4,7 @@ test_that("Check renv.lock compare", {
     filename2 = system.file("testdata/renv.lock", package = "Strategus")
   )
   expect_true(nrow(compare) > 0)
-  expect_true(nrow(compare[compare$lockfile1Version != compare$lockfile1Version,]) == 0)
+  expect_true(nrow(compare[compare$lockfile1Version != compare$lockfile1Version, ]) == 0)
 })
 
 test_that("Check renv.lock sync detects no changes", {
@@ -66,7 +66,7 @@ test_that("Test renv.lock validation", {
   expect_message(
     object = Strategus::validateLockFile(
       filename = tmp
-      ),
+    ),
     regexp = "PASSED"
   )
 

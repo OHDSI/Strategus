@@ -11,5 +11,7 @@ validateLockFile(filename)
 }
 \description{
 Will check an renv.lock file for a module to verify that it only references
-tagged packages and includes the packages required by Strategus.
+tagged packages and includes the packages required by Strategus. It will
+also check for suggested packages that are useful for testing, such as
+RSQLite.
 }

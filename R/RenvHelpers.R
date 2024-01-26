@@ -83,8 +83,8 @@ syncLockFile <- function(sourceOfTruthLockFileName, targetLockFileName) {
     filename2 = targetLockFileName
   )
   verDiffs <- comparedLockFiles[!is.na(comparedLockFiles$lockfile2Version) &
-                                  comparedLockFiles$lockfile1Version != comparedLockFiles$lockfile2Version,]
-  verDiffs <- verDiffs[!is.na(verDiffs$lockfile1Name),]
+    comparedLockFiles$lockfile1Version != comparedLockFiles$lockfile2Version, ]
+  verDiffs <- verDiffs[!is.na(verDiffs$lockfile1Name), ]
 
   if (nrow(verDiffs) == 0) {
     rlang::inform("Lock files are already in sync.")
@@ -93,32 +93,32 @@ syncLockFile <- function(sourceOfTruthLockFileName, targetLockFileName) {
 
   # Update the target lock file based on the source of truth
   for (i in 1:nrow(verDiffs)) {
-    index <- findPackageByName(targetLockFile$Packages, verDiffs[i,]$lockfile1Name)
+    index <- findPackageByName(targetLockFile$Packages, verDiffs[i, ]$lockfile1Name)
     tryCatch(expr = {
       semverPattern <- "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+)?$"
-      sourceOfTruthVersion <- verDiffs[i,]$lockfile1Version
+      sourceOfTruthVersion <- verDiffs[i, ]$lockfile1Version
       targetVersion <- targetLockFile$Packages[[index]]$Version
       if (grepl(semverPattern, sourceOfTruthVersion) && grepl(semverPattern, targetVersion)) {
         sourceOfTruthVersion <- semver::parse_version(sourceOfTruthVersion)
         targetVersion <- semver::parse_version(targetVersion)
         if (sourceOfTruthVersion > targetVersion) {
           rlang::inform(
-            message = paste(verDiffs[i,]$lockfile1Name, "[", targetVersion, "->", sourceOfTruthVersion, "]")
+            message = paste(verDiffs[i, ]$lockfile1Name, "[", targetVersion, "->", sourceOfTruthVersion, "]")
           )
-          targetLockFile$Packages[[index]]$Version <- verDiffs[i,]$lockfile1Version
-          if (!is.na(verDiffs[i,]$lockfile1RemoteRef)) {
-            targetLockFile$Packages[[index]]$RemoteRef <- verDiffs[i,]$lockfile1RemoteRef
+          targetLockFile$Packages[[index]]$Version <- verDiffs[i, ]$lockfile1Version
+          if (!is.na(verDiffs[i, ]$lockfile1RemoteRef)) {
+            targetLockFile$Packages[[index]]$RemoteRef <- verDiffs[i, ]$lockfile1RemoteRef
           }
         } else {
           rlang::inform(
-            message = paste(verDiffs[i,]$lockfile1Name, "[ SKIPPING - ", targetVersion, ">", sourceOfTruthVersion, "]")
+            message = paste(verDiffs[i, ]$lockfile1Name, "[ SKIPPING - ", targetVersion, ">", sourceOfTruthVersion, "]")
           )
         }
       } else {
-        rlang::warn(paste0("Package: [", verDiffs[i,]$lockfile1Name, "] - version number could not be parsed. Please inspect manually as it may require an upgrade."))
+        rlang::warn(paste0("Package: [", verDiffs[i, ]$lockfile1Name, "] - version number could not be parsed. Please inspect manually as it may require an upgrade."))
       }
     }, error = function(err) {
-      rlang::inform("An error occurred:", str(err), "\n")
+      rlang::inform("An error occurred:", utils::str(err), "\n")
     })
   }
 
@@ -154,8 +154,8 @@ validateLockFile <- function(filename) {
 
   # Check that the mandatory dependencies are met
   message("Checking mandatory packages...", appendLF = F)
-  if (length(mandatoryPackages()) != nrow(df[df$Name %in% mandatoryPackages(),])) {
-    missingPkgs <- setdiff(mandatoryPackages(), df[df$Name %in% mandatoryPackages(),]$Name)
+  if (length(mandatoryPackages()) != nrow(df[df$Name %in% mandatoryPackages(), ])) {
+    missingPkgs <- setdiff(mandatoryPackages(), df[df$Name %in% mandatoryPackages(), ]$Name)
     message("FAILED!")
     message(" -- Missing the mandatory packages: ", paste(missingPkgs, collapse = ", "))
     message(" Please record these missing dependencies in your renv.lock file.")
@@ -165,8 +165,8 @@ validateLockFile <- function(filename) {
 
   # Check for suggested packages
   message("Checking suggested packages...", appendLF = F)
-  if (length(suggestedPacakges()) != nrow(df[df$Name %in% suggestedPacakges(),])) {
-    missingPkgs <- setdiff(suggestedPacakges(), df[df$Name %in% suggestedPacakges(),]$Name)
+  if (length(suggestedPacakges()) != nrow(df[df$Name %in% suggestedPacakges(), ])) {
+    missingPkgs <- setdiff(suggestedPacakges(), df[df$Name %in% suggestedPacakges(), ]$Name)
     message("WARNING!")
     message(" -- Missing the suggested packages: ", paste(missingPkgs, collapse = ", "))
     message(" This is an optional set of dependencies so you may decide if you wish to have them in your renv.lock file.")
@@ -177,10 +177,10 @@ validateLockFile <- function(filename) {
   # Check that we're using declared versions of all packages
   message("Checking all package using tagged versions in RemoteRef...", appendLF = F)
   # Start by filtering out the CRAN Repository entries
-  dfFiltered <- df[tolower(df$Source) != "repository",]
+  dfFiltered <- df[tolower(df$Source) != "repository", ]
   if (!all(grepl("^(v)?\\d+(\\.\\d+){2}$", dfFiltered$RemoteRef))) {
     message("FAILED! Please check the following packages:")
-    problemPkgs <- dfFiltered[!grepl("^(v)?\\d+(\\.\\d+){2}$", dfFiltered$RemoteRef),]
+    problemPkgs <- dfFiltered[!grepl("^(v)?\\d+(\\.\\d+){2}$", dfFiltered$RemoteRef), ]
     for (i in 1:nrow(problemPkgs)) {
       message(paste0(" -- Package: ", problemPkgs$Name[[i]], "; RemoteRef: ", problemPkgs$RemoteRef[[i]]))
     }
@@ -190,6 +190,9 @@ validateLockFile <- function(filename) {
   }
 }
 
+#' List of mandatory packages for a Strategus module
+#'
+#' @keywords internal
 mandatoryPackages <- function() {
   return(c(
     "CohortGenerator",
@@ -201,12 +204,17 @@ mandatoryPackages <- function() {
   ))
 }
 
+#' List of suggested packages for a Strategus module
+#'
+#' @keywords internal
 suggestedPacakges <- function() {
   return(c("RSQLite"))
 }
 
 
-# internal function to read lock file into data frame
+#' Convert a lock file to a data.frame
+#'
+#' @keywords internal
 lockFileToDataFrame <- function(lf) {
   df <- data.frame()
   for (i in 1:length(lf$Packages)) {
@@ -222,4 +230,3 @@ lockFileToDataFrame <- function(lf) {
   }
   return(df)
 }
-
