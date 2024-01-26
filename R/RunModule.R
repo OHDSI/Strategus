@@ -28,10 +28,10 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
   version <- moduleSpecification$version
   remoteRepo <- moduleSpecification$remoteRepo
   remoteUsername <- moduleSpecification$remoteUsername
-  moduleInstallation <- verifyModuleInstallation(module, version, silent = TRUE)
+  moduleInstallation <- verifyModuleInstallation(module, version)
   moduleFolder <- moduleInstallation$moduleFolder
   if (isFALSE(moduleInstallation$moduleInstalled)) {
-    stop("Stopping since module is not properly installed!")
+    stop(paste0("Stopping since module is not properly installed! Module folder: ", moduleInstallation$moduleFolder))
   }
 
   # Create job context
