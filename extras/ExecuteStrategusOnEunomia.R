@@ -36,9 +36,17 @@ analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
                          package = "Strategus")
 )
 
-# Update to use the newer version of CG
-analysisSpecifications$moduleSpecifications[[1]]$version <- "0.2.2-7"
-analysisSpecifications$moduleSpecifications <- list(analysisSpecifications$moduleSpecifications[[1]])
+# Update to use the newer versions of modules
+analysisSpecifications$moduleSpecifications[[1]]$version <- "0.2.2-7" # CG
+analysisSpecifications$moduleSpecifications[[2]]$version <- "0.1.2-1" # CD
+analysisSpecifications$moduleSpecifications[[3]]$version <- "0.3.1-1" # CI
+analysisSpecifications$moduleSpecifications[[4]]$version <- "0.4.1-1" # CC
+analysisSpecifications$moduleSpecifications[[5]]$version <- "0.2.2-1" # CM
+analysisSpecifications$moduleSpecifications[[6]]$version <- "0.3.3-1" # SCCS
+analysisSpecifications$moduleSpecifications[[7]]$version <- "0.2.2-1" # PLP
+
+# Only CG
+#analysisSpecifications$moduleSpecifications <- list(analysisSpecifications$moduleSpecifications[[1]])
 
 resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
   resultsConnectionDetailsReference = "eunomia",
