@@ -5,5 +5,5 @@ CohortGeneratorModule,v0.3.0,github.com,OHDSI,cdm,CohortGenerator,v0.8.1
 CohortIncidenceModule,v0.4.0,github.com,OHDSI,cdm,CohortIncidence,v3.3.0
 CohortMethodModule,v0.3.0,github.com,OHDSI,cdm,CohortMethod,v5.2.0
 PatientLevelPredictionModule,v0.3.0,github.com,OHDSI,cdm,PatientLevelPrediction,v6.3.6
-SelfControlledCaseSeriesModule,v0.4.0,github.com,OHDSI,cdm,SelfControlledCaseSeries,v5.1.0
+SelfControlledCaseSeriesModule,v0.4.1,github.com,OHDSI,cdm,SelfControlledCaseSeries,v5.1.1
 EvidenceSynthesisModule,v0.6.0,github.com,OHDSI,results,EvidenceSynthesis,v0.5.0

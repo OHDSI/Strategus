@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
                         <h4 data-toc-skip class="author">Anthony G.
 Sena</h4>
             
-            <h4 data-toc-skip class="date">2024-01-26</h4>
+            <h4 data-toc-skip class="date">2024-01-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/HEAD/vignettes/CreatingAnalysisSpecification.Rmd" class="external-link"><code>vignettes/CreatingAnalysisSpecification.Rmd</code></a></small>
       <div class="hidden name"><code>CreatingAnalysisSpecification.Rmd</code></div>
@@ -125,7 +125,7 @@ will install the necessary HADES packages for this vignette.</p>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/Characterization"</span>, ref <span class="op">=</span> <span class="st">"v0.1.3"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortIncidence"</span>, ref <span class="op">=</span> <span class="st">"v3.3.0"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/CohortMethod"</span>, ref <span class="op">=</span> <span class="st">"v5.2.0"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/SelfControlledCaseSeries"</span>, ref <span class="op">=</span> <span class="st">"v5.1.0"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/SelfControlledCaseSeries"</span>, ref <span class="op">=</span> <span class="st">"v5.1.1"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ohdsi/PatientLevelPrediction"</span>, ref <span class="op">=</span> <span class="st">"v6.3.6"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -407,7 +407,7 @@ cohort analysis for this study.</p>
 cohort analysis for this study.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/SelfControlledCaseSeries" class="external-link">SelfControlledCaseSeries</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.4.0/SettingsFunctions.R"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.4.1/SettingsFunctions.R"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Exposures-outcomes -----------------------------------------------------------</span></span>
 <span><span class="va">negativeControlOutcomeIds</span> <span class="op">&lt;-</span> <span class="va">ncoCohortSet</span><span class="op">$</span><span class="va">cohortId</span></span>
