@@ -47,7 +47,7 @@ remotes::install_github("ohdsi/CohortDiagnostics", ref = "v3.2.5")
 remotes::install_github("ohdsi/Characterization", ref = "v0.1.3")
 remotes::install_github("ohdsi/CohortIncidence", ref = "v3.3.0")
 remotes::install_github("ohdsi/CohortMethod", ref = "v5.2.0")
-remotes::install_github("ohdsi/SelfControlledCaseSeries", ref = "v5.1.0")
+remotes::install_github("ohdsi/SelfControlledCaseSeries", ref = "v5.1.1")
 remotes::install_github("ohdsi/PatientLevelPrediction", ref = "v6.3.6")
 ```
 
@@ -310,7 +310,7 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 library(SelfControlledCaseSeries)
-source("https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.4.0/SettingsFunctions.R")
+source("https://raw.githubusercontent.com/OHDSI/SelfControlledCaseSeriesModule/v0.4.1/SettingsFunctions.R")
 
 # Exposures-outcomes -----------------------------------------------------------
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
