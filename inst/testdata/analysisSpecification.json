@@ -1344,7 +1344,7 @@
     },
     {
       "module": "SelfControlledCaseSeriesModule",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "remoteRepo": "github.com",
       "remoteUsername": "ohdsi",
       "settings": {
@@ -2473,7 +2473,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 17037306,
+                "seed": 15721621,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2488,7 +2488,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 74734,
+            "seed": 78595,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"
@@ -2610,7 +2610,7 @@
                 "modelType": "logistic",
                 "addIntercept": true,
                 "useControl": true,
-                "seed": 22792170,
+                "seed": 85843933,
                 "name": "Lasso Logistic Regression",
                 "threads": -1,
                 "tolerance": 2e-06,
@@ -2625,7 +2625,7 @@
           "splitSettings": {
             "test": 0.25,
             "train": 0.75,
-            "seed": 14402,
+            "seed": 729,
             "nfold": 3,
             "attr_class": "splitSettings",
             "attr_fun": "randomSplitter"

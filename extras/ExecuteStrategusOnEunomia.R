@@ -7,9 +7,9 @@
 
 #Run the Eunomia study ---------
 # Set the folder & environment variable for module storage
-moduleFolder <- "C:/temp/strategus/modules"
+moduleFolder <- Sys.getenv("INSTANTIATED_MODULES_FOLDER")
 studyFolder <- "C:/temp/strategus/EunomiaTestStudy"
-Sys.setenv("INSTANTIATED_MODULES_FOLDER" = moduleFolder)
+
 
 if (!dir.exists(moduleFolder)) {
   dir.create(moduleFolder, recursive = TRUE)
@@ -66,7 +66,7 @@ executionSettings <- ParallelLogger::loadSettingsFromJson(
 
 Strategus::storeConnectionDetails(
   connectionDetails,
-  resultsConnectionDetailsReference
+  "eunomia"
 )
 
 Strategus::createResultDataModels(

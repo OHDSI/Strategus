@@ -1,3 +1,7 @@
+Strategus 0.2.1
+===============
+- Update SelfControlledCaseSeries Module to v0.4.1
+
 Strategus 0.2.0
 ===============
 - Add functions for developers to help with renv.lock file validation (#69)
