@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "OHDSI study specification",
+  "description": "A study definition for an OHDSI study",
+  "properties": {
+    "apiVersion": {
+      "type": "string"
+    },
+    "studyName": {
+      "type": "string"
+    },
+    "studyDescription": {
+      "type": "string"
+    },
+    "sharedResources": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "resourceName" : {
+                "type": "string",
+                "description": "unique name for resource"
+              },
+              "cohortDefinitionSet": {
+                "type": "object",
+                "properties": {
+                  "cohortDefinitions": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "_links": {
+                              "type": "object",
+                              "properties": {
+                                "self": {
+                                  "type": "object",
+                                  "properties": {
+                                    "href": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
+                              },
+                              "required": [
+                                "self"
+                              ]
+                            },
+                            "cohortName": {
+                              "type": "string"
+                            },
+                            "cohortDefinitionId": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "_links",
+                            "cohortName",
+                            "cohortDefinitionId"
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "cohortDefinitionId": {
+                              "type": "integer"
+                            },
+                            "targetCohortDefinitionId": {
+                              "type": "integer"
+                            },
+                            "subsetDefinitionId": {
+                              "type": "integer"
+                            },
+                            "cohortName": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "cohortDefinitionId",
+                            "targetCohortDefinitionId",
+                            "subsetDefinitionId"
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  "subsetDefinitions": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "_links": {
+                          "type": "object",
+                          "properties": {
+                            "self": {
+                              "type": "object",
+                              "properties": {
+                                "href": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "required": [
+                            "self"
+                          ]
+                        },
+                        "subsetDefinitionName": {
+                          "type": "string"
+                        },
+                        "subsetDefinitionId": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "_links",
+                        "subsetDefinitionName",
+                        "subsetDefinitionId"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "cohortDefinitions",
+                  "subsetDefinitions"
+                ]
+              }
+            },
+            "required": [
+              "cohortDefinitionSet"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "resourceName" : {
+                "type": "string",
+                "description": "unique name for resource"
+              },
+              "conceptSetDefinition": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "conceptSetName": {
+                    "type": "string"
+                  },
+                  "concepts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "conceptId": {
+                          "type": "integer"
+                        },
+                        "conceptName": {
+                          "type": "string"
+                        },
+                        "standardConcept": {
+                          "type": "string",
+                          "enum": [
+                            "S",
+                            "NS"
+                          ]
+                        },
+                        "standardConceptCaption": {
+                          "type": "string"
+                        },
+                        "invalidReason": {
+                          "type": "string"
+                        },
+                        "invalidReasonCaption": {
+                          "type": "string"
+                        },
+                        "conceptCode": {
+                          "type": "string"
+                        },
+                        "domainId": {
+                          "type": "integer"
+                        },
+                        "vocabularyId": {
+                          "type": "integer"
+                        },
+                        "conceptClassId": {
+                          "type": "integer"
+                        },
+                        "validStartDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "validEndDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "cohortDefinitionId": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "conceptId",
+                        "conceptName",
+                        "standardConcept",
+                        "standardConceptCaption",
+                        "invalidReason",
+                        "invalidReasonCaption",
+                        "conceptCode",
+                        "domainId",
+                        "vocabularyId",
+                        "conceptClassId",
+                        "validStartDate",
+                        "validEndDate"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "conceptSetName",
+                  "concepts"
+                ]
+              }
+            },
+            "required": [
+              "conceptSetDefinition"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "resourceName" : {
+                "type": "string",
+                "description": "unique name for resource"
+              },
+              "negativeControlConceptSetDefinition": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "conceptSetName": {
+                    "type": "string"
+                  },
+                  "concepts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "conceptId": {
+                          "type": "integer"
+                        },
+                        "conceptName": {
+                          "type": "string"
+                        },
+                        "standardConcept": {
+                          "type": "string",
+                          "enum": [
+                            "S",
+                            "NS"
+                          ]
+                        },
+                        "standardConceptCaption": {
+                          "type": "string"
+                        },
+                        "invalidReason": {
+                          "type": "string"
+                        },
+                        "invalidReasonCaption": {
+                          "type": "string"
+                        },
+                        "conceptCode": {
+                          "type": "string"
+                        },
+                        "domainId": {
+                          "type": "integer"
+                        },
+                        "vocabularyId": {
+                          "type": "integer"
+                        },
+                        "conceptClassId": {
+                          "type": "integer"
+                        },
+                        "validStartDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "validEndDate": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "cohortDefinitionId": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "conceptId",
+                        "conceptName",
+                        "standardConcept",
+                        "standardConceptCaption",
+                        "invalidReason",
+                        "invalidReasonCaption",
+                        "conceptCode",
+                        "domainId",
+                        "vocabularyId",
+                        "conceptClassId",
+                        "validStartDate",
+                        "validEndDate",
+                        "cohortDefinitionId"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "conceptSetName",
+                  "concepts"
+                ]
+              }
+            },
+            "required": [
+              "negativeControlConceptSetDefinition"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "sharedResource": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "schemaRef": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "name",
+                  "schemaRef"
+                ]
+              }
+            },
+            "required": [
+              "sharedResource"
+            ]
+          }
+        ]
+      }
+    },
+    "renv": {
+      "type": "object",
+      "properties": {
+        "_links": {
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "object",
+              "properties": {
+                "href": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": [
+            "self"
+          ]
+        }
+      },
+      "required": [
+        "_links"
+      ]
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "module": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "schemaRef": {
+            "type": "string",
+            "format": "uri"
+          },
+          "settings": {
+            "$ref": "#"
+          },
+          "requiredSharedResources" : {
+            "type": "array",
+            "description": "Shared resource labels required for this object",
+            "items": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "module",
+            "version",
+            "schemaRef",
+            "settings",
+            "requiredSharedResources"
+          ]
+        }
+      }
+    },
+    "required": [
+      "apiVersion",
+      "sharedResources",
+      "renv",
+      "modules"
+    ]
+  }
+}
