@@ -19,3 +19,7 @@ src/*.dll
 /Debug
 standalone/build/*
 _targets
+
+# Docker-related files
+ZscalerRootCA.crt
+GITHUBPAT.txt
