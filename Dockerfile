@@ -24,7 +24,7 @@ RUN install2.r --error --skipinstalled --repos "https://packagemanager.posit.co/
 
 # Installing Strategus & Strategus Modules - NOTE that the module path is in 2 places for now
 RUN echo "INSTATIATED_MODULES_FOLDER=/home/ohdsi/strategus/modules" >> /usr/local/lib/R/etc/Renviron
-ENV GITHUB_PAT=$/run/secrets/build_github_pat
+ENV GITHUB_PAT=$GITHUB_PAT
 RUN R <<EOF
 Sys.setenv(INSTANTIATED_MODULES_FOLDER = "/home/ohdsi/strategus/modules")
 remotes::install_github(repo = 'OHDSI/Strategus')
