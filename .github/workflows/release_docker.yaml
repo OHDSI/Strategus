@@ -40,7 +40,7 @@ jobs:
       # Add Docker labels and tags
       - name: Docker meta
         id: docker_meta
-        uses: docker/metadata-action@v5
+        uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: ${{ env.DOCKER_IMAGE }}
           tag-match: v(.*)

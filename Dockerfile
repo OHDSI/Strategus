@@ -22,19 +22,12 @@ RUN install2.r --error --skipinstalled --repos "https://packagemanager.posit.co/
     DatabaseConnector \
 && rm -rf /tmp/download_packages/ /tmp/*.rds
 
-# Installing Strategus
-RUN --mount=type=secret,id=build_github_pat \
-    cp /usr/local/lib/R/etc/Renviron /tmp/Renviron \
-    && echo "GITHUB_PAT=$(cat /run/secrets/build_github_pat)" >> /usr/local/lib/R/etc/Renviron \
-    && echo "DATABASECONNECTOR_JAR_FOLDER=/opt/hades/jdbc_drivers" >> /usr/local/lib/R/etc/Renviron \
-    && R -e "remotes::install_github(repo = 'OHDSI/Strategus', upgrade = 'always')" \
-    && cp /tmp/Renviron /usr/local/lib/R/etc/Renviron
-
-# Installing Strategus Modules
-RUN --mount=type=secret,id=build_github_pat \
-    cp /usr/local/lib/R/etc/Renviron /tmp/Renviron \
-    && echo "GITHUB_PAT=$(cat /run/secrets/build_github_pat)" >> /usr/local/lib/R/etc/Renviron \
-    && echo "INSTATIATED_MODULES_FOLDER=/home/ohdsi/strategus/modules" >> /usr/local/lib/R/etc/Renviron \
-    && R -e "\
-       analysisSpecifications <- ParallelLogger::loadSettingsFromJson(fileName = system.file('testdata/analysisSpecification.json', package = 'Strategus')); \
-       Strategus::ensureAllModulesInstantiated(analysisSpecifications)"
+# Installing Strategus & Strategus Modules - NOTE that the module path is in 2 places for now
+RUN echo "INSTATIATED_MODULES_FOLDER=/home/ohdsi/strategus/modules" >> /usr/local/lib/R/etc/Renviron
+ENV GITHUB_PAT=$/run/secrets/build_github_pat
+RUN R <<EOF
+Sys.setenv(INSTANTIATED_MODULES_FOLDER = "/home/ohdsi/strategus/modules")
+remotes::install_github(repo = 'OHDSI/Strategus')
+analysisSpecifications <- ParallelLogger::loadSettingsFromJson(fileName = system.file('testdata/analysisSpecification.json', package = 'Strategus'))
+Strategus::ensureAllModulesInstantiated(analysisSpecifications)
+EOF
