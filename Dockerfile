@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y r-cran-rjava openjdk-11-jdk libsecret-1
 && rm -rf /var/lib/apt/lists/*
 
 # Workaround to allow for communication on J&J laptop
-# COPY ZscalerRootCA.crt /root/ZscalerRootCA.crt
-# RUN cat /root/ZscalerRootCA.crt >> /etc/ssl/certs/ca-certificates.crt
-# COPY ZscalerRootCA.crt /usr/local/share/ca-certificates
-# RUN update-ca-certificates
+COPY ZscalerRootCA.crt /root/ZscalerRootCA.crt
+RUN cat /root/ZscalerRootCA.crt >> /etc/ssl/certs/ca-certificates.crt
+COPY ZscalerRootCA.crt /usr/local/share/ca-certificates
+RUN update-ca-certificates
 
 # install utility R packages - use the latest versions of the packages 
 # which is why we specify the repo argument
@@ -26,15 +26,15 @@ RUN install2.r --error --skipinstalled --repos "https://packagemanager.posit.co/
 RUN --mount=type=secret,id=build_github_pat \
     cp /usr/local/lib/R/etc/Renviron /tmp/Renviron \
     && echo "GITHUB_PAT=$(cat /run/secrets/build_github_pat)" >> /usr/local/lib/R/etc/Renviron \
-    && echo "INSTATIATED_MODULES_FOLDER=/home/ohdsi/strategus/modules" >> /usr/local/lib/R/etc/Renviron.site \
     && echo "DATABASECONNECTOR_JAR_FOLDER=/opt/hades/jdbc_drivers" >> /usr/local/lib/R/etc/Renviron \
     && R -e "remotes::install_github(repo = 'OHDSI/Strategus', upgrade = 'always')" \
     && cp /tmp/Renviron /usr/local/lib/R/etc/Renviron
 
 # Installing Strategus Modules
 RUN --mount=type=secret,id=build_github_pat \
+    cp /usr/local/lib/R/etc/Renviron /tmp/Renviron \
     && echo "GITHUB_PAT=$(cat /run/secrets/build_github_pat)" >> /usr/local/lib/R/etc/Renviron \
-    && R -e "print(Sys.getenv('INSTANTIATED_MODULES_FOLDER'))" \
-    && R -e "analysisSpecifications <- ParallelLogger::loadSettingsFromJson(fileName = system.file('testdata/analysisSpecification.json', package = 'Strategus'))" \
-    && R -e "Strategus::ensureAllModulesInstantiated(analysisSpecifications)"
-
+    && echo "INSTATIATED_MODULES_FOLDER=/home/ohdsi/strategus/modules" >> /usr/local/lib/R/etc/Renviron \
+    && Rscript -e "\
+       analysisSpecifications <- ParallelLogger::loadSettingsFromJson(fileName = system.file('testdata/analysisSpecification.json', package = 'Strategus')); \
+       Strategus::ensureAllModulesInstantiated(analysisSpecifications)"
