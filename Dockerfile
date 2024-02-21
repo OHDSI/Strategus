@@ -35,6 +35,6 @@ RUN --mount=type=secret,id=build_github_pat \
     cp /usr/local/lib/R/etc/Renviron /tmp/Renviron \
     && echo "GITHUB_PAT=$(cat /run/secrets/build_github_pat)" >> /usr/local/lib/R/etc/Renviron \
     && echo "INSTATIATED_MODULES_FOLDER=/home/ohdsi/strategus/modules" >> /usr/local/lib/R/etc/Renviron \
-    && Rscript -e "\
+    && R -e "\
        analysisSpecifications <- ParallelLogger::loadSettingsFromJson(fileName = system.file('testdata/analysisSpecification.json', package = 'Strategus')); \
        Strategus::ensureAllModulesInstantiated(analysisSpecifications)"
