@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y r-cran-rjava openjdk-11-jdk libsecret-1
 && rm -rf /var/lib/apt/lists/*
 
 # Workaround to allow for communication on J&J laptop
-COPY ZscalerRootCA.crt /root/ZscalerRootCA.crt
-RUN cat /root/ZscalerRootCA.crt >> /etc/ssl/certs/ca-certificates.crt
-COPY ZscalerRootCA.crt /usr/local/share/ca-certificates
-RUN update-ca-certificates
+# COPY ZscalerRootCA.crt /root/ZscalerRootCA.crt
+# RUN cat /root/ZscalerRootCA.crt >> /etc/ssl/certs/ca-certificates.crt
+# COPY ZscalerRootCA.crt /usr/local/share/ca-certificates
+# RUN update-ca-certificates
 
 # install utility R packages - use the latest versions of the packages 
 # which is why we specify the repo argument
