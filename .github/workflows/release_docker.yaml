@@ -9,10 +9,15 @@
 #                      Needed to avoid "API rate limit exceeded" from github.
 name: Release Docker
 
+# on:
+#   release:
+#     types: [published]
+# For testing - remove in favor of tagging approach above
 on:
-  release:
-    types: [published]
-  workflow_dispatch:
+  push:
+    branches:
+      - 'issue-97-docker'
+    workflow_dispatch:
     inputs:
       docker_image:
         description: 'OHDSI Strategus with HADES and RStudio.'
