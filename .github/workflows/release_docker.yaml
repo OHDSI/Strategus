@@ -28,9 +28,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE: ${{ inputs.docker_image || secrets.DOCKER_IMAGE }}
+      GITHUB_PAT: ${{ secrets.GH_TOKEN }}
+      DOCKER_IMAGE: ${{ inputs.docker_image.default || secrets.DOCKER_IMAGE }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # ------------------------------------
       # The pattern for the following steps is specified
