@@ -28,6 +28,8 @@
 #' @param executionScriptFolder   Optional: the path to use for storing the execution script.
 #'                                when NULL, this function will use a temporary
 #'                                file location to create the script to execute.
+#' @param workers                 Optional: Number of local worker nodes to create for parallel execution
+#'                                see https://books.ropensci.org/targets/crew.html
 #' @template keyringName
 #' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
 #'                                the same as the `executionScriptFolder` used in the run to restart.
@@ -40,6 +42,7 @@ execute <- function(analysisSpecifications,
                     executionSettings,
                     executionScriptFolder = NULL,
                     keyringName = NULL,
+                    workers = 1,
                     restart = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
   keyringList <- keyring::keyring_list()
@@ -131,14 +134,15 @@ execute <- function(analysisSpecifications,
     dependencies = dependencies,
     executionScriptFolder = executionScriptFolder,
     restart = restart,
-    keyringName = keyringName
+    keyringName = keyringName,
+    workers = workers
   )
   # targets::tar_manifest(script = fileName)
   # targets::tar_glimpse(script = fileName)
   targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
 }
 
-generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, restart) {
+generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, restart, workers) {
   fileName <- file.path(executionScriptFolder, "script.R")
   if (restart) {
     return(fileName)
@@ -154,7 +158,14 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
       moduleToTargetNames <- readRDS(moduleToTargetNamesFileName)
       dependencies <- readRDS(dependenciesFileName)
 
-      targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
+      targets::tar_option_set(
+        packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring")
+      )
+
+      if (workers > 1) {
+        targets::tar_option_set(controller = crew::crew_controller_local(workers = workers))
+      }
+
       targetList <- list(
         targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
         # NOTE Execution settings could be mapped to many different cdms making re-execution across cdms much simpler
@@ -235,6 +246,7 @@ generateTargetsScript <- function(analysisSpecifications, executionSettings, dep
     sprintf("moduleToTargetNamesFileName <- '%s'", moduleToTargetNamesFileName),
     sprintf("dependenciesFileName <- '%s'", dependenciesFileName),
     sprintf("execResultsUpload <- '%s'", execResultsUpload),
+    sprintf("workers <- '%s'", workers),
     readLines(fileName)
   ), fileName)
 
