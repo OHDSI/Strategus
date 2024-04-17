@@ -9,6 +9,7 @@ execute(
   executionSettings,
   executionScriptFolder = NULL,
   keyringName = NULL,
+  workers = 1,
   restart = FALSE
 )
 }
@@ -29,6 +30,9 @@ NULL to select the default keyring. If the keyring is password
 protected, the password must be stored in the environment variable
 STRATEGUS_KEYRING_PASSWORD so it is retrieved using the command
 Sys.getenv("STRATEGUS_KEYRING_PASSWORD")}
+
+\item{workers}{Optional: Number of local worker nodes to create for parallel execution
+see https://books.ropensci.org/targets/crew.html}
 
 \item{restart}{Restart run? Requires \code{executionScriptFolder} to be specified, and be
 the same as the \code{executionScriptFolder} used in the run to restart.}

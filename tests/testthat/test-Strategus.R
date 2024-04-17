@@ -97,7 +97,8 @@ test_that("Run unit test study", {
       analysisSpecifications = analysisSpecifications,
       executionSettings = executionSettings,
       executionScriptFolder = scriptFolder,
-      keyringName = keyringName
+      keyringName = keyringName,
+      workers = 2
     )
 
     expect_true(file.exists(file.path(resultsFolder, "TestModule1_1", "done")))
