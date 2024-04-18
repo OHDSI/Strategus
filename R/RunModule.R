@@ -79,6 +79,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       # unlockKeyring will be injected automatically
       keyringLocked <- unlockKeyring(keyringName = keyringName)
 
+      ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReport.R"))
 

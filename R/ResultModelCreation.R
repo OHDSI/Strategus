@@ -203,6 +203,7 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
         renv::use(lockfile = "renv.lock")
       }
 
+      ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReportR.txt"))
       # Main.R can override default behaviour by implementing this function

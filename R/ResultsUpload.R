@@ -81,6 +81,8 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
       moduleInfo <- ParallelLogger::loadSettingsFromJson("MetaData.json")
       jobContext <- readRDS(jobContextFileName)
       specifications <- getDataModelSpecifications(jobContext)
+
+      ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReportR.txt"))
 
