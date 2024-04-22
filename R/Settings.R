@@ -90,6 +90,7 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' @param tempEmulationSchema        Some database platforms like Oracle and Impala do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
 #' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
@@ -109,6 +110,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                                        tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
                                        workFolder,
                                        resultsFolder,
+                                       logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                        minCellCount = 5,
                                        integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
                                        integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
@@ -121,6 +123,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertList(cohortTableNames, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
   checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
@@ -131,6 +134,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   # Normalize paths to convert relative paths to absolute paths
   workFolder <- normalizePath(workFolder, mustWork = F)
   resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+  logFileName <- normalizePath(logFileName, mustWork = F)
 
   executionSettings <- list(
     connectionDetailsReference = connectionDetailsReference,
@@ -140,6 +144,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
     tempEmulationSchema = tempEmulationSchema,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
+    logFileName = logFileName,
     minCellCount = minCellCount,
     integerAsNumeric = integerAsNumeric,
     integer64AsNumeric = integer64AsNumeric,
@@ -157,6 +162,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
 #' @param resultsDatabaseSchema      A schema where the results tables are stored
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
 #' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
@@ -170,6 +176,7 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
                                            resultsDatabaseSchema,
                                            workFolder,
                                            resultsFolder,
+                                           logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                            minCellCount = 5,
                                            integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
                                            integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
@@ -178,6 +185,7 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
   checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
@@ -186,12 +194,14 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   # Normalize paths to convert relative paths to absolute paths
   workFolder <- normalizePath(workFolder, mustWork = F)
   resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+  logFileName <- normalizePath(logFileName, mustWork = F)
 
   executionSettings <- list(
     resultsConnectionDetailsReference = resultsConnectionDetailsReference,
     resultsDatabaseSchema = resultsDatabaseSchema,
     workFolder = workFolder,
     resultsFolder = resultsFolder,
+    logFileName = logFileName,
     minCellCount = minCellCount,
     integerAsNumeric = integerAsNumeric,
     integer64AsNumeric = integer64AsNumeric

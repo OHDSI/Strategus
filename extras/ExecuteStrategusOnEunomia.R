@@ -8,7 +8,7 @@
 #Run the Eunomia study ---------
 # Set the folder & environment variable for module storage
 moduleFolder <- Sys.getenv("INSTANTIATED_MODULES_FOLDER")
-studyFolder <- "d:/temp/strategus/EunomiaTestStudy"
+studyFolder <- "D:/temp/strategus/EunomiaTestStudy"
 
 
 if (!dir.exists(moduleFolder)) {

@@ -81,6 +81,8 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
       moduleInfo <- ParallelLogger::loadSettingsFromJson("MetaData.json")
       jobContext <- readRDS(jobContextFileName)
       specifications <- getDataModelSpecifications(jobContext)
+
+      ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReportR.txt"))
 
@@ -88,6 +90,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
         renv::use(lockfile = "renv.lock")
       }
 
+      message("START RESULTS UPLOAD: ", moduleName)
       # Override default behaviour and do module specific upload inside module context?
       if (is.function(uploadResultsCallback)) {
         ParallelLogger::logInfo("Calling module result upload functionality")
@@ -122,6 +125,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
         writeLines("specifications.written", doneFile)
       }
 
+      message("FINISH RESULTS UPLOAD: ", moduleName)
       ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE)
       ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE)
     },
@@ -130,6 +134,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
     injectVars = list(
       jobContextFileName = jobContextFileName,
       dataModelExportPath = dataModelExportPath,
+      moduleName = module,
       doneFile = doneFile
     )
   )
