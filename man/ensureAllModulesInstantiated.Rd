@@ -4,7 +4,11 @@
 \alias{ensureAllModulesInstantiated}
 \title{Ensure all modules are instantiated}
 \usage{
-ensureAllModulesInstantiated(analysisSpecifications, forceVerification = FALSE)
+ensureAllModulesInstantiated(
+  analysisSpecifications,
+  forceVerification = FALSE,
+  enforceModuleDependencies = TRUE
+)
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
