@@ -36,10 +36,6 @@ analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
                          package = "Strategus")
 )
 
-# Filter to to CI only
-filteredAnalysisSpecifications <- analysisSpecifications
-filteredAnalysisSpecifications$moduleSpecifications <- list(filteredAnalysisSpecifications$moduleSpecifications[[3]])
-
 resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
   resultsConnectionDetailsReference = "eunomia",
   resultsDatabaseSchema = "main",
@@ -54,9 +50,9 @@ executionSettings <- Strategus::createCdmExecutionSettings(
   cohortTableNames = CohortGenerator::getCohortTableNames(),
   workFolder = "work_folder",
   resultsFolder = "results_folder",
-  minCellCount = 5#,
-  #resultsConnectionDetailsReference = "eunomia",
-  #resultsDatabaseSchema = "main"
+  minCellCount = 5,
+  resultsConnectionDetailsReference = "eunomia",
+  resultsDatabaseSchema = "main"
 )
 
 ParallelLogger::saveSettingsToJson(
@@ -74,14 +70,12 @@ Strategus::storeConnectionDetails(
 )
 
 Strategus::createResultDataModels(
-  analysisSpecifications = filteredAnalysisSpecifications,
-  executionSettings = resultsExecutionSettings,
-  enforceModuleDependencies = F
+  analysisSpecifications = analysisSpecifications,
+  executionSettings = resultsExecutionSettings
 )
 
 Strategus::execute(
-  analysisSpecifications = filteredAnalysisSpecifications,
+  analysisSpecifications = analysisSpecifications,
   executionSettings = executionSettings,
-  executionScriptFolder = file.path(studyFolder, "script_folder"),
-  enforceModuleDependencies = F
+  executionScriptFolder = file.path(studyFolder, "script_folder")
 )
