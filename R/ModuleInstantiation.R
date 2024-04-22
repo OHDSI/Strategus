@@ -52,13 +52,6 @@ ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerificati
     ))
   }
 
-  # Check required dependencies have been declare in the specification
-  # unless the user has set enforceModuleDependencies == FALSE
-  checkModuleDependencies(
-    modules = modules,
-    enforceModuleDependencies = enforceModuleDependencies
-  )
-
   # Ensure all required modules are instantiated:
   for (i in 1:nrow(modules)) {
     ensureModuleInstantiated(
@@ -68,6 +61,13 @@ ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerificati
       remoteUsername = modules$remoteUsername[i]
     )
   }
+
+  # Check required dependencies have been declare in the specification
+  # unless the user has set enforceModuleDependencies == FALSE
+  checkModuleDependencies(
+    modules = modules,
+    enforceModuleDependencies = enforceModuleDependencies
+  )
 
   # Verify all modules are properly installed
   moduleInstallStatus <- list()
