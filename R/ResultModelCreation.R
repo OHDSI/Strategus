@@ -27,7 +27,8 @@ createResultDataModels <- function(analysisSpecifications,
                                    executionSettings,
                                    executionScriptFolder = NULL,
                                    keyringName = NULL,
-                                   restart = FALSE) {
+                                   restart = FALSE,
+                                   enforceModuleDependencies = TRUE) {
   errorMessages <- checkmate::makeAssertCollection()
   keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
@@ -35,7 +36,11 @@ createResultDataModels <- function(analysisSpecifications,
   checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  modules <- ensureAllModulesInstantiated(analysisSpecifications)
+  modules <- ensureAllModulesInstantiated(
+    analysisSpecifications = analysisSpecifications,
+    enforceModuleDependencies = enforceModuleDependencies
+  )
+
   if (isFALSE(modules$allModulesInstalled)) {
     stop("Stopping execution due to module issues")
   }

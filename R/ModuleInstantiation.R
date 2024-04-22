@@ -37,7 +37,7 @@
 #' the instantiated modules.
 #'
 #' @export
-ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerification = FALSE) {
+ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerification = FALSE, enforceModuleDependencies = TRUE) {
   modules <- getModuleTable(analysisSpecifications, distinct = TRUE)
 
   # Verify only one version per module:
@@ -52,6 +52,13 @@ ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerificati
     ))
   }
 
+  # Check required dependencies have been declare in the specification
+  # unless the user has set enforceModuleDependencies == FALSE
+  checkModuleDependencies(
+    modules = modules,
+    enforceModuleDependencies = enforceModuleDependencies
+  )
+
   # Ensure all required modules are instantiated:
   for (i in 1:nrow(modules)) {
     ensureModuleInstantiated(
@@ -60,21 +67,6 @@ ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerificati
       remoteRepo = modules$remoteRepo[i],
       remoteUsername = modules$remoteUsername[i]
     )
-  }
-
-  # Check required dependencies have been installed:
-  dependencies <- extractDependencies(modules)
-  missingDependencies <- dependencies %>%
-    filter(!dependsOn %in% modules$module)
-  if (nrow(missingDependencies) > 0) {
-    message <- paste(
-      c(
-        "Detected missing dependencies:",
-        sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
-      ),
-      collapse = "\n"
-    )
-    stop(message)
   }
 
   # Verify all modules are properly installed
@@ -300,6 +292,39 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
   )
 }
 
+extractDependencies <- function(modules) {
+  extractDependenciesSingleModule <- function(module) {
+    moduleFolder <- getModuleFolder(module$module, module$version)
+    metaData <- getModuleMetaData(moduleFolder)
+    dependencies <- tibble(
+      module = module$module,
+      dependsOn = as.character(metaData$Dependencies)
+    )
+    return(dependencies)
+  }
+  dependencies <- lapply(split(modules, 1:nrow(modules)), extractDependenciesSingleModule) %>%
+    bind_rows()
+  return(dependencies)
+}
+
+checkModuleDependencies <- function(modules, enforceModuleDependencies) {
+  # Check required dependencies have been declare in the specification
+  # unless the user has set enforceModuleDependencies == FALSE
+  dependencies <- extractDependencies(modules)
+  missingDependencies <- dependencies %>%
+    filter(!dependsOn %in% modules$module)
+  if (nrow(missingDependencies) > 0 && enforceModuleDependencies) {
+    message <- paste(
+      c(
+        "Detected missing dependencies:",
+        sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
+      ),
+      collapse = "\n"
+    )
+    stop(message)
+  }
+}
+
 getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
   modules <- lapply(
     analysisSpecifications$moduleSpecifications,
@@ -318,21 +343,6 @@ getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
       distinct(module, version, .keep_all = TRUE)
   }
   return(modules)
-}
-
-extractDependencies <- function(modules) {
-  extractDependenciesSingleModule <- function(module) {
-    moduleFolder <- getModuleFolder(module$module, module$version)
-    metaData <- getModuleMetaData(moduleFolder)
-    dependencies <- tibble(
-      module = module$module,
-      dependsOn = as.character(metaData$Dependencies)
-    )
-    return(dependencies)
-  }
-  dependencies <- lapply(split(modules, 1:nrow(modules)), extractDependenciesSingleModule) %>%
-    bind_rows()
-  return(dependencies)
 }
 
 getModuleMetaData <- function(moduleFolder) {

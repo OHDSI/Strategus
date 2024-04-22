@@ -31,6 +31,9 @@
 #' @template keyringName
 #' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
 #'                                the same as the `executionScriptFolder` used in the run to restart.
+#'
+#' @template enforceModuleDependencies
+#'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified
 #' analyses.
@@ -40,7 +43,8 @@ execute <- function(analysisSpecifications,
                     executionSettings,
                     executionScriptFolder = NULL,
                     keyringName = NULL,
-                    restart = FALSE) {
+                    restart = FALSE,
+                    enforceModuleDependencies = TRUE) {
   errorMessages <- checkmate::makeAssertCollection()
   keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
@@ -98,7 +102,10 @@ execute <- function(analysisSpecifications,
   }
 
   # Validate the modules
-  modules <- ensureAllModulesInstantiated(analysisSpecifications)
+  modules <- ensureAllModulesInstantiated(
+    analysisSpecifications = analysisSpecifications,
+    enforceModuleDependencies = enforceModuleDependencies
+  )
   if (isFALSE(modules$allModulesInstalled)) {
     stop("Stopping execution due to module issues")
   }

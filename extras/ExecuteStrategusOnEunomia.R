@@ -8,7 +8,7 @@
 #Run the Eunomia study ---------
 # Set the folder & environment variable for module storage
 moduleFolder <- Sys.getenv("INSTANTIATED_MODULES_FOLDER")
-studyFolder <- "C:/temp/strategus/EunomiaTestStudy"
+studyFolder <- "d:/temp/strategus/EunomiaTestStudy"
 
 
 if (!dir.exists(moduleFolder)) {
@@ -36,6 +36,10 @@ analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
                          package = "Strategus")
 )
 
+# Filter to to CI only
+filteredAnalysisSpecifications <- analysisSpecifications
+filteredAnalysisSpecifications$moduleSpecifications <- list(filteredAnalysisSpecifications$moduleSpecifications[[3]])
+
 resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
   resultsConnectionDetailsReference = "eunomia",
   resultsDatabaseSchema = "main",
@@ -50,9 +54,9 @@ executionSettings <- Strategus::createCdmExecutionSettings(
   cohortTableNames = CohortGenerator::getCohortTableNames(),
   workFolder = "work_folder",
   resultsFolder = "results_folder",
-  minCellCount = 5,
-  resultsConnectionDetailsReference = "eunomia",
-  resultsDatabaseSchema = "main"
+  minCellCount = 5#,
+  #resultsConnectionDetailsReference = "eunomia",
+  #resultsDatabaseSchema = "main"
 )
 
 ParallelLogger::saveSettingsToJson(
@@ -70,12 +74,14 @@ Strategus::storeConnectionDetails(
 )
 
 Strategus::createResultDataModels(
-  analysisSpecifications = analysisSpecifications,
-  executionSettings = resultsExecutionSettings
+  analysisSpecifications = filteredAnalysisSpecifications,
+  executionSettings = resultsExecutionSettings,
+  enforceModuleDependencies = F
 )
 
 Strategus::execute(
-  analysisSpecifications = analysisSpecifications,
+  analysisSpecifications = filteredAnalysisSpecifications,
   executionSettings = executionSettings,
-  executionScriptFolder = file.path(studyFolder, "script_folder")
+  executionScriptFolder = file.path(studyFolder, "script_folder"),
+  enforceModuleDependencies = F
 )
