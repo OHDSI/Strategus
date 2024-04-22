@@ -206,6 +206,8 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
       ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReportR.txt"))
+
+      message("START SCHEMA CREATION: ", moduleName)
       # Main.R can override default behaviour by implementing this function
       if (is.function(createDataModelSchema)) {
         # If the keyring is locked, unlock it, set the value and then re-lock it
@@ -240,6 +242,7 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
         )
         writeLines("specifications.not.written", doneFile)
       }
+      message("FINISH SCHEMA CREATION: ", moduleName)
 
       ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE)
       ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE)
@@ -249,6 +252,7 @@ runSchemaCreation <- function(analysisSpecifications, keyringSettings, moduleInd
     injectVars = list(
       jobContextFileName = jobContextFileName,
       dataModelExportPath = dataModelExportPath,
+      moduleName = module,
       doneFile = doneFile
     )
   )

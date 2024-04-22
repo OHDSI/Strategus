@@ -194,6 +194,7 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   # Normalize paths to convert relative paths to absolute paths
   workFolder <- normalizePath(workFolder, mustWork = F)
   resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+  logFileName <- normalizePath(logFileName, mustWork = F)
 
   executionSettings <- list(
     resultsConnectionDetailsReference = resultsConnectionDetailsReference,
