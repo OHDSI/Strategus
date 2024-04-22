@@ -110,7 +110,9 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       if (keyringLocked) {
         keyring::keyring_lock(keyring = keyringName)
       }
+      message("START MODULE: ", module)
       execute(jobContext)
+      message("FINISH MODULE: ", module)
 
       ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE)
       ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE)
