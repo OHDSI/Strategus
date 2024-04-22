@@ -79,6 +79,7 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       # unlockKeyring will be injected automatically
       keyringLocked <- unlockKeyring(keyringName = keyringName)
 
+      ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReport.R"))
 
@@ -109,7 +110,9 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
       if (keyringLocked) {
         keyring::keyring_lock(keyring = keyringName)
       }
+      message("START MODULE RUN: ", moduleName)
       execute(jobContext)
+      message("FINISH MODULE RUN: ", moduleName)
 
       ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE)
       ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE)
@@ -120,7 +123,8 @@ runModule <- function(analysisSpecifications, keyringSettings, moduleIndex, exec
     injectVars = list(
       doneFile = doneFile,
       isCdmExecution = isCdmExecution,
-      jobContextFileName = jobContextFileName
+      jobContextFileName = jobContextFileName,
+      moduleName = module
     )
   )
 
