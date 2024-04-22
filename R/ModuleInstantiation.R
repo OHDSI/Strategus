@@ -31,6 +31,8 @@
 #'
 #' @template forceVerification
 #'
+#' @template enforceModuleDependencies
+#'
 #' @return
 #' A list containing the install status of all modules
 #' (TRUE if all are installed properly) and a tibble listing
