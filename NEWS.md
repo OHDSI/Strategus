@@ -1,3 +1,10 @@
+Strategus 0.3.0
+===============
+- Provide option to skip modules (#87)
+- Central log file for execution (#132)
+- Create function to collect all results into a single ZIP file for sharing (#46)
+- Install latest modules (#125)
+
 Strategus 0.2.1
 ===============
 - Update SelfControlledCaseSeries Module to v0.4.1

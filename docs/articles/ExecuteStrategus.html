@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Execute Strategus • Strategus</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Strategus</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
                         <h4 data-toc-skip class="author">Anthony G.
 Sena</h4>
             
-            <h4 data-toc-skip class="date">2024-01-29</h4>
+            <h4 data-toc-skip class="date">2024-06-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/HEAD/vignettes/ExecuteStrategus.Rmd" class="external-link"><code>vignettes/ExecuteStrategus.Rmd</code></a></small>
       <div class="hidden name"><code>ExecuteStrategus.Rmd</code></div>
@@ -142,10 +142,12 @@ connection.</p>
 <span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu">Eunomia</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Eunomia/man/getEunomiaConnectionDetails.html" class="external-link">getEunomiaConnectionDetails</a></span><span class="op">(</span></span>
 <span>  databaseFile <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outputFolder</span>, <span class="st">"cdm.sqlite"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## attempting to download GiBleed</span></span></code></pre>
+<pre><code><span><span class="co">## attempting to extract and load: D:/eunomiaData/GiBleed_5.3.zip to: D:/eunomiaData/GiBleed_5.3.sqlite</span></span></code></pre>
 <p>Next we will use <code>Strategus</code> to store the connection
 details and provide a <code>connectionDetailsReference</code> that
 Strategus will use to look up the connection details.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/storeConnectionDetails.html">storeConnectionDetails</a></span><span class="op">(</span></span>
 <span>  connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
 <span>  connectionDetailsReference <span class="op">=</span> <span class="st">"eunomia"</span></span>
@@ -159,7 +161,7 @@ re-use these details in all future studies.</p>
 <p>Next, we will use <code>Strategus</code> to create the CDM execution
 settings. The <code>connectionDetailsReference</code> refers to the
 connection details we stored earlier:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">executionSettings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCdmExecutionSettings.html">createCdmExecutionSettings</a></span><span class="op">(</span></span>
 <span>  connectionDetailsReference <span class="op">=</span> <span class="st">"eunomia"</span>,</span>
 <span>  workDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
@@ -171,7 +173,7 @@ connection details we stored earlier:</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we can write out the execution settings to the file system
 to capture this information.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ParallelLogger</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/ParallelLogger/reference/saveSettingsToJson.html" class="external-link">saveSettingsToJson</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">executionSettings</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outputFolder</span>, <span class="st">"eunomiaExecutionSettings.json"</span><span class="op">)</span></span>
@@ -191,7 +193,7 @@ modules need to be instantiated before they can be executed, a sometimes
 time-consuming task. We must specify a global location where these
 modules will be instantiated so that, once a module is instantiated, it
 can be used in all future studies:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span><span class="st">"INSTANTIATED_MODULES_FOLDER"</span> <span class="op">=</span> <span class="st">"c:/strategus/modules"</span><span class="op">)</span></span></code></pre></div>
 <p>We recommend adding this environmental variable to your
 <code>.renviron</code> file, so it is always set.</p>
@@ -201,7 +203,7 @@ can be used in all future studies:</p>
 </h3>
 <p>For this study, we will use analysis specifications created
 elsewhere, and the execution settings we created earlier:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analysisSpecifications</span> <span class="op">&lt;-</span> <span class="fu">ParallelLogger</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/ParallelLogger/reference/loadSettingsFromJson.html" class="external-link">loadSettingsFromJson</a></span><span class="op">(</span></span>
 <span>  fileName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testdata/analysisSpecification.json"</span>,</span>
 <span>    package <span class="op">=</span> <span class="st">"Strategus"</span></span>
@@ -212,7 +214,7 @@ elsewhere, and the execution settings we created earlier:</p>
 <span>  fileName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outputFolder</span>, <span class="st">"eunomiaExecutionSettings.json"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>And finally we execute the study:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/execute.html">execute</a></span><span class="op">(</span></span>
 <span>  analysisSpecifications <span class="op">=</span> <span class="va">analysisSpecifications</span>,</span>
 <span>  executionSettings <span class="op">=</span> <span class="va">executionSettings</span>,</span>
@@ -244,7 +246,7 @@ settings.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
       </footer>

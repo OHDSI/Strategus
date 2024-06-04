@@ -301,7 +301,7 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
 #' This function will call out to the OHDSI GitHub repo to find the latest
 #' version of the module and attempt to install it. Only modules that are listed
 #' in the `getModuleList()` function are allowed since it will have a known
-#'GitHub location.
+#' GitHub location.
 #'
 #' @param moduleName The name of the module to install (i.e. "CohortGeneratorModule").
 #' This parameter must match a value found in the `module` column of `getModuleList()`
@@ -327,8 +327,10 @@ installLatestModule <- function(moduleName) {
   urlTemplate <- "https://api.%s/repos/%s/%s/releases/latest"
   baseUrl <- sprintf(urlTemplate, moduleDetails$remoteRepo, moduleDetails$remoteUsername, moduleDetails$module)
   req <- httr2::request(base_url = baseUrl) |>
-    httr2::req_headers("Authorization" = paste0("Bearer ", Sys.getenv("GITHUB_PAT")),
-                       "X-GitHub-Api-Version" = "2022-11-28")
+    httr2::req_headers(
+      "Authorization" = paste0("Bearer ", Sys.getenv("GITHUB_PAT")),
+      "X-GitHub-Api-Version" = "2022-11-28"
+    )
   response <- httr2::req_perform(req)
   release <- jsonlite::fromJSON(httr2::resp_body_string(response))
   version <- gsub("v", "", release$tag_name, ignore.case = TRUE)
