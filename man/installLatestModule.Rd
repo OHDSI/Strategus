@@ -7,8 +7,8 @@
 installLatestModule(moduleName)
 }
 \arguments{
-\item{module}{The name of the module to install (i.e. "CohortGeneratorModule").
-This paramter must match a value found in the \code{module} column of \code{getModuleList()}}
+\item{moduleName}{The name of the module to install (i.e. "CohortGeneratorModule").
+This parameter must match a value found in the \code{module} column of \code{getModuleList()}}
 }
 \value{
 None - this function is called for its side effects

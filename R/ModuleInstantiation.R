@@ -303,8 +303,8 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
 #' in the `getModuleList()` function are allowed since it will have a known
 #'GitHub location.
 #'
-#' @param module The name of the module to install (i.e. "CohortGeneratorModule").
-#' This paramter must match a value found in the `module` column of `getModuleList()`
+#' @param moduleName The name of the module to install (i.e. "CohortGeneratorModule").
+#' This parameter must match a value found in the `module` column of `getModuleList()`
 #'
 #' @return
 #' None - this function is called for its side effects
