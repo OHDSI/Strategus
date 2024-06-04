@@ -33,7 +33,9 @@ Imports:
   tibble,
   ResultModelManager (>= 0.3.0),
   SqlRender (>= 1.11.0),
-  semver
+  semver,
+  httr2,
+  jsonlite
 Suggests:
   testthat (>= 3.0.0),
   fs,
