@@ -70,6 +70,9 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/installLatestModule.html</loc>
+  </url>
+  <url>
     <loc>/reference/lockFileToDataFrame.html</loc>
   </url>
   <url>
@@ -104,5 +107,8 @@
   </url>
   <url>
     <loc>/reference/withModuleRenv.html</loc>
+  </url>
+  <url>
+    <loc>/reference/zipResults.html</loc>
   </url>
 </urlset>
