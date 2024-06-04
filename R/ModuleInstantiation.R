@@ -31,13 +31,15 @@
 #'
 #' @template forceVerification
 #'
+#' @template enforceModuleDependencies
+#'
 #' @return
 #' A list containing the install status of all modules
 #' (TRUE if all are installed properly) and a tibble listing
 #' the instantiated modules.
 #'
 #' @export
-ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerification = FALSE) {
+ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerification = FALSE, enforceModuleDependencies = TRUE) {
   modules <- getModuleTable(analysisSpecifications, distinct = TRUE)
 
   # Verify only one version per module:
@@ -62,20 +64,12 @@ ensureAllModulesInstantiated <- function(analysisSpecifications, forceVerificati
     )
   }
 
-  # Check required dependencies have been installed:
-  dependencies <- extractDependencies(modules)
-  missingDependencies <- dependencies %>%
-    filter(!dependsOn %in% modules$module)
-  if (nrow(missingDependencies) > 0) {
-    message <- paste(
-      c(
-        "Detected missing dependencies:",
-        sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
-      ),
-      collapse = "\n"
-    )
-    stop(message)
-  }
+  # Check required dependencies have been declare in the specification
+  # unless the user has set enforceModuleDependencies == FALSE
+  checkModuleDependencies(
+    modules = modules,
+    enforceModuleDependencies = enforceModuleDependencies
+  )
 
   # Verify all modules are properly installed
   moduleInstallStatus <- list()
@@ -300,6 +294,88 @@ verifyModuleInstallation <- function(module, version, silent = FALSE, forceVerif
   )
 }
 
+
+#' Install the latest release of a module
+#'
+#' @description
+#' This function will call out to the OHDSI GitHub repo to find the latest
+#' version of the module and attempt to install it. Only modules that are listed
+#' in the `getModuleList()` function are allowed since it will have a known
+#' GitHub location.
+#'
+#' @param moduleName The name of the module to install (i.e. "CohortGeneratorModule").
+#' This parameter must match a value found in the `module` column of `getModuleList()`
+#'
+#' @return
+#' None - this function is called for its side effects
+#'
+#' @export
+installLatestModule <- function(moduleName) {
+  assertModulesFolderSetting(x = Sys.getenv("INSTANTIATED_MODULES_FOLDER"))
+  instantiatedModulesFolder <- Sys.getenv("INSTANTIATED_MODULES_FOLDER")
+  # Verify that the user's GITHUB_PAT is set properly
+  # otherwise we may hit a rate limit
+  if (Sys.getenv("GITHUB_PAT") == "") {
+    stop("You must set your GITHUB_PAT to use this function. Please use the function `usethis::create_github_token()` and try again after restarting your R session.")
+  }
+  moduleList <- getModuleList()
+  if (isFALSE(moduleName %in% moduleList$module)) {
+    stop("Module: ", module, " not found in the list from Strategus::getModuleList().")
+  }
+  moduleDetails <- moduleList %>%
+    dplyr::filter(module == moduleName)
+  urlTemplate <- "https://api.%s/repos/%s/%s/releases/latest"
+  baseUrl <- sprintf(urlTemplate, moduleDetails$remoteRepo, moduleDetails$remoteUsername, moduleDetails$module)
+  req <- httr2::request(base_url = baseUrl) |>
+    httr2::req_headers(
+      "Authorization" = paste0("Bearer ", Sys.getenv("GITHUB_PAT")),
+      "X-GitHub-Api-Version" = "2022-11-28"
+    )
+  response <- httr2::req_perform(req)
+  release <- jsonlite::fromJSON(httr2::resp_body_string(response))
+  version <- gsub("v", "", release$tag_name, ignore.case = TRUE)
+  moduleFolder <- ensureModuleInstantiated(
+    module = moduleDetails$module,
+    version = version,
+    remoteRepo = moduleDetails$remoteRepo,
+    remoteUsername = moduleDetails$remoteUsername
+  )
+  rlang::inform(paste0("Installed ", moduleName, " to ", moduleFolder))
+}
+
+extractDependencies <- function(modules) {
+  extractDependenciesSingleModule <- function(module) {
+    moduleFolder <- getModuleFolder(module$module, module$version)
+    metaData <- getModuleMetaData(moduleFolder)
+    dependencies <- tibble(
+      module = module$module,
+      dependsOn = as.character(metaData$Dependencies)
+    )
+    return(dependencies)
+  }
+  dependencies <- lapply(split(modules, 1:nrow(modules)), extractDependenciesSingleModule) %>%
+    bind_rows()
+  return(dependencies)
+}
+
+checkModuleDependencies <- function(modules, enforceModuleDependencies) {
+  # Check required dependencies have been declare in the specification
+  # unless the user has set enforceModuleDependencies == FALSE
+  dependencies <- extractDependencies(modules)
+  missingDependencies <- dependencies %>%
+    filter(!dependsOn %in% modules$module)
+  if (nrow(missingDependencies) > 0 && enforceModuleDependencies) {
+    message <- paste(
+      c(
+        "Detected missing dependencies:",
+        sprintf("- Missing module '%s' required by module '%s'", missingDependencies$dependsOn, missingDependencies$module)
+      ),
+      collapse = "\n"
+    )
+    stop(message)
+  }
+}
+
 getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
   modules <- lapply(
     analysisSpecifications$moduleSpecifications,
@@ -318,21 +394,6 @@ getModuleTable <- function(analysisSpecifications, distinct = FALSE) {
       distinct(module, version, .keep_all = TRUE)
   }
   return(modules)
-}
-
-extractDependencies <- function(modules) {
-  extractDependenciesSingleModule <- function(module) {
-    moduleFolder <- getModuleFolder(module$module, module$version)
-    metaData <- getModuleMetaData(moduleFolder)
-    dependencies <- tibble(
-      module = module$module,
-      dependsOn = as.character(metaData$Dependencies)
-    )
-    return(dependencies)
-  }
-  dependencies <- lapply(split(modules, 1:nrow(modules)), extractDependenciesSingleModule) %>%
-    bind_rows()
-  return(dependencies)
 }
 
 getModuleMetaData <- function(moduleFolder) {

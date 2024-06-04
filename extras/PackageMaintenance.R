@@ -39,7 +39,11 @@ updateModuleVersionInfo <- function() {
   # Get latest module versions ---------------------------------------------------
   getLatestModuleVersion <- function(remoteRepo, remoteUsername, module) {
     urlTemplate <- "https://api.%s/repos/%s/%s/releases/latest"
-    release <- jsonlite::fromJSON(sprintf(urlTemplate, remoteRepo, remoteUsername, module))
+    req <- httr2::request(base_url = sprintf(urlTemplate, remoteRepo, remoteUsername, module)) |>
+      httr2::req_headers("Authorization" = paste0("Bearer ", Sys.getenv("GITHUB_PAT")),
+                  "X-GitHub-Api-Version" = "2022-11-28")
+    response <- httr2::req_perform(req)
+    release <- jsonlite::fromJSON(httr2::resp_body_string(response))
     return(release$tag_name)
   }
   versions <- tibble::tibble(

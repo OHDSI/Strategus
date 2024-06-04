@@ -4,7 +4,11 @@
 \alias{ensureAllModulesInstantiated}
 \title{Ensure all modules are instantiated}
 \usage{
-ensureAllModulesInstantiated(analysisSpecifications, forceVerification = FALSE)
+ensureAllModulesInstantiated(
+  analysisSpecifications,
+  forceVerification = FALSE,
+  enforceModuleDependencies = TRUE
+)
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
@@ -15,6 +19,15 @@ to re-evaluate if a module is properly installed. The default is FALSE
 since if a module is successfully validated, the module will contain
 the hash value of the module's renv.lock file in the file system so it can
 by-pass running this check every time.}
+
+\item{enforceModuleDependencies}{When set to TRUE, Strategus will enforce
+module dependencies that are declared by each module. For example, the
+CohortDiagnostics module declares a dependency on the CohortGenerator module
+and Strategus will require that an analysis specification declare that both
+modules must exist in order to execute the analysis. When set to FALSE,
+Strategus will not enforce these module dependencies which assumes you have
+properly run all module dependencies yourself. Setting this to FALSE is not
+recommended since it is potentially unsafe.}
 }
 \value{
 A list containing the install status of all modules

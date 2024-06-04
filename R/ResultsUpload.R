@@ -58,6 +58,8 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   }
 
   tempScriptFile <- file.path(moduleExecutionSettings$workSubFolder, "UploadScript.R")
+  ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
+  on.exit(ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE))
 
   ##
   # Module space executed code
@@ -68,9 +70,10 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
 
       getDataModelSpecifications <- function(...) {
         ParallelLogger::logInfo("Getting result model specification")
-        if (file.exists("resultsDataModelSpecification.csv")) {
+        rdmsFilePath <- file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "resultsDataModelSpecification.csv")
+        if (file.exists(rdmsFilePath)) {
           res <- CohortGenerator::readCsv(
-            file = "resultsDataModelSpecification.csv"
+            file = rdmsFilePath
           )
           return(res)
         }
@@ -81,6 +84,8 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
       moduleInfo <- ParallelLogger::loadSettingsFromJson("MetaData.json")
       jobContext <- readRDS(jobContextFileName)
       specifications <- getDataModelSpecifications(jobContext)
+
+      ParallelLogger::addDefaultFileLogger(jobContext$moduleExecutionSettings$logFileName)
       ParallelLogger::addDefaultFileLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "log.txt"))
       ParallelLogger::addDefaultErrorReportLogger(file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "errorReportR.txt"))
 
@@ -88,6 +93,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
         renv::use(lockfile = "renv.lock")
       }
 
+      message("START MODULE RESULTS UPLOAD: ", moduleName)
       # Override default behaviour and do module specific upload inside module context?
       if (is.function(uploadResultsCallback)) {
         ParallelLogger::logInfo("Calling module result upload functionality")
@@ -122,6 +128,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
         writeLines("specifications.written", doneFile)
       }
 
+      message("FINISH MODULE RESULTS UPLOAD: ", moduleName)
       ParallelLogger::unregisterLogger("DEFAULT_FILE_LOGGER", silent = TRUE)
       ParallelLogger::unregisterLogger("DEFAULT_ERRORREPORT_LOGGER", silent = TRUE)
     },
@@ -130,6 +137,7 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
     injectVars = list(
       jobContextFileName = jobContextFileName,
       dataModelExportPath = dataModelExportPath,
+      moduleName = module,
       doneFile = doneFile
     )
   )
@@ -149,34 +157,32 @@ runResultsUpload <- function(analysisSpecifications, keyringSettings, moduleInde
   workStatus <- readLines(doneFile)
 
   if (workStatus == "specifications.written") {
-    ParallelLogger::logInfo("Uploading results according to module specification")
+    message("Uploading results according to module specification")
     specifications <- CohortGenerator::readCsv(dataModelExportPath)
-    moduleInfo <- ParallelLogger::loadSettingsFromJson(file.path(moduleFolder, "MetaData.json"))
 
     keyringName <- jobContext$keyringSettings$keyringName
     keyringLocked <- Strategus::unlockKeyring(keyringName = keyringName)
 
-    ParallelLogger::logInfo("Getting result database credentials")
+    message("Getting result database credentials")
     resultsConnectionDetails <- keyring::key_get(jobContext$moduleExecutionSettings$resultsConnectionDetailsReference, keyring = keyringName)
     resultsConnectionDetails <- ParallelLogger::convertJsonToSettings(resultsConnectionDetails)
     resultsConnectionDetails <- do.call(DatabaseConnector::createConnectionDetails, resultsConnectionDetails)
     jobContext$moduleExecutionSettings$resultsConnectionDetails <- resultsConnectionDetails
 
-    ParallelLogger::logInfo("Calling RMM for upload")
+    message("Calling RMM for upload")
     ResultModelManager::uploadResults(
       connectionDetails = jobContext$moduleExecutionSettings$resultsConnectionDetails,
       schema = jobContext$moduleExecutionSettings$resultsDatabaseSchema,
       resultsFolder = jobContext$moduleExecutionSettings$resultsSubFolder,
-      tablePrefix = moduleInfo$TablePrefix,
       forceOverWriteOfSpecifications = FALSE,
       purgeSiteDataBeforeUploading = FALSE,
-      databaseIdentifierFile = "database_meta_data.csv",
+      databaseIdentifierFile = file.path(executionSettings$resultsFolder, "DatabaseMetaData", "database_meta_data.csv"),
       runCheckAndFixCommands = FALSE,
       warnOnMissingTable = TRUE,
       specifications = specifications
     )
 
-    ParallelLogger::logInfo("Upload completed")
+    message("Upload completed")
     if (keyringLocked) {
       keyring::keyring_lock(keyring = keyringName)
     }
