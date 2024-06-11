@@ -8,7 +8,7 @@ execute(
   analysisSpecifications,
   executionSettings,
   executionScriptFolder = NULL,
-  keyringName = NULL,
+  connectionDetails,
   restart = FALSE,
   enforceModuleDependencies = TRUE
 )
@@ -23,13 +23,6 @@ by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \c
 \item{executionScriptFolder}{Optional: the path to use for storing the execution script.
 when NULL, this function will use a temporary
 file location to create the script to execute.}
-
-\item{keyringName}{The name of the keyring to operate on. This function assumes you have
-created the keyring before calling this function. It defaults to
-NULL to select the default keyring. If the keyring is password
-protected, the password must be stored in the environment variable
-STRATEGUS_KEYRING_PASSWORD so it is retrieved using the command
-Sys.getenv("STRATEGUS_KEYRING_PASSWORD")}
 
 \item{restart}{Restart run? Requires \code{executionScriptFolder} to be specified, and be
 the same as the \code{executionScriptFolder} used in the run to restart.}
