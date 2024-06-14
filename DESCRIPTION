@@ -23,6 +23,8 @@ Imports:
   renv (>= 1.0.0),
   ParallelLogger (>= 3.1.0),
   dplyr,
+  tidyr,
+  fs,
   checkmate,
   keyring,
   rlang,
