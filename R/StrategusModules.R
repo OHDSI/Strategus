@@ -33,8 +33,8 @@ StrategusModule <- R6::R6Class(
     jobContext = NA,
     #' @field moduleIndex The index of the module in the analysis specification.
     moduleIndex = 0,
-    #' @field databaseId The database ID to use for the execution. TODO: This shouldn't be
-    #' something the end-user worries about
+    #' @field databaseId The database ID to use for the execution.
+    #' TODO: This shouldn't be something the end-user worries about
     databaseId = "-1",
     #' @field moduleName The name of the module
     moduleName = "StrategusModuleBaseClass",
@@ -51,7 +51,7 @@ StrategusModule <- R6::R6Class(
     #' @description Executes the module based on the job context
     #' @param connectionDetails The connection details to the database
     execute = function(connectionDetails) {
-      private$.message('Executing...', self$moduleName)
+      private$.message('EXECUTING: ', self$moduleName)
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB
@@ -103,6 +103,8 @@ StrategusModule <- R6::R6Class(
       invisible(returnVal)
     },
     #' @description Create a cohort definition set from the job context
+    #' TODO: This is BAD for the base class since the settings passed in here
+    #' (jobContext$settings) are assumed to be for the cohort generator.
     #' @param jobContext The job context to use for execution. See JobContext class for more info
     .createCohortDefinitionSetFromJobContext = function() {
       jobContext <- self$jobContext
@@ -128,6 +130,8 @@ StrategusModule <- R6::R6Class(
       return(cohortDefinitionSet)
     },
     #' @description Create a cohort definition set from the shared resource of the job context
+    #' TODO: This is BAD for the base class since the settings passed in here are assumed
+    #' to be for the cohort generator.
     #' @param jobContext The job context to use for execution. See JobContext class for more info
     .getCohortDefinitionSetFromSharedResource = function(cohortDefinitionSharedResource, settings) {
       cohortDefinitions <- cohortDefinitionSharedResource$cohortDefinitions
@@ -211,6 +215,41 @@ StrategusModule <- R6::R6Class(
 )
 
 
+# StrategusModuleSettings -------------
+#' @title Class for creating settings that are used by a Strategus Module
+#' @export
+#' @description
+#' Class for creating settings that are used by a Strategus Module. The
+#' main motivator for this class is that R6 does not provide a way
+#' to create static methods.The settings class should have an empty
+#' constructor while the main StrategusModule will likely need some
+#' type of inputs to the constructor.
+#' TODO: Revisit this with the working group.
+StrategusModuleSettings <- R6::R6Class(
+  classname = "# StrategusModuleSettings",
+  public = list(
+    #' @description Base function for creating the module settings object.
+    #' Each module will have its own implementation and this base class method
+    #' will be used to ensure the class of the specifications is set properly.
+    #' @param className The class name for the module specifications
+    #' @param moduleSpecifications The module specifications
+    createModuleSpecifications = function(className, moduleSpecifications) {
+      class(moduleSpecifications) <- c(className, "ModuleSpecifications")
+      return(moduleSpecifications)
+    },
+    #' @description Base function for creating the shared resources settings object.
+    #' Each module will have its own implementation if it needs to create
+    #' a shared resource.
+    #' @param className The class name for the shared resources specifications
+    #' @param sharedResourceSpecifications The shared resources specifications
+    createSharedResourcesSpecifications = function(className, sharedResourcesSpecifications) {
+      class(sharedResourcesSpecifications) <- c(className, "SharedResources")
+      return(sharedResourcesSpecifications)
+    }
+  )
+)
+
+
 # CohortGeneratorModule -------------
 #' @title Module for generating cohorts against an OMOP CDM
 #' @export
@@ -231,10 +270,10 @@ CohortGeneratorModule <- R6::R6Class(
         moduleIndex = moduleIndex,
         databaseId = databaseId
       )
+      browser()
       self$cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
     },
     #' @description Generates the cohorts
-    #' @param jobContext The job context to use for execution. See JobContext class for more info
     execute = function(connectionDetails) {
       super$execute(connectionDetails)
       jobContext <- self$jobContext
@@ -264,11 +303,112 @@ CohortGeneratorModule <- R6::R6Class(
     createResultsSchema = function(resultsConnectionDetails) {
       super$createResultsSchema(resultsConnectionDetails)
     }
+  )
+)
+
+
+# CohortGeneratorModuleSettings -------------
+#' @title Create settings for use with the @seealso [CohortGeneratorModule]
+#' @export
+#' @description
+#' Module settings used by the @seealso [CohortGeneratorModule]
+CohortGeneratorModuleSettings <- R6::R6Class(
+  classname = "CohortGeneratorModuleSettings",
+  inherit = StrategusModuleSettings,
+  public = list(
+    #' @description Creates the CohortGenerator Module Specifications
+    createModuleSpecifications = function(incremental = TRUE,
+                                          generateStats = TRUE) {
+      analysis <- list()
+      for (name in names(formals(self$createModuleSpecifications))) {
+        analysis[[name]] <- get(name)
+      }
+
+      specifications <- super$createModuleSpecifications(
+        className = "CohortGeneratorModuleSpecifications",
+        moduleSpecifications = list(
+          module = "CohortGeneratorModule",
+          settings = analysis
+        )
+      )
+      return(specifications)
+    },
+    #' @description Create shared specifications for the cohort definition set
+    createCohortSharedResourceSpecifications = function(cohortDefinitionSet) {
+      if (!CohortGenerator::isCohortDefinitionSet(cohortDefinitionSet)) {
+        stop("cohortDefinitionSet is not properly defined")
+      }
+
+      subsetDefinitions <- CohortGenerator::getSubsetDefinitions(cohortDefinitionSet)
+      if (length(subsetDefinitions) > 0) {
+        # Filter the cohort definition set to the "parent" cohorts.
+        parentCohortDefinitionSet <- cohortDefinitionSet[!cohortDefinitionSet$isSubset, ]
+      } else {
+        parentCohortDefinitionSet <- cohortDefinitionSet
+      }
+
+      sharedResource <- list()
+      cohortDefinitionSetFiltered <- private$.listafy(parentCohortDefinitionSet)
+      sharedResource["cohortDefinitions"] <- list(cohortDefinitionSetFiltered)
+
+      if (length(subsetDefinitions)) {
+        # Subset definitions
+        subsetDefinitionsJson <- lapply(subsetDefinitions, function(x) {
+          x$toJSON()
+        })
+        sharedResource["subsetDefs"] <- list(subsetDefinitionsJson)
+
+        # Filter to the subsets
+        subsetCohortDefinitionSet <- cohortDefinitionSet[cohortDefinitionSet$isSubset, ]
+        subsetIdMapping <- list()
+        for (i in 1:nrow(subsetCohortDefinitionSet)) {
+          idMapping <- list(
+            cohortId = subsetCohortDefinitionSet$cohortId[i],
+            subsetId = subsetCohortDefinitionSet$subsetDefinitionId[i],
+            targetCohortId = subsetCohortDefinitionSet$subsetParent[i]
+          )
+          subsetIdMapping[[i]] <- idMapping
+        }
+        sharedResource["cohortSubsets"] <- list(subsetIdMapping)
+      }
+
+      sharedResource <- super$createSharedResourcesSpecifications(
+        className = "CohortDefinitionSharedResources",
+        sharedResourcesSpecifications = sharedResource
+      )
+      return(sharedResource)
+    },
+    #' @description Create shared specifications for the negative control outcomes cohort set
+    createNegativeControlOutcomeCohortSharedResourceSpecifications = function(negativeControlOutcomeCohortSet,
+                                                                              occurrenceType,
+                                                                              detectOnDescendants) {
+      negativeControlOutcomeCohortSet <- apply(negativeControlOutcomeCohortSet, 1, as.list)
+      sharedResource <- list(
+        negativeControlOutcomes = list(
+          negativeControlOutcomeCohortSet = negativeControlOutcomeCohortSet,
+          occurrenceType = occurrenceType,
+          detectOnDescendants = detectOnDescendants
+        )
+      )
+      sharedResource <- super$createSharedResourcesSpecifications(
+        className = "NegativeControlOutcomeSharedResources",
+        sharedResourcesSpecifications = sharedResource
+      )
+      return(sharedResource)
+    }
   ),
   private = list(
-    .filterCohortCountsColumns = function(cohortCounts) {
-      # Filter to columns in the results data model
-      return(cohortCounts[c("databaseId", "cohortId", "cohortEntries", "cohortSubjects")])
+    .listafy = function(df) {
+      mylist <- list()
+      for (i in 1:nrow(df)) {
+        cohortData <- list(
+          cohortId = df$cohortId[i],
+          cohortName = df$cohortName[i],
+          cohortDefinition = df$json[i]
+        )
+        mylist[[i]] <- cohortData
+      }
+      return(mylist)
     }
   )
 )

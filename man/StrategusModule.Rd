@@ -11,20 +11,37 @@ Provides a base class for HADES Strategus modules to inherit
 \describe{
 \item{\code{tablePrefix}}{The prefix to append to database tables
 that hold results for this module}
+
+\item{\code{jobContext}}{The job context to use for execution.
+See JobContext class for more info}
+
+\item{\code{moduleIndex}}{The index of the module in the analysis specification.}
+
+\item{\code{databaseId}}{The database ID to use for the execution.
+TODO: This shouldn't be something the end-user worries about}
+
+\item{\code{moduleName}}{The name of the module}
 }
 \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-StrategusModule-new}{\code{StrategusModule$new()}}
 \item \href{#method-StrategusModule-execute}{\code{StrategusModule$execute()}}
-\item \href{#method-StrategusModule-createAnalysisSettings}{\code{StrategusModule$createAnalysisSettings()}}
-\item \href{#method-StrategusModule-validateAnalysisSettings}{\code{StrategusModule$validateAnalysisSettings()}}
-\item \href{#method-StrategusModule-exportResults}{\code{StrategusModule$exportResults()}}
 \item \href{#method-StrategusModule-createResultsSchema}{\code{StrategusModule$createResultsSchema()}}
 \item \href{#method-StrategusModule-uploadResults}{\code{StrategusModule$uploadResults()}}
 \item \href{#method-StrategusModule-clone}{\code{StrategusModule$clone()}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StrategusModule-new"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-new}{}}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$new(jobContext, moduleIndex, databaseId)}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-StrategusModule-execute"></a>}}
@@ -32,57 +49,13 @@ that hold results for this module}
 \subsection{Method \code{execute()}}{
 Executes the module based on the job context
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$execute(connectionDetails, jobContext)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$execute(connectionDetails)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{jobContext}}{The job context to use for execution. See JobContext class for more info}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-StrategusModule-createAnalysisSettings"></a>}}
-\if{latex}{\out{\hypertarget{method-StrategusModule-createAnalysisSettings}{}}}
-\subsection{Method \code{createAnalysisSettings()}}{
-Define the inputs to the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createAnalysisSettings()}\if{html}{\out{</div>}}
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-StrategusModule-validateAnalysisSettings"></a>}}
-\if{latex}{\out{\hypertarget{method-StrategusModule-validateAnalysisSettings}{}}}
-\subsection{Method \code{validateAnalysisSettings()}}{
-Validate the analysis settings ahead of execution
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$validateAnalysisSettings(analysisSettings)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{analysisSettings}}{The analysis settings to validate}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-StrategusModule-exportResults"></a>}}
-\if{latex}{\out{\hypertarget{method-StrategusModule-exportResults}{}}}
-\subsection{Method \code{exportResults()}}{
-Export the results to .csv from the work folder
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$exportResults(jobContext)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{jobContext}}{The job context to use for execution. See JobContext class for more info}
+\item{\code{connectionDetails}}{The connection details to the database}
 }
 \if{html}{\out{</div>}}
 }
@@ -110,7 +83,7 @@ Create the results schema for the module
 \subsection{Method \code{uploadResults()}}{
 Upload the results for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$uploadResults(connectionDetails, resultsFolder)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$uploadResults(connectionDetails)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

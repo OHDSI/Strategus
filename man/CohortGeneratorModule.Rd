@@ -20,8 +20,8 @@ that hold results for this module}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-CohortGeneratorModule-new}{\code{CohortGeneratorModule$new()}}
 \item \href{#method-CohortGeneratorModule-execute}{\code{CohortGeneratorModule$execute()}}
-\item \href{#method-CohortGeneratorModule-exportResults}{\code{CohortGeneratorModule$exportResults()}}
 \item \href{#method-CohortGeneratorModule-createResultsSchema}{\code{CohortGeneratorModule$createResultsSchema()}}
 \item \href{#method-CohortGeneratorModule-clone}{\code{CohortGeneratorModule$clone()}}
 }
@@ -29,35 +29,26 @@ that hold results for this module}
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createAnalysisSettings"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createAnalysisSettings'><code>Strategus::StrategusModule$createAnalysisSettings()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="uploadResults"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-uploadResults'><code>Strategus::StrategusModule$uploadResults()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateAnalysisSettings"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateAnalysisSettings'><code>Strategus::StrategusModule$validateAnalysisSettings()</code></a></span></li>
 </ul>
 </details>
 }}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-new"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-new}{}}}
+\subsection{Method \code{new()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$new(jobContext, moduleIndex, databaseId)}\if{html}{\out{</div>}}
+}
+
+}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortGeneratorModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortGeneratorModule-execute}{}}}
 \subsection{Method \code{execute()}}{
 Generates the cohorts
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$execute(connectionDetails, jobContext)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{jobContext}}{The job context to use for execution. See JobContext class for more info}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CohortGeneratorModule-exportResults"></a>}}
-\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-exportResults}{}}}
-\subsection{Method \code{exportResults()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$exportResults(jobContext, cohortsGenerated = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$execute(connectionDetails)}\if{html}{\out{</div>}}
 }
 
 }
