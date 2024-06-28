@@ -234,7 +234,7 @@ StrategusModuleSettings <- R6::R6Class(
     #' @param className The class name for the module specifications
     #' @param moduleSpecifications The module specifications
     createModuleSpecifications = function(className, moduleSpecifications) {
-      class(moduleSpecifications) <- c(className, "ModuleSpecifications")
+      class(moduleSpecifications) <- c(className, private$.getModuleClassName())
       return(moduleSpecifications)
     },
     #' @description Base function for creating the shared resources settings object.
@@ -243,8 +243,38 @@ StrategusModuleSettings <- R6::R6Class(
     #' @param className The class name for the shared resources specifications
     #' @param sharedResourceSpecifications The shared resources specifications
     createSharedResourcesSpecifications = function(className, sharedResourcesSpecifications) {
-      class(sharedResourcesSpecifications) <- c(className, "SharedResources")
+      class(sharedResourcesSpecifications) <- c(className, private$.getSharedResourcesClassName())
       return(sharedResourcesSpecifications)
+    },
+    #' @description Base function for validating the module settings object.
+    #' Each module will have its own implementation and this base class method
+    #' will be used to ensure the module specifications are valid ahead of
+    #' execution
+    #' @param moduleSpecifications The module specifications
+    validateModuleSpecifications = function(moduleSpecifications, moduleClassName) {
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(moduleSpecifications, private$.getModuleClassName())
+      checkmate::assertClass(moduleSpecifications, moduleClassName)
+      checkmate::reportAssertions(collection = errorMessages)
+    },
+    #' @description Base function for validating the shared resources
+    #' specification settings object. Each module will have its own
+    #' implementation and this base class method will be used to ensure
+    #' the module specifications are valid ahead of execution
+    #' @param moduleSpecifications The module specifications
+    validateSharedResourcesSpecifications = function(sharedResourcesSpecifications, sharedResourcesClassName) {
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(sharedResourcesSpecifications, private$.getSharedResourcesClassName())
+      checkmate::assertClass(sharedResourcesSpecifications, sharedResourcesClassName)
+      checkmate::reportAssertions(collection = errorMessages)
+    }
+  ),
+  private = list(
+    .getModuleClassName = function() {
+      invisible("ModuleSpecifications")
+    },
+    .getSharedResourcesClassName = function() {
+      invisible("SharedResources")
     }
   )
 )
@@ -270,7 +300,6 @@ CohortGeneratorModule <- R6::R6Class(
         moduleIndex = moduleIndex,
         databaseId = databaseId
       )
-      browser()
       self$cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
     },
     #' @description Generates the cohorts
@@ -325,9 +354,9 @@ CohortGeneratorModuleSettings <- R6::R6Class(
       }
 
       specifications <- super$createModuleSpecifications(
-        className = "CohortGeneratorModuleSpecifications",
+        className = private$.getModuleSpecificationsClassName(),
         moduleSpecifications = list(
-          module = "CohortGeneratorModule",
+          module = private$.getModuleName(),
           settings = analysis
         )
       )
@@ -373,7 +402,7 @@ CohortGeneratorModuleSettings <- R6::R6Class(
       }
 
       sharedResource <- super$createSharedResourcesSpecifications(
-        className = "CohortDefinitionSharedResources",
+        className = private$.getCohortDefinitionSharedResourcesClassName(),
         sharedResourcesSpecifications = sharedResource
       )
       return(sharedResource)
@@ -391,13 +420,46 @@ CohortGeneratorModuleSettings <- R6::R6Class(
         )
       )
       sharedResource <- super$createSharedResourcesSpecifications(
-        className = "NegativeControlOutcomeSharedResources",
+        className = private$.getNegativeControlOutcomeSharedResourcesClassName(),
         sharedResourcesSpecifications = sharedResource
       )
       return(sharedResource)
+    },
+    #' @description Validate the module specifications
+    validateModuleSpecifications = function(moduleSpecifications) {
+      super$validateModuleSpecifications(
+        moduleSpecifications = moduleSpecifications,
+        moduleClassName = private$.getModuleSpecificationsClassName()
+      )
+    },
+    #' @description Validate the cohort shared resource specifications
+    validateCohortSharedResourceSpecifications = function(cohortSharedResourceSpecifications) {
+      super$validateSharedResourcesSpecifications(
+        sharedResourcesSpecifications = cohortSharedResourceSpecifications,
+        sharedResourcesClassName = private$.getCohortDefinitionSharedResourcesClassName()
+      )
+    },
+    #' @description Validate the cohort shared resource specifications
+    validateNegativeControlOutcomeCohortSharedResourceSpecifications = function(negativeControlOutcomeCohortSharedResourceSpecifications) {
+      super$validateSharedResourcesSpecifications(
+        sharedResourcesSpecifications = negativeControlOutcomeCohortSharedResourceSpecifications,
+        sharedResourcesClassName = private$.getNegativeControlOutcomeSharedResourcesClassName()
+      )
     }
   ),
   private = list(
+    .getModuleSpecificationsClassName = function() {
+      invisible("CohortGeneratorModuleSpecifications")
+    },
+    .getModuleName = function() {
+      invisible("CohortGeneratorModule")
+    },
+    .getCohortDefinitionSharedResourcesClassName = function() {
+      invisible("CohortDefinitionSharedResources")
+    },
+    .getNegativeControlOutcomeSharedResourcesClassName = function() {
+      invisible("NegativeControlOutcomeSharedResources")
+    },
     .listafy = function(df) {
       mylist <- list()
       for (i in 1:nrow(df)) {
