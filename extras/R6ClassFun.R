@@ -76,8 +76,25 @@ createCohortSharedResourceSpecifications <- function(cohortDefinitionSet) {
   return(sharedResource)
 }
 
+# NOTE: THIS SHOULD GO IN THE MODULE!
+createNegativeControlOutcomeCohortSharedResourceSpecifications <- function(negativeControlOutcomeCohortSet,
+                                                                           occurrenceType,
+                                                                           detectOnDescendants) {
+  negativeControlOutcomeCohortSet <- apply(negativeControlOutcomeCohortSet, 1, as.list)
+  sharedResource <- list(
+    negativeControlOutcomes = list(
+      negativeControlOutcomeCohortSet = negativeControlOutcomeCohortSet,
+      occurrenceType = occurrenceType,
+      detectOnDescendants = detectOnDescendants
+    )
+  )
+  class(sharedResource) <- c("NegativeControlOutcomeSharedResources", "SharedResources")
+  return(sharedResource)
+}
+
 jc$sharedResources <- list(
-  createCohortSharedResourceSpecifications(cohortDefinitionSet)
+  createCohortSharedResourceSpecifications(cohortDefinitionSet),
+  createNegativeControlOutcomeCohortSharedResourceSpecifications(ncoCohortSet, "first", TRUE)
 )
 jc$settings <- list(
   incremental = FALSE,
@@ -105,6 +122,7 @@ cg <- CohortGeneratorModule$new(
   databaseId = "foo"
 )
 #debugonce(cg$execute)
+#debugonce(CohortGenerator:::generateAndExportNegativeControls)
 cg$execute(
   connectionDetails = connectionDetails
 )

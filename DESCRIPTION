@@ -39,9 +39,8 @@ Suggests:
   Eunomia,
   withr
 Remotes:
-  ohdsi/CohortGenerator,
-  ohdsi/ResultModelManager,
-  ohdsi/Eunomia
+  ohdsi/CohortGenerator@667f5c84c7267bf5689bbe8fef8474ad565a589a,
+  ohdsi/ResultModelManager
 VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 7.3.1

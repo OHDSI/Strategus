@@ -38,6 +38,8 @@ StrategusModule <- R6::R6Class(
     databaseId = "-1",
     #' @field moduleName The name of the module
     moduleName = "StrategusModuleBaseClass",
+    # TODO: Remove the initialize function and just pass to methods instead.
+    # Need to handle the sub folders differently.
     initialize = function(jobContext, moduleIndex, databaseId) {
       checkmate::assertR6(jobContext, "JobContext")
       self$jobContext = jobContext
@@ -50,24 +52,6 @@ StrategusModule <- R6::R6Class(
     #' @param connectionDetails The connection details to the database
     execute = function(connectionDetails) {
       private$.message('Executing...', self$moduleName)
-    },
-    #' @description Define the inputs to the module
-    createAnalysisSettings = function() {
-      # TODO - IMPLEMENT
-      private$.message('Create analysis settings...')
-      warning("NOT IMPLEMENTED")
-    },
-    #' @description Validate the analysis settings ahead of execution
-    #' @param analysisSettings The analysis settings to validate
-    validateAnalysisSettings = function(analysisSettings) {
-      # TODO - IMPLEMENT
-      private$.message('Validate analysis settings...')
-      warning("NOT IMPLEMENTED")
-    },
-    #' @description Export the results to .csv from the work folder
-    #' @param
-    exportResults = function(connection, connectionDetails) {
-      private$.message('exportResults...', self$moduleName)
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB
@@ -211,9 +195,9 @@ StrategusModule <- R6::R6Class(
         negativeControlOutcomeCohortSet <- rbind(
           negativeControlOutcomeCohortSet,
           data.frame(
-            cohortId = bit64::as.integer64(nc$cohortId),
+            cohortId = as.numeric(nc$cohortId),
             cohortName = nc$cohortName,
-            outcomeConceptId = bit64::as.integer64(nc$outcomeConceptId)
+            outcomeConceptId = as.numeric(nc$outcomeConceptId)
           )
         )
       }
@@ -254,175 +238,28 @@ CohortGeneratorModule <- R6::R6Class(
     execute = function(connectionDetails) {
       super$execute(connectionDetails)
       jobContext <- self$jobContext
-
-      cohortDefinitionSet <- self$cohortDefinitionSet
-
-      # Establish the connection and ensure the cleanup is performed
-      connection <- DatabaseConnector::connect(connectionDetails)
-      on.exit(DatabaseConnector::disconnect(connection))
-
-      # Create the cohort tables
-      CohortGenerator::createCohortTables(
-        connection = connection,
-        cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cohortTableNames = jobContext$moduleExecutionSettings$cohortTableNames,
-        incremental = jobContext$settings$incremental
-      )
-
-      # Generate the cohorts
-      cohortsGenerated <- CohortGenerator::generateCohortSet(
-        connection = connection,
-        cohortDefinitionSet = cohortDefinitionSet,
-        cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cohortTableNames = jobContext$moduleExecutionSettings$cohortTableNames,
-        incremental = jobContext$settings$incremental,
-        incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
-      )
-
-      # Generate any negative controls
-      if (private$.jobContextHasNegativeControlOutcomeSharedResource()) {
-        negativeControlOutcomeSettings <- private$.createNegativeControlOutcomeSettingsFromJobContext()
-
-        CohortGenerator::generateNegativeControlOutcomeCohorts(
-          connection = connection,
-          cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-          cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-          cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-          negativeControlOutcomeCohortSet = negativeControlOutcomeSettings$cohortSet,
-          tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema,
-          occurrenceType = negativeControlOutcomeSettings$occurrenceType,
-          detectOnDescendants = negativeControlOutcomeSettings$detectOnDescendants,
-          incremental = jobContext$settings$incremental,
-          incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
-        )
-      }
-
-      self$exportResults(
-        connectionDetails = connectionDetails,
-        cohortsGenerated = cohortsGenerated
-      )
-    },
-    exportResults = function(connection = NULL, connectionDetails = NULL, cohortsGenerated = NULL) {
-      if (is.null(connection) && is.null(connectionDetails)) {
-        stop("You must provide either a database connection or the connection details.")
-      }
-
-      if (is.null(connection)) {
-        # Establish the connection and ensure the cleanup is performed
-        connection <- DatabaseConnector::connect(connectionDetails)
-        on.exit(DatabaseConnector::disconnect(connection))
-      }
-
-      jobContext <- self$jobContext
-      cohortDefinitionSet <- self$cohortDefinitionSet
-
+      negativeControlOutcomeSettings <- private$.createNegativeControlOutcomeSettingsFromJobContext()
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
       if (!dir.exists(resultsFolder)) {
         dir.create(resultsFolder, recursive = TRUE)
       }
 
-
-      # Save the generation information
-      if (!is.null(cohortsGenerated) && nrow(cohortsGenerated) > 0) {
-        cohortsGenerated$databaseId <- jobContext$moduleExecutionSettings$databaseId
-        # Remove any cohorts that were skipped
-        cohortsGenerated <- cohortsGenerated[toupper(cohortsGenerated$generationStatus) != "SKIPPED", ]
-        cohortsGeneratedFileName <- file.path(resultsFolder, "cohort_generation.csv")
-        if (jobContext$settings$incremental) {
-          # Format the data for saving
-          names(cohortsGenerated) <- SqlRender::camelCaseToSnakeCase(names(cohortsGenerated))
-          CohortGenerator::saveIncremental(
-            data = cohortsGenerated,
-            fileName = cohortsGeneratedFileName,
-            cohort_id = cohortsGenerated$cohort_id
-          )
-        } else {
-          CohortGenerator::writeCsv(
-            x = cohortsGenerated,
-            file = cohortsGeneratedFileName
-          )
-        }
-      }
-
-      cohortCounts <- CohortGenerator::getCohortCounts(
-        connection = connection,
+      CohortGenerator::runCohortGeneration(
+        connectionDetails = connectionDetails,
+        cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-        cohortDefinitionSet = cohortDefinitionSet,
-        databaseId = jobContext$moduleExecutionSettings$databaseId
-      )
-
-      # Filter to columns in the results data model
-      cohortCounts <- private$.filterCohortCountsColumns(cohortCounts)
-
-      CohortGenerator::writeCsv(
-        x = cohortCounts,
-        file = file.path(resultsFolder, "cohort_count.csv")
-      )
-
-      # Insert the inclusion rule names before exporting the stats tables
-      CohortGenerator::exportCohortStatsTables(
-        connection = connection,
         cohortTableNames = jobContext$moduleExecutionSettings$cohortTableNames,
-        cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cohortStatisticsFolder = resultsFolder,
-        snakeCaseToCamelCase = FALSE,
-        fileNamesInSnakeCase = TRUE,
-        incremental = jobContext$settings$incremental,
+        cohortDefinitionSet = self$cohortDefinitionSet,
+        negativeControlOutcomeCohortSet = negativeControlOutcomeSettings$cohortSet,
+        occurrenceType = negativeControlOutcomeSettings$occurrenceType,
+        detectOnDescendants = negativeControlOutcomeSettings$detectOnDescendants,
+        outputFolder = resultsFolder,
         databaseId = jobContext$moduleExecutionSettings$databaseId,
-        cohortDefinitionSet = cohortDefinitionSet
+        incremental = jobContext$settings$incremental,
+        incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
       )
 
-      # Massage and save the cohort definition set
-      colsToRename <- c("cohortId", "cohortName", "sql", "json")
-      colInd <- which(names(cohortDefinitionSet) %in% colsToRename)
-      cohortDefinitions <- cohortDefinitionSet
-      names(cohortDefinitions)[colInd] <- c("cohortDefinitionId", "cohortName", "sqlCommand", "json")
-      cohortDefinitions$description <- ""
-      CohortGenerator::writeCsv(
-        x = cohortDefinitions,
-        file = file.path(resultsFolder, "cohort_definition.csv")
-      )
-
-      # Generate any negative controls
-      if (private$.jobContextHasNegativeControlOutcomeSharedResource()) {
-        negativeControlOutcomeSettings <- private$.createNegativeControlOutcomeSettingsFromJobContext()
-
-        cohortCountsNegativeControlOutcomes <- CohortGenerator::getCohortCounts(
-          connection = connection,
-          cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-          cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-          databaseId = jobContext$moduleExecutionSettings$databaseId,
-          cohortIds = negativeControlOutcomeSettings$cohortSet$cohortId
-        )
-
-        CohortGenerator::writeCsv(
-          x = cohortCountsNegativeControlOutcomes,
-          file = file.path(resultsFolder, "cohort_count_neg_ctrl.csv")
-        )
-      }
-
-
-      # Set the table names in resultsDataModelSpecification.csv
-      resultsDataModel <- CohortGenerator::readCsv(
-        file = "resultsDataModelSpecification.csv",
-        warnOnCaseMismatch = FALSE
-      )
-      newTableNames <- paste0(self$tablePrefix, resultsDataModel$tableName)
-      file.rename(
-        file.path(resultsFolder, paste0(unique(resultsDataModel$tableName), ".csv")),
-        file.path(resultsFolder, paste0(unique(newTableNames), ".csv"))
-      )
-      resultsDataModel$tableName <- newTableNames
-      CohortGenerator::writeCsv(
-        x = resultsDataModel,
-        file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
-        warnOnCaseMismatch = FALSE,
-        warnOnFileNameCaseMismatch = FALSE,
-        warnOnUploadRuleViolations = FALSE
-      )
-      private$.message(paste("Results available at:", zipFile))
+      private$.message(paste("Results available at:", resultsFolder))
     },
     createResultsSchema = function(resultsConnectionDetails) {
       super$createResultsSchema(resultsConnectionDetails)
