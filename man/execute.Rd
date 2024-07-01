@@ -4,14 +4,7 @@
 \alias{execute}
 \title{Execute analysis specifications.}
 \usage{
-execute(
-  analysisSpecifications,
-  executionSettings,
-  executionScriptFolder = NULL,
-  connectionDetails,
-  restart = FALSE,
-  enforceModuleDependencies = TRUE
-)
+execute(analysisSpecifications, executionSettings, connectionDetails)
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created

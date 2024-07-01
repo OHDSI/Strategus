@@ -9,9 +9,6 @@ Provides a base class for HADES Strategus modules to inherit
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{tablePrefix}}{The prefix to append to database tables
-that hold results for this module}
-
 \item{\code{jobContext}}{The job context to use for execution.
 See JobContext class for more info}
 
@@ -19,8 +16,6 @@ See JobContext class for more info}
 
 \item{\code{databaseId}}{The database ID to use for the execution.
 TODO: This shouldn't be something the end-user worries about}
-
-\item{\code{moduleName}}{The name of the module}
 }
 \if{html}{\out{</div>}}
 }
@@ -66,13 +61,21 @@ Executes the module based on the job context
 \subsection{Method \code{createResultsSchema()}}{
 Create the results schema for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createResultsSchema(resultsConnectionDetails)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createResultsSchema(
+  resultsConnectionDetails,
+  resultsSchema,
+  tablePrefix = ""
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+
+\item{\code{resultsSchema}}{The schema holding the results}
+
+\item{\code{tablePrefix}}{The prefix to use to append to the results tables (optional)}
 }
 \if{html}{\out{</div>}}
 }

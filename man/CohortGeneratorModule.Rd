@@ -9,14 +9,6 @@ Generates cohorts against the OMOP CDM
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortGeneratorModule}
 }
-\section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{tablePrefix}}{The prefix to append to database tables
-that hold results for this module}
-}
-\if{html}{\out{</div>}}
-}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
@@ -57,7 +49,11 @@ Generates the cohorts
 \if{latex}{\out{\hypertarget{method-CohortGeneratorModule-createResultsSchema}{}}}
 \subsection{Method \code{createResultsSchema()}}{
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createResultsSchema(resultsConnectionDetails)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createResultsSchema(
+  resultsConnectionDetails,
+  resultsSchema,
+  tablePrefix = ""
+)}\if{html}{\out{</div>}}
 }
 
 }

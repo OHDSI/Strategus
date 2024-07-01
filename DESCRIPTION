@@ -32,6 +32,7 @@ Imports:
   ResultModelManager (>= 0.3.0),
   SqlRender (>= 1.11.0)
 Suggests:
+  CohortIncidence,
   testthat (>= 3.0.0),
   fs,
   knitr,
@@ -40,6 +41,7 @@ Suggests:
   withr
 Remotes:
   ohdsi/CohortGenerator@667f5c84c7267bf5689bbe8fef8474ad565a589a,
+  ohdsi/CohortIncidence,
   ohdsi/ResultModelManager
 VignetteBuilder: knitr
 NeedsCompilation: no

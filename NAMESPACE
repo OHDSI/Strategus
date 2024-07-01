@@ -2,6 +2,8 @@
 
 export(CohortGeneratorModule)
 export(CohortGeneratorModuleSettings)
+export(CohortIncidenceModule)
+export(CohortIncidenceModuleSettings)
 export(JobContext)
 export(StrategusModule)
 export(StrategusModuleSettings)
