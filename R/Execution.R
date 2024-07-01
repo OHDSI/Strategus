@@ -40,10 +40,7 @@
 #' @export
 execute <- function(analysisSpecifications,
                     executionSettings,
-                    executionScriptFolder = NULL,
-                    connectionDetails,
-                    restart = FALSE,
-                    enforceModuleDependencies = TRUE) {
+                    connectionDetails) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
@@ -94,49 +91,64 @@ execute <- function(analysisSpecifications,
     }
   }
 
-  # Validate the modules
-  modules <- ensureAllModulesInstantiated(
-    analysisSpecifications = analysisSpecifications,
-    enforceModuleDependencies = enforceModuleDependencies
-  )
-  if (isFALSE(modules$allModulesInstalled)) {
-    stop("Stopping execution due to module issues")
-  }
-
-  if (is.null(executionScriptFolder)) {
-    executionScriptFolder <- tempfile("strategusTempSettings")
-    dir.create(executionScriptFolder)
-    on.exit(unlink(executionScriptFolder, recursive = TRUE))
-  } else if (!restart) {
-    if (dir.exists(executionScriptFolder)) {
-      unlink(executionScriptFolder, recursive = TRUE)
-    }
-    dir.create(executionScriptFolder, recursive = TRUE)
-  }
-  # Normalize path to convert from relative to absolute path
-  executionScriptFolder <- normalizePath(executionScriptFolder, mustWork = F)
-
   if (is(executionSettings, "CdmExecutionSettings")) {
     executionSettings$databaseId <- createDatabaseMetaData(
       executionSettings = executionSettings,
       connectionDetails = connectionDetails
     )
   }
-  dependencies <- extractDependencies(modules$modules)
 
+  # Execute the cohort generator module first if it exists
+  for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
+    moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
+    if (tolower(moduleName) == "cohortgeneratormodule") {
+      moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
+      jc <- createJobContext(
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = executionSettings,
+        moduleSpecification = moduleSpecification
+      )
+      cg <- CohortGeneratorModule$new(
+        jobContext = jc,
+        moduleIndex = 1,
+        databaseId = executionSettings$databaseId
+      )
+      cg$execute(
+        connectionDetails = connectionDetails
+      )
+      break;
+    }
+  }
 
-  error("NOT YET RE-IMPLEMENTED")
-  # fileName <- generateTargetsScript(
-  #   analysisSpecifications = analysisSpecifications,
-  #   executionSettings = executionSettings,
-  #   dependencies = dependencies,
-  #   executionScriptFolder = executionScriptFolder,
-  #   restart = restart,
-  #   keyringName = keyringName
-  # )
-  # # targets::tar_manifest(script = fileName)
-  # # targets::tar_glimpse(script = fileName)
-  # targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
+  # Execute any other modules
+  for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
+    moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
+    if (tolower(moduleName) != "cohortgeneratormodule") {
+      rlang::inform(paste0("TODO: RUN ", toupper(moduleName)))
+      moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
+      jc <- createJobContext(
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = executionSettings,
+        moduleSpecification = moduleSpecification
+      )
+      moduleObj <- get(moduleName)$new(
+        jobContext = jc,
+        moduleIndex = i,
+        databaseId = executionSettings$databaseId
+      )
+      moduleObj$execute(
+        connectionDetails = connectionDetails
+      )
+    }
+  }
+}
+
+createJobContext <- function(analysisSpecifications, executionSettings, moduleSpecification) {
+  jc <- JobContext$new()
+  jc$sharedResources <- analysisSpecifications$sharedResources
+  jc$settings <- moduleSpecification$settings
+  jc$moduleExecutionSettings <- executionSettings
+  return(jc)
 }
 
 # generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, restart) {

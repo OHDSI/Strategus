@@ -8,13 +8,26 @@ cohortDefinitionSet <- getCohortDefinitionSet(
   sqlFolder = "testdata/sql",
   packageName = "Strategus"
 )
+subsetOperations <- list(
+  createDemographicSubset(
+    name = "Demographic Criteria",
+    ageMin = 18,
+    ageMax = 64
+  )
+)
+subsetDef <- createCohortSubsetDefinition(
+  name = "test definition",
+  definitionId = 1,
+  subsetOperators = subsetOperations
+)
+cohortDefinitionSet <- cohortDefinitionSet |>
+  addCohortSubsetDefinition(subsetDef)
+
 ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
                                            package = "Strategus"
 ))
 
-# Create the job context manually for now - this will be
-# something internal in Strategus later.
-jc <- JobContext$new()
+# Create the analysis settings
 cgModuleSettingsCreator <- CohortGeneratorModuleSettings$new()
 
 # Create the settings & validate them
@@ -27,18 +40,20 @@ cgModuleSettingsCreator$validateNegativeControlOutcomeCohortSharedResourceSpecif
 cgModuleSettings <- cgModuleSettingsCreator$createModuleSpecifications()
 cgModuleSettingsCreator$validateModuleSpecifications(cgModuleSettings)
 
-jc$sharedResources <- list(
-  cohortSharedResourcesSpecifications,
-  ncoCohortSharedResourceSpecifications
-)
-jc$settings <- cgModuleSettings$settings #NOTE: This is done since the module settings are extracted from the larger analysis settings
+analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+  addSharedResources(cohortSharedResourcesSpecifications) |>
+  addSharedResources(ncoCohortSharedResourceSpecifications) |>
+  addModuleSpecifications(cgModuleSettings)
 
 # Cleanup any prior results
 outputFolder <- "D:/TEMP/StrategusR6Testing"
 unlink(outputFolder, recursive = T)
+dir.create(outputFolder, recursive = T)
+ParallelLogger::saveSettingsToJson(analysisSpecifications, file.path(outputFolder, "analysisSettings.json"))
 workFolder <- file.path(outputFolder, "work_folder")
 resultsFolder <- file.path(outputFolder, "results_folder")
-jc$moduleExecutionSettings <- Strategus::createCdmExecutionSettings(
+
+executionSettings <- Strategus::createCdmExecutionSettings(
   connectionDetailsReference = "eunomia", # TODO: This needs to go
   workDatabaseSchema = "main",
   cdmDatabaseSchema = "main",
@@ -51,15 +66,14 @@ jc$moduleExecutionSettings <- Strategus::createCdmExecutionSettings(
 )
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-
-cg <- CohortGeneratorModule$new(
-  jobContext = jc,
-  moduleIndex = 1,
-  databaseId = "Eunomia"
-)
-
-cg$execute(
+#debugonce(Strategus::execute)
+Strategus::execute(
+  analysisSpecifications = analysisSpecifications,
+  executionSettings = executionSettings,
   connectionDetails = connectionDetails
 )
 
-#cg$createResultsSchema(NULL)
+
+# Can we treate a derived class like the base class?
+foo <- get("JobContext")$new()
+class(foo)

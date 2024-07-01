@@ -55,25 +55,10 @@ StrategusModule <- R6::R6Class(
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB
-    createResultsSchema = function(resultsConnectionDetails) {
-      # TODO - IMPLEMENT
-      private$.message('createResultsSchema...')
-      warning("NOT IMPLEMENTED")
-      private$.message(paste0("Table Prefix: ", self$tablePrefix))
-
-      # TODO: Having a base implementation will be hard since we
-      # need to know the location of the results data model to create it.
-      # Here is the prior implementation with `dataModelExportPath` holding
-      # the location where the resultsDataModelSpecification.csv was written
-      # to the results folder.
-      # connection <- DatabaseConnector::connect(resultsConnectionDetails)
-      # on.exit(DatabaseConnector::disconnect(connection))
-      # sql <- ResultModelManager::generateSqlSchema(csvFilepath = dataModelExportPath)
-      # DatabaseConnector::renderTranslateExecuteSql(connection,
-      #                                              sql,
-      #                                              table_prefix = moduleInfo$TablePrefix,
-      #                                              database_schema = jobContext$moduleExecutionSettings$resultsDatabaseSchema
-      #)
+    #' @param resultsSchema The schema holding the results
+    #' @param tablePrefix The prefix to use to append to the results tables (optional)
+    createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
+      private$.message('CREATE RESULTS SCHEMA: ', self$moduleName)
     },
     #' @description Upload the results for the module
     #' @param connectionDetails The connection details to the results DB
@@ -106,7 +91,7 @@ StrategusModule <- R6::R6Class(
     #' TODO: This is BAD for the base class since the settings passed in here
     #' (jobContext$settings) are assumed to be for the cohort generator.
     #' @param jobContext The job context to use for execution. See JobContext class for more info
-    .createCohortDefinitionSetFromJobContext = function() {
+    .createCohortDefinitionSetFromJobContext = function(generateStats) {
       jobContext <- self$jobContext
       cohortDefinitions <- list()
       if (length(jobContext$sharedResources) <= 0) {
@@ -125,7 +110,7 @@ StrategusModule <- R6::R6Class(
       }
       cohortDefinitionSet <- private$.getCohortDefinitionSetFromSharedResource(
         cohortDefinitionSharedResource = cohortDefinitionSharedResource,
-        settings = jobContext$settings
+        generateStats = generateStats
       )
       return(cohortDefinitionSet)
     },
@@ -133,7 +118,7 @@ StrategusModule <- R6::R6Class(
     #' TODO: This is BAD for the base class since the settings passed in here are assumed
     #' to be for the cohort generator.
     #' @param jobContext The job context to use for execution. See JobContext class for more info
-    .getCohortDefinitionSetFromSharedResource = function(cohortDefinitionSharedResource, settings) {
+    .getCohortDefinitionSetFromSharedResource = function(cohortDefinitionSharedResource, generateStats) {
       cohortDefinitions <- cohortDefinitionSharedResource$cohortDefinitions
       if (length(cohortDefinitions) <= 0) {
         stop("No cohort definitions found")
@@ -142,7 +127,7 @@ StrategusModule <- R6::R6Class(
       for (i in 1:length(cohortDefinitions)) {
         cohortJson <- cohortDefinitions[[i]]$cohortDefinition
         cohortExpression <- CirceR::cohortExpressionFromJson(cohortJson)
-        cohortSql <- CirceR::buildCohortQuery(cohortExpression, options = CirceR::createGenerateOptions(generateStats = settings$generateStats))
+        cohortSql <- CirceR::buildCohortQuery(cohortExpression, options = CirceR::createGenerateOptions(generateStats = generateStats))
         cohortDefinitionSet <- rbind(cohortDefinitionSet, data.frame(
           cohortId = as.double(cohortDefinitions[[i]]$cohortId),
           cohortName = cohortDefinitions[[i]]$cohortName,
@@ -228,13 +213,15 @@ StrategusModule <- R6::R6Class(
 StrategusModuleSettings <- R6::R6Class(
   classname = "# StrategusModuleSettings",
   public = list(
+    moduleClassName = "ModuleSpecifications",
+    sharedResourcesClassName = "SharedResources",
     #' @description Base function for creating the module settings object.
     #' Each module will have its own implementation and this base class method
     #' will be used to ensure the class of the specifications is set properly.
     #' @param className The class name for the module specifications
     #' @param moduleSpecifications The module specifications
     createModuleSpecifications = function(className, moduleSpecifications) {
-      class(moduleSpecifications) <- c(className, private$.getModuleClassName())
+      class(moduleSpecifications) <- c(className, self$moduleClassName)
       return(moduleSpecifications)
     },
     #' @description Base function for creating the shared resources settings object.
@@ -243,7 +230,7 @@ StrategusModuleSettings <- R6::R6Class(
     #' @param className The class name for the shared resources specifications
     #' @param sharedResourceSpecifications The shared resources specifications
     createSharedResourcesSpecifications = function(className, sharedResourcesSpecifications) {
-      class(sharedResourcesSpecifications) <- c(className, private$.getSharedResourcesClassName())
+      class(sharedResourcesSpecifications) <- c(className, self$sharedResourcesClassName)
       return(sharedResourcesSpecifications)
     },
     #' @description Base function for validating the module settings object.
@@ -253,7 +240,7 @@ StrategusModuleSettings <- R6::R6Class(
     #' @param moduleSpecifications The module specifications
     validateModuleSpecifications = function(moduleSpecifications, moduleClassName) {
       errorMessages <- checkmate::makeAssertCollection()
-      checkmate::assertClass(moduleSpecifications, private$.getModuleClassName())
+      checkmate::assertClass(moduleSpecifications, self$moduleClassName)
       checkmate::assertClass(moduleSpecifications, moduleClassName)
       checkmate::reportAssertions(collection = errorMessages)
     },
@@ -264,17 +251,9 @@ StrategusModuleSettings <- R6::R6Class(
     #' @param moduleSpecifications The module specifications
     validateSharedResourcesSpecifications = function(sharedResourcesSpecifications, sharedResourcesClassName) {
       errorMessages <- checkmate::makeAssertCollection()
-      checkmate::assertClass(sharedResourcesSpecifications, private$.getSharedResourcesClassName())
+      checkmate::assertClass(sharedResourcesSpecifications, self$sharedResourcesClassName)
       checkmate::assertClass(sharedResourcesSpecifications, sharedResourcesClassName)
       checkmate::reportAssertions(collection = errorMessages)
-    }
-  ),
-  private = list(
-    .getModuleClassName = function() {
-      invisible("ModuleSpecifications")
-    },
-    .getSharedResourcesClassName = function() {
-      invisible("SharedResources")
     }
   )
 )
@@ -300,7 +279,9 @@ CohortGeneratorModule <- R6::R6Class(
         moduleIndex = moduleIndex,
         databaseId = databaseId
       )
-      self$cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
+      self$cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext(
+        generateStats = jobContext$settings$generateStats
+      )
     },
     #' @description Generates the cohorts
     execute = function(connectionDetails) {
@@ -329,8 +310,13 @@ CohortGeneratorModule <- R6::R6Class(
 
       private$.message(paste("Results available at:", resultsFolder))
     },
-    createResultsSchema = function(resultsConnectionDetails) {
-      super$createResultsSchema(resultsConnectionDetails)
+    createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
+      super$createResultsSchema(resultsConnectionDetails, resultsSchema, tablePrefix)
+      CohortGenerator::createResultsDataModel(
+        connectionDetails = resultsConnectionDetails,
+        databaseSchema = resultsSchema,
+        tablePrefix = tablePrefix
+      )
     }
   )
 )
@@ -345,6 +331,10 @@ CohortGeneratorModuleSettings <- R6::R6Class(
   classname = "CohortGeneratorModuleSettings",
   inherit = StrategusModuleSettings,
   public = list(
+    moduleSpecificationsClassName = "CohortGeneratorModuleSpecifications",
+    moduleName = "CohortGeneratorModule",
+    cohortDefinitionSharedResourcesClassName = "CohortDefinitionSharedResources",
+    negativeControlOutcomeSharedResourcesClassName = "NegativeControlOutcomeSharedResources",
     #' @description Creates the CohortGenerator Module Specifications
     createModuleSpecifications = function(incremental = TRUE,
                                           generateStats = TRUE) {
@@ -354,9 +344,9 @@ CohortGeneratorModuleSettings <- R6::R6Class(
       }
 
       specifications <- super$createModuleSpecifications(
-        className = private$.getModuleSpecificationsClassName(),
+        className = self$moduleSpecificationsClassName,
         moduleSpecifications = list(
-          module = private$.getModuleName(),
+          module = self$moduleName,
           settings = analysis
         )
       )
@@ -402,7 +392,7 @@ CohortGeneratorModuleSettings <- R6::R6Class(
       }
 
       sharedResource <- super$createSharedResourcesSpecifications(
-        className = private$.getCohortDefinitionSharedResourcesClassName(),
+        className = self$cohortDefinitionSharedResourcesClassName,
         sharedResourcesSpecifications = sharedResource
       )
       return(sharedResource)
@@ -420,7 +410,7 @@ CohortGeneratorModuleSettings <- R6::R6Class(
         )
       )
       sharedResource <- super$createSharedResourcesSpecifications(
-        className = private$.getNegativeControlOutcomeSharedResourcesClassName(),
+        className = self$negativeControlOutcomeSharedResourcesClassName,
         sharedResourcesSpecifications = sharedResource
       )
       return(sharedResource)
@@ -429,37 +419,25 @@ CohortGeneratorModuleSettings <- R6::R6Class(
     validateModuleSpecifications = function(moduleSpecifications) {
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications,
-        moduleClassName = private$.getModuleSpecificationsClassName()
+        moduleClassName = self$moduleSpecificationsClassName
       )
     },
     #' @description Validate the cohort shared resource specifications
     validateCohortSharedResourceSpecifications = function(cohortSharedResourceSpecifications) {
       super$validateSharedResourcesSpecifications(
         sharedResourcesSpecifications = cohortSharedResourceSpecifications,
-        sharedResourcesClassName = private$.getCohortDefinitionSharedResourcesClassName()
+        sharedResourcesClassName = self$cohortDefinitionSharedResourcesClassName
       )
     },
     #' @description Validate the cohort shared resource specifications
     validateNegativeControlOutcomeCohortSharedResourceSpecifications = function(negativeControlOutcomeCohortSharedResourceSpecifications) {
       super$validateSharedResourcesSpecifications(
         sharedResourcesSpecifications = negativeControlOutcomeCohortSharedResourceSpecifications,
-        sharedResourcesClassName = private$.getNegativeControlOutcomeSharedResourcesClassName()
+        sharedResourcesClassName = self$negativeControlOutcomeSharedResourcesClassName
       )
     }
   ),
   private = list(
-    .getModuleSpecificationsClassName = function() {
-      invisible("CohortGeneratorModuleSpecifications")
-    },
-    .getModuleName = function() {
-      invisible("CohortGeneratorModule")
-    },
-    .getCohortDefinitionSharedResourcesClassName = function() {
-      invisible("CohortDefinitionSharedResources")
-    },
-    .getNegativeControlOutcomeSharedResourcesClassName = function() {
-      invisible("NegativeControlOutcomeSharedResources")
-    },
     .listafy = function(df) {
       mylist <- list()
       for (i in 1:nrow(df)) {
