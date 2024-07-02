@@ -23,5 +23,3 @@
 #' @import DatabaseConnector
 #' @importFrom methods is
 NULL
-
-#assertModulesFolderSetting <- checkmate::makeAssertionFunction(.checkModuleFolderSetting)

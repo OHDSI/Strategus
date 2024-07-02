@@ -6,16 +6,13 @@
 \usage{
 uploadResults(
   analysisSpecifications,
-  executionSettings,
+  resultsExecutionSettings,
   resultsConnectionDetails
 )
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{executionSettings}{An object of type \code{ExecutionSettings} as created
-by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
 }
 \description{
 Upload the results for a given analysis
