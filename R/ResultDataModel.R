@@ -32,6 +32,13 @@ createResultDataModels <- function(analysisSpecifications,
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # The DatabaseMetaData is a special case...
+  .createDatabaseMetadataTables(
+    resultsConnectionDetails = resultsConnectionDetails,
+    resultsDatabaseSchema = resultsExecutionSettings$resultsDatabaseSchema,
+    resultsFolder = resultsExecutionSettings$resultsFolder
+  )
+
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     moduleObj <- get(moduleName)$new()
@@ -60,6 +67,13 @@ uploadResults <- function(analysisSpecifications,
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # The DatabaseMetaData is a special case...
+  .uploadDatabaseMetadata(
+    resultsConnectionDetails = resultsConnectionDetails,
+    resultsDatabaseSchema = resultsExecutionSettings$resultsDatabaseSchema,
+    resultsFolder = resultsExecutionSettings$resultsFolder
+  )
+
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     moduleObj <- get(moduleName)$new()
@@ -70,3 +84,5 @@ uploadResults <- function(analysisSpecifications,
     )
   }
 }
+
+

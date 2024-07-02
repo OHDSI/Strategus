@@ -226,11 +226,12 @@ resultsConnectionDetails <- DatabaseConnector::createConnectionDetails(
 # any/all results schema creation results
 resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
   resultsDatabaseSchema = "main",
-  workFolder = file.path(outputFolder, "schema_creation", "work_folder"),
-  resultsFolder = file.path(outputFolder, "schema_creation", "results_folder")
+  resultsFolder = executionSettings$resultsFolder,
+  workFolder = file.path(outputFolder, "schema_creation", "work_folder")
 )
 
 # NOTE: CI has not implemented this so it will error out.
+debugonce(Strategus::createResultDataModels)
 Strategus::createResultDataModels(
   analysisSpecifications = analysisSpecifications,
   resultsExecutionSettings = resultsExecutionSettings,
