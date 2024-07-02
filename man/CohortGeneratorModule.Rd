@@ -28,6 +28,7 @@ analysis specification}
 \item \href{#method-CohortGeneratorModule-new}{\code{CohortGeneratorModule$new()}}
 \item \href{#method-CohortGeneratorModule-execute}{\code{CohortGeneratorModule$execute()}}
 \item \href{#method-CohortGeneratorModule-createResultsSchema}{\code{CohortGeneratorModule$createResultsSchema()}}
+\item \href{#method-CohortGeneratorModule-uploadResults}{\code{CohortGeneratorModule$uploadResults()}}
 \item \href{#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}}
 \item \href{#method-CohortGeneratorModule-createCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$createCohortSharedResourceSpecifications()}}
 \item \href{#method-CohortGeneratorModule-createNegativeControlOutcomeCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$createNegativeControlOutcomeCohortSharedResourceSpecifications()}}
@@ -41,7 +42,6 @@ analysis specification}
 <details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="uploadResults"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-uploadResults'><code>Strategus::StrategusModule$uploadResults()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
 </details>
@@ -65,8 +65,7 @@ Generates the cohorts
 \if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$execute(
   connectionDetails,
   analysisSpecifications,
-  executionSettings,
-  moduleIndex = 1
+  executionSettings
 )}\if{html}{\out{</div>}}
 }
 
@@ -78,8 +77,6 @@ Generates the cohorts
 \item{\code{analysisSpecifications}}{The analysis specifications for the study}
 
 \item{\code{executionSettings}}{The execution settings for the study}
-
-\item{\code{moduleIndex}}{(Optional) Index number to append to the results folder}
 }
 \if{html}{\out{</div>}}
 }
@@ -105,6 +102,31 @@ Create the results schema for the module
 \item{\code{resultsSchema}}{The schema holding the results}
 
 \item{\code{tablePrefix}}{The prefix to use to append to the results tables (optional)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-uploadResults"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-uploadResults}{}}}
+\subsection{Method \code{uploadResults()}}{
+Upload the results for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$uploadResults(
+  resultsConnectionDetails,
+  analysisSpecifications,
+  resultsExecutionSettings
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+
+\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+
+\item{\code{resultsExecutionSettings}}{The results execution settings}
 }
 \if{html}{\out{</div>}}
 }

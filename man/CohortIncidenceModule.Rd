@@ -15,6 +15,7 @@ Computes incidence rates for cohorts against the OMOP CDM
 \item \href{#method-CohortIncidenceModule-new}{\code{CohortIncidenceModule$new()}}
 \item \href{#method-CohortIncidenceModule-execute}{\code{CohortIncidenceModule$execute()}}
 \item \href{#method-CohortIncidenceModule-createResultsSchema}{\code{CohortIncidenceModule$createResultsSchema()}}
+\item \href{#method-CohortIncidenceModule-uploadResults}{\code{CohortIncidenceModule$uploadResults()}}
 \item \href{#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}}
 \item \href{#method-CohortIncidenceModule-validateModuleSpecifications}{\code{CohortIncidenceModule$validateModuleSpecifications()}}
 \item \href{#method-CohortIncidenceModule-clone}{\code{CohortIncidenceModule$clone()}}
@@ -24,7 +25,6 @@ Computes incidence rates for cohorts against the OMOP CDM
 <details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="uploadResults"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-uploadResults'><code>Strategus::StrategusModule$uploadResults()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
 </details>
@@ -48,8 +48,7 @@ Executes the CohortIncidence packages
 \if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$execute(
   connectionDetails,
   analysisSpecifications,
-  executionSettings,
-  moduleIndex = 1
+  executionSettings
 )}\if{html}{\out{</div>}}
 }
 
@@ -61,8 +60,6 @@ Executes the CohortIncidence packages
 \item{\code{analysisSpecifications}}{The analysis specifications for the study}
 
 \item{\code{executionSettings}}{The execution settings for the study}
-
-\item{\code{moduleIndex}}{(Optional) Index number to append to the results folder}
 }
 \if{html}{\out{</div>}}
 }
@@ -88,6 +85,31 @@ Create the results schema for the module
 \item{\code{resultsSchema}}{The schema holding the results}
 
 \item{\code{tablePrefix}}{The prefix to use to append to the results tables (optional)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortIncidenceModule-uploadResults"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortIncidenceModule-uploadResults}{}}}
+\subsection{Method \code{uploadResults()}}{
+Upload the results for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$uploadResults(
+  resultsConnectionDetails,
+  analysisSpecifications,
+  resultsExecutionSettings
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+
+\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+
+\item{\code{resultsExecutionSettings}}{The results execution settings}
 }
 \if{html}{\out{</div>}}
 }

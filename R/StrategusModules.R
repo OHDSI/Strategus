@@ -26,9 +26,6 @@ JobContext <- R6::R6Class(
 StrategusModule <- R6::R6Class(
   classname = "StrategusModule",
   public = list(
-    #' @field jobContext The job context to use for execution.
-    #' @seealso [JobContext()]
-    jobContext = JobContext$new(),
     #' @field moduleName The name of the module taken from the class name.
     #' This is set in the constructor of the class.
     moduleName = "",
@@ -53,39 +50,18 @@ StrategusModule <- R6::R6Class(
     #' @param connectionDetails The connection details to the database
     #' @param analysisSpecifications The analysis specifications for the study
     #' @param executionSettings The execution settings for the study
-    #' @param moduleIndex (Optional) Index number to append to the results folder
-    execute = function(connectionDetails, analysisSpecifications, executionSettings, moduleIndex = 1) {
+    execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
       checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
       checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
 
-      private$.message('EXECUTING: ', self$moduleName)
-
-      # Get the moduleSpecification from the analysis specification
-      # for the current class name.
-      moduleSpecification <- private$.getModuleSpecification(
-        analysisSpecifications = analysisSpecifications,
-        moduleName = self$moduleName
-      )
-      if (is.null(moduleSpecification)) {
-        stop(paste0(self$moduleName, " settings could not be found in the analysis specification."))
-      }
-      self$jobContext$settings <- moduleSpecification$settings
-
-      # Assemble the job context from the analysis specification
-      # for the given module.
-      self$jobContext$sharedResources <- analysisSpecifications$sharedResources
-      self$jobContext$moduleExecutionSettings <- executionSettings
-      self$jobContext$moduleExecutionSettings$workSubFolder <- file.path(self$jobContext$moduleExecutionSettings$workFolder, sprintf("%s_%d", self$moduleName, moduleIndex))
-      self$jobContext$moduleExecutionSettings$resultsSubFolder <- file.path(self$jobContext$moduleExecutionSettings$resultsFolder, sprintf("%s_%d", self$moduleName, moduleIndex))
-
-      # NOTE: This should be in the execution settings already
-      #self$jobContext$moduleExecutionSettings$databaseId <- databaseId
-
+      # Setup the job context
+      private$.createJobContext(analysisSpecifications, executionSettings)
       # Setup logging
-      private$.createLoggers(self$jobContext$moduleExecutionSettings)
+      private$.createLoggers(private$jobContext$moduleExecutionSettings)
+      private$.message('EXECUTING: ', self$moduleName)
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB
@@ -95,12 +71,18 @@ StrategusModule <- R6::R6Class(
       private$.message('CREATE RESULTS SCHEMA: ', self$moduleName)
     },
     #' @description Upload the results for the module
-    #' @param connectionDetails The connection details to the results DB
-    #' @param resultsFolder The folder with the results in .csv format
-    uploadResults = function(connectionDetails) {
-      # TODO - IMPLEMENT
-      private$.message('uploadResults...')
-      warning("NOT IMPLEMENTED")
+    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @param analysisSpecifications The analysis specifications for the study
+    #' @param resultsExecutionSettings The results execution settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
+      checkmate::assertClass(resultsExecutionSettings, "ResultsExecutionSettings", add = errorMessages)
+      checkmate::reportAssertions(collection = errorMessages)
+
+      # Setup the job context
+      private$.createJobContext(analysisSpecifications, resultsExecutionSettings)
+      private$.message('UPLOAD RESULTS: ', self$moduleName)
     },
     #' @description Base function for creating the module settings object.
     #' Each module will have its own implementation and this base class method
@@ -148,6 +130,7 @@ StrategusModule <- R6::R6Class(
     }
   ),
   private = list(
+    jobContext = JobContext$new(),
     .message = function(...) {
       rlang::inform(paste0(...))
     },
@@ -171,6 +154,31 @@ StrategusModule <- R6::R6Class(
       #ParallelLogger::unregisterLogger("MODULE_LOGGER")
       #ParallelLogger::unregisterLogger("MODULE_ERROR_LOGGER")
     },
+    .createJobContext = function(analysisSpecifications, executionSettings) {
+      # Make sure this is created each call
+      private$jobContext <- JobContext$new()
+      # Get the moduleSpecification from the analysis specification
+      # for the current class name.
+      moduleSpecification <- private$.getModuleSpecification(
+        analysisSpecifications = analysisSpecifications,
+        moduleName = self$moduleName
+      )
+      if (is.null(moduleSpecification)) {
+        stop(paste0(self$moduleName, " settings could not be found in the analysis specification."))
+      }
+      private$jobContext$settings <- moduleSpecification$settings
+
+      # Assemble the job context from the analysis specification
+      # for the given module.
+      private$jobContext$sharedResources <- analysisSpecifications$sharedResources
+      private$jobContext$moduleExecutionSettings <- executionSettings
+      private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
+      private$jobContext$moduleExecutionSettings$resultsSubFolder <- file.path(private$jobContext$moduleExecutionSettings$resultsFolder, self$moduleName)
+
+      # TODO: This should be in the execution settings already for
+      # CDM ExecutionSettings
+      #private$jobContext$moduleExecutionSettings$databaseId <- databaseId
+    },
     .getModuleSpecification = function(analysisSpecifications, moduleName) {
       moduleSpecification <- NULL
       for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
@@ -192,7 +200,7 @@ StrategusModule <- R6::R6Class(
       invisible(returnVal)
     },
     .createCohortDefinitionSetFromJobContext = function(generateStats) {
-      jobContext <- self$jobContext
+      jobContext <- private$jobContext
       cohortDefinitions <- list()
       if (length(jobContext$sharedResources) <= 0) {
         stop("No shared resources found")
@@ -249,7 +257,7 @@ StrategusModule <- R6::R6Class(
       return(cohortDefinitionSet)
     },
     .jobContextHasNegativeControlOutcomeSharedResource = function() {
-      jobContext <- self$jobContext
+      jobContext <- private$jobContext
       ncSharedResource <- private$.getSharedResourceByClassName(
         sharedResources = jobContext$sharedResources,
         className = "NegativeControlOutcomeSharedResources"
@@ -258,7 +266,7 @@ StrategusModule <- R6::R6Class(
       invisible(hasNegativeControlOutcomeSharedResource)
     },
     .createNegativeControlOutcomeSettingsFromJobContext = function() {
-      jobContext <- self$jobContext
+      jobContext <- private$jobContext
       negativeControlSharedResource <- private$.getSharedResourceByClassName(
         sharedResources = jobContext$sharedResources,
         className = "NegativeControlOutcomeSharedResources"
@@ -316,10 +324,9 @@ CohortGeneratorModule <- R6::R6Class(
     #' @param connectionDetails The connection details to the database
     #' @param analysisSpecifications The analysis specifications for the study
     #' @param executionSettings The execution settings for the study
-    #' @param moduleIndex (Optional) Index number to append to the results folder
-    execute = function(connectionDetails, analysisSpecifications, executionSettings, moduleIndex = 1) {
-      super$execute(connectionDetails, analysisSpecifications, executionSettings, moduleIndex)
-      jobContext <- self$jobContext
+    execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$execute(connectionDetails, analysisSpecifications, executionSettings)
+      jobContext <- private$jobContext
       cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
       negativeControlOutcomeSettings <- private$.createNegativeControlOutcomeSettingsFromJobContext()
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -355,6 +362,24 @@ CohortGeneratorModule <- R6::R6Class(
         connectionDetails = resultsConnectionDetails,
         databaseSchema = resultsSchema,
         tablePrefix = tablePrefix
+      )
+    },
+    #' @description Upload the results for the module
+    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @param analysisSpecifications The analysis specifications for the study
+    #' @param resultsExecutionSettings The results execution settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
+      # TODO: The decisions to set the parameters:
+      #    forceOverWriteOfSpecifications = FALSE
+      #    purgeSiteDataBeforeUploading = FALSE
+      # needs discussion.
+      CohortGenerator::uploadResults(
+        connectionDetails = resultsConnectionDetails,
+        schema = resultsExecutionSettings$resultsDatabaseSchema,
+        resultsFolder = private$jobContext$moduleExecutionSettings$resultsSubFolder,
+        forceOverWriteOfSpecifications = FALSE,
+        purgeSiteDataBeforeUploading = FALSE
       )
     },
     #' @description Creates the CohortGenerator Module Specifications
@@ -505,10 +530,9 @@ CohortIncidenceModule <- R6::R6Class(
     #' @param connectionDetails The connection details to the database
     #' @param analysisSpecifications The analysis specifications for the study
     #' @param executionSettings The execution settings for the study
-    #' @param moduleIndex (Optional) Index number to append to the results folder
-    execute = function(connectionDetails, analysisSpecifications, executionSettings, moduleIndex = 1) {
-      super$execute(connectionDetails, analysisSpecifications, executionSettings, moduleIndex)
-      jobContext <- self$jobContext
+    execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$execute(connectionDetails, analysisSpecifications, executionSettings)
+      jobContext <- private$jobContext
       private$.message("Validating inputs")
       private$.validate()
 
@@ -588,6 +612,14 @@ CohortIncidenceModule <- R6::R6Class(
       super$createResultsSchema(resultsConnectionDetails, resultsSchema, tablePrefix)
       stop("NOT IMPLEMENTED")
     },
+    #' @description Upload the results for the module
+    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @param analysisSpecifications The analysis specifications for the study
+    #' @param resultsExecutionSettings The results execution settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
+      stop("NOT IMPLEMENTED")
+    },
     #' @description Creates the CohortIncidence Module Specifications
     #' @param irDesign The incidence rate design created from the CohortIncidence
     #' package
@@ -614,7 +646,7 @@ CohortIncidenceModule <- R6::R6Class(
     .validate = function() {
       # Validate that the analysis specification will work when we
       # enter the execute statement. This is done by deserializing the design.
-      irDesign <- CohortIncidence::IncidenceDesign$new(self$jobContext$settings$irDesign)
+      irDesign <- CohortIncidence::IncidenceDesign$new(private$jobContext$settings$irDesign)
       designJson <- rJava::J("org.ohdsi.analysis.cohortincidence.design.CohortIncidence")$fromJson(as.character(irDesign$asJSON()))
 
       invisible(designJson)

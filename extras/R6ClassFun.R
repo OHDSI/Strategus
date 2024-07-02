@@ -99,9 +99,7 @@ executionSettings <- Strategus::createCdmExecutionSettings(
   cohortTableNames = CohortGenerator::getCohortTableNames(),
   workFolder = workFolder,
   resultsFolder = resultsFolder,
-  minCellCount = 5,
-  resultsConnectionDetailsReference = "eunomia",
-  resultsDatabaseSchema = "main"
+  minCellCount = 5
 )
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
@@ -112,11 +110,86 @@ Strategus::execute(
   connectionDetails = connectionDetails
 )
 
-# # Create results data model & upload results
-# library(RSQLite)
-# mydb <- dbConnect(RSQLite::SQLite(), file.path(outputFolder, "results.sqlite"))
-# dbDisconnect(mydb)
-#
-# Strategus::createResultDataModels(
-#
-# )
+# Create results data model & upload results
+library(RSQLite)
+mydb <- dbConnect(RSQLite::SQLite(), file.path(outputFolder, "results.sqlite"))
+dbDisconnect(mydb)
+
+resultsConnectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = "sqlite",
+  server = file.path(outputFolder, "results.sqlite")
+)
+
+# NOTE: resultsExecutionSettings uses a diff. folder to hold
+# any/all results schema creation results
+resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+  resultsDatabaseSchema = "main",
+  workFolder = file.path(outputFolder, "schema_creation", "work_folder"),
+  resultsFolder = file.path(outputFolder, "schema_creation", "results_folder")
+)
+
+# NOTE: CI has not implemented this so it will error out.
+Strategus::createResultDataModels(
+  analysisSpecifications = analysisSpecifications,
+  resultsExecutionSettings = resultsExecutionSettings,
+  resultsConnectionDetails = resultsConnectionDetails
+)
+
+resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+  resultsDatabaseSchema = "main",
+  workFolder = executionSettings$workFolder,
+  resultsFolder = executionSettings$resultsFolder
+)
+
+#debugonce(Strategus::uploadResults)
+Strategus::uploadResults(
+  analysisSpecifications = analysisSpecifications,
+  resultsExecutionSettings = resultsExecutionSettings,
+  resultsConnectionDetails = resultsConnectionDetails
+)
+
+# Verify results
+#conn <- DatabaseConnector::connect(resultsConnectionDetails)
+#DatabaseConnector::disconnect(conn)
+
+# Review results --------------------------
+library(ShinyAppBuilder)
+library(OhdsiShinyModules)
+# ADD OR REMOVE MODULES TAILORED TO YOUR STUDY
+shinyConfig <- initializeModuleConfig() |>
+  addModuleConfig(
+    createDefaultAboutConfig()
+  )  |>
+  addModuleConfig(
+    createDefaultDatasourcesConfig()
+  )  |>
+  addModuleConfig(
+    createDefaultCohortGeneratorConfig()
+  )
+  # |>
+  # addModuleConfig(
+  #   createDefaultCohortDiagnosticsConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultCharacterizationConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultPredictionConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultCohortMethodConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultSccsConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultEvidenceSynthesisConfig()
+  # )
+
+# now create the shiny app based on the config file and view the results
+# based on the connection
+ShinyAppBuilder::createShinyApp(
+  config = shinyConfig,
+  connectionDetails = resultsConnectionDetails,
+  resultDatabaseSettings = createDefaultResultDatabaseSettings(schema = "main")
+)

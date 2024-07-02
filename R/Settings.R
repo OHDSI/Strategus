@@ -93,9 +93,6 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #'                                   in results.
 #' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
 #' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
-#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
-#'                                          details from a secure local store.
-#' @param resultsDatabaseSchema      A schema where the results tables are stored
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -110,9 +107,7 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
                                        logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                        minCellCount = 5,
                                        integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-                                       integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
-                                       resultsConnectionDetailsReference = NULL,
-                                       resultsDatabaseSchema = NULL) {
+                                       integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(cdmDatabaseSchema, len = 1, add = errorMessages)
@@ -123,8 +118,6 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
   checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
-  checkmate::assertCharacter(resultsConnectionDetailsReference, null.ok = TRUE, add = errorMessages)
-  checkmate::assertCharacter(resultsDatabaseSchema, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths

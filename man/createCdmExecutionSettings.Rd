@@ -14,9 +14,7 @@ createCdmExecutionSettings(
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
   minCellCount = 5,
   integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-  integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
-  resultsConnectionDetailsReference = NULL,
-  resultsDatabaseSchema = NULL
+  integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)
 )
 }
 \arguments{
@@ -44,11 +42,6 @@ in results.}
 \item{integerAsNumeric}{Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native \code{Integer} class. Default is TRUE}
 
 \item{integer64AsNumeric}{Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using \code{bit64::integer64}.  Default is TRUE}
-
-\item{resultsConnectionDetailsReference}{A string that can be used to retrieve the results database connection
-details from a secure local store.}
-
-\item{resultsDatabaseSchema}{A schema where the results tables are stored}
 }
 \value{
 An object of type \code{ExecutionSettings}.

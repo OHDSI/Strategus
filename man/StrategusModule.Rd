@@ -6,14 +6,9 @@
 \description{
 Provides a base class for HADES Strategus modules to inherit
 }
-\seealso{
-\code{\link[=JobContext]{JobContext()}}
-}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{jobContext}}{The job context to use for execution.}
-
 \item{\code{moduleName}}{The name of the module taken from the class name.
 This is set in the constructor of the class.}
 
@@ -64,8 +59,7 @@ Executes the module
 \if{html}{\out{<div class="r">}}\preformatted{StrategusModule$execute(
   connectionDetails,
   analysisSpecifications,
-  executionSettings,
-  moduleIndex = 1
+  executionSettings
 )}\if{html}{\out{</div>}}
 }
 
@@ -77,8 +71,6 @@ Executes the module
 \item{\code{analysisSpecifications}}{The analysis specifications for the study}
 
 \item{\code{executionSettings}}{The execution settings for the study}
-
-\item{\code{moduleIndex}}{(Optional) Index number to append to the results folder}
 }
 \if{html}{\out{</div>}}
 }
@@ -114,15 +106,21 @@ Create the results schema for the module
 \subsection{Method \code{uploadResults()}}{
 Upload the results for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$uploadResults(connectionDetails)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$uploadResults(
+  resultsConnectionDetails,
+  analysisSpecifications,
+  resultsExecutionSettings
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
 
-\item{\code{resultsFolder}}{The folder with the results in .csv format}
+\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+
+\item{\code{resultsExecutionSettings}}{The results execution settings}
 }
 \if{html}{\out{</div>}}
 }
