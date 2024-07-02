@@ -33,6 +33,7 @@ Imports:
   SqlRender (>= 1.18.0)
 Suggests:
   CohortIncidence,
+  CohortMethod,
   testthat (>= 3.0.0),
   fs,
   knitr,
@@ -42,6 +43,7 @@ Suggests:
 Remotes:
   ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,
+  ohdsi/CohortMethod,
   ohdsi/ResultModelManager
 VignetteBuilder: knitr
 NeedsCompilation: no

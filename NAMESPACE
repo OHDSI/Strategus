@@ -2,6 +2,7 @@
 
 export(CohortGeneratorModule)
 export(CohortIncidenceModule)
+export(CohortMethodModule)
 export(StrategusModule)
 export(addModuleSpecifications)
 export(addSharedResources)
