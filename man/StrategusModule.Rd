@@ -6,16 +6,28 @@
 \description{
 Provides a base class for HADES Strategus modules to inherit
 }
+\seealso{
+\code{\link[=JobContext]{JobContext()}}
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{jobContext}}{The job context to use for execution.
-See JobContext class for more info}
+\item{\code{jobContext}}{The job context to use for execution.}
 
-\item{\code{moduleIndex}}{The index of the module in the analysis specification.}
+\item{\code{moduleName}}{The name of the module taken from the class name.
+This is set in the constructor of the class.}
 
-\item{\code{databaseId}}{The database ID to use for the execution.
-TODO: This shouldn't be something the end-user worries about}
+\item{\code{moduleClassName}}{The class name that identifies
+the module specifications in the overall analysis specification.
+This is set in the constructor of the class.}
+
+\item{\code{internalModuleSpecificationClassName}}{A constant value.
+The base class name that identifies a module specification
+in the analysis specification.}
+
+\item{\code{internalSharedResourcesClassName}}{A constant value. The class name
+that identifies the shared resources section in the overall analysis
+specification.}
 }
 \if{html}{\out{</div>}}
 }
@@ -26,6 +38,10 @@ TODO: This shouldn't be something the end-user worries about}
 \item \href{#method-StrategusModule-execute}{\code{StrategusModule$execute()}}
 \item \href{#method-StrategusModule-createResultsSchema}{\code{StrategusModule$createResultsSchema()}}
 \item \href{#method-StrategusModule-uploadResults}{\code{StrategusModule$uploadResults()}}
+\item \href{#method-StrategusModule-createModuleSpecifications}{\code{StrategusModule$createModuleSpecifications()}}
+\item \href{#method-StrategusModule-createSharedResourcesSpecifications}{\code{StrategusModule$createSharedResourcesSpecifications()}}
+\item \href{#method-StrategusModule-validateModuleSpecifications}{\code{StrategusModule$validateModuleSpecifications()}}
+\item \href{#method-StrategusModule-validateSharedResourcesSpecifications}{\code{StrategusModule$validateSharedResourcesSpecifications()}}
 \item \href{#method-StrategusModule-clone}{\code{StrategusModule$clone()}}
 }
 }
@@ -33,8 +49,9 @@ TODO: This shouldn't be something the end-user worries about}
 \if{html}{\out{<a id="method-StrategusModule-new"></a>}}
 \if{latex}{\out{\hypertarget{method-StrategusModule-new}{}}}
 \subsection{Method \code{new()}}{
+Initialize the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$new(jobContext, moduleIndex, databaseId)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$new()}\if{html}{\out{</div>}}
 }
 
 }
@@ -42,15 +59,26 @@ TODO: This shouldn't be something the end-user worries about}
 \if{html}{\out{<a id="method-StrategusModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-StrategusModule-execute}{}}}
 \subsection{Method \code{execute()}}{
-Executes the module based on the job context
+Executes the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$execute(connectionDetails)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$execute(
+  connectionDetails,
+  analysisSpecifications,
+  executionSettings,
+  moduleIndex = 1
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{connectionDetails}}{The connection details to the database}
+
+\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+
+\item{\code{executionSettings}}{The execution settings for the study}
+
+\item{\code{moduleIndex}}{(Optional) Index number to append to the results folder}
 }
 \if{html}{\out{</div>}}
 }
@@ -95,6 +123,94 @@ Upload the results for the module
 \item{\code{connectionDetails}}{The connection details to the results DB}
 
 \item{\code{resultsFolder}}{The folder with the results in .csv format}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StrategusModule-createModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-createModuleSpecifications}{}}}
+\subsection{Method \code{createModuleSpecifications()}}{
+Base function for creating the module settings object.
+Each module will have its own implementation and this base class method
+will be used to ensure the class of the specifications is set properly.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{moduleSpecifications}}{The module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StrategusModule-createSharedResourcesSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-createSharedResourcesSpecifications}{}}}
+\subsection{Method \code{createSharedResourcesSpecifications()}}{
+Base function for creating the shared resources settings object.
+Each module will have its own implementation if it needs to create
+a shared resource.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createSharedResourcesSpecifications(
+  className,
+  sharedResourcesSpecifications
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{className}}{The class name of the shared resources specifications}
+
+\item{\code{sharedResourcesSpecifications}}{The shared resources specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StrategusModule-validateModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-validateModuleSpecifications}{}}}
+\subsection{Method \code{validateModuleSpecifications()}}{
+Base function for validating the module settings object.
+Each module will have its own implementation and this base class method
+will be used to ensure the module specifications are valid ahead of
+execution
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$validateModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{moduleSpecifications}}{The module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StrategusModule-validateSharedResourcesSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-validateSharedResourcesSpecifications}{}}}
+\subsection{Method \code{validateSharedResourcesSpecifications()}}{
+Base function for validating the shared resources
+specification settings object. Each module will have its own
+implementation and this base class method will be used to ensure
+the module specifications are valid ahead of execution
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$validateSharedResourcesSpecifications(
+  className,
+  sharedResourcesSpecifications
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{className}}{The class name of the shared resources specifications}
+
+\item{\code{sharedResourcesSpecifications}}{The shared resources specifications}
 }
 \if{html}{\out{</div>}}
 }

@@ -29,8 +29,8 @@ Imports:
   digest,
   methods,
   tibble,
-  ResultModelManager (>= 0.3.0),
-  SqlRender (>= 1.11.0)
+  ResultModelManager (>= 0.5.8),
+  SqlRender (>= 1.18.0)
 Suggests:
   CohortIncidence,
   testthat (>= 3.0.0),
@@ -40,7 +40,7 @@ Suggests:
   Eunomia,
   withr
 Remotes:
-  ohdsi/CohortGenerator@667f5c84c7267bf5689bbe8fef8474ad565a589a,
+  ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,
   ohdsi/ResultModelManager
 VignetteBuilder: knitr

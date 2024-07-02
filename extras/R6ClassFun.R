@@ -30,7 +30,7 @@ ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_s
 # Create the analysis settings ---------------
 
 # Cohort Generator -----------------
-cgModuleSettingsCreator <- CohortGeneratorModuleSettings$new()
+cgModuleSettingsCreator <- CohortGeneratorModule$new()
 
 # Create the settings & validate them
 cohortSharedResourcesSpecifications <- cgModuleSettingsCreator$createCohortSharedResourceSpecifications(cohortDefinitionSet)
@@ -44,7 +44,7 @@ cgModuleSettingsCreator$validateModuleSpecifications(cgModuleSettings)
 
 # Cohort Incidence -----------------
 library(CohortIncidence)
-ciModuleSettingsCreator <- CohortIncidenceModuleSettings$new()
+ciModuleSettingsCreator <- CohortIncidenceModule$new()
 targets <- list(
   createCohortRef(id = 1, name = "Celecoxib"),
   createCohortRef(id = 2, name = "Diclofenac"),
@@ -106,7 +106,6 @@ executionSettings <- Strategus::createCdmExecutionSettings(
 )
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-#debugonce(Strategus::execute)
 Strategus::execute(
   analysisSpecifications = analysisSpecifications,
   executionSettings = executionSettings,

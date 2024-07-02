@@ -9,19 +9,40 @@ Generates cohorts against the OMOP CDM
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortGeneratorModule}
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{cohortDefinitionSharedResourcesClassName}}{A constant for the name
+of the cohort definition shared resources section of the analysis
+specification}
+
+\item{\code{negativeControlOutcomeSharedResourcesClassName}}{A constant for the
+name of the negative control outcome shared resources section of the
+analysis specification}
+}
+\if{html}{\out{</div>}}
+}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-CohortGeneratorModule-new}{\code{CohortGeneratorModule$new()}}
 \item \href{#method-CohortGeneratorModule-execute}{\code{CohortGeneratorModule$execute()}}
 \item \href{#method-CohortGeneratorModule-createResultsSchema}{\code{CohortGeneratorModule$createResultsSchema()}}
+\item \href{#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}}
+\item \href{#method-CohortGeneratorModule-createCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$createCohortSharedResourceSpecifications()}}
+\item \href{#method-CohortGeneratorModule-createNegativeControlOutcomeCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$createNegativeControlOutcomeCohortSharedResourceSpecifications()}}
+\item \href{#method-CohortGeneratorModule-validateModuleSpecifications}{\code{CohortGeneratorModule$validateModuleSpecifications()}}
+\item \href{#method-CohortGeneratorModule-validateCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$validateCohortSharedResourceSpecifications()}}
+\item \href{#method-CohortGeneratorModule-validateNegativeControlOutcomeCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$validateNegativeControlOutcomeCohortSharedResourceSpecifications()}}
 \item \href{#method-CohortGeneratorModule-clone}{\code{CohortGeneratorModule$clone()}}
 }
 }
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="uploadResults"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-uploadResults'><code>Strategus::StrategusModule$uploadResults()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -29,8 +50,9 @@ Generates cohorts against the OMOP CDM
 \if{html}{\out{<a id="method-CohortGeneratorModule-new"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortGeneratorModule-new}{}}}
 \subsection{Method \code{new()}}{
+Initialize the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$new(jobContext, moduleIndex, databaseId)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$new()}\if{html}{\out{</div>}}
 }
 
 }
@@ -40,14 +62,33 @@ Generates cohorts against the OMOP CDM
 \subsection{Method \code{execute()}}{
 Generates the cohorts
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$execute(connectionDetails)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$execute(
+  connectionDetails,
+  analysisSpecifications,
+  executionSettings,
+  moduleIndex = 1
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{connectionDetails}}{The connection details to the database}
+
+\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+
+\item{\code{executionSettings}}{The execution settings for the study}
+
+\item{\code{moduleIndex}}{(Optional) Index number to append to the results folder}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortGeneratorModule-createResultsSchema"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortGeneratorModule-createResultsSchema}{}}}
 \subsection{Method \code{createResultsSchema()}}{
+Create the results schema for the module
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createResultsSchema(
   resultsConnectionDetails,
@@ -56,6 +97,147 @@ Generates the cohorts
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+
+\item{\code{resultsSchema}}{The schema holding the results}
+
+\item{\code{tablePrefix}}{The prefix to use to append to the results tables (optional)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-createModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-createModuleSpecifications}{}}}
+\subsection{Method \code{createModuleSpecifications()}}{
+Creates the CohortGenerator Module Specifications
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createModuleSpecifications(
+  incremental = TRUE,
+  generateStats = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{incremental}}{When TRUE, the module will keep track of the cohorts
+generated so that subsequent runs will skip any previously generated
+cohorts.}
+
+\item{\code{generateStats}}{When TRUE, the Circe cohort definition SQL will
+include steps to compute inclusion rule statistics.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-createCohortSharedResourceSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-createCohortSharedResourceSpecifications}{}}}
+\subsection{Method \code{createCohortSharedResourceSpecifications()}}{
+Create shared specifications for the cohort definition set
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createCohortSharedResourceSpecifications(
+  cohortDefinitionSet
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{cohortDefinitionSet}}{The cohort definition set to include in the
+specification. See the CohortGenerator package for details on how to
+build this object.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-createNegativeControlOutcomeCohortSharedResourceSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-createNegativeControlOutcomeCohortSharedResourceSpecifications}{}}}
+\subsection{Method \code{createNegativeControlOutcomeCohortSharedResourceSpecifications()}}{
+Create shared specifications for the negative control outcomes cohort set
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createNegativeControlOutcomeCohortSharedResourceSpecifications(
+  negativeControlOutcomeCohortSet,
+  occurrenceType,
+  detectOnDescendants
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{negativeControlOutcomeCohortSet}}{The negative control outcome cohort
+definition set defines the concepts to use to construct negative control
+outcome cohorts. See the CohortGenerator package for more details.}
+
+\item{\code{occurrenceType}}{Either "first" or "all}
+
+\item{\code{detectOnDescendants}}{When TRUE, the concept ID for the negative
+control will use the \code{concept_ancestor} table and will detect
+descendant concepts when constructing the cohort.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-validateModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-validateModuleSpecifications}{}}}
+\subsection{Method \code{validateModuleSpecifications()}}{
+Validate the module specifications
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$validateModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{moduleSpecifications}}{The module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-validateCohortSharedResourceSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-validateCohortSharedResourceSpecifications}{}}}
+\subsection{Method \code{validateCohortSharedResourceSpecifications()}}{
+Validate the cohort shared resource specifications
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$validateCohortSharedResourceSpecifications(
+  cohortSharedResourceSpecifications
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{cohortSharedResourceSpecifications}}{The cohort shared resource specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-validateNegativeControlOutcomeCohortSharedResourceSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-validateNegativeControlOutcomeCohortSharedResourceSpecifications}{}}}
+\subsection{Method \code{validateNegativeControlOutcomeCohortSharedResourceSpecifications()}}{
+Validate the cohort shared resource specifications
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$validateNegativeControlOutcomeCohortSharedResourceSpecifications(
+  negativeControlOutcomeCohortSharedResourceSpecifications
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{negativeControlOutcomeCohortSharedResourceSpecifications}}{The cohort shared resource specifications}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortGeneratorModule-clone"></a>}}

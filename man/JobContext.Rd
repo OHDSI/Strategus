@@ -2,18 +2,18 @@
 % Please edit documentation in R/StrategusModules.R
 \name{JobContext}
 \alias{JobContext}
-\title{The job context definition that is used by the Strategus module}
+\title{Job context holds the elements of the analysis specification
+and execution settings necessary to execute a module.}
 \description{
-This object will define the job context for a module so it has a set
-of well defined inputs to execute the module.
-}
-\details{
-TODO: Create a formal definition of the job context
+This is an internal class used by the StrategusModule (and child classes)
+execute function
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{sharedResources}}{Shared resources for execution}
+\item{\code{sharedResources}}{Shared resources for execution
+TODO: Revisit to break this into fields for cohorts, subsets,
+negative controls,}
 
 \item{\code{settings}}{Module settings}
 

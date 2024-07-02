@@ -15,13 +15,17 @@ Computes incidence rates for cohorts against the OMOP CDM
 \item \href{#method-CohortIncidenceModule-new}{\code{CohortIncidenceModule$new()}}
 \item \href{#method-CohortIncidenceModule-execute}{\code{CohortIncidenceModule$execute()}}
 \item \href{#method-CohortIncidenceModule-createResultsSchema}{\code{CohortIncidenceModule$createResultsSchema()}}
+\item \href{#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}}
+\item \href{#method-CohortIncidenceModule-validateModuleSpecifications}{\code{CohortIncidenceModule$validateModuleSpecifications()}}
 \item \href{#method-CohortIncidenceModule-clone}{\code{CohortIncidenceModule$clone()}}
 }
 }
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
+<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="uploadResults"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-uploadResults'><code>Strategus::StrategusModule$uploadResults()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
 </details>
 }}
@@ -29,8 +33,9 @@ Computes incidence rates for cohorts against the OMOP CDM
 \if{html}{\out{<a id="method-CohortIncidenceModule-new"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortIncidenceModule-new}{}}}
 \subsection{Method \code{new()}}{
+Initialize the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$new(jobContext, moduleIndex, databaseId)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$new()}\if{html}{\out{</div>}}
 }
 
 }
@@ -38,16 +43,35 @@ Computes incidence rates for cohorts against the OMOP CDM
 \if{html}{\out{<a id="method-CohortIncidenceModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortIncidenceModule-execute}{}}}
 \subsection{Method \code{execute()}}{
-Exectes the CohortIncidence packages
+Executes the CohortIncidence packages
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$execute(connectionDetails)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$execute(
+  connectionDetails,
+  analysisSpecifications,
+  executionSettings,
+  moduleIndex = 1
+)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{connectionDetails}}{The connection details to the database}
+
+\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+
+\item{\code{executionSettings}}{The execution settings for the study}
+
+\item{\code{moduleIndex}}{(Optional) Index number to append to the results folder}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortIncidenceModule-createResultsSchema"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortIncidenceModule-createResultsSchema}{}}}
 \subsection{Method \code{createResultsSchema()}}{
+Create the results schema for the module
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$createResultsSchema(
   resultsConnectionDetails,
@@ -56,6 +80,52 @@ Exectes the CohortIncidence packages
 )}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+
+\item{\code{resultsSchema}}{The schema holding the results}
+
+\item{\code{tablePrefix}}{The prefix to use to append to the results tables (optional)}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortIncidenceModule-createModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortIncidenceModule-createModuleSpecifications}{}}}
+\subsection{Method \code{createModuleSpecifications()}}{
+Creates the CohortIncidence Module Specifications
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$createModuleSpecifications(irDesign = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{irDesign}}{The incidence rate design created from the CohortIncidence
+package}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortIncidenceModule-validateModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortIncidenceModule-validateModuleSpecifications}{}}}
+\subsection{Method \code{validateModuleSpecifications()}}{
+Validate the module specifications
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$validateModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{moduleSpecifications}}{The CohortIncidence module specifications}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortIncidenceModule-clone"></a>}}

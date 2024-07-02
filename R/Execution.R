@@ -102,19 +102,17 @@ execute <- function(analysisSpecifications,
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) == "cohortgeneratormodule") {
-      moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
-      jc <- createJobContext(
-        analysisSpecifications = analysisSpecifications,
-        executionSettings = executionSettings,
-        moduleSpecification = moduleSpecification
-      )
-      cg <- CohortGeneratorModule$new(
-        jobContext = jc,
-        moduleIndex = 1,
-        databaseId = executionSettings$databaseId
-      )
+      #moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
+      # jc <- createJobContext(
+      #   analysisSpecifications = analysisSpecifications,
+      #   executionSettings = executionSettings,
+      #   moduleSpecification = moduleSpecification
+      # )
+      cg <- CohortGeneratorModule$new()
       cg$execute(
-        connectionDetails = connectionDetails
+        connectionDetails = connectionDetails,
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = executionSettings
       )
       break;
     }
@@ -124,31 +122,21 @@ execute <- function(analysisSpecifications,
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) != "cohortgeneratormodule") {
-      rlang::inform(paste0("TODO: RUN ", toupper(moduleName)))
       moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
-      jc <- createJobContext(
+      # jc <- createJobContext(
+      #   analysisSpecifications = analysisSpecifications,
+      #   executionSettings = executionSettings,
+      #   moduleSpecification = moduleSpecification
+      # )
+      moduleObj <- get(moduleName)$new()
+      moduleObj$execute(
+        connectionDetails = connectionDetails,
         analysisSpecifications = analysisSpecifications,
         executionSettings = executionSettings,
-        moduleSpecification = moduleSpecification
-      )
-      moduleObj <- get(moduleName)$new(
-        jobContext = jc,
-        moduleIndex = i,
-        databaseId = executionSettings$databaseId
-      )
-      moduleObj$execute(
-        connectionDetails = connectionDetails
+        moduleIndex = i
       )
     }
   }
-}
-
-createJobContext <- function(analysisSpecifications, executionSettings, moduleSpecification) {
-  jc <- JobContext$new()
-  jc$sharedResources <- analysisSpecifications$sharedResources
-  jc$settings <- moduleSpecification$settings
-  jc$moduleExecutionSettings <- executionSettings
-  return(jc)
 }
 
 # generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, restart) {
