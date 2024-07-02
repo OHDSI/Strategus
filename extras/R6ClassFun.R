@@ -87,14 +87,13 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
 
 # Cleanup any prior results
 outputFolder <- "D:/TEMP/StrategusR6Testing"
-unlink(outputFolder, recursive = T)
+unlink(outputFolder, recursive = T, force = T)
 dir.create(outputFolder, recursive = T)
 ParallelLogger::saveSettingsToJson(analysisSpecifications, file.path(outputFolder, "analysisSettings.json"))
 workFolder <- file.path(outputFolder, "work_folder")
 resultsFolder <- file.path(outputFolder, "results_folder")
 
 executionSettings <- Strategus::createCdmExecutionSettings(
-  connectionDetailsReference = "eunomia", # TODO: This needs to go
   workDatabaseSchema = "main",
   cdmDatabaseSchema = "main",
   cohortTableNames = CohortGenerator::getCohortTableNames(),
@@ -106,8 +105,18 @@ executionSettings <- Strategus::createCdmExecutionSettings(
 )
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
+#debugonce(Strategus::execute)
 Strategus::execute(
   analysisSpecifications = analysisSpecifications,
   executionSettings = executionSettings,
   connectionDetails = connectionDetails
 )
+
+# # Create results data model & upload results
+# library(RSQLite)
+# mydb <- dbConnect(RSQLite::SQLite(), file.path(outputFolder, "results.sqlite"))
+# dbDisconnect(mydb)
+#
+# Strategus::createResultDataModels(
+#
+# )

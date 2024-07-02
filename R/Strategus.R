@@ -24,4 +24,4 @@
 #' @importFrom methods is
 NULL
 
-assertModulesFolderSetting <- checkmate::makeAssertionFunction(.checkModuleFolderSetting)
+#assertModulesFolderSetting <- checkmate::makeAssertionFunction(.checkModuleFolderSetting)

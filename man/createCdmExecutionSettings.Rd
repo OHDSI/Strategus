@@ -5,7 +5,6 @@
 \title{Create CDM execution settings}
 \usage{
 createCdmExecutionSettings(
-  connectionDetailsReference,
   workDatabaseSchema,
   cdmDatabaseSchema,
   cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
@@ -21,9 +20,6 @@ createCdmExecutionSettings(
 )
 }
 \arguments{
-\item{connectionDetailsReference}{A string that can be used to retrieve database connection details from a secure local
-store.}
-
 \item{workDatabaseSchema}{A database schema where intermediate data can be stored. The user (as identified in the
 connection details) will need to have write access to this database schema.}
 

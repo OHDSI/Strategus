@@ -5,7 +5,6 @@
 \title{Create Results execution settings}
 \usage{
 createResultsExecutionSettings(
-  resultsConnectionDetailsReference,
   resultsDatabaseSchema,
   workFolder,
   resultsFolder,
@@ -16,9 +15,6 @@ createResultsExecutionSettings(
 )
 }
 \arguments{
-\item{resultsConnectionDetailsReference}{A string that can be used to retrieve the results database connection
-details from a secure local store.}
-
 \item{resultsDatabaseSchema}{A schema where the results tables are stored}
 
 \item{workFolder}{A folder in the local file system where intermediate results can be written.}

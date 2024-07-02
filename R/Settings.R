@@ -78,8 +78,6 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 
 #' Create CDM execution settings
 #'
-#' @param connectionDetailsReference A string that can be used to retrieve database connection details from a secure local
-#'                                   store.
 #' @param workDatabaseSchema         A database schema where intermediate data can be stored. The user (as identified in the
 #'                                   connection details) will need to have write access to this database schema.
 #' @param cdmDatabaseSchema          The database schema containing the data in CDM format. The user (as identified in the
@@ -103,8 +101,7 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' An object of type `ExecutionSettings`.
 #'
 #' @export
-createCdmExecutionSettings <- function(connectionDetailsReference,
-                                       workDatabaseSchema,
+createCdmExecutionSettings <- function(workDatabaseSchema,
                                        cdmDatabaseSchema,
                                        cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
                                        tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
@@ -117,7 +114,6 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                                        resultsConnectionDetailsReference = NULL,
                                        resultsDatabaseSchema = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(cdmDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertList(cohortTableNames, add = errorMessages)
@@ -136,29 +132,16 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   resultsFolder <- normalizePath(resultsFolder, mustWork = F)
   logFileName <- normalizePath(logFileName, mustWork = F)
 
-  executionSettings <- list(
-    connectionDetailsReference = connectionDetailsReference,
-    workDatabaseSchema = workDatabaseSchema,
-    cdmDatabaseSchema = cdmDatabaseSchema,
-    cohortTableNames = cohortTableNames,
-    tempEmulationSchema = tempEmulationSchema,
-    workFolder = workFolder,
-    resultsFolder = resultsFolder,
-    logFileName = logFileName,
-    minCellCount = minCellCount,
-    integerAsNumeric = integerAsNumeric,
-    integer64AsNumeric = integer64AsNumeric,
-    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-    resultsDatabaseSchema = resultsDatabaseSchema
-  )
+  executionSettings <- list()
+  for (name in names(formals(createCdmExecutionSettings))) {
+    executionSettings[[name]] <- get(name)
+  }
   class(executionSettings) <- c("CdmExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
 
 #' Create Results execution settings
 #'
-#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
-#'                                          details from a secure local store.
 #' @param resultsDatabaseSchema      A schema where the results tables are stored
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
 #' @param resultsFolder              A folder in the local file system where the module output will be written.
@@ -172,8 +155,7 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
 #' An object of type `ExecutionSettings`.
 #'
 #' @export
-createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
-                                           resultsDatabaseSchema,
+createResultsExecutionSettings <- function(resultsDatabaseSchema,
                                            workFolder,
                                            resultsFolder,
                                            logFileName = file.path(resultsFolder, "strategus-log.txt"),
@@ -181,7 +163,6 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
                                            integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
                                            integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
   errorMessages <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(resultsConnectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
@@ -196,58 +177,52 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   resultsFolder <- normalizePath(resultsFolder, mustWork = F)
   logFileName <- normalizePath(logFileName, mustWork = F)
 
-  executionSettings <- list(
-    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-    resultsDatabaseSchema = resultsDatabaseSchema,
-    workFolder = workFolder,
-    resultsFolder = resultsFolder,
-    logFileName = logFileName,
-    minCellCount = minCellCount,
-    integerAsNumeric = integerAsNumeric,
-    integer64AsNumeric = integer64AsNumeric
-  )
+  executionSettings <- list()
+  for (name in names(formals(createResultsExecutionSettings))) {
+    executionSettings[[name]] <- get(name)
+  }
   class(executionSettings) <- c("ResultsExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
 
 
-#' Provides a list of HADES modules to run through Strategus
+#' #' Provides a list of HADES modules to run through Strategus
+#' #'
+#' #' @description
+#' #' This function provides a list of modules and their locations
+#' #' that may be used with Strategus.
+#' #'
+#' #' @return
+#' #' A data.frame() of modules that work with Strategus. This will contain:
+#' #' module = The name of the module
+#' #' version = The version of the module
+#' #' remote_repo = The remote location of the module (i.e. github.com)
+#' #' remote_username = The organization of the module (i.e. OHDSI)
+#' #' module_type = 'cdm' or 'results'. 'cdm' refers to modules that are designed to work against
+#' #' patient level data in the OMOP CDM format. 'results' refers to modules that are designed
+#' #' to work against a results database containing output from a 'cdm' module.
+#' #'
+#' #' @export
+#' getModuleList <- function() {
+#'   moduleList <- CohortGenerator::readCsv(file = system.file("csv/modules.csv",
+#'     package = "Strategus",
+#'     mustWork = TRUE
+#'   ))
+#'   return(moduleList)
+#' }
 #'
-#' @description
-#' This function provides a list of modules and their locations
-#' that may be used with Strategus.
+#' #' @keywords internal
+#' .checkModuleFolderSetting <- function(x) {
+#'   if (length(x) == 0 || x == "") {
+#'     return(paste0("INSTANTIATED_MODULES_FOLDER environment variable has not been set. INSTANTIATED_MODULES_FOLDER must be set using Sys.setenv(INSTANTIATED_MODULES_FOLDER = \"/somepath\")"))
+#'   } else {
+#'     return(TRUE)
+#'   }
+#' }
 #'
-#' @return
-#' A data.frame() of modules that work with Strategus. This will contain:
-#' module = The name of the module
-#' version = The version of the module
-#' remote_repo = The remote location of the module (i.e. github.com)
-#' remote_username = The organization of the module (i.e. OHDSI)
-#' module_type = 'cdm' or 'results'. 'cdm' refers to modules that are designed to work against
-#' patient level data in the OMOP CDM format. 'results' refers to modules that are designed
-#' to work against a results database containing output from a 'cdm' module.
-#'
-#' @export
-getModuleList <- function() {
-  moduleList <- CohortGenerator::readCsv(file = system.file("csv/modules.csv",
-    package = "Strategus",
-    mustWork = TRUE
-  ))
-  return(moduleList)
-}
-
-#' @keywords internal
-.checkModuleFolderSetting <- function(x) {
-  if (length(x) == 0 || x == "") {
-    return(paste0("INSTANTIATED_MODULES_FOLDER environment variable has not been set. INSTANTIATED_MODULES_FOLDER must be set using Sys.setenv(INSTANTIATED_MODULES_FOLDER = \"/somepath\")"))
-  } else {
-    return(TRUE)
-  }
-}
-
-#' Used when serializing connection details to retain NULL values
-#'
-#' @keywords internal
-.nullList <- function() {
-  invisible(list(NULL))
-}
+#' #' Used when serializing connection details to retain NULL values
+#' #'
+#' #' @keywords internal
+#' .nullList <- function() {
+#'   invisible(list(NULL))
+#' }

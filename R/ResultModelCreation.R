@@ -25,37 +25,13 @@
 #' @export
 createResultDataModels <- function(analysisSpecifications,
                                    executionSettings,
-                                   executionScriptFolder = NULL,
-                                   keyringName = NULL,
-                                   restart = FALSE,
-                                   enforceModuleDependencies = TRUE) {
+                                   connectionDetails) {
   errorMessages <- checkmate::makeAssertCollection()
-  keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ResultsExecutionSettings", add = errorMessages)
-  checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
+  checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  modules <- ensureAllModulesInstantiated(
-    analysisSpecifications = analysisSpecifications,
-    enforceModuleDependencies = enforceModuleDependencies
-  )
-
-  if (isFALSE(modules$allModulesInstalled)) {
-    stop("Stopping execution due to module issues")
-  }
-
-
-  if (is.null(executionScriptFolder)) {
-    executionScriptFolder <- tempfile("strategusTempSettings")
-    dir.create(executionScriptFolder)
-    on.exit(unlink(executionScriptFolder, recursive = TRUE))
-  } else if (!restart) {
-    if (dir.exists(executionScriptFolder)) {
-      unlink(executionScriptFolder, recursive = TRUE)
-    }
-    dir.create(executionScriptFolder, recursive = TRUE)
-  }
   # Normalize path to convert from relative to absolute path
   executionScriptFolder <- normalizePath(executionScriptFolder, mustWork = F)
 

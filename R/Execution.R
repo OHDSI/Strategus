@@ -91,6 +91,13 @@ execute <- function(analysisSpecifications,
     }
   }
 
+  # Set up logging
+  ParallelLogger::addDefaultFileLogger(
+    name = "STRATEGUS_LOGGER",
+    fileName = executionSettings$logFileName
+  )
+  on.exit(ParallelLogger::clearLoggers())
+
   if (is(executionSettings, "CdmExecutionSettings")) {
     executionSettings$databaseId <- createDatabaseMetaData(
       executionSettings = executionSettings,
@@ -102,12 +109,6 @@ execute <- function(analysisSpecifications,
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) == "cohortgeneratormodule") {
-      #moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
-      # jc <- createJobContext(
-      #   analysisSpecifications = analysisSpecifications,
-      #   executionSettings = executionSettings,
-      #   moduleSpecification = moduleSpecification
-      # )
       cg <- CohortGeneratorModule$new()
       cg$execute(
         connectionDetails = connectionDetails,
@@ -123,11 +124,6 @@ execute <- function(analysisSpecifications,
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) != "cohortgeneratormodule") {
       moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
-      # jc <- createJobContext(
-      #   analysisSpecifications = analysisSpecifications,
-      #   executionSettings = executionSettings,
-      #   moduleSpecification = moduleSpecification
-      # )
       moduleObj <- get(moduleName)$new()
       moduleObj$execute(
         connectionDetails = connectionDetails,

@@ -55,6 +55,12 @@ StrategusModule <- R6::R6Class(
     #' @param executionSettings The execution settings for the study
     #' @param moduleIndex (Optional) Index number to append to the results folder
     execute = function(connectionDetails, analysisSpecifications, executionSettings, moduleIndex = 1) {
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
+      checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
+      checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+      checkmate::reportAssertions(collection = errorMessages)
+
       private$.message('EXECUTING: ', self$moduleName)
 
       # Get the moduleSpecification from the analysis specification
@@ -77,6 +83,9 @@ StrategusModule <- R6::R6Class(
 
       # NOTE: This should be in the execution settings already
       #self$jobContext$moduleExecutionSettings$databaseId <- databaseId
+
+      # Setup logging
+      private$.createLoggers(self$jobContext$moduleExecutionSettings)
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB
@@ -141,6 +150,26 @@ StrategusModule <- R6::R6Class(
   private = list(
     .message = function(...) {
       rlang::inform(paste0(...))
+    },
+    .createLoggers = function(moduleExecutionSettings) {
+      # TODO: Attaching these module-level loggers
+      # seems to create an issue whereby only messages
+      # emitted by the PL package are logged for some reason.
+      # Come back to this..
+      #
+      # Establish loggers for the module execution
+      # ParallelLogger::addDefaultFileLogger(
+      #   name = "MODULE_LOGGER",
+      #   fileName = file.path(moduleExecutionSettings$resultsSubFolder, "log.txt")
+      # )
+      # ParallelLogger::addDefaultErrorReportLogger(
+      #   name = "MODULE_ERROR_LOGGER",
+      #   file.path(moduleExecutionSettings$resultsSubFolder, "errorReport.R")
+      # )
+    },
+    .clearLoggers = function() {
+      #ParallelLogger::unregisterLogger("MODULE_LOGGER")
+      #ParallelLogger::unregisterLogger("MODULE_ERROR_LOGGER")
     },
     .getModuleSpecification = function(analysisSpecifications, moduleName) {
       moduleSpecification <- NULL
@@ -314,6 +343,7 @@ CohortGeneratorModule <- R6::R6Class(
       )
 
       private$.message(paste("Results available at:", resultsFolder))
+      private$.clearLoggers()
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB
@@ -548,6 +578,7 @@ CohortIncidenceModule <- R6::R6Class(
       # readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
 
       private$.message(paste("Results available at:", resultsFolder))
+      private$.clearLoggers()
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB
