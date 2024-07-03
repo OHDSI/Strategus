@@ -6,7 +6,7 @@
 \description{
 Computes cohort characterization information against the OMOP CDM
 NOTE: Using v1.0.3 version of module and
-commit cc8b5c1b194aa36fca3f5870927f3b4aedb28d8d for the
+commit 372fb70c6133bdd8811f8dc1d2a2f9cb9a184345 for the
 package
 }
 \section{Super class}{

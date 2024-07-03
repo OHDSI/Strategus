@@ -197,16 +197,66 @@ cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
   analysesToExclude = analysesToExclude
 )
 
+# PatientLevelPrediction -------------------------------
+plpModuleSettingsCreator <- PatientLevelPredictionModule$new()
+makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
+  invisible(PatientLevelPrediction::createModelDesign(
+    targetId = targetId,
+    outcomeId = outcomeId,
+    restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+    populationSettings = popSettings,
+    covariateSettings = covarSettings,
+    preprocessSettings = PatientLevelPrediction::createPreprocessSettings(),
+    modelSettings = PatientLevelPrediction::setLassoLogisticRegression(),
+    splitSettings = PatientLevelPrediction::createDefaultSplitSetting(),
+    runCovariateSummary = T
+  ))
+}
+
+plpPopulationSettings <- PatientLevelPrediction::createStudyPopulationSettings(
+  startAnchor = "cohort start",
+  riskWindowStart = 1,
+  endAnchor = "cohort start",
+  riskWindowEnd = 365,
+  minTimeAtRisk = 1
+)
+plpCovarSettings <- FeatureExtraction::createDefaultCovariateSettings()
+
+exposureOfInterestIds = c(1,2)
+outcomeOfInterestIds = c(3)
+modelDesignList <- list()
+for (i in 1:length(exposureOfInterestIds)) {
+  for (j in 1:length(outcomeOfInterestIds)) {
+    modelDesignList <- append(
+      modelDesignList,
+      list(
+        makeModelDesignSettings(
+          targetId = exposureOfInterestIds[i],
+          outcomeId = outcomeOfInterestIds[j],
+          popSettings = plpPopulationSettings,
+          covarSettings = plpCovarSettings
+        )
+      )
+    )
+  }
+}
+
+plpModuleSpecifications <- plpModuleSettingsCreator$createModuleSpecifications(
+  modelDesignList = modelDesignList
+)
 
 # Create analysis specifications ---------------
 analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   addModuleSpecifications(cgModuleSettings) |>
-  #addModuleSpecifications(cModuleSpecifications) |>
   addModuleSpecifications(cdModuleSpecifications) |>
+  addModuleSpecifications(cmModuleSpecifications) |>
+  # NOT WORKING
+  #addModuleSpecifications(cModuleSpecifications) |>
+  #addModuleSpecifications(plpModuleSpecifications)
+  # MOSTLY WORKING
   #addModuleSpecifications(ciModuleSettings) |>
-  addModuleSpecifications(cmModuleSpecifications)
 
 # Cleanup any prior results -----------------
 outputFolder <- "D:/TEMP/StrategusR6Testing"
@@ -231,7 +281,7 @@ connectionDetails <- Eunomia::getEunomiaConnectionDetails(
   databaseFile = file.path(outputFolder, "Eunomia.sqlite"),
   overwrite = TRUE
 )
-debugonce(Strategus::execute)
+#debugonce(Strategus::execute)
 #debugonce(CohortDiagnostics:::computeCohortCounts)
 Strategus::execute(
   analysisSpecifications = analysisSpecifications,

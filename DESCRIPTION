@@ -36,11 +36,12 @@ Suggests:
   CohortDiagnostics,
   CohortIncidence,
   CohortMethod,
-  testthat (>= 3.0.0),
+  Eunomia,
   fs,
   knitr,
+  PatientLevelPrediction,
   rmarkdown,
-  Eunomia,
+  testthat (>= 3.0.0),
   withr
 Remotes:
   ohdsi/Characterization@372fb70c6133bdd8811f8dc1d2a2f9cb9a184345,
@@ -48,7 +49,8 @@ Remotes:
   ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
-  ohdsi/ResultModelManager
+  ohdsi/ResultModelManager,
+  ohdsi/PatientLevelPrediction
 VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 7.3.1
