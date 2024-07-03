@@ -1,0 +1,213 @@
+# CohortGeneratorModule -------------
+#' @title Module for generating cohorts against an OMOP CDM
+#' @export
+#' @description
+#' Generates cohorts against the OMOP CDM
+CohortGeneratorModule <- R6::R6Class(
+  classname = "CohortGeneratorModule",
+  inherit = StrategusModule,
+  public = list(
+    #' @field cohortDefinitionSharedResourcesClassName A constant for the name
+    #' of the cohort definition shared resources section of the analysis
+    #' specification
+    cohortDefinitionSharedResourcesClassName = "CohortDefinitionSharedResources",
+    #' @field negativeControlOutcomeSharedResourcesClassName A constant for the
+    #' name of the negative control outcome shared resources section of the
+    #' analysis specification
+    negativeControlOutcomeSharedResourcesClassName = "NegativeControlOutcomeSharedResources",
+    #' @description Initialize the module
+    initialize = function() {
+      super$initialize()
+    },
+    #' @description Generates the cohorts
+    #' @param connectionDetails The connection details to the database
+    #' @param analysisSpecifications The analysis specifications for the study
+    #' @param executionSettings The execution settings for the study
+    execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$execute(connectionDetails, analysisSpecifications, executionSettings)
+      jobContext <- private$jobContext
+      cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
+      negativeControlOutcomeSettings <- private$.createNegativeControlOutcomeSettingsFromJobContext()
+      resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
+      if (!dir.exists(resultsFolder)) {
+        dir.create(resultsFolder, recursive = TRUE)
+      }
+
+      CohortGenerator::runCohortGeneration(
+        connectionDetails = connectionDetails,
+        cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
+        cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        cohortTableNames = jobContext$moduleExecutionSettings$cohortTableNames,
+        cohortDefinitionSet = cohortDefinitionSet,
+        negativeControlOutcomeCohortSet = negativeControlOutcomeSettings$cohortSet,
+        occurrenceType = negativeControlOutcomeSettings$occurrenceType,
+        detectOnDescendants = negativeControlOutcomeSettings$detectOnDescendants,
+        outputFolder = resultsFolder,
+        databaseId = jobContext$moduleExecutionSettings$databaseId,
+        incremental = jobContext$settings$incremental,
+        incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
+      )
+
+      private$.message(paste("Results available at:", resultsFolder))
+      private$.clearLoggers()
+    },
+    #' @description Create the results schema for the module
+    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @param resultsSchema The schema holding the results
+    #' @param tablePrefix The prefix to use to append to the results tables (optional)
+    createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
+      super$createResultsSchema(resultsConnectionDetails, resultsSchema, tablePrefix)
+      CohortGenerator::createResultsDataModel(
+        connectionDetails = resultsConnectionDetails,
+        databaseSchema = resultsSchema,
+        tablePrefix = tablePrefix
+      )
+    },
+    #' @description Upload the results for the module
+    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @param analysisSpecifications The analysis specifications for the study
+    #' @param resultsExecutionSettings The results execution settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
+      # TODO: The decisions to set the parameters:
+      #    forceOverWriteOfSpecifications = FALSE
+      #    purgeSiteDataBeforeUploading = FALSE
+      # needs discussion.
+      CohortGenerator::uploadResults(
+        connectionDetails = resultsConnectionDetails,
+        schema = resultsExecutionSettings$resultsDatabaseSchema,
+        resultsFolder = private$jobContext$moduleExecutionSettings$resultsSubFolder,
+        forceOverWriteOfSpecifications = FALSE,
+        purgeSiteDataBeforeUploading = FALSE
+      )
+    },
+    #' @description Creates the CohortGenerator Module Specifications
+    #' @param incremental When TRUE, the module will keep track of the cohorts
+    #' generated so that subsequent runs will skip any previously generated
+    #' cohorts.
+    #' @param generateStats When TRUE, the Circe cohort definition SQL will
+    #' include steps to compute inclusion rule statistics.
+    createModuleSpecifications = function(incremental = TRUE,
+                                          generateStats = TRUE) {
+      analysis <- list()
+      for (name in names(formals(self$createModuleSpecifications))) {
+        analysis[[name]] <- get(name)
+      }
+
+      specifications <- super$createModuleSpecifications(
+        moduleSpecifications = analysis
+      )
+      return(specifications)
+    },
+    #' @description Create shared specifications for the cohort definition set
+    #' @param cohortDefinitionSet The cohort definition set to include in the
+    #' specification. See the CohortGenerator package for details on how to
+    #' build this object.
+    createCohortSharedResourceSpecifications = function(cohortDefinitionSet) {
+      if (!CohortGenerator::isCohortDefinitionSet(cohortDefinitionSet)) {
+        stop("cohortDefinitionSet is not properly defined")
+      }
+
+      subsetDefinitions <- CohortGenerator::getSubsetDefinitions(cohortDefinitionSet)
+      if (length(subsetDefinitions) > 0) {
+        # Filter the cohort definition set to the "parent" cohorts.
+        parentCohortDefinitionSet <- cohortDefinitionSet[!cohortDefinitionSet$isSubset, ]
+      } else {
+        parentCohortDefinitionSet <- cohortDefinitionSet
+      }
+
+      sharedResource <- list()
+      cohortDefinitionSetFiltered <- private$.listafy(parentCohortDefinitionSet)
+      sharedResource["cohortDefinitions"] <- list(cohortDefinitionSetFiltered)
+
+      if (length(subsetDefinitions)) {
+        # Subset definitions
+        subsetDefinitionsJson <- lapply(subsetDefinitions, function(x) {
+          x$toJSON()
+        })
+        sharedResource["subsetDefs"] <- list(subsetDefinitionsJson)
+
+        # Filter to the subsets
+        subsetCohortDefinitionSet <- cohortDefinitionSet[cohortDefinitionSet$isSubset, ]
+        subsetIdMapping <- list()
+        for (i in 1:nrow(subsetCohortDefinitionSet)) {
+          idMapping <- list(
+            cohortId = subsetCohortDefinitionSet$cohortId[i],
+            subsetId = subsetCohortDefinitionSet$subsetDefinitionId[i],
+            targetCohortId = subsetCohortDefinitionSet$subsetParent[i]
+          )
+          subsetIdMapping[[i]] <- idMapping
+        }
+        sharedResource["cohortSubsets"] <- list(subsetIdMapping)
+      }
+
+      sharedResource <- super$createSharedResourcesSpecifications(
+        className = self$cohortDefinitionSharedResourcesClassName,
+        sharedResourcesSpecifications = sharedResource
+      )
+      return(sharedResource)
+    },
+    #' @description Create shared specifications for the negative control outcomes cohort set
+    #' @param negativeControlOutcomeCohortSet The negative control outcome cohort
+    #' definition set defines the concepts to use to construct negative control
+    #' outcome cohorts. See the CohortGenerator package for more details.
+    #' @param occurrenceType Either "first" or "all
+    #' @param detectOnDescendants When TRUE, the concept ID for the negative
+    #' control will use the `concept_ancestor` table and will detect
+    #' descendant concepts when constructing the cohort.
+    createNegativeControlOutcomeCohortSharedResourceSpecifications = function(negativeControlOutcomeCohortSet,
+                                                                              occurrenceType,
+                                                                              detectOnDescendants) {
+      negativeControlOutcomeCohortSet <- apply(negativeControlOutcomeCohortSet, 1, as.list)
+      sharedResource <- list(
+        negativeControlOutcomes = list(
+          negativeControlOutcomeCohortSet = negativeControlOutcomeCohortSet,
+          occurrenceType = occurrenceType,
+          detectOnDescendants = detectOnDescendants
+        )
+      )
+      sharedResource <- super$createSharedResourcesSpecifications(
+        className = self$negativeControlOutcomeSharedResourcesClassName,
+        sharedResourcesSpecifications = sharedResource
+      )
+      return(sharedResource)
+    },
+    #' @description Validate the module specifications
+    #' @param moduleSpecifications The module specifications
+    validateModuleSpecifications = function(moduleSpecifications) {
+      super$validateModuleSpecifications(
+        moduleSpecifications = moduleSpecifications
+      )
+    },
+    #' @description Validate the cohort shared resource specifications
+    #' @param cohortSharedResourceSpecifications The cohort shared resource specifications
+    validateCohortSharedResourceSpecifications = function(cohortSharedResourceSpecifications) {
+      super$validateSharedResourcesSpecifications(
+        className = self$cohortDefinitionSharedResourcesClassName,
+        sharedResourcesSpecifications = cohortSharedResourceSpecifications
+      )
+    },
+    #' @description Validate the cohort shared resource specifications
+    #' @param negativeControlOutcomeCohortSharedResourceSpecifications The cohort shared resource specifications
+    validateNegativeControlOutcomeCohortSharedResourceSpecifications = function(negativeControlOutcomeCohortSharedResourceSpecifications) {
+      super$validateSharedResourcesSpecifications(
+        className = self$negativeControlOutcomeSharedResourcesClassName,
+        sharedResourcesSpecifications = negativeControlOutcomeCohortSharedResourceSpecifications
+      )
+    }
+  ),
+  private = list(
+    .listafy = function(df) {
+      mylist <- list()
+      for (i in 1:nrow(df)) {
+        cohortData <- list(
+          cohortId = df$cohortId[i],
+          cohortName = df$cohortName[i],
+          cohortDefinition = df$json[i]
+        )
+        mylist[[i]] <- cohortData
+      }
+      return(mylist)
+    }
+  )
+)
