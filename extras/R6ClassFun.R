@@ -42,6 +42,21 @@ cgModuleSettingsCreator$validateNegativeControlOutcomeCohortSharedResourceSpecif
 cgModuleSettings <- cgModuleSettingsCreator$createModuleSpecifications()
 cgModuleSettingsCreator$validateModuleSpecifications(cgModuleSettings)
 
+# Cohort Diagnostics -----------------
+cdModuleSettingsCreator <- CohortDiagnosticsModule$new()
+cdModuleSpecifications <- cdModuleSettingsCreator$createModuleSpecifications(
+  runInclusionStatistics = TRUE,
+  runIncludedSourceConcepts = TRUE,
+  runOrphanConcepts = TRUE,
+  runTimeSeries = FALSE,
+  runVisitContext = TRUE,
+  runBreakdownIndexEvents = TRUE,
+  runIncidenceRate = TRUE,
+  runCohortRelationship = TRUE,
+  runTemporalCohortCharacterization = TRUE,
+  incremental = FALSE
+)
+
 # Cohort Incidence -----------------
 library(CohortIncidence)
 ciModuleSettingsCreator <- CohortIncidenceModule$new()
@@ -181,6 +196,7 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   addModuleSpecifications(cgModuleSettings) |>
+  addModuleSpecifications(cdModuleSpecifications) |>
   #addModuleSpecifications(ciModuleSettings) |>
   addModuleSpecifications(cmModuleSpecifications)
 
@@ -197,19 +213,33 @@ resultsFolder <- file.path(outputFolder, "results_folder")
 executionSettings <- Strategus::createCdmExecutionSettings(
   workDatabaseSchema = "main",
   cdmDatabaseSchema = "main",
-  cohortTableNames = CohortGenerator::getCohortTableNames(),
+  cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "strategus_test"),
   workFolder = workFolder,
   resultsFolder = resultsFolder,
   minCellCount = 5
 )
 
-connectionDetails <- Eunomia::getEunomiaConnectionDetails()
+connectionDetails <- Eunomia::getEunomiaConnectionDetails(
+  databaseFile = file.path(outputFolder, "Eunomia.sqlite"),
+  overwrite = TRUE
+)
 #debugonce(Strategus::execute)
+#debugonce(CohortDiagnostics:::computeCohortCounts)
 Strategus::execute(
   analysisSpecifications = analysisSpecifications,
   executionSettings = executionSettings,
   connectionDetails = connectionDetails
 )
+
+# # # DEBUG CD
+# cdModule <- CohortDiagnosticsModule$new()
+# debugonce(cdModule$execute)
+# executionSettings$databaseId = "Eunomia"
+# cdModule$execute(
+#   analysisSpecifications = analysisSpecifications,
+#   executionSettings = executionSettings,
+#   connectionDetails = connectionDetails
+# )
 
 # Create empty results database -------------------------
 library(RSQLite)
@@ -231,7 +261,6 @@ resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
 )
 
 # NOTE: CI has not implemented this so it will error out.
-debugonce(Strategus::createResultDataModels)
 Strategus::createResultDataModels(
   analysisSpecifications = analysisSpecifications,
   resultsExecutionSettings = resultsExecutionSettings,
@@ -270,10 +299,9 @@ shinyConfig <- initializeModuleConfig() |>
   addModuleConfig(
     createDefaultCohortGeneratorConfig()
   ) |>
-  # |>
-  # addModuleConfig(
-  #   createDefaultCohortDiagnosticsConfig()
-  # ) |>
+  addModuleConfig(
+    createDefaultCohortDiagnosticsConfig()
+  ) |>
   # addModuleConfig(
   #   createDefaultCharacterizationConfig()
   # ) |>

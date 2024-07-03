@@ -32,6 +32,7 @@ Imports:
   ResultModelManager (>= 0.5.8),
   SqlRender (>= 1.18.0)
 Suggests:
+  CohortDiagnostics,
   CohortIncidence,
   CohortMethod,
   testthat (>= 3.0.0),
@@ -41,6 +42,7 @@ Suggests:
   Eunomia,
   withr
 Remotes:
+  ohdsi/CohortDiagnostics,
   ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
