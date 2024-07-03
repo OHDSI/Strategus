@@ -21,6 +21,8 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
     #' @param executionSettings The execution settings for the study
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
+      checkmate::assertClass(executionSettings, "CdmExecutionSettings")
+
       jobContext <- private$jobContext
       sccsMultiThreadingSettings <- SelfControlledCaseSeries::createDefaultSccsMultiThreadingSettings(parallel::detectCores())
 

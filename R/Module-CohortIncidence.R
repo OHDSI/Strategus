@@ -17,6 +17,8 @@ CohortIncidenceModule <- R6::R6Class(
     #' @param executionSettings The execution settings for the study
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
+      checkmate::assertClass(executionSettings, "CdmExecutionSettings")
+
       jobContext <- private$jobContext
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       private$.message("Validating inputs")

@@ -18,8 +18,9 @@ CohortMethodModule <- R6::R6Class(
     #' @param executionSettings The execution settings for the study
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      jobContext <- private$jobContext
+      checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
+      jobContext <- private$jobContext
       multiThreadingSettings <- CohortMethod::createDefaultMultiThreadingSettings(parallel::detectCores())
 
       args <- jobContext$settings
