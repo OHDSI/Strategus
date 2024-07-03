@@ -32,6 +32,7 @@ Imports:
   ResultModelManager (>= 0.5.8),
   SqlRender (>= 1.18.0)
 Suggests:
+  Characterization,
   CohortDiagnostics,
   CohortIncidence,
   CohortMethod,
@@ -42,6 +43,7 @@ Suggests:
   Eunomia,
   withr
 Remotes:
+  ohdsi/Characterization@372fb70c6133bdd8811f8dc1d2a2f9cb9a184345,
   ohdsi/CohortDiagnostics,
   ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,

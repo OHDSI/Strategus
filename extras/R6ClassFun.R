@@ -42,6 +42,13 @@ cgModuleSettingsCreator$validateNegativeControlOutcomeCohortSharedResourceSpecif
 cgModuleSettings <- cgModuleSettingsCreator$createModuleSpecifications()
 cgModuleSettingsCreator$validateModuleSpecifications(cgModuleSettings)
 
+# Characterization -------------------------------
+cModuleSettingsCreator <- CharacterizationModule$new()
+cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
+  targetIds = c(1, 2),
+  outcomeIds = 3
+)
+
 # Cohort Diagnostics -----------------
 cdModuleSettingsCreator <- CohortDiagnosticsModule$new()
 cdModuleSpecifications <- cdModuleSettingsCreator$createModuleSpecifications(
@@ -196,6 +203,7 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   addModuleSpecifications(cgModuleSettings) |>
+  #addModuleSpecifications(cModuleSpecifications) |>
   addModuleSpecifications(cdModuleSpecifications) |>
   #addModuleSpecifications(ciModuleSettings) |>
   addModuleSpecifications(cmModuleSpecifications)
@@ -223,7 +231,7 @@ connectionDetails <- Eunomia::getEunomiaConnectionDetails(
   databaseFile = file.path(outputFolder, "Eunomia.sqlite"),
   overwrite = TRUE
 )
-#debugonce(Strategus::execute)
+debugonce(Strategus::execute)
 #debugonce(CohortDiagnostics:::computeCohortCounts)
 Strategus::execute(
   analysisSpecifications = analysisSpecifications,
