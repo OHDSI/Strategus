@@ -41,6 +41,7 @@ Suggests:
   knitr,
   PatientLevelPrediction,
   rmarkdown,
+  SelfControlledCaseSeries,
   testthat (>= 3.0.0),
   withr
 Remotes:
@@ -49,8 +50,9 @@ Remotes:
   ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
+  ohdsi/PatientLevelPrediction,
   ohdsi/ResultModelManager,
-  ohdsi/PatientLevelPrediction
+  ohdsi/SelfControlledCaseSeries
 VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 7.3.1

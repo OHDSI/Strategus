@@ -1,26 +1,28 @@
-# CohortMethodModule -------------
-#' @title Module for performing new-user cohort studies
+# SelfControlledCaseSeriesModule -------------
+#' @title Module for performing Self-Controlled Case Series (SCCS) analyses
+#' in an observational database in the OMOP Common Data Model.
 #' @export
 #' @description
-#' Module for performing new-user cohort studies in an observational
-#' database in the OMOP Common Data Model.
-CohortMethodModule <- R6::R6Class(
-  classname = "CohortMethodModule",
+#' Module for performing Self-Controlled Case Series (SCCS) analyses
+#' in an observational database in the OMOP Common Data Model.
+SelfControlledCaseSeriesModule <- R6::R6Class(
+  classname = "SelfControlledCaseSeriesModule",
   inherit = StrategusModule,
   public = list(
+    #' @field tablePrefix The table prefix for results tables
+    tablePrefix = "sccs_",
     #' @description Initialize the module
     initialize = function() {
       super$initialize()
     },
-    #' @description Executes the CohortMethod package
+    #' @description Executes the SelfControlledCaseSeries package
     #' @param connectionDetails The connection details to the database
     #' @param analysisSpecifications The analysis specifications for the study
     #' @param executionSettings The execution settings for the study
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
       jobContext <- private$jobContext
-
-      multiThreadingSettings <- CohortMethod::createDefaultMultiThreadingSettings(parallel::detectCores())
+      sccsMultiThreadingSettings <- SelfControlledCaseSeries::createDefaultSccsMultiThreadingSettings(parallel::detectCores())
 
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
@@ -29,29 +31,37 @@ CohortMethodModule <- R6::R6Class(
       args$exposureTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outcomeDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
       args$outcomeTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
+      args$nestingCohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
+      args$nestingCohortTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
+      args$customCovariateDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
+      args$customCovariateTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outputFolder <- jobContext$moduleExecutionSettings$workSubFolder
-      args$multiThreadingSettings <- multiThreadingSettings
-      args$cmDiagnosticThresholds <- NULL
-      do.call(CohortMethod::runCmAnalyses, args)
+      args$sccsMultiThreadingSettings <- sccsMultiThreadingSettings
+      args$sccsDiagnosticThresholds <- NULL
+      do.call(SelfControlledCaseSeries::runSccsAnalyses, args)
 
       exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
-      CohortMethod::exportToCsv(
+      SelfControlledCaseSeries::exportToCsv(
         outputFolder = jobContext$moduleExecutionSettings$workSubFolder,
         exportFolder = exportFolder,
         databaseId = jobContext$moduleExecutionSettings$databaseId,
         minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        maxCores = parallel::detectCores(),
-        cmDiagnosticThresholds = jobContext$settings$cmDiagnosticThresholds
+        sccsDiagnosticThresholds = jobContext$settings$sccsDiagnosticThresholds
       )
       # TODO: Removing this to make the upload easier
       #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$databaseId)))
 
-      resultsDataModel <- CohortGenerator::readCsv(file = system.file("csv", "resultsDataModelSpecification.csv", package = "CohortMethod"))
+      resultsDataModel <- CohortGenerator::readCsv(file = system.file("csv", "resultsDataModelSpecification.csv", package = "SelfControlledCaseSeries"))
+      resultsDataModel <- resultsDataModel[file.exists(file.path(exportFolder, paste0(resultsDataModel$tableName, ".csv"))), ]
+      if (any(!startsWith(resultsDataModel$tableName, self$tablePrefix))) {
+        stop("Table names do not have required prefix")
+      }
       CohortGenerator::writeCsv(
         x = resultsDataModel,
         file = file.path(exportFolder, "resultsDataModelSpecification.csv"),
         warnOnFileNameCaseMismatch = FALSE
       )
+
       private$.message(paste("Results available at:", exportFolder))
       private$.clearLoggers()
     },
@@ -61,10 +71,12 @@ CohortMethodModule <- R6::R6Class(
     #' @param tablePrefix The prefix to use to append to the results tables (optional)
     createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
       super$createResultsSchema(resultsConnectionDetails, resultsSchema, tablePrefix)
-      CohortMethod::createResultsDataModel(
+      # Note: not passing the tablePrefix argument to
+      # createResultsDataModel since the SCCS results
+      # model already contains the "sccs_" table prefix
+      SelfControlledCaseSeries::createResultsDataModel(
         connectionDetails = resultsConnectionDetails,
         databaseSchema = resultsSchema,
-        tablePrefix = tablePrefix
       )
     },
     #' @description Upload the results for the module
@@ -74,7 +86,7 @@ CohortMethodModule <- R6::R6Class(
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
 
-      # TODO: This is something CM does differently.
+      # TODO: This is something SCCS does differently.
       # Find the results zip file in the results sub folder
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       zipFiles <- list.files(
@@ -99,7 +111,7 @@ CohortMethodModule <- R6::R6Class(
       #    forceOverWriteOfSpecifications = FALSE
       #    purgeSiteDataBeforeUploading = FALSE
       # needs discussion.
-      CohortMethod::uploadResults(
+      SelfControlledCaseSeries::uploadResults(
         connectionDetails = resultsConnectionDetails,
         schema = resultsExecutionSettings$resultsDatabaseSchema,
         zipFileName = zipFileName,
@@ -107,51 +119,17 @@ CohortMethodModule <- R6::R6Class(
         purgeSiteDataBeforeUploading = FALSE
       )
     },
-    #' @description Creates the CohortMethod Module Specifications
-    #'
-    #' @details
-    #' Run a list of analyses for the target-comparator-outcomes of interest. This function will run all
-    #' specified analyses against all hypotheses of interest, meaning that the total number of outcome
-    #' models is `length(cmAnalysisList) * length(targetComparatorOutcomesList)` (if all analyses specify an
-    #' outcome model should be fitted). When you provide several analyses it will determine whether any of
-    #' the analyses have anything in common, and will take advantage of this fact. For example, if we
-    #' specify several analyses that only differ in the way the outcome model is fitted, then this
-    #' function will extract the data and fit the propensity model only once, and re-use this in all the
-    #' analysis.
-    #'
-    #' After completion, a tibble containing references to all generated files can be obtained using the
-    #' [getFileReference()] function. A summary of the analysis results can be obtained using the
-    #' [getResultsSummary()] function.
-    #'
-    #' ## Analyses to Exclude
-    #'
-    #' Normally, `runCmAnalyses` will run all combinations of target-comparator-outcome-analyses settings.
-    #' However, sometimes we may not need all those combinations. Using the `analysesToExclude` argument,
-    #' we can remove certain items from the full matrix. This argument should be a data frame with at least
-    #' one of the following columns:
-    #'
-    #' @param cmAnalysisList                 A list of objects of type `cmAnalysis` as created using
-    #'                                       the `[CohortMethod::createCmAnalysis] function.
-    #' @param targetComparatorOutcomesList   A list of objects of type `targetComparatorOutcomes` as
-    #'                                       created using the [CohortMethod::createTargetComparatorOutcomes]
-    #'                                       function.
-    #' @param analysesToExclude              Analyses to exclude. See the Analyses to Exclude section for details.
-    #' @param refitPsForEveryOutcome         Should the propensity model be fitted for every outcome (i.e.
-    #'                                       after people who already had the outcome are removed)? If
-    #'                                       false, a single propensity model will be fitted, and people
-    #'                                       who had the outcome previously will be removed afterwards.
-    #' @param refitPsForEveryStudyPopulation Should the propensity model be fitted for every study population
-    #'                                       definition? If false, a single propensity model will be fitted,
-    #'                                       and the study population criteria will be applied afterwards.
-    #' @param cmDiagnosticThresholds An object of type `CmDiagnosticThresholds` as created using
-    #'                                 [CohortMethod::createCmDiagnosticThresholds()].
-    #'
-    createModuleSpecifications = function(cmAnalysisList,
-                                          targetComparatorOutcomesList,
+    #' @description Creates the SelfControlledCaseSeries Module Specifications
+    #' @param sccsAnalysisList description
+    #' @param exposuresOutcomeList description
+    #' @param analysesToExclude description
+    #' @param combineDataFetchAcrossOutcomes description
+    #' @param sccsDiagnosticThresholds description
+    createModuleSpecifications = function(sccsAnalysisList,
+                                          exposuresOutcomeList,
                                           analysesToExclude = NULL,
-                                          refitPsForEveryOutcome = FALSE,
-                                          refitPsForEveryStudyPopulation = TRUE,
-                                          cmDiagnosticThresholds = createCmDiagnosticThresholds()) {
+                                          combineDataFetchAcrossOutcomes = FALSE,
+                                          sccsDiagnosticThresholds = createSccsDiagnosticThresholds()) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)

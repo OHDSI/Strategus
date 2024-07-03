@@ -44,7 +44,7 @@ Initialize the module
 \if{html}{\out{<a id="method-CohortMethodModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortMethodModule-execute}{}}}
 \subsection{Method \code{execute()}}{
-Executes the CohortMethod packages
+Executes the CohortMethod package
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortMethodModule$execute(
   connectionDetails,

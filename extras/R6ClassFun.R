@@ -197,6 +197,113 @@ cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
   analysesToExclude = analysesToExclude
 )
 
+# SelfControlledCaseSeries -------------------------------
+library(SelfControlledCaseSeries)
+sccsModuleSettingsCreator <- SelfControlledCaseSeriesModule$new()
+
+# Exposures-outcomes
+negativeControlOutcomeIds <- ncoCohortSet$cohortId
+outcomeOfInterestIds <- c(3)
+exposureOfInterestIds <- c(1, 2)
+
+exposuresOutcomeList <- list()
+for (exposureOfInterestId in exposureOfInterestIds) {
+  for (outcomeOfInterestId in outcomeOfInterestIds) {
+    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- createExposuresOutcome(
+      outcomeId = outcomeOfInterestId,
+      exposures = list(createExposure(exposureId = exposureOfInterestId))
+    )
+  }
+  for (negativeControlOutcomeId in negativeControlOutcomeIds) {
+    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- createExposuresOutcome(
+      outcomeId = negativeControlOutcomeId,
+      exposures = list(createExposure(exposureId = exposureOfInterestId, trueEffectSize = 1))
+    )
+  }
+}
+
+# Analysis settings ------------------------------------------------------------
+getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
+  studyStartDate = "",
+  studyEndDate = "",
+  maxCasesPerOutcome = 1e6,
+  useNestingCohort = TRUE,
+  nestingCohortId = 1,
+  deleteCovariatesSmallCount = 0
+)
+
+createStudyPopulation6AndOlderArgs <- SelfControlledCaseSeries::createCreateStudyPopulationArgs(
+  minAge = 18,
+  naivePeriod = 365
+)
+
+covarPreExp <- SelfControlledCaseSeries::createEraCovariateSettings(
+  label = "Pre-exposure",
+  includeEraIds = "exposureId",
+  start = -30,
+  end = -1,
+  endAnchor = "era start"
+)
+
+covarExposureOfInt <- SelfControlledCaseSeries::createEraCovariateSettings(
+  label = "Main",
+  includeEraIds = "exposureId",
+  start = 0,
+  startAnchor = "era start",
+  end = 0,
+  endAnchor = "era end",
+  profileLikelihood = TRUE,
+  exposureOfInterest = TRUE
+)
+
+calendarTimeSettings <- SelfControlledCaseSeries::createCalendarTimeCovariateSettings(
+  calendarTimeKnots = 5,
+  allowRegularization = TRUE,
+  computeConfidenceIntervals = FALSE
+)
+
+seasonalitySettings <- SelfControlledCaseSeries::createSeasonalityCovariateSettings(
+  seasonKnots = 5,
+  allowRegularization = TRUE,
+  computeConfidenceIntervals = FALSE
+)
+
+createSccsIntervalDataArgs <- SelfControlledCaseSeries::createCreateSccsIntervalDataArgs(
+  eraCovariateSettings = list(covarPreExp, covarExposureOfInt),
+  seasonalityCovariateSettings = seasonalitySettings,
+  calendarTimeCovariateSettings = calendarTimeSettings,
+  minCasesForTimeCovariates = 100000
+)
+
+fitSccsModelArgs <- SelfControlledCaseSeries::createFitSccsModelArgs(
+  control = Cyclops::createControl(
+    cvType = "auto",
+    selectorType = "byPid",
+    startingVariance = 0.1,
+    seed = 1,
+    resetCoefficients = TRUE,
+    noiseLevel = "quiet"
+  )
+)
+
+sccsAnalysis1 <- SelfControlledCaseSeries::createSccsAnalysis(
+  analysisId = 1,
+  description = "SCCS age 18-",
+  getDbSccsDataArgs = getDbSccsDataArgs,
+  createStudyPopulationArgs = createStudyPopulation6AndOlderArgs,
+  createIntervalDataArgs = createSccsIntervalDataArgs,
+  fitSccsModelArgs = fitSccsModelArgs
+)
+
+sccsAnalysisList <- list(sccsAnalysis1)
+
+# SCCS module specs ------------------------------------------------------------
+sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
+  sccsAnalysisList = sccsAnalysisList,
+  exposuresOutcomeList = exposuresOutcomeList,
+  combineDataFetchAcrossOutcomes = FALSE
+)
+
 # PatientLevelPrediction -------------------------------
 plpModuleSettingsCreator <- PatientLevelPredictionModule$new()
 makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
@@ -222,8 +329,6 @@ plpPopulationSettings <- PatientLevelPrediction::createStudyPopulationSettings(
 )
 plpCovarSettings <- FeatureExtraction::createDefaultCovariateSettings()
 
-exposureOfInterestIds = c(1,2)
-outcomeOfInterestIds = c(3)
 modelDesignList <- list()
 for (i in 1:length(exposureOfInterestIds)) {
   for (j in 1:length(outcomeOfInterestIds)) {
@@ -245,6 +350,9 @@ plpModuleSpecifications <- plpModuleSettingsCreator$createModuleSpecifications(
   modelDesignList = modelDesignList
 )
 
+
+
+
 # Create analysis specifications ---------------
 analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
@@ -252,6 +360,7 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addModuleSpecifications(cgModuleSettings) |>
   addModuleSpecifications(cdModuleSpecifications) |>
   addModuleSpecifications(cmModuleSpecifications) |>
+  addModuleSpecifications(sccsModuleSpecifications)
   # NOT WORKING
   #addModuleSpecifications(cModuleSpecifications) |>
   #addModuleSpecifications(plpModuleSpecifications)
