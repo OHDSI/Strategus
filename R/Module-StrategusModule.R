@@ -135,24 +135,22 @@ StrategusModule <- R6::R6Class(
       rlang::inform(paste0(...))
     },
     .createLoggers = function(moduleExecutionSettings) {
-      # TODO: Attaching these module-level loggers
-      # seems to create an issue whereby only messages
-      # emitted by the PL package are logged for some reason.
-      # Come back to this..
-      #
       # Establish loggers for the module execution
-      # ParallelLogger::addDefaultFileLogger(
-      #   name = "MODULE_LOGGER",
-      #   fileName = file.path(moduleExecutionSettings$resultsSubFolder, "log.txt")
-      # )
-      # ParallelLogger::addDefaultErrorReportLogger(
-      #   name = "MODULE_ERROR_LOGGER",
-      #   file.path(moduleExecutionSettings$resultsSubFolder, "errorReport.R")
-      # )
+      if (!dir.exists(moduleExecutionSettings$resultsSubFolder)) {
+        dir.create(moduleExecutionSettings$resultsSubFolder)
+      }
+      ParallelLogger::addDefaultFileLogger(
+        name = "MODULE_LOGGER",
+        fileName = file.path(moduleExecutionSettings$resultsSubFolder, "log.txt")
+      )
+      ParallelLogger::addDefaultErrorReportLogger(
+        name = "MODULE_ERROR_LOGGER",
+        file.path(moduleExecutionSettings$resultsSubFolder, "errorReportR.txt")
+      )
     },
     .clearLoggers = function() {
-      #ParallelLogger::unregisterLogger("MODULE_LOGGER")
-      #ParallelLogger::unregisterLogger("MODULE_ERROR_LOGGER")
+      ParallelLogger::unregisterLogger("MODULE_LOGGER")
+      ParallelLogger::unregisterLogger("MODULE_ERROR_LOGGER")
     },
     .createJobContext = function(analysisSpecifications, executionSettings) {
       # Make sure this is created each call
