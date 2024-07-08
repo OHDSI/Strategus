@@ -50,7 +50,10 @@ createDatabaseMetaData <- function(executionSettings, connectionDetails) {
   }
 
   resultsDataModel <- CohortGenerator::readCsv(
-    file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
+    file = system.file(
+      file.path("csv", "databaseMetaDataRdms.csv"),
+      package = "Strategus"
+    ),
     warnOnCaseMismatch = FALSE
   )
 

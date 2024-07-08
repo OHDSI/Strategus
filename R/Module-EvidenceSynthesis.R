@@ -45,10 +45,10 @@ EvidenceSynthesisModule <- R6::R6Class(
         minCellCount = jobContext$moduleExecutionSettings$minCellCount
       )
 
-      # TODO: This needs to go into the package
-      #file.copy("resultsDataModelSpecification.csv", file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "resultsDataModelSpecification.csv"))
-      invisible(NULL)
-
+      file.copy(
+        from = private$.getResultsDataModelSpecificationFileLocation(),
+        to = file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "resultsDataModelSpecification.csv")
+      )
       private$.clearLoggers()
     },
     #' @description Create the results schema for the module
@@ -57,7 +57,20 @@ EvidenceSynthesisModule <- R6::R6Class(
     #' @param tablePrefix The prefix to use to append to the results tables (optional)
     createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
       super$createResultsSchema(resultsConnectionDetails, resultsSchema, tablePrefix)
-      warning("NOT IMPLEMENTED")
+      if (resultsConnectionDetails$dbms == "sqlite" & resultsSchema != "main") {
+        stop("Invalid schema for sqlite, use databaseSchema = 'main'")
+      }
+
+      connection <- DatabaseConnector::connect(resultsConnectionDetails)
+      on.exit(DatabaseConnector::disconnect(resultsConnectionDetails))
+
+      # Create the results model
+      sql <- ResultModelManager::generateSqlSchema(
+        csvFilepath = private$.getResultsDataModelSpecificationFileLocation()
+      )
+      sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsSchema)
+      sql <- SqlRender::translate(sql = sql, targetDialect = connection@dbms)
+      DatabaseConnector::executeSql(connection, sql)
     },
     #' @description Upload the results for the module
     #' @param resultsConnectionDetails The connection details to the results DB
@@ -65,7 +78,23 @@ EvidenceSynthesisModule <- R6::R6Class(
     #' @param resultsExecutionSettings The results execution settings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
-      warning("NOT IMPLEMENTED")
+      jobContext <- private$jobContext
+      resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
+
+      # TODO: The decisions to set the parameters:
+      #    forceOverWriteOfSpecifications = FALSE
+      #    purgeSiteDataBeforeUploading = FALSE
+      # needs discussion.
+      ResultModelManager::uploadResults(
+        connectionDetails = resultsConnectionDetails,
+        schema = resultsExecutionSettings$resultsDatabaseSchema,
+        resultsFolder = resultsFolder,
+        forceOverWriteOfSpecifications = FALSE,
+        purgeSiteDataBeforeUploading = FALSE,
+        runCheckAndFixCommands = FALSE,
+        specifications = private$.getResultsDataModelSpecification(),
+        warnOnMissingTable = FALSE
+      )
     },
     #' @description Creates the module Specifications
     #' @param evidenceSynthesisAnalysisList A list of objects of type `EvidenceSynthesisAnalysis`` as generated
@@ -935,11 +964,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       readr::write_csv(data, fileName, append = append)
     },
     .createEmptyResult = function(tableName = "") {
-      columns <- readr::read_csv(
-        file = "resultsDataModelSpecification.csv",
-        show_col_types = FALSE
-      ) |>
-        SqlRender::snakeCaseToCamelCaseNames() |>
+      columns <- private$.getResultsDataModelSpecification() |>
         filter(.data$tableName == !!tableName) |>
         pull(.data$columnName) |>
         SqlRender::snakeCaseToCamelCase()
@@ -951,6 +976,18 @@ EvidenceSynthesisModule <- R6::R6Class(
     },
     .quoteSql = function(values) {
       return(paste0("'", paste(values, collapse = "', '"), "'"))
+    },
+    .getResultsDataModelSpecification = function() {
+      rdms <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation()
+      )
+      return(rdms)
+    },
+    .getResultsDataModelSpecificationFileLocation = function() {
+      return(system.file(
+        file.path("csv", "evidenceSynthesisRdms.csv"),
+        package = "Strategus"
+      ))
     }
   )
 )

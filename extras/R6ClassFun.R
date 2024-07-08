@@ -483,12 +483,34 @@ esAnalysisSpecifications <- Strategus::createEmptyAnalysisSpecificiations() |>
 
 ParallelLogger::saveSettingsToJson(esAnalysisSpecifications, file.path(outputFolder, "evidenceSynthesisAnalysisSpecifications.json"))
 
-debugonce(Strategus::execute)
+
+resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+  resultsDatabaseSchema = "main",
+  resultsFolder = file.path(outputFolder, "evidence_sythesis", "results_folder"),
+  workFolder = file.path(outputFolder, "evidence_sythesis", "work_folder")
+)
+
+#debugonce(Strategus::execute)
 Strategus::execute(
   analysisSpecifications = esAnalysisSpecifications,
   executionSettings = resultsExecutionSettings,
   connectionDetails = resultsConnectionDetails
 )
+
+#debugonce(Strategus::createResultDataModels)
+Strategus::createResultDataModels(
+  analysisSpecifications = esAnalysisSpecifications,
+  resultsExecutionSettings = resultsExecutionSettings,
+  resultsConnectionDetails = resultsConnectionDetails
+)
+
+#debugonce(Strategus::uploadResults)
+Strategus::uploadResults(
+  analysisSpecifications = esAnalysisSpecifications,
+  resultsExecutionSettings = resultsExecutionSettings,
+  resultsConnectionDetails = resultsConnectionDetails
+)
+
 
 
 # Review results --------------------------

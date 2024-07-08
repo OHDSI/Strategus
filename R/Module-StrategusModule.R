@@ -137,7 +137,7 @@ StrategusModule <- R6::R6Class(
     .createLoggers = function(moduleExecutionSettings) {
       # Establish loggers for the module execution
       if (!dir.exists(moduleExecutionSettings$resultsSubFolder)) {
-        dir.create(moduleExecutionSettings$resultsSubFolder)
+        dir.create(moduleExecutionSettings$resultsSubFolder, recursive = T)
       }
       ParallelLogger::addDefaultFileLogger(
         name = "MODULE_LOGGER",
