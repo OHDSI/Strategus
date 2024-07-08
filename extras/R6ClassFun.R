@@ -222,7 +222,6 @@ for (exposureOfInterestId in exposureOfInterestIds) {
   }
 }
 
-# Analysis settings ------------------------------------------------------------
 getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
   studyStartDate = "",
   studyEndDate = "",
@@ -297,7 +296,6 @@ sccsAnalysis1 <- SelfControlledCaseSeries::createSccsAnalysis(
 
 sccsAnalysisList <- list(sccsAnalysis1)
 
-# SCCS module specs ------------------------------------------------------------
 sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
   sccsAnalysisList = sccsAnalysisList,
   exposuresOutcomeList = exposuresOutcomeList,
@@ -357,13 +355,14 @@ plpModuleSpecifications <- plpModuleSettingsCreator$createModuleSpecifications(
 analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
+  # WORKING
   addModuleSpecifications(cgModuleSettings) |>
   addModuleSpecifications(cdModuleSpecifications) |>
   addModuleSpecifications(cmModuleSpecifications) |>
-  addModuleSpecifications(sccsModuleSpecifications)
-  # NOT WORKING
+  addModuleSpecifications(sccsModuleSpecifications) |>
+  addModuleSpecifications(plpModuleSpecifications)
+# NOT WORKING
   #addModuleSpecifications(cModuleSpecifications) |>
-  #addModuleSpecifications(plpModuleSpecifications)
   # MOSTLY WORKING
   #addModuleSpecifications(ciModuleSettings) |>
 
@@ -391,7 +390,6 @@ connectionDetails <- Eunomia::getEunomiaConnectionDetails(
   overwrite = TRUE
 )
 #debugonce(Strategus::execute)
-#debugonce(CohortDiagnostics:::computeCohortCounts)
 Strategus::execute(
   analysisSpecifications = analysisSpecifications,
   executionSettings = executionSettings,

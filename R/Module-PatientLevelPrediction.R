@@ -41,7 +41,7 @@ PatientLevelPredictionModule <- R6::R6Class(
       )
 
       jobContext$settings <- private$.setCovariateSchemaTable(
-        modelDesignList = jobContext$settings,
+        modelDesignList = jobContext$settings$modelDesignList,
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
@@ -97,8 +97,6 @@ PatientLevelPredictionModule <- R6::R6Class(
     #' @param resultsExecutionSettings The results execution settings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
-      conn <- DatabaseConnector::connect(resultsConnectionDetails)
-      on.exit(DatabaseConnector::disconnect(conn))
 
       databaseSchemaSettings <- PatientLevelPrediction::createDatabaseSchemaSettings(
         resultSchema = resultsExecutionSettings$resultsDatabaseSchema,
@@ -109,7 +107,7 @@ PatientLevelPredictionModule <- R6::R6Class(
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       PatientLevelPrediction::insertCsvToDatabase(
         csvFolder = resultsFolder,
-        conn = conn,
+        connectionDetails = resultsConnectionDetails,
         databaseSchemaSettings = databaseSchemaSettings,
         modelSaveLocation = file.path(resultsFolder, "dbmodels"),
         csvTableAppend = ""
