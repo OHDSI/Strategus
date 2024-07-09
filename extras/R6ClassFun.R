@@ -348,23 +348,20 @@ plpModuleSpecifications <- plpModuleSettingsCreator$createModuleSpecifications(
   modelDesignList = modelDesignList
 )
 
-
-
-
 # Create analysis specifications ---------------
 analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   # WORKING
-  addModuleSpecifications(cgModuleSettings) |>
-  addModuleSpecifications(cdModuleSpecifications) |>
-  addModuleSpecifications(cmModuleSpecifications) |>
-  addModuleSpecifications(sccsModuleSpecifications) |>
-  addModuleSpecifications(plpModuleSpecifications)
-# NOT WORKING
-  #addModuleSpecifications(cModuleSpecifications) |>
+  addCohortGeneratorModuleSpecifications(cgModuleSettings) |>
+  addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
+  addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
+  addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
+  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
+  # NOT WORKING
+  #addCharacterizationModuleSpecifications(cModuleSpecifications) |>
   # MOSTLY WORKING
-  #addModuleSpecifications(ciModuleSettings) |>
+  #addCohortIncidenceModuleSpecifications(ciModuleSettings)
 
 # Cleanup any prior results -----------------
 outputFolder <- "D:/TEMP/StrategusR6Testing"

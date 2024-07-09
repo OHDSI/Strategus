@@ -76,6 +76,104 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
   return(analysisSpecifications)
 }
 
+#' @export
+addCharacterizationModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CharacterizationModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' @export
+addCohortDiagnosticsModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortDiagnosticsModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' @export
+addCohortGeneratorModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortGeneratorModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' @export
+addCohortIncidenceModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortIncidenceModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' @export
+addCohortMethodeModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortMethodModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' @export
+addEvidenceSynthesisModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "EvidenceSynthesisModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' @export
+addPatientLevelPredictionModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "PatientLevelPredictionModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' @export
+addSelfControlledCaseSeriesModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "SelfControlledCaseSeriesModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+addAndValidateModuleSpecifications <- function(moduleName, analysisSpecifications, moduleSpecifications) {
+  moduleObj <- get(moduleName)$new()
+  moduleObj$validateModuleSpecifications(moduleSpecifications)
+  analysisSpecifications <- addModuleSpecifications(
+    analysisSpecifications = analysisSpecifications,
+    moduleSpecifications = moduleSpecifications
+  )
+  return(analysisSpecifications)
+}
+
 #' Create CDM execution settings
 #'
 #' @param workDatabaseSchema         A database schema where intermediate data can be stored. The user (as identified in the
