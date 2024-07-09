@@ -18,6 +18,7 @@ CohortMethodModule <- R6::R6Class(
     #' @param executionSettings The execution settings for the study
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
+      on.exit(private$.clearLoggers())
       checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
       jobContext <- private$jobContext
@@ -54,7 +55,6 @@ CohortMethodModule <- R6::R6Class(
         warnOnFileNameCaseMismatch = FALSE
       )
       private$.message(paste("Results available at:", exportFolder))
-      private$.clearLoggers()
     },
     #' @description Create the results schema for the module
     #' @param resultsConnectionDetails The connection details to the results DB

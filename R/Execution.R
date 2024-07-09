@@ -92,11 +92,14 @@ execute <- function(analysisSpecifications,
   }
 
   # Set up logging
+  if (!dir.exists(dirname(executionSettings$logFileName))) {
+    dir.create(dirname(executionSettings$logFileName), recursive = T)
+  }
   ParallelLogger::addDefaultFileLogger(
     name = "STRATEGUS_LOGGER",
     fileName = executionSettings$logFileName
   )
-  on.exit(ParallelLogger::clearLoggers())
+  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
 
   if (is(executionSettings, "CdmExecutionSettings")) {
     executionSettings$databaseId <- createDatabaseMetaData(
