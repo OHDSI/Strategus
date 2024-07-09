@@ -18,7 +18,7 @@ for performing meta-analysis and forest plots
 \itemize{
 \item \href{#method-EvidenceSynthesisModule-new}{\code{EvidenceSynthesisModule$new()}}
 \item \href{#method-EvidenceSynthesisModule-execute}{\code{EvidenceSynthesisModule$execute()}}
-\item \href{#method-EvidenceSynthesisModule-createResultsSchema}{\code{EvidenceSynthesisModule$createResultsSchema()}}
+\item \href{#method-EvidenceSynthesisModule-createResultsDataModel}{\code{EvidenceSynthesisModule$createResultsDataModel()}}
 \item \href{#method-EvidenceSynthesisModule-uploadResults}{\code{EvidenceSynthesisModule$uploadResults()}}
 \item \href{#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}}
 \item \href{#method-EvidenceSynthesisModule-validateModuleSpecifications}{\code{EvidenceSynthesisModule$validateModuleSpecifications()}}
@@ -74,12 +74,12 @@ Executes the EvidenceSynthesis package
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-EvidenceSynthesisModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-EvidenceSynthesisModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = ""
@@ -89,7 +89,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

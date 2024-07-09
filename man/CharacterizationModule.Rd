@@ -24,7 +24,7 @@ package
 \itemize{
 \item \href{#method-CharacterizationModule-new}{\code{CharacterizationModule$new()}}
 \item \href{#method-CharacterizationModule-execute}{\code{CharacterizationModule$execute()}}
-\item \href{#method-CharacterizationModule-createResultsSchema}{\code{CharacterizationModule$createResultsSchema()}}
+\item \href{#method-CharacterizationModule-createResultsDataModel}{\code{CharacterizationModule$createResultsDataModel()}}
 \item \href{#method-CharacterizationModule-uploadResults}{\code{CharacterizationModule$uploadResults()}}
 \item \href{#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}}
 \item \href{#method-CharacterizationModule-clone}{\code{CharacterizationModule$clone()}}
@@ -75,12 +75,12 @@ Execute characterization
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CharacterizationModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-CharacterizationModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-CharacterizationModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-CharacterizationModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = self$tablePrefix
@@ -90,7 +90,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

@@ -15,7 +15,7 @@ database in the OMOP Common Data Model.
 \itemize{
 \item \href{#method-CohortMethodModule-new}{\code{CohortMethodModule$new()}}
 \item \href{#method-CohortMethodModule-execute}{\code{CohortMethodModule$execute()}}
-\item \href{#method-CohortMethodModule-createResultsSchema}{\code{CohortMethodModule$createResultsSchema()}}
+\item \href{#method-CohortMethodModule-createResultsDataModel}{\code{CohortMethodModule$createResultsDataModel()}}
 \item \href{#method-CohortMethodModule-uploadResults}{\code{CohortMethodModule$uploadResults()}}
 \item \href{#method-CohortMethodModule-createModuleSpecifications}{\code{CohortMethodModule$createModuleSpecifications()}}
 \item \href{#method-CohortMethodModule-validateModuleSpecifications}{\code{CohortMethodModule$validateModuleSpecifications()}}
@@ -66,12 +66,12 @@ Executes the CohortMethod package
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CohortMethodModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-CohortMethodModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-CohortMethodModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortMethodModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortMethodModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{CohortMethodModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = ""
@@ -81,7 +81,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

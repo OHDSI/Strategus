@@ -80,12 +80,12 @@ CharacterizationModule <- R6::R6Class(
 
       private$.message(paste("Results available at:", resultsFolder))
     },
-    #' @description Create the results schema for the module
-    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @description Create the results data model for the module
+    #' @param resultsConnectionDetails The connection details to the results database
     #' @param resultsSchema The schema holding the results
     #' @param tablePrefix The prefix to use to append to the results tables (optional)
-    createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = self$tablePrefix) {
-      super$createResultsSchema(resultsConnectionDetails, resultsSchema, tablePrefix)
+    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = self$tablePrefix) {
+      super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
       Characterization::createCharacterizationTables(
         connectionDetails = resultsConnectionDetails,
         resultSchema = resultsSchema,

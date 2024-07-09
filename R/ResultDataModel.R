@@ -14,37 +14,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Create Result Data Models
+#' Create Result Data Model
+#'
 #' @description
 #' Use this at the study design stage to create data models for modules
-#' This functions loads modules and executes any custom code to create schemas in a results database
-#' If recreate is set to TRUE all existing data will be removed, otherwise
+#' This functions loads modules and executes any custom code to create
+#' the results data model in the specified schema in the results database.
 #'
 #' @inheritParams execute
 #'
 #' @export
-createResultDataModels <- function(analysisSpecifications,
-                                   resultsExecutionSettings,
-                                   resultsConnectionDetails) {
+createResultDataModel <- function(analysisSpecifications,
+                                  resultsDataModelSettings,
+                                  resultsConnectionDetails) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
-  checkmate::assertClass(resultsExecutionSettings, "ResultsExecutionSettings", add = errorMessages)
+  checkmate::assertClass(resultsDataModelSettings, "ResultsDataModelSettings", add = errorMessages)
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # The DatabaseMetaData is a special case...
-  .createDatabaseMetadataTables(
+  .createDatabaseMetadataResultsDataModel(
     resultsConnectionDetails = resultsConnectionDetails,
-    resultsDatabaseSchema = resultsExecutionSettings$resultsDatabaseSchema,
-    resultsFolder = resultsExecutionSettings$resultsFolder
+    resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema,
+    resultsFolder = resultsDataModelSettings$resultsFolder
   )
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     moduleObj <- get(moduleName)$new()
-    moduleObj$createResultsSchema(
+    moduleObj$createResultsDataModel(
       resultsConnectionDetails = resultsConnectionDetails,
-      resultsSchema = resultsExecutionSettings$resultsDatabaseSchema,
+      resultsSchema = resultsDataModelSettings$resultsDatabaseSchema
     )
   }
 }
@@ -55,7 +56,7 @@ createResultDataModels <- function(analysisSpecifications,
 #'
 #' Upload the results for a given analysis
 #'
-#' @inheritParams createResultDataModels
+#' @inheritParams createResultDataModel
 #'
 #' @export
 uploadResults <- function(analysisSpecifications,

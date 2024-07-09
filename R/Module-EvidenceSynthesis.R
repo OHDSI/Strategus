@@ -51,12 +51,12 @@ EvidenceSynthesisModule <- R6::R6Class(
         to = file.path(jobContext$moduleExecutionSettings$resultsSubFolder, "resultsDataModelSpecification.csv")
       )
     },
-    #' @description Create the results schema for the module
-    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @description Create the results data model for the module
+    #' @param resultsConnectionDetails The connection details to the results database
     #' @param resultsSchema The schema holding the results
     #' @param tablePrefix The prefix to use to append to the results tables (optional)
-    createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
-      super$createResultsSchema(resultsConnectionDetails, resultsSchema, tablePrefix)
+    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
+      super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
       if (resultsConnectionDetails$dbms == "sqlite" & resultsSchema != "main") {
         stop("Invalid schema for sqlite, use databaseSchema = 'main'")
       }

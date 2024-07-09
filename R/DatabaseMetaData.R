@@ -132,9 +132,9 @@ createDatabaseMetaData <- function(executionSettings, connectionDetails) {
   return(databaseId)
 }
 
-.createDatabaseMetadataTables <- function(resultsConnectionDetails,
-                                          resultsDatabaseSchema,
-                                          resultsFolder) {
+.createDatabaseMetadataResultsDataModel <- function(resultsConnectionDetails,
+                                                    resultsDatabaseSchema,
+                                                    resultsFolder) {
   if (dir.exists(file.path(resultsFolder, "DatabaseMetaData"))) {
     databaseMetaDataResultsFolder <- file.path(resultsFolder, "DatabaseMetaData")
     rdmsFile <- file.path(databaseMetaDataResultsFolder, "resultsDataModelSpecification.csv")
@@ -157,6 +157,7 @@ createDatabaseMetaData <- function(executionSettings, connectionDetails) {
     }
   }
 }
+
 .uploadDatabaseMetadata <- function(resultsConnectionDetails,
                                     resultsDatabaseSchema,
                                     resultsFolder) {

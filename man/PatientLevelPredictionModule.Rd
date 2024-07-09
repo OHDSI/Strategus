@@ -22,7 +22,7 @@ database in the OMOP Common Data Model.
 \itemize{
 \item \href{#method-PatientLevelPredictionModule-new}{\code{PatientLevelPredictionModule$new()}}
 \item \href{#method-PatientLevelPredictionModule-execute}{\code{PatientLevelPredictionModule$execute()}}
-\item \href{#method-PatientLevelPredictionModule-createResultsSchema}{\code{PatientLevelPredictionModule$createResultsSchema()}}
+\item \href{#method-PatientLevelPredictionModule-createResultsDataModel}{\code{PatientLevelPredictionModule$createResultsDataModel()}}
 \item \href{#method-PatientLevelPredictionModule-uploadResults}{\code{PatientLevelPredictionModule$uploadResults()}}
 \item \href{#method-PatientLevelPredictionModule-createModuleSpecifications}{\code{PatientLevelPredictionModule$createModuleSpecifications()}}
 \item \href{#method-PatientLevelPredictionModule-validateModuleSpecifications}{\code{PatientLevelPredictionModule$validateModuleSpecifications()}}
@@ -73,12 +73,12 @@ Executes the PatientLevelPrediction package
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PatientLevelPredictionModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-PatientLevelPredictionModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-PatientLevelPredictionModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-PatientLevelPredictionModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = self$tablePrefix
@@ -88,7 +88,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

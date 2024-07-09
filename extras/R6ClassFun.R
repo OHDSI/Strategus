@@ -413,19 +413,16 @@ resultsConnectionDetails <- DatabaseConnector::createConnectionDetails(
   server = file.path(outputFolder, "results.sqlite")
 )
 
-# Create results schema tables -------------------------
-# NOTE: resultsExecutionSettings uses a diff. folder to hold
-# any/all results schema creation results
-resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+# Create results data model -------------------------
+resultsDataModelSettings <- Strategus::createResultsDataModelSettings(
   resultsDatabaseSchema = "main",
   resultsFolder = executionSettings$resultsFolder,
-  workFolder = file.path(outputFolder, "schema_creation", "work_folder")
 )
 
 # NOTE: CI has not implemented this so it will error out.
-Strategus::createResultDataModels(
+Strategus::createResultDataModel(
   analysisSpecifications = analysisSpecifications,
-  resultsExecutionSettings = resultsExecutionSettings,
+  resultsDataModelSettings = resultsDataModelSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
 

@@ -27,7 +27,7 @@ analysis specification}
 \itemize{
 \item \href{#method-CohortGeneratorModule-new}{\code{CohortGeneratorModule$new()}}
 \item \href{#method-CohortGeneratorModule-execute}{\code{CohortGeneratorModule$execute()}}
-\item \href{#method-CohortGeneratorModule-createResultsSchema}{\code{CohortGeneratorModule$createResultsSchema()}}
+\item \href{#method-CohortGeneratorModule-createResultsDataModel}{\code{CohortGeneratorModule$createResultsDataModel()}}
 \item \href{#method-CohortGeneratorModule-uploadResults}{\code{CohortGeneratorModule$uploadResults()}}
 \item \href{#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}}
 \item \href{#method-CohortGeneratorModule-createCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$createCohortSharedResourceSpecifications()}}
@@ -82,12 +82,12 @@ Generates the cohorts
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CohortGeneratorModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-CohortGeneratorModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = ""
@@ -97,7 +97,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

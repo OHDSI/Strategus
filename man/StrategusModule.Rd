@@ -31,7 +31,7 @@ specification.}
 \itemize{
 \item \href{#method-StrategusModule-new}{\code{StrategusModule$new()}}
 \item \href{#method-StrategusModule-execute}{\code{StrategusModule$execute()}}
-\item \href{#method-StrategusModule-createResultsSchema}{\code{StrategusModule$createResultsSchema()}}
+\item \href{#method-StrategusModule-createResultsDataModel}{\code{StrategusModule$createResultsDataModel()}}
 \item \href{#method-StrategusModule-uploadResults}{\code{StrategusModule$uploadResults()}}
 \item \href{#method-StrategusModule-createModuleSpecifications}{\code{StrategusModule$createModuleSpecifications()}}
 \item \href{#method-StrategusModule-createSharedResourcesSpecifications}{\code{StrategusModule$createSharedResourcesSpecifications()}}
@@ -76,12 +76,12 @@ Executes the module
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-StrategusModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-StrategusModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-StrategusModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = ""
@@ -91,7 +91,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

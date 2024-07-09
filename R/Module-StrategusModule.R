@@ -63,12 +63,16 @@ StrategusModule <- R6::R6Class(
       private$.createLoggers(private$jobContext$moduleExecutionSettings)
       private$.message('EXECUTING: ', self$moduleName)
     },
-    #' @description Create the results schema for the module
-    #' @param resultsConnectionDetails The connection details to the results DB
+    #' @description Create the results data model for the module
+    #' @param resultsConnectionDetails The connection details to the results database
     #' @param resultsSchema The schema holding the results
     #' @param tablePrefix The prefix to use to append to the results tables (optional)
-    createResultsSchema = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
-      private$.message('CREATE RESULTS SCHEMA: ', self$moduleName)
+    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
+      checkmate::assertCharacter(resultsSchema, len = 1, add = errorMessages)
+      checkmate::reportAssertions(collection = errorMessages)
+      private$.message('CREATE RESULTS DATA MODEL: ', self$moduleName)
     },
     #' @description Upload the results for the module
     #' @param resultsConnectionDetails The connection details to the results DB

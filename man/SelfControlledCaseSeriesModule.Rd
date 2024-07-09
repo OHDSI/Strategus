@@ -23,7 +23,7 @@ in an observational database in the OMOP Common Data Model.
 \itemize{
 \item \href{#method-SelfControlledCaseSeriesModule-new}{\code{SelfControlledCaseSeriesModule$new()}}
 \item \href{#method-SelfControlledCaseSeriesModule-execute}{\code{SelfControlledCaseSeriesModule$execute()}}
-\item \href{#method-SelfControlledCaseSeriesModule-createResultsSchema}{\code{SelfControlledCaseSeriesModule$createResultsSchema()}}
+\item \href{#method-SelfControlledCaseSeriesModule-createResultsDataModel}{\code{SelfControlledCaseSeriesModule$createResultsDataModel()}}
 \item \href{#method-SelfControlledCaseSeriesModule-uploadResults}{\code{SelfControlledCaseSeriesModule$uploadResults()}}
 \item \href{#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}}
 \item \href{#method-SelfControlledCaseSeriesModule-validateModuleSpecifications}{\code{SelfControlledCaseSeriesModule$validateModuleSpecifications()}}
@@ -74,12 +74,12 @@ Executes the SelfControlledCaseSeries package
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = ""
@@ -89,7 +89,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

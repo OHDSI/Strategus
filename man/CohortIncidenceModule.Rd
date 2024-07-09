@@ -14,7 +14,7 @@ Computes incidence rates for cohorts against the OMOP CDM
 \itemize{
 \item \href{#method-CohortIncidenceModule-new}{\code{CohortIncidenceModule$new()}}
 \item \href{#method-CohortIncidenceModule-execute}{\code{CohortIncidenceModule$execute()}}
-\item \href{#method-CohortIncidenceModule-createResultsSchema}{\code{CohortIncidenceModule$createResultsSchema()}}
+\item \href{#method-CohortIncidenceModule-createResultsDataModel}{\code{CohortIncidenceModule$createResultsDataModel()}}
 \item \href{#method-CohortIncidenceModule-uploadResults}{\code{CohortIncidenceModule$uploadResults()}}
 \item \href{#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}}
 \item \href{#method-CohortIncidenceModule-validateModuleSpecifications}{\code{CohortIncidenceModule$validateModuleSpecifications()}}
@@ -65,12 +65,12 @@ Execute the CohortIncidence package
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CohortIncidenceModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-CohortIncidenceModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-CohortIncidenceModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortIncidenceModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
   tablePrefix = ""
@@ -80,7 +80,7 @@ Create the results schema for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

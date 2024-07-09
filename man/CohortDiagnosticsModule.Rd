@@ -22,7 +22,7 @@ against the OMOP Common Data Model.
 \itemize{
 \item \href{#method-CohortDiagnosticsModule-new}{\code{CohortDiagnosticsModule$new()}}
 \item \href{#method-CohortDiagnosticsModule-execute}{\code{CohortDiagnosticsModule$execute()}}
-\item \href{#method-CohortDiagnosticsModule-createResultsSchema}{\code{CohortDiagnosticsModule$createResultsSchema()}}
+\item \href{#method-CohortDiagnosticsModule-createResultsDataModel}{\code{CohortDiagnosticsModule$createResultsDataModel()}}
 \item \href{#method-CohortDiagnosticsModule-uploadResults}{\code{CohortDiagnosticsModule$uploadResults()}}
 \item \href{#method-CohortDiagnosticsModule-createModuleSpecifications}{\code{CohortDiagnosticsModule$createModuleSpecifications()}}
 \item \href{#method-CohortDiagnosticsModule-validateModuleSpecifications}{\code{CohortDiagnosticsModule$validateModuleSpecifications()}}
@@ -73,22 +73,22 @@ Executes the CohortDiagnostics package
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CohortDiagnosticsModule-createResultsSchema"></a>}}
-\if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-createResultsSchema}{}}}
-\subsection{Method \code{createResultsSchema()}}{
-Create the results schema for the module
+\if{html}{\out{<a id="method-CohortDiagnosticsModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$createResultsSchema(
+\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsSchema,
-  tablePrefix = ""
+  tablePrefix = self$tablePrefix
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database}
 
 \item{\code{resultsSchema}}{The schema holding the results}
 

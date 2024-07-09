@@ -275,3 +275,36 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
   class(executionSettings) <- c("ResultsExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
+
+#' Create Results Data Model Settings
+#'
+#' @param resultsDatabaseSchema      A schema where the results tables are stored
+#' @param resultsFolder              A folder in the local file system where the execution results are held.
+#'                                   TODO: Why? Creating the results data model needs this parameter
+#'                                   for the DatabaseMetaData which feels inconsistent.
+#' @param logFileName                Logging information from the results data model creation
+#'
+#' @return
+#' An object of type `ResultsDataModelSettings`
+#'
+#' @export
+createResultsDataModelSettings <- function(resultsDatabaseSchema,
+                                           resultsFolder,
+                                           logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt")) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  # Normalize paths to convert relative paths to absolute paths
+  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+  logFileName <- normalizePath(logFileName, mustWork = F)
+
+  executionSettings <- list()
+  for (name in names(formals(createResultsDataModelSettings))) {
+    executionSettings[[name]] <- get(name)
+  }
+  class(executionSettings) <- c("ResultsDataModelSettings")
+  return(executionSettings)
+}
