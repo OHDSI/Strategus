@@ -78,14 +78,14 @@ PatientLevelPredictionModule <- R6::R6Class(
     },
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
-    #' @template resultsSchema
+    #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = self$tablePrefix) {
-      super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
+      super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
       PatientLevelPrediction::createPlpResultTables(
         connectionDetails = resultsConnectionDetails,
         targetDialect = resultsConnectionDetails$dbms,
-        resultSchema = resultsSchema,
+        resultSchema = resultsDatabaseSchema,
         deleteTables = F,
         createTables = T,
         tablePrefix = tablePrefix

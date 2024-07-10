@@ -501,6 +501,7 @@ Strategus::createResultDataModel(
   resultsConnectionDetails = resultsConnectionDetails
 )
 
+resultsUploadSettings$resultsFolder <- resultsExecutionSettings$resultsFolder
 Strategus::uploadResults(
   analysisSpecifications = esAnalysisSpecifications,
   resultsUploadSettings = resultsUploadSettings,

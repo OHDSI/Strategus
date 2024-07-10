@@ -85,10 +85,10 @@ CharacterizationModule <- R6::R6Class(
     },
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
-    #' @template resultsSchema
+    #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = self$tablePrefix) {
-      super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
+      super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
       resultsDataModel <-private$.getResultsDataModelSpecification()
       resultsDataModel$tableName <- paste0(tablePrefix, resultsDataModel$tableName)
       sql <- ResultModelManager::generateSqlSchema(
@@ -96,7 +96,7 @@ CharacterizationModule <- R6::R6Class(
       )
       sql <- SqlRender::render(
         sql = sql,
-        database_schema = resultsSchema
+        database_schema = resultsDatabaseSchema
       )
       connection <- DatabaseConnector::connect(
         connectionDetails = resultsConnectionDetails

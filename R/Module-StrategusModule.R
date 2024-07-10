@@ -65,12 +65,12 @@ StrategusModule <- R6::R6Class(
     },
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
-    #' @template resultsSchema
+    #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
-      checkmate::assertCharacter(resultsSchema, len = 1, add = errorMessages)
+      checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
       private$.message('CREATE RESULTS DATA MODEL: ', self$moduleName)
     },

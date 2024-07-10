@@ -58,13 +58,13 @@ CohortMethodModule <- R6::R6Class(
     },
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
-    #' @template resultsSchema
+    #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
-      super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
+      super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
       CohortMethod::createResultsDataModel(
         connectionDetails = resultsConnectionDetails,
-        databaseSchema = resultsSchema,
+        databaseSchema = resultsDatabaseSchema,
         tablePrefix = tablePrefix
       )
     },

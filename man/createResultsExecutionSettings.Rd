@@ -13,7 +13,7 @@ createResultsExecutionSettings(
 )
 }
 \arguments{
-\item{resultsDatabaseSchema}{A schema where the results tables are stored}
+\item{resultsDatabaseSchema}{The schema in the results database that holds the results data model.}
 
 \item{workFolder}{A folder in the local file system where intermediate results can be written.}
 

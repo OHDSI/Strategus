@@ -89,7 +89,7 @@ Create the results data model for the module
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StrategusModule$createResultsDataModel(
   resultsConnectionDetails,
-  resultsSchema,
+  resultsDatabaseSchema,
   tablePrefix = ""
 )}\if{html}{\out{</div>}}
 }
@@ -105,7 +105,7 @@ is an object of class \code{connectionDetails} as created by the
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{resultsSchema}}{The schema in the results database that holds the results data model.}
+\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }

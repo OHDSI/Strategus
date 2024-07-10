@@ -291,7 +291,7 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
 
 #' Create Results execution settings
 #'
-#' @param resultsDatabaseSchema      A schema where the results tables are stored
+#' @template resultsDatabaseSchema
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
 #' @template resultsFolder
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
@@ -334,7 +334,7 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #' TODO: Why do we need resultsFolder? Creating the results data model needs this parameter
 #' for the DatabaseMetaData which feels inconsistent.
 #'
-#' @param resultsDatabaseSchema      A schema where the results tables are stored
+#' @template resultsDatabaseSchema
 #' @template resultsFolder
 #' @param logFileName                Logging information from the results data model creation
 #'
@@ -365,7 +365,7 @@ createResultsDataModelSettings <- function(resultsDatabaseSchema,
 
 #' Create results upload settings
 #'
-#' @param resultsDatabaseSchema      A schema where the results tables are stored. Use [@seealso [createResultsDataModel()]] to setup this schema.
+#' @template resultsDatabaseSchema
 #' @template resultsFolder
 #' @param purgeSiteDataBeforeUploading If TRUE, before inserting data for a specific databaseId all the data for that site will be dropped. This assumes the results folder contains the full data for that data site.
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`

@@ -53,11 +53,11 @@ EvidenceSynthesisModule <- R6::R6Class(
     },
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
-    #' @template resultsSchema
+    #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
-      super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
-      if (resultsConnectionDetails$dbms == "sqlite" & resultsSchema != "main") {
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
+      super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
+      if (resultsConnectionDetails$dbms == "sqlite" & resultsDatabaseSchema != "main") {
         stop("Invalid schema for sqlite, use databaseSchema = 'main'")
       }
 
@@ -68,7 +68,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       sql <- ResultModelManager::generateSqlSchema(
         csvFilepath = private$.getResultsDataModelSpecificationFileLocation()
       )
-      sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsSchema)
+      sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
       sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
       DatabaseConnector::executeSql(connection, sql)
     },

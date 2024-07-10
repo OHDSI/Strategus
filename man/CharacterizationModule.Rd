@@ -88,7 +88,7 @@ Create the results data model for the module
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createResultsDataModel(
   resultsConnectionDetails,
-  resultsSchema,
+  resultsDatabaseSchema,
   tablePrefix = self$tablePrefix
 )}\if{html}{\out{</div>}}
 }
@@ -104,7 +104,7 @@ is an object of class \code{connectionDetails} as created by the
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{resultsSchema}}{The schema in the results database that holds the results data model.}
+\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }
@@ -155,37 +155,14 @@ Creates the CharacterizationModule Specifications
 \if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createModuleSpecifications(
   targetIds,
   outcomeIds,
-  outcomeWashoutDays = c(365),
-  minPriorObservation = 365,
   dechallengeStopInterval = 30,
   dechallengeEvaluationWindow = 30,
-  riskWindowStart = c(1, 1),
-  startAnchor = c("cohort start", "cohort start"),
-  riskWindowEnd = c(0, 365),
-  endAnchor = c("cohort end", "cohort end"),
-  minCharacterizationMean = 0.01,
-  covariateSettings = FeatureExtraction::createCovariateSettings(useDemographicsGender =
-    T, useDemographicsAge = T, useDemographicsAgeGroup = T, useDemographicsRace = T,
-    useDemographicsEthnicity = T, useDemographicsIndexYear = T, useDemographicsIndexMonth
-    = T, useDemographicsTimeInCohort = T, useDemographicsPriorObservationTime = T,
-    useDemographicsPostObservationTime = T, useConditionGroupEraLongTerm = T,
-    useDrugGroupEraOverlapping = T, useDrugGroupEraLongTerm = T,
-    useProcedureOccurrenceLongTerm = T, useMeasurementLongTerm = T, 
-    
-    useObservationLongTerm = T, useDeviceExposureLongTerm = T,
-    useVisitConceptCountLongTerm = T, useConditionGroupEraShortTerm = T,
-    useDrugGroupEraShortTerm = T, useProcedureOccurrenceShortTerm = T,
-    useMeasurementShortTerm = T, useObservationShortTerm = T, useDeviceExposureShortTerm
-    = T, useVisitConceptCountShortTerm = T, endDays = 0, longTermStartDays = -365,
-    shortTermStartDays = -30),
-  caseCovariateSettings =
-    Characterization::createDuringCovariateSettings(useConditionGroupEraDuring = T,
-    useDrugGroupEraDuring = T, useProcedureOccurrenceDuring = T, useDeviceExposureDuring
-    = T, useMeasurementDuring = T, useObservationDuring = T, useVisitConceptCountDuring =
-    T),
-  casePreTargetDuration = 365,
-  casePostOutcomeDuration = 365,
-  incremental = T
+  timeAtRisk = data.frame(riskWindowStart = c(1, 1), startAnchor = c("cohort start",
+    "cohort start"), riskWindowEnd = c(0, 365), endAnchor = c("cohort end",
+    "cohort end")),
+  minPriorObservation = 0,
+  minCharacterizationMean = 0,
+  covariateSettings = FeatureExtraction::createDefaultCovariateSettings()
 )}\if{html}{\out{</div>}}
 }
 
@@ -196,33 +173,17 @@ Creates the CharacterizationModule Specifications
 
 \item{\code{outcomeIds}}{A vector of cohort IDs to use as the outcome(s) for the characterization}
 
-\item{\code{outcomeWashoutDays}}{The number of days between outcomes for washout}
-
-\item{\code{minPriorObservation}}{The minimum prior observation (in the target?)}
-
 \item{\code{dechallengeStopInterval}}{description}
 
 \item{\code{dechallengeEvaluationWindow}}{description}
 
-\item{\code{riskWindowStart}}{description}
+\item{\code{timeAtRisk}}{description}
 
-\item{\code{startAnchor}}{description}
-
-\item{\code{riskWindowEnd}}{description}
-
-\item{\code{endAnchor}}{description}
+\item{\code{minPriorObservation}}{description}
 
 \item{\code{minCharacterizationMean}}{description}
 
 \item{\code{covariateSettings}}{description}
-
-\item{\code{caseCovariateSettings}}{description}
-
-\item{\code{casePreTargetDuration}}{description}
-
-\item{\code{casePostOutcomeDuration}}{description}
-
-\item{\code{incremental}}{description}
 }
 \if{html}{\out{</div>}}
 }

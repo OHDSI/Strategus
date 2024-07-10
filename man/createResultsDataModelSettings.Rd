@@ -11,7 +11,7 @@ createResultsDataModelSettings(
 )
 }
 \arguments{
-\item{resultsDatabaseSchema}{A schema where the results tables are stored}
+\item{resultsDatabaseSchema}{The schema in the results database that holds the results data model.}
 
 \item{resultsFolder}{The root folder holding the study results.}
 

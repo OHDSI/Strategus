@@ -69,16 +69,16 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
     },
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
-    #' @template resultsSchema
+    #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
-      super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
+      super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
       # Note: not passing the tablePrefix argument to
       # createResultsDataModel since the SCCS results
       # model already contains the "sccs_" table prefix
       SelfControlledCaseSeries::createResultsDataModel(
         connectionDetails = resultsConnectionDetails,
-        databaseSchema = resultsSchema,
+        databaseSchema = resultsDatabaseSchema,
       )
     },
     #' @description Upload the results for the module
