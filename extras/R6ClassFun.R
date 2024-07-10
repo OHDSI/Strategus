@@ -357,9 +357,9 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
   addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
   addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
+  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
   # NOT WORKING
-  #addCharacterizationModuleSpecifications(cModuleSpecifications) |>
+  addCharacterizationModuleSpecifications(cModuleSpecifications)
   # MOSTLY WORKING
   #addCohortIncidenceModuleSpecifications(ciModuleSettings)
 
@@ -484,28 +484,28 @@ resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
   workFolder = file.path(outputFolder, "evidence_sythesis", "work_folder")
 )
 
-#debugonce(Strategus::execute)
 Strategus::execute(
   analysisSpecifications = esAnalysisSpecifications,
   executionSettings = resultsExecutionSettings,
   connectionDetails = resultsConnectionDetails
 )
 
-#debugonce(Strategus::createResultDataModels)
-Strategus::createResultDataModels(
+resultsDataModelSettings <- Strategus::createResultsDataModelSettings(
+  resultsDatabaseSchema = "main",
+  resultsFolder = resultsExecutionSettings$resultsFolder,
+)
+
+Strategus::createResultDataModel(
   analysisSpecifications = esAnalysisSpecifications,
-  resultsExecutionSettings = resultsExecutionSettings,
+  resultsDataModelSettings = resultsDataModelSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
 
-#debugonce(Strategus::uploadResults)
 Strategus::uploadResults(
   analysisSpecifications = esAnalysisSpecifications,
-  resultsExecutionSettings = resultsExecutionSettings,
+  resultsUploadSettings = resultsUploadSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
-
-
 
 # Review results --------------------------
 library(ShinyAppBuilder)

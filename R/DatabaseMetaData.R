@@ -193,10 +193,6 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
 }
 
 .getDatabaseMetaDataResultsFolder <- function(resultsFolder) {
-  if (dir.exists(file.path(resultsFolder, "DatabaseMetaData"))) {
-    return(file.path(resultsFolder, "DatabaseMetaData"))
-  } else {
-    return(NULL)
-  }
+  return(file.path(resultsFolder, "DatabaseMetaData"))
 }
 

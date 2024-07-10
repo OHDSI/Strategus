@@ -35,28 +35,31 @@ CharacterizationModule <- R6::R6Class(
         outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        characterizationSettings = jobContext$settings$analysis,
+        characterizationSettings = jobContext$settings,
         databaseId = jobContext$moduleExecutionSettings$databaseId,
         saveDirectory = workFolder,
-        tablePrefix = self$tablePrefix,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        incremental = jobContext$settings$incremental,
-        threads = parallel::detectCores(),
-        minCharacterizationMean = jobContext$settings$minCharacterizationMean
+        tablePrefix = self$tablePrefix
       )
 
-      # move results from work folder to output folder
+      # Export the results
+      rlang::inform("Export data to csv files")
+
+      sqliteConnectionDetails <- DatabaseConnector::createConnectionDetails(
+        dbms = "sqlite",
+        server = file.path(workFolder, "sqliteCharacterization", "sqlite.sqlite")
+      )
+
+      # get the result location folder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
-      csvFileLoc <- file.path(workFolder,'results')
-      csvFiles <- dir(csvFileLoc)
-      for(csvFile in csvFiles){
-        message(paste0('Exporting csv file ', csvFile))
-        file.copy(
-          from = file.path(csvFileLoc, csvFile),
-          to = file.path(resultsFolder, paste0(moduleInfo$TablePrefix,csvFile))
-        )
-      }
+      Characterization::exportDatabaseToCsv(
+        connectionDetails = sqliteConnectionDetails,
+        resultSchema = "main",
+        tempEmulationSchema = NULL,
+        tablePrefix = self$tablePrefix,
+        filePrefix = self$tablePrefix,
+        saveDirectory = resultsFolder
+      )
 
       # Export the resultsDataModelSpecification.csv
       resultsDataModel <- CohortGenerator::readCsv(
@@ -68,7 +71,7 @@ CharacterizationModule <- R6::R6Class(
       )
 
       # add the prefix to the tableName column
-      resultsDataModel$tableName <- paste0(moduleInfo$TablePrefix, resultsDataModel$tableName)
+      resultsDataModel$tableName <- paste0(self$tablePrefix, resultsDataModel$tableName)
 
       CohortGenerator::writeCsv(
         x = resultsDataModel,
@@ -86,11 +89,22 @@ CharacterizationModule <- R6::R6Class(
     #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = self$tablePrefix) {
       super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
-      Characterization::createCharacterizationTables(
-        connectionDetails = resultsConnectionDetails,
-        resultSchema = resultsSchema,
-        targetDialect = connectionDetails$dbms,
-        tablePrefix = tablePrefix
+      resultsDataModel <-private$.getResultsDataModelSpecification()
+      resultsDataModel$tableName <- paste0(tablePrefix, resultsDataModel$tableName)
+      sql <- ResultModelManager::generateSqlSchema(
+        schemaDefinition = resultsDataModel
+      )
+      sql <- SqlRender::render(
+        sql = sql,
+        database_schema = resultsSchema
+      )
+      connection <- DatabaseConnector::connect(
+        connectionDetails = resultsConnectionDetails
+      )
+      on.exit(DatabaseConnector::disconnect(connection))
+      DatabaseConnector::executeSql(
+        connection = connection,
+        sql = sql
       )
     },
     #' @description Upload the results for the module
@@ -99,109 +113,48 @@ CharacterizationModule <- R6::R6Class(
     #' @template resultsUploadSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
-      # TODO: Needs implementation
-      warning("NOT IMPLEMENTED")
+      jobContext <- private$jobContext
+      resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
+
+      specifications <- private$.getResultsDataModelSpecification()
+
+      ResultModelManager::uploadResults(
+        connectionDetails = resultsConnectionDetails,
+        schema = resultsUploadSettings$resultsDatabaseSchema,
+        resultsFolder = resultsFolder,
+        purgeSiteDataBeforeUploading = resultsUploadSettings$purgeSiteDataBeforeUploading,
+        specifications = specifications
+      )
     },
     #' @description Creates the CharacterizationModule Specifications
     #' @param targetIds A vector of cohort IDs to use as the target(s) for the characterization
     #' @param outcomeIds A vector of cohort IDs to use as the outcome(s) for the characterization
-    #' @param outcomeWashoutDays The number of days between outcomes for washout
-    #' @param minPriorObservation The minimum prior observation (in the target?)
     #' @param dechallengeStopInterval description
     #' @param dechallengeEvaluationWindow description
-    #' @param riskWindowStart description
-    #' @param startAnchor description
-    #' @param riskWindowEnd description
-    #' @param endAnchor description
+    #' @param timeAtRisk description
+    #' @param minPriorObservation description
     #' @param minCharacterizationMean description
     #' @param covariateSettings description
-    #' @param caseCovariateSettings description
-    #' @param casePreTargetDuration description
-    #' @param casePostOutcomeDuration description
-    #' @param incremental description
     createModuleSpecifications = function(targetIds,
-                                          outcomeIds, # a vector of ids
-                                          outcomeWashoutDays = c(365), # same length as outcomeIds with the outcomeWashout
-                                          minPriorObservation = 365,
+                                          outcomeIds,
                                           dechallengeStopInterval = 30,
                                           dechallengeEvaluationWindow = 30,
-                                          riskWindowStart = c(1, 1),
-                                          startAnchor = c("cohort start", "cohort start"),
-                                          riskWindowEnd = c(0, 365),
-                                          endAnchor = c("cohort end", "cohort end"),
-                                          minCharacterizationMean = 0.01,
-                                          covariateSettings = FeatureExtraction::createCovariateSettings(
-                                            useDemographicsGender = T,
-                                            useDemographicsAge = T,
-                                            useDemographicsAgeGroup = T,
-                                            useDemographicsRace = T,
-                                            useDemographicsEthnicity = T,
-                                            useDemographicsIndexYear = T,
-                                            useDemographicsIndexMonth = T,
-                                            useDemographicsTimeInCohort = T,
-                                            useDemographicsPriorObservationTime = T,
-                                            useDemographicsPostObservationTime = T,
-                                            useConditionGroupEraLongTerm = T,
-                                            useDrugGroupEraOverlapping = T,
-                                            useDrugGroupEraLongTerm = T,
-                                            useProcedureOccurrenceLongTerm = T,
-                                            useMeasurementLongTerm = T,
-                                            useObservationLongTerm = T,
-                                            useDeviceExposureLongTerm = T,
-                                            useVisitConceptCountLongTerm = T,
-                                            useConditionGroupEraShortTerm = T,
-                                            useDrugGroupEraShortTerm = T,
-                                            useProcedureOccurrenceShortTerm = T,
-                                            useMeasurementShortTerm = T,
-                                            useObservationShortTerm = T,
-                                            useDeviceExposureShortTerm = T,
-                                            useVisitConceptCountShortTerm = T,
-                                            endDays = 0,
-                                            longTermStartDays =  -365,
-                                            shortTermStartDays = -30),
-                                          caseCovariateSettings = Characterization::createDuringCovariateSettings(
-                                            useConditionGroupEraDuring = T,
-                                            useDrugGroupEraDuring = T,
-                                            useProcedureOccurrenceDuring = T,
-                                            useDeviceExposureDuring = T,
-                                            useMeasurementDuring = T,
-                                            useObservationDuring = T,
-                                            useVisitConceptCountDuring = T),
-                                          casePreTargetDuration = 365,
-                                          casePostOutcomeDuration = 365,
-                                          incremental = T) {
+                                          timeAtRisk = data.frame(
+                                            riskWindowStart = c(1, 1),
+                                            startAnchor = c("cohort start", "cohort start"),
+                                            riskWindowEnd = c(0, 365),
+                                            endAnchor = c("cohort end", "cohort end")
+                                          ),
+                                          minPriorObservation = 0,
+                                          minCharacterizationMean = 0,
+                                          covariateSettings = FeatureExtraction::createDefaultCovariateSettings()) {
       # input checks
-
-      if(!inherits(outcomeIds, "numeric")){
-        stop("outcomeIdsList must be a numeric or a numeric vector")
+      if (!inherits(timeAtRisk, "data.frame")) {
+        stop("timeAtRisk must be a data.frame")
       }
-
-      if(!inherits(outcomeWashoutDays, "numeric")){
-        stop("outcomeWashoutDays must be a numeric or a numeric vector")
+      if (nrow(timeAtRisk) == 0) {
+        stop("timeAtRisk must be a non-empty data.frame")
       }
-      if(length(outcomeIds) != length(outcomeWashoutDays)){
-        stop("outcomeWashoutDaysVector and outcomeIdsList must be same length")
-      }
-      if(length(minPriorObservation) != 1){
-        stop("minPriorObservation needs to be length 1")
-      }
-      if(length(riskWindowStart) != length(startAnchor) |
-         length(riskWindowEnd) != length(startAnchor) |
-         length(endAnchor) != length(startAnchor))
-      {
-        stop("Time-at-risk settings must be same length")
-      }
-
-      # group the outcomeIds with the same outcomeWashoutDays
-      outcomeWashoutDaysVector <- unique(outcomeWashoutDays)
-      outcomeIdsList <- lapply(
-        outcomeWashoutDaysVector,
-        function(x){
-          ind <- which(outcomeWashoutDays == x)
-          unique(outcomeIds[ind])
-        }
-      )
-
 
       timeToEventSettings <- Characterization::createTimeToEventSettings(
         targetIds = targetIds,
@@ -215,35 +168,44 @@ CharacterizationModule <- R6::R6Class(
         dechallengeEvaluationWindow = dechallengeEvaluationWindow
       )
 
-      aggregateCovariateSettings <- list()
+      aggregateCovariateSettings <- lapply(
+        X = 1:nrow(timeAtRisk),
+        FUN = function(i) {
+          Characterization::createAggregateCovariateSettings(
+            targetIds = targetIds,
+            outcomeIds = outcomeIds,
+            minPriorObservation = minPriorObservation,
+            riskWindowStart = timeAtRisk$riskWindowStart[i],
+            startAnchor = timeAtRisk$startAnchor[i],
+            riskWindowEnd = timeAtRisk$riskWindowEnd[i],
+            endAnchor = timeAtRisk$endAnchor[i],
+            covariateSettings = covariateSettings,
+            minCharacterizationMean = minCharacterizationMean
+          )
+        }
+      )
 
-      for(j in 1:length(outcomeIdsList)){
-        aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
-          targetIds = targetIds,
-          outcomeIds = outcomeIdsList[[j]],
-          minPriorObservation = minPriorObservation,
-          outcomeWashoutDays = outcomeWashoutDaysVector[j],
-          riskWindowStart = riskWindowStart,
-          startAnchor = startAnchor,
-          riskWindowEnd = riskWindowEnd,
-          endAnchor = endAnchor,
-          covariateSettings = covariateSettings
-        )
-      }
-
-      # TODO: This looks odd - why is analysis required to be nested?
-      analysis <- list(
-        analysis = Characterization::createCharacterizationSettings(
-          timeToEventSettings = list(timeToEventSettings),
-          dechallengeRechallengeSettings = list(dechallengeRechallengeSettings),
-          aggregateCovariateSettings = aggregateCovariateSettings
-        )
+      analysis <- Characterization::createCharacterizationSettings(
+        timeToEventSettings = list(timeToEventSettings),
+        dechallengeRechallengeSettings = list(dechallengeRechallengeSettings),
+        aggregateCovariateSettings = aggregateCovariateSettings
       )
 
       specifications <- super$createModuleSpecifications(
         moduleSpecifications = analysis
       )
       return(specifications)
+    }
+  ),
+  private = list(
+    .getResultsDataModelSpecification = function() {
+      rdms <- CohortGenerator::readCsv(
+        file = system.file(
+          "settings/resultsDataModelSpecification.csv",
+          package = "Characterization"
+        )
+      )
+      return(rdms)
     }
   )
 )

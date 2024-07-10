@@ -62,14 +62,14 @@ EvidenceSynthesisModule <- R6::R6Class(
       }
 
       connection <- DatabaseConnector::connect(resultsConnectionDetails)
-      on.exit(DatabaseConnector::disconnect(resultsConnectionDetails))
+      on.exit(DatabaseConnector::disconnect(connection))
 
       # Create the results model
       sql <- ResultModelManager::generateSqlSchema(
         csvFilepath = private$.getResultsDataModelSpecificationFileLocation()
       )
       sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsSchema)
-      sql <- SqlRender::translate(sql = sql, targetDialect = connection@dbms)
+      sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
       DatabaseConnector::executeSql(connection, sql)
     },
     #' @description Upload the results for the module

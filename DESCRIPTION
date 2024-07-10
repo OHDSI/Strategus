@@ -43,7 +43,7 @@ Suggests:
   testthat (>= 3.0.0),
   withr
 Remotes:
-  ohdsi/Characterization@372fb70c6133bdd8811f8dc1d2a2f9cb9a184345,
+  ohdsi/Characterization,
   ohdsi/CohortDiagnostics,
   ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,
