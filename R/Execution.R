@@ -102,7 +102,7 @@ execute <- function(analysisSpecifications,
   on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
 
   if (is(executionSettings, "CdmExecutionSettings")) {
-    executionSettings$databaseId <- createDatabaseMetaData(
+    executionSettings$databaseId <- .createDatabaseMetaData(
       executionSettings = executionSettings,
       connectionDetails = connectionDetails
     )

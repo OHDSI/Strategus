@@ -75,25 +75,18 @@ EvidenceSynthesisModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @param resultsConnectionDetails The connection details to the results DB
     #' @param analysisSpecifications The analysis specifications for the study
-    #' @param resultsExecutionSettings The results execution settings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
+    #' @param resultsUploadSettings The results upload settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
       jobContext <- private$jobContext
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
-      # TODO: The decisions to set the parameters:
-      #    forceOverWriteOfSpecifications = FALSE
-      #    purgeSiteDataBeforeUploading = FALSE
-      # needs discussion.
       ResultModelManager::uploadResults(
         connectionDetails = resultsConnectionDetails,
-        schema = resultsExecutionSettings$resultsDatabaseSchema,
+        schema = resultsUploadSettings$resultsDatabaseSchema,
         resultsFolder = resultsFolder,
-        forceOverWriteOfSpecifications = FALSE,
-        purgeSiteDataBeforeUploading = FALSE,
-        runCheckAndFixCommands = FALSE,
-        specifications = private$.getResultsDataModelSpecification(),
-        warnOnMissingTable = FALSE
+        purgeSiteDataBeforeUploading = FALSE, # ES is not site specific
+        specifications = private$.getResultsDataModelSpecification()
       )
     },
     #' @description Creates the module Specifications

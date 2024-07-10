@@ -94,17 +94,21 @@ PatientLevelPredictionModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @param resultsConnectionDetails The connection details to the results DB
     #' @param analysisSpecifications The analysis specifications for the study
-    #' @param resultsExecutionSettings The results execution settings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
+    #' @param resultsUploadSettings The results upload settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
 
       databaseSchemaSettings <- PatientLevelPrediction::createDatabaseSchemaSettings(
-        resultSchema = resultsExecutionSettings$resultsDatabaseSchema,
+        resultSchema = resultsUploadSettings$resultsDatabaseSchema,
         tablePrefix = self$tablePrefix,
         targetDialect = resultsConnectionDetails$dbms
       )
 
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+      # TODO: This function does not expose
+      # a way to specify the database identifier file
+      # which makes the purge problematic since I'm
+      # not sure how it will know what to purge...
       PatientLevelPrediction::insertCsvToDatabase(
         csvFolder = resultsFolder,
         connectionDetails = resultsConnectionDetails,

@@ -96,9 +96,9 @@ CharacterizationModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @param resultsConnectionDetails The connection details to the results DB
     #' @param analysisSpecifications The analysis specifications for the study
-    #' @param resultsExecutionSettings The results execution settings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
+    #' @param resultsUploadSettings The results upload settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
       # TODO: Needs implementation
       warning("NOT IMPLEMENTED")
     },

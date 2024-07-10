@@ -12,9 +12,7 @@ createCdmExecutionSettings(
   workFolder,
   resultsFolder,
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
-  minCellCount = 5,
-  integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-  integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)
+  minCellCount = 5
 )
 }
 \arguments{

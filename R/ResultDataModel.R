@@ -36,8 +36,7 @@ createResultDataModel <- function(analysisSpecifications,
   # The DatabaseMetaData is a special case...
   .createDatabaseMetadataResultsDataModel(
     resultsConnectionDetails = resultsConnectionDetails,
-    resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema,
-    resultsFolder = resultsDataModelSettings$resultsFolder
+    resultsDataModelSettings = resultsDataModelSettings
   )
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
@@ -60,19 +59,33 @@ createResultDataModel <- function(analysisSpecifications,
 #'
 #' @export
 uploadResults <- function(analysisSpecifications,
-                          resultsExecutionSettings,
+                          resultsUploadSettings,
                           resultsConnectionDetails) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
-  checkmate::assertClass(resultsExecutionSettings, "ResultsExecutionSettings", add = errorMessages)
+  checkmate::assertClass(resultsUploadSettings, "ResultsUploadSettings", add = errorMessages)
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
+
+  # If the user has set purgeSiteDataBeforeUploading == TRUE
+  # then we must confirm the location of the DatabaseMetaData
+  # to obtain the database ID
+  if(isTRUE(resultsUploadSettings$purgeSiteDataBeforeUploading)) {
+    databaseIdentifierFile <- getDatabaseIdentifierFilePath(resultsUploadSettings$resultsFolder)
+    if (!file.exists(databaseIdentifierFile)) {
+      stop(
+        sprintf(
+          "databaseIdentifierFile %s not found. This file location must be specified when purgeSiteDataBeforeUploading == TRUE",
+          databaseIdentifierFile
+        )
+      )
+    }
+  }
 
   # The DatabaseMetaData is a special case...
   .uploadDatabaseMetadata(
     resultsConnectionDetails = resultsConnectionDetails,
-    resultsDatabaseSchema = resultsExecutionSettings$resultsDatabaseSchema,
-    resultsFolder = resultsExecutionSettings$resultsFolder
+    resultsUploadSettings = resultsUploadSettings
   )
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
@@ -81,7 +94,7 @@ uploadResults <- function(analysisSpecifications,
     moduleObj$uploadResults(
       resultsConnectionDetails = resultsConnectionDetails,
       analysisSpecifications = analysisSpecifications,
-      resultsExecutionSettings = resultsExecutionSettings
+      resultsUploadSettings = resultsUploadSettings
     )
   }
 }

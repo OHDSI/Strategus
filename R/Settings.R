@@ -21,21 +21,6 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-#' Create an empty analysis specifications object.
-#'
-#' @return
-#' An object of type `AnalysisSpecifications`.
-#'
-#' @export
-createEmptyAnalysisSpecificiations <- function() {
-  analysisSpecifications <- list(
-    sharedResources = list(),
-    moduleSpecifications = list()
-  )
-  class(analysisSpecifications) <- "AnalysisSpecifications"
-  return(analysisSpecifications)
-}
-
 #' Add shared resources to analysis specifications
 #'
 #' @param analysisSpecifications An object of type `AnalysisSpecifications` as created
@@ -174,6 +159,23 @@ addAndValidateModuleSpecifications <- function(moduleName, analysisSpecification
   return(analysisSpecifications)
 }
 
+
+#' Create an empty analysis specifications object.
+#'
+#' @return
+#' An object of type `AnalysisSpecifications`.
+#'
+#' @export
+createEmptyAnalysisSpecificiations <- function() {
+  analysisSpecifications <- list(
+    sharedResources = list(),
+    moduleSpecifications = list()
+  )
+  class(analysisSpecifications) <- "AnalysisSpecifications"
+  return(analysisSpecifications)
+}
+
+
 #' Create CDM execution settings
 #'
 #' @param workDatabaseSchema         A database schema where intermediate data can be stored. The user (as identified in the
@@ -203,9 +205,7 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
                                        workFolder,
                                        resultsFolder,
                                        logFileName = file.path(resultsFolder, "strategus-log.txt"),
-                                       minCellCount = 5,
-                                       integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-                                       integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
+                                       minCellCount = 5) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(cdmDatabaseSchema, len = 1, add = errorMessages)
@@ -214,8 +214,6 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
-  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
-  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -239,8 +237,6 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
-#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
-#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -250,17 +246,13 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
                                            workFolder,
                                            resultsFolder,
                                            logFileName = file.path(resultsFolder, "strategus-log.txt"),
-                                           minCellCount = 5,
-                                           integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-                                           integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
+                                           minCellCount = 5) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
-  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
-  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -306,5 +298,39 @@ createResultsDataModelSettings <- function(resultsDatabaseSchema,
     executionSettings[[name]] <- get(name)
   }
   class(executionSettings) <- c("ResultsDataModelSettings")
+  return(executionSettings)
+}
+
+#' Create results upload settings
+#'
+#' @param resultsDatabaseSchema      A schema where the results tables are stored. Use [@seealso [createResultsDataModel()]] to setup this schema.
+#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @param purgeSiteDataBeforeUploading If TRUE, before inserting data for a specific databaseId all the data for that site will be dropped. This assumes the results folder contains the full data for that data site.
+#' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
+#'
+#' @return
+#' An object of type `ResultsUploadSettings`.
+#'
+#' @export
+createResultsUploadSettings <- function(resultsDatabaseSchema,
+                                        resultsFolder,
+                                        purgeSiteDataBeforeUploading = FALSE,
+                                        logFileName = file.path(resultsFolder, "strategus-upload-log.txt")) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertLogical(purgeSiteDataBeforeUploading)
+  checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  # Normalize paths to convert relative paths to absolute paths
+  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+  logFileName <- normalizePath(logFileName, mustWork = F)
+
+  executionSettings <- list()
+  for (name in names(formals(createResultsUploadSettings))) {
+    executionSettings[[name]] <- get(name)
+  }
+  class(executionSettings) <- c("ResultsUploadSettings")
   return(executionSettings)
 }

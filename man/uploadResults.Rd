@@ -6,7 +6,7 @@
 \usage{
 uploadResults(
   analysisSpecifications,
-  resultsExecutionSettings,
+  resultsUploadSettings,
   resultsConnectionDetails
 )
 }

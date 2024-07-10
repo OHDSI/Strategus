@@ -77,15 +77,15 @@ StrategusModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @param resultsConnectionDetails The connection details to the results DB
     #' @param analysisSpecifications The analysis specifications for the study
-    #' @param resultsExecutionSettings The results execution settings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
+    #' @param resultsUploadSettings The results upload settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
-      checkmate::assertClass(resultsExecutionSettings, "ResultsExecutionSettings", add = errorMessages)
+      checkmate::assertClass(resultsUploadSettings, "ResultsUploadSettings", add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
 
       # Setup the job context
-      private$.createJobContext(analysisSpecifications, resultsExecutionSettings)
+      private$.createJobContext(analysisSpecifications, resultsUploadSettings)
       private$.message('UPLOAD RESULTS: ', self$moduleName)
     },
     #' @description Base function for creating the module settings object.
@@ -174,8 +174,15 @@ StrategusModule <- R6::R6Class(
       # for the given module.
       private$jobContext$sharedResources <- analysisSpecifications$sharedResources
       private$jobContext$moduleExecutionSettings <- executionSettings
-      private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
       private$jobContext$moduleExecutionSettings$resultsSubFolder <- file.path(private$jobContext$moduleExecutionSettings$resultsFolder, self$moduleName)
+
+      if (is(private$jobContext$moduleExecutionSettings, "ExecutionSettings")) {
+        private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
+      }
+
+      if (is(private$jobContext$moduleExecutionSettings, "ResultsUploadSettings")) {
+        private$jobContext$moduleExecutionSettings$databaseIdentifierFile <- Strategus::getDatabaseIdentifierFilePath(executionSettings$resultsFolder)
+      }
 
       # TODO: This should be in the execution settings already for
       # CDM ExecutionSettings

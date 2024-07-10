@@ -405,6 +405,9 @@ Strategus::execute(
 
 # Create empty results database -------------------------
 library(RSQLite)
+if (file.exists(file.path(outputFolder, "results.sqlite"))) {
+  unlink(file.path(outputFolder, "results.sqlite"))
+}
 mydb <- dbConnect(RSQLite::SQLite(), file.path(outputFolder, "results.sqlite"))
 dbDisconnect(mydb)
 
@@ -427,16 +430,15 @@ Strategus::createResultDataModel(
 )
 
 # Upload results ---------------
-resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
-  resultsDatabaseSchema = "main",
-  workFolder = executionSettings$workFolder,
-  resultsFolder = executionSettings$resultsFolder
+resultsUploadSettings <- Strategus::createResultsUploadSettings(
+  resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema,
+  resultsFolder = resultsDataModelSettings$resultsFolder
 )
 
 #debugonce(Strategus::uploadResults)
 Strategus::uploadResults(
   analysisSpecifications = analysisSpecifications,
-  resultsExecutionSettings = resultsExecutionSettings,
+  resultsUploadSettings = resultsUploadSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
 

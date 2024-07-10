@@ -115,7 +115,7 @@ Upload the results for the module
 \if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
-  resultsExecutionSettings
+  resultsUploadSettings
 )}\if{html}{\out{</div>}}
 }
 
@@ -126,7 +126,7 @@ Upload the results for the module
 
 \item{\code{analysisSpecifications}}{The analysis specifications for the study}
 
-\item{\code{resultsExecutionSettings}}{The results execution settings}
+\item{\code{resultsUploadSettings}}{The results upload settings}
 }
 \if{html}{\out{</div>}}
 }

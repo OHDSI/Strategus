@@ -77,9 +77,9 @@ CohortDiagnosticsModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @param resultsConnectionDetails The connection details to the results DB
     #' @param analysisSpecifications The analysis specifications for the study
-    #' @param resultsExecutionSettings The results execution settings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsExecutionSettings)
+    #' @param resultsUploadSettings The results upload settings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
 
       # TODO: This is something CD does differently.
       # Find the results zip file in the results sub folder
@@ -102,17 +102,16 @@ CohortDiagnosticsModule <- R6::R6Class(
         zipFileName <- file.path(resultsFolder, "results.zip")
       }
 
-      # TODO: The decisions to set the parameters:
-      #    forceOverWriteOfSpecifications = FALSE
-      #    purgeSiteDataBeforeUploading = FALSE
-      # needs discussion.
+      # TODO: This function does not expose
+      # a way to specify the database identifier file
+      # which makes the purge problematic since I'm
+      # not sure how it will know what to purge...
       CohortDiagnostics::uploadResults(
         connectionDetails = resultsConnectionDetails,
-        schema = resultsExecutionSettings$resultsDatabaseSchema,,
+        schema = resultsUploadSettings$resultsDatabaseSchema,,
         tablePrefix = self$tablePrefix,
         zipFileName = zipFileName,
-        forceOverWriteOfSpecifications = FALSE,
-        purgeSiteDataBeforeUploading = FALSE
+        purgeSiteDataBeforeUploading = resultsUploadSettings$purgeSiteDataBeforeUploading
       )
     },
     #' @description Creates the CohortDiagnostics Module Specifications
