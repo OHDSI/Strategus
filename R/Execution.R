@@ -25,13 +25,7 @@
 #'
 #' @template AnalysisSpecifications
 #' @template executionSettings
-#' @param executionScriptFolder   Optional: the path to use for storing the execution script.
-#'                                when NULL, this function will use a temporary
-#'                                file location to create the script to execute.
-#' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
-#'                                the same as the `executionScriptFolder` used in the run to restart.
-#'
-#' @template enforceModuleDependencies
+#' @template connectionDetails
 #'
 #' @return
 #' Does not return anything. Is called for the side-effect of executing the specified

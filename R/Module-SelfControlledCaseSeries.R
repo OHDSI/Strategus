@@ -16,9 +16,9 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       super$initialize()
     },
     #' @description Executes the SelfControlledCaseSeries package
-    #' @param connectionDetails The connection details to the database
-    #' @param analysisSpecifications The analysis specifications for the study
-    #' @param executionSettings The execution settings for the study
+    #' @template connectionDetails
+    #' @template analysisSpecifications
+    #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
       on.exit(private$.clearLoggers())
@@ -68,9 +68,9 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       private$.message(paste("Results available at:", exportFolder))
     },
     #' @description Create the results data model for the module
-    #' @param resultsConnectionDetails The connection details to the results database
-    #' @param resultsSchema The schema holding the results
-    #' @param tablePrefix The prefix to use to append to the results tables (optional)
+    #' @template resultsConnectionDetails
+    #' @template resultsSchema
+    #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
       super$createResultsDataModel(resultsConnectionDetails, resultsSchema, tablePrefix)
       # Note: not passing the tablePrefix argument to
@@ -82,9 +82,9 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       )
     },
     #' @description Upload the results for the module
-    #' @param resultsConnectionDetails The connection details to the results DB
-    #' @param analysisSpecifications The analysis specifications for the study
-    #' @param resultsUploadSettings The results upload settings
+    #' @template resultsConnectionDetails
+    #' @template analysisSpecifications
+    #' @template resultsUploadSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
 
@@ -142,7 +142,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       return(specifications)
     },
     #' @description Validate the module specifications
-    #' @param moduleSpecifications The CohortIncidence module specifications
+    #' @param moduleSpecifications The SelfControlledCaseSeries module specifications
     validateModuleSpecifications = function(moduleSpecifications) {
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications

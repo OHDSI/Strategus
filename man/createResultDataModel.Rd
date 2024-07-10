@@ -13,6 +13,12 @@ createResultDataModel(
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{resultsDataModelSettings}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+
+\item{resultsConnectionDetails}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 }
 \description{
 Use this at the study design stage to create data models for modules

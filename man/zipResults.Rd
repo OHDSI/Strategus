@@ -7,8 +7,7 @@
 zipResults(resultsFolder, zipFile)
 }
 \arguments{
-\item{resultsFolder}{The folder holding the study results. This is found in
-\code{executionSettings$resultsFolder}.}
+\item{resultsFolder}{The root folder holding the study results.}
 
 \item{zipFile}{The path to the zip file to be created.}
 }

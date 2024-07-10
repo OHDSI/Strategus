@@ -20,13 +20,13 @@ for performing meta-analysis and forest plots
 \item \href{#method-EvidenceSynthesisModule-execute}{\code{EvidenceSynthesisModule$execute()}}
 \item \href{#method-EvidenceSynthesisModule-createResultsDataModel}{\code{EvidenceSynthesisModule$createResultsDataModel()}}
 \item \href{#method-EvidenceSynthesisModule-uploadResults}{\code{EvidenceSynthesisModule$uploadResults()}}
-\item \href{#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}}
 \item \href{#method-EvidenceSynthesisModule-validateModuleSpecifications}{\code{EvidenceSynthesisModule$validateModuleSpecifications()}}
 \item \href{#method-EvidenceSynthesisModule-createEvidenceSynthesisSource}{\code{EvidenceSynthesisModule$createEvidenceSynthesisSource()}}
 \item \href{#method-EvidenceSynthesisModule-createRandomEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createRandomEffectsMetaAnalysis()}}
 \item \href{#method-EvidenceSynthesisModule-createFixedEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis()}}
 \item \href{#method-EvidenceSynthesisModule-createBayesianMetaAnalysis}{\code{EvidenceSynthesisModule$createBayesianMetaAnalysis()}}
 \item \href{#method-EvidenceSynthesisModule-createEsDiagnosticThresholds}{\code{EvidenceSynthesisModule$createEsDiagnosticThresholds()}}
+\item \href{#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}}
 \item \href{#method-EvidenceSynthesisModule-clone}{\code{EvidenceSynthesisModule$clone()}}
 }
 }
@@ -64,11 +64,17 @@ Executes the EvidenceSynthesis package
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connectionDetails}}{The connection details to the database}
+\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{\code{executionSettings}}{The execution settings for the study}
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -89,11 +95,17 @@ Create the results data model for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{resultsSchema}}{The schema holding the results}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{tablePrefix}}{The prefix to use to append to the results tables (optional)}
+\item{\code{resultsSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }
 \if{html}{\out{</div>}}
 }
@@ -114,36 +126,21 @@ Upload the results for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{resultsUploadSettings}}{The results upload settings}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-EvidenceSynthesisModule-createModuleSpecifications"></a>}}
-\if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createModuleSpecifications}{}}}
-\subsection{Method \code{createModuleSpecifications()}}{
-Creates the module Specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createModuleSpecifications(
-  evidenceSynthesisAnalysisList,
-  esDiagnosticThresholds = self$createEsDiagnosticThresholds()
-)}\if{html}{\out{</div>}}
-}
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{evidenceSynthesisAnalysisList}}{A list of objects of type `EvidenceSynthesisAnalysis`` as generated
-by either the \code{\link[=createFixedEffectsMetaAnalysis]{createFixedEffectsMetaAnalysis()}} or
-\code{\link[=createBayesianMetaAnalysis]{createBayesianMetaAnalysis()}} function.}
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{\code{esDiagnosticThresholds}}{An object of type\code{EsDiagnosticThresholds} as generated by the
-\code{\link[=createEsDiagnosticThresholds]{createEsDiagnosticThresholds()}} function.}
+\item{\code{resultsUploadSettings}}{The results upload settings as created using [@seealso \code{\link[=createResultsUploadSettings]{createResultsUploadSettings()}}]}
 }
 \if{html}{\out{</div>}}
 }
@@ -160,7 +157,7 @@ Validate the module specifications
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{moduleSpecifications}}{The CohortIncidence module specifications
+\item{\code{moduleSpecifications}}{The EvidenceSynthesis module specifications
 Create an evidence synthesis source}
 }
 \if{html}{\out{</div>}}
@@ -358,6 +355,31 @@ heterogeneity in Bayesian random-effects models)?}
 }
 \subsection{Returns}{
 An object of type \code{EsDiagnosticThresholds}.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-EvidenceSynthesisModule-createModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createModuleSpecifications}{}}}
+\subsection{Method \code{createModuleSpecifications()}}{
+Creates the module Specifications
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createModuleSpecifications(
+  evidenceSynthesisAnalysisList,
+  esDiagnosticThresholds = self$createEsDiagnosticThresholds()
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{evidenceSynthesisAnalysisList}}{A list of objects of type \code{EvidenceSynthesisAnalysis} as generated
+by either the \href{../../Strategus/html/EvidenceSynthesisModule.html#method-createFixedEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis()}}
+or \href{../../Strategus/html/EvidenceSynthesisModule.html#method-createBayesianMetaAnalysis}{\code{EvidenceSynthesisModule$createBayesianMetaAnalysis()}} function.}
+
+\item{\code{esDiagnosticThresholds}}{An object of type\code{EsDiagnosticThresholds} as generated by the
+\href{../../Strategus/html/EvidenceSynthesisModule.html#method-createEsDiagnosticThresholds}{\code{EvidenceSynthesisModule$createEsDiagnosticThresholds()}} function.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}

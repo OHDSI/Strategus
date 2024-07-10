@@ -7,6 +7,9 @@ by Strategus}
 \usage{
 getDatabaseIdentifierFilePath(resultsFolder)
 }
+\arguments{
+\item{resultsFolder}{The root folder holding the study results.}
+}
 \description{
 This function is used to identify the location of the database identifier
 created by Strategus when running an analysis specification. This

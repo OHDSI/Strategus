@@ -13,9 +13,7 @@ createResultsDataModelSettings(
 \arguments{
 \item{resultsDatabaseSchema}{A schema where the results tables are stored}
 
-\item{resultsFolder}{A folder in the local file system where the execution results are held.
-TODO: Why? Creating the results data model needs this parameter
-for the DatabaseMetaData which feels inconsistent.}
+\item{resultsFolder}{The root folder holding the study results.}
 
 \item{logFileName}{Logging information from the results data model creation}
 }
@@ -23,5 +21,6 @@ for the DatabaseMetaData which feels inconsistent.}
 An object of type \code{ResultsDataModelSettings}
 }
 \description{
-Create Results Data Model Settings
+TODO: Why do we need resultsFolder? Creating the results data model needs this parameter
+for the DatabaseMetaData which feels inconsistent.
 }

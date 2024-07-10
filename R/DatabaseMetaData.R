@@ -30,6 +30,7 @@
 #' location is important when uploading results since the database identifier
 #' may be needed to purge old results for a given database identifier.
 #'
+#' @template resultsFolder
 #' @export
 getDatabaseIdentifierFilePath <- function(resultsFolder) {
   return(file.path(.getDatabaseMetaDataResultsFolder(resultsFolder), "database_meta_data.csv"))
@@ -148,7 +149,7 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
 
 .createDatabaseMetadataResultsDataModel <- function(resultsConnectionDetails,
                                                     resultsDataModelSettings) {
-  rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsUploadSettings$resultsFolder), "resultsDataModelSpecification.csv")
+  rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder), "resultsDataModelSpecification.csv")
   if (file.exists(rdmsFile)) {
     rlang::inform("Creating results data model for database metadata")
     connection <- DatabaseConnector::connect(resultsConnectionDetails)
@@ -183,7 +184,7 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
       schema = resultsUploadSettings$resultsDatabaseSchema,
       resultsFolder = databaseMetaDataResultsFolder,
       purgeSiteDataBeforeUploading = resultsUploadSettings$purgeSiteDataBeforeUploading,
-      databaseIdentifierFile = .getDatabaseIdentifierFile(resultsUploadSettings$resultsFolder),
+      databaseIdentifierFile = getDatabaseIdentifierFilePath(resultsUploadSettings$resultsFolder),
       specifications = specification
     )
   } else {

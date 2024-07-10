@@ -21,7 +21,9 @@
 #' This functions loads modules and executes any custom code to create
 #' the results data model in the specified schema in the results database.
 #'
-#' @inheritParams execute
+#' @template AnalysisSpecifications
+#' @param resultsDataModelSettings The results data model settings as created using [@seealso [createResultsDataModelSettings()]]
+#' @template resultsConnectionDetails
 #'
 #' @export
 createResultDataModel <- function(analysisSpecifications,
@@ -55,7 +57,9 @@ createResultDataModel <- function(analysisSpecifications,
 #'
 #' Upload the results for a given analysis
 #'
-#' @inheritParams createResultDataModel
+#' @template AnalysisSpecifications
+#' @template resultsUploadSettings
+#' @template resultsConnectionDetails
 #'
 #' @export
 uploadResults <- function(analysisSpecifications,

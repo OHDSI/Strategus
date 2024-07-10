@@ -14,7 +14,7 @@ createResultsUploadSettings(
 \arguments{
 \item{resultsDatabaseSchema}{A schema where the results tables are stored. Use [@seealso \code{\link[=createResultsDataModel]{createResultsDataModel()}}] to setup this schema.}
 
-\item{resultsFolder}{A folder in the local file system where the module output will be written.}
+\item{resultsFolder}{The root folder holding the study results.}
 
 \item{purgeSiteDataBeforeUploading}{If TRUE, before inserting data for a specific databaseId all the data for that site will be dropped. This assumes the results folder contains the full data for that data site.}
 

@@ -17,7 +17,7 @@ createResultsExecutionSettings(
 
 \item{workFolder}{A folder in the local file system where intermediate results can be written.}
 
-\item{resultsFolder}{A folder in the local file system where the module output will be written.}
+\item{resultsFolder}{The root folder holding the study results.}
 
 \item{logFileName}{Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the \code{resultsFolder}}
 

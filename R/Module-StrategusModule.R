@@ -47,9 +47,9 @@ StrategusModule <- R6::R6Class(
       self$moduleClassName = paste0(self$moduleName, "Specifications")
     },
     #' @description Executes the module
-    #' @param connectionDetails The connection details to the database
-    #' @param analysisSpecifications The analysis specifications for the study
-    #' @param executionSettings The execution settings for the study
+    #' @template connectionDetails
+    #' @template analysisSpecifications
+    #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
@@ -64,9 +64,9 @@ StrategusModule <- R6::R6Class(
       private$.message('EXECUTING: ', self$moduleName)
     },
     #' @description Create the results data model for the module
-    #' @param resultsConnectionDetails The connection details to the results database
-    #' @param resultsSchema The schema holding the results
-    #' @param tablePrefix The prefix to use to append to the results tables (optional)
+    #' @template resultsConnectionDetails
+    #' @template resultsSchema
+    #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsSchema, tablePrefix = "") {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
@@ -75,9 +75,9 @@ StrategusModule <- R6::R6Class(
       private$.message('CREATE RESULTS DATA MODEL: ', self$moduleName)
     },
     #' @description Upload the results for the module
-    #' @param resultsConnectionDetails The connection details to the results DB
-    #' @param analysisSpecifications The analysis specifications for the study
-    #' @param resultsUploadSettings The results upload settings
+    #' @template resultsConnectionDetails
+    #' @template analysisSpecifications
+    #' @template resultsUploadSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
@@ -91,7 +91,7 @@ StrategusModule <- R6::R6Class(
     #' @description Base function for creating the module settings object.
     #' Each module will have its own implementation and this base class method
     #' will be used to ensure the class of the specifications is set properly.
-    #' @param moduleSpecifications The module specifications
+    #' @template moduleSpecifications
     createModuleSpecifications = function(moduleSpecifications) {
       moduleSpecifications = list(
         module = self$moduleName,
@@ -113,7 +113,7 @@ StrategusModule <- R6::R6Class(
     #' Each module will have its own implementation and this base class method
     #' will be used to ensure the module specifications are valid ahead of
     #' execution
-    #' @param moduleSpecifications The module specifications
+    #' @template moduleSpecifications
     validateModuleSpecifications = function(moduleSpecifications) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(moduleSpecifications, self$internalModuleSpecificationClassName)

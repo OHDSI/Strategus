@@ -56,11 +56,13 @@ Executes the CohortMethod package
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{connectionDetails}}{The connection details to the database}
+\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{analysisSpecifications}}{The analysis specifications for the study}
 
-\item{\code{executionSettings}}{The execution settings for the study}
+\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
 }
 \if{html}{\out{</div>}}
 }
@@ -81,11 +83,17 @@ Create the results data model for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{resultsSchema}}{The schema holding the results}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{tablePrefix}}{The prefix to use to append to the results tables (optional)}
+\item{\code{resultsSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }
 \if{html}{\out{</div>}}
 }
@@ -106,11 +114,18 @@ Upload the results for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results DB}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{analysisSpecifications}}{The analysis specifications for the study}
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
-\item{\code{resultsUploadSettings}}{The results upload settings}
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{resultsUploadSettings}}{The results upload settings as created using [@seealso \code{\link[=createResultsUploadSettings]{createResultsUploadSettings()}}]}
 }
 \if{html}{\out{</div>}}
 }
@@ -168,8 +183,8 @@ function will extract the data and fit the propensity model only once, and re-us
 analysis.
 
 After completion, a tibble containing references to all generated files can be obtained using the
-\code{\link[=getFileReference]{getFileReference()}} function. A summary of the analysis results can be obtained using the
-\code{\link[=getResultsSummary]{getResultsSummary()}} function.
+\code{\link[CohortMethod:getFileReference]{CohortMethod::getFileReference()}} function. A summary of the analysis results can be obtained using the
+\code{\link[CohortMethod:getResultsSummary]{CohortMethod::getResultsSummary()}} function.
 \subsection{Analyses to Exclude}{
 
 Normally, \code{runCmAnalyses} will run all combinations of target-comparator-outcome-analyses settings.
@@ -192,7 +207,7 @@ Validate the module specifications
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{moduleSpecifications}}{The CohortIncidence module specifications}
+\item{\code{moduleSpecifications}}{The CohortMethod module specifications}
 }
 \if{html}{\out{</div>}}
 }

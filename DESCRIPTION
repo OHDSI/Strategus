@@ -2,7 +2,7 @@ Package: Strategus
 Type: Package
 Title: Coordinating and Executing Analytics Using HADES Modules
 Version: 1.0.0
-Date: 2023-06-04
+Date: 2024-07-10
 Authors@R: c(
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
@@ -18,17 +18,14 @@ Depends:
 	R (>= 4.2.0),
 	CohortGenerator (>= 0.8.0),
 	DatabaseConnector (>= 6.2.3),
-	R6
+  R6
 Imports:
   ParallelLogger (>= 3.1.0),
   dplyr,
   checkmate,
   rlang,
-  utils,
-  R.utils,
   digest,
   methods,
-  tibble,
   ResultModelManager (>= 0.5.8),
   SqlRender (>= 1.18.0)
 Suggests:
@@ -37,6 +34,7 @@ Suggests:
   CohortIncidence,
   CohortMethod,
   Eunomia,
+  EvidenceSynthesis,
   fs,
   knitr,
   PatientLevelPrediction,

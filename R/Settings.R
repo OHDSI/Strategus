@@ -23,8 +23,7 @@
 
 #' Add shared resources to analysis specifications
 #'
-#' @param analysisSpecifications An object of type `AnalysisSpecifications` as created
-#'                               by [createEmptyAnalysisSpecificiations()].
+#' @template analysisSpecifications
 #' @param sharedResources   An object of type `SharedResources`.
 #'
 #' @return
@@ -43,9 +42,8 @@ addSharedResources <- function(analysisSpecifications, sharedResources) {
 
 #' Add module specifications to analysis specifications
 #'
-#' @param analysisSpecifications An object of type `AnalysisSpecifications` as created
-#'                               by [createEmptyAnalysisSpecificiations()].
-#' @param moduleSpecifications   An object of type `ModuleSpecifications`.
+#' @template analysisSpecifications
+#' @template moduleSpecifications
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -61,6 +59,14 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
   return(analysisSpecifications)
 }
 
+#' Add Characterization module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `CharacterizationModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addCharacterizationModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -72,6 +78,14 @@ addCharacterizationModuleSpecifications <- function(analysisSpecifications, modu
   )
 }
 
+#' Add Cohort Diagnostics module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `CohortDiagnosticsModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addCohortDiagnosticsModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -83,6 +97,14 @@ addCohortDiagnosticsModuleSpecifications <- function(analysisSpecifications, mod
   )
 }
 
+#' Add Cohort Generator module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `CohortGeneratorModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addCohortGeneratorModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -94,6 +116,14 @@ addCohortGeneratorModuleSpecifications <- function(analysisSpecifications, modul
   )
 }
 
+#' Add Cohort Incidence module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `CohortIncidenceModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addCohortIncidenceModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -105,6 +135,14 @@ addCohortIncidenceModuleSpecifications <- function(analysisSpecifications, modul
   )
 }
 
+#' Add Cohort Method module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `CohortMethodModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addCohortMethodeModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -116,6 +154,14 @@ addCohortMethodeModuleSpecifications <- function(analysisSpecifications, moduleS
   )
 }
 
+#' Add Evidence Synthesis module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `EvidenceSynthesisModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addEvidenceSynthesisModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -127,6 +173,14 @@ addEvidenceSynthesisModuleSpecifications <- function(analysisSpecifications, mod
   )
 }
 
+#' Add Patient Level Prediction module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `PatientLevelPredictionModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addPatientLevelPredictionModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -138,6 +192,14 @@ addPatientLevelPredictionModuleSpecifications <- function(analysisSpecifications
   )
 }
 
+#' Add Self Controlled Case Series Module module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   An object of type `SelfControlledCaseSeriesModule`.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
 #' @export
 addSelfControlledCaseSeriesModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
   return(
@@ -187,12 +249,10 @@ createEmptyAnalysisSpecificiations <- function() {
 #'                                   [CohortGenerator::getCohortTableNames()] function.
 #' @param tempEmulationSchema        Some database platforms like Oracle and Impala do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
-#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @template resultsFolder
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
-#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
-#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -233,7 +293,7 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
 #'
 #' @param resultsDatabaseSchema      A schema where the results tables are stored
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
-#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @template resultsFolder
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
@@ -270,10 +330,12 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 
 #' Create Results Data Model Settings
 #'
+#' @description
+#' TODO: Why do we need resultsFolder? Creating the results data model needs this parameter
+#' for the DatabaseMetaData which feels inconsistent.
+#'
 #' @param resultsDatabaseSchema      A schema where the results tables are stored
-#' @param resultsFolder              A folder in the local file system where the execution results are held.
-#'                                   TODO: Why? Creating the results data model needs this parameter
-#'                                   for the DatabaseMetaData which feels inconsistent.
+#' @template resultsFolder
 #' @param logFileName                Logging information from the results data model creation
 #'
 #' @return
@@ -304,7 +366,7 @@ createResultsDataModelSettings <- function(resultsDatabaseSchema,
 #' Create results upload settings
 #'
 #' @param resultsDatabaseSchema      A schema where the results tables are stored. Use [@seealso [createResultsDataModel()]] to setup this schema.
-#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @template resultsFolder
 #' @param purgeSiteDataBeforeUploading If TRUE, before inserting data for a specific databaseId all the data for that site will be dropped. This assumes the results folder contains the full data for that data site.
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #'

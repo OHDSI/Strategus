@@ -13,6 +13,12 @@ uploadResults(
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{resultsUploadSettings}{The results upload settings as created using [@seealso \code{\link[=createResultsUploadSettings]{createResultsUploadSettings()}}]}
+
+\item{resultsConnectionDetails}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 }
 \description{
 Upload the results for a given analysis

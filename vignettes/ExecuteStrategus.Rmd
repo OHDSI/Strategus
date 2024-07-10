@@ -65,7 +65,6 @@ Next, we will use `Strategus` to create the CDM execution settings. The `connect
 
 ```{r}
 executionSettings <- createCdmExecutionSettings(
-  connectionDetailsReference = "eunomia",
   workDatabaseSchema = "main",
   cdmDatabaseSchema = "main",
   cohortTableNames = CohortGenerator::getCohortTableNames(),
