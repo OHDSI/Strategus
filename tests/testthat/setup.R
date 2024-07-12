@@ -1,6 +1,7 @@
 library(testthat)
 library(Strategus)
 library(Eunomia)
+library(CohortGenerator)
 library(dplyr)
 
 if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
@@ -18,7 +19,6 @@ if (dir.exists(Sys.getenv("DATABASECONNECTOR_JAR_FOLDER"))) {
     testthat::teardown_env()
   )
 }
-
 # Create a unique ID for the table identifiers
 tableSuffix <- paste0(substr(.Platform$OS.type, 1, 3), format(Sys.time(), "%y%m%d%H%M%S"), sample(1:100, 1))
 tableSuffix <- abs(digest::digest2int(tableSuffix))

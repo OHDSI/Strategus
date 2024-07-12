@@ -46,7 +46,7 @@ createResultDataModel <- function(analysisSpecifications,
     moduleObj <- get(moduleName)$new()
     moduleObj$createResultsDataModel(
       resultsConnectionDetails = resultsConnectionDetails,
-      resultsSchema = resultsDataModelSettings$resultsDatabaseSchema
+      resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema
     )
   }
 }

@@ -151,7 +151,7 @@ CohortMethodModule <- R6::R6Class(
                                           analysesToExclude = NULL,
                                           refitPsForEveryOutcome = FALSE,
                                           refitPsForEveryStudyPopulation = TRUE,
-                                          cmDiagnosticThresholds = createCmDiagnosticThresholds()) {
+                                          cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds()) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)

@@ -130,7 +130,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
                                           exposuresOutcomeList,
                                           analysesToExclude = NULL,
                                           combineDataFetchAcrossOutcomes = FALSE,
-                                          sccsDiagnosticThresholds = createSccsDiagnosticThresholds()) {
+                                          sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)

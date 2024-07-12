@@ -71,7 +71,6 @@ execute <- function(analysisSpecifications,
             return(TRUE)
           },
           warning = function(w) {
-            warning(w)
             return(FALSE)
           }
         )
