@@ -30,6 +30,7 @@ Imports:
   SqlRender (>= 1.18.0)
 Suggests:
   Characterization,
+  CirceR,
   CohortDiagnostics,
   CohortIncidence,
   CohortMethod,
