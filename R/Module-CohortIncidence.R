@@ -7,6 +7,8 @@ CohortIncidenceModule <- R6::R6Class(
   classname = "CohortIncidenceModule",
   inherit = StrategusModule,
   public = list(
+    #' @field tablePrefix The table prefix to append to results tables
+    tablePrefix = "ci_",
     #' @description Initialize the module
     initialize = function() {
       super$initialize()
@@ -16,22 +18,25 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
-      super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      on.exit(private$.clearLoggers())
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
+      checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
+      checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+      checkmate::reportAssertions(collection = errorMessages)
+
+      # Setup the job context
+      private$.createJobContext(analysisSpecifications, executionSettings)
+
       checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
-      jobContext <- private$jobContext
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
-      private$.message("Validating inputs")
-      private$.validate()
 
       # Establish the connection and ensure the cleanup is performed
       connection <- DatabaseConnector::connect(connectionDetails)
       on.exit(DatabaseConnector::disconnect(connection))
 
       # extract CohortIncidence design from jobContext
-      irDesign <- as.character(CohortIncidence::IncidenceDesign$new(jobContext$settings$irDesign)$asJSON())
-
+      irDesign <- as.character(CohortIncidence::IncidenceDesign$new(private$jobContext$settings$irDesign)$asJSON())
 
       # construct buildOptions from executionSettings
       # Questions:
@@ -39,9 +44,9 @@ CohortIncidenceModule <- R6::R6Class(
       # Are we pulling the source name from the right place?
 
       buildOptions <- CohortIncidence::buildOptions(
-        cohortTable = paste0(jobContext$moduleExecutionSettings$workDatabaseSchema, ".", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable),
-        cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        sourceName = as.character(jobContext$moduleExecutionSettings$databaseId),
+        cohortTable = paste0(private$jobContext$moduleExecutionSettings$workDatabaseSchema, ".", private$jobContext$moduleExecutionSettings$cohortTableNames$cohortTable),
+        cdmDatabaseSchema = private$jobContext$moduleExecutionSettings$cdmDatabaseSchema,
+        sourceName = as.character(private$jobContext$moduleExecutionSettings$databaseId),
         refId = 1
       )
 
@@ -52,43 +57,39 @@ CohortIncidenceModule <- R6::R6Class(
       )
 
       # Export the results
-      exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
+      exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       if (!dir.exists(exportFolder)) {
         dir.create(exportFolder, recursive = TRUE)
       }
 
-      rlang::inform("Export data")
-      if (nrow(executeResults) > 0) {
-        executeResults$database_id <- jobContext$moduleExecutionSettings$databaseId
-      } else {
-        executeResults$database_id <- character(0)
-      }
+      private$.message("Export data")
 
       # apply minCellCount to  executeResults
-      minCellCount <- jobContext$moduleExecutionSettings$minCellCount
+      minCellCount <- private$jobContext$moduleExecutionSettings$minCellCount
       if (minCellCount > 0) {
-        executeResults <- private$.enforceMinCellValue(executeResults, "PERSONS_AT_RISK_PE", minCellCount)
-        executeResults <- private$.enforceMinCellValue(executeResults, "PERSONS_AT_RISK", minCellCount)
-        executeResults <- private$.enforceMinCellValue(executeResults, "PERSON_OUTCOMES_PE", minCellCount)
-        executeResults <- private$.enforceMinCellValue(executeResults, "PERSON_OUTCOMES", minCellCount)
-        executeResults <- private$.enforceMinCellValue(executeResults, "OUTCOMES_PE", minCellCount)
-        executeResults <- private$.enforceMinCellValue(executeResults, "OUTCOMES", minCellCount)
-        executeResults <- private$.enforceMinCellStats(executeResults)
+        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSONS_AT_RISK_PE", minCellCount)
+        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSONS_AT_RISK", minCellCount)
+        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSON_OUTCOMES_PE", minCellCount)
+        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSON_OUTCOMES", minCellCount)
+        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "OUTCOMES_PE", minCellCount)
+        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "OUTCOMES", minCellCount)
+        executeResults$incidence_summary <- private$.enforceMinCellStats(executeResults$incidence_summary)
       }
 
-      readr::write_csv(executeResults, file.path(exportFolder, "incidence_summary.csv")) # this will be renamed later
+      for (tableName in names(executeResults)) {
+        tableData <- executeResults[[tableName]]
+        if (tableName == 'incidence_summary') {
+          if (nrow(tableData) > 0) {
+            tableData$database_id <- private$jobContext$moduleExecutionSettings$databaseId
+          } else {
+            tableData$database_id <- character(0)
+          }
+        }
+        readr::write_csv(tableData, file.path(exportFolder, paste0(self$tablePrefix,tableName,".csv")))
+      }
 
-      # TODO: Move the results data model into the package
-      # moduleInfo <- ParallelLogger::loadSettingsFromJson("MetaData.json")
-      # resultsDataModel <- readr::read_csv(file = "resultsDataModelSpecification.csv", show_col_types = FALSE)
-      # newTableNames <- paste0(moduleInfo$TablePrefix, resultsDataModel$"table_name")
-      # # Rename export files based on table prefix
-      # file.rename(
-      #   file.path(exportFolder, paste0(unique(resultsDataModel$"table_name"), ".csv")),
-      #   file.path(exportFolder, paste0(unique(newTableNames), ".csv"))
-      # )
-      # resultsDataModel$table_name <- newTableNames
-      # readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
+      resultsDataModel <- private$.getResultsDataModelSpecification()
+      readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
 
       private$.message(paste("Results available at:", resultsFolder))
     },
@@ -98,7 +99,18 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
-      stop("NOT IMPLEMENTED")
+      if (resultsConnectionDetails$dbms == "sqlite" & resultsDatabaseSchema != "main") {
+        stop("Invalid schema for sqlite, use databaseSchema = 'main'")
+      }
+
+      connection <- DatabaseConnector::connect(resultsConnectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+
+      # Create the results model
+      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = private$.getResultsDataModelSpecification())
+      sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
+      sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
+      DatabaseConnector::executeSql(connection, sql)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
@@ -106,7 +118,22 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template resultsUploadSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
-      stop("NOT IMPLEMENTED")
+      resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+      exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+
+      # use the results model spec that was saved along with the results output, not the embedded model spec.
+      resultsModelSpec <- readr::read_csv(
+        file = file.path(file.path(exportFolder, "resultsDataModelSpecification.csv")),
+        show_col_types = FALSE
+      )
+
+      ResultModelManager::uploadResults(
+        connectionDetails = resultsConnectionDetails,
+        schema = resultsUploadSettings$resultsDatabaseSchema,
+        resultsFolder = resultsFolder,
+        purgeSiteDataBeforeUploading = FALSE, # TODO: when to determine to purge? should that be in resultsUploadSettings?
+        specifications = resultsModelSpec
+      )
     },
     #' @description Creates the CohortIncidence Module Specifications
     #' @param irDesign The incidence rate design created from the CohortIncidence
@@ -128,22 +155,18 @@ CohortIncidenceModule <- R6::R6Class(
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
-    }
-  ),
-  private = list(
-    .validate = function() {
-      # Validate that the analysis specification will work when we
-      # enter the execute statement. This is done by deserializing the design.
-      irDesign <- CohortIncidence::IncidenceDesign$new(private$jobContext$settings$irDesign)
+      irDesign <- CohortIncidence::IncidenceDesign$new(moduleSpecifications$settings$irDesign)
       designJson <- rJava::J("org.ohdsi.analysis.cohortincidence.design.CohortIncidence")$fromJson(as.character(irDesign$asJSON()))
 
       invisible(designJson)
-    },
+    }
+  ),
+  private = list(
     .enforceMinCellValue = function(data, fieldName, minValues, silent = FALSE) {
       toCensor <- !is.na(data[, fieldName]) & data[, fieldName] < minValues & data[, fieldName] != 0
       if (!silent) {
         percent <- round(100 * sum(toCensor) / nrow(data), 1)
-        ParallelLogger::logInfo(
+        private$.message(
           "   censoring ",
           sum(toCensor),
           " values (",
@@ -166,6 +189,20 @@ CohortIncidenceModule <- R6::R6Class(
       data[toCensor, "INCIDENCE_PROPORTION_P100P"] <- NA
 
       return(data)
+    },
+    .getResultsDataModelSpecification = function() {
+      rdms <- readr::read_csv(
+        file = private$.getResultsDataModelSpecificationFileLocation(),
+        show_col_types = FALSE
+      )
+      rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
+      return(rdms)
+    },
+    .getResultsDataModelSpecificationFileLocation = function() {
+      return(system.file(
+        file.path("csv", "cohortIncidenceRdms.csv"),
+        package = "Strategus"
+      ))
     }
   )
 )
