@@ -170,9 +170,9 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
 }
 
 .uploadDatabaseMetadata <- function(resultsConnectionDetails,
-                                    resultsUploadSettings) {
-  databaseMetaDataResultsFolder <- .getDatabaseMetaDataResultsFolder(resultsUploadSettings$resultsFolder)
-  rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsUploadSettings$resultsFolder), "resultsDataModelSpecification.csv")
+                                    resultsDataModelSettings) {
+  databaseMetaDataResultsFolder <- .getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder)
+  rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder), "resultsDataModelSpecification.csv")
   if (file.exists(rdmsFile)) {
     rlang::inform("Uploading database metadata")
     connection <- DatabaseConnector::connect(resultsConnectionDetails)
@@ -181,10 +181,10 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
     specification <- CohortGenerator::readCsv(file = rdmsFile)
     ResultModelManager::uploadResults(
       connection = connection,
-      schema = resultsUploadSettings$resultsDatabaseSchema,
+      schema = resultsDataModelSettings$resultsDatabaseSchema,
       resultsFolder = databaseMetaDataResultsFolder,
-      purgeSiteDataBeforeUploading = resultsUploadSettings$purgeSiteDataBeforeUploading,
-      databaseIdentifierFile = getDatabaseIdentifierFilePath(resultsUploadSettings$resultsFolder),
+      purgeSiteDataBeforeUploading = TRUE,
+      databaseIdentifierFile = getDatabaseIdentifierFilePath(resultsDataModelSettings$resultsFolder),
       specifications = specification
     )
   } else {

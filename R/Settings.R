@@ -331,12 +331,12 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #' Create Results Data Model Settings
 #'
 #' @description
-#' TODO: Why do we need resultsFolder? Creating the results data model needs this parameter
-#' for the DatabaseMetaData which feels inconsistent.
+#' The results data model settings are used to create the results data
+#' model and to upload results.
 #'
 #' @template resultsDatabaseSchema
 #' @template resultsFolder
-#' @param logFileName                Logging information from the results data model creation
+#' @param logFileName     Log location for data model operations
 #'
 #' @return
 #' An object of type `ResultsDataModelSettings`
@@ -360,39 +360,5 @@ createResultsDataModelSettings <- function(resultsDatabaseSchema,
     executionSettings[[name]] <- get(name)
   }
   class(executionSettings) <- c("ResultsDataModelSettings")
-  return(executionSettings)
-}
-
-#' Create results upload settings
-#'
-#' @template resultsDatabaseSchema
-#' @template resultsFolder
-#' @param purgeSiteDataBeforeUploading If TRUE, before inserting data for a specific databaseId all the data for that site will be dropped. This assumes the results folder contains the full data for that data site.
-#' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
-#'
-#' @return
-#' An object of type `ResultsUploadSettings`.
-#'
-#' @export
-createResultsUploadSettings <- function(resultsDatabaseSchema,
-                                        resultsFolder,
-                                        purgeSiteDataBeforeUploading = FALSE,
-                                        logFileName = file.path(resultsFolder, "strategus-upload-log.txt")) {
-  errorMessages <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
-  checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
-  checkmate::assertLogical(purgeSiteDataBeforeUploading)
-  checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
-  checkmate::reportAssertions(collection = errorMessages)
-
-  # Normalize paths to convert relative paths to absolute paths
-  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
-  logFileName <- normalizePath(logFileName, mustWork = F)
-
-  executionSettings <- list()
-  for (name in names(formals(createResultsUploadSettings))) {
-    executionSettings[[name]] <- get(name)
-  }
-  class(executionSettings) <- c("ResultsUploadSettings")
   return(executionSettings)
 }

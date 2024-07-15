@@ -93,12 +93,12 @@ PatientLevelPredictionModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
-    #' @template resultsUploadSettings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
+    #' @template resultsDataModelSettings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
 
       databaseSchemaSettings <- PatientLevelPrediction::createDatabaseSchemaSettings(
-        resultSchema = resultsUploadSettings$resultsDatabaseSchema,
+        resultSchema = resultsDataModelSettings$resultsDatabaseSchema,
         tablePrefix = self$tablePrefix,
         targetDialect = resultsConnectionDetails$dbms
       )

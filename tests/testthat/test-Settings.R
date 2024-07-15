@@ -409,12 +409,3 @@ test_that("Create results data model settings", {
 
   expect_equal(class(settings), c("ResultsDataModelSettings"))
 })
-
-test_that("Create results upload settings", {
-  settings <- createResultsUploadSettings(
-    resultsDatabaseSchema = "test",
-    resultsFolder = tempfile()
-  )
-
-  expect_equal(class(settings), c("ResultsUploadSettings"))
-})

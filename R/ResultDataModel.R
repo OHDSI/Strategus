@@ -58,38 +58,23 @@ createResultDataModel <- function(analysisSpecifications,
 #' Upload the results for a given analysis
 #'
 #' @template AnalysisSpecifications
-#' @template resultsUploadSettings
+#' @template resultsDataModelSettings
 #' @template resultsConnectionDetails
 #'
 #' @export
 uploadResults <- function(analysisSpecifications,
-                          resultsUploadSettings,
+                          resultsDataModelSettings,
                           resultsConnectionDetails) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
-  checkmate::assertClass(resultsUploadSettings, "ResultsUploadSettings", add = errorMessages)
+  checkmate::assertClass(resultsDataModelSettings, "ResultsDataModelSettings", add = errorMessages)
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
-
-  # If the user has set purgeSiteDataBeforeUploading == TRUE
-  # then we must confirm the location of the DatabaseMetaData
-  # to obtain the database ID
-  if(isTRUE(resultsUploadSettings$purgeSiteDataBeforeUploading)) {
-    databaseIdentifierFile <- getDatabaseIdentifierFilePath(resultsUploadSettings$resultsFolder)
-    if (!file.exists(databaseIdentifierFile)) {
-      stop(
-        sprintf(
-          "databaseIdentifierFile %s not found. This file location must be specified when purgeSiteDataBeforeUploading == TRUE",
-          databaseIdentifierFile
-        )
-      )
-    }
-  }
 
   # The DatabaseMetaData is a special case...
   .uploadDatabaseMetadata(
     resultsConnectionDetails = resultsConnectionDetails,
-    resultsUploadSettings = resultsUploadSettings
+    resultsDataModelSettings = resultsDataModelSettings
   )
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
@@ -98,7 +83,7 @@ uploadResults <- function(analysisSpecifications,
     moduleObj$uploadResults(
       resultsConnectionDetails = resultsConnectionDetails,
       analysisSpecifications = analysisSpecifications,
-      resultsUploadSettings = resultsUploadSettings
+      resultsDataModelSettings = resultsDataModelSettings
     )
   }
 }

@@ -70,9 +70,9 @@ CohortMethodModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
-    #' @template resultsUploadSettings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
+    #' @template resultsDataModelSettings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
 
       # TODO: This is something CM does differently.
       # Find the results zip file in the results sub folder
@@ -101,9 +101,9 @@ CohortMethodModule <- R6::R6Class(
       # not sure how it will know what to purge...
       CohortMethod::uploadResults(
         connectionDetails = resultsConnectionDetails,
-        schema = resultsUploadSettings$resultsDatabaseSchema,
+        schema = resultsDataModelSettings$resultsDatabaseSchema,
         zipFileName = zipFileName,
-        purgeSiteDataBeforeUploading = resultsUploadSettings$purgeSiteDataBeforeUploading
+        purgeSiteDataBeforeUploading = FALSE
       )
     },
     #' @description Creates the CohortMethod Module Specifications

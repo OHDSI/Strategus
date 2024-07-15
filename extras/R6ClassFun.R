@@ -430,15 +430,10 @@ Strategus::createResultDataModel(
 )
 
 # Upload results ---------------
-resultsUploadSettings <- Strategus::createResultsUploadSettings(
-  resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema,
-  resultsFolder = resultsDataModelSettings$resultsFolder
-)
-
 #debugonce(Strategus::uploadResults)
 Strategus::uploadResults(
   analysisSpecifications = analysisSpecifications,
-  resultsUploadSettings = resultsUploadSettings,
+  resultsDataModelSettings = resultsDataModelSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
 
@@ -501,10 +496,9 @@ Strategus::createResultDataModel(
   resultsConnectionDetails = resultsConnectionDetails
 )
 
-resultsUploadSettings$resultsFolder <- resultsExecutionSettings$resultsFolder
 Strategus::uploadResults(
   analysisSpecifications = esAnalysisSpecifications,
-  resultsUploadSettings = resultsUploadSettings,
+  resultsDataModelSettings = resultsDataModelSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
 

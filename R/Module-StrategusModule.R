@@ -75,15 +75,15 @@ StrategusModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
-    #' @template resultsUploadSettings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
+    #' @template resultsDataModelSettings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
-      checkmate::assertClass(resultsUploadSettings, "ResultsUploadSettings", add = errorMessages)
+      checkmate::assertClass(resultsDataModelSettings, "ResultsDataModelSettings", add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
 
       # Setup the job context
-      private$.createJobContext(analysisSpecifications, resultsUploadSettings)
+      private$.createJobContext(analysisSpecifications, resultsDataModelSettings)
       private$.message('UPLOAD RESULTS: ', self$moduleName)
     },
     #' @description Base function for creating the module settings object.
@@ -158,10 +158,6 @@ StrategusModule <- R6::R6Class(
 
       if (is(private$jobContext$moduleExecutionSettings, "ExecutionSettings")) {
         private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
-      }
-
-      if (is(private$jobContext$moduleExecutionSettings, "ResultsUploadSettings")) {
-        private$jobContext$moduleExecutionSettings$databaseIdentifierFile <- Strategus::getDatabaseIdentifierFilePath(executionSettings$resultsFolder)
       }
 
       # TODO: This should be in the execution settings already for

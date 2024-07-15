@@ -15,12 +15,12 @@ createResultsDataModelSettings(
 
 \item{resultsFolder}{The root folder holding the study results.}
 
-\item{logFileName}{Logging information from the results data model creation}
+\item{logFileName}{Log location for data model operations}
 }
 \value{
 An object of type \code{ResultsDataModelSettings}
 }
 \description{
-TODO: Why do we need resultsFolder? Creating the results data model needs this parameter
-for the DatabaseMetaData which feels inconsistent.
+The results data model settings are used to create the results data
+model and to upload results.
 }
