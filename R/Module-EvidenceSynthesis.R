@@ -21,7 +21,6 @@ EvidenceSynthesisModule <- R6::R6Class(
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      on.exit(private$.clearLoggers())
       checkmate::assertClass(executionSettings, "ResultsExecutionSettings")
       jobContext <- private$jobContext
 

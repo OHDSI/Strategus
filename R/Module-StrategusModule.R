@@ -59,8 +59,6 @@ StrategusModule <- R6::R6Class(
 
       # Setup the job context
       private$.createJobContext(analysisSpecifications, executionSettings)
-      # Setup logging
-      private$.createLoggers(private$jobContext$moduleExecutionSettings)
       private$.message('EXECUTING: ', self$moduleName)
     },
     #' @description Create the results data model for the module
@@ -137,24 +135,6 @@ StrategusModule <- R6::R6Class(
     jobContext = JobContext$new(),
     .message = function(...) {
       rlang::inform(paste0(...))
-    },
-    .createLoggers = function(moduleExecutionSettings) {
-      # Establish loggers for the module execution
-      if (!dir.exists(moduleExecutionSettings$resultsSubFolder)) {
-        dir.create(moduleExecutionSettings$resultsSubFolder, recursive = T)
-      }
-      ParallelLogger::addDefaultFileLogger(
-        name = "MODULE_LOGGER",
-        fileName = file.path(moduleExecutionSettings$resultsSubFolder, "log.txt")
-      )
-      ParallelLogger::addDefaultErrorReportLogger(
-        name = "MODULE_ERROR_LOGGER",
-        file.path(moduleExecutionSettings$resultsSubFolder, "errorReportR.txt")
-      )
-    },
-    .clearLoggers = function() {
-      ParallelLogger::unregisterLogger("MODULE_LOGGER")
-      ParallelLogger::unregisterLogger("MODULE_ERROR_LOGGER")
     },
     .createJobContext = function(analysisSpecifications, executionSettings) {
       # Make sure this is created each call
