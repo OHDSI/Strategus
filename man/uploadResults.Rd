@@ -6,7 +6,7 @@
 \usage{
 uploadResults(
   analysisSpecifications,
-  resultsUploadSettings,
+  resultsDataModelSettings,
   resultsConnectionDetails
 )
 }
@@ -14,7 +14,7 @@ uploadResults(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{resultsUploadSettings}{The results upload settings as created using [@seealso \code{\link[=createResultsUploadSettings]{createResultsUploadSettings()}}]}
+\item{resultsDataModelSettings}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 
 \item{resultsConnectionDetails}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the

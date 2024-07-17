@@ -59,8 +59,6 @@ StrategusModule <- R6::R6Class(
 
       # Setup the job context
       private$.createJobContext(analysisSpecifications, executionSettings)
-      # Setup logging
-      private$.createLoggers(private$jobContext$moduleExecutionSettings)
       private$.message('EXECUTING: ', self$moduleName)
     },
     #' @description Create the results data model for the module
@@ -77,15 +75,15 @@ StrategusModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
-    #' @template resultsUploadSettings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
+    #' @template resultsDataModelSettings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
-      checkmate::assertClass(resultsUploadSettings, "ResultsUploadSettings", add = errorMessages)
+      checkmate::assertClass(resultsDataModelSettings, "ResultsDataModelSettings", add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
 
       # Setup the job context
-      private$.createJobContext(analysisSpecifications, resultsUploadSettings)
+      private$.createJobContext(analysisSpecifications, resultsDataModelSettings)
       private$.message('UPLOAD RESULTS: ', self$moduleName)
     },
     #' @description Base function for creating the module settings object.
@@ -138,24 +136,6 @@ StrategusModule <- R6::R6Class(
     .message = function(...) {
       rlang::inform(paste0(...))
     },
-    .createLoggers = function(moduleExecutionSettings) {
-      # Establish loggers for the module execution
-      if (!dir.exists(moduleExecutionSettings$resultsSubFolder)) {
-        dir.create(moduleExecutionSettings$resultsSubFolder, recursive = T)
-      }
-      ParallelLogger::addDefaultFileLogger(
-        name = "MODULE_LOGGER",
-        fileName = file.path(moduleExecutionSettings$resultsSubFolder, "log.txt")
-      )
-      ParallelLogger::addDefaultErrorReportLogger(
-        name = "MODULE_ERROR_LOGGER",
-        file.path(moduleExecutionSettings$resultsSubFolder, "errorReportR.txt")
-      )
-    },
-    .clearLoggers = function() {
-      ParallelLogger::unregisterLogger("MODULE_LOGGER")
-      ParallelLogger::unregisterLogger("MODULE_ERROR_LOGGER")
-    },
     .createJobContext = function(analysisSpecifications, executionSettings) {
       # Make sure this is created each call
       private$jobContext <- JobContext$new()
@@ -178,10 +158,6 @@ StrategusModule <- R6::R6Class(
 
       if (is(private$jobContext$moduleExecutionSettings, "ExecutionSettings")) {
         private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
-      }
-
-      if (is(private$jobContext$moduleExecutionSettings, "ResultsUploadSettings")) {
-        private$jobContext$moduleExecutionSettings$databaseIdentifierFile <- Strategus::getDatabaseIdentifierFilePath(executionSettings$resultsFolder)
       }
 
       # TODO: This should be in the execution settings already for

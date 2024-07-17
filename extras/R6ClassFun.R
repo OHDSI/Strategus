@@ -430,15 +430,10 @@ Strategus::createResultDataModel(
 )
 
 # Upload results ---------------
-resultsUploadSettings <- Strategus::createResultsUploadSettings(
-  resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema,
-  resultsFolder = resultsDataModelSettings$resultsFolder
-)
-
 #debugonce(Strategus::uploadResults)
 Strategus::uploadResults(
   analysisSpecifications = analysisSpecifications,
-  resultsUploadSettings = resultsUploadSettings,
+  resultsDataModelSettings = resultsDataModelSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
 
@@ -501,16 +496,15 @@ Strategus::createResultDataModel(
   resultsConnectionDetails = resultsConnectionDetails
 )
 
-resultsUploadSettings$resultsFolder <- resultsExecutionSettings$resultsFolder
 Strategus::uploadResults(
   analysisSpecifications = esAnalysisSpecifications,
-  resultsUploadSettings = resultsUploadSettings,
+  resultsDataModelSettings = resultsDataModelSettings,
   resultsConnectionDetails = resultsConnectionDetails
 )
 
 # Review results --------------------------
-library(ShinyAppBuilder)
-library(OhdsiShinyModules)
+library(ShinyAppBuilder) #NOTE: remotes::install_github("OHDSI/ShinyAppBuilder", ref="estimation")
+library(OhdsiShinyModules) #NOTE: remotes::install_github("OHDSI/OhdsiShinyModules", ref="estimation-updated")
 # ADD OR REMOVE MODULES TAILORED TO YOUR STUDY
 shinyConfig <- initializeModuleConfig() |>
   addModuleConfig(
@@ -525,26 +519,22 @@ shinyConfig <- initializeModuleConfig() |>
   addModuleConfig(
     createDefaultCohortDiagnosticsConfig()
   ) |>
-  # addModuleConfig(
-  #   createDefaultCharacterizationConfig()
-  # ) |>
-  # addModuleConfig(
-  #   createDefaultPredictionConfig()
-  # ) |>
   addModuleConfig(
-   createDefaultCohortMethodConfig()
+    createDefaultCharacterizationConfig()
+  ) |>
+  addModuleConfig(
+    createDefaultPredictionConfig()
+  ) |>
+  addModuleConfig(
+   createDefaultEstimationConfig()
   )
-  # addModuleConfig(
-  #   createDefaultSccsConfig()
-  # ) |>
-  # addModuleConfig(
-  #   createDefaultEvidenceSynthesisConfig()
-  # )
 
 # now create the shiny app based on the config file and view the results
 # based on the connection
 ShinyAppBuilder::createShinyApp(
   config = shinyConfig,
   connectionDetails = resultsConnectionDetails,
-  resultDatabaseSettings = createDefaultResultDatabaseSettings(schema = "main")
+  resultDatabaseSettings = createDefaultResultDatabaseSettings(schema = "main"),
+  title = "Celecoxib vs. Diclofinac for the risk of GI Bleed",
+  studyDescription = "This study is showcasing the capabilities of running Strategus on Eunomia."
 )

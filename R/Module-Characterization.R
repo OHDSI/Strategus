@@ -22,7 +22,6 @@ CharacterizationModule <- R6::R6Class(
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      on.exit(private$.clearLoggers())
       checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
       jobContext <- private$jobContext
@@ -110,9 +109,9 @@ CharacterizationModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
-    #' @template resultsUploadSettings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
+    #' @template resultsDataModelSettings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
       jobContext <- private$jobContext
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
@@ -120,9 +119,9 @@ CharacterizationModule <- R6::R6Class(
 
       ResultModelManager::uploadResults(
         connectionDetails = resultsConnectionDetails,
-        schema = resultsUploadSettings$resultsDatabaseSchema,
+        schema = resultsDataModelSettings$resultsDatabaseSchema,
         resultsFolder = resultsFolder,
-        purgeSiteDataBeforeUploading = resultsUploadSettings$purgeSiteDataBeforeUploading,
+        purgeSiteDataBeforeUploading = FALSE,
         specifications = specifications
       )
     },

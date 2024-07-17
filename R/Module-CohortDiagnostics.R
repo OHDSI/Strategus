@@ -20,7 +20,6 @@ CohortDiagnosticsModule <- R6::R6Class(
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      on.exit(private$.clearLoggers())
       checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
       jobContext <- private$jobContext
@@ -77,9 +76,9 @@ CohortDiagnosticsModule <- R6::R6Class(
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
-    #' @template resultsUploadSettings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsUploadSettings)
+    #' @template resultsDataModelSettings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
 
       # TODO: This is something CD does differently.
       # Find the results zip file in the results sub folder
@@ -102,16 +101,12 @@ CohortDiagnosticsModule <- R6::R6Class(
         zipFileName <- file.path(resultsFolder, "results.zip")
       }
 
-      # TODO: This function does not expose
-      # a way to specify the database identifier file
-      # which makes the purge problematic since I'm
-      # not sure how it will know what to purge...
       CohortDiagnostics::uploadResults(
         connectionDetails = resultsConnectionDetails,
-        schema = resultsUploadSettings$resultsDatabaseSchema,,
+        schema = resultsDataModelSettings$resultsDatabaseSchema,
         tablePrefix = self$tablePrefix,
         zipFileName = zipFileName,
-        purgeSiteDataBeforeUploading = resultsUploadSettings$purgeSiteDataBeforeUploading
+        purgeSiteDataBeforeUploading = FALSE
       )
     },
     #' @description Creates the CohortDiagnostics Module Specifications

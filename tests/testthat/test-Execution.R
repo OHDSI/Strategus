@@ -80,14 +80,9 @@ test_that("Execute study, upload results, excute results modules and upload resu
   )
 
   # Upload cdm related results --------------------
-  resultsUploadSettings <- Strategus::createResultsUploadSettings(
-    resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema,
-    resultsFolder = resultsDataModelSettings$resultsFolder
-  )
-
   Strategus::uploadResults(
     analysisSpecifications = analysisSpecifications,
-    resultsUploadSettings = resultsUploadSettings,
+    resultsDataModelSettings = resultsDataModelSettings,
     resultsConnectionDetails = resultsConnectionDetails
   )
 
@@ -127,16 +122,19 @@ test_that("Execute study, upload results, excute results modules and upload resu
   )
 
   # Upload the results -------------
-  resultsUploadSettings <- Strategus::createResultsUploadSettings(
+  resultsDataModelSettings <- Strategus::createResultsDataModelSettings(
     resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema,
     resultsFolder = resultsExecutionSettings$resultsFolder
   )
 
-  Strategus::uploadResults(
-    analysisSpecifications = resultsModulesAnalysisSpecifications,
-    resultsUploadSettings = resultsUploadSettings,
-    resultsConnectionDetails = resultsConnectionDetails
-
+  # NOTE: This will throw a warning since the database metadata
+  # does not exist
+  expect_warning(
+    Strategus::uploadResults(
+      analysisSpecifications = resultsModulesAnalysisSpecifications,
+      resultsDataModelSettings = resultsDataModelSettings,
+      resultsConnectionDetails = resultsConnectionDetails
+    )
   )
 
   # Get a list of tables

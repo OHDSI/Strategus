@@ -110,7 +110,7 @@ Upload the results for the module
 \if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
-  resultsUploadSettings
+  resultsDataModelSettings
 )}\if{html}{\out{</div>}}
 }
 
@@ -131,7 +131,7 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{\code{resultsUploadSettings}}{The results upload settings as created using [@seealso \code{\link[=createResultsUploadSettings]{createResultsUploadSettings()}}]}
+\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 }
 \if{html}{\out{</div>}}
 }
