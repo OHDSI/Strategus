@@ -131,6 +131,7 @@ CohortIncidenceModule <- R6::R6Class(
         connectionDetails = resultsConnectionDetails,
         schema = resultsUploadSettings$resultsDatabaseSchema,
         resultsFolder = resultsFolder,
+        runCheckAndFixCommands = TRUE,
         purgeSiteDataBeforeUploading = FALSE, # TODO: when to determine to purge? should that be in resultsUploadSettings?
         specifications = resultsModelSpec
       )
