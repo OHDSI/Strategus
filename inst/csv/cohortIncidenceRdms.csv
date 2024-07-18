@@ -1,6 +1,6 @@
 table_name,column_name,data_type,is_required,primary_key,min_cell_count,description
 incidence_summary,ref_id,int,No,No,No,None provided
-incidence_summary,ref_id,int,No,No,No,None provided
+incidence_summary,database_id,varchar(255),No,No,No,None provided
 incidence_summary,source_name,varchar(255),No,No,No,None provided
 incidence_summary,target_cohort_definition_id,bigint,No,No,No,None provided
 incidence_summary,target_name,varchar(255),No,No,No,None provided

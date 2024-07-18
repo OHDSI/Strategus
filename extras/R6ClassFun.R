@@ -352,16 +352,13 @@ plpModuleSpecifications <- plpModuleSettingsCreator$createModuleSpecifications(
 analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
-  # WORKING
   addCohortGeneratorModuleSpecifications(cgModuleSettings) |>
-  #addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
-  #addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
-  #addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-  #addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
-  # NOT WORKING
-  addCharacterizationModuleSpecifications(cModuleSpecifications)
-  # MOSTLY WORKING
-  #addCohortIncidenceModuleSpecifications(ciModuleSettings)
+  addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
+  addCharacterizationModuleSpecifications(cModuleSpecifications) |>
+  addCohortIncidenceModuleSpecifications(ciModuleSettings) |>
+  addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
+  addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
+  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
 
 # Cleanup any prior results -----------------
 outputFolder <- "D:/TEMP/StrategusR6Testing"
@@ -393,11 +390,11 @@ Strategus::execute(
   connectionDetails = connectionDetails
 )
 
-# # # DEBUG CD
-# cdModule <- CohortDiagnosticsModule$new()
-# debugonce(cdModule$execute)
+# # DEBUG CI
+# ciModule <- CohortIncidenceModule$new()
+# debugonce(ciModule$execute)
 # executionSettings$databaseId = "Eunomia"
-# cdModule$execute(
+# ciModule$execute(
 #   analysisSpecifications = analysisSpecifications,
 #   executionSettings = executionSettings,
 #   connectionDetails = connectionDetails
@@ -502,7 +499,50 @@ Strategus::uploadResults(
   resultsConnectionDetails = resultsConnectionDetails
 )
 
-# Review results --------------------------
+# Review results - CURRENT APPROACH FOR Char & Inc --------------------------
+library(ShinyAppBuilder) #NOTE: remotes::install_github("OHDSI/ShinyAppBuilder", ref="v2.0.1")
+library(OhdsiShinyModules) #NOTE: remotes::install_github("OHDSI/OhdsiShinyModules", ref="v2.1.5")
+
+# ADD OR REMOVE MODULES TAILORED TO YOUR STUDY
+shinyConfig <- initializeModuleConfig() |>
+  addModuleConfig(
+    createDefaultAboutConfig()
+  )  |>
+  addModuleConfig(
+    createDefaultDatasourcesConfig()
+  )  |>
+  addModuleConfig(
+    createDefaultCohortGeneratorConfig()
+  ) |>
+  # addModuleConfig(
+  #   createDefaultCohortDiagnosticsConfig()
+  # ) |>
+  addModuleConfig(
+    createDefaultCharacterizationConfig()
+  ) #|>
+  # addModuleConfig(
+  #   createDefaultPredictionConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultCohortMethodConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultSccsConfig()
+  # ) |>
+  # addModuleConfig(
+  #   createDefaultEvidenceSynthesisConfig()
+  # )
+
+# now create the shiny app based on the config file and view the results
+# based on the connection
+ShinyAppBuilder::createShinyApp(
+  config = shinyConfig,
+  connectionDetails = resultsConnectionDetails,
+  resultDatabaseSettings = createDefaultResultDatabaseSettings(schema = "main")
+)
+
+
+# Review results - NEW BRANCH APPROACH --------------------------
 library(ShinyAppBuilder) #NOTE: remotes::install_github("OHDSI/ShinyAppBuilder", ref="estimation")
 library(OhdsiShinyModules) #NOTE: remotes::install_github("OHDSI/OhdsiShinyModules", ref="estimation-updated")
 # ADD OR REMOVE MODULES TAILORED TO YOUR STUDY

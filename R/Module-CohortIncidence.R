@@ -77,10 +77,14 @@ CohortIncidenceModule <- R6::R6Class(
         executeResults <- private$.enforceMinCellStats(executeResults)
       }
 
-      readr::write_csv(executeResults, file.path(exportFolder, "incidence_summary.csv")) # this will be renamed later
+      readr::write_csv(executeResults, file.path(exportFolder, paste0(self$tablePrefix, "incidence_summary.csv")))
 
       resultsDataModel <- private$.getResultsDataModelSpecification()
-      readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
+      CohortGenerator::writeCsv(
+        x = resultsDataModel,
+        file = file.path(exportFolder, "resultsDataModelSpecification.csv"),
+        warnOnFileNameCaseMismatch = FALSE
+      )
 
       private$.message(paste("Results available at:", resultsFolder))
     },
@@ -112,16 +116,14 @@ CohortIncidenceModule <- R6::R6Class(
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
 
       # use the results model spec that was saved along with the results output, not the embedded model spec.
-      resultsModelSpec <- readr::read_csv(
-        file = file.path(file.path(resultsFolder, "resultsDataModelSpecification.csv")),
-        show_col_types = FALSE
+      resultsModelSpec <- CohortGenerator::readCsv(
+        file = file.path(file.path(resultsFolder, "resultsDataModelSpecification.csv"))
       )
 
       ResultModelManager::uploadResults(
         connectionDetails = resultsConnectionDetails,
-        schema = resultsUploadSettings$resultsDatabaseSchema,
+        schema = resultsDataModelSettings$resultsDatabaseSchema,
         resultsFolder = resultsFolder,
-        runCheckAndFixCommands = TRUE,
         purgeSiteDataBeforeUploading = FALSE,
         specifications = resultsModelSpec
       )
@@ -186,9 +188,8 @@ CohortIncidenceModule <- R6::R6Class(
       return(data)
     },
     .getResultsDataModelSpecification = function() {
-      rdms <- readr::read_csv(
-        file = private$.getResultsDataModelSpecificationFileLocation(),
-        show_col_types = FALSE
+      rdms <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation()
       )
       rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
       return(rdms)
