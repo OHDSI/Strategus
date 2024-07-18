@@ -7,6 +7,8 @@ CohortIncidenceModule <- R6::R6Class(
   classname = "CohortIncidenceModule",
   inherit = StrategusModule,
   public = list(
+    #' @field tablePrefix The table prefix to append to results tables
+    tablePrefix = "ci_",
     #' @description Initialize the module
     initialize = function() {
       super$initialize()
@@ -77,17 +79,8 @@ CohortIncidenceModule <- R6::R6Class(
 
       readr::write_csv(executeResults, file.path(exportFolder, "incidence_summary.csv")) # this will be renamed later
 
-      # TODO: Move the results data model into the package
-      # moduleInfo <- ParallelLogger::loadSettingsFromJson("MetaData.json")
-      # resultsDataModel <- readr::read_csv(file = "resultsDataModelSpecification.csv", show_col_types = FALSE)
-      # newTableNames <- paste0(moduleInfo$TablePrefix, resultsDataModel$"table_name")
-      # # Rename export files based on table prefix
-      # file.rename(
-      #   file.path(exportFolder, paste0(unique(resultsDataModel$"table_name"), ".csv")),
-      #   file.path(exportFolder, paste0(unique(newTableNames), ".csv"))
-      # )
-      # resultsDataModel$table_name <- newTableNames
-      # readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
+      resultsDataModel <- private$.getResultsDataModelSpecification()
+      readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
 
       private$.message(paste("Results available at:", resultsFolder))
     },
@@ -97,7 +90,18 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
-      stop("NOT IMPLEMENTED")
+      if (resultsConnectionDetails$dbms == "sqlite" & resultsDatabaseSchema != "main") {
+        stop("Invalid schema for sqlite, use databaseSchema = 'main'")
+      }
+
+      connection <- DatabaseConnector::connect(resultsConnectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+
+      # Create the results model
+      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = private$.getResultsDataModelSpecification())
+      sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
+      sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
+      DatabaseConnector::executeSql(connection, sql)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
@@ -105,7 +109,22 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template resultsDataModelSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
-      stop("NOT IMPLEMENTED")
+      resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+
+      # use the results model spec that was saved along with the results output, not the embedded model spec.
+      resultsModelSpec <- readr::read_csv(
+        file = file.path(file.path(resultsFolder, "resultsDataModelSpecification.csv")),
+        show_col_types = FALSE
+      )
+
+      ResultModelManager::uploadResults(
+        connectionDetails = resultsConnectionDetails,
+        schema = resultsUploadSettings$resultsDatabaseSchema,
+        resultsFolder = resultsFolder,
+        runCheckAndFixCommands = TRUE,
+        purgeSiteDataBeforeUploading = FALSE,
+        specifications = resultsModelSpec
+      )
     },
     #' @description Creates the CohortIncidence Module Specifications
     #' @param irDesign The incidence rate design created from the CohortIncidence
@@ -142,7 +161,7 @@ CohortIncidenceModule <- R6::R6Class(
       toCensor <- !is.na(data[, fieldName]) & data[, fieldName] < minValues & data[, fieldName] != 0
       if (!silent) {
         percent <- round(100 * sum(toCensor) / nrow(data), 1)
-        ParallelLogger::logInfo(
+        private$.message(
           "   censoring ",
           sum(toCensor),
           " values (",
@@ -165,6 +184,20 @@ CohortIncidenceModule <- R6::R6Class(
       data[toCensor, "INCIDENCE_PROPORTION_P100P"] <- NA
 
       return(data)
+    },
+    .getResultsDataModelSpecification = function() {
+      rdms <- readr::read_csv(
+        file = private$.getResultsDataModelSpecificationFileLocation(),
+        show_col_types = FALSE
+      )
+      rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
+      return(rdms)
+    },
+    .getResultsDataModelSpecificationFileLocation = function() {
+      return(system.file(
+        file.path("csv", "cohortIncidenceRdms.csv"),
+        package = "Strategus"
+      ))
     }
   )
 )
