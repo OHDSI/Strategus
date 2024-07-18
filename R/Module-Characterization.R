@@ -89,7 +89,6 @@ CharacterizationModule <- R6::R6Class(
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
       resultsDataModel <-private$.getResultsDataModelSpecification()
-      resultsDataModel$tableName <- paste0(tablePrefix, resultsDataModel$tableName)
       sql <- ResultModelManager::generateSqlSchema(
         schemaDefinition = resultsDataModel
       )
@@ -197,13 +196,14 @@ CharacterizationModule <- R6::R6Class(
     }
   ),
   private = list(
-    .getResultsDataModelSpecification = function() {
+    .getResultsDataModelSpecification = function(tablePrefix = self$tablePrefix) {
       rdms <- CohortGenerator::readCsv(
         file = system.file(
           "settings/resultsDataModelSpecification.csv",
           package = "Characterization"
         )
       )
+      rdms$tableName <- paste0(tablePrefix, rdms$tableName)
       return(rdms)
     }
   )

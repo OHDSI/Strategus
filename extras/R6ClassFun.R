@@ -354,10 +354,10 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   # WORKING
   addCohortGeneratorModuleSpecifications(cgModuleSettings) |>
-  addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
-  addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
-  addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
+  #addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
+  #addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
+  #addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
+  #addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
   # NOT WORKING
   addCharacterizationModuleSpecifications(cModuleSpecifications)
   # MOSTLY WORKING
