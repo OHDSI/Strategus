@@ -43,3 +43,6 @@ age_group_def,max_age,int,no,no
 subgroup_def,ref_id,int,yes,yes
 subgroup_def,subgroup_id,bigint,no,yes
 subgroup_def,subgroup_name,varchar(255),no,no
+target_outcome_ref,ref_id,int,yes,yes
+target_outcome_ref,target_cohort_id,bigint,yes,yes
+target_outcome_ref,outcome_cohort_id,bigint,yes,yes

@@ -18,6 +18,7 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      refId <- 1 # this should be part of execution settings
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
       checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
@@ -36,7 +37,8 @@ CohortIncidenceModule <- R6::R6Class(
       on.exit(DatabaseConnector::disconnect(connection))
 
       # extract CohortIncidence design from jobContext
-      irDesign <- as.character(CohortIncidence::IncidenceDesign$new(private$jobContext$settings$irDesign)$asJSON())
+      irDesign <- CohortIncidence::IncidenceDesign$new(private$jobContext$settings$irDesign)
+      irDesignJSON <- as.character(irDesign$asJSON())
 
       # construct buildOptions from executionSettings
       # Questions:
@@ -47,12 +49,12 @@ CohortIncidenceModule <- R6::R6Class(
         cohortTable = paste0(private$jobContext$moduleExecutionSettings$workDatabaseSchema, ".", private$jobContext$moduleExecutionSettings$cohortTableNames$cohortTable),
         cdmDatabaseSchema = private$jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         sourceName = as.character(private$jobContext$moduleExecutionSettings$databaseId),
-        refId = 1
+        refId = refId
       )
 
       executeResults <- CohortIncidence::executeAnalysis(
         connection = connection,
-        incidenceDesign = irDesign,
+        incidenceDesign = irDesignJSON,
         buildOptions = buildOptions
       )
 
@@ -87,6 +89,19 @@ CohortIncidenceModule <- R6::R6Class(
         }
         readr::write_csv(tableData, file.path(exportFolder, paste0(self$tablePrefix,tableName,".csv")))
       }
+
+      # in addition to the output of the module, we will produce a T-O lookup table that can be used to filter results
+      # to either 'Outcomes for T' or 'Targets for Outcomes'
+
+      targetOutcomeDfList <- lapply(irDesign$analysisList, function(analysis) {
+        outcomeDefs <- Filter(function (o) o$id %in% analysis$outcomes, irDesign$outcomeDefs)
+        outcome_cohort_id <- sapply(outcomeDefs, function(o) o$cohortId)
+        as.data.frame(expand.grid(target_cohort_id = analysis$targets, outcome_cohort_id = outcome_cohort_id))
+      })
+
+      target_outcome_ref <- unique(do.call(rbind, targetOutcomeDfList))
+      target_outcome_ref$ref_id <- refId
+      readr::write_csv(target_outcome_ref, file.path(exportFolder, paste0(self$tablePrefix,"target_outcome_ref",".csv")))
 
       resultsDataModel <- private$.getResultsDataModelSpecification()
       readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
@@ -129,7 +144,7 @@ CohortIncidenceModule <- R6::R6Class(
 
       ResultModelManager::uploadResults(
         connectionDetails = resultsConnectionDetails,
-        schema = resultsUploadSettings$resultsDatabaseSchema,
+        schema = resultsDataModelSettings$resultsDatabaseSchema,
         resultsFolder = resultsFolder,
         runCheckAndFixCommands = TRUE,
         purgeSiteDataBeforeUploading = FALSE, # TODO: when to determine to purge? should that be in resultsUploadSettings?
