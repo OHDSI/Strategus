@@ -352,16 +352,13 @@ plpModuleSpecifications <- plpModuleSettingsCreator$createModuleSpecifications(
 analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
-  # WORKING
   addCohortGeneratorModuleSpecifications(cgModuleSettings) |>
-  #addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
-  #addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
-  #addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-  #addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
-  # NOT WORKING
-  addCharacterizationModuleSpecifications(cModuleSpecifications)
-  # MOSTLY WORKING
-  #addCohortIncidenceModuleSpecifications(ciModuleSettings)
+  addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
+  addCharacterizationModuleSpecifications(cModuleSpecifications) |>
+  addCohortIncidenceModuleSpecifications(ciModuleSettings) |>
+  addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
+  addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
+  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
 
 # Cleanup any prior results -----------------
 outputFolder <- "D:/TEMP/StrategusR6Testing"
@@ -430,7 +427,7 @@ Strategus::createResultDataModel(
 )
 
 # Upload results ---------------
-#debugonce(Strategus::uploadResults)
+debugonce(Strategus::uploadResults)
 Strategus::uploadResults(
   analysisSpecifications = analysisSpecifications,
   resultsDataModelSettings = resultsDataModelSettings,

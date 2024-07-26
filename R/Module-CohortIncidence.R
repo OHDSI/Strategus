@@ -18,18 +18,10 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
-      refId <- 1 # this should be part of execution settings
-      errorMessages <- checkmate::makeAssertCollection()
-      checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
-      checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
-      checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
-      checkmate::reportAssertions(collection = errorMessages)
-
-      # Setup the job context
-      private$.createJobContext(analysisSpecifications, executionSettings)
-
+      super$execute(connectionDetails, analysisSpecifications, executionSettings)
       checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
+      refId <- 1 # this should be part of execution settings
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
 
       # Establish the connection and ensure the cleanup is performed
@@ -146,8 +138,7 @@ CohortIncidenceModule <- R6::R6Class(
         connectionDetails = resultsConnectionDetails,
         schema = resultsDataModelSettings$resultsDatabaseSchema,
         resultsFolder = resultsFolder,
-        runCheckAndFixCommands = TRUE,
-        purgeSiteDataBeforeUploading = FALSE, # TODO: when to determine to purge? should that be in resultsUploadSettings?
+        purgeSiteDataBeforeUploading = FALSE,
         specifications = resultsModelSpec
       )
     },
@@ -207,9 +198,8 @@ CohortIncidenceModule <- R6::R6Class(
       return(data)
     },
     .getResultsDataModelSpecification = function() {
-      rdms <- readr::read_csv(
-        file = private$.getResultsDataModelSpecificationFileLocation(),
-        show_col_types = FALSE
+      rdms <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation()
       )
       rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
       return(rdms)

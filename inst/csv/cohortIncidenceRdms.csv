@@ -1,4 +1,4 @@
-tableName,columnName,dataType,isRequired,primaryKey
+table_name,column_name,data_type,is_required,primary_key
 incidence_summary,ref_id ,int,no,no
 incidence_summary,database_id,varchar(255),yes,no
 incidence_summary,source_name,varchar(255),no,no

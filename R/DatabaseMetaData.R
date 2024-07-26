@@ -184,7 +184,6 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
       schema = resultsDataModelSettings$resultsDatabaseSchema,
       resultsFolder = databaseMetaDataResultsFolder,
       purgeSiteDataBeforeUploading = TRUE,
-      runCheckAndFixCommands = TRUE,
       databaseIdentifierFile = getDatabaseIdentifierFilePath(resultsDataModelSettings$resultsFolder),
       specifications = specification
     )
