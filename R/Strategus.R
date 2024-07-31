@@ -21,7 +21,6 @@
 #' @import dplyr
 #' @import CohortGenerator
 #' @import DatabaseConnector
+#' @import R6
 #' @importFrom methods is
 NULL
-
-assertModulesFolderSetting <- checkmate::makeAssertionFunction(.checkModuleFolderSetting)

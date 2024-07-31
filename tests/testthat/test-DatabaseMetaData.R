@@ -1,5 +1,4 @@
 test_that("Test DatabaseMetaData error conditions", {
-  skip_if_not_secret_service()
   # Run this test in isolation as it will make changes to the CDM schema.
   eunomiaConnectionDetails <- Eunomia::getEunomiaConnectionDetails()
   connection <- DatabaseConnector::connect(eunomiaConnectionDetails)
@@ -32,24 +31,12 @@ test_that("Test DatabaseMetaData error conditions", {
         )
       }
       DatabaseConnector::disconnect(connection)
-      unlink(eunomiaConnectionDetails$server, recursive = TRUE, force = TRUE)
     },
     testthat::teardown_env()
   )
 
-  # Setup keyring for the test
-  Sys.setenv("STRATEGUS_KEYRING_PASSWORD" = keyringPassword)
-  createKeyringForUnitTest(selectedKeyring = keyringName, selectedKeyringPassword = keyringPassword)
-  on.exit(deleteKeyringForUnitTest())
-
   # Confirm an error is thrown when 1 or more of these tables are missing
-  Strategus::storeConnectionDetails(
-    connectionDetails = eunomiaConnectionDetails,
-    connectionDetailsReference = dbms,
-    keyringName = keyringName
-  )
   executionSettings <- Strategus::createCdmExecutionSettings(
-    connectionDetailsReference = dbms,
     workDatabaseSchema = workDatabaseSchema,
     cdmDatabaseSchema = cdmDatabaseSchema,
     cohortTableNames = CohortGenerator::getCohortTableNames(),
@@ -58,9 +45,9 @@ test_that("Test DatabaseMetaData error conditions", {
     minCellCount = 5
   )
   expect_error(
-    Strategus:::createDatabaseMetaData(
+    Strategus:::.createDatabaseMetaData(
       executionSettings = executionSettings,
-      keyringName = keyringName
+      connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: Your OMOP CDM is missing the following required tables: cdm_source, vocabulary, observation_period"
   )
@@ -79,9 +66,9 @@ test_that("Test DatabaseMetaData error conditions", {
   }
 
   expect_error(
-    Strategus:::createDatabaseMetaData(
+    Strategus:::.createDatabaseMetaData(
       executionSettings = executionSettings,
-      keyringName = keyringName
+      connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: The CDM_SOURCE table in your OMOP CDM is empty."
   )
@@ -98,9 +85,9 @@ test_that("Test DatabaseMetaData error conditions", {
   )
 
   expect_error(
-    Strategus:::createDatabaseMetaData(
+    Strategus:::.createDatabaseMetaData(
       executionSettings = executionSettings,
-      keyringName = keyringName
+      connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: The VOCABULARY table in your OMOP CDM is missing the version"
   )
@@ -115,9 +102,9 @@ test_that("Test DatabaseMetaData error conditions", {
     backup_table = "vocabulary_bak"
   )
   expect_error(
-    Strategus:::createDatabaseMetaData(
+    Strategus:::.createDatabaseMetaData(
       executionSettings = executionSettings,
-      keyringName = keyringName
+      connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: The OBSERVATION_PERIOD table in your OMOP CDM lacks a maximum observation_period_end_date"
   )

@@ -6,8 +6,7 @@
 #' relative paths to the root of the `resultsFolder`
 #' which is generally found in `executionSettings$resultsFolder`.
 #'
-#' @param resultsFolder The folder holding the study results. This is found in
-#' `executionSettings$resultsFolder`.
+#' @template resultsFolder
 #'
 #' @param zipFile The path to the zip file to be created.
 #'

@@ -1,8 +1,8 @@
 Package: Strategus
 Type: Package
 Title: Coordinating and Executing Analytics Using HADES Modules
-Version: 0.3.0
-Date: 2023-06-04
+Version: 1.0.0
+Date: 2024-07-10
 Authors@R: c(
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
@@ -17,36 +17,44 @@ BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
 	R (>= 4.2.0),
 	CohortGenerator (>= 0.8.0),
-	DatabaseConnector (>= 6.2.3)
+	DatabaseConnector (>= 6.2.3),
+  R6
 Imports:
-  targets,
-  renv (>= 1.0.0),
   ParallelLogger (>= 3.1.0),
   dplyr,
   checkmate,
-  keyring,
   rlang,
-  utils,
-  R.utils,
   digest,
   methods,
-  tibble,
-  ResultModelManager (>= 0.3.0),
-  SqlRender (>= 1.11.0),
-  semver,
-  httr2,
-  jsonlite
+  ResultModelManager (>= 0.5.8),
+  SqlRender (>= 1.18.0)
 Suggests:
-  testthat (>= 3.0.0),
+  Characterization,
+  CirceR,
+  CohortDiagnostics,
+  CohortIncidence,
+  CohortMethod,
+  Cyclops,
+  Eunomia,
+  EvidenceSynthesis,
+  FeatureExtraction,
   fs,
   knitr,
+  PatientLevelPrediction,
   rmarkdown,
-  Eunomia,
+  RSQLite,
+  SelfControlledCaseSeries,
+  testthat (>= 3.0.0),
   withr
 Remotes:
+  ohdsi/Characterization,
+  ohdsi/CohortDiagnostics,
   ohdsi/CohortGenerator,
+  ohdsi/CohortIncidence,
+  ohdsi/CohortMethod,
+  ohdsi/PatientLevelPrediction,
   ohdsi/ResultModelManager,
-  ohdsi/Eunomia
+  ohdsi/SelfControlledCaseSeries
 VignetteBuilder: knitr
 NeedsCompilation: no
 RoxygenNote: 7.3.1
