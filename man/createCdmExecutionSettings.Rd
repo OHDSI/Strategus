@@ -5,7 +5,6 @@
 \title{Create CDM execution settings}
 \usage{
 createCdmExecutionSettings(
-  connectionDetailsReference,
   workDatabaseSchema,
   cdmDatabaseSchema,
   cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
@@ -13,17 +12,10 @@ createCdmExecutionSettings(
   workFolder,
   resultsFolder,
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
-  minCellCount = 5,
-  integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-  integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
-  resultsConnectionDetailsReference = NULL,
-  resultsDatabaseSchema = NULL
+  minCellCount = 5
 )
 }
 \arguments{
-\item{connectionDetailsReference}{A string that can be used to retrieve database connection details from a secure local
-store.}
-
 \item{workDatabaseSchema}{A database schema where intermediate data can be stored. The user (as identified in the
 connection details) will need to have write access to this database schema.}
 
@@ -38,21 +30,12 @@ connection details) will need to have read access to this database schema.}
 
 \item{workFolder}{A folder in the local file system where intermediate results can be written.}
 
-\item{resultsFolder}{A folder in the local file system where the module output will be written.}
+\item{resultsFolder}{The root folder holding the study results.}
 
 \item{logFileName}{Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the \code{resultsFolder}}
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included
 in results.}
-
-\item{integerAsNumeric}{Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native \code{Integer} class. Default is TRUE}
-
-\item{integer64AsNumeric}{Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using \code{bit64::integer64}.  Default is TRUE}
-
-\item{resultsConnectionDetailsReference}{A string that can be used to retrieve the results database connection
-details from a secure local store.}
-
-\item{resultsDatabaseSchema}{A schema where the results tables are stored}
 }
 \value{
 An object of type \code{ExecutionSettings}.

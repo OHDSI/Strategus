@@ -1,0 +1,59 @@
+{
+  "sharedResources": [],
+  "moduleSpecifications": [
+    {
+      "module": "EvidenceSynthesisModule",
+      "settings": {
+        "evidenceSynthesisAnalysisList": [
+          {
+            "chainLength": 1100000,
+            "burnIn": 100000,
+            "subSampleFrequency": 100,
+            "priorSd": [2, 0.5],
+            "alpha": 0.05,
+            "robust": false,
+            "df": 4,
+            "seed": 1,
+            "evidenceSynthesisAnalysisId": 1,
+            "evidenceSynthesisDescription": "Bayesian random-effects alpha 0.05 - adaptive grid",
+            "evidenceSynthesisSource": {
+              "sourceMethod": "CohortMethod",
+              "likelihoodApproximation": "adaptive grid",
+              "attr_class": "EvidenceSynthesisSource"
+            },
+            "controlType": "outcome",
+            "attr_class": ["BayesianMetaAnalysis", "EvidenceSynthesisAnalysis"]
+          },
+          {
+            "chainLength": 1100000,
+            "burnIn": 100000,
+            "subSampleFrequency": 100,
+            "priorSd": [2, 0.5],
+            "alpha": 0.05,
+            "robust": false,
+            "df": 4,
+            "seed": 1,
+            "evidenceSynthesisAnalysisId": 2,
+            "evidenceSynthesisDescription": "Bayesian random-effects alpha 0.05 - adaptive grid",
+            "evidenceSynthesisSource": {
+              "sourceMethod": "SelfControlledCaseSeries",
+              "likelihoodApproximation": "adaptive grid",
+              "attr_class": "EvidenceSynthesisSource"
+            },
+            "controlType": "outcome",
+            "attr_class": ["BayesianMetaAnalysis", "EvidenceSynthesisAnalysis"]
+          }
+        ],
+        "esDiagnosticThresholds": {
+          "mdrrThreshold": 10,
+          "easeThreshold": 0.25,
+          "i2Threshold": 0.4,
+          "tauThreshold": 0.6931,
+          "attr_class": "EsDiagnosticThresholds"
+        }
+      },
+      "attr_class": ["ModuleSpecifications", "EvidenceSynthesisModuleSpecifications"]
+    }
+  ],
+  "attr_class": "AnalysisSpecifications"
+}

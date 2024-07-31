@@ -1,6 +1,0 @@
-{
-	"Name": "TestModule1",
-	"Version": "0.0.1",
-	"Dependencies": [],
-	"TablePrefix": "tm1_"
-}

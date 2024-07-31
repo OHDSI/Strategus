@@ -1,9 +1,0 @@
-module,version,remote_repo,remote_username,module_type,main_package,main_package_tag
-CharacterizationModule,v0.6.0,github.com,OHDSI,cdm,Characterization,v0.2.0
-CohortDiagnosticsModule,v0.2.0,github.com,OHDSI,cdm,CohortDiagnostics,v3.2.5
-CohortGeneratorModule,v0.4.1,github.com,OHDSI,cdm,CohortGenerator,v0.9.0
-CohortIncidenceModule,v0.4.1,github.com,OHDSI,cdm,CohortIncidence,v3.3.0
-CohortMethodModule,v0.3.1,github.com,OHDSI,cdm,CohortMethod,v5.3.0
-PatientLevelPredictionModule,v0.3.0,github.com,OHDSI,cdm,PatientLevelPrediction,v6.3.6
-SelfControlledCaseSeriesModule,v0.5.0,github.com,OHDSI,cdm,SelfControlledCaseSeries,v5.2.0
-EvidenceSynthesisModule,v0.6.1,github.com,OHDSI,results,EvidenceSynthesis,v0.5.0

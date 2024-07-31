@@ -21,16 +21,27 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
-  databaseMetaDataFolder <- file.path(executionSettings$resultsFolder, "DatabaseMetaData")
+#' Provides the file path to the database identifier file created
+#' by Strategus
+#'
+#' @description
+#' This function is used to identify the location of the database identifier
+#' created by Strategus when running an analysis specification. This
+#' location is important when uploading results since the database identifier
+#' may be needed to purge old results for a given database identifier.
+#'
+#' @template resultsFolder
+#' @export
+getDatabaseIdentifierFilePath <- function(resultsFolder) {
+  return(file.path(.getDatabaseMetaDataResultsFolder(resultsFolder), "database_meta_data.csv"))
+}
+
+.createDatabaseMetaData <- function(executionSettings, connectionDetails) {
+  databaseMetaDataFolder <- .getDatabaseMetaDataResultsFolder(executionSettings$resultsFolder)
   if (!dir.exists(databaseMetaDataFolder)) {
     dir.create(databaseMetaDataFolder, recursive = TRUE)
   }
 
-  connectionDetails <- retrieveConnectionDetails(
-    connectionDetailsReference = executionSettings$connectionDetailsReference,
-    keyringName = keyringName
-  )
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
@@ -54,7 +65,10 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
   }
 
   resultsDataModel <- CohortGenerator::readCsv(
-    file = system.file("databaseMetaDataRdms.csv", package = "Strategus"),
+    file = system.file(
+      file.path("csv", "databaseMetaDataRdms.csv"),
+      package = "Strategus"
+    ),
     warnOnCaseMismatch = FALSE
   )
 
@@ -132,3 +146,53 @@ createDatabaseMetaData <- function(executionSettings, keyringName = NULL) {
   )
   return(databaseId)
 }
+
+.createDatabaseMetadataResultsDataModel <- function(resultsConnectionDetails,
+                                                    resultsDataModelSettings) {
+  rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder), "resultsDataModelSpecification.csv")
+  if (file.exists(rdmsFile)) {
+    rlang::inform("Creating results data model for database metadata")
+    connection <- DatabaseConnector::connect(resultsConnectionDetails)
+    on.exit(DatabaseConnector::disconnect(connection))
+
+    # Create the SQL from the resultsDataModelSpecification.csv
+    sql <- ResultModelManager::generateSqlSchema(
+      csvFilepath = rdmsFile
+    )
+    sql <- SqlRender::render(
+      sql = sql,
+      database_schema = resultsDataModelSettings$resultsDatabaseSchema
+    )
+    DatabaseConnector::executeSql(connection = connection, sql = sql)
+  } else {
+    warning("DatabaseMetaData not found - skipping table creation")
+  }
+}
+
+.uploadDatabaseMetadata <- function(resultsConnectionDetails,
+                                    resultsDataModelSettings) {
+  databaseMetaDataResultsFolder <- .getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder)
+  rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder), "resultsDataModelSpecification.csv")
+  if (file.exists(rdmsFile)) {
+    rlang::inform("Uploading database metadata")
+    connection <- DatabaseConnector::connect(resultsConnectionDetails)
+    on.exit(DatabaseConnector::disconnect(connection))
+
+    specification <- CohortGenerator::readCsv(file = rdmsFile)
+    ResultModelManager::uploadResults(
+      connection = connection,
+      schema = resultsDataModelSettings$resultsDatabaseSchema,
+      resultsFolder = databaseMetaDataResultsFolder,
+      purgeSiteDataBeforeUploading = TRUE,
+      databaseIdentifierFile = getDatabaseIdentifierFilePath(resultsDataModelSettings$resultsFolder),
+      specifications = specification
+    )
+  } else {
+    warning("DatabaseMetaData not found - skipping table creation")
+  }
+}
+
+.getDatabaseMetaDataResultsFolder <- function(resultsFolder) {
+  return(file.path(resultsFolder, "DatabaseMetaData"))
+}
+
