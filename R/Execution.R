@@ -116,45 +116,15 @@ execute <- function(analysisSpecifications,
   }
 
   # Execute any other modules
-  executionStatus <- list()
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) != "cohortgeneratormodule") {
       moduleObj <- get(moduleName)$new()
-      # Wrap execution in safely to allow the capture of
-      # any errors and to continue the execution.
-      safeExec <- purrr::safely(moduleObj$execute)
-      executionResult <- safeExec(
+      moduleObj$execute(
         connectionDetails = connectionDetails,
         analysisSpecifications = analysisSpecifications,
         executionSettings = executionSettings
       )
-      executionStatus <- append(
-        executionStatus,
-        list(
-          list(
-            moduleName = moduleName,
-            result = executionResult
-          )
-        )
-      )
-    }
-  }
-
-  # Print a summary
-  cli::cli_h1("EXECUTION SUMMARY")
-  for (i in 1:length(executionStatus)) {
-    status <- executionStatus[[i]]
-    if (!is.null(status$result$error)) {
-      cli::cli_alert_danger(
-        paste(
-          status$moduleName,
-          "ERROR:",
-          status$result$error$message
-        )
-      )
-    } else {
-      cli::cli_alert_success(status$moduleName)
     }
   }
 }
