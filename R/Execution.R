@@ -103,7 +103,12 @@ execute <- function(analysisSpecifications,
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) == "cohortgeneratormodule") {
-      moduleExecutionStatus <- .executeModule(moduleName)
+      moduleExecutionStatus <- .executeModule(
+        moduleName = moduleName,
+        connectionDetails = connectionDetails,
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = executionSettings
+      )
       executionStatus <- append(
         executionStatus,
         moduleExecutionStatus
@@ -116,7 +121,12 @@ execute <- function(analysisSpecifications,
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) != "cohortgeneratormodule") {
-      moduleExecutionStatus <- .executeModule(moduleName)
+      moduleExecutionStatus <- .executeModule(
+        moduleName = moduleName,
+        connectionDetails = connectionDetails,
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = executionSettings
+      )
       executionStatus <- append(
         executionStatus,
         moduleExecutionStatus
@@ -140,7 +150,7 @@ execute <- function(analysisSpecifications,
   invisible(executionStatus)
 }
 
-.executeModule <- function(moduleName) {
+.executeModule <- function(moduleName, connectionDetails, analysisSpecifications, executionSettings) {
   moduleObject <- get(moduleName)$new()
   safeExec <- purrr::safely(moduleObject$execute)
   startTime <- Sys.time()

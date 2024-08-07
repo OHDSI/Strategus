@@ -20,13 +20,15 @@ Depends:
 	DatabaseConnector (>= 6.2.3),
   R6
 Imports:
-  ParallelLogger (>= 3.1.0),
-  dplyr,
   checkmate,
-  rlang,
+  cli,
   digest,
+  dplyr,
   methods,
+  ParallelLogger (>= 3.1.0),
+  purrr,
   ResultModelManager (>= 0.5.8),
+  rlang,
   SqlRender (>= 1.18.0)
 Suggests:
   Characterization,
