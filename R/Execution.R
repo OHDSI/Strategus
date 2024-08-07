@@ -14,13 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Note: Using S3 for consistency with settings objects in PLP, CohortMethod, and
-# FeatureExtraction. If we want to use S4 or R6 we need to first adapt those
-# packages. This will be difficult, since these settings objects are used throughout
-# these packages, and are for example used in do.call() calls. We should also
-# carefully consider serialization and deserialization to JSON, which currently
-# uses custom functionality in ParallelLogger to maintain object attributes.
-
 #' Execute analysis specifications.
 #'
 #' @template AnalysisSpecifications
@@ -28,8 +21,11 @@
 #' @template connectionDetails
 #'
 #' @return
-#' Does not return anything. Is called for the side-effect of executing the specified
-#' analyses.
+#' Returns a list of lists that contains
+#' - moduleName: The name of the module executed
+#' - result: The result of the execution. See purrr::safely for details on
+#' this result.
+#' - executionTime: The time for the module to execute
 #'
 #' @export
 execute <- function(analysisSpecifications,
@@ -101,42 +97,29 @@ execute <- function(analysisSpecifications,
     )
   }
 
+  executionStatus <- list()
+
   # Execute the cohort generator module first if it exists
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) == "cohortgeneratormodule") {
-      cg <- CohortGeneratorModule$new()
-      cg$execute(
-        connectionDetails = connectionDetails,
-        analysisSpecifications = analysisSpecifications,
-        executionSettings = executionSettings
+      moduleExecutionStatus <- .executeModule(moduleName)
+      executionStatus <- append(
+        executionStatus,
+        moduleExecutionStatus
       )
       break;
     }
   }
 
   # Execute any other modules
-  executionStatus <- list()
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     if (tolower(moduleName) != "cohortgeneratormodule") {
-      moduleObj <- get(moduleName)$new()
-      # Wrap execution in safely to allow the capture of
-      # any errors and to continue the execution.
-      safeExec <- purrr::safely(moduleObj$execute)
-      executionResult <- safeExec(
-        connectionDetails = connectionDetails,
-        analysisSpecifications = analysisSpecifications,
-        executionSettings = executionSettings
-      )
+      moduleExecutionStatus <- .executeModule(moduleName)
       executionStatus <- append(
         executionStatus,
-        list(
-          list(
-            moduleName = moduleName,
-            result = executionResult
-          )
-        )
+        moduleExecutionStatus
       )
     }
   }
@@ -145,16 +128,44 @@ execute <- function(analysisSpecifications,
   cli::cli_h1("EXECUTION SUMMARY")
   for (i in 1:length(executionStatus)) {
     status <- executionStatus[[i]]
+    errorMessage <- ifelse(!is.null(status$result$error), status$result$error, "")
+    statusMessage <- sprintf("%s %s (Execution Time: %s)", status$moduleName, errorMessage, status$executionTime)
     if (!is.null(status$result$error)) {
-      cli::cli_alert_danger(
-        paste(
-          status$moduleName,
-          "ERROR:",
-          status$result$error$message
-        )
-      )
+      cli::cli_alert_danger(statusMessage)
     } else {
-      cli::cli_alert_success(status$moduleName)
+      cli::cli_alert_success(statusMessage)
     }
   }
+
+  invisible(executionStatus)
+}
+
+.executeModule <- function(moduleName) {
+  moduleObject <- get(moduleName)$new()
+  safeExec <- purrr::safely(moduleObject$execute)
+  startTime <- Sys.time()
+  executionResult <- safeExec(
+    connectionDetails = connectionDetails,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
+  )
+  timeToExecute <- Sys.time() - startTime
+  # Emit any errors
+  if (!is.null(executionResult$error)) {
+    .printErrorMessage(executionResult$error$message)
+  }
+  return(
+    list(
+      list(
+        moduleName = moduleName,
+        result = executionResult,
+        executionTime = paste0(signif(timeToExecute, 3), " ", attr(timeToExecute, "units"))
+      )
+    )
+  )
+}
+
+.printErrorMessage <- function(message) {
+  error <- cli::combine_ansi_styles("red")
+  cat(error(paste0("ERROR: ", message, "\n")))
 }

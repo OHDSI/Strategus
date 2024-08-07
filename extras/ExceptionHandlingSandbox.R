@@ -10,7 +10,12 @@ ExceptionThrowerModule <- R6::R6Class(
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
       checkmate::assertClass(executionSettings, "CdmExecutionSettings")
-      stop("THROWING EXCEPTION")
+      private$errorFn("THROWING EXCEPTION")
+    }
+  ),
+  private = list(
+    errorFn = function(msg) {
+      stop(msg)
     }
   )
 )
@@ -56,9 +61,9 @@ executionSettings <- Strategus::createCdmExecutionSettings(
 )
 
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-Strategus::execute(
+#debugonce(Strategus::execute)
+executionStatus <- Strategus::execute(
   analysisSpecifications = analysisSpecifications,
   executionSettings = executionSettings,
   connectionDetails = connectionDetails
 )
-
