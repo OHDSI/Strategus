@@ -17,8 +17,13 @@ by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \c
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 }
 \value{
-Does not return anything. Is called for the side-effect of executing the specified
-analyses.
+Returns a list of lists that contains
+\itemize{
+\item moduleName: The name of the module executed
+\item result: The result of the execution. See purrr::safely for details on
+this result.
+\item executionTime: The time for the module to execute
+}
 }
 \description{
 Execute analysis specifications.
