@@ -3,9 +3,7 @@
 #' @export
 #' @description
 #' Computes cohort characterization information against the OMOP CDM
-#' NOTE: Using v1.0.3 version of module and
-#' commit 372fb70c6133bdd8811f8dc1d2a2f9cb9a184345 for the
-#' package
+#' package version 2.0.0
 CharacterizationModule <- R6::R6Class(
   classname = "CharacterizationModule",
   inherit = StrategusModule,
@@ -131,7 +129,6 @@ CharacterizationModule <- R6::R6Class(
     #' @param dechallengeEvaluationWindow description
     #' @param timeAtRisk description
     #' @param minPriorObservation description
-    #' @param minCharacterizationMean description
     #' @param covariateSettings description
     createModuleSpecifications = function(targetIds,
                                           outcomeIds,
@@ -144,7 +141,6 @@ CharacterizationModule <- R6::R6Class(
                                             endAnchor = c("cohort end", "cohort end")
                                           ),
                                           minPriorObservation = 0,
-                                          minCharacterizationMean = 0,
                                           covariateSettings = FeatureExtraction::createDefaultCovariateSettings()) {
       # input checks
       if (!inherits(timeAtRisk, "data.frame")) {
