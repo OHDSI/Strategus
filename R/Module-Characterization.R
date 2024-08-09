@@ -33,29 +33,8 @@ CharacterizationModule <- R6::R6Class(
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         characterizationSettings = jobContext$settings,
-        databaseId = jobContext$moduleExecutionSettings$databaseId,
-        saveDirectory = workFolder,
-        tablePrefix = self$tablePrefix
-      )
-
-      # Export the results
-      rlang::inform("Export data to csv files")
-
-      sqliteConnectionDetails <- DatabaseConnector::createConnectionDetails(
-        dbms = "sqlite",
-        server = file.path(workFolder, "sqliteCharacterization", "sqlite.sqlite")
-      )
-
-      # get the result location folder
-      resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
-
-      Characterization::exportDatabaseToCsv(
-        connectionDetails = sqliteConnectionDetails,
-        resultSchema = "main",
-        tempEmulationSchema = NULL,
-        tablePrefix = self$tablePrefix,
-        filePrefix = self$tablePrefix,
-        saveDirectory = resultsFolder
+        databaseId = jobContext$moduleExecutionSettings$databaseId
+        outputDirectory = jobContext$moduleExecutionSettings$resultsSubFolder
       )
 
       # Export the resultsDataModelSpecification.csv
