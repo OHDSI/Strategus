@@ -177,8 +177,7 @@ CharacterizationModule <- R6::R6Class(
             startAnchor = timeAtRisk$startAnchor[i],
             riskWindowEnd = timeAtRisk$riskWindowEnd[i],
             endAnchor = timeAtRisk$endAnchor[i],
-            covariateSettings = covariateSettings,
-            minCharacterizationMean = minCharacterizationMean
+            covariateSettings = covariateSettings
           )
         }
       )
