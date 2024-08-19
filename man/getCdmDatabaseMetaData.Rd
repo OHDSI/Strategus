@@ -16,7 +16,5 @@ created \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}}.
 \description{
 This function is used to gather metadata about your OMOP CDM and inspect
 for informational purposes. This information will be saved with your
-results when running an analysis specification. This
-location is important when uploading results since the database identifier
-may be needed to purge old results for a given database identifier.
+results when executing an analysis specification.
 }

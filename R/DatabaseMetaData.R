@@ -26,7 +26,7 @@
 #'
 #' @description
 #' This function is used to identify the location of the database identifier
-#' created by Strategus when running an analysis specification. This
+#' created by Strategus when executing an analysis specification. This
 #' location is important when uploading results since the database identifier
 #' may be needed to purge old results for a given database identifier.
 #'
@@ -41,9 +41,7 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
 #' @description
 #' This function is used to gather metadata about your OMOP CDM and inspect
 #' for informational purposes. This information will be saved with your
-#' results when running an analysis specification. This
-#' location is important when uploading results since the database identifier
-#' may be needed to purge old results for a given database identifier.
+#' results when executing an analysis specification.
 #'
 #' @param cdmExecutionSettings    An object of type `CdmExecutionSettings` as
 #'                                created [createCdmExecutionSettings()].

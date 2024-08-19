@@ -5,9 +5,7 @@
 \title{Module for generating cohort characterization information}
 \description{
 Computes cohort characterization information against the OMOP CDM
-NOTE: Using v1.0.3 version of module and
-commit 372fb70c6133bdd8811f8dc1d2a2f9cb9a184345 for the
-package
+package version 2.0.0
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CharacterizationModule}
@@ -155,14 +153,36 @@ Creates the CharacterizationModule Specifications
 \if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createModuleSpecifications(
   targetIds,
   outcomeIds,
+  outcomeWashoutDays = c(365),
+  minPriorObservation = 365,
   dechallengeStopInterval = 30,
   dechallengeEvaluationWindow = 30,
-  timeAtRisk = data.frame(riskWindowStart = c(1, 1), startAnchor = c("cohort start",
-    "cohort start"), riskWindowEnd = c(0, 365), endAnchor = c("cohort end",
-    "cohort end")),
-  minPriorObservation = 0,
-  minCharacterizationMean = 0,
-  covariateSettings = FeatureExtraction::createDefaultCovariateSettings()
+  riskWindowStart = c(1, 1),
+  startAnchor = c("cohort start", "cohort start"),
+  riskWindowEnd = c(0, 365),
+  endAnchor = c("cohort end", "cohort end"),
+  minCharacterizationMean = 0.01,
+  covariateSettings = FeatureExtraction::createCovariateSettings(useDemographicsGender =
+    T, useDemographicsAge = T, useDemographicsAgeGroup = T, useDemographicsRace = T,
+    useDemographicsEthnicity = T, useDemographicsIndexYear = T, useDemographicsIndexMonth
+    = T, useDemographicsTimeInCohort = T, useDemographicsPriorObservationTime = T,
+    useDemographicsPostObservationTime = T, useConditionGroupEraLongTerm = T,
+    useDrugGroupEraOverlapping = T, useDrugGroupEraLongTerm = T,
+    useProcedureOccurrenceLongTerm = T, useMeasurementLongTerm = T, 
+    
+    useObservationLongTerm = T, useDeviceExposureLongTerm = T,
+    useVisitConceptCountLongTerm = T, useConditionGroupEraShortTerm = T,
+    useDrugGroupEraShortTerm = T, useProcedureOccurrenceShortTerm = T,
+    useMeasurementShortTerm = T, useObservationShortTerm = T, useDeviceExposureShortTerm
+    = T, useVisitConceptCountShortTerm = T, endDays = 0, longTermStartDays = -365,
+    shortTermStartDays = -30),
+  caseCovariateSettings =
+    Characterization::createDuringCovariateSettings(useConditionGroupEraDuring = T,
+    useDrugGroupEraDuring = T, useProcedureOccurrenceDuring = T, useDeviceExposureDuring
+    = T, useMeasurementDuring = T, useObservationDuring = T, useVisitConceptCountDuring =
+    T),
+  casePreTargetDuration = 365,
+  casePostOutcomeDuration = 365
 )}\if{html}{\out{</div>}}
 }
 
@@ -173,17 +193,31 @@ Creates the CharacterizationModule Specifications
 
 \item{\code{outcomeIds}}{A vector of cohort IDs to use as the outcome(s) for the characterization}
 
+\item{\code{outcomeWashoutDays}}{A vector of integers specifying the washout days for each outcome (same length as the outcomeIds)}
+
+\item{\code{minPriorObservation}}{The number of days of minimum observation a patient in the target populations must have}
+
 \item{\code{dechallengeStopInterval}}{description}
 
 \item{\code{dechallengeEvaluationWindow}}{description}
 
-\item{\code{timeAtRisk}}{description}
+\item{\code{riskWindowStart}}{The number of days after start anchor to start the time-at-risk (can be a vector for multiple TARS)}
 
-\item{\code{minPriorObservation}}{description}
+\item{\code{startAnchor}}{The TAR starts relative to this either cohort start or cohort end (can be a vector for multiple TARS)}
 
-\item{\code{minCharacterizationMean}}{description}
+\item{\code{riskWindowEnd}}{The number of days after end anchor to end the time-at-risk (can be a vector for multiple TARS)}
 
-\item{\code{covariateSettings}}{description}
+\item{\code{endAnchor}}{The TAR ends relative to this either cohort start or cohort end (can be a vector for multiple TARS)}
+
+\item{\code{minCharacterizationMean}}{The minimum fraction patients in the target have a covariate for it to be included}
+
+\item{\code{covariateSettings}}{Covariates for the database, cohort and risk factor characterization}
+
+\item{\code{caseCovariateSettings}}{Covariates for the case-series characterization}
+
+\item{\code{casePreTargetDuration}}{The number of days before target start to use for case-series}
+
+\item{\code{casePostOutcomeDuration}}{The number of days after outcome start to use for case-series}
 }
 \if{html}{\out{</div>}}
 }
