@@ -33,7 +33,7 @@ CharacterizationModule <- R6::R6Class(
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         characterizationSettings = jobContext$settings,
-        databaseId = jobContext$moduleExecutionSettings$databaseId,
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         outputDirectory = jobContext$moduleExecutionSettings$resultsSubFolder,
         executionPath = workFolder,
         csvFilePrefix = self$tablePrefix,

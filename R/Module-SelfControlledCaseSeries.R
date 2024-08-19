@@ -46,12 +46,12 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       SelfControlledCaseSeries::exportToCsv(
         outputFolder = jobContext$moduleExecutionSettings$workSubFolder,
         exportFolder = exportFolder,
-        databaseId = jobContext$moduleExecutionSettings$databaseId,
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         minCellCount = jobContext$moduleExecutionSettings$minCellCount,
         sccsDiagnosticThresholds = jobContext$settings$sccsDiagnosticThresholds
       )
       # TODO: Removing this to make the upload easier
-      #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$databaseId)))
+      #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
       resultsDataModel <- CohortGenerator::readCsv(file = system.file("csv", "resultsDataModelSpecification.csv", package = "SelfControlledCaseSeries"))
       resultsDataModel <- resultsDataModel[file.exists(file.path(exportFolder, paste0(resultsDataModel$tableName, ".csv"))), ]
