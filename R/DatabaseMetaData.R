@@ -133,7 +133,7 @@ getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
     stop("FATAL ERROR: The OBSERVATION_PERIOD table in your OMOP CDM lacks a maximum observation_period_end_date. This may be a result of an error in the ETL as each person in the OMOP CDM must have an observation period with a valid start and end date.")
   }
 
-  databaseId <- digest::digest2int(paste(cdmSource$cdmSourceName, cdmSource$cdmReleaseDate))
+  databaseId <- digest::digest2int(paste(cdmSource$cdmSourceName, cdmSource$cdmReleaseDate, cdmSource$cdmHolder))
   databaseMetaData <- cdmSource %>%
     mutate(
       vocabularyVersion = vocabVersion$vocabularyVersion,
