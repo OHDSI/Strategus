@@ -241,45 +241,41 @@ StrategusModule <- R6::R6Class(
 
       return(cohortDefinitionSet)
     },
-    .jobContextHasNegativeControlOutcomeSharedResource = function() {
-      jobContext <- private$jobContext
-      ncSharedResource <- private$.getSharedResourceByClassName(
-        sharedResources = jobContext$sharedResources,
-        className = "NegativeControlOutcomeSharedResources"
-      )
-      hasNegativeControlOutcomeSharedResource <- !is.null(ncSharedResource)
-      invisible(hasNegativeControlOutcomeSharedResource)
-    },
     .createNegativeControlOutcomeSettingsFromJobContext = function() {
       jobContext <- private$jobContext
       negativeControlSharedResource <- private$.getSharedResourceByClassName(
         sharedResources = jobContext$sharedResources,
         className = "NegativeControlOutcomeSharedResources"
       )
-      if (is.null(negativeControlSharedResource)) {
-        stop("Negative control outcome shared resource not found!")
-      }
-      negativeControlOutcomes <- negativeControlSharedResource$negativeControlOutcomes$negativeControlOutcomeCohortSet
-      if (length(negativeControlOutcomes) <= 0) {
-        stop("No negative control outcomes found")
-      }
-      negativeControlOutcomeCohortSet <- CohortGenerator::createEmptyNegativeControlOutcomeCohortSet()
-      for (i in 1:length(negativeControlOutcomes)) {
-        nc <- negativeControlOutcomes[[i]]
-        negativeControlOutcomeCohortSet <- rbind(
-          negativeControlOutcomeCohortSet,
-          data.frame(
-            cohortId = as.numeric(nc$cohortId),
-            cohortName = nc$cohortName,
-            outcomeConceptId = as.numeric(nc$outcomeConceptId)
+      if (!is.null(negativeControlSharedResource)) {
+        negativeControlOutcomes <- negativeControlSharedResource$negativeControlOutcomes$negativeControlOutcomeCohortSet
+        if (length(negativeControlOutcomes) <= 0) {
+          stop("Negative control outcome shared resource found but no negative control outcomes were provided.")
+        }
+        negativeControlOutcomeCohortSet <- CohortGenerator::createEmptyNegativeControlOutcomeCohortSet()
+        for (i in 1:length(negativeControlOutcomes)) {
+          nc <- negativeControlOutcomes[[i]]
+          negativeControlOutcomeCohortSet <- rbind(
+            negativeControlOutcomeCohortSet,
+            data.frame(
+              cohortId = as.numeric(nc$cohortId),
+              cohortName = nc$cohortName,
+              outcomeConceptId = as.numeric(nc$outcomeConceptId)
+            )
           )
-        )
+        }
+        invisible(list(
+          cohortSet = negativeControlOutcomeCohortSet,
+          occurrenceType = negativeControlSharedResource$negativeControlOutcomes$occurrenceType,
+          detectOnDescendants = negativeControlSharedResource$negativeControlOutcomes$detectOnDescendants
+        ))
+      } else {
+        invisible(list(
+          cohortSet = NULL,
+          occurrenceType = "all",
+          detectOnDescendants = FALSE
+        ))
       }
-      invisible(list(
-        cohortSet = negativeControlOutcomeCohortSet,
-        occurrenceType = negativeControlSharedResource$negativeControlOutcomes$occurrenceType,
-        detectOnDescendants = negativeControlSharedResource$negativeControlOutcomes$detectOnDescendants
-      ))
     }
   )
 )
