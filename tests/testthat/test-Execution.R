@@ -179,3 +179,35 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
     )
   )
 })
+
+test_that("Negative control outcomes are optional", {
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+                           package = "Strategus"
+    )
+  )
+
+  # Remove the nco section
+  analysisSpecifications$sharedResources <- list(analysisSpecifications$sharedResources[[1]])
+
+  # Remove all but CG
+  analysisSpecifications$moduleSpecifications <- list(analysisSpecifications$moduleSpecifications[[3]])
+
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "unit_test"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder")
+  )
+
+  expect_output(
+    Strategus::execute(
+      connectionDetails = connectionDetails,
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings
+    ),
+    "Generating cohort set",
+    ignore.case = TRUE
+  )
+})
