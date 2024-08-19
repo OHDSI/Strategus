@@ -142,7 +142,7 @@ getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
   return(databaseMetaData)
 }
 
-.writeDatabaseMetaData <- function(databaseMetaData) {
+.writeDatabaseMetaData <- function(databaseMetaData, executionSettings) {
   # Save the results
   databaseMetaDataFolder <- .getDatabaseMetaDataResultsFolder(executionSettings$resultsFolder)
   if (!dir.exists(databaseMetaDataFolder)) {

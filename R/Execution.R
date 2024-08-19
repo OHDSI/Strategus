@@ -96,7 +96,7 @@ execute <- function(analysisSpecifications,
       connectionDetails = connectionDetails
     )
     executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
-    .writeDatabaseMetaData(cdmDatabaseMetaData)
+    .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
   }
 
   executionStatus <- list()
