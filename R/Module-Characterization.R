@@ -38,7 +38,7 @@ CharacterizationModule <- R6::R6Class(
         executionPath = workFolder,
         csvFilePrefix = self$tablePrefix,
         minCellCount =  jobContext$moduleExecutionSettings$minCellCount,
-        minCharacterizationMean = 0.01,
+        minCharacterizationMean = jobContext$moduleExecutionSettings$minCharacterizationMean,
         incremental = T, # any Strartegus param for this?
         threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", 1,Sys.getenv('CharacterizationThreads') ))
       )
