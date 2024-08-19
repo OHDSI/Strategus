@@ -40,7 +40,7 @@ CohortIncidenceModule <- R6::R6Class(
       buildOptions <- CohortIncidence::buildOptions(
         cohortTable = paste0(private$jobContext$moduleExecutionSettings$workDatabaseSchema, ".", private$jobContext$moduleExecutionSettings$cohortTableNames$cohortTable),
         cdmDatabaseSchema = private$jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        sourceName = as.character(private$jobContext$moduleExecutionSettings$databaseId),
+        sourceName = as.character(jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId),
         refId = refId
       )
 
@@ -74,7 +74,7 @@ CohortIncidenceModule <- R6::R6Class(
         tableData <- executeResults[[tableName]]
         if (tableName == 'incidence_summary') {
           if (nrow(tableData) > 0) {
-            tableData$database_id <- private$jobContext$moduleExecutionSettings$databaseId
+            tableData$database_id <- private$jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
           } else {
             tableData$database_id <- character(0)
           }

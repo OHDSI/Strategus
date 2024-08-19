@@ -36,11 +36,25 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
   return(file.path(.getDatabaseMetaDataResultsFolder(resultsFolder), "database_meta_data.csv"))
 }
 
-.createDatabaseMetaData <- function(executionSettings, connectionDetails) {
-  databaseMetaDataFolder <- .getDatabaseMetaDataResultsFolder(executionSettings$resultsFolder)
-  if (!dir.exists(databaseMetaDataFolder)) {
-    dir.create(databaseMetaDataFolder, recursive = TRUE)
-  }
+#' Gets the metadata for your OMOP CDM Database
+#'
+#' @description
+#' This function is used to gather metadata about your OMOP CDM and inspect
+#' for informational purposes. This information will be saved with your
+#' results when running an analysis specification. This
+#' location is important when uploading results since the database identifier
+#' may be needed to purge old results for a given database identifier.
+#'
+#' @param cdmExecutionSettings    An object of type `CdmExecutionSettings` as
+#'                                created [createCdmExecutionSettings()].
+#' @template connectionDetails
+#'
+#' @export
+getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
+  checkmate::assertClass(cdmExecutionSettings, "CdmExecutionSettings", add=errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
 
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
@@ -51,7 +65,7 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
   requiredTables <- c("cdm_source", "vocabulary", "observation_period")
   cdmTableList <- DatabaseConnector::getTableNames(
     connection = connection,
-    databaseSchema = executionSettings$cdmDatabaseSchema
+    databaseSchema = cdmExecutionSettings$cdmDatabaseSchema
   )
   cdmTableList <- unique(tolower(cdmTableList))
 
@@ -64,20 +78,14 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
     stop(sprintf("FATAL ERROR: Your OMOP CDM is missing the following required tables: %s", paste(missingCdmTables, collapse = ", ")))
   }
 
-  resultsDataModel <- CohortGenerator::readCsv(
-    file = system.file(
-      file.path("csv", "databaseMetaDataRdms.csv"),
-      package = "Strategus"
-    ),
-    warnOnCaseMismatch = FALSE
-  )
+  resultsDataModel <- .getDatabaseMetaDataRdms()
 
   sql <- "SELECT TOP 1 * FROM @cdm_database_schema.cdm_source;"
   cdmSource <- renderTranslateQuerySql(
     connection = connection,
     sql = sql,
     snakeCaseToCamelCase = TRUE,
-    cdm_database_schema = executionSettings$cdmDatabaseSchema
+    cdm_database_schema = cdmExecutionSettings$cdmDatabaseSchema
   )
 
   # Verify that the cdmSource table has information
@@ -102,7 +110,7 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
     connection = connection,
     sql = sql,
     snakeCaseToCamelCase = TRUE,
-    cdm_database_schema = executionSettings$cdmDatabaseSchema
+    cdm_database_schema = cdmExecutionSettings$cdmDatabaseSchema
   )
 
   # Verify that the vocabulary_version is found
@@ -117,7 +125,7 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
     connection = connection,
     sql = sql,
     snakeCaseToCamelCase = TRUE,
-    cdm_database_schema = executionSettings$cdmDatabaseSchema
+    cdm_database_schema = cdmExecutionSettings$cdmDatabaseSchema
   )
 
   # Verify that the MAX(observation_period_end_date) is a valid date
@@ -126,16 +134,27 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
   }
 
   databaseId <- digest::digest2int(paste(cdmSource$cdmSourceName, cdmSource$cdmReleaseDate))
-  database <- cdmSource %>%
+  databaseMetaData <- cdmSource %>%
     mutate(
       vocabularyVersion = vocabVersion$vocabularyVersion,
       databaseId = !!databaseId
     ) %>%
     bind_cols(observationPeriodMax)
 
+  return(databaseMetaData)
+}
+
+.writeDatabaseMetaData <- function(databaseMetaData) {
+  # Save the results
+  databaseMetaDataFolder <- .getDatabaseMetaDataResultsFolder(executionSettings$resultsFolder)
+  if (!dir.exists(databaseMetaDataFolder)) {
+    dir.create(databaseMetaDataFolder, recursive = TRUE)
+  }
+
+  resultsDataModel <- .getDatabaseMetaDataRdms()
   # Export the csv files:
   CohortGenerator::writeCsv(
-    x = database,
+    x = databaseMetaData,
     file = file.path(databaseMetaDataFolder, "database_meta_data.csv")
   )
 
@@ -144,7 +163,6 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
     file = file.path(databaseMetaDataFolder, "resultsDataModelSpecification.csv"),
     warnOnFileNameCaseMismatch = FALSE
   )
-  return(databaseId)
 }
 
 .createDatabaseMetadataResultsDataModel <- function(resultsConnectionDetails,
@@ -194,5 +212,16 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
 
 .getDatabaseMetaDataResultsFolder <- function(resultsFolder) {
   return(file.path(resultsFolder, "DatabaseMetaData"))
+}
+
+.getDatabaseMetaDataRdms <- function() {
+  resultsDataModel <- CohortGenerator::readCsv(
+    file = system.file(
+      file.path("csv", "databaseMetaDataRdms.csv"),
+      package = "Strategus"
+    ),
+    warnOnCaseMismatch = FALSE
+  )
+  invisible(resultsDataModel)
 }
 

@@ -159,10 +159,6 @@ StrategusModule <- R6::R6Class(
       if (is(private$jobContext$moduleExecutionSettings, "ExecutionSettings")) {
         private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
       }
-
-      # TODO: This should be in the execution settings already for
-      # CDM ExecutionSettings
-      #private$jobContext$moduleExecutionSettings$databaseId <- databaseId
     },
     .getModuleSpecification = function(analysisSpecifications, moduleName) {
       moduleSpecification <- NULL

@@ -45,8 +45,8 @@ test_that("Test DatabaseMetaData error conditions", {
     minCellCount = 5
   )
   expect_error(
-    Strategus:::.createDatabaseMetaData(
-      executionSettings = executionSettings,
+    Strategus::getCdmDatabaseMetaData(
+      cdmExecutionSettings = executionSettings,
       connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: Your OMOP CDM is missing the following required tables: cdm_source, vocabulary, observation_period"
@@ -66,8 +66,8 @@ test_that("Test DatabaseMetaData error conditions", {
   }
 
   expect_error(
-    Strategus:::.createDatabaseMetaData(
-      executionSettings = executionSettings,
+    Strategus::getCdmDatabaseMetaData(
+      cdmExecutionSettings = executionSettings,
       connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: The CDM_SOURCE table in your OMOP CDM is empty."
@@ -85,8 +85,8 @@ test_that("Test DatabaseMetaData error conditions", {
   )
 
   expect_error(
-    Strategus:::.createDatabaseMetaData(
-      executionSettings = executionSettings,
+    Strategus::getCdmDatabaseMetaData(
+      cdmExecutionSettings = executionSettings,
       connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: The VOCABULARY table in your OMOP CDM is missing the version"
@@ -102,8 +102,8 @@ test_that("Test DatabaseMetaData error conditions", {
     backup_table = "vocabulary_bak"
   )
   expect_error(
-    Strategus:::.createDatabaseMetaData(
-      executionSettings = executionSettings,
+    Strategus::getCdmDatabaseMetaData(
+      cdmExecutionSettings = executionSettings,
       connectionDetails = eunomiaConnectionDetails
     ),
     regexp = "FATAL ERROR: The OBSERVATION_PERIOD table in your OMOP CDM lacks a maximum observation_period_end_date"
