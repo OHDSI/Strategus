@@ -45,7 +45,7 @@ CohortGeneratorModule <- R6::R6Class(
         occurrenceType = negativeControlOutcomeSettings$occurrenceType,
         detectOnDescendants = negativeControlOutcomeSettings$detectOnDescendants,
         outputFolder = resultsFolder,
-        databaseId = jobContext$moduleExecutionSettings$databaseId,
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         incremental = jobContext$settings$incremental,
         incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
       )

@@ -12,7 +12,7 @@ getDatabaseIdentifierFilePath(resultsFolder)
 }
 \description{
 This function is used to identify the location of the database identifier
-created by Strategus when running an analysis specification. This
+created by Strategus when executing an analysis specification. This
 location is important when uploading results since the database identifier
 may be needed to purge old results for a given database identifier.
 }

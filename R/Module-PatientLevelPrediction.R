@@ -33,7 +33,7 @@ PatientLevelPredictionModule <- R6::R6Class(
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cdmDatabaseName = jobContext$moduleExecutionSettings$connectionDetailsReference,
-        cdmDatabaseId = jobContext$moduleExecutionSettings$databaseId,
+        cdmDatabaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         # tempEmulationSchema =  , is there s temp schema specified anywhere?
         cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,

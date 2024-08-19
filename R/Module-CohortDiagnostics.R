@@ -29,7 +29,7 @@ CohortDiagnosticsModule <- R6::R6Class(
       args <- jobContext$settings
       args$cohortDefinitionSet <- cohortDefinitionSet
       args$exportFolder <- exportFolder
-      args$databaseId <- jobContext$moduleExecutionSettings$databaseId
+      args$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
       args$cohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
@@ -40,7 +40,7 @@ CohortDiagnosticsModule <- R6::R6Class(
       do.call(CohortDiagnostics::executeDiagnostics, args)
 
       # TODO: Removing this to make the upload easier
-      # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$databaseId)))
+      # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
       resultsDataModel <- CohortGenerator::readCsv(
         file = system.file("settings", "resultsDataModelSpecification.csv", package = "CohortDiagnostics"),
