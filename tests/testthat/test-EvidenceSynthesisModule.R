@@ -102,7 +102,7 @@ test_that("Run module", {
     executionSettings = resultsExecutionSettings,
     connectionDetails = esTestDataConnectionDetails
   )
-  resultsFiles <- list.files(testResultsFolder)
+  resultsFiles <- list.files(file.path(testResultsFolder, "EvidenceSynthesisModule"))
   expect_true("es_analysis.csv" %in% resultsFiles)
   expect_true("es_cm_result.csv" %in% resultsFiles)
   expect_true("es_cm_diagnostics_summary.csv" %in% resultsFiles)
@@ -218,7 +218,7 @@ test_that("Include only allowed CM estimates in meta-analysis", {
     group_by(targetId, comparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId) %>%
     summarize(nAllowed = sum(include), .groups = "drop")
 
-  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "es_cm_result.csv"))
+  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_result.csv"))
   results <- results %>%
     left_join(allowed, by = join_by(targetId, comparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId))
   expect_true(all(results$nDatabases == results$nAllowed))
@@ -304,7 +304,7 @@ test_that("Include only allowed SCCS estimates in meta-analysis", {
     group_by(exposuresOutcomeSetId, covariateId, analysisId, evidenceSynthesisAnalysisId) %>%
     summarize(nAllowed = sum(include), .groups = "drop")
 
-  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "es_sccs_result.csv"))
+  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_sccs_result.csv"))
   results <- results %>%
     left_join(allowed, by = join_by(exposuresOutcomeSetId, covariateId, analysisId, evidenceSynthesisAnalysisId))
   expect_true(all(results$nDatabases == results$nAllowed))
@@ -325,8 +325,8 @@ test_that("Output conforms to results model", {
 
 test_that("Check MDRR values", {
   # CohortMethod
-  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "es_cm_result.csv"))
-  diagnostics <- CohortGenerator::readCsv(file.path(testResultsFolder, "es_cm_diagnostics_summary.csv"))
+  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_result.csv"))
+  diagnostics <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_diagnostics_summary.csv"))
   combined <- results %>%
     inner_join(diagnostics, by = join_by(targetId, comparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId))
   noDbs <- combined %>%
@@ -347,8 +347,8 @@ test_that("Check MDRR values", {
   expect_true(all(!is.na(multiDbs$mdrr)))
 
   # SCCS
-  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "es_sccs_result.csv"))
-  diagnostics <- CohortGenerator::readCsv(file.path(testResultsFolder, "es_sccs_diagnostics_summary.csv"))
+  results <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_sccs_result.csv"))
+  diagnostics <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_sccs_diagnostics_summary.csv"))
   combined <- results %>%
     inner_join(diagnostics, by = join_by(analysisId, exposuresOutcomeSetId, covariateId, evidenceSynthesisAnalysisId))
   noDbs <- combined %>%
@@ -400,7 +400,7 @@ test_that("Don't error when no negative controls present", {
     connectionDetails = tempConnectionDetails
   )
 
-  estimates <- readr::read_csv(file.path(testResultsFolder, "es_cm_result.csv"), show_col_types = FALSE)
+  estimates <- readr::read_csv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_result.csv"), show_col_types = FALSE)
   expect_gt(nrow(estimates), 0)
   expect_true(all(is.na(estimates$calibrated_rr)))
 })
