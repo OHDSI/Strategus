@@ -314,7 +314,7 @@ test_that("Output conforms to results model", {
   model <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "resultsDataModelSpecification.csv"))
   tables <- unique(model$tableName)
   for (table in tables) {
-    data <- readr::read_csv(file.path(testResultsFolder, sprintf("%s.csv", table)), show_col_types = FALSE)
+    data <- readr::read_csv(file.path(testResultsFolder, "EvidenceSynthesisModule", sprintf("%s.csv", table)), show_col_types = FALSE)
     observed <- colnames(data)
     observed <- sort(observed)
     expected <- model$columnName[model$tableName == table]
