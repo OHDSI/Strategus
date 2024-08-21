@@ -91,7 +91,7 @@ createEsModuleSpecs <- function() {
 }
 
 test_that("Run module", {
-  analysisSpecification <- createEsModuleSpecs()
+  esAnalysisSpecifications <- createEsModuleSpecs()
   resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
     resultsDatabaseSchema = "main",
     resultsFolder = testResultsFolder,
@@ -387,8 +387,8 @@ test_that("Don't error when no negative controls present", {
   # tempJobContext$moduleExecutionSettings$resultsConnectionDetails <- tempConnectionDetails
   # execute(tempJobContext)
 
-  analysisSettings <- createEsModuleSpecs()
-  analysisSpecification$moduleSpecifications[[1]] <- list(analysisSpecification$moduleSpecifications[[1]]$settings$evidenceSynthesisAnalysisList[[1]])
+  esAnalysisSpecifications <- createEsModuleSpecs()
+  esAnalysisSpecifications$moduleSpecifications[[1]]$settings$evidenceSynthesisAnalysisList <- list(esAnalysisSpecifications$moduleSpecifications[[1]]$settings$evidenceSynthesisAnalysisList[[1]])
   resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
     resultsDatabaseSchema = "main",
     resultsFolder = testResultsFolder,
