@@ -311,7 +311,7 @@ test_that("Include only allowed SCCS estimates in meta-analysis", {
 })
 
 test_that("Output conforms to results model", {
-  model <- CohortGenerator::readCsv(file.path(testResultsFolder, "resultsDataModelSpecification.csv"))
+  model <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "resultsDataModelSpecification.csv"))
   tables <- unique(model$tableName)
   for (table in tables) {
     data <- readr::read_csv(file.path(testResultsFolder, sprintf("%s.csv", table)), show_col_types = FALSE)
