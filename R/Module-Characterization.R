@@ -3,7 +3,7 @@
 #' @export
 #' @description
 #' Computes cohort characterization information against the OMOP CDM
-#' package version 2.0.0
+#' package version 2.0.1
 CharacterizationModule <- R6::R6Class(
   classname = "CharacterizationModule",
   inherit = StrategusModule,
