@@ -13,7 +13,8 @@ createCdmExecutionSettings(
   resultsFolder,
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
   minCellCount = 5,
-  incremental = TRUE
+  incremental = TRUE,
+  maxCores = parallel::detectCores()
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ in results.}
 \item{incremental}{This value will be passed to each module that supports execution in an incremental manner. Modules
 and their underlying packages may use the \code{workFolder} contents to determine their state of execution
 and attempt to pick up where they left off when this value is set to TRUE.}
+
+\item{maxCores}{The maximum number of processing cores to use for execution. The default is to
+use all available cores on the machine.}
 }
 \value{
 An object of type \code{ExecutionSettings}.

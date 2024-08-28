@@ -9,7 +9,8 @@ createResultsExecutionSettings(
   workFolder,
   resultsFolder,
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
-  minCellCount = 5
+  minCellCount = 5,
+  maxCores = parallel::detectCores()
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ createResultsExecutionSettings(
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included
 in results.}
+
+\item{maxCores}{The maximum number of processing cores to use for execution. The default is to
+use all available cores on the machine.}
 }
 \value{
 An object of type \code{ExecutionSettings}.

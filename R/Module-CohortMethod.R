@@ -17,11 +17,11 @@ CohortMethodModule <- R6::R6Class(
     #' @param analysisSpecifications The analysis specifications for the study
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
       jobContext <- private$jobContext
-      multiThreadingSettings <- CohortMethod::createDefaultMultiThreadingSettings(parallel::detectCores())
+      multiThreadingSettings <- CohortMethod::createDefaultMultiThreadingSettings(jobContext$moduleExecutionSettings$maxCores)
 
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
@@ -41,7 +41,7 @@ CohortMethodModule <- R6::R6Class(
         exportFolder = exportFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        maxCores = parallel::detectCores(),
+        maxCores = jobContext$moduleExecutionSettings$maxCores,
         cmDiagnosticThresholds = jobContext$settings$cmDiagnosticThresholds
       )
       # TODO: Removing this to make the upload easier
