@@ -48,8 +48,7 @@ test_that("Test analysis specification creation", {
     runBreakdownIndexEvents = TRUE,
     runIncidenceRate = TRUE,
     runCohortRelationship = TRUE,
-    runTemporalCohortCharacterization = TRUE,
-    incremental = FALSE
+    runTemporalCohortCharacterization = TRUE
   )
 
   # Cohort Generator -----------------

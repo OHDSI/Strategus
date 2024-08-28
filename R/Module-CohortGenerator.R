@@ -46,7 +46,7 @@ CohortGeneratorModule <- R6::R6Class(
         detectOnDescendants = negativeControlOutcomeSettings$detectOnDescendants,
         outputFolder = resultsFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        incremental = jobContext$settings$incremental,
+        incremental = jobContext$moduleExecutionSettings$incremental,
         incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
       )
 
@@ -79,13 +79,9 @@ CohortGeneratorModule <- R6::R6Class(
       )
     },
     #' @description Creates the CohortGenerator Module Specifications
-    #' @param incremental When TRUE, the module will keep track of the cohorts
-    #' generated so that subsequent runs will skip any previously generated
-    #' cohorts.
     #' @param generateStats When TRUE, the Circe cohort definition SQL will
     #' include steps to compute inclusion rule statistics.
-    createModuleSpecifications = function(incremental = TRUE,
-                                          generateStats = TRUE) {
+    createModuleSpecifications = function(generateStats = TRUE) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
