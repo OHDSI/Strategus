@@ -272,6 +272,16 @@ StrategusModule <- R6::R6Class(
           detectOnDescendants = FALSE
         ))
       }
+    },
+    .validateCdmExecutionSettings = function(executionSettings) {
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(executionSettings, "CdmExecutionSettings", add = errorMessages)
+      checkmate::assertInt(executionSettings$maxCores, lower = 1, upper = parallel::detectCores())
+    },
+    .validateResultsExecutionSettings = function(executionSettings) {
+      errorMessages <- checkmate::makeAssertCollection()
+      checkmate::assertClass(executionSettings, "ResultsExecutionSettings", add = errorMessages)
+      checkmate::assertInt(executionSettings$maxCores, lower = 1, upper = parallel::detectCores())
     }
   )
 )
