@@ -163,8 +163,7 @@ Creates the CohortDiagnostics Module Specifications
   runTemporalCohortCharacterization = TRUE,
   temporalCovariateSettings = private$.getDefaultCovariateSettings(),
   minCharacterizationMean = 0.01,
-  irWashoutPeriod = 0,
-  incremental = FALSE
+  irWashoutPeriod = 0
 )}\if{html}{\out{</div>}}
 }
 
@@ -204,8 +203,6 @@ will help reduce the file size of the characterization output, but will remove i
 on covariates that have very low values. The default is 0.001 (i.e. 0.1 percent)}
 
 \item{\code{irWashoutPeriod}}{Number of days washout to include in calculation of incidence rates - default is 0}
-
-\item{\code{incremental}}{Create only cohort diagnostics that haven't been created before?}
 }
 \if{html}{\out{</div>}}
 }
