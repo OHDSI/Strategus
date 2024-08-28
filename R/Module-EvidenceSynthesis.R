@@ -20,8 +20,8 @@ EvidenceSynthesisModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$.validateResultsExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      checkmate::assertClass(executionSettings, "ResultsExecutionSettings")
       jobContext <- private$jobContext
 
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -357,7 +357,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       fullKeys <- perDbEstimates$estimates[, c(perDbEstimates$key, "analysisId")] |>
         distinct()
 
-      cluster <- ParallelLogger::makeCluster(min(10, parallel::detectCores()))
+      cluster <- ParallelLogger::makeCluster(min(10, jobContext$moduleExecutionSettings$maxCores))
       ParallelLogger::clusterRequire(cluster, "dplyr")
       on.exit(ParallelLogger::stopCluster(cluster))
 

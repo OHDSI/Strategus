@@ -253,6 +253,11 @@ createEmptyAnalysisSpecificiations <- function() {
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
+#' @param incremental                This value will be passed to each module that supports execution in an incremental manner. Modules
+#'                                   and their underlying packages may use the `workFolder` contents to determine their state of execution
+#'                                   and attempt to pick up where they left off when this value is set to TRUE.
+#' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
+#'                                   use all available cores on the machine.
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -265,7 +270,9 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
                                        workFolder,
                                        resultsFolder,
                                        logFileName = file.path(resultsFolder, "strategus-log.txt"),
-                                       minCellCount = 5) {
+                                       minCellCount = 5,
+                                       incremental = TRUE,
+                                       maxCores = parallel::detectCores()) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(cdmDatabaseSchema, len = 1, add = errorMessages)
@@ -274,6 +281,8 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::assertLogical(incremental, add = errorMessages)
+  checkmate::assertInt(maxCores, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -297,7 +306,8 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
-#'
+#' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
+#'                                   use all available cores on the machine.
 #' @return
 #' An object of type `ExecutionSettings`.
 #'
@@ -306,13 +316,15 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
                                            workFolder,
                                            resultsFolder,
                                            logFileName = file.path(resultsFolder, "strategus-log.txt"),
-                                           minCellCount = 5) {
+                                           minCellCount = 5,
+                                           maxCores = parallel::detectCores()) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
+  checkmate::assertInt(maxCores, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths

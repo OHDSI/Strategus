@@ -19,8 +19,8 @@ CohortDiagnosticsModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
       jobContext <- private$jobContext
       cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
@@ -133,7 +133,6 @@ CohortDiagnosticsModule <- R6::R6Class(
     #'                                    will help reduce the file size of the characterization output, but will remove information
     #'                                    on covariates that have very low values. The default is 0.001 (i.e. 0.1 percent)
     #' @param irWashoutPeriod             Number of days washout to include in calculation of incidence rates - default is 0
-    #' @param incremental                 Create only cohort diagnostics that haven't been created before?
     createModuleSpecifications = function(cohortIds = NULL,
                                           runInclusionStatistics = TRUE,
                                           runIncludedSourceConcepts = TRUE,
@@ -146,8 +145,7 @@ CohortDiagnosticsModule <- R6::R6Class(
                                           runTemporalCohortCharacterization = TRUE,
                                           temporalCovariateSettings = private$.getDefaultCovariateSettings(),
                                           minCharacterizationMean = 0.01,
-                                          irWashoutPeriod = 0,
-                                          incremental = FALSE) {
+                                          irWashoutPeriod = 0) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)

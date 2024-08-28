@@ -18,8 +18,8 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
       refId <- 1 # this should be part of execution settings
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder

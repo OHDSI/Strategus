@@ -3,7 +3,7 @@
 #' @export
 #' @description
 #' Computes cohort characterization information against the OMOP CDM
-#' package version 2.0.0
+#' package version 2.0.1
 CharacterizationModule <- R6::R6Class(
   classname = "CharacterizationModule",
   inherit = StrategusModule,
@@ -19,8 +19,8 @@ CharacterizationModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+      super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
-      checkmate::assertClass(executionSettings, "CdmExecutionSettings")
 
       jobContext <- private$jobContext
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
@@ -39,7 +39,7 @@ CharacterizationModule <- R6::R6Class(
         csvFilePrefix = self$tablePrefix,
         minCellCount =  jobContext$moduleExecutionSettings$minCellCount,
         minCharacterizationMean = jobContext$moduleExecutionSettings$minCharacterizationMean,
-        incremental = T, # any Strartegus param for this?
+        incremental = jobContext$moduleExecutionSettings$incremental,
         threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", 1,Sys.getenv('CharacterizationThreads') ))
       )
 

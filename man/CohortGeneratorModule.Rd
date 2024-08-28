@@ -159,19 +159,12 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \subsection{Method \code{createModuleSpecifications()}}{
 Creates the CohortGenerator Module Specifications
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createModuleSpecifications(
-  incremental = TRUE,
-  generateStats = TRUE
-)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$createModuleSpecifications(generateStats = TRUE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{incremental}}{When TRUE, the module will keep track of the cohorts
-generated so that subsequent runs will skip any previously generated
-cohorts.}
-
 \item{\code{generateStats}}{When TRUE, the Circe cohort definition SQL will
 include steps to compute inclusion rule statistics.}
 }
