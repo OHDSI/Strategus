@@ -12,7 +12,8 @@ createCdmExecutionSettings(
   workFolder,
   resultsFolder,
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
-  minCellCount = 5
+  minCellCount = 5,
+  incremental = TRUE
 )
 }
 \arguments{
@@ -36,6 +37,10 @@ connection details) will need to have read access to this database schema.}
 
 \item{minCellCount}{The minimum number of subjects contributing to a count before it can be included
 in results.}
+
+\item{incremental}{This value will be passed to each module that supports execution in an incremental manner. Modules
+and their underlying packages may use the \code{workFolder} contents to determine their state of execution
+and attempt to pick up where they left off when this value is set to TRUE.}
 }
 \value{
 An object of type \code{ExecutionSettings}.
