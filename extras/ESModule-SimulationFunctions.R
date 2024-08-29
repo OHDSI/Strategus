@@ -1,6 +1,6 @@
 # Copyright 2024 Observational Health Data Sciences and Informatics
 #
-# This file is part of EvidenceSynthesisModule
+# This file is part of Strategus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Functions used in SimulateResultsForTestin.R
+# Functions used in extras/ESModule-SimulateResultsForTesting.R
 
 library(survival)
 
@@ -201,7 +201,6 @@ simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1
       mutate(
         exposuresOutcomeSetId = outcomeId,
         covariateId = covariateSettings$outputIds[1],
-        outcomeId = outcomeId,
         analysisId = analysisId,
         databaseId = i
       )
