@@ -42,7 +42,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         settings = jobContext$settings$evidenceSynthesisAnalysisList,
         esDiagnosticThresholds = jobContext$settings$esDiagnosticThresholds,
         resultsFolder = resultsFolder,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
+        maxCores = jobContext$moduleExecutionSettings$maxCores
       )
 
       file.copy(
@@ -299,7 +300,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       fileName <- file.path(resultsFolder, paste0(outputTable, ".csv"))
       private$.writeToCsv(data = diagnostics, fileName = fileName, append = FALSE)
     },
-    .executeEvidenceSynthesis = function(connectionDetails, databaseSchema, settings, esDiagnosticThresholds, resultsFolder, minCellCount) {
+    .executeEvidenceSynthesis = function(connectionDetails, databaseSchema, settings, esDiagnosticThresholds, resultsFolder, minCellCount, maxCores) {
       connection <- DatabaseConnector::connect(connectionDetails)
       on.exit(DatabaseConnector::disconnect(connection))
 
@@ -321,11 +322,12 @@ EvidenceSynthesisModule <- R6::R6Class(
         databaseSchema = databaseSchema,
         resultsFolder = resultsFolder,
         minCellCount = minCellCount,
-        esDiagnosticThresholds = esDiagnosticThresholds
+        esDiagnosticThresholds = esDiagnosticThresholds,
+        maxCores = maxCores
       ))
     },
     # analysisSettings = settings[[4]]
-    .doAnalysis = function(analysisSettings, connection, databaseSchema, resultsFolder, minCellCount, esDiagnosticThresholds) {
+    .doAnalysis = function(analysisSettings, connection, databaseSchema, resultsFolder, minCellCount, esDiagnosticThresholds, maxCores) {
       perDbEstimates <- private$.getPerDatabaseEstimates(
         connection = connection,
         databaseSchema = databaseSchema,
@@ -357,7 +359,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       fullKeys <- perDbEstimates$estimates[, c(perDbEstimates$key, "analysisId")] |>
         distinct()
 
-      cluster <- ParallelLogger::makeCluster(min(10, jobContext$moduleExecutionSettings$maxCores))
+      cluster <- ParallelLogger::makeCluster(min(10, maxCores))
       ParallelLogger::clusterRequire(cluster, "dplyr")
       on.exit(ParallelLogger::stopCluster(cluster))
 
