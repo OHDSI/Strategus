@@ -32,6 +32,7 @@ Imports:
   rlang,
   SqlRender (>= 1.18.0)
 Suggests:
+  aws.s3,
   Characterization,
   CirceR,
   CohortDiagnostics,
@@ -43,6 +44,7 @@ Suggests:
   FeatureExtraction,
   fs,
   knitr,
+  OhdsiSharing,
   PatientLevelPrediction,
   rmarkdown,
   RSQLite,
@@ -55,6 +57,7 @@ Remotes:
   ohdsi/CohortGenerator,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
+  ohdsi/OhdsiSharing,
   ohdsi/PatientLevelPrediction,
   ohdsi/ResultModelManager,
   ohdsi/SelfControlledCaseSeries

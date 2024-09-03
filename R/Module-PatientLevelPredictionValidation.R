@@ -59,7 +59,7 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       modelTransferFolder <- sort(dir(upperWorkDir, pattern = 'ModelTransferModule'), decreasing = T)[1]
 
       modelSaveLocation <- file.path( upperWorkDir, modelTransferFolder, 'models') # hack to use work folder for model transfer
-      modelInfo <- .getModelInfo(modelSaveLocation)
+      modelInfo <- private$.getModelInfo(modelSaveLocation)
 
 
       groupedModelInfo <- modelInfo %>%
