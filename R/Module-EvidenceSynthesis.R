@@ -42,7 +42,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         settings = jobContext$settings$evidenceSynthesisAnalysisList,
         esDiagnosticThresholds = jobContext$settings$esDiagnosticThresholds,
         resultsFolder = resultsFolder,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
+        maxCores = jobContext$moduleExecutionSettings$maxCores
       )
 
       file.copy(
@@ -299,7 +300,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       fileName <- file.path(resultsFolder, paste0(outputTable, ".csv"))
       private$.writeToCsv(data = diagnostics, fileName = fileName, append = FALSE)
     },
-    .executeEvidenceSynthesis = function(connectionDetails, databaseSchema, settings, esDiagnosticThresholds, resultsFolder, minCellCount) {
+    .executeEvidenceSynthesis = function(connectionDetails, databaseSchema, settings, esDiagnosticThresholds, resultsFolder, minCellCount, maxCores) {
       connection <- DatabaseConnector::connect(connectionDetails)
       on.exit(DatabaseConnector::disconnect(connection))
 
@@ -321,11 +322,12 @@ EvidenceSynthesisModule <- R6::R6Class(
         databaseSchema = databaseSchema,
         resultsFolder = resultsFolder,
         minCellCount = minCellCount,
-        esDiagnosticThresholds = esDiagnosticThresholds
+        esDiagnosticThresholds = esDiagnosticThresholds,
+        maxCores = maxCores
       ))
     },
     # analysisSettings = settings[[4]]
-    .doAnalysis = function(analysisSettings, connection, databaseSchema, resultsFolder, minCellCount, esDiagnosticThresholds) {
+    .doAnalysis = function(analysisSettings, connection, databaseSchema, resultsFolder, minCellCount, esDiagnosticThresholds, maxCores) {
       perDbEstimates <- private$.getPerDatabaseEstimates(
         connection = connection,
         databaseSchema = databaseSchema,
@@ -357,7 +359,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       fullKeys <- perDbEstimates$estimates[, c(perDbEstimates$key, "analysisId")] |>
         distinct()
 
-      cluster <- ParallelLogger::makeCluster(min(10, jobContext$moduleExecutionSettings$maxCores))
+      cluster <- ParallelLogger::makeCluster(min(10, maxCores))
       ParallelLogger::clusterRequire(cluster, "dplyr")
       on.exit(ParallelLogger::stopCluster(cluster))
 
@@ -379,13 +381,13 @@ EvidenceSynthesisModule <- R6::R6Class(
         if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
           controlKey <- c("targetId", "comparatorId", "analysisId")
         } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
-          controlKey <- c("covariateId", "analysisId")
+          controlKey <- c("exposureId", "nestingCohortId", "covariateId", "analysisId")
         }
       } else if (analysisSettings$controlType == "exposure") {
         if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
           controlKey <- c("outcomeId", "analysisId")
         } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
-          controlKey <- c("exposuresOutcomeSetId", "analysisId")
+          controlKey <- c("outcomeId", "analysisId")
         }
       } else {
         stop(sprintf("Unknown control type '%s'", analysisSettings$controlType))
@@ -452,7 +454,7 @@ EvidenceSynthesisModule <- R6::R6Class(
     },
     # group = split(estimates, groupKeys)[[1]]
     .calibrateEstimates = function(group) {
-      ncs <- group[group$trueEffectSize == 1 & !is.na(group$seLogRr), ]
+      ncs <- group[!is.na(group$trueEffectSize) & group$trueEffectSize == 1 & !is.na(group$seLogRr), ]
       pcs <- group[!is.na(group$trueEffectSize) & group$trueEffectSize != 1 & !is.na(group$seLogRr), ]
       if (nrow(ncs) >= 5) {
         null <- EmpiricalCalibration::fitMcmcNull(logRr = ncs$logRr, seLogRr = ncs$seLogRr)
@@ -825,7 +827,7 @@ EvidenceSynthesisModule <- R6::R6Class(
                                          .data$trueEffectSize
           ))
       } else if (evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
-        key <- c("exposuresOutcomeSetId", "covariateId")
+        key <- c("exposureId", "nestingCohortId", "outcomeId", "exposuresOutcomeSetId", "covariateId")
         databaseIds <- evidenceSynthesisSource$databaseIds
         analysisIds <- evidenceSynthesisSource$analysisIds
         if (private$.hasUnblindForEvidenceSynthesisColumn(connection, databaseSchema, "sccs_diagnostics_summary")) {
@@ -834,12 +836,17 @@ EvidenceSynthesisModule <- R6::R6Class(
           unblindColumn <- "unblind"
         }
         sql <- "SELECT sccs_result.*,
+        sccs_covariate.era_id AS exposure_id,
+        outcome_id,
+        nesting_cohort_id,
         mdrr,
         CASE
           WHEN @unblind_column IS NULL THEN CASE WHEN true_effect_size IS NULL THEN 0 ELSE 1 END
           ELSE @unblind_column
         END AS unblind
       FROM @database_schema.sccs_result
+      INNER JOIN @database_schema.sccs_exposures_outcome_set
+        ON sccs_result.exposures_outcome_set_id = sccs_exposures_outcome_set.exposures_outcome_set_id
       INNER JOIN @database_schema.sccs_covariate
         ON sccs_result.database_id = sccs_covariate.database_id
           AND sccs_result.exposures_outcome_set_id = sccs_covariate.exposures_outcome_set_id
@@ -847,7 +854,7 @@ EvidenceSynthesisModule <- R6::R6Class(
           AND sccs_result.analysis_id = sccs_covariate.analysis_id
       INNER JOIN @database_schema.sccs_exposure
         ON sccs_result.exposures_outcome_set_id = sccs_exposure.exposures_outcome_set_id
-          AND sccs_covariate.era_id = sccs_covariate.era_id
+          AND sccs_covariate.era_id = sccs_exposure.era_id
       LEFT JOIN @database_schema.sccs_diagnostics_summary
       ON sccs_result.exposures_outcome_set_id = sccs_diagnostics_summary.exposures_outcome_set_id
         AND sccs_result.covariate_id = sccs_diagnostics_summary.covariate_id
@@ -879,6 +886,9 @@ EvidenceSynthesisModule <- R6::R6Class(
             filter(.data$unblind == 1) |>
             select(
               "exposuresOutcomeSetId",
+              "exposureId",
+              "nestingCohortId",
+              "outcomeId",
               "covariateId",
               "analysisId",
               "databaseId",
@@ -905,6 +915,9 @@ EvidenceSynthesisModule <- R6::R6Class(
                 filter(.data$unblind == 1) |>
                 select(
                   "exposuresOutcomeSetId",
+                  "exposureId",
+                  "nestingCohortId",
+                  "outcomeId",
                   "covariateId",
                   "analysisId",
                   "databaseId",
@@ -914,11 +927,16 @@ EvidenceSynthesisModule <- R6::R6Class(
         } else {
           stop(sprintf("Unknown likelihood approximation '%s'.", evidenceSynthesisSource$likelihoodApproximation))
         }
-        sql <- "SELECT DISTINCT sccs_covariate.analysis_id,
-            sccs_covariate.exposures_outcome_set_id,
+        sql <- "SELECT DISTINCT sccs_exposure.exposures_outcome_set_id,
+            sccs_covariate.analysis_id,
+            sccs_covariate.era_id AS exposure_id,
+            nesting_cohort_id,
+            outcome_id,
             sccs_covariate.covariate_id,
             true_effect_size
           FROM @database_schema.sccs_exposure
+          INNER JOIN @database_schema.sccs_exposures_outcome_set
+            ON sccs_exposure.exposures_outcome_set_id = sccs_exposures_outcome_set.exposures_outcome_set_id
           INNER JOIN @database_schema.sccs_covariate
             ON sccs_exposure.era_id = sccs_covariate.era_id
               AND sccs_exposure.exposures_outcome_set_id = sccs_covariate.exposures_outcome_set_id

@@ -27,6 +27,7 @@ Imports:
   methods,
   ParallelLogger (>= 3.1.0),
   purrr,
+  readr,
   ResultModelManager (>= 0.5.8),
   rlang,
   SqlRender (>= 1.18.0)
