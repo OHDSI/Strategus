@@ -24,6 +24,7 @@ CharacterizationModule <- R6::R6Class(
 
       jobContext <- private$jobContext
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
+      resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       Characterization::runCharacterizationAnalyses(
         connectionDetails = connectionDetails,
