@@ -16,7 +16,7 @@ URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
 	R (>= 4.2.0),
-	CohortGenerator (>= 0.8.0),
+	CohortGenerator (>= 0.11.0),
 	DatabaseConnector (>= 6.2.3),
   R6
 Imports:
