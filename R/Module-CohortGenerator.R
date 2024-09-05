@@ -28,7 +28,9 @@ CohortGeneratorModule <- R6::R6Class(
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
       jobContext <- private$jobContext
-      cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
+      cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext(
+        generateStats = jobContext$settings$generateStats
+      )
       negativeControlOutcomeSettings <- private$.createNegativeControlOutcomeSettingsFromJobContext()
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
       if (!dir.exists(resultsFolder)) {

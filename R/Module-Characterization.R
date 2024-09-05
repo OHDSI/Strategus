@@ -24,6 +24,7 @@ CharacterizationModule <- R6::R6Class(
 
       jobContext <- private$jobContext
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
+      resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       Characterization::runCharacterizationAnalyses(
         connectionDetails = connectionDetails,
@@ -32,13 +33,13 @@ CharacterizationModule <- R6::R6Class(
         outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        characterizationSettings = jobContext$settings,
+        characterizationSettings = jobContext$settings$analysis,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        outputDirectory = jobContext$moduleExecutionSettings$resultsSubFolder,
+        outputDirectory = resultsFolder,
         executionPath = workFolder,
         csvFilePrefix = self$tablePrefix,
         minCellCount =  jobContext$moduleExecutionSettings$minCellCount,
-        minCharacterizationMean = jobContext$moduleExecutionSettings$minCharacterizationMean,
+        minCharacterizationMean = jobContext$settings$minCharacterizationMean,
         incremental = jobContext$moduleExecutionSettings$incremental,
         threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", 1,Sys.getenv('CharacterizationThreads') ))
       )
@@ -241,7 +242,10 @@ CharacterizationModule <- R6::R6Class(
       )
 
       specifications <- super$createModuleSpecifications(
-        moduleSpecifications = analysis
+        moduleSpecifications = list(
+          analysis = analysis,
+          minCharacterizationMean = minCharacterizationMean
+        )
       )
       return(specifications)
     }

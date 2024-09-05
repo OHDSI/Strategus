@@ -40,7 +40,7 @@ CohortIncidenceModule <- R6::R6Class(
       buildOptions <- CohortIncidence::buildOptions(
         cohortTable = paste0(private$jobContext$moduleExecutionSettings$workDatabaseSchema, ".", private$jobContext$moduleExecutionSettings$cohortTableNames$cohortTable),
         cdmDatabaseSchema = private$jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        sourceName = as.character(jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId),
+        sourceName = as.character(private$jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId),
         refId = refId
       )
 
