@@ -198,8 +198,9 @@ CohortIncidenceModule <- R6::R6Class(
       return(data)
     },
     .getResultsDataModelSpecification = function() {
-      rdms <- CohortGenerator::readCsv(
-        file = private$.getResultsDataModelSpecificationFileLocation()
+      rdms <- readr::read_csv(
+        file = private$.getResultsDataModelSpecificationFileLocation(),
+        show_col_types = FALSE
       )
       rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
       return(rdms)
