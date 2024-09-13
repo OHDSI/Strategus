@@ -24,7 +24,7 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
       jobContext <- private$jobContext
-      cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
+      #cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
@@ -35,9 +35,9 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       if (is.null(jobContext$settings)) {
         stop("Analysis settings not found in job context")
       }
-      if (is.null(jobContext$sharedResources)) {
-        stop("Shared resources not found in job context")
-      }
+      # if (is.null(jobContext$sharedResources)) {
+      #   stop("Shared resources not found in job context")
+      # }
       if (is.null(jobContext$moduleExecutionSettings)) {
         stop("Execution settings not found in job context")
       }
@@ -55,7 +55,7 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       # )
 
       # check the model locations are valid and apply model
-      upperWorkDir <- dirname(workFolder)
+      upperWorkDir <- dirname(jobContext$moduleExecutionSettings$workFolder) # AGS: NOTE - Using the "root" folder as the expection is that the ModelTransferModule output is here
       modelTransferFolder <- sort(dir(upperWorkDir, pattern = 'ModelTransferModule'), decreasing = T)[1]
 
       modelSaveLocation <- file.path( upperWorkDir, modelTransferFolder, 'models') # hack to use work folder for model transfer
@@ -229,7 +229,7 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       return(models)
     },
     # this updates the cohort table details in covariates
-    .updateCovariates <- function(plpModel, cohortTable, cohortDatabaseSchema){
+    .updateCovariates = function(plpModel, cohortTable, cohortDatabaseSchema){
 
       covSettings <- plpModel$modelDesign$covariateSettings
       # if a single setting make it into a list to force consistency
