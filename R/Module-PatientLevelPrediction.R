@@ -34,7 +34,7 @@ PatientLevelPredictionModule <- R6::R6Class(
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cdmDatabaseName = jobContext$moduleExecutionSettings$connectionDetailsReference,
         cdmDatabaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        # tempEmulationSchema =  , is there s temp schema specified anywhere?
+        tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema,
         cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
@@ -71,6 +71,13 @@ PatientLevelPredictionModule <- R6::R6Class(
         ),
         csvFolder = file.path(resultsFolder),
         fileAppend = NULL
+      )
+
+      resultsDataModel <- private$.getResultsDataModelSpecification()
+      CohortGenerator::writeCsv(
+        x = resultsDataModel,
+        file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
+        warnOnFileNameCaseMismatch = F
       )
 
       private$.message(paste("Results available at:", resultsFolder))
@@ -166,6 +173,19 @@ PatientLevelPredictionModule <- R6::R6Class(
       }
 
       return(modelDesignList)
+    },
+    .getResultsDataModelSpecification = function() {
+      rdms <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation()
+      )
+      rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
+      return(rdms)
+    },
+    .getResultsDataModelSpecificationFileLocation = function() {
+      return(system.file(
+        file.path("settings", "resultsDataModelSpecification.csv"),
+        package = "PatientLevelPrediction"
+      ))
     }
   )
 )
