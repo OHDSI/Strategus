@@ -35,61 +35,22 @@ jobs:
       run: |
         PGPASSWORD=password psql -h 127.0.0.1 -U user -d mydb -f extras/rdms/full_data_model_pg.sql
 
-    # - name: Upload artifact
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: postgres_test_sql
-    #     path: postgres_test.sql
-    #
-  # documentation:
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #
-  #   services:
-  #    postgres:
-  #       image: postgres:14.0
-  #       env:
-  #         POSTGRES_DB: mydb
-  #         POSTGRES_USER: user
-  #         POSTGRES_PASSWORD: password
-  #         POSTGRES_HOST: postgres
-  #         POSTGRES_PORT: 5432
-  #       ports:
-  #         - 5432:5432
-  #       options: --name postgres --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-  #
-  #   steps:
-  #     - name: Checkout du code
-  #       uses: actions/checkout@v2
-  #
-  #     - name: download dump
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: postgres_test_sql
-  #         path: public
-  #
-  #     - name: Configure l'environnement pour SchemaSpy
-  #       run: |
-  #         sudo apt-get update
-  #         sudo apt-get install default-jdk -y
-  #         sudo apt-get install postgresql-client -y
-  #         sudo apt-get install graphviz -y
-  #         rm -r db
-  #         mkdir db
-  #         mv public/postgres_test.sql .
-  #         PGPASSWORD=password psql -U user -h localhost -p 5432 -d mydb -f postgres_test.sql
-  #
-  #
-  #     - name: Exécuter SchemaSpy
-  #       run: |
-  #         java -jar schemaspy-6.2.4.jar -configFile config.file -debug
-  #
-  #     - name: Upload artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: documentation-artifact
-  #         path: public
-  #
+    - name: Configure SchemaSpy environment
+      run: |
+        sudo apt-get update
+        sudo apt-get install default-jdk -y
+        sudo apt-get install postgresql-client -y
+
+    - name: Execute SchemaSpy
+      run: |
+        java -jar extras/rdms/schemaspy-6.2.4.jar -vizjs -configFile extras/rdms/schemaspy-config.properties -meta extras/rdms/schema_meta.xml -debug
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation-artifact
+        path: public
+
   # deploy:
   #   runs-on: ubuntu-latest
   #   needs: documentation

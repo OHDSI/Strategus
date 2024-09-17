@@ -1,5 +1,11 @@
 # This script will produce a SQL script that is then used by GHA
 # to document the full results data model for all modules in Strategus
+library(Strategus)
+library(dplyr)
+
+# fullResultsDataModel will hold the full results model to create the
+# SchemaSpyMeta.xml
+fullResultsDataModel <- tibble::tibble()
 rdms <- CohortGenerator::readCsv(
   file = system.file(
     file.path("csv", "databaseMetaDataRdms.csv"),
@@ -7,6 +13,10 @@ rdms <- CohortGenerator::readCsv(
   ),
   warnOnCaseMismatch = F
 )
+
+fullResultsDataModel <- fullResultsDataModel %>%
+  bind_rows(rdms %>% select(tableName, columnName, description))
+
 sql <- "-- Strategus Tables\n"
 sql <- paste0(sql, ResultModelManager::generateSqlSchema(schemaDefinition = rdms))
 
@@ -22,6 +32,13 @@ for(module in moduleList) {
   rdms <- m$getResultsDataModelSpecification()
   sql <- paste0(sql, "-- ", module, " Tables\n")
   sql <- paste0(sql, ResultModelManager::generateSqlSchema(schemaDefinition = rdms))
+
+  if (!"description" %in% colnames(rdms)) {
+    rdms$description <- ""
+  }
+
+  fullResultsDataModel <- fullResultsDataModel %>%
+    bind_rows(rdms %>% select(tableName, columnName, description))
 }
 
 # Save the OHDSI-SQL
@@ -44,5 +61,43 @@ SqlRender::writeSql(
   targetFile = "./extras/rdms/full_data_model_pg.sql"
 )
 
+# Write out the SchemaSpy SchemaMeta.xml (https://schemaspy.readthedocs.io/en/latest/configuration/schemaMeta.html)
+library(xml2)
+
+# Create the root element with attributes
+schemaMeta <- xml_new_root("schemaMeta",
+                           "xmlns:xsi" = "http://www.w3.org/2001/XMLSchema-instance",
+                           "xsi:noNamespaceSchemaLocation" = "http://schemaspy.org/xsd/6/schemameta.xsd")
+
+# Add comments node
+xml_add_child(schemaMeta, "comments", "This is where we'll describe the Strategus results data model.")
+
+# Create tables node
+tables <- xml_add_child(schemaMeta, "tables")
+
+# Iterate over the fullResultsDataModel to create the descriptions
+# of the tables & columns.
+uniqueTableNames <- unique(fullResultsDataModel$tableName)
+for (i in seq_along(uniqueTableNames)) {
+  # Add table node with attributes
+  currentTableName <- uniqueTableNames[i]
+  #print(currentTableName)
+  table <- xml_add_child(tables, "table", name = currentTableName, comments = "Table comment goes here")
+
+  # Get the columns
+  columnsForCurrentTable <- fullResultsDataModel %>%
+    filter(.data$tableName == currentTableName)
+
+  for (j in 1:nrow(columnsForCurrentTable)) {
+    columnName <- columnsForCurrentTable$columnName[j]
+    description <- columnsForCurrentTable$description[j]
+    #print(paste0("  -- ", columnName))
+    # Add column node with attributes
+    xml_add_child(table, "column", name = columnName, comments = description)
+  }
+}
+
+# Write the XML string to a file, omitting the XML declaration
+write_xml(schemaMeta, "./extras/rdms/schema_meta.xml")
 
 
