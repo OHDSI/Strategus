@@ -41,6 +41,10 @@ jobs:
         sudo apt-get install default-jdk -y
         sudo apt-get install postgresql-client -y
 
+    - name: Download PostgreSQL JDBC Driver
+      run: |
+        wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar -O $HOME/postgresql-jdbc.jar
+
     - name: Execute SchemaSpy
       run: |
         java -jar extras/rdms/schemaspy-6.2.4.jar -vizjs -configFile extras/rdms/schemaspy-config.properties -meta extras/rdms/schema_meta.xml -debug
