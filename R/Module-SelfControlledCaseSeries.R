@@ -53,7 +53,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       # TODO: Removing this to make the upload easier
       #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
-      resultsDataModel <- CohortGenerator::readCsv(file = system.file("csv", "resultsDataModelSpecification.csv", package = "SelfControlledCaseSeries"))
+      resultsDataModel <- self$getResultsDataModelSpecification()
       resultsDataModel <- resultsDataModel[file.exists(file.path(exportFolder, paste0(resultsDataModel$tableName, ".csv"))), ]
       if (any(!startsWith(resultsDataModel$tableName, self$tablePrefix))) {
         stop("Table names do not have required prefix")
@@ -79,6 +79,18 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         connectionDetails = resultsConnectionDetails,
         databaseSchema = resultsDatabaseSchema,
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file("csv", "resultsDataModelSpecification.csv", package = "SelfControlledCaseSeries"),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails

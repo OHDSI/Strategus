@@ -95,8 +95,12 @@ CohortIncidenceModule <- R6::R6Class(
       target_outcome_ref$ref_id <- refId
       readr::write_csv(target_outcome_ref, file.path(exportFolder, paste0(self$tablePrefix,"target_outcome_ref",".csv")))
 
-      resultsDataModel <- private$.getResultsDataModelSpecification()
-      readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
+      resultsDataModelSpecification <- self$getResultsDataModelSpecification()
+      CohortGenerator::writeCsv(
+        x = resultsDataModelSpecification,
+        file.path(exportFolder, "resultsDataModelSpecification.csv"),
+        warnOnFileNameCaseMismatch = FALSE
+      )
 
       private$.message(paste("Results available at:", resultsFolder))
     },
@@ -118,6 +122,16 @@ CohortIncidenceModule <- R6::R6Class(
       sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
       sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
       DatabaseConnector::executeSql(connection, sql)
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation(),
+        warnOnCaseMismatch = FALSE
+      )
+      resultsDataModelSpecification$tableName <-paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
@@ -196,14 +210,6 @@ CohortIncidenceModule <- R6::R6Class(
       data[toCensor, "INCIDENCE_PROPORTION_P100P"] <- NA
 
       return(data)
-    },
-    .getResultsDataModelSpecification = function() {
-      rdms <- readr::read_csv(
-        file = private$.getResultsDataModelSpecificationFileLocation(),
-        show_col_types = FALSE
-      )
-      rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
-      return(rdms)
     },
     .getResultsDataModelSpecificationFileLocation = function() {
       return(system.file(

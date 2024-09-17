@@ -19,6 +19,7 @@ for performing meta-analysis and forest plots
 \item \href{#method-EvidenceSynthesisModule-new}{\code{EvidenceSynthesisModule$new()}}
 \item \href{#method-EvidenceSynthesisModule-execute}{\code{EvidenceSynthesisModule$execute()}}
 \item \href{#method-EvidenceSynthesisModule-createResultsDataModel}{\code{EvidenceSynthesisModule$createResultsDataModel()}}
+\item \href{#method-EvidenceSynthesisModule-getResultsDataModelSpecification}{\code{EvidenceSynthesisModule$getResultsDataModelSpecification()}}
 \item \href{#method-EvidenceSynthesisModule-uploadResults}{\code{EvidenceSynthesisModule$uploadResults()}}
 \item \href{#method-EvidenceSynthesisModule-validateModuleSpecifications}{\code{EvidenceSynthesisModule$validateModuleSpecifications()}}
 \item \href{#method-EvidenceSynthesisModule-createEvidenceSynthesisSource}{\code{EvidenceSynthesisModule$createEvidenceSynthesisSource()}}
@@ -104,6 +105,27 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-EvidenceSynthesisModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }

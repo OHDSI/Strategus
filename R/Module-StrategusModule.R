@@ -72,6 +72,10 @@ StrategusModule <- R6::R6Class(
       checkmate::reportAssertions(collection = errorMessages)
       private$.message('CREATE RESULTS DATA MODEL: ', self$moduleName)
     },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+    },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications

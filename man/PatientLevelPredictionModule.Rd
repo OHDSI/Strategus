@@ -23,6 +23,7 @@ database in the OMOP Common Data Model.
 \item \href{#method-PatientLevelPredictionModule-new}{\code{PatientLevelPredictionModule$new()}}
 \item \href{#method-PatientLevelPredictionModule-execute}{\code{PatientLevelPredictionModule$execute()}}
 \item \href{#method-PatientLevelPredictionModule-createResultsDataModel}{\code{PatientLevelPredictionModule$createResultsDataModel()}}
+\item \href{#method-PatientLevelPredictionModule-getResultsDataModelSpecification}{\code{PatientLevelPredictionModule$getResultsDataModelSpecification()}}
 \item \href{#method-PatientLevelPredictionModule-uploadResults}{\code{PatientLevelPredictionModule$uploadResults()}}
 \item \href{#method-PatientLevelPredictionModule-createModuleSpecifications}{\code{PatientLevelPredictionModule$createModuleSpecifications()}}
 \item \href{#method-PatientLevelPredictionModule-validateModuleSpecifications}{\code{PatientLevelPredictionModule$validateModuleSpecifications()}}
@@ -103,6 +104,27 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PatientLevelPredictionModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-PatientLevelPredictionModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }

@@ -73,7 +73,7 @@ PatientLevelPredictionModule <- R6::R6Class(
         fileAppend = NULL
       )
 
-      resultsDataModel <- private$.getResultsDataModelSpecification()
+      resultsDataModel <- self$getResultsDataModelSpecification()
       CohortGenerator::writeCsv(
         x = resultsDataModel,
         file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
@@ -96,6 +96,17 @@ PatientLevelPredictionModule <- R6::R6Class(
         createTables = T,
         tablePrefix = tablePrefix
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation()
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
@@ -173,13 +184,6 @@ PatientLevelPredictionModule <- R6::R6Class(
       }
 
       return(modelDesignList)
-    },
-    .getResultsDataModelSpecification = function() {
-      rdms <- CohortGenerator::readCsv(
-        file = private$.getResultsDataModelSpecificationFileLocation()
-      )
-      rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
-      return(rdms)
     },
     .getResultsDataModelSpecificationFileLocation = function() {
       return(system.file(

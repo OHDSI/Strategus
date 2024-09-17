@@ -45,19 +45,10 @@ CharacterizationModule <- R6::R6Class(
       )
 
       # Export the resultsDataModelSpecification.csv
-      resultsDataModel <- CohortGenerator::readCsv(
-        file = system.file(
-          "settings/resultsDataModelSpecification.csv",
-          package = "Characterization"
-        ),
-        warnOnCaseMismatch = FALSE
-      )
-
-      # add the prefix to the tableName column
-      resultsDataModel$tableName <- paste0(self$tablePrefix, resultsDataModel$tableName)
+      resultsDataModelSpecification <- self$getResultsDataModelSpecification()
 
       CohortGenerator::writeCsv(
-        x = resultsDataModel,
+        x = resultsDataModelSpecification,
         file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
         warnOnCaseMismatch = FALSE,
         warnOnFileNameCaseMismatch = FALSE,
@@ -80,6 +71,21 @@ CharacterizationModule <- R6::R6Class(
         createTables = T,
         tablePrefix = tablePrefix
           )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file(
+          file.path("settings", "resultsDataModelSpecification.csv"),
+          package = "Characterization"
+        ),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
