@@ -1,0 +1,121 @@
+name: CI
+
+on: [push]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14.0
+        env:
+          POSTGRES_DB: mydb
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: --name postgres --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download and install dbmate
+      run: |
+        curl -fsSL -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/latest/download/dbmate-linux-amd64
+        chmod +x /usr/local/bin/dbmate
+
+    - name: Run migrations and dump data
+      run: |
+        make migrate
+        make dump_ci
+        mv db/schema.sql postgres_test.sql
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: postgres_test_sql
+        path: postgres_test.sql
+
+  documentation:
+    runs-on: ubuntu-latest
+    needs: build
+
+    services:
+     postgres:
+        image: postgres:14.0
+        env:
+          POSTGRES_DB: mydb
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: --name postgres --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v2
+
+      - name: download dump
+        uses: actions/download-artifact@v2
+        with:
+          name: postgres_test_sql
+          path: public
+
+      - name: Configure l'environnement pour SchemaSpy
+        run: |
+          sudo apt-get update
+          sudo apt-get install default-jdk -y
+          sudo apt-get install postgresql-client -y
+          sudo apt-get install graphviz -y
+          rm -r db
+          mkdir db
+          mv public/postgres_test.sql .
+          PGPASSWORD=password psql -U user -h localhost -p 5432 -d mydb -f postgres_test.sql
+
+
+      - name: Exécuter SchemaSpy
+        run: |
+          java -jar schemaspy-6.2.4.jar -configFile config.file -debug
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: documentation-artifact
+          path: public
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: documentation
+    steps:
+      - name: Exécuter SchemaSpy
+        run: |
+          ls
+          echo aaaaaaa
+
+      - name: Checkout du code
+        uses: actions/checkout@v2
+
+      - name: Exécuter SchemaSpy
+        run: |
+          ls
+          echo aaaaaaa
+
+      - name: download documentation
+        uses: actions/download-artifact@v2
+        with:
+          name: documentation-artifact
+          path: public
+
+
+      - name: "Deploy Github Pages"
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          BRANCH: gh-pages
+          FOLDER: public/

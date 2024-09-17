@@ -65,6 +65,8 @@ unlink("inst/doc/IntroductionToStrategus.tex")
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
 
+# Document the full results data model
+source("DocumentResultsDataModel.R")
 
 # Produce a study analysis specification for testing -----------
 library(Strategus)
