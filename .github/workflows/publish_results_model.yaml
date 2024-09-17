@@ -33,7 +33,7 @@ jobs:
 
     - name: Run SQL Script
       run: |
-        PGPASSWORD=password psql -h 127.0.0.1 -U myuser -d mydb -f extras/rdms/full_data_model_pg.sql
+        PGPASSWORD=password psql -h 127.0.0.1 -U user -d mydb -f extras/rdms/full_data_model_pg.sql
 
     # - name: Upload artifact
     #   uses: actions/upload-artifact@v4
