@@ -11,3 +11,6 @@ compare_versions
 .github
 docs
 .idea
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
