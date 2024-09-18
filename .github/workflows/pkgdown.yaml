@@ -84,17 +84,17 @@ jobs:
       run: |
         java -jar extras/rdms/schemaspy-6.2.4.jar -vizjs -dp $HOME -configFile extras/rdms/schemaspy-config.properties -out docs/results-schema -meta extras/rdms/schema_meta.xml -debug
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: documentation-artifact
-        path: docs/results-schema
-
-    - name: download documentation
-      uses: actions/download-artifact@v4
-      with:
-        name: documentation-artifact
-        path: docs/results-schema
+    # - name: Upload artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: documentation-artifact
+    #     path: docs/results-schema
+    #
+    # - name: download documentation
+    #   uses: actions/download-artifact@v4
+    #   with:
+    #     name: documentation-artifact
+    #     path: docs/results-schema
 
     - name: Deploy to GitHub pages 🚀
       #if: github.event_name != 'pull_request'
