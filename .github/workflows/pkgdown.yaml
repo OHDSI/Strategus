@@ -82,7 +82,7 @@ jobs:
 
     - name: Execute SchemaSpy
       run: |
-        java -jar extras/rdms/schemaspy-6.2.4.jar -vizjs -dp $HOME -configFile extras/rdms/schemaspy-config.properties -meta extras/rdms/schema_meta.xml -debug
+        java -jar extras/rdms/schemaspy-6.2.4.jar -vizjs -dp $HOME -configFile extras/rdms/schemaspy-config.properties -out docs/results-schema -meta extras/rdms/schema_meta.xml -debug
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
