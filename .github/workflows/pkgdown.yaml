@@ -91,7 +91,7 @@ jobs:
         path: docs/results-schema
 
     - name: download documentation
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: documentation-artifact
         path: docs/results-schema
