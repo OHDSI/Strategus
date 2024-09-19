@@ -20,3 +20,5 @@ src/*.dll
 standalone/build/*
 _targets
 docs
+
+extras/rdms/public

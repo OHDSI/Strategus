@@ -101,3 +101,23 @@ for (i in seq_along(uniqueTableNames)) {
 write_xml(schemaMeta, "./extras/rdms/schema_meta.xml")
 
 
+# Used to create the DB locally to assist in documenting the
+# results model.
+# connectionDetails <- DatabaseConnector::createConnectionDetails(
+#   dbms = "postgresql",
+#   server = "127.0.0.1/mydb",
+#   user = "user",
+#   password = "password"
+# )
+# connection <- DatabaseConnector::connect(connectionDetails)
+# DatabaseConnector::executeSql(
+#   connection = connection,
+#   sql = "drop schema public cascade;create schema public;"
+# )
+# sql <- SqlRender::readSql("./extras/rdms/full_data_model_pg.sql")
+# DatabaseConnector::executeSql(
+#   connection = connection,
+#   sql = sql
+# )
+# DatabaseConnector::disconnect(connection)
+
