@@ -505,16 +505,16 @@
       <column name="gender_id" comments="Gender identifier"/>
       <column name="gender_name" comments="Gender name"/>
       <column name="start_year" comments="Start year"/>
-      <column name="persons_at_risk_pe" comments="Persons at risk pre-exposure"/>
+      <column name="persons_at_risk_pe" comments="Persons at risk pre-exclude (counts before excluding time at risk)"/>
       <column name="persons_at_risk" comments="Persons at risk"/>
-      <column name="person_days_pe" comments="Person days pre-exposure"/>
+      <column name="person_days_pe" comments="Person days pre-exclude (counts before excluding time at risk)"/>
       <column name="person_days" comments="Person days"/>
-      <column name="person_outcomes_pe" comments="Person outcomes pre-exposure"/>
+      <column name="person_outcomes_pe" comments="Person outcomes pre-exclude (counts before excluding time at risk)"/>
       <column name="person_outcomes" comments="Person outcomes"/>
-      <column name="outcomes_pe" comments="Outcomes pre-expsoure"/>
+      <column name="outcomes_pe" comments="Outcomes pre-exclude (counts before excluding time at risk)"/>
       <column name="outcomes" comments="Outcomes"/>
-      <column name="incidence_proportion_p100p" comments="Incidence proportion"/>
-      <column name="incidence_rate_p100py" comments="Incidence rate"/>
+      <column name="incidence_proportion_p100p" comments="Incidence proportion (person_outcomes / persons_at_risk) per 100 people"/>
+      <column name="incidence_rate_p100py" comments="Incidence rate (outcomes / time_at_risk) per 100 person years"/>
     </table>
     <table name="ci_target_def" comments="CohortIncidenceModule: Target cohort definitions">
       <column name="ref_id" comments="The reference identifier for the analysis"/>
