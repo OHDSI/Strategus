@@ -27,7 +27,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: mydb
+          POSTGRES_DB: strategus
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
           POSTGRES_HOST: postgres
@@ -81,7 +81,7 @@ jobs:
 
     - name: Execute SchemaSpy
       run: |
-        java -jar extras/rdms/schemaspy-6.2.4.jar -vizjs -dp $HOME -configFile extras/rdms/schemaspy-config.properties -meta extras/rdms/schema_meta.xml -debug
+        java -jar extras/rdms/schemaspy-6.2.4.jar -vizjs -dp $HOME -configFile extras/rdms/schemaspy-config.properties -meta extras/rdms/schema_meta.xml -debug -desc "Results data model" -noTablePaging
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4

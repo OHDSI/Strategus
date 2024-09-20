@@ -1,5 +1,5 @@
 -- Strategus Tables
-CREATE TABLE public.database_meta_data (
+CREATE TABLE results.database_meta_data (
   	 cdm_source_name VARCHAR,
 	 cdm_source_abbreviation VARCHAR,
 	 cdm_holder VARCHAR,
@@ -16,7 +16,7 @@ CREATE TABLE public.database_meta_data (
 	PRIMARY KEY(database_id)
 );
 -- CharacterizationModule Tables
-CREATE TABLE public.c_time_to_event (
+CREATE TABLE results.c_time_to_event (
   	 database_id VARCHAR(100) NOT NULL,
 	 target_cohort_definition_id BIGINT NOT NULL,
 	 outcome_cohort_definition_id BIGINT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE public.c_time_to_event (
 	 time_scale VARCHAR(20) NOT NULL,
 	PRIMARY KEY(database_id,target_cohort_definition_id,outcome_cohort_definition_id,outcome_type,target_outcome_type,time_to_event,time_scale)
 );
-CREATE TABLE public.c_rechallenge_fail_case_series (
+CREATE TABLE results.c_rechallenge_fail_case_series (
   	 database_id VARCHAR(100) NOT NULL,
 	 dechallenge_stop_interval INT NOT NULL,
 	 dechallenge_evaluation_window INT NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE public.c_rechallenge_fail_case_series (
 	 rechallenge_outcome_start_date_offset INT,
 	PRIMARY KEY(database_id,dechallenge_stop_interval,dechallenge_evaluation_window,target_cohort_definition_id,outcome_cohort_definition_id,person_key)
 );
-CREATE TABLE public.c_dechallenge_rechallenge (
+CREATE TABLE results.c_dechallenge_rechallenge (
   	 database_id VARCHAR(100) NOT NULL,
 	 dechallenge_stop_interval INT NOT NULL,
 	 dechallenge_evaluation_window INT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE public.c_dechallenge_rechallenge (
 	 pct_rechallenge_fail NUMERIC,
 	PRIMARY KEY(database_id,dechallenge_stop_interval,dechallenge_evaluation_window,target_cohort_definition_id,outcome_cohort_definition_id)
 );
-CREATE TABLE public.c_analysis_ref (
+CREATE TABLE results.c_analysis_ref (
   	 database_id VARCHAR(100) NOT NULL,
 	 setting_id VARCHAR(30) NOT NULL,
 	 analysis_id INT NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE public.c_analysis_ref (
 	 missing_means_zero VARCHAR(1),
 	PRIMARY KEY(database_id,setting_id,analysis_id)
 );
-CREATE TABLE public.c_covariate_ref (
+CREATE TABLE results.c_covariate_ref (
   	 database_id VARCHAR(100) NOT NULL,
 	 setting_id VARCHAR(30) NOT NULL,
 	 covariate_id BIGINT NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE public.c_covariate_ref (
 	 collisions INT,
 	PRIMARY KEY(database_id,setting_id,covariate_id)
 );
-CREATE TABLE public.c_covariates (
+CREATE TABLE results.c_covariates (
   	 database_id VARCHAR(100) NOT NULL,
 	 setting_id VARCHAR(30) NOT NULL,
 	 cohort_type VARCHAR(12) NOT NULL,
@@ -105,7 +105,7 @@ CREATE TABLE public.c_covariates (
 	 average_value NUMERIC,
 	PRIMARY KEY(database_id,setting_id,cohort_type,target_cohort_id,outcome_cohort_id,min_characterization_mean,covariate_id)
 );
-CREATE TABLE public.c_covariates_continuous (
+CREATE TABLE results.c_covariates_continuous (
   	 database_id VARCHAR(100) NOT NULL,
 	 setting_id VARCHAR(30) NOT NULL,
 	 cohort_type VARCHAR(12) NOT NULL,
@@ -124,7 +124,7 @@ CREATE TABLE public.c_covariates_continuous (
 	 p_90_value NUMERIC,
 	PRIMARY KEY(database_id,setting_id,cohort_type,target_cohort_id,outcome_cohort_id,covariate_id)
 );
-CREATE TABLE public.c_settings (
+CREATE TABLE results.c_settings (
   	 setting_id VARCHAR(30) NOT NULL,
 	 database_id VARCHAR(100) NOT NULL,
 	 covariate_setting_json VARCHAR,
@@ -139,7 +139,7 @@ CREATE TABLE public.c_settings (
 	 case_post_outcome_duration INT,
 	PRIMARY KEY(setting_id,database_id)
 );
-CREATE TABLE public.c_cohort_details (
+CREATE TABLE results.c_cohort_details (
   	 database_id VARCHAR(100) NOT NULL,
 	 setting_id VARCHAR(30) NOT NULL,
 	 cohort_type VARCHAR(12) NOT NULL,
@@ -147,7 +147,7 @@ CREATE TABLE public.c_cohort_details (
 	 outcome_cohort_id INT NOT NULL,
 	PRIMARY KEY(database_id,setting_id,cohort_type,target_cohort_id,outcome_cohort_id)
 );
-CREATE TABLE public.c_cohort_counts (
+CREATE TABLE results.c_cohort_counts (
   	 database_id VARCHAR(100),
 	 cohort_type VARCHAR(12),
 	 target_cohort_id INT,
@@ -165,7 +165,7 @@ CREATE TABLE public.c_cohort_counts (
 	 max_exposure_time BIGINT
 );
 -- CohortDiagnosticsModule Tables
-CREATE TABLE public.cd_cohort (
+CREATE TABLE results.cd_cohort (
   	 cohort_id BIGINT NOT NULL,
 	 cohort_name VARCHAR,
 	 metadata VARCHAR,
@@ -176,19 +176,19 @@ CREATE TABLE public.cd_cohort (
 	 is_subset INT,
 	PRIMARY KEY(cohort_id)
 );
-CREATE TABLE public.cd_subset_definition (
+CREATE TABLE results.cd_subset_definition (
   	 subset_definition_id BIGINT NOT NULL,
 	 json VARCHAR NOT NULL,
 	PRIMARY KEY(subset_definition_id,json)
 );
-CREATE TABLE public.cd_cohort_count (
+CREATE TABLE results.cd_cohort_count (
   	 cohort_id BIGINT NOT NULL,
 	 cohort_entries NUMERIC,
 	 cohort_subjects NUMERIC,
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(cohort_id,database_id)
 );
-CREATE TABLE public.cd_cohort_inclusion (
+CREATE TABLE results.cd_cohort_inclusion (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 rule_sequence BIGINT NOT NULL,
@@ -196,7 +196,7 @@ CREATE TABLE public.cd_cohort_inclusion (
 	 description VARCHAR,
 	PRIMARY KEY(database_id,cohort_id,rule_sequence)
 );
-CREATE TABLE public.cd_cohort_inc_result (
+CREATE TABLE results.cd_cohort_inc_result (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 mode_id BIGINT NOT NULL,
@@ -204,7 +204,7 @@ CREATE TABLE public.cd_cohort_inc_result (
 	 person_count NUMERIC,
 	PRIMARY KEY(database_id,cohort_id,mode_id,inclusion_rule_mask)
 );
-CREATE TABLE public.cd_cohort_inc_stats (
+CREATE TABLE results.cd_cohort_inc_stats (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 rule_sequence BIGINT NOT NULL,
@@ -214,7 +214,7 @@ CREATE TABLE public.cd_cohort_inc_stats (
 	 person_total NUMERIC,
 	PRIMARY KEY(database_id,cohort_id,rule_sequence,mode_id)
 );
-CREATE TABLE public.cd_cohort_relationships (
+CREATE TABLE results.cd_cohort_relationships (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 comparator_cohort_id BIGINT NOT NULL,
@@ -243,7 +243,7 @@ CREATE TABLE public.cd_cohort_relationships (
 	 c_days BIGINT,
 	PRIMARY KEY(database_id,cohort_id,comparator_cohort_id,start_day,end_day)
 );
-CREATE TABLE public.cd_cohort_summary_stats (
+CREATE TABLE results.cd_cohort_summary_stats (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 mode_id BIGINT NOT NULL,
@@ -251,7 +251,7 @@ CREATE TABLE public.cd_cohort_summary_stats (
 	 final_count NUMERIC,
 	PRIMARY KEY(database_id,cohort_id,mode_id)
 );
-CREATE TABLE public.cd_concept (
+CREATE TABLE results.cd_concept (
   	 concept_id BIGINT NOT NULL,
 	 concept_name VARCHAR(255),
 	 domain_id VARCHAR(20),
@@ -264,14 +264,14 @@ CREATE TABLE public.cd_concept (
 	 invalid_reason VARCHAR,
 	PRIMARY KEY(concept_id)
 );
-CREATE TABLE public.cd_concept_ancestor (
+CREATE TABLE results.cd_concept_ancestor (
   	 ancestor_concept_id BIGINT NOT NULL,
 	 descendant_concept_id BIGINT NOT NULL,
 	 min_levels_of_separation INT,
 	 max_levels_of_separation INT,
 	PRIMARY KEY(ancestor_concept_id,descendant_concept_id)
 );
-CREATE TABLE public.cd_concept_relationship (
+CREATE TABLE results.cd_concept_relationship (
   	 concept_id_1 BIGINT NOT NULL,
 	 concept_id_2 BIGINT NOT NULL,
 	 relationship_id VARCHAR(20) NOT NULL,
@@ -280,7 +280,7 @@ CREATE TABLE public.cd_concept_relationship (
 	 invalid_reason VARCHAR(1),
 	PRIMARY KEY(concept_id_1,concept_id_2,relationship_id)
 );
-CREATE TABLE public.cd_concept_sets (
+CREATE TABLE results.cd_concept_sets (
   	 cohort_id BIGINT NOT NULL,
 	 concept_set_id INT NOT NULL,
 	 concept_set_sql VARCHAR,
@@ -288,13 +288,13 @@ CREATE TABLE public.cd_concept_sets (
 	 concept_set_expression VARCHAR,
 	PRIMARY KEY(cohort_id,concept_set_id)
 );
-CREATE TABLE public.cd_concept_synonym (
+CREATE TABLE results.cd_concept_synonym (
   	 concept_id BIGINT NOT NULL,
 	 concept_synonym_name VARCHAR NOT NULL,
 	 language_concept_id BIGINT NOT NULL,
 	PRIMARY KEY(concept_id,concept_synonym_name,language_concept_id)
 );
-CREATE TABLE public.cd_database (
+CREATE TABLE results.cd_database (
   	 database_id VARCHAR NOT NULL,
 	 database_name VARCHAR,
 	 description VARCHAR,
@@ -303,13 +303,13 @@ CREATE TABLE public.cd_database (
 	 vocabulary_version_cdm VARCHAR,
 	PRIMARY KEY(database_id)
 );
-CREATE TABLE public.cd_domain (
+CREATE TABLE results.cd_domain (
   	 domain_id VARCHAR(20) NOT NULL,
 	 domain_name VARCHAR(255),
 	 domain_concept_id BIGINT,
 	PRIMARY KEY(domain_id)
 );
-CREATE TABLE public.cd_incidence_rate (
+CREATE TABLE results.cd_incidence_rate (
   	 cohort_count NUMERIC,
 	 person_years NUMERIC,
 	 gender VARCHAR NOT NULL,
@@ -320,7 +320,7 @@ CREATE TABLE public.cd_incidence_rate (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(gender,age_group,calendar_year,cohort_id,database_id)
 );
-CREATE TABLE public.cd_included_source_concept (
+CREATE TABLE results.cd_included_source_concept (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 concept_set_id INT NOT NULL,
@@ -330,7 +330,7 @@ CREATE TABLE public.cd_included_source_concept (
 	 concept_count NUMERIC,
 	PRIMARY KEY(database_id,cohort_id,concept_set_id,concept_id,source_concept_id)
 );
-CREATE TABLE public.cd_index_event_breakdown (
+CREATE TABLE results.cd_index_event_breakdown (
   	 concept_id BIGINT NOT NULL,
 	 concept_count NUMERIC,
 	 subject_count NUMERIC,
@@ -340,14 +340,14 @@ CREATE TABLE public.cd_index_event_breakdown (
 	 domain_table VARCHAR NOT NULL,
 	PRIMARY KEY(concept_id,cohort_id,database_id,domain_field,domain_table)
 );
-CREATE TABLE public.cd_metadata (
+CREATE TABLE results.cd_metadata (
   	 database_id VARCHAR NOT NULL,
 	 start_time VARCHAR NOT NULL,
 	 variable_field VARCHAR NOT NULL,
 	 value_field VARCHAR,
 	PRIMARY KEY(database_id,start_time,variable_field)
 );
-CREATE TABLE public.cd_orphan_concept (
+CREATE TABLE results.cd_orphan_concept (
   	 cohort_id BIGINT NOT NULL,
 	 concept_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -356,7 +356,7 @@ CREATE TABLE public.cd_orphan_concept (
 	 concept_subjects NUMERIC,
 	PRIMARY KEY(cohort_id,concept_set_id,database_id,concept_id)
 );
-CREATE TABLE public.cd_relationship (
+CREATE TABLE results.cd_relationship (
   	 relationship_id VARCHAR(20) NOT NULL,
 	 relationship_name VARCHAR(255),
 	 is_hierarchical VARCHAR(1),
@@ -365,14 +365,14 @@ CREATE TABLE public.cd_relationship (
 	 relationship_concept_id BIGINT NOT NULL,
 	PRIMARY KEY(relationship_id,reverse_relationship_id,relationship_concept_id)
 );
-CREATE TABLE public.cd_resolved_concepts (
+CREATE TABLE results.cd_resolved_concepts (
   	 cohort_id BIGINT NOT NULL,
 	 concept_set_id INT NOT NULL,
 	 concept_id BIGINT NOT NULL,
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(cohort_id,concept_set_id,concept_id,database_id)
 );
-CREATE TABLE public.cd_temporal_analysis_ref (
+CREATE TABLE results.cd_temporal_analysis_ref (
   	 analysis_id INT NOT NULL,
 	 analysis_name VARCHAR,
 	 domain_id VARCHAR(20) NOT NULL,
@@ -380,14 +380,14 @@ CREATE TABLE public.cd_temporal_analysis_ref (
 	 missing_means_zero VARCHAR(1),
 	PRIMARY KEY(analysis_id,domain_id)
 );
-CREATE TABLE public.cd_temporal_covariate_ref (
+CREATE TABLE results.cd_temporal_covariate_ref (
   	 covariate_id BIGINT NOT NULL,
 	 covariate_name VARCHAR,
 	 analysis_id INT,
 	 concept_id BIGINT,
 	PRIMARY KEY(covariate_id)
 );
-CREATE TABLE public.cd_temporal_covariate_value (
+CREATE TABLE results.cd_temporal_covariate_value (
   	 cohort_id BIGINT NOT NULL,
 	 time_id INT NOT NULL,
 	 covariate_id BIGINT NOT NULL,
@@ -397,7 +397,7 @@ CREATE TABLE public.cd_temporal_covariate_value (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(cohort_id,time_id,covariate_id,database_id)
 );
-CREATE TABLE public.cd_temporal_covariate_value_dist (
+CREATE TABLE results.cd_temporal_covariate_value_dist (
   	 cohort_id BIGINT NOT NULL,
 	 time_id INT NOT NULL,
 	 covariate_id BIGINT NOT NULL,
@@ -414,13 +414,13 @@ CREATE TABLE public.cd_temporal_covariate_value_dist (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(cohort_id,time_id,covariate_id,database_id)
 );
-CREATE TABLE public.cd_temporal_time_ref (
+CREATE TABLE results.cd_temporal_time_ref (
   	 time_id INT NOT NULL,
 	 start_day NUMERIC,
 	 end_day NUMERIC,
 	PRIMARY KEY(time_id)
 );
-CREATE TABLE public.cd_time_series (
+CREATE TABLE results.cd_time_series (
   	 cohort_id BIGINT NOT NULL,
 	 database_id VARCHAR NOT NULL,
 	 period_begin DATE NOT NULL,
@@ -441,7 +441,7 @@ CREATE TABLE public.cd_time_series (
 	 subjects_end_in BIGINT,
 	PRIMARY KEY(cohort_id,database_id,period_begin,period_end,series_type,calendar_interval,gender,age_group)
 );
-CREATE TABLE public.cd_visit_context (
+CREATE TABLE results.cd_visit_context (
   	 cohort_id BIGINT NOT NULL,
 	 visit_concept_id BIGINT NOT NULL,
 	 visit_context VARCHAR NOT NULL,
@@ -449,7 +449,7 @@ CREATE TABLE public.cd_visit_context (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(cohort_id,visit_concept_id,visit_context,database_id)
 );
-CREATE TABLE public.cd_vocabulary (
+CREATE TABLE results.cd_vocabulary (
   	 vocabulary_id VARCHAR(50),
 	 vocabulary_name VARCHAR(255),
 	 vocabulary_reference VARCHAR,
@@ -457,7 +457,7 @@ CREATE TABLE public.cd_vocabulary (
 	 vocabulary_concept_id BIGINT
 );
 -- CohortGeneratorModule Tables
-CREATE TABLE public.cg_cohort_definition (
+CREATE TABLE results.cg_cohort_definition (
   	 cohort_definition_id BIGINT NOT NULL,
 	 cohort_name VARCHAR,
 	 description VARCHAR,
@@ -468,7 +468,7 @@ CREATE TABLE public.cg_cohort_definition (
 	 subset_definition_id BIGINT,
 	PRIMARY KEY(cohort_definition_id)
 );
-CREATE TABLE public.cg_cohort_generation (
+CREATE TABLE results.cg_cohort_generation (
   	 cohort_id BIGINT NOT NULL,
 	 cohort_name VARCHAR,
 	 generation_status VARCHAR,
@@ -477,14 +477,14 @@ CREATE TABLE public.cg_cohort_generation (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(cohort_id,database_id)
 );
-CREATE TABLE public.cg_cohort_inclusion (
+CREATE TABLE results.cg_cohort_inclusion (
   	 cohort_definition_id BIGINT NOT NULL,
 	 rule_sequence INT NOT NULL,
 	 name VARCHAR NOT NULL,
 	 description VARCHAR,
 	PRIMARY KEY(cohort_definition_id,rule_sequence,name)
 );
-CREATE TABLE public.cg_cohort_inc_result (
+CREATE TABLE results.cg_cohort_inc_result (
   	 database_id VARCHAR NOT NULL,
 	 cohort_definition_id BIGINT NOT NULL,
 	 inclusion_rule_mask INT NOT NULL,
@@ -492,7 +492,7 @@ CREATE TABLE public.cg_cohort_inc_result (
 	 mode_id INT NOT NULL,
 	PRIMARY KEY(database_id,cohort_definition_id,inclusion_rule_mask,person_count,mode_id)
 );
-CREATE TABLE public.cg_cohort_inc_stats (
+CREATE TABLE results.cg_cohort_inc_stats (
   	 database_id VARCHAR NOT NULL,
 	 cohort_definition_id BIGINT NOT NULL,
 	 rule_sequence INT NOT NULL,
@@ -502,7 +502,7 @@ CREATE TABLE public.cg_cohort_inc_stats (
 	 mode_id INT NOT NULL,
 	PRIMARY KEY(database_id,cohort_definition_id,rule_sequence,person_count,gain_count,person_total,mode_id)
 );
-CREATE TABLE public.cg_cohort_summary_stats (
+CREATE TABLE results.cg_cohort_summary_stats (
   	 database_id VARCHAR NOT NULL,
 	 cohort_definition_id BIGINT NOT NULL,
 	 base_count BIGINT NOT NULL,
@@ -510,32 +510,32 @@ CREATE TABLE public.cg_cohort_summary_stats (
 	 mode_id INT NOT NULL,
 	PRIMARY KEY(database_id,cohort_definition_id,base_count,final_count,mode_id)
 );
-CREATE TABLE public.cg_cohort_censor_stats (
+CREATE TABLE results.cg_cohort_censor_stats (
   	 cohort_definition_id BIGINT NOT NULL,
 	 lost_count BIGINT NOT NULL,
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(cohort_definition_id,lost_count,database_id)
 );
-CREATE TABLE public.cg_cohort_count (
+CREATE TABLE results.cg_cohort_count (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 cohort_entries BIGINT NOT NULL,
 	 cohort_subjects BIGINT NOT NULL,
 	PRIMARY KEY(database_id,cohort_id,cohort_entries,cohort_subjects)
 );
-CREATE TABLE public.cg_cohort_count_neg_ctrl (
+CREATE TABLE results.cg_cohort_count_neg_ctrl (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
 	 cohort_entries BIGINT NOT NULL,
 	 cohort_subjects BIGINT NOT NULL,
 	PRIMARY KEY(database_id,cohort_id,cohort_entries,cohort_subjects)
 );
-CREATE TABLE public.cg_cohort_subset_definition (
+CREATE TABLE results.cg_cohort_subset_definition (
   	 subset_definition_id BIGINT NOT NULL,
 	 json TEXT,
 	PRIMARY KEY(subset_definition_id)
 );
-CREATE TABLE public.cg_cohort_definition_neg_ctrl (
+CREATE TABLE results.cg_cohort_definition_neg_ctrl (
   	 cohort_id BIGINT NOT NULL,
 	 outcome_concept_id BIGINT,
 	 cohort_name VARCHAR,
@@ -544,7 +544,7 @@ CREATE TABLE public.cg_cohort_definition_neg_ctrl (
 	PRIMARY KEY(cohort_id)
 );
 -- CohortIncidenceModule Tables
-CREATE TABLE public.ci_incidence_summary (
+CREATE TABLE results.ci_incidence_summary (
   	 ref_id INT,
 	 database_id VARCHAR(255),
 	 source_name VARCHAR(255),
@@ -567,13 +567,13 @@ CREATE TABLE public.ci_incidence_summary (
 	 incidence_proportion_p100p NUMERIC,
 	 incidence_rate_p100py NUMERIC
 );
-CREATE TABLE public.ci_target_def (
+CREATE TABLE results.ci_target_def (
   	 ref_id INT NOT NULL,
 	 target_cohort_definition_id BIGINT NOT NULL,
 	 target_name VARCHAR(255),
 	PRIMARY KEY(ref_id,target_cohort_definition_id)
 );
-CREATE TABLE public.ci_outcome_def (
+CREATE TABLE results.ci_outcome_def (
   	 ref_id INT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 outcome_cohort_definition_id BIGINT,
@@ -582,7 +582,7 @@ CREATE TABLE public.ci_outcome_def (
 	 excluded_cohort_definition_id BIGINT,
 	PRIMARY KEY(ref_id,outcome_id)
 );
-CREATE TABLE public.ci_tar_def (
+CREATE TABLE results.ci_tar_def (
   	 ref_id INT NOT NULL,
 	 tar_id BIGINT NOT NULL,
 	 tar_start_with VARCHAR(10),
@@ -591,7 +591,7 @@ CREATE TABLE public.ci_tar_def (
 	 tar_end_offset BIGINT,
 	PRIMARY KEY(ref_id,tar_id)
 );
-CREATE TABLE public.ci_age_group_def (
+CREATE TABLE results.ci_age_group_def (
   	 ref_id INT NOT NULL,
 	 age_group_id INT NOT NULL,
 	 age_group_name VARCHAR(255),
@@ -599,20 +599,20 @@ CREATE TABLE public.ci_age_group_def (
 	 max_age INT,
 	PRIMARY KEY(ref_id,age_group_id)
 );
-CREATE TABLE public.ci_subgroup_def (
+CREATE TABLE results.ci_subgroup_def (
   	 ref_id INT NOT NULL,
 	 subgroup_id BIGINT NOT NULL,
 	 subgroup_name VARCHAR(255),
 	PRIMARY KEY(ref_id,subgroup_id)
 );
-CREATE TABLE public.ci_target_outcome_ref (
+CREATE TABLE results.ci_target_outcome_ref (
   	 ref_id INT NOT NULL,
 	 target_cohort_id BIGINT NOT NULL,
 	 outcome_cohort_id BIGINT NOT NULL,
 	PRIMARY KEY(ref_id,target_cohort_id,outcome_cohort_id)
 );
 -- CohortMethodModule Tables
-CREATE TABLE public.cm_attrition (
+CREATE TABLE results.cm_attrition (
   	 sequence_number INT NOT NULL,
 	 description VARCHAR,
 	 subjects INT,
@@ -624,7 +624,7 @@ CREATE TABLE public.cm_attrition (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(sequence_number,exposure_id,target_id,comparator_id,analysis_id,outcome_id,database_id)
 );
-CREATE TABLE public.cm_follow_up_dist (
+CREATE TABLE results.cm_follow_up_dist (
   	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
@@ -650,13 +650,13 @@ CREATE TABLE public.cm_follow_up_dist (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(target_id,comparator_id,outcome_id,analysis_id,database_id)
 );
-CREATE TABLE public.cm_analysis (
+CREATE TABLE results.cm_analysis (
   	 analysis_id INT NOT NULL,
 	 description VARCHAR,
 	 definition VARCHAR,
 	PRIMARY KEY(analysis_id)
 );
-CREATE TABLE public.cm_result (
+CREATE TABLE results.cm_result (
   	 analysis_id INT NOT NULL,
 	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
@@ -686,7 +686,7 @@ CREATE TABLE public.cm_result (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(analysis_id,target_id,comparator_id,outcome_id,database_id)
 );
-CREATE TABLE public.cm_interaction_result (
+CREATE TABLE results.cm_interaction_result (
   	 analysis_id INT NOT NULL,
 	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
@@ -714,7 +714,7 @@ CREATE TABLE public.cm_interaction_result (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(analysis_id,target_id,comparator_id,outcome_id,interaction_covariate_id,database_id)
 );
-CREATE TABLE public.cm_covariate (
+CREATE TABLE results.cm_covariate (
   	 covariate_id BIGINT NOT NULL,
 	 covariate_name VARCHAR,
 	 analysis_id INT NOT NULL,
@@ -722,13 +722,13 @@ CREATE TABLE public.cm_covariate (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(covariate_id,analysis_id,database_id)
 );
-CREATE TABLE public.cm_covariate_analysis (
+CREATE TABLE results.cm_covariate_analysis (
   	 covariate_analysis_id INT NOT NULL,
 	 covariate_analysis_name VARCHAR,
 	 analysis_id INT NOT NULL,
 	PRIMARY KEY(covariate_analysis_id,analysis_id)
 );
-CREATE TABLE public.cm_covariate_balance (
+CREATE TABLE results.cm_covariate_balance (
   	 database_id VARCHAR NOT NULL,
 	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
@@ -748,7 +748,7 @@ CREATE TABLE public.cm_covariate_balance (
 	 target_comparator_std_diff NUMERIC,
 	PRIMARY KEY(database_id,target_id,comparator_id,outcome_id,analysis_id,covariate_id)
 );
-CREATE TABLE public.cm_diagnostics_summary (
+CREATE TABLE results.cm_diagnostics_summary (
   	 analysis_id INT NOT NULL,
 	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
@@ -772,7 +772,7 @@ CREATE TABLE public.cm_diagnostics_summary (
 	 unblind_for_evidence_synthesis INT,
 	PRIMARY KEY(analysis_id,target_id,comparator_id,outcome_id,database_id)
 );
-CREATE TABLE public.cm_target_comparator_outcome (
+CREATE TABLE results.cm_target_comparator_outcome (
   	 outcome_id BIGINT NOT NULL,
 	 outcome_of_interest INT,
 	 true_effect_size NUMERIC,
@@ -780,7 +780,7 @@ CREATE TABLE public.cm_target_comparator_outcome (
 	 comparator_id BIGINT NOT NULL,
 	PRIMARY KEY(outcome_id,target_id,comparator_id)
 );
-CREATE TABLE public.cm_kaplan_meier_dist (
+CREATE TABLE results.cm_kaplan_meier_dist (
   	 time_day INT NOT NULL,
 	 target_survival NUMERIC,
 	 target_survival_lb NUMERIC,
@@ -797,7 +797,7 @@ CREATE TABLE public.cm_kaplan_meier_dist (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(time_day,target_id,comparator_id,outcome_id,analysis_id,database_id)
 );
-CREATE TABLE public.cm_likelihood_profile (
+CREATE TABLE results.cm_likelihood_profile (
   	 log_rr NUMERIC NOT NULL,
 	 log_likelihood NUMERIC,
 	 target_id BIGINT NOT NULL,
@@ -807,7 +807,7 @@ CREATE TABLE public.cm_likelihood_profile (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(log_rr,target_id,comparator_id,outcome_id,analysis_id,database_id)
 );
-CREATE TABLE public.cm_preference_score_dist (
+CREATE TABLE results.cm_preference_score_dist (
   	 analysis_id INT NOT NULL,
 	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
@@ -817,7 +817,7 @@ CREATE TABLE public.cm_preference_score_dist (
 	 comparator_density NUMERIC,
 	PRIMARY KEY(analysis_id,target_id,comparator_id,database_id,preference_score)
 );
-CREATE TABLE public.cm_propensity_model (
+CREATE TABLE results.cm_propensity_model (
   	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
@@ -826,7 +826,7 @@ CREATE TABLE public.cm_propensity_model (
 	 coefficient NUMERIC,
 	PRIMARY KEY(target_id,comparator_id,analysis_id,database_id,covariate_id)
 );
-CREATE TABLE public.cm_shared_covariate_balance (
+CREATE TABLE results.cm_shared_covariate_balance (
   	 database_id VARCHAR NOT NULL,
 	 target_id BIGINT NOT NULL,
 	 comparator_id BIGINT NOT NULL,
@@ -846,14 +846,14 @@ CREATE TABLE public.cm_shared_covariate_balance (
 	PRIMARY KEY(database_id,target_id,comparator_id,analysis_id,covariate_id)
 );
 -- EvidenceSynthesisModule Tables
-CREATE TABLE public.es_analysis (
+CREATE TABLE results.es_analysis (
   	 evidence_synthesis_analysis_id INT NOT NULL,
 	 evidence_synthesis_description VARCHAR(255),
 	 source_method VARCHAR(100),
 	 definition VARCHAR,
 	PRIMARY KEY(evidence_synthesis_analysis_id)
 );
-CREATE TABLE public.es_cm_diagnostics_summary (
+CREATE TABLE results.es_cm_diagnostics_summary (
   	 target_id INT NOT NULL,
 	 comparator_id INT NOT NULL,
 	 outcome_id INT NOT NULL,
@@ -870,7 +870,7 @@ CREATE TABLE public.es_cm_diagnostics_summary (
 	 unblind INT,
 	PRIMARY KEY(target_id,comparator_id,outcome_id,analysis_id,evidence_synthesis_analysis_id)
 );
-CREATE TABLE public.es_cm_result (
+CREATE TABLE results.es_cm_result (
   	 target_id INT NOT NULL,
 	 comparator_id INT NOT NULL,
 	 outcome_id INT NOT NULL,
@@ -899,7 +899,7 @@ CREATE TABLE public.es_cm_result (
 	 calibrated_se_log_rr NUMERIC,
 	PRIMARY KEY(target_id,comparator_id,outcome_id,analysis_id,evidence_synthesis_analysis_id)
 );
-CREATE TABLE public.es_sccs_diagnostics_summary (
+CREATE TABLE results.es_sccs_diagnostics_summary (
   	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
@@ -915,7 +915,7 @@ CREATE TABLE public.es_sccs_diagnostics_summary (
 	 unblind INT,
 	PRIMARY KEY(exposures_outcome_set_id,covariate_id,analysis_id,evidence_synthesis_analysis_id)
 );
-CREATE TABLE public.es_sccs_result (
+CREATE TABLE results.es_sccs_result (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
@@ -946,20 +946,20 @@ CREATE TABLE public.es_sccs_result (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,evidence_synthesis_analysis_id)
 );
 -- PatientLevelPredictionModule Tables
-CREATE TABLE public.plp_cohorts (
+CREATE TABLE results.plp_cohorts (
   	 cohort_id INT NOT NULL,
 	 cohort_definition_id BIGINT,
 	 cohort_name VARCHAR,
 	PRIMARY KEY(cohort_id)
 );
-CREATE TABLE public.plp_cohort_definition (
+CREATE TABLE results.plp_cohort_definition (
   	 cohort_definition_id BIGINT,
 	 cohort_name VARCHAR,
 	 description TEXT,
 	 json TEXT,
 	 sql_command TEXT
 );
-CREATE TABLE public.plp_database_meta_data (
+CREATE TABLE results.plp_database_meta_data (
   	 database_id VARCHAR NOT NULL,
 	 cdm_source_name VARCHAR,
 	 cdm_source_abbreviation VARCHAR,
@@ -974,12 +974,12 @@ CREATE TABLE public.plp_database_meta_data (
 	 max_obs_period_end_date VARCHAR,
 	PRIMARY KEY(database_id)
 );
-CREATE TABLE public.plp_database_details (
+CREATE TABLE results.plp_database_details (
   	 database_id INT NOT NULL,
 	 database_meta_data_id VARCHAR,
 	PRIMARY KEY(database_id)
 );
-CREATE TABLE public.plp_tars (
+CREATE TABLE results.plp_tars (
   	 tar_id INT NOT NULL,
 	 tar_start_day INT,
 	 tar_start_anchor VARCHAR,
@@ -987,48 +987,48 @@ CREATE TABLE public.plp_tars (
 	 tar_end_anchor VARCHAR,
 	PRIMARY KEY(tar_id)
 );
-CREATE TABLE public.plp_population_settings (
+CREATE TABLE results.plp_population_settings (
   	 population_setting_id INT NOT NULL,
 	 population_settings_json TEXT,
 	PRIMARY KEY(population_setting_id)
 );
-CREATE TABLE public.plp_covariate_settings (
+CREATE TABLE results.plp_covariate_settings (
   	 covariate_setting_id INT NOT NULL,
 	 covariate_settings_json TEXT,
 	PRIMARY KEY(covariate_setting_id)
 );
-CREATE TABLE public.plp_model_settings (
+CREATE TABLE results.plp_model_settings (
   	 model_setting_id INT NOT NULL,
 	 model_type VARCHAR,
 	 model_settings_json VARCHAR,
 	PRIMARY KEY(model_setting_id)
 );
-CREATE TABLE public.plp_split_settings (
+CREATE TABLE results.plp_split_settings (
   	 split_setting_id INT NOT NULL,
 	 split_settings_json TEXT,
 	PRIMARY KEY(split_setting_id)
 );
-CREATE TABLE public.plp_plp_data_settings (
+CREATE TABLE results.plp_plp_data_settings (
   	 plp_data_setting_id INT NOT NULL,
 	 plp_data_settings_json TEXT,
 	PRIMARY KEY(plp_data_setting_id)
 );
-CREATE TABLE public.plp_feature_engineering_settings (
+CREATE TABLE results.plp_feature_engineering_settings (
   	 feature_engineering_setting_id INT NOT NULL,
 	 feature_engineering_settings_json TEXT,
 	PRIMARY KEY(feature_engineering_setting_id)
 );
-CREATE TABLE public.plp_tidy_covariates_settings (
+CREATE TABLE results.plp_tidy_covariates_settings (
   	 tidy_covariates_setting_id INT NOT NULL,
 	 tidy_covariates_settings_json TEXT,
 	PRIMARY KEY(tidy_covariates_setting_id)
 );
-CREATE TABLE public.plp_sample_settings (
+CREATE TABLE results.plp_sample_settings (
   	 sample_setting_id INT NOT NULL,
 	 sample_settings_json TEXT,
 	PRIMARY KEY(sample_setting_id)
 );
-CREATE TABLE public.plp_model_designs (
+CREATE TABLE results.plp_model_designs (
   	 model_design_id INT NOT NULL,
 	 target_id INT,
 	 outcome_id INT,
@@ -1043,33 +1043,33 @@ CREATE TABLE public.plp_model_designs (
 	 tidy_covariates_setting_id INT,
 	PRIMARY KEY(model_design_id)
 );
-CREATE TABLE public.plp_diagnostics (
+CREATE TABLE results.plp_diagnostics (
   	 diagnostic_id INT NOT NULL,
 	 model_design_id INT,
 	 database_id INT,
 	 execution_date_time VARCHAR,
 	PRIMARY KEY(diagnostic_id)
 );
-CREATE TABLE public.plp_diagnostic_summary (
+CREATE TABLE results.plp_diagnostic_summary (
   	 diagnostic_id INT,
 	 probast_id VARCHAR,
 	 result_value VARCHAR
 );
-CREATE TABLE public.plp_diagnostic_predictors (
+CREATE TABLE results.plp_diagnostic_predictors (
   	 diagnostic_id INT,
 	 days_to_event INT,
 	 outcome_at_time INT,
 	 observed_at_start_of_day BIGINT,
 	 input_type VARCHAR
 );
-CREATE TABLE public.plp_diagnostic_participants (
+CREATE TABLE results.plp_diagnostic_participants (
   	 diagnostic_id INT,
 	 design VARCHAR,
 	 metric VARCHAR,
 	 value NUMERIC,
 	 probast_id VARCHAR
 );
-CREATE TABLE public.plp_diagnostic_outcomes (
+CREATE TABLE results.plp_diagnostic_outcomes (
   	 diagnostic_id INT,
 	 xvalue INT,
 	 outcome_percent NUMERIC,
@@ -1077,13 +1077,13 @@ CREATE TABLE public.plp_diagnostic_outcomes (
 	 probast_id VARCHAR,
 	 input_type VARCHAR
 );
-CREATE TABLE public.plp_diagnostic_designs (
+CREATE TABLE results.plp_diagnostic_designs (
   	 diagnostic_id INT NOT NULL,
 	 probast_id VARCHAR,
 	 value VARCHAR,
 	PRIMARY KEY(diagnostic_id)
 );
-CREATE TABLE public.plp_models (
+CREATE TABLE results.plp_models (
   	 model_id INT NOT NULL,
 	 analysis_id VARCHAR,
 	 model_design_id INT,
@@ -1097,7 +1097,7 @@ CREATE TABLE public.plp_models (
 	 intercept NUMERIC,
 	PRIMARY KEY(model_id)
 );
-CREATE TABLE public.plp_recalibrations (
+CREATE TABLE results.plp_recalibrations (
   	 recalibration_id INT NOT NULL,
 	 original_model_id INT,
 	 recalibrated_model_id INT,
@@ -1105,7 +1105,7 @@ CREATE TABLE public.plp_recalibrations (
 	 recalibration_json VARCHAR,
 	PRIMARY KEY(recalibration_id)
 );
-CREATE TABLE public.plp_performances (
+CREATE TABLE results.plp_performances (
   	 performance_id INT NOT NULL,
 	 model_design_id INT,
 	 development_database_id INT,
@@ -1120,7 +1120,7 @@ CREATE TABLE public.plp_performances (
 	 plp_version VARCHAR,
 	PRIMARY KEY(performance_id)
 );
-CREATE TABLE public.plp_attrition (
+CREATE TABLE results.plp_attrition (
   	 performance_id INT,
 	 outcome_id INT,
 	 description VARCHAR,
@@ -1128,7 +1128,7 @@ CREATE TABLE public.plp_attrition (
 	 unique_people INT,
 	 outcomes INT
 );
-CREATE TABLE public.plp_prediction_distribution (
+CREATE TABLE results.plp_prediction_distribution (
   	 performance_id INT,
 	 evaluation VARCHAR,
 	 class_label INT,
@@ -1143,7 +1143,7 @@ CREATE TABLE public.plp_prediction_distribution (
 	 p_95_predicted_probability NUMERIC,
 	 max_predicted_probability NUMERIC
 );
-CREATE TABLE public.plp_covariate_summary (
+CREATE TABLE results.plp_covariate_summary (
   	 performance_id INT,
 	 covariate_id BIGINT,
 	 covariate_name VARCHAR,
@@ -1160,7 +1160,7 @@ CREATE TABLE public.plp_covariate_summary (
 	 with_outcome_covariate_st_dev NUMERIC,
 	 standardized_mean_diff NUMERIC
 );
-CREATE TABLE public.plp_threshold_summary (
+CREATE TABLE results.plp_threshold_summary (
   	 performance_id INT,
 	 evaluation VARCHAR,
 	 prediction_threshold NUMERIC,
@@ -1187,7 +1187,7 @@ CREATE TABLE public.plp_threshold_summary (
 	 negative_likelihood_ratio NUMERIC,
 	 diagnostic_odds_ratio NUMERIC
 );
-CREATE TABLE public.plp_calibration_summary (
+CREATE TABLE results.plp_calibration_summary (
   	 performance_id INT,
 	 evaluation VARCHAR,
 	 prediction_threshold NUMERIC,
@@ -1202,13 +1202,13 @@ CREATE TABLE public.plp_calibration_summary (
 	 max_predicted_probability NUMERIC,
 	 observed_incidence NUMERIC
 );
-CREATE TABLE public.plp_evaluation_statistics (
+CREATE TABLE results.plp_evaluation_statistics (
   	 performance_id INT,
 	 evaluation VARCHAR,
 	 metric VARCHAR,
 	 value NUMERIC
 );
-CREATE TABLE public.plp_demographic_summary (
+CREATE TABLE results.plp_demographic_summary (
   	 performance_id INT,
 	 evaluation VARCHAR,
 	 age_group VARCHAR,
@@ -1224,20 +1224,20 @@ CREATE TABLE public.plp_demographic_summary (
 	 max_predicted_probability NUMERIC
 );
 -- SelfControlledCaseSeriesModule Tables
-CREATE TABLE public.sccs_analysis (
+CREATE TABLE results.sccs_analysis (
   	 analysis_id INT NOT NULL,
 	 description VARCHAR,
 	 definition VARCHAR,
 	PRIMARY KEY(analysis_id)
 );
-CREATE TABLE public.sccs_covariate_analysis (
+CREATE TABLE results.sccs_covariate_analysis (
   	 analysis_id INT NOT NULL,
 	 covariate_analysis_id INT NOT NULL,
 	 covariate_analysis_name VARCHAR,
 	 variable_of_interest INT,
 	PRIMARY KEY(analysis_id,covariate_analysis_id)
 );
-CREATE TABLE public.sccs_covariate (
+CREATE TABLE results.sccs_covariate (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
@@ -1247,7 +1247,7 @@ CREATE TABLE public.sccs_covariate (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
-CREATE TABLE public.sccs_era (
+CREATE TABLE results.sccs_era (
   	 exposures_outcome_set_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 era_type VARCHAR NOT NULL,
@@ -1256,19 +1256,19 @@ CREATE TABLE public.sccs_era (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(exposures_outcome_set_id,analysis_id,era_type,era_id,database_id)
 );
-CREATE TABLE public.sccs_exposures_outcome_set (
+CREATE TABLE results.sccs_exposures_outcome_set (
   	 exposures_outcome_set_id INT NOT NULL,
 	 outcome_id INT,
 	 nesting_cohort_id INT,
 	PRIMARY KEY(exposures_outcome_set_id)
 );
-CREATE TABLE public.sccs_exposure (
+CREATE TABLE results.sccs_exposure (
   	 exposures_outcome_set_id INT NOT NULL,
 	 era_id INT NOT NULL,
 	 true_effect_size NUMERIC,
 	PRIMARY KEY(exposures_outcome_set_id,era_id)
 );
-CREATE TABLE public.sccs_spline (
+CREATE TABLE results.sccs_spline (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1277,7 +1277,7 @@ CREATE TABLE public.sccs_spline (
 	 rr NUMERIC,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,spline_type,knot_month)
 );
-CREATE TABLE public.sccs_censor_model (
+CREATE TABLE results.sccs_censor_model (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1286,7 +1286,7 @@ CREATE TABLE public.sccs_censor_model (
 	 model_type VARCHAR,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,parameter_id)
 );
-CREATE TABLE public.sccs_result (
+CREATE TABLE results.sccs_result (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
@@ -1316,7 +1316,7 @@ CREATE TABLE public.sccs_result (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
-CREATE TABLE public.sccs_covariate_result (
+CREATE TABLE results.sccs_covariate_result (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1326,7 +1326,7 @@ CREATE TABLE public.sccs_covariate_result (
 	 ci_95_ub NUMERIC,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,covariate_id)
 );
-CREATE TABLE public.sccs_attrition (
+CREATE TABLE results.sccs_attrition (
   	 sequence_number INT NOT NULL,
 	 description VARCHAR,
 	 analysis_id INT NOT NULL,
@@ -1339,7 +1339,7 @@ CREATE TABLE public.sccs_attrition (
 	 observed_days BIGINT,
 	PRIMARY KEY(sequence_number,analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
-CREATE TABLE public.sccs_likelihood_profile (
+CREATE TABLE results.sccs_likelihood_profile (
   	 log_rr NUMERIC NOT NULL,
 	 log_likelihood NUMERIC,
 	 covariate_id INT NOT NULL,
@@ -1348,7 +1348,7 @@ CREATE TABLE public.sccs_likelihood_profile (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(log_rr,covariate_id,exposures_outcome_set_id,analysis_id,database_id)
 );
-CREATE TABLE public.sccs_time_trend (
+CREATE TABLE results.sccs_time_trend (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1359,7 +1359,7 @@ CREATE TABLE public.sccs_time_trend (
 	 adjusted_ratio NUMERIC,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
-CREATE TABLE public.sccs_time_to_event (
+CREATE TABLE results.sccs_time_to_event (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1369,7 +1369,7 @@ CREATE TABLE public.sccs_time_to_event (
 	 outcomes INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,era_id,week)
 );
-CREATE TABLE public.sccs_age_spanning (
+CREATE TABLE results.sccs_age_spanning (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1377,7 +1377,7 @@ CREATE TABLE public.sccs_age_spanning (
 	 cover_before_after_subjects INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,age_month)
 );
-CREATE TABLE public.sccs_calendar_time_spanning (
+CREATE TABLE results.sccs_calendar_time_spanning (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1386,7 +1386,7 @@ CREATE TABLE public.sccs_calendar_time_spanning (
 	 cover_before_after_subjects INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
-CREATE TABLE public.sccs_event_dep_observation (
+CREATE TABLE results.sccs_event_dep_observation (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1395,7 +1395,7 @@ CREATE TABLE public.sccs_event_dep_observation (
 	 outcomes INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,months_to_end,censored)
 );
-CREATE TABLE public.sccs_diagnostics_summary (
+CREATE TABLE results.sccs_diagnostics_summary (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,

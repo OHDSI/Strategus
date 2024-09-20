@@ -207,12 +207,12 @@
       <column name="end_day" comments="end day"/>
       <column name="subjects" comments="number of subjects total"/>
       <column name="sub_cs_before_ts" comments="present in both target and comparator"/>
-      <column name="sub_cs_on_ts" comments="comparator cohort start date before target start date (offset) [How many subjects in comparator cohort start prior to first target cohort start]"/>
-      <column name="sub_cs_after_ts" comments="comparator cohort start date on target start date (offset) [How many subjects in comparator cohort start with first target cohort start]"/>
-      <column name="sub_cs_before_te" comments="comparator cohort start date after target start date (offset) [How many subjects in comparator cohort start after first target cohort start]"/>
-      <column name="sub_cs_on_te" comments="comparator cohort start date before target end date (offset) [How many subjects in comparator cohort start after first target cohort end]"/>
-      <column name="sub_cs_after_te" comments="comparator cohort start date on target end date (offset) [How many subjects in comparator cohort start on first target cohort end]"/>
-      <column name="sub_cs_window_t" comments="comparator cohort start date after target end date (offset) [How many subjects in comparator cohort start after first target cohort end]"/>
+      <column name="sub_cs_on_ts" comments="How many subjects in comparator cohort start prior to first target cohort start"/>
+      <column name="sub_cs_after_ts" comments="How many subjects in comparator cohort start with first target cohort start"/>
+      <column name="sub_cs_before_te" comments="How many subjects in comparator cohort start after first target cohort start"/>
+      <column name="sub_cs_on_te" comments="How many subjects in comparator cohort start after first target cohort end"/>
+      <column name="sub_cs_after_te" comments="How many subjects in comparator cohort start on first target cohort end"/>
+      <column name="sub_cs_window_t" comments="How many subjects in comparator cohort start after first target cohort end"/>
       <column name="sub_ce_window_t" comments="comparator cohort subjects start within period (incidence) relative to target start date and end date"/>
       <column name="sub_cs_window_ts" comments="comparator cohort subjects start within period (incidence) relative to target start date and end date"/>
       <column name="sub_cs_window_te" comments="comparator cohort subjects start within period (incidence) relative to target start date"/>
