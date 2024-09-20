@@ -1252,20 +1252,20 @@ CREATE TABLE public.plp_demographic_summary (
 	 max_predicted_probability NUMERIC
 );
 -- SelfControlledCaseSeriesModule Tables
-CREATE TABLE public.sccs_sccs_analysis (
+CREATE TABLE public.sccs_analysis (
   	 analysis_id INT NOT NULL,
 	 description VARCHAR,
 	 definition VARCHAR,
 	PRIMARY KEY(analysis_id)
 );
-CREATE TABLE public.sccs_sccs_covariate_analysis (
+CREATE TABLE public.sccs_covariate_analysis (
   	 analysis_id INT NOT NULL,
 	 covariate_analysis_id INT NOT NULL,
 	 covariate_analysis_name VARCHAR,
 	 variable_of_interest INT,
 	PRIMARY KEY(analysis_id,covariate_analysis_id)
 );
-CREATE TABLE public.sccs_sccs_covariate (
+CREATE TABLE public.sccs_covariate (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
@@ -1275,7 +1275,7 @@ CREATE TABLE public.sccs_sccs_covariate (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
-CREATE TABLE public.sccs_sccs_era (
+CREATE TABLE public.sccs_era (
   	 exposures_outcome_set_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 era_type VARCHAR NOT NULL,
@@ -1284,19 +1284,19 @@ CREATE TABLE public.sccs_sccs_era (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(exposures_outcome_set_id,analysis_id,era_type,era_id,database_id)
 );
-CREATE TABLE public.sccs_sccs_exposures_outcome_set (
+CREATE TABLE public.sccs_exposures_outcome_set (
   	 exposures_outcome_set_id INT NOT NULL,
 	 outcome_id INT,
 	 nesting_cohort_id INT,
 	PRIMARY KEY(exposures_outcome_set_id)
 );
-CREATE TABLE public.sccs_sccs_exposure (
+CREATE TABLE public.sccs_exposure (
   	 exposures_outcome_set_id INT NOT NULL,
 	 era_id INT NOT NULL,
 	 true_effect_size NUMERIC,
 	PRIMARY KEY(exposures_outcome_set_id,era_id)
 );
-CREATE TABLE public.sccs_sccs_spline (
+CREATE TABLE public.sccs_spline (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1305,7 +1305,7 @@ CREATE TABLE public.sccs_sccs_spline (
 	 rr NUMERIC,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,spline_type,knot_month)
 );
-CREATE TABLE public.sccs_sccs_censor_model (
+CREATE TABLE public.sccs_censor_model (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1314,7 +1314,7 @@ CREATE TABLE public.sccs_sccs_censor_model (
 	 model_type VARCHAR,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,parameter_id)
 );
-CREATE TABLE public.sccs_sccs_result (
+CREATE TABLE public.sccs_result (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
@@ -1344,7 +1344,7 @@ CREATE TABLE public.sccs_sccs_result (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
-CREATE TABLE public.sccs_sccs_covariate_result (
+CREATE TABLE public.sccs_covariate_result (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1354,7 +1354,7 @@ CREATE TABLE public.sccs_sccs_covariate_result (
 	 ci_95_ub NUMERIC,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,covariate_id)
 );
-CREATE TABLE public.sccs_sccs_attrition (
+CREATE TABLE public.sccs_attrition (
   	 sequence_number INT NOT NULL,
 	 description VARCHAR,
 	 analysis_id INT NOT NULL,
@@ -1367,7 +1367,7 @@ CREATE TABLE public.sccs_sccs_attrition (
 	 observed_days BIGINT,
 	PRIMARY KEY(sequence_number,analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
-CREATE TABLE public.sccs_sccs_likelihood_profile (
+CREATE TABLE public.sccs_likelihood_profile (
   	 log_rr NUMERIC NOT NULL,
 	 log_likelihood NUMERIC,
 	 covariate_id INT NOT NULL,
@@ -1376,7 +1376,7 @@ CREATE TABLE public.sccs_sccs_likelihood_profile (
 	 database_id VARCHAR NOT NULL,
 	PRIMARY KEY(log_rr,covariate_id,exposures_outcome_set_id,analysis_id,database_id)
 );
-CREATE TABLE public.sccs_sccs_time_trend (
+CREATE TABLE public.sccs_time_trend (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1387,7 +1387,7 @@ CREATE TABLE public.sccs_sccs_time_trend (
 	 adjusted_ratio NUMERIC,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
-CREATE TABLE public.sccs_sccs_time_to_event (
+CREATE TABLE public.sccs_time_to_event (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1397,7 +1397,7 @@ CREATE TABLE public.sccs_sccs_time_to_event (
 	 outcomes INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,era_id,week)
 );
-CREATE TABLE public.sccs_sccs_age_spanning (
+CREATE TABLE public.sccs_age_spanning (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1405,7 +1405,7 @@ CREATE TABLE public.sccs_sccs_age_spanning (
 	 cover_before_after_subjects INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,age_month)
 );
-CREATE TABLE public.sccs_sccs_calendar_time_spanning (
+CREATE TABLE public.sccs_calendar_time_spanning (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1414,7 +1414,7 @@ CREATE TABLE public.sccs_sccs_calendar_time_spanning (
 	 cover_before_after_subjects INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
-CREATE TABLE public.sccs_sccs_event_dep_observation (
+CREATE TABLE public.sccs_event_dep_observation (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1423,7 +1423,7 @@ CREATE TABLE public.sccs_sccs_event_dep_observation (
 	 outcomes INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,months_to_end,censored)
 );
-CREATE TABLE public.sccs_sccs_diagnostics_summary (
+CREATE TABLE public.sccs_diagnostics_summary (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,

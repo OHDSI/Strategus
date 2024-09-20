@@ -89,7 +89,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       )
 
       # add the prefix to the tableName column
-      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, tablePrefix, resultsDataModelSpecification$tableName)
       return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module

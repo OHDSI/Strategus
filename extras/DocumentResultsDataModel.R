@@ -13,9 +13,10 @@ rdms <- CohortGenerator::readCsv(
   ),
   warnOnCaseMismatch = F
 )
+rdms$tableDefinedBy <- "Strategus"
 
 fullResultsDataModel <- fullResultsDataModel %>%
-  bind_rows(rdms %>% select(tableName, columnName, description))
+  bind_rows(rdms %>% select(tableDefinedBy, tableName, columnName, description))
 
 sql <- "-- Strategus Tables\n"
 sql <- paste0(sql, ResultModelManager::generateSqlSchema(schemaDefinition = rdms))
@@ -36,10 +37,23 @@ for(module in moduleList) {
   if (!"description" %in% colnames(rdms)) {
     rdms$description <- ""
   }
+  rdms$tableDefinedBy <- module
 
   fullResultsDataModel <- fullResultsDataModel %>%
-    bind_rows(rdms %>% select(tableName, columnName, description))
+    bind_rows(rdms %>% select(tableDefinedBy, tableName, columnName, description))
 }
+
+# NOTE: This code was to inititally save the table information to a csv file
+# that will be manually edited to include the table descriptions
+# tableDescriptions <- fullResultsDataModel %>%
+#   select(tableDefinedBy, tableName) %>%
+#   distinct() %>%
+#   mutate(description = "") %>%
+#   arrange(tableName)
+# CohortGenerator::writeCsv(
+#   x = tableDescriptions,
+#   file = "./extras/rdms/table_descriptions.csv"
+# )
 
 # Save the OHDSI-SQL
 SqlRender::writeSql(
@@ -78,11 +92,21 @@ tables <- xml_add_child(schemaMeta, "tables")
 # Iterate over the fullResultsDataModel to create the descriptions
 # of the tables & columns.
 uniqueTableNames <- unique(fullResultsDataModel$tableName)
+tableDescriptions <- CohortGenerator::readCsv(
+  file = "./extras/rdms/table_descriptions.csv"
+)
 for (i in seq_along(uniqueTableNames)) {
   # Add table node with attributes
   currentTableName <- uniqueTableNames[i]
   #print(currentTableName)
-  table <- xml_add_child(tables, "table", name = currentTableName, comments = "Table comment goes here")
+  # Get the table description, if it exists
+  currentTableDescriptionInfo <- tableDescriptions %>%
+    filter(.data$tableName == currentTableName)
+  currentTableDescription <- ""
+  if (nrow(currentTableDescriptionInfo) == 1) {
+    currentTableDescription <- paste0(currentTableDescriptionInfo$tableDefinedBy[1], ": ", currentTableDescriptionInfo$description[1])
+  }
+  table <- xml_add_child(tables, "table", name = currentTableName, comments = currentTableDescription)
 
   # Get the columns
   columnsForCurrentTable <- fullResultsDataModel %>%

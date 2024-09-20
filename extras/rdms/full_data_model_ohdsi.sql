@@ -1481,33 +1481,33 @@ CREATE TABLE @database_schema.@table_prefix@plp_demographic_summary (
 );
 -- SelfControlledCaseSeriesModule Tables
 {DEFAULT @table_prefix = ''}
-{DEFAULT @sccs_sccs_analysis = sccs_sccs_analysis}
-{DEFAULT @sccs_sccs_covariate_analysis = sccs_sccs_covariate_analysis}
-{DEFAULT @sccs_sccs_covariate = sccs_sccs_covariate}
-{DEFAULT @sccs_sccs_era = sccs_sccs_era}
-{DEFAULT @sccs_sccs_exposures_outcome_set = sccs_sccs_exposures_outcome_set}
-{DEFAULT @sccs_sccs_exposure = sccs_sccs_exposure}
-{DEFAULT @sccs_sccs_spline = sccs_sccs_spline}
-{DEFAULT @sccs_sccs_censor_model = sccs_sccs_censor_model}
-{DEFAULT @sccs_sccs_result = sccs_sccs_result}
-{DEFAULT @sccs_sccs_covariate_result = sccs_sccs_covariate_result}
-{DEFAULT @sccs_sccs_attrition = sccs_sccs_attrition}
-{DEFAULT @sccs_sccs_likelihood_profile = sccs_sccs_likelihood_profile}
-{DEFAULT @sccs_sccs_time_trend = sccs_sccs_time_trend}
-{DEFAULT @sccs_sccs_time_to_event = sccs_sccs_time_to_event}
-{DEFAULT @sccs_sccs_age_spanning = sccs_sccs_age_spanning}
-{DEFAULT @sccs_sccs_calendar_time_spanning = sccs_sccs_calendar_time_spanning}
-{DEFAULT @sccs_sccs_event_dep_observation = sccs_sccs_event_dep_observation}
-{DEFAULT @sccs_sccs_diagnostics_summary = sccs_sccs_diagnostics_summary}
+{DEFAULT @sccs_analysis = sccs_analysis}
+{DEFAULT @sccs_covariate_analysis = sccs_covariate_analysis}
+{DEFAULT @sccs_covariate = sccs_covariate}
+{DEFAULT @sccs_era = sccs_era}
+{DEFAULT @sccs_exposures_outcome_set = sccs_exposures_outcome_set}
+{DEFAULT @sccs_exposure = sccs_exposure}
+{DEFAULT @sccs_spline = sccs_spline}
+{DEFAULT @sccs_censor_model = sccs_censor_model}
+{DEFAULT @sccs_result = sccs_result}
+{DEFAULT @sccs_covariate_result = sccs_covariate_result}
+{DEFAULT @sccs_attrition = sccs_attrition}
+{DEFAULT @sccs_likelihood_profile = sccs_likelihood_profile}
+{DEFAULT @sccs_time_trend = sccs_time_trend}
+{DEFAULT @sccs_time_to_event = sccs_time_to_event}
+{DEFAULT @sccs_age_spanning = sccs_age_spanning}
+{DEFAULT @sccs_calendar_time_spanning = sccs_calendar_time_spanning}
+{DEFAULT @sccs_event_dep_observation = sccs_event_dep_observation}
+{DEFAULT @sccs_diagnostics_summary = sccs_diagnostics_summary}
   
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_analysis (
+CREATE TABLE @database_schema.@table_prefix@sccs_analysis (
   	 analysis_id INT NOT NULL,
 	 description VARCHAR,
 	 definition VARCHAR,
 	PRIMARY KEY(analysis_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_covariate_analysis (
+CREATE TABLE @database_schema.@table_prefix@sccs_covariate_analysis (
   	 analysis_id INT NOT NULL,
 	 covariate_analysis_id INT NOT NULL,
 	 covariate_analysis_name VARCHAR,
@@ -1515,7 +1515,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_covariate_analysis (
 	PRIMARY KEY(analysis_id,covariate_analysis_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_covariate (
+CREATE TABLE @database_schema.@table_prefix@sccs_covariate (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
@@ -1526,7 +1526,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_covariate (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_era (
+CREATE TABLE @database_schema.@table_prefix@sccs_era (
   	 exposures_outcome_set_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 era_type VARCHAR NOT NULL,
@@ -1536,21 +1536,21 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_era (
 	PRIMARY KEY(exposures_outcome_set_id,analysis_id,era_type,era_id,database_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_exposures_outcome_set (
+CREATE TABLE @database_schema.@table_prefix@sccs_exposures_outcome_set (
   	 exposures_outcome_set_id INT NOT NULL,
 	 outcome_id INT,
 	 nesting_cohort_id INT,
 	PRIMARY KEY(exposures_outcome_set_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_exposure (
+CREATE TABLE @database_schema.@table_prefix@sccs_exposure (
   	 exposures_outcome_set_id INT NOT NULL,
 	 era_id INT NOT NULL,
 	 true_effect_size FLOAT,
 	PRIMARY KEY(exposures_outcome_set_id,era_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_spline (
+CREATE TABLE @database_schema.@table_prefix@sccs_spline (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1560,7 +1560,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_spline (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,spline_type,knot_month)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_censor_model (
+CREATE TABLE @database_schema.@table_prefix@sccs_censor_model (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1570,7 +1570,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_censor_model (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,parameter_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_result (
+CREATE TABLE @database_schema.@table_prefix@sccs_result (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
@@ -1601,7 +1601,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_result (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_covariate_result (
+CREATE TABLE @database_schema.@table_prefix@sccs_covariate_result (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1612,7 +1612,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_covariate_result (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,covariate_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_attrition (
+CREATE TABLE @database_schema.@table_prefix@sccs_attrition (
   	 sequence_number INT NOT NULL,
 	 description VARCHAR,
 	 analysis_id INT NOT NULL,
@@ -1626,7 +1626,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_attrition (
 	PRIMARY KEY(sequence_number,analysis_id,exposures_outcome_set_id,covariate_id,database_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_likelihood_profile (
+CREATE TABLE @database_schema.@table_prefix@sccs_likelihood_profile (
   	 log_rr FLOAT NOT NULL,
 	 log_likelihood FLOAT,
 	 covariate_id INT NOT NULL,
@@ -1636,7 +1636,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_likelihood_profile (
 	PRIMARY KEY(log_rr,covariate_id,exposures_outcome_set_id,analysis_id,database_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_time_trend (
+CREATE TABLE @database_schema.@table_prefix@sccs_time_trend (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1648,7 +1648,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_time_trend (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_time_to_event (
+CREATE TABLE @database_schema.@table_prefix@sccs_time_to_event (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1659,7 +1659,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_time_to_event (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,era_id,week)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_age_spanning (
+CREATE TABLE @database_schema.@table_prefix@sccs_age_spanning (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1668,7 +1668,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_age_spanning (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,age_month)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_calendar_time_spanning (
+CREATE TABLE @database_schema.@table_prefix@sccs_calendar_time_spanning (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1678,7 +1678,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_calendar_time_spanning (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_event_dep_observation (
+CREATE TABLE @database_schema.@table_prefix@sccs_event_dep_observation (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
@@ -1688,7 +1688,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_sccs_event_dep_observation (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,months_to_end,censored)
 );
  
-CREATE TABLE @database_schema.@table_prefix@sccs_sccs_diagnostics_summary (
+CREATE TABLE @database_schema.@table_prefix@sccs_diagnostics_summary (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 covariate_id INT NOT NULL,
