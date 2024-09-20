@@ -521,65 +521,65 @@
       <column name="detect_on_descendants" comments="When set to 1 detect_on_descendants used the vocabulary to find negative control outcomes using the outcome_concept_id and all descendants via the concept_ancestor table. When set to 0 only the exact outcome_concept_id was used to detect the outcome"/>
     </table>
     <table name="ci_incidence_summary" comments="CohortIncidenceModule: Incidence rate/proportion summary">
-      <column name="ref_id" comments="NA"/>
-      <column name="database_id" comments="NA"/>
-      <column name="source_name" comments="NA"/>
-      <column name="target_cohort_definition_id" comments="NA"/>
-      <column name="tar_id" comments="NA"/>
-      <column name="subgroup_id" comments="NA"/>
-      <column name="outcome_id" comments="NA"/>
-      <column name="age_group_id" comments="NA"/>
-      <column name="gender_id" comments="NA"/>
-      <column name="gender_name" comments="NA"/>
-      <column name="start_year" comments="NA"/>
-      <column name="persons_at_risk_pe" comments="NA"/>
-      <column name="persons_at_risk" comments="NA"/>
-      <column name="person_days_pe" comments="NA"/>
-      <column name="person_days" comments="NA"/>
-      <column name="person_outcomes_pe" comments="NA"/>
-      <column name="person_outcomes" comments="NA"/>
-      <column name="outcomes_pe" comments="NA"/>
-      <column name="outcomes" comments="NA"/>
-      <column name="incidence_proportion_p100p" comments="NA"/>
-      <column name="incidence_rate_p100py" comments="NA"/>
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="source_name" comments="The source name for the database"/>
+      <column name="target_cohort_definition_id" comments="Target cohort identifier"/>
+      <column name="tar_id" comments="Time-at-risk identifier"/>
+      <column name="subgroup_id" comments="Subgroup identifier"/>
+      <column name="outcome_id" comments="Outcome cohort identifier"/>
+      <column name="age_group_id" comments="Age group identifier"/>
+      <column name="gender_id" comments="Gender identifier"/>
+      <column name="gender_name" comments="Gender name"/>
+      <column name="start_year" comments="Start year"/>
+      <column name="persons_at_risk_pe" comments="Persons at risk pre-exposure"/>
+      <column name="persons_at_risk" comments="Persons at risk"/>
+      <column name="person_days_pe" comments="Person days pre-exposure"/>
+      <column name="person_days" comments="Person days"/>
+      <column name="person_outcomes_pe" comments="Person outcomes pre-exposure"/>
+      <column name="person_outcomes" comments="Person outcomes"/>
+      <column name="outcomes_pe" comments="Outcomes pre-expsoure"/>
+      <column name="outcomes" comments="Outcomes"/>
+      <column name="incidence_proportion_p100p" comments="Incidence proportion"/>
+      <column name="incidence_rate_p100py" comments="Incidence rate"/>
     </table>
     <table name="ci_target_def" comments="CohortIncidenceModule: Target cohort definitions">
-      <column name="ref_id" comments="NA"/>
-      <column name="target_cohort_definition_id" comments="NA"/>
-      <column name="target_name" comments="NA"/>
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="target_cohort_definition_id" comments="Target cohort identifier"/>
+      <column name="target_name" comments="Target cohort name"/>
     </table>
     <table name="ci_outcome_def" comments="CohortIncidenceModule: Outcome cohort definitions">
-      <column name="ref_id" comments="NA"/>
-      <column name="outcome_id" comments="NA"/>
-      <column name="outcome_cohort_definition_id" comments="NA"/>
-      <column name="outcome_name" comments="NA"/>
-      <column name="clean_window" comments="NA"/>
-      <column name="excluded_cohort_definition_id" comments="NA"/>
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="outcome_id" comments="Outcome identifier"/>
+      <column name="outcome_cohort_definition_id" comments="Outcome cohort identifier"/>
+      <column name="outcome_name" comments="Outcome name"/>
+      <column name="clean_window" comments="Clean window"/>
+      <column name="excluded_cohort_definition_id" comments="Excluded cohort identifier"/>
     </table>
     <table name="ci_tar_def" comments="CohortIncidenceModule: Time-at-risk definitions">
-      <column name="ref_id" comments="NA"/>
-      <column name="tar_id" comments="NA"/>
-      <column name="tar_start_with" comments="NA"/>
-      <column name="tar_start_offset" comments="NA"/>
-      <column name="tar_end_with" comments="NA"/>
-      <column name="tar_end_offset" comments="NA"/>
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="tar_id" comments="Time-at-risk identifier"/>
+      <column name="tar_start_with" comments="Time-at-risk start anchor"/>
+      <column name="tar_start_offset" comments="Time-at-risk start offset in days"/>
+      <column name="tar_end_with" comments="Time-at-risk end anchor"/>
+      <column name="tar_end_offset" comments="Time-at-risk end offset in days"/>
     </table>
     <table name="ci_age_group_def" comments="CohortIncidenceModule: Age group definitions">
-      <column name="ref_id" comments="NA"/>
-      <column name="age_group_id" comments="NA"/>
-      <column name="age_group_name" comments="NA"/>
-      <column name="min_age" comments="NA"/>
-      <column name="max_age" comments="NA"/>
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="age_group_id" comments="Age group identifier"/>
+      <column name="age_group_name" comments="Age group name"/>
+      <column name="min_age" comments="Minimum age"/>
+      <column name="max_age" comments="Maximum age"/>
     </table>
     <table name="ci_subgroup_def" comments="CohortIncidenceModule: Subgroup definitions">
-      <column name="ref_id" comments="NA"/>
-      <column name="subgroup_id" comments="NA"/>
-      <column name="subgroup_name" comments="NA"/>
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="subgroup_id" comments="The subgroup identifier"/>
+      <column name="subgroup_name" comments="The subgroup name"/>
     </table>
     <table name="ci_target_outcome_ref" comments="CohortIncidenceModule: Target outcome cross reference">
-      <column name="ref_id" comments="NA"/>
-      <column name="target_cohort_id" comments="NA"/>
-      <column name="outcome_cohort_id" comments="NA"/>
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="target_cohort_id" comments="The target cohort identifier"/>
+      <column name="outcome_cohort_id" comments="The outcome cohort identifier"/>
     </table>
     <table name="cm_attrition" comments="CohortMethodModule: Attrition table">
       <column name="sequence_number" comments="The place in the sequence of steps defining the final analysis cohort. 1 indicates the original exposed population without any inclusion criteria."/>
