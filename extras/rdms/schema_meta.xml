@@ -157,293 +157,266 @@
       <column name="max_exposure_time" comments="Max exposure time across cohort"/>
     </table>
     <table name="cd_cohort" comments="CohortDiagnosticsModule: Cohort details">
-      <column name="cohort_id" comments=""/>
-      <column name="cohort_name" comments=""/>
-      <column name="metadata" comments=""/>
-      <column name="json" comments=""/>
-      <column name="sql" comments=""/>
-      <column name="subset_parent" comments=""/>
-      <column name="subset_definition_id" comments=""/>
-      <column name="is_subset" comments=""/>
+      <column name="cohort_id" comments="cohort id"/>
+      <column name="cohort_name" comments="cohort name"/>
+      <column name="metadata" comments="meta data about the cohort"/>
+      <column name="json" comments="circe json description"/>
+      <column name="sql" comments="sql derrived from circe description"/>
+      <column name="subset_parent" comments="cohort subset parent id (some as if not a subset)"/>
+      <column name="subset_definition_id" comments="subset cohort definition id"/>
+      <column name="is_subset" comments="is the cohort a subset or not?"/>
     </table>
     <table name="cd_subset_definition" comments="CohortDiagnosticsModule: Cohort subset definition">
-      <column name="subset_definition_id" comments=""/>
-      <column name="json" comments=""/>
+      <column name="subset_definition_id" comments="subset cohort definition id"/>
+      <column name="json" comments="subset cohort definition json"/>
     </table>
     <table name="cd_cohort_count" comments="CohortDiagnosticsModule: Cohort counts">
-      <column name="cohort_id" comments=""/>
-      <column name="cohort_entries" comments=""/>
-      <column name="cohort_subjects" comments=""/>
-      <column name="database_id" comments=""/>
+      <column name="cohort_id" comments="cohort id"/>
+      <column name="cohort_entries" comments="number of entries in to cohort (an individual can be counted multiple times)"/>
+      <column name="cohort_subjects" comments="number of individuals in cohort"/>
+      <column name="database_id" comments="database identifier"/>
     </table>
     <table name="cd_cohort_inclusion" comments="CohortDiagnosticsModule: Cohort inclusion info">
-      <column name="database_id" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="rule_sequence" comments=""/>
-      <column name="name" comments=""/>
-      <column name="description" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="cohort_id" comments="cohort id"/>
+      <column name="rule_sequence" comments="inclusion rule sequence used to determine rule"/>
+      <column name="name" comments="name of inclusion rule"/>
+      <column name="description" comments="description of inclusion rule"/>
     </table>
     <table name="cd_cohort_inc_result" comments="CohortDiagnosticsModule: Cohort inclusion results">
-      <column name="database_id" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="mode_id" comments=""/>
-      <column name="inclusion_rule_mask" comments=""/>
-      <column name="person_count" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="cohort_id" comments="cohort id"/>
+      <column name="mode_id" comments="mode of inclusion rule"/>
+      <column name="inclusion_rule_mask" comments="inclusion rule bit mask"/>
+      <column name="person_count" comments="person count following rule application"/>
     </table>
     <table name="cd_cohort_inc_stats" comments="CohortDiagnosticsModule: Cohort inclusion statstics">
-      <column name="database_id" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="rule_sequence" comments=""/>
-      <column name="mode_id" comments=""/>
-      <column name="person_count" comments=""/>
-      <column name="gain_count" comments=""/>
-      <column name="person_total" comments=""/>
-    </table>
-    <table name="cd_cohort_overlap" comments="CohortDiagnosticsModule: Cohort overlap">
-      <column name="either_subjects" comments=""/>
-      <column name="both_subjects" comments=""/>
-      <column name="t_only_subjects" comments=""/>
-      <column name="c_only_subjects" comments=""/>
-      <column name="t_before_c_subjects" comments=""/>
-      <column name="c_before_t_subjects" comments=""/>
-      <column name="same_day_subjects" comments=""/>
-      <column name="t_in_c_subjects" comments=""/>
-      <column name="c_in_t_subjects" comments=""/>
-      <column name="target_cohort_id" comments=""/>
-      <column name="comparator_cohort_id" comments=""/>
-      <column name="database_id" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="cohort_id" comments="cohort id"/>
+      <column name="rule_sequence" comments="inclusion rule sequence used to determine rule"/>
+      <column name="mode_id" comments="mode of inclusion rule"/>
+      <column name="person_count" comments="person count following rule application"/>
+      <column name="gain_count" comments="number of people gained from rule"/>
+      <column name="person_total" comments="person total"/>
     </table>
     <table name="cd_cohort_relationships" comments="CohortDiagnosticsModule: Cohort relationships">
-      <column name="database_id" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="comparator_cohort_id" comments=""/>
-      <column name="start_day" comments=""/>
-      <column name="end_day" comments=""/>
-      <column name="subjects" comments=""/>
-      <column name="sub_cs_before_ts" comments=""/>
-      <column name="rec_cs_before_ts" comments=""/>
-      <column name="sub_cs_on_ts" comments=""/>
-      <column name="rec_cs_on_ts" comments=""/>
-      <column name="sub_cs_after_ts" comments=""/>
-      <column name="rec_cs_after_ts" comments=""/>
-      <column name="sub_cs_before_te" comments=""/>
-      <column name="rec_cs_before_te" comments=""/>
-      <column name="sub_cs_on_te" comments=""/>
-      <column name="rec_cs_on_te" comments=""/>
-      <column name="sub_cs_after_te" comments=""/>
-      <column name="rec_cs_after_te" comments=""/>
-      <column name="sub_cs_window_t" comments=""/>
-      <column name="rec_cs_window_t" comments=""/>
-      <column name="sub_ce_window_t" comments=""/>
-      <column name="rec_ce_window_t" comments=""/>
-      <column name="sub_cs_window_ts" comments=""/>
-      <column name="rec_cs_window_ts" comments=""/>
-      <column name="sub_cs_window_te" comments=""/>
-      <column name="rec_cs_window_te" comments=""/>
-      <column name="sub_ce_window_ts" comments=""/>
-      <column name="rec_ce_window_ts" comments=""/>
-      <column name="sub_ce_window_te" comments=""/>
-      <column name="rec_ce_window_te" comments=""/>
-      <column name="sub_c_within_t" comments=""/>
-      <column name="rec_c_within_t" comments=""/>
-      <column name="c_days_before_ts" comments=""/>
-      <column name="c_days_before_te" comments=""/>
-      <column name="c_days_within_t_days" comments=""/>
-      <column name="c_days_after_ts" comments=""/>
-      <column name="c_days_after_te" comments=""/>
-      <column name="t_days" comments=""/>
-      <column name="c_days" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="cohort_id" comments="target cohort id"/>
+      <column name="comparator_cohort_id" comments="comparator cohort id"/>
+      <column name="start_day" comments="start day"/>
+      <column name="end_day" comments="end day"/>
+      <column name="subjects" comments="number of subjects total"/>
+      <column name="sub_cs_before_ts" comments="present in both target and comparator"/>
+      <column name="sub_cs_on_ts" comments="comparator cohort start date before target start date (offset) [How many subjects in comparator cohort start prior to first target cohort start]"/>
+      <column name="sub_cs_after_ts" comments="comparator cohort start date on target start date (offset) [How many subjects in comparator cohort start with first target cohort start]"/>
+      <column name="sub_cs_before_te" comments="comparator cohort start date after target start date (offset) [How many subjects in comparator cohort start after first target cohort start]"/>
+      <column name="sub_cs_on_te" comments="comparator cohort start date before target end date (offset) [How many subjects in comparator cohort start after first target cohort end]"/>
+      <column name="sub_cs_after_te" comments="comparator cohort start date on target end date (offset) [How many subjects in comparator cohort start on first target cohort end]"/>
+      <column name="sub_cs_window_t" comments="comparator cohort start date after target end date (offset) [How many subjects in comparator cohort start after first target cohort end]"/>
+      <column name="sub_ce_window_t" comments="comparator cohort subjects start within period (incidence) relative to target start date and end date"/>
+      <column name="sub_cs_window_ts" comments="comparator cohort subjects start within period (incidence) relative to target start date and end date"/>
+      <column name="sub_cs_window_te" comments="comparator cohort subjects start within period (incidence) relative to target start date"/>
+      <column name="sub_ce_window_ts" comments="comparator cohort subjects start within period (incidence) relative to target end date"/>
+      <column name="sub_ce_window_te" comments="comparator cohort subjects end within period (incidence) relative to target start date"/>
+      <column name="sub_c_within_t" comments="comparator cohort subjects end within period (incidence) relative to target end date"/>
+      <column name="c_days_before_ts" comments="comparator cohort days within target (offset) days"/>
+      <column name="c_days_before_te" comments="comparator cohort days before target start date (offset)"/>
+      <column name="c_days_within_t_days" comments="comparator cohort days before target end date (offset)"/>
+      <column name="c_days_after_ts" comments="comparator cohort days within target cohort days (offset)"/>
+      <column name="c_days_after_te" comments="comparator cohort days after target start date (offset)"/>
+      <column name="t_days" comments="target days"/>
+      <column name="c_days" comments="comparator days"/>
     </table>
     <table name="cd_cohort_summary_stats" comments="CohortDiagnosticsModule: Cohort summary stats">
-      <column name="database_id" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="mode_id" comments=""/>
-      <column name="base_count" comments=""/>
-      <column name="final_count" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="cohort_id" comments="cohort id"/>
+      <column name="mode_id" comments="mode identifier"/>
+      <column name="base_count" comments="base count of cohort"/>
+      <column name="final_count" comments="final count after rules applied"/>
     </table>
     <table name="cd_concept" comments="CohortDiagnosticsModule: Concept lookup table">
-      <column name="concept_id" comments=""/>
-      <column name="concept_name" comments=""/>
-      <column name="domain_id" comments=""/>
-      <column name="vocabulary_id" comments=""/>
-      <column name="concept_class_id" comments=""/>
-      <column name="standard_concept" comments=""/>
-      <column name="concept_code" comments=""/>
-      <column name="valid_start_date" comments=""/>
-      <column name="valid_end_date" comments=""/>
-      <column name="invalid_reason" comments=""/>
+      <column name="concept_id" comments="concept id"/>
+      <column name="concept_name" comments="concept name"/>
+      <column name="domain_id" comments="concept domain id"/>
+      <column name="vocabulary_id" comments="vocabulary concept id"/>
+      <column name="concept_class_id" comments="concept class identifier"/>
+      <column name="standard_concept" comments="is a standard concept?"/>
+      <column name="concept_code" comments="concept source code"/>
+      <column name="valid_start_date" comments="period of validity start"/>
+      <column name="valid_end_date" comments="period of validity end"/>
+      <column name="invalid_reason" comments="reason concept is no longer valid"/>
     </table>
     <table name="cd_concept_ancestor" comments="CohortDiagnosticsModule: Concept ancestor">
-      <column name="ancestor_concept_id" comments=""/>
-      <column name="descendant_concept_id" comments=""/>
-      <column name="min_levels_of_separation" comments=""/>
-      <column name="max_levels_of_separation" comments=""/>
+      <column name="ancestor_concept_id" comments="ancestor concept id"/>
+      <column name="descendant_concept_id" comments="descendant concept id"/>
+      <column name="min_levels_of_separation" comments="minimum levels of separation in heirarchy"/>
+      <column name="max_levels_of_separation" comments="maximum level of separation in heirarchy"/>
     </table>
     <table name="cd_concept_relationship" comments="CohortDiagnosticsModule: Concept Relationship">
-      <column name="concept_id_1" comments=""/>
-      <column name="concept_id_2" comments=""/>
-      <column name="relationship_id" comments=""/>
-      <column name="valid_start_date" comments=""/>
-      <column name="valid_end_date" comments=""/>
-      <column name="invalid_reason" comments=""/>
+      <column name="concept_id_1" comments="concept identifier 1"/>
+      <column name="concept_id_2" comments="concept identifier 2"/>
+      <column name="relationship_id" comments="relationship identifier"/>
+      <column name="valid_start_date" comments="period of validity start"/>
+      <column name="valid_end_date" comments="period of validity end"/>
+      <column name="invalid_reason" comments="reason relationship is no longer valid"/>
     </table>
     <table name="cd_concept_sets" comments="CohortDiagnosticsModule: Concept sets">
-      <column name="cohort_id" comments=""/>
-      <column name="concept_set_id" comments=""/>
-      <column name="concept_set_sql" comments=""/>
-      <column name="concept_set_name" comments=""/>
-      <column name="concept_set_expression" comments=""/>
+      <column name="cohort_id" comments="concept id"/>
+      <column name="concept_set_id" comments="concept set identifier"/>
+      <column name="concept_set_sql" comments="concept set sql"/>
+      <column name="concept_set_name" comments="concept set name"/>
+      <column name="concept_set_expression" comments="concept set expression"/>
     </table>
     <table name="cd_concept_synonym" comments="CohortDiagnosticsModule: Concept synonym">
-      <column name="concept_id" comments=""/>
-      <column name="concept_synonym_name" comments=""/>
-      <column name="language_concept_id" comments=""/>
+      <column name="concept_id" comments="concpt id"/>
+      <column name="concept_synonym_name" comments="concept synonym name"/>
+      <column name="language_concept_id" comments="lanague id"/>
     </table>
     <table name="cd_database" comments="CohortDiagnosticsModule: CDM database information for Cohort Diagnostics">
-      <column name="database_id" comments=""/>
-      <column name="database_name" comments=""/>
-      <column name="description" comments=""/>
-      <column name="is_meta_analysis" comments=""/>
-      <column name="vocabulary_version" comments=""/>
-      <column name="vocabulary_version_cdm" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="database_name" comments="cdm name"/>
+      <column name="description" comments="description of cdm"/>
+      <column name="is_meta_analysis" comments="is meta analysis?"/>
+      <column name="vocabulary_version" comments="vocabulary version"/>
+      <column name="vocabulary_version_cdm" comments="vocabulary_version_cdm"/>
     </table>
     <table name="cd_domain" comments="CohortDiagnosticsModule: Domain from the vocabulary">
-      <column name="domain_id" comments=""/>
-      <column name="domain_name" comments=""/>
-      <column name="domain_concept_id" comments=""/>
+      <column name="domain_id" comments="domain identifier"/>
+      <column name="domain_name" comments="concept domain name"/>
+      <column name="domain_concept_id" comments="domain concept identifier in concept table"/>
     </table>
     <table name="cd_incidence_rate" comments="CohortDiagnosticsModule: Incidence rate for Cohort Diagnostics">
-      <column name="cohort_count" comments=""/>
-      <column name="person_years" comments=""/>
-      <column name="gender" comments=""/>
-      <column name="age_group" comments=""/>
-      <column name="calendar_year" comments=""/>
-      <column name="incidence_rate" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="database_id" comments=""/>
+      <column name="cohort_count" comments="total count in cohort"/>
+      <column name="person_years" comments="sum of total person years"/>
+      <column name="gender" comments="gender grouping"/>
+      <column name="age_group" comments="age grouping"/>
+      <column name="calendar_year" comments="calendar year in cohort"/>
+      <column name="incidence_rate" comments="incidence rate computed"/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="database_id" comments="database identifier"/>
     </table>
     <table name="cd_included_source_concept" comments="CohortDiagnosticsModule: Included source concepts">
-      <column name="database_id" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="concept_set_id" comments=""/>
-      <column name="concept_id" comments=""/>
-      <column name="source_concept_id" comments=""/>
-      <column name="concept_subjects" comments=""/>
-      <column name="concept_count" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="cohort_id" comments="cohort id"/>
+      <column name="concept_set_id" comments="concept set identifier"/>
+      <column name="concept_id" comments="concept identifier 1"/>
+      <column name="source_concept_id" comments="source concept id"/>
+      <column name="concept_subjects" comments="subjects with concept"/>
+      <column name="concept_count" comments="total count of concept"/>
     </table>
     <table name="cd_index_event_breakdown" comments="CohortDiagnosticsModule: Index event breakdown">
-      <column name="concept_id" comments=""/>
-      <column name="concept_count" comments=""/>
-      <column name="subject_count" comments=""/>
-      <column name="cohort_id" comments=""/>
-      <column name="database_id" comments=""/>
-      <column name="domain_field" comments=""/>
-      <column name="domain_table" comments=""/>
+      <column name="concept_id" comments="concept identifier"/>
+      <column name="concept_count" comments="number of concept occurences"/>
+      <column name="subject_count" comments="number of distinct people"/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="domain_field" comments="domain identifier"/>
+      <column name="domain_table" comments="domain table"/>
     </table>
     <table name="cd_metadata" comments="CohortDiagnosticsModule: Metadata for the database and runtime environment used for Cohort Diagnostics">
-      <column name="database_id" comments=""/>
-      <column name="start_time" comments=""/>
-      <column name="variable_field" comments=""/>
-      <column name="value_field" comments=""/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="start_time" comments="when run started"/>
+      <column name="variable_field" comments="variable name"/>
+      <column name="value_field" comments="variable value"/>
     </table>
     <table name="cd_orphan_concept" comments="CohortDiagnosticsModule: Orphan concept list">
-      <column name="cohort_id" comments=""/>
-      <column name="concept_set_id" comments=""/>
-      <column name="database_id" comments=""/>
-      <column name="concept_id" comments=""/>
-      <column name="concept_count" comments=""/>
-      <column name="concept_subjects" comments=""/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="concept_set_id" comments="concept set identifier"/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="concept_id" comments="concept identifier"/>
+      <column name="concept_count" comments="number of concept occurences"/>
+      <column name="concept_subjects" comments="number of distinct people"/>
     </table>
     <table name="cd_relationship" comments="CohortDiagnosticsModule: Relationships">
-      <column name="relationship_id" comments=""/>
-      <column name="relationship_name" comments=""/>
-      <column name="is_hierarchical" comments=""/>
-      <column name="defines_ancestry" comments=""/>
-      <column name="reverse_relationship_id" comments=""/>
-      <column name="relationship_concept_id" comments=""/>
+      <column name="relationship_id" comments="relationship identifier"/>
+      <column name="relationship_name" comments="relationship name"/>
+      <column name="is_hierarchical" comments="is heirarchical relationship?"/>
+      <column name="defines_ancestry" comments="defines ancestory"/>
+      <column name="reverse_relationship_id" comments="reverse relationship concept id"/>
+      <column name="relationship_concept_id" comments="relationship concept identifier in concept table"/>
     </table>
     <table name="cd_resolved_concepts" comments="CohortDiagnosticsModule: Resolved concepts">
-      <column name="cohort_id" comments=""/>
-      <column name="concept_set_id" comments=""/>
-      <column name="concept_id" comments=""/>
-      <column name="database_id" comments=""/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="concept_set_id" comments="concept set identifier"/>
+      <column name="concept_id" comments="concept identifier"/>
+      <column name="database_id" comments="database identifier"/>
     </table>
     <table name="cd_temporal_analysis_ref" comments="CohortDiagnosticsModule: Temporal analysis reference">
-      <column name="analysis_id" comments=""/>
-      <column name="analysis_name" comments=""/>
-      <column name="domain_id" comments=""/>
-      <column name="is_binary" comments=""/>
-      <column name="missing_means_zero" comments=""/>
+      <column name="analysis_id" comments="temporal analysis identifier"/>
+      <column name="analysis_name" comments="name of temporal analysis"/>
+      <column name="domain_id" comments="domain identifier"/>
+      <column name="is_binary" comments="is binary or continuous measure (proportion or average)"/>
+      <column name="missing_means_zero" comments="missing means no count"/>
     </table>
     <table name="cd_temporal_covariate_ref" comments="CohortDiagnosticsModule: Covariate reference">
-      <column name="covariate_id" comments=""/>
-      <column name="covariate_name" comments=""/>
-      <column name="analysis_id" comments=""/>
-      <column name="concept_id" comments=""/>
+      <column name="covariate_id" comments="covariate identifier"/>
+      <column name="covariate_name" comments="name of covariate"/>
+      <column name="analysis_id" comments="temporal analysis identifier"/>
+      <column name="concept_id" comments="concept identifier"/>
     </table>
     <table name="cd_temporal_covariate_value" comments="CohortDiagnosticsModule: Binary covariate values">
-      <column name="cohort_id" comments=""/>
-      <column name="time_id" comments=""/>
-      <column name="covariate_id" comments=""/>
-      <column name="sum_value" comments=""/>
-      <column name="mean" comments=""/>
-      <column name="sd" comments=""/>
-      <column name="database_id" comments=""/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="time_id" comments="time identifier"/>
+      <column name="covariate_id" comments="covariate identifier"/>
+      <column name="sum_value" comments="sum value"/>
+      <column name="mean" comments="mean"/>
+      <column name="sd" comments="standard deviation"/>
+      <column name="database_id" comments="database identifier"/>
     </table>
     <table name="cd_temporal_covariate_value_dist" comments="CohortDiagnosticsModule: Continuous covariate values">
-      <column name="cohort_id" comments=""/>
-      <column name="time_id" comments=""/>
-      <column name="covariate_id" comments=""/>
-      <column name="count_value" comments=""/>
-      <column name="min_value" comments=""/>
-      <column name="max_value" comments=""/>
-      <column name="mean" comments=""/>
-      <column name="sd" comments=""/>
-      <column name="median_value" comments=""/>
-      <column name="p_10_value" comments=""/>
-      <column name="p_25_value" comments=""/>
-      <column name="p_75_value" comments=""/>
-      <column name="p_90_value" comments=""/>
-      <column name="database_id" comments=""/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="time_id" comments="time identifier"/>
+      <column name="covariate_id" comments="covariate identifier"/>
+      <column name="count_value" comments="count"/>
+      <column name="min_value" comments="minimum value"/>
+      <column name="max_value" comments="maximum value"/>
+      <column name="mean" comments="mean value"/>
+      <column name="sd" comments="standard deviation"/>
+      <column name="median_value" comments="median (value at 50%)"/>
+      <column name="p_10_value" comments="value at 10%"/>
+      <column name="p_25_value" comments="value at 25%"/>
+      <column name="p_75_value" comments="value at 75%"/>
+      <column name="p_90_value" comments="value at 90%"/>
+      <column name="database_id" comments="database identifier"/>
     </table>
     <table name="cd_temporal_time_ref" comments="CohortDiagnosticsModule: Temporal time reference">
-      <column name="time_id" comments=""/>
-      <column name="start_day" comments=""/>
-      <column name="end_day" comments=""/>
+      <column name="time_id" comments="time identifier"/>
+      <column name="start_day" comments="start day"/>
+      <column name="end_day" comments="end day"/>
     </table>
     <table name="cd_time_series" comments="CohortDiagnosticsModule: Time series information">
-      <column name="cohort_id" comments=""/>
-      <column name="database_id" comments=""/>
-      <column name="period_begin" comments=""/>
-      <column name="period_end" comments=""/>
-      <column name="series_type" comments=""/>
-      <column name="calendar_interval" comments=""/>
-      <column name="gender" comments=""/>
-      <column name="age_group" comments=""/>
-      <column name="records" comments=""/>
-      <column name="subjects" comments=""/>
-      <column name="person_days" comments=""/>
-      <column name="person_days_in" comments=""/>
-      <column name="records_start" comments=""/>
-      <column name="subjects_start" comments=""/>
-      <column name="subjects_start_in" comments=""/>
-      <column name="records_end" comments=""/>
-      <column name="subjects_end" comments=""/>
-      <column name="subjects_end_in" comments=""/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="database_id" comments="database identifier"/>
+      <column name="period_begin" comments="peroid start date"/>
+      <column name="period_end" comments="perioid end date"/>
+      <column name="series_type" comments="time series type"/>
+      <column name="calendar_interval" comments="calendar interval"/>
+      <column name="gender" comments="gender grouping"/>
+      <column name="age_group" comments="age grouping"/>
+      <column name="records" comments="record count"/>
+      <column name="subjects" comments="distinct person count"/>
+      <column name="person_days" comments="total person time in days"/>
+      <column name="person_days_in" comments="total person time in days"/>
+      <column name="records_start" comments="records at start"/>
+      <column name="subjects_start" comments="subject count at start"/>
+      <column name="subjects_start_in" comments="subject out at start"/>
+      <column name="records_end" comments="records end"/>
+      <column name="subjects_end" comments="subjects end"/>
+      <column name="subjects_end_in" comments="subjects end in"/>
     </table>
     <table name="cd_visit_context" comments="CohortDiagnosticsModule: Visit context">
-      <column name="cohort_id" comments=""/>
-      <column name="visit_concept_id" comments=""/>
-      <column name="visit_context" comments=""/>
-      <column name="subjects" comments=""/>
-      <column name="database_id" comments=""/>
+      <column name="cohort_id" comments="cohort identifier"/>
+      <column name="visit_concept_id" comments="visit concept identifier"/>
+      <column name="visit_context" comments="name of visit context"/>
+      <column name="subjects" comments="number of subjects"/>
+      <column name="database_id" comments="database identifier"/>
     </table>
     <table name="cd_vocabulary" comments="CohortDiagnosticsModule: Vocabulary information">
-      <column name="vocabulary_id" comments=""/>
-      <column name="vocabulary_name" comments=""/>
-      <column name="vocabulary_reference" comments=""/>
-      <column name="vocabulary_version" comments=""/>
-      <column name="vocabulary_concept_id" comments=""/>
+      <column name="vocabulary_id" comments="vocabulary identifier"/>
+      <column name="vocabulary_name" comments="vocabulary name"/>
+      <column name="vocabulary_reference" comments="vocabulary reference"/>
+      <column name="vocabulary_version" comments="vocabulary version"/>
+      <column name="vocabulary_concept_id" comments="vocabulary concept identifier"/>
     </table>
     <table name="cg_cohort_definition" comments="CohortGeneratorModule: Cohort definitions">
       <column name="cohort_definition_id" comments="The unique identifier for the cohort definition"/>

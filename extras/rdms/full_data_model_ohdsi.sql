@@ -196,7 +196,6 @@ CREATE TABLE @database_schema.@table_prefix@c_cohort_counts (
 {DEFAULT @cd_cohort_inclusion = cd_cohort_inclusion}
 {DEFAULT @cd_cohort_inc_result = cd_cohort_inc_result}
 {DEFAULT @cd_cohort_inc_stats = cd_cohort_inc_stats}
-{DEFAULT @cd_cohort_overlap = cd_cohort_overlap}
 {DEFAULT @cd_cohort_relationships = cd_cohort_relationships}
 {DEFAULT @cd_cohort_summary_stats = cd_cohort_summary_stats}
 {DEFAULT @cd_concept = cd_concept}
@@ -277,22 +276,6 @@ CREATE TABLE @database_schema.@table_prefix@cd_cohort_inc_stats (
 	PRIMARY KEY(database_id,cohort_id,rule_sequence,mode_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@cd_cohort_overlap (
-  	 either_subjects FLOAT,
-	 both_subjects FLOAT,
-	 t_only_subjects FLOAT,
-	 c_only_subjects FLOAT,
-	 t_before_c_subjects FLOAT,
-	 c_before_t_subjects FLOAT,
-	 same_day_subjects FLOAT,
-	 t_in_c_subjects FLOAT,
-	 c_in_t_subjects FLOAT,
-	 target_cohort_id BIGINT NOT NULL,
-	 comparator_cohort_id BIGINT NOT NULL,
-	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(target_cohort_id,comparator_cohort_id,database_id)
-);
- 
 CREATE TABLE @database_schema.@table_prefix@cd_cohort_relationships (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
@@ -301,31 +284,18 @@ CREATE TABLE @database_schema.@table_prefix@cd_cohort_relationships (
 	 end_day FLOAT NOT NULL,
 	 subjects BIGINT,
 	 sub_cs_before_ts BIGINT,
-	 rec_cs_before_ts BIGINT,
 	 sub_cs_on_ts BIGINT,
-	 rec_cs_on_ts BIGINT,
 	 sub_cs_after_ts BIGINT,
-	 rec_cs_after_ts BIGINT,
 	 sub_cs_before_te BIGINT,
-	 rec_cs_before_te BIGINT,
 	 sub_cs_on_te BIGINT,
-	 rec_cs_on_te BIGINT,
 	 sub_cs_after_te BIGINT,
-	 rec_cs_after_te BIGINT,
 	 sub_cs_window_t BIGINT,
-	 rec_cs_window_t BIGINT,
 	 sub_ce_window_t BIGINT,
-	 rec_ce_window_t BIGINT,
 	 sub_cs_window_ts BIGINT,
-	 rec_cs_window_ts BIGINT,
 	 sub_cs_window_te BIGINT,
-	 rec_cs_window_te BIGINT,
 	 sub_ce_window_ts BIGINT,
-	 rec_ce_window_ts BIGINT,
 	 sub_ce_window_te BIGINT,
-	 rec_ce_window_te BIGINT,
 	 sub_c_within_t BIGINT,
-	 rec_c_within_t BIGINT,
 	 c_days_before_ts BIGINT,
 	 c_days_before_te BIGINT,
 	 c_days_within_t_days BIGINT,
