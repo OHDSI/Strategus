@@ -14,7 +14,8 @@ createCdmExecutionSettings(
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
   minCellCount = 5,
   incremental = TRUE,
-  maxCores = parallel::detectCores()
+  maxCores = parallel::detectCores(),
+  modulesToExecute = c()
 )
 }
 \arguments{
@@ -45,6 +46,9 @@ and attempt to pick up where they left off when this value is set to TRUE.}
 
 \item{maxCores}{The maximum number of processing cores to use for execution. The default is to
 use all available cores on the machine.}
+
+\item{modulesToExecute}{(Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
+all modules in the analysis specification are executed.}
 }
 \value{
 An object of type \code{ExecutionSettings}.

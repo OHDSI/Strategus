@@ -202,7 +202,7 @@ CohortIncidenceModule <- R6::R6Class(
         file = private$.getResultsDataModelSpecificationFileLocation(),
         show_col_types = FALSE
       )
-      rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
+      rdms$table_name <-paste0(self$tablePrefix, rdms$table_name)
       return(rdms)
     },
     .getResultsDataModelSpecificationFileLocation = function() {
