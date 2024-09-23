@@ -115,8 +115,7 @@ cdModuleSpecifications <- cdModuleSettingsCreator$createModuleSpecifications(
   runBreakdownIndexEvents = TRUE,
   runIncidenceRate = TRUE,
   runCohortRelationship = TRUE,
-  runTemporalCohortCharacterization = TRUE,
-  incremental = FALSE
+  runTemporalCohortCharacterization = TRUE
 )
 
 # Cohort Generator -----------------
@@ -447,9 +446,8 @@ cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addCharacterizationModuleSpecifications(cModuleSpecifications) |>
   addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
   addCohortGeneratorModuleSpecifications(cgModuleSpecifications) |>
-  #addCohortIncidenceModuleSpecifications(ciModuleSpecifications) |>
+  addCohortIncidenceModuleSpecifications(ciModuleSpecifications) |>
   addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
-  #addEvidenceSynthesisModuleSpecifications(evidenceSynthesisAnalysisSpecifications) |>
   addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
   addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
 

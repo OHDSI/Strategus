@@ -211,3 +211,75 @@ test_that("Negative control outcomes are optional", {
     ignore.case = TRUE
   )
 })
+
+test_that("Specify subset of modules to run with modules not in specification fails", {
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+                           package = "Strategus"
+    )
+  )
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "unit_test"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder"),
+    modulesToExecute = c("foobar")
+  )
+
+  expect_error(
+    Strategus::execute(
+      connectionDetails = connectionDetails,
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings
+    )
+  )
+
+  executionSettings <- createResultsExecutionSettings(
+    resultsDatabaseSchema = "main",
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder"),
+    modulesToExecute = c("foobar")
+  )
+
+  expect_error(
+    Strategus::execute(
+      connectionDetails = connectionDetails,
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings
+    )
+  )
+})
+
+test_that("Specify subset of modules to run", {
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+                           package = "Strategus"
+    )
+  )
+
+  modulesToExecute <- c("CohortGeneratorModule", "CohortIncidenceModule")
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "unit_test"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder"),
+    modulesToExecute = modulesToExecute
+  )
+
+  output <- Strategus::execute(
+    connectionDetails = connectionDetails,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
+  )
+
+  modulesExecuted <- sapply(
+    X = output,
+    FUN = function(x) {
+      x$moduleName
+    }
+  )
+
+  expect_true(all(modulesExecuted %in% modulesToExecute))
+})
