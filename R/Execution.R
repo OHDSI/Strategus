@@ -80,6 +80,61 @@ execute <- function(analysisSpecifications,
     }
   }
 
+  # Determine if the user has opted to subset to specific modules
+  # in the analysis specification. If so, validate that the
+  # modulesToExecute are present in the analysis specification
+  # before attempting to subset the analyses to run.
+  if (length(executionSettings$modulesToExecute) > 0) {
+    # Get the modules in the analysis specification with their
+    # index in the array
+    modulesWithIndex <- lapply(
+      X = seq_along(analysisSpecifications$moduleSpecifications),
+      FUN = function(i) {
+        list(
+          idx = i,
+          module = analysisSpecifications$moduleSpecifications[[i]]$module
+        )
+      }
+    )
+    modulesInAnalysisSpecification <- sapply(
+      X = modulesWithIndex,
+      FUN = function(x) {
+        x$module
+      }
+    )
+
+    modulesToExecuteString <- paste(executionSettings$modulesToExecute, collapse = ", ")
+    modulesInAnalysisSpecificationString <- paste(modulesInAnalysisSpecification, collapse = ", ")
+
+    # Stop if we cannot find all of the requested modules
+    # to execute in the overall analysis specification
+    if(!all(tolower(executionSettings$modulesToExecute) %in% tolower(modulesInAnalysisSpecification))) {
+      errorMsg <- paste0(
+        "The executionSettings specified to run only the modules: ",
+        modulesToExecuteString,
+        ".\n However the analysis specification includes the following modules: ",
+        modulesInAnalysisSpecificationString
+      )
+      stop(errorMsg)
+    }
+
+    # Subset the analysis specifications to those modules
+    # specified by the user
+    cli::cli_alert_info(paste0("Runnning a subset of modules: ", modulesToExecuteString))
+    moduleSubset <- unlist(
+      lapply(
+        X = modulesWithIndex,
+        FUN = function(x) {
+          if (tolower(x$module) %in% tolower(executionSettings$modulesToExecute)) {
+            return(x$idx)
+          }
+        }
+      )
+    )
+    analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[moduleSubset]
+  }
+
+
   # Set up logging
   if (!dir.exists(dirname(executionSettings$logFileName))) {
     dir.create(dirname(executionSettings$logFileName), recursive = T)
