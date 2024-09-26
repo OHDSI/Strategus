@@ -1,0 +1,21 @@
+<!-- AGS: HAND CODED -->
+<schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.org/xsd/6/schemameta.xsd" >
+    <tables>
+        <table name="c_covariates">
+            <column name="setting_id" type="INT">
+                <foreignKey table="c_covariate_ref" column="setting_id" />
+            </column>
+            <column name="database_id" type="varchar">
+                <foreignKey table="c_covariate_ref" column="database_id" />
+            </column>
+            <column name="covariate_id" type="int">
+                <foreignKey table="c_covariate_ref" column="covariate_id" />
+            </column>
+        </table>
+        <table name="c_settings">
+            <column name="setting_id" type="INT">
+                <foreignKey table="c_covariate" column="setting_id" />
+            </column>
+		</table>
+    </tables>
+</schemaMeta>

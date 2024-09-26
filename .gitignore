@@ -22,3 +22,4 @@ _targets
 docs
 
 extras/rdms/public
+extras/rdms/*.class
