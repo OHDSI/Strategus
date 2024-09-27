@@ -1,5 +1,29 @@
-# This script will produce a SQL script that is then used by GHA
-# to document the full results data model for all modules in Strategus
+# ------------------------------------------------------------------------------
+# This script does the following:
+# - Uses a local PG instance to create the results data model. The data
+#   model is then exported to produce a SQL script that is then used by GHA
+#   to build the SchemaSpy results data model documentation.
+# - Creates the SchemaSpy SchemaMeta.xml used to build the documentation.
+#   This XML contains the table descriptions, column descriptions and
+#   FK relationships between the entities.
+#   (https://schemaspy.readthedocs.io/en/latest/configuration/schemaMeta.html)
+#
+# Notes about resources found in the /extras/rdms directory:
+# - table_descriptions.csv: Hand currated table descriptions. Column descriptions
+#   come from the module rdms files.
+# - SqlExtractor.java: Program to parse out the OhdsiShinyModules R files to
+#   extract the SQL used by the results viewer. The output of this program is
+#   contained in ohdsi_shiny_modules_sql_queries.csv
+# - SqlJoinRelationshipExtractor.java: Program to parse
+#   ohdsi_shiny_modules_sql_queries.csv and identify the JOIN clauses to
+#   document the relationships in the data model. Results of this program are
+#   in ohdsi_shiny_modules_table_relationships.csv.
+# - results_table_realtionships.xlsx: Manually reviewed the ohdsi_shiny_modules_table_relationships.csv
+#   and extracted the list of tables and their foreign key relationships.
+# - results_table_relationships.csv: Exported the unique entries from
+#   results_table_realtionships.xlsx. This resource is then used when constructing
+#   the SchemaSpy SchemaMeta.xml
+# ------------------------------------------------------------------------------
 library(Strategus)
 library(dplyr)
 
@@ -22,7 +46,8 @@ sql <- "-- Strategus Tables\n"
 sql <- paste0(sql, ResultModelManager::generateSqlSchema(schemaDefinition = rdms))
 
 # Iterate over all of the modules in the project
-# and produce the SQL for the results data model
+# and produce the full results data model specification
+# for each module
 moduleFileList <- list.files("./R", pattern = "^Module-.*\\.R$")
 fileNameCleaned <- sub("^Module-", "", moduleFileList)  # Remove "Module-"
 fileNameCleaned <- sub("\\.R$", "", fileNameCleaned)  # Remove ".R"
@@ -31,6 +56,7 @@ moduleList <- paste0(fileNameCleaned, "Module")
 for(module in moduleList) {
   m <- get(module)$new()
   rdms <- m$getResultsDataModelSpecification()
+
   sql <- paste0(sql, "-- ", module, " Tables\n")
   sql <- paste0(sql, ResultModelManager::generateSqlSchema(schemaDefinition = rdms))
 
@@ -43,7 +69,7 @@ for(module in moduleList) {
     bind_rows(rdms %>% select(tableDefinedBy, tableName, columnName, description))
 }
 
-# NOTE: This code was to inititally save the table information to a csv file
+# NOTE: This code was to initially save the table information to a csv file
 # that will be manually edited to include the table descriptions
 # tableDescriptions <- fullResultsDataModel %>%
 #   select(tableDefinedBy, tableName) %>%
@@ -75,7 +101,7 @@ SqlRender::writeSql(
   targetFile = "./extras/rdms/full_data_model_pg.sql"
 )
 
-# Write out the SchemaSpy SchemaMeta.xml (https://schemaspy.readthedocs.io/en/latest/configuration/schemaMeta.html)
+# Write out the SchemaSpy SchemaMeta.xml ---------------------------
 library(xml2)
 
 # Create the root element with attributes
@@ -95,10 +121,13 @@ uniqueTableNames <- unique(fullResultsDataModel$tableName)
 tableDescriptions <- CohortGenerator::readCsv(
   file = "./extras/rdms/table_descriptions.csv"
 )
+resultsTableRelationships <-CohortGenerator::readCsv(
+  file = "./extras/rdms/results_table_relationships.csv"
+)
 for (i in seq_along(uniqueTableNames)) {
   # Add table node with attributes
   currentTableName <- uniqueTableNames[i]
-  #print(currentTableName)
+  print(currentTableName)
   # Get the table description, if it exists
   currentTableDescriptionInfo <- tableDescriptions %>%
     filter(.data$tableName == currentTableName)
@@ -113,11 +142,22 @@ for (i in seq_along(uniqueTableNames)) {
     filter(.data$tableName == currentTableName)
 
   for (j in 1:nrow(columnsForCurrentTable)) {
-    columnName <- columnsForCurrentTable$columnName[j]
+    curColumnName <- columnsForCurrentTable$columnName[j]
     description <- columnsForCurrentTable$description[j]
-    #print(paste0("  -- ", columnName))
+    print(paste0("  -- ", curColumnName))
     # Add column node with attributes
-    xml_add_child(table, "column", name = columnName, comments = description)
+    columnNode <- xml_add_child(table, "column", name = curColumnName, comments = description)
+    # Determine if this table + column has a FK relationship to any other tables
+    curColumnFk <- resultsTableRelationships %>%
+      filter(.data$tableName == currentTableName & .data$columnName == curColumnName)
+    if (nrow(curColumnFk) > 0) {
+      print(paste0("-- FK FOUND FOR: ", currentTableName, ".", curColumnName))
+      for (k in 1:nrow(curColumnFk)) {
+        fkTable <- curColumnFk$fkTableName[k]
+        fkColumn <- curColumnFk$fkColumnName[k]
+        xml_add_child(columnNode, "foreignKey", table = fkTable, column = fkColumn)
+      }
+    }
   }
 }
 
@@ -144,4 +184,3 @@ write_xml(schemaMeta, "./extras/rdms/schema_meta.xml")
 #   sql = sql
 # )
 # DatabaseConnector::disconnect(connection)
-

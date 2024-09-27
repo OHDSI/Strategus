@@ -14,7 +14,9 @@
       <column name="cdm_version" comments="NA"/>
       <column name="cdm_version_concept_id" comments="The Concept Id representing the version of the CDM."/>
       <column name="vocabulary_version" comments="NA"/>
-      <column name="database_id" comments="NA"/>
+      <column name="database_id" comments="NA">
+        <foreignKey table="c_cohort_details" column="database_id"/>
+      </column>
       <column name="max_obs_period_end_date" comments="NA"/>
     </table>
     <table name="c_time_to_event" comments="CharacterizationModule: Time to event">
@@ -90,23 +92,42 @@
       <column name="collisions" comments="The number of collisions found for the covariate_id"/>
     </table>
     <table name="c_covariates" comments="CharacterizationModule: Binary covariates">
-      <column name="database_id" comments="The database identifier"/>
-      <column name="setting_id" comments="The run identifier"/>
+      <column name="database_id" comments="The database identifier">
+        <foreignKey table="c_covariate_ref" column="database_id"/>
+        <foreignKey table="c_settings" column="database_id"/>
+        <foreignKey table="c_settings" column="setting_id"/>
+      </column>
+      <column name="setting_id" comments="The run identifier">
+        <foreignKey table="c_covariate_ref" column="setting_id"/>
+        <foreignKey table="c_settings" column="setting_id"/>
+        <foreignKey table="c_settings" column="database_id"/>
+      </column>
       <column name="cohort_type" comments="The cohort type"/>
       <column name="target_cohort_id" comments="The target cohort id"/>
       <column name="outcome_cohort_id" comments="The outcome cohort id"/>
       <column name="min_characterization_mean" comments="Minimum fraction for feature extraction"/>
-      <column name="covariate_id" comments="The covaraite id"/>
+      <column name="covariate_id" comments="The covaraite id">
+        <foreignKey table="c_covariate_ref" column="covariate_id"/>
+      </column>
       <column name="sum_value" comments="The sum value"/>
       <column name="average_value" comments="The average value"/>
     </table>
     <table name="c_covariates_continuous" comments="CharacterizationModule: Continuous covariates">
-      <column name="database_id" comments="The database identifier"/>
-      <column name="setting_id" comments="The run identifier"/>
+      <column name="database_id" comments="The database identifier">
+        <foreignKey table="c_covariate_ref" column="database_id"/>
+        <foreignKey table="c_settings" column="database_id"/>
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
+      <column name="setting_id" comments="The run identifier">
+        <foreignKey table="c_covariate_ref" column="setting_id"/>
+        <foreignKey table="c_settings" column="setting_id"/>
+      </column>
       <column name="cohort_type" comments="The cohort type"/>
       <column name="target_cohort_id" comments="The target cohort id"/>
       <column name="outcome_cohort_id" comments="The outcome cohort id"/>
-      <column name="covariate_id" comments="The covariate identifier"/>
+      <column name="covariate_id" comments="The covariate identifier">
+        <foreignKey table="c_covariate_ref" column="covariate_id"/>
+      </column>
       <column name="count_value" comments="The count value"/>
       <column name="min_value" comments="The min value"/>
       <column name="max_value" comments="The max value"/>
@@ -119,8 +140,13 @@
       <column name="p_90_value" comments="The 90th percentile"/>
     </table>
     <table name="c_settings" comments="CharacterizationModule: Settings">
-      <column name="setting_id" comments="The run identifier"/>
-      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier">
+        <foreignKey table="c_cohort_details" column="setting_id"/>
+      </column>
+      <column name="database_id" comments="The database identifier">
+        <foreignKey table="database_meta_data" column="database_id"/>
+        <foreignKey table="c_cohort_details" column="database_id"/>
+      </column>
       <column name="covariate_setting_json" comments="The covariate settings JSON"/>
       <column name="case_covariate_setting_json" comments="The during covariate settings JSON"/>
       <column name="min_prior_observation" comments="Minimum time observed before index"/>
@@ -136,8 +162,12 @@
       <column name="database_id" comments="The database identifier"/>
       <column name="setting_id" comments="The run identifier"/>
       <column name="cohort_type" comments="The cohort type"/>
-      <column name="target_cohort_id" comments="The target cohort id"/>
-      <column name="outcome_cohort_id" comments="The outcome cohort id"/>
+      <column name="target_cohort_id" comments="The target cohort id">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="outcome_cohort_id" comments="The outcome cohort id">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
     </table>
     <table name="c_cohort_counts" comments="CharacterizationModule: Cohort counts">
       <column name="database_id" comments="The database identifier"/>
@@ -292,20 +322,28 @@
       <column name="age_group" comments="age grouping"/>
       <column name="calendar_year" comments="calendar year in cohort"/>
       <column name="incidence_rate" comments="incidence rate computed"/>
-      <column name="cohort_id" comments="cohort identifier"/>
-      <column name="database_id" comments="database identifier"/>
+      <column name="cohort_id" comments="cohort identifier">
+        <foreignKey table="cd_cohort_count" column="cohort_id"/>
+      </column>
+      <column name="database_id" comments="database identifier">
+        <foreignKey table="cd_cohort_count" column="database_id"/>
+      </column>
     </table>
     <table name="cd_included_source_concept" comments="CohortDiagnosticsModule: Included source concepts">
       <column name="database_id" comments="database identifier"/>
       <column name="cohort_id" comments="cohort id"/>
       <column name="concept_set_id" comments="concept set identifier"/>
-      <column name="concept_id" comments="concept identifier 1"/>
+      <column name="concept_id" comments="concept identifier 1">
+        <foreignKey table="cd_concept" column="concept_id"/>
+      </column>
       <column name="source_concept_id" comments="source concept id"/>
       <column name="concept_subjects" comments="subjects with concept"/>
       <column name="concept_count" comments="total count of concept"/>
     </table>
     <table name="cd_index_event_breakdown" comments="CohortDiagnosticsModule: Index event breakdown">
-      <column name="concept_id" comments="concept identifier"/>
+      <column name="concept_id" comments="concept identifier">
+        <foreignKey table="cd_concept" column="concept_id"/>
+      </column>
       <column name="concept_count" comments="number of concept occurences"/>
       <column name="subject_count" comments="number of distinct people"/>
       <column name="cohort_id" comments="cohort identifier"/>
@@ -349,9 +387,13 @@
       <column name="missing_means_zero" comments="missing means no count"/>
     </table>
     <table name="cd_temporal_covariate_ref" comments="CohortDiagnosticsModule: Covariate reference">
-      <column name="covariate_id" comments="covariate identifier"/>
+      <column name="covariate_id" comments="covariate identifier">
+        <foreignKey table="cd_temporal_covariate_value" column="covariate_id"/>
+      </column>
       <column name="covariate_name" comments="name of covariate"/>
-      <column name="analysis_id" comments="temporal analysis identifier"/>
+      <column name="analysis_id" comments="temporal analysis identifier">
+        <foreignKey table="cd_temporal_analysis_ref" column="analysis_id"/>
+      </column>
       <column name="concept_id" comments="concept identifier"/>
     </table>
     <table name="cd_temporal_covariate_value" comments="CohortDiagnosticsModule: Binary covariate values">

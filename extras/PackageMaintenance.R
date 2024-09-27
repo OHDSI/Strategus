@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Go document the full results data model -> DocumentResultsDataModel.R
+
 # Manually delete package from library. Avoids "Already in use" message when rebuilding
 unloadNamespace("Strategus")
 .rs.restartR()
@@ -64,9 +66,6 @@ unlink("inst/doc/IntroductionToStrategus.tex")
 
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
-
-# Document the full results data model
-source("DocumentResultsDataModel.R")
 
 # Produce a study analysis specification for testing -----------
 library(Strategus)

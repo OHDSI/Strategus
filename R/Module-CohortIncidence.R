@@ -118,7 +118,7 @@ CohortIncidenceModule <- R6::R6Class(
       on.exit(DatabaseConnector::disconnect(connection))
 
       # Create the results model
-      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = private$.getResultsDataModelSpecification())
+      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = self$getResultsDataModelSpecification())
       sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
       sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
       DatabaseConnector::executeSql(connection, sql)
