@@ -1,114 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/CreatingAnalysisSpecification.html</loc>
-  </url>
-  <url>
-    <loc>/articles/CreatingModules.html</loc>
-  </url>
-  <url>
-    <loc>/articles/ExecuteStrategus.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/IntroductionToStrategus.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/pull_request_template.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addModuleSpecifications.html</loc>
-  </url>
-  <url>
-    <loc>/reference/addSharedResources.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compareLockFiles.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createCdmExecutionSettings.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createEmptyAnalysisSpecificiations.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createExecutionSettings.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createResultDataModels.html</loc>
-  </url>
-  <url>
-    <loc>/reference/createResultsExecutionSettings.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dot-nullList.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ensureAllModulesInstantiated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/execute.html</loc>
-  </url>
-  <url>
-    <loc>/reference/getModuleList.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/installLatestModule.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lockFileToDataFrame.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mandatoryPackages.html</loc>
-  </url>
-  <url>
-    <loc>/reference/retrieveConnectionDetails.html</loc>
-  </url>
-  <url>
-    <loc>/reference/runSchemaCreation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/storeConnectionDetails.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Strategus-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/suggestedPacakges.html</loc>
-  </url>
-  <url>
-    <loc>/reference/syncLockFile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/unlockKeyring.html</loc>
-  </url>
-  <url>
-    <loc>/reference/validateLockFile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/verifyModuleInstallation.html</loc>
-  </url>
-  <url>
-    <loc>/reference/withModuleRenv.html</loc>
-  </url>
-  <url>
-    <loc>/reference/zipResults.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://ohdsi.github.io/Strategus/404.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/articles/IntroductionToStrategus.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/articles/index.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/authors.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/index.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/news/index.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/CharacterizationModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/CohortDiagnosticsModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/CohortGeneratorModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/CohortIncidenceModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/CohortMethodModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/EvidenceSynthesisModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/JobContext.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/PatientLevelPredictionModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/SelfControlledCaseSeriesModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/Strategus-package.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/StrategusModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addCharacterizationModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addCohortDiagnosticsModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addCohortGeneratorModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addCohortIncidenceModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addCohortMethodeModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addEvidenceSynthesisModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addPatientLevelPredictionModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addSelfControlledCaseSeriesModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addSharedResources.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/createCdmExecutionSettings.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/createEmptyAnalysisSpecificiations.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/createResultDataModel.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/createResultsExecutionSettings.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/execute.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/getCdmDatabaseMetaData.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/getDatabaseIdentifierFilePath.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/index.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/uploadResults.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/zipResults.html</loc></url>
 </urlset>
+

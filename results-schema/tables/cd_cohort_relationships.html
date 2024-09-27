@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>cd_cohort_relationships - mydb.public</title>
+        <title>cd_cohort_relationships - strategus.results</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -46,7 +46,7 @@
                 <nav class="navbar navbar-static-top">
                     <div class="container">
                         <div class="navbar-header">
-                            <a href="../index.html" class="navbar-brand"><b>mydb</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <a href="../index.html" class="navbar-brand"><b>strategus</b></a><span class="navbar-brand" style="padding-left: 0">.results</span>
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
                         </div>
 
@@ -84,7 +84,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body clearfix">
-                            <p>Table comment goes here</p>
+                            <p>CohortDiagnosticsModule: Cohort relationships</p>
                         </div><!-- /.box-body -->
                     </div>
                 </section>
@@ -104,7 +104,7 @@
                                     id="standard_table"
                                     class="table table-bordered table-striped dataTable"
                                     role="grid"
-                                    data-paging="true"
+                                    data-paging="false"
                                     data-page-length="10"
                                     data-length-change="false">
                                 <thead align='left'>
@@ -136,7 +136,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator days</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="c_days_after_te">c_days_after_te</span></td>
@@ -153,7 +153,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort days after target start date (offset)</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="c_days_after_ts">c_days_after_ts</span></td>
@@ -170,7 +170,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort days within target cohort days (offset)</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="c_days_before_te">c_days_before_te</span></td>
@@ -187,7 +187,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort days before target start date (offset)</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="c_days_before_ts">c_days_before_ts</span></td>
@@ -204,7 +204,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort days within target (offset) days</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="c_days_within_t_days">c_days_within_t_days</span></td>
@@ -221,7 +221,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort days before target end date (offset)</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="cohort_id">cohort_id</span></td>
@@ -238,7 +238,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>target cohort id</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="comparator_cohort_id">comparator_cohort_id</span></td>
@@ -255,7 +255,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort id</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="database_id">database_id</span></td>
@@ -272,7 +272,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>database identifier</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="end_day">end_day</span></td>
@@ -289,228 +289,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_c_within_t">rec_c_within_t</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_ce_window_t">rec_ce_window_t</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_ce_window_te">rec_ce_window_te</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_ce_window_ts">rec_ce_window_ts</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_after_te">rec_cs_after_te</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_after_ts">rec_cs_after_ts</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_before_te">rec_cs_before_te</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_before_ts">rec_cs_before_ts</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_on_te">rec_cs_on_te</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_on_ts">rec_cs_on_ts</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_window_t">rec_cs_window_t</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_window_te">rec_cs_window_te</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="rec_cs_window_ts">rec_cs_window_ts</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
+                                    <td><p>end day</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="start_day">start_day</span></td>
@@ -527,7 +306,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>start day</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_c_within_t">sub_c_within_t</span></td>
@@ -544,7 +323,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort subjects end within period (incidence) relative to target end date</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_ce_window_t">sub_ce_window_t</span></td>
@@ -561,7 +340,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort subjects start within period (incidence) relative to target start date and end date</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_ce_window_te">sub_ce_window_te</span></td>
@@ -578,7 +357,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort subjects end within period (incidence) relative to target start date</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_ce_window_ts">sub_ce_window_ts</span></td>
@@ -595,7 +374,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort subjects start within period (incidence) relative to target end date</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_after_te">sub_cs_after_te</span></td>
@@ -612,7 +391,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>How many subjects in comparator cohort start on first target cohort end</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_after_ts">sub_cs_after_ts</span></td>
@@ -629,7 +408,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>How many subjects in comparator cohort start with first target cohort start</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_before_te">sub_cs_before_te</span></td>
@@ -646,7 +425,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>How many subjects in comparator cohort start after first target cohort start</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_before_ts">sub_cs_before_ts</span></td>
@@ -663,7 +442,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>present in both target and comparator</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_on_te">sub_cs_on_te</span></td>
@@ -680,7 +459,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>How many subjects in comparator cohort start after first target cohort end</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_on_ts">sub_cs_on_ts</span></td>
@@ -697,7 +476,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>How many subjects in comparator cohort start prior to first target cohort start</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_window_t">sub_cs_window_t</span></td>
@@ -714,7 +493,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>How many subjects in comparator cohort start after first target cohort end</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_window_te">sub_cs_window_te</span></td>
@@ -731,7 +510,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort subjects start within period (incidence) relative to target start date</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="sub_cs_window_ts">sub_cs_window_ts</span></td>
@@ -748,7 +527,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>comparator cohort subjects start within period (incidence) relative to target start date and end date</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="subjects">subjects</span></td>
@@ -765,7 +544,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>number of subjects total</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="t_days">t_days</span></td>
@@ -782,7 +561,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>target days</p></td>
                                 </tr>
                                 </tbody>
                             </table>

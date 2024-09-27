@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>mydb.public</title>
+        <title>strategus.results</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
@@ -46,7 +46,7 @@
                 <nav class="navbar navbar-static-top">
                     <div class="container">
                         <div class="navbar-header">
-                            <a href="index.html" class="navbar-brand"><b>mydb</b></a><span class="navbar-brand" style="padding-left: 0">.public</span>
+                            <a href="index.html" class="navbar-brand"><b>strategus</b></a><span class="navbar-brand" style="padding-left: 0">.results</span>
                             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
                         </div>
 
@@ -77,12 +77,21 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="callout callout-info">
-                                <h4>SchemaSpy Analysis of mydb.public</h4>
-                                <p>Generated on Wed Sep 18 14:40 UTC 2024</p>
+                                <h4>SchemaSpy Analysis of strategus.results</h4>
+                                <p>Generated on Fri Sep 27 19:20 UTC 2024</p>
                             </div>
                         </div>
                     </div>
-                    <a href="mydb.public.xml" title="XML Representation">XML Representation</a><br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-solid">
+                                <div class="box-body">
+                                    <p><p>Results data model</p></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="strategus.results.xml" title="XML Representation">XML Representation</a><br />
                     <a href="insertionOrder.txt" title="Useful for loading data into a database">Insertion Order</a>
                     <a href="deletionOrder.txt" title="Useful for purging data from a database">Deletion Order</a>
                 </section>
@@ -94,7 +103,7 @@
                                 <span class="info-box-icon bg-aqua"><i class="fa fa-table"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">TABLES</span>
-                                    <span class="info-box-number">128</span>
+                                    <span class="info-box-number">127</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -118,7 +127,7 @@
                                 <span class="info-box-icon bg-green"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">COLUMNS</span>
-                                    <span class="info-box-number">1064</span>
+                                    <span class="info-box-number">1039</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -168,16 +177,16 @@
                             <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <p>Database Type: PostgreSQL - 16.4 (Debian 16.4-1.pgdg120+1)</p>
+                            <p>Database Type: PostgreSQL - 17.0 (Debian 17.0-1.pgdg120+1)</p>
                         </div><!-- /.box-body -->
                     </div>
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Schema public</h3>
+                            <h3 class="box-title">Schema results</h3>
                             <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <p> <p>This is where we&rsquo;ll describe the Strategus results data model.</p> </p>
+                            <p> <p>The tables in the results data model are grouped using a unique prefix for each Strategus module. For example, the CharacterizationModule results tables all start with &ldquo;c_&rdquo;.</p> </p>
                         </div><!-- /.box-body -->
                     </div>
                     <div class="box box-primary">
@@ -208,29 +217,38 @@
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_covariates_continuous.html">c_covariates_continuous</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">16</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Continuous covariates</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_covariate_result.html">sccs_sccs_covariate_result</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail"><a href="tables/sccs_covariate.html">sccs_covariate</a></td>
+                                        <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Covariate reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_temporal_analysis_ref.html">cd_temporal_analysis_ref</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Temporal analysis reference</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_covariate_analysis.html">sccs_covariate_analysis</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Covariate analysis</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_resolved_concepts.html">cd_resolved_concepts</a></td>
@@ -239,7 +257,7 @@
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Resolved concepts</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_concept_relationship.html">cd_concept_relationship</a></td>
@@ -248,7 +266,7 @@
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Concept Relationship</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_diagnostic_participants.html">plp_diagnostic_participants</a></td>
@@ -257,25 +275,25 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Diagnostic participants</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_index_event_breakdown.html">cd_index_event_breakdown</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Index event breakdown</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_diagnostic_summary.html">plp_diagnostic_summary</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Diagnostic summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_visit_context.html">cd_visit_context</a></td>
@@ -284,16 +302,7 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_likelihood_profile.html">sccs_sccs_likelihood_profile</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">6</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Visit context</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_rechallenge_fail_case_series.html">c_rechallenge_fail_case_series</a></td>
@@ -302,16 +311,16 @@
                                         <td class="detail" align="right">17</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Rechallenge fail case series</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_covariate_analysis.html">cm_covariate_analysis</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Covariate analysis reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_calibration_summary.html">plp_calibration_summary</a></td>
@@ -320,25 +329,25 @@
                                         <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Calibration summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_incidence_summary.html">ci_incidence_summary</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">10</td>
                                         <td class="detail" align="right">21</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Incidence rate/proportion summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_concept.html">cd_concept</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">10</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Concept lookup table</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_kaplan_meier_dist.html">cm_kaplan_meier_dist</a></td>
@@ -347,7 +356,7 @@
                                         <td class="detail" align="right">14</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Kaplan Meier distribution</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_covariate_settings.html">plp_covariate_settings</a></td>
@@ -356,25 +365,25 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Covariate settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_tar_def.html">ci_tar_def</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Time-at-risk definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_spline.html">sccs_sccs_spline</a></td>
+                                        <td class="detail"><a href="tables/sccs_event_dep_observation.html">sccs_event_dep_observation</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Event-dependent observation diagnostic</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_analysis.html">es_analysis</a></td>
@@ -383,43 +392,34 @@
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Analysis reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_count.html">cg_cohort_count</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort counts</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_generation.html">cg_cohort_generation</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_exposure.html">sccs_sccs_exposure</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">3</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort generation times</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_count.html">cd_cohort_count</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort counts</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_censor_stats.html">cg_cohort_censor_stats</a></td>
@@ -428,7 +428,7 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort censor statistics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_count_neg_ctrl.html">cg_cohort_count_neg_ctrl</a></td>
@@ -437,16 +437,16 @@
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Negative control outcome cohort counts</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_temporal_covariate_value.html">cd_temporal_covariate_value</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Binary covariate values</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_relationship.html">cd_relationship</a></td>
@@ -455,25 +455,25 @@
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Relationships</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_dechallenge_rechallenge.html">c_dechallenge_rechallenge</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">20</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Dechallenge rechallenge</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_definition.html">cg_cohort_definition</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">17</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">8</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_prediction_distribution.html">plp_prediction_distribution</a></td>
@@ -482,7 +482,16 @@
                                         <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Prediction distribution</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_diagnostics_summary.html">sccs_diagnostics_summary</a></td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">14</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Diagnostic summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_cohort_counts.html">c_cohort_counts</a></td>
@@ -491,16 +500,7 @@
                                         <td class="detail" align="right">15</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_covariate.html">sccs_sccs_covariate</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">7</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Cohort counts</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_model_settings.html">plp_model_settings</a></td>
@@ -509,16 +509,7 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_time_trend.html">sccs_sccs_time_trend</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">8</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Model settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_concept_synonym.html">cd_concept_synonym</a></td>
@@ -527,25 +518,43 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Concept synonym</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_age_spanning.html">sccs_age_spanning</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Age spanning diagnostic</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_summary_stats.html">cg_cohort_summary_stats</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort summary statistics</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_exposure.html">sccs_exposure</a></td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Exposure reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_orphan_concept.html">cd_orphan_concept</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Orphan concept list</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_time_series.html">cd_time_series</a></td>
@@ -554,25 +563,16 @@
                                         <td class="detail" align="right">18</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_time_to_event.html">sccs_sccs_time_to_event</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">7</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Time series information</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_incidence_rate.html">cd_incidence_rate</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">8</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Incidence rate for Cohort Diagnostics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_threshold_summary.html">plp_threshold_summary</a></td>
@@ -581,16 +581,16 @@
                                         <td class="detail" align="right">25</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Threshold summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_inclusion.html">cg_cohort_inclusion</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort inclusion information</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_feature_engineering_settings.html">plp_feature_engineering_settings</a></td>
@@ -599,7 +599,16 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Feature engineering settings</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_time_trend.html">sccs_time_trend</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Time trend diagnostic</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_diagnostic_predictors.html">plp_diagnostic_predictors</a></td>
@@ -608,7 +617,7 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Diagnostic predictors</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_covariate_summary.html">plp_covariate_summary</a></td>
@@ -617,7 +626,7 @@
                                         <td class="detail" align="right">15</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Covariate summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_database_meta_data.html">plp_database_meta_data</a></td>
@@ -626,34 +635,34 @@
                                         <td class="detail" align="right">12</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: CDM database metadata</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_covariate.html">cm_covariate</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Covariate reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_settings.html">c_settings</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">12</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_target_comparator_outcome.html">cm_target_comparator_outcome</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Target comparator outcome reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_inc_stats.html">cg_cohort_inc_stats</a></td>
@@ -662,7 +671,7 @@
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort inclusion statistics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_cohort_definition.html">plp_cohort_definition</a></td>
@@ -671,7 +680,7 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Cohort definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_inc_result.html">cd_cohort_inc_result</a></td>
@@ -680,7 +689,16 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort inclusion results</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_era.html">sccs_era</a></td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Era reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_tars.html">plp_tars</a></td>
@@ -689,16 +707,16 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Time-at-risk settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_result.html">cm_result</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">27</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Study results for main effects</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_sccs_diagnostics_summary.html">es_sccs_diagnostics_summary</a></td>
@@ -707,7 +725,7 @@
                                         <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Self controlled case series diagnostics summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort.html">cd_cohort</a></td>
@@ -716,7 +734,7 @@
                                         <td class="detail" align="right">8</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort details</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_inc_stats.html">cd_cohort_inc_stats</a></td>
@@ -725,43 +743,25 @@
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort inclusion statstics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_diagnostics_summary.html">sccs_sccs_diagnostics_summary</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">14</td>
+                                        <td class="detail"><a href="tables/plp_model_designs.html">plp_model_designs</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">12</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Model designs</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_censor_model.html">sccs_sccs_censor_model</a></td>
+                                        <td class="detail"><a href="tables/sccs_likelihood_profile.html">sccs_likelihood_profile</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/plp_model_designs.html">plp_model_designs</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">12</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_covariate_analysis.html">sccs_sccs_covariate_analysis</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">4</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Likelihood profile</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_inclusion.html">cd_cohort_inclusion</a></td>
@@ -770,7 +770,7 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort inclusion info</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_vocabulary.html">cd_vocabulary</a></td>
@@ -779,7 +779,7 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Vocabulary information</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_cm_result.html">es_cm_result</a></td>
@@ -788,7 +788,7 @@
                                         <td class="detail" align="right">26</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Cohort method results</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_target_def.html">ci_target_def</a></td>
@@ -797,7 +797,7 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Target cohort definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_attrition.html">cm_attrition</a></td>
@@ -806,7 +806,7 @@
                                         <td class="detail" align="right">9</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Attrition table</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_database.html">cd_database</a></td>
@@ -815,16 +815,7 @@
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_era.html">sccs_sccs_era</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">6</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: CDM database information for Cohort Diagnostics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_diagnostic_outcomes.html">plp_diagnostic_outcomes</a></td>
@@ -833,34 +824,16 @@
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Diagnostic outcomes</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_covariate_balance.html">cm_covariate_balance</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">17</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_event_dep_observation.html">sccs_sccs_event_dep_observation</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">6</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/cd_cohort_overlap.html">cd_cohort_overlap</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">12</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Covariate balance</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_subset_definition.html">cd_subset_definition</a></td>
@@ -869,25 +842,25 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort subset definition</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_subgroup_def.html">ci_subgroup_def</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Subgroup definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_cohort_details.html">c_cohort_details</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Cohort details</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_preference_score_dist.html">cm_preference_score_dist</a></td>
@@ -896,7 +869,7 @@
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Preference score distribution</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_population_settings.html">plp_population_settings</a></td>
@@ -905,16 +878,16 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Population settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/database_meta_data.html">database_meta_data</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">17</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">13</td>
-                                        <td class="detail" align="right">-1</td>
+                                        <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Strategus: Metadata for each CDM database</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_concept_ancestor.html">cd_concept_ancestor</a></td>
@@ -923,7 +896,7 @@
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Concept ancestor</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_likelihood_profile.html">cm_likelihood_profile</a></td>
@@ -932,7 +905,7 @@
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Likelihood Profile</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_sccs_result.html">es_sccs_result</a></td>
@@ -941,7 +914,7 @@
                                         <td class="detail" align="right">27</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Self controlled case series results</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_analysis_ref.html">c_analysis_ref</a></td>
@@ -950,43 +923,52 @@
                                         <td class="detail" align="right">9</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Analysis reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_inc_result.html">cg_cohort_inc_result</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort inclusion results</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_time_to_event.html">sccs_time_to_event</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Time-to-event diagnostic</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_concept_sets.html">cd_concept_sets</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Concept sets</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_performances.html">plp_performances</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">12</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Model performance</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_diagnostics_summary.html">cm_diagnostics_summary</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">21</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Diagnostics summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_attrition.html">plp_attrition</a></td>
@@ -995,25 +977,7 @@
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_calendar_time_spanning.html">sccs_sccs_calendar_time_spanning</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">6</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_attrition.html">sccs_sccs_attrition</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">10</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Attrition information</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_diagnostic_designs.html">plp_diagnostic_designs</a></td>
@@ -1022,34 +986,34 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Diagnostic designs</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_time_to_event.html">c_time_to_event</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">8</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Time to event</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_propensity_model.html">cm_propensity_model</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Propensity model</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_shared_covariate_balance.html">cm_shared_covariate_balance</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">16</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Shared covariate balance</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_tidy_covariates_settings.html">plp_tidy_covariates_settings</a></td>
@@ -1058,16 +1022,7 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_result.html">sccs_sccs_result</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">27</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Tidy covariate settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_temporal_time_ref.html">cd_temporal_time_ref</a></td>
@@ -1076,16 +1031,7 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_exposures_outcome_set.html">sccs_sccs_exposures_outcome_set</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">3</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Temporal time reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_summary_stats.html">cd_cohort_summary_stats</a></td>
@@ -1094,7 +1040,7 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort summary stats</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_target_outcome_ref.html">ci_target_outcome_ref</a></td>
@@ -1103,7 +1049,7 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Target outcome cross reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_definition_neg_ctrl.html">cg_cohort_definition_neg_ctrl</a></td>
@@ -1112,16 +1058,7 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_analysis.html">sccs_sccs_analysis</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">3</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Negative control outcome cohort definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_models.html">plp_models</a></td>
@@ -1130,7 +1067,7 @@
                                         <td class="detail" align="right">11</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Models</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_domain.html">cd_domain</a></td>
@@ -1139,16 +1076,25 @@
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Domain from the vocabulary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_age_group_def.html">ci_age_group_def</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Age group definitions</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_attrition.html">sccs_attrition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Attrition table</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_sample_settings.html">plp_sample_settings</a></td>
@@ -1157,7 +1103,25 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Sample settings</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_censor_model.html">sccs_censor_model</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Event-dependent observation censoring model</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_spline.html">sccs_spline</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Season, age, and calendar time splines</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_metadata.html">cd_metadata</a></td>
@@ -1166,16 +1130,16 @@
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Metadata for the database and runtime environment used for Cohort Diagnostics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_diagnostics.html">plp_diagnostics</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Diagnostics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_demographic_summary.html">plp_demographic_summary</a></td>
@@ -1184,7 +1148,7 @@
                                         <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Demographic summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_temporal_covariate_value_dist.html">cd_temporal_covariate_value_dist</a></td>
@@ -1193,7 +1157,7 @@
                                         <td class="detail" align="right">14</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Continuous covariate values</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_interaction_result.html">cm_interaction_result</a></td>
@@ -1202,7 +1166,7 @@
                                         <td class="detail" align="right">25</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Study results for interaction effects</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_plp_data_settings.html">plp_plp_data_settings</a></td>
@@ -1211,7 +1175,7 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: PLP data settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_evaluation_statistics.html">plp_evaluation_statistics</a></td>
@@ -1220,25 +1184,34 @@
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Evaluation statistics</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/sccs_sccs_age_spanning.html">sccs_sccs_age_spanning</a></td>
+                                        <td class="detail"><a href="tables/sccs_analysis.html">sccs_analysis</a></td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Analysis reference</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_result.html">sccs_result</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">13</td>
+                                        <td class="detail" align="right">27</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Results</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_outcome_def.html">ci_outcome_def</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Outcome cohort definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_split_settings.html">plp_split_settings</a></td>
@@ -1247,16 +1220,25 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Split settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_covariate_ref.html">c_covariate_ref</a></td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">8</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Covariate reference</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_calendar_time_spanning.html">sccs_calendar_time_spanning</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Calendar time spanning diagnostic</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_cm_diagnostics_summary.html">es_cm_diagnostics_summary</a></td>
@@ -1265,16 +1247,25 @@
                                         <td class="detail" align="right">14</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Cohort method diagnostics summary</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_cohorts.html">plp_cohorts</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Cohort identifier reference</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_exposures_outcome_set.html">sccs_exposures_outcome_set</a></td>
+                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Exposure outcome set reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_database_details.html">plp_database_details</a></td>
@@ -1283,7 +1274,7 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: CDM database details</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_follow_up_dist.html">cm_follow_up_dist</a></td>
@@ -1292,43 +1283,52 @@
                                         <td class="detail" align="right">23</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Follow up distribution</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sccs_covariate_result.html">sccs_covariate_result</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Covariate results</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_covariates.html">c_covariates</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">9</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Binary covariates</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_included_source_concept.html">cd_included_source_concept</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">7</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Included source concepts</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_relationships.html">cd_cohort_relationships</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">39</td>
+                                        <td class="detail" align="right">26</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort relationships</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_temporal_covariate_ref.html">cd_temporal_covariate_ref</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Covariate reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_subset_definition.html">cg_cohort_subset_definition</a></td>
@@ -1337,7 +1337,7 @@
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort subset definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_recalibrations.html">plp_recalibrations</a></td>
@@ -1346,16 +1346,16 @@
                                         <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Recalibrations</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_analysis.html">cm_analysis</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">3</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>Table comment goes here</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Analysis reference</p></td>
                                     </tr>
                             </table>
                         </div>
