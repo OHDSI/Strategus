@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemaMeta xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://schemaspy.org/xsd/6/schemameta.xsd">
-  <comments>This is where we'll describe the Strategus results data model.</comments>
+  <comments>The tables in the results data model are grouped using a unique prefix for
+  each Strategus module. For example, the CharacterizationModule results tables
+  all start with "c_".</comments>
   <tables>
     <table name="database_meta_data" comments="Strategus: Metadata for each CDM database">
       <column name="cdm_source_name" comments="The name of the CDM instance."/>
@@ -20,7 +22,9 @@
       <column name="max_obs_period_end_date" comments="NA"/>
     </table>
     <table name="c_time_to_event" comments="CharacterizationModule: Time to event">
-      <column name="database_id" comments="The database identifier"/>
+      <column name="database_id" comments="The database identifier">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
       <column name="target_cohort_definition_id" comments="The cohort definition id for the target cohort"/>
       <column name="outcome_cohort_definition_id" comments="The cohort definition id for the outcome cohort"/>
       <column name="outcome_type" comments="Is the outvome a first occurrence or repeat"/>
@@ -49,11 +53,17 @@
       <column name="rechallenge_outcome_start_date_offset" comments="The offset for the outcome start (number of days after index)"/>
     </table>
     <table name="c_dechallenge_rechallenge" comments="CharacterizationModule: Dechallenge rechallenge">
-      <column name="database_id" comments="The database identifier"/>
+      <column name="database_id" comments="The database identifier">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
       <column name="dechallenge_stop_interval" comments="The dechallenge stop interval"/>
       <column name="dechallenge_evaluation_window" comments="The dechallenge evaluation window"/>
-      <column name="target_cohort_definition_id" comments="The cohort definition id for the target cohort"/>
-      <column name="outcome_cohort_definition_id" comments="The cohort definition id for the outcome cohort"/>
+      <column name="target_cohort_definition_id" comments="The cohort definition id for the target cohort">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="outcome_cohort_definition_id" comments="The cohort definition id for the outcome cohort">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
       <column name="num_exposure_eras" comments="The number of exposure eras"/>
       <column name="num_persons_exposed" comments="The number of persons exposed"/>
       <column name="num_cases" comments="The number of cases"/>
@@ -204,7 +214,9 @@
       <column name="cohort_id" comments="cohort id"/>
       <column name="cohort_entries" comments="number of entries in to cohort (an individual can be counted multiple times)"/>
       <column name="cohort_subjects" comments="number of individuals in cohort"/>
-      <column name="database_id" comments="database identifier"/>
+      <column name="database_id" comments="database identifier">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
     </table>
     <table name="cd_cohort_inclusion" comments="CohortDiagnosticsModule: Cohort inclusion info">
       <column name="database_id" comments="database identifier"/>
@@ -358,10 +370,16 @@
       <column name="value_field" comments="variable value"/>
     </table>
     <table name="cd_orphan_concept" comments="CohortDiagnosticsModule: Orphan concept list">
-      <column name="cohort_id" comments="cohort identifier"/>
-      <column name="concept_set_id" comments="concept set identifier"/>
+      <column name="cohort_id" comments="cohort identifier">
+        <foreignKey table="cd_concept_sets" column="cohort_id"/>
+      </column>
+      <column name="concept_set_id" comments="concept set identifier">
+        <foreignKey table="cd_concept_sets" column="concept_set_id"/>
+      </column>
       <column name="database_id" comments="database identifier"/>
-      <column name="concept_id" comments="concept identifier"/>
+      <column name="concept_id" comments="concept identifier">
+        <foreignKey table="cd_concept" column="concept_id"/>
+      </column>
       <column name="concept_count" comments="number of concept occurences"/>
       <column name="concept_subjects" comments="number of distinct people"/>
     </table>
@@ -476,16 +494,22 @@
       <column name="generation_status" comments="The cohort generation status"/>
       <column name="start_time" comments="The start time of the generation process"/>
       <column name="end_time" comments="The end time of the generation process"/>
-      <column name="database_id" comments="The database idenifier for this information"/>
+      <column name="database_id" comments="The database idenifier for this information">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
     </table>
     <table name="cg_cohort_inclusion" comments="CohortGeneratorModule: Cohort inclusion information">
-      <column name="cohort_definition_id" comments="The unique identifier for the cohort definition"/>
+      <column name="cohort_definition_id" comments="The unique identifier for the cohort definition">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
       <column name="rule_sequence" comments="The rule sequence for the inclusion rule"/>
       <column name="name" comments="The name of the inclusion rule"/>
       <column name="description" comments="The description of the inclusion rule"/>
     </table>
     <table name="cg_cohort_inc_result" comments="CohortGeneratorModule: Cohort inclusion results">
-      <column name="database_id" comments="The database idenifier for this information"/>
+      <column name="database_id" comments="The database idenifier for this information">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
       <column name="cohort_definition_id" comments="The unique identifier for the cohort definition"/>
       <column name="inclusion_rule_mask" comments="A bit-mask for the inclusion rule"/>
       <column name="person_count" comments="The number of persons satisifying the inclusion rule"/>
@@ -501,8 +525,12 @@
       <column name="mode_id" comments="The mode id"/>
     </table>
     <table name="cg_cohort_summary_stats" comments="CohortGeneratorModule: Cohort summary statistics">
-      <column name="database_id" comments="The database idenifier for this information"/>
-      <column name="cohort_definition_id" comments="The unique identifier for the cohort definition"/>
+      <column name="database_id" comments="The database idenifier for this information">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
+      <column name="cohort_definition_id" comments="The unique identifier for the cohort definition">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
       <column name="base_count" comments="The base count"/>
       <column name="final_count" comments="The final count"/>
       <column name="mode_id" comments="The mode id"/>
@@ -513,8 +541,12 @@
       <column name="database_id" comments="The database idenifier for this information"/>
     </table>
     <table name="cg_cohort_count" comments="CohortGeneratorModule: Cohort counts">
-      <column name="database_id" comments="The database idenifier for this information"/>
-      <column name="cohort_id" comments="The unique identifier for the cohort definition"/>
+      <column name="database_id" comments="The database idenifier for this information">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
+      <column name="cohort_id" comments="The unique identifier for the cohort definition">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
       <column name="cohort_entries" comments="The number of cohort entries"/>
       <column name="cohort_subjects" comments="The number of unique subjects"/>
     </table>
@@ -536,14 +568,31 @@
       <column name="detect_on_descendants" comments="When set to 1 detect_on_descendants used the vocabulary to find negative control outcomes using the outcome_concept_id and all descendants via the concept_ancestor table. When set to 0 only the exact outcome_concept_id was used to detect the outcome"/>
     </table>
     <table name="ci_incidence_summary" comments="CohortIncidenceModule: Incidence rate/proportion summary">
-      <column name="ref_id" comments="The reference identifier for the analysis"/>
-      <column name="database_id" comments="The database identifier"/>
+      <column name="ref_id" comments="The reference identifier for the analysis">
+        <foreignKey table="ci_outcome_def" column="ref_id"/>
+        <foreignKey table="ci_tar_def" column="ref_id"/>
+        <foreignKey table="ci_subgroup_def" column="ref_id"/>
+        <foreignKey table="ci_age_group_def" column="ref_id"/>
+      </column>
+      <column name="database_id" comments="The database identifier">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
       <column name="source_name" comments="The source name for the database"/>
-      <column name="target_cohort_definition_id" comments="Target cohort identifier"/>
-      <column name="tar_id" comments="Time-at-risk identifier"/>
-      <column name="subgroup_id" comments="Subgroup identifier"/>
-      <column name="outcome_id" comments="Outcome cohort identifier"/>
-      <column name="age_group_id" comments="Age group identifier"/>
+      <column name="target_cohort_definition_id" comments="Target cohort identifier">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="tar_id" comments="Time-at-risk identifier">
+        <foreignKey table="ci_tar_def" column="ref_id"/>
+      </column>
+      <column name="subgroup_id" comments="Subgroup identifier">
+        <foreignKey table="ci_subgroup_def" column="subgroup_id"/>
+      </column>
+      <column name="outcome_id" comments="Outcome cohort identifier">
+        <foreignKey table="ci_outcome_def" column="outcome_id"/>
+      </column>
+      <column name="age_group_id" comments="Age group identifier">
+        <foreignKey table="ci_age_group_def" column="age_group_id"/>
+      </column>
       <column name="gender_id" comments="Gender identifier"/>
       <column name="gender_name" comments="Gender name"/>
       <column name="start_year" comments="Start year"/>
@@ -633,15 +682,24 @@
       <column name="database_id" comments="Foreign key referencing the database."/>
     </table>
     <table name="cm_analysis" comments="CohortMethodModule: Analysis reference">
-      <column name="analysis_id" comments="A unique identifier for an analysis."/>
+      <column name="analysis_id" comments="A unique identifier for an analysis.">
+        <foreignKey table="cm_result" column="analysis_id"/>
+        <foreignKey table="cm_diagnostics_summary" column="analysis_id"/>
+      </column>
       <column name="description" comments="A description for an analysis, e.g. 'On-treatment'."/>
       <column name="definition" comments="A CohortMethod JSON object specifying the analysis."/>
     </table>
     <table name="cm_result" comments="CohortMethodModule: Study results for main effects">
       <column name="analysis_id" comments="Foreign key referencing the cm_analysis table."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
-      <column name="outcome_id" comments="The identifier for the outcome cohort."/>
+      <column name="target_id" comments="The identifier for the target cohort.">
+        <foreignKey table="cm_target_comparator_outcome" column="target_id"/>
+      </column>
+      <column name="comparator_id" comments="The identifier for the comparator cohort.">
+        <foreignKey table="cm_target_comparator_outcome" column="comparator_id"/>
+      </column>
+      <column name="outcome_id" comments="The identifier for the outcome cohort.">
+        <foreignKey table="cm_target_comparator_outcome" column="outcome_id"/>
+      </column>
       <column name="rr" comments="The estimated relative risk (e.g. the hazard ratio)."/>
       <column name="ci_95_lb" comments="The lower bound of the 95% confidence interval of the relative risk."/>
       <column name="ci_95_ub" comments="The upper bound of the 95% confidence interval of the relative risk."/>
@@ -694,7 +752,9 @@
       <column name="database_id" comments="Foreign key referencing the database."/>
     </table>
     <table name="cm_covariate" comments="CohortMethodModule: Covariate reference">
-      <column name="covariate_id" comments="A unique identified for a covariate."/>
+      <column name="covariate_id" comments="A unique identified for a covariate.">
+        <foreignKey table="cm_propensity_model" column="covariate_id"/>
+      </column>
       <column name="covariate_name" comments="A name for a covariate, e.g. 'Age group: 20-25 years'."/>
       <column name="analysis_id" comments="Foreign key referencing the cm_analysis table."/>
       <column name="covariate_analysis_id" comments="Foreign key referencing the cm_covariate_analysis table."/>
@@ -706,12 +766,19 @@
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
     </table>
     <table name="cm_covariate_balance" comments="CohortMethodModule: Covariate balance">
-      <column name="database_id" comments="Foreign key referencing the database."/>
+      <column name="database_id" comments="Foreign key referencing the database.">
+        <foreignKey table="database_meta_data" column="database_id"/>
+        <foreignKey table="cm_covariate" column="database_id"/>
+      </column>
       <column name="target_id" comments="The identifier for the target cohort."/>
       <column name="comparator_id" comments="The identifier for the comparator cohort."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
-      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
-      <column name="covariate_id" comments="A foreign key referencing the cm_covariate table."/>
+      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table.">
+        <foreignKey table="cm_covariate" column="analysis_id"/>
+      </column>
+      <column name="covariate_id" comments="A foreign key referencing the cm_covariate table.">
+        <foreignKey table="cm_covariate" column="covariate_id"/>
+      </column>
       <column name="target_mean_before" comments="The mean value of the covariate in the target cohort before propensity score adjustment."/>
       <column name="comparator_mean_before" comments="The mean value of the covariate in the comparator cohort before propensity score adjustment."/>
       <column name="mean_before" comments="The mean value of the covariate in the union of the target and comparator cohort before propensity score adjustment."/>
@@ -725,11 +792,21 @@
       <column name="target_comparator_std_diff" comments="The standardized difference of the means before and after propensity score adjustment in  the union of the target and comparator cohorts."/>
     </table>
     <table name="cm_diagnostics_summary" comments="CohortMethodModule: Diagnostics summary">
-      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
-      <column name="outcome_id" comments="The identifier for the outcome cohort."/>
-      <column name="database_id" comments="Foreign key referencing the database."/>
+      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table.">
+        <foreignKey table="cm_analysis" column="analysis_id"/>
+      </column>
+      <column name="target_id" comments="The identifier for the target cohort.">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="comparator_id" comments="The identifier for the comparator cohort.">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="outcome_id" comments="The identifier for the outcome cohort.">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="database_id" comments="Foreign key referencing the database.">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
       <column name="max_sdm" comments="The maximum absolute standardized difference of mean."/>
       <column name="shared_max_sdm" comments="The maximum absolute standardized difference of mean of the shared balance (shared across outcomes)."/>
       <column name="equipoise" comments="The fraction of the study population with a preference score between 0.3 and 0.7."/>
@@ -797,11 +874,18 @@
       <column name="coefficient" comments="The coefficient (beta) for the covariate in the propensity model."/>
     </table>
     <table name="cm_shared_covariate_balance" comments="CohortMethodModule: Shared covariate balance">
-      <column name="database_id" comments="Foreign key referencing the database."/>
+      <column name="database_id" comments="Foreign key referencing the database.">
+        <foreignKey table="cm_covariate" column="database_id"/>
+      </column>
       <column name="target_id" comments="The identifier for the target cohort."/>
       <column name="comparator_id" comments="The identifier for the comparator cohort."/>
-      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
-      <column name="covariate_id" comments="A foreign key referencing the cm_covariate table."/>
+      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table.">
+        <foreignKey table="cm_covariate" column="analysis_id"/>
+        <foreignKey table="cm_covariate_analysis" column="analysis_id"/>
+      </column>
+      <column name="covariate_id" comments="A foreign key referencing the cm_covariate table.">
+        <foreignKey table="cm_covariate" column="covariate_id"/>
+      </column>
       <column name="mean_before" comments="The mean value of the covariate in the union of the target and comparator cohort before propensity score adjustment."/>
       <column name="target_mean_before" comments="The mean value of the covariate in the target cohort before propensity score adjustment."/>
       <column name="comparator_mean_before" comments="The mean value of the covariate in the comparator cohort before propensity score adjustment."/>
@@ -910,7 +994,9 @@
     </table>
     <table name="plp_cohorts" comments="PatientLevelPredictionModule: Cohort identifier reference">
       <column name="cohort_id" comments="a unique identifier for the cohort in the plp results database"/>
-      <column name="cohort_definition_id" comments="the identifier in ATLAS for the cohort"/>
+      <column name="cohort_definition_id" comments="the identifier in ATLAS for the cohort">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
       <column name="cohort_name" comments="the name of the cohort"/>
     </table>
     <table name="plp_cohort_definition" comments="PatientLevelPredictionModule: Cohort definitions">
@@ -980,8 +1066,12 @@
     </table>
     <table name="plp_model_designs" comments="PatientLevelPredictionModule: Model designs">
       <column name="model_design_id" comments="a unique identifier for the model design settings"/>
-      <column name="target_id" comments="the  identifier for the target cohort id"/>
-      <column name="outcome_id" comments="the  identifier for the outcome cohort id"/>
+      <column name="target_id" comments="the  identifier for the target cohort id">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="outcome_id" comments="the  identifier for the outcome cohort id">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
       <column name="tar_id" comments="the  identifier for the time at risk setting"/>
       <column name="plp_data_setting_id" comments="the  identifier for the plp data setting"/>
       <column name="population_setting_id" comments="the  identifier for the population setting"/>
@@ -993,9 +1083,15 @@
       <column name="tidy_covariates_setting_id" comments="the  identifier for the tidy covariate setting"/>
     </table>
     <table name="plp_diagnostics" comments="PatientLevelPredictionModule: Diagnostics">
-      <column name="diagnostic_id" comments="the unique identifier for the diagnostic results"/>
-      <column name="model_design_id" comments="the identifier for the model design"/>
-      <column name="database_id" comments="the identifier for the database"/>
+      <column name="diagnostic_id" comments="the unique identifier for the diagnostic results">
+        <foreignKey table="plp_diagnostic_summary" column="diagnostic_id"/>
+      </column>
+      <column name="model_design_id" comments="the identifier for the model design">
+        <foreignKey table="plp_model_designs" column="model_design_id"/>
+      </column>
+      <column name="database_id" comments="the identifier for the database">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
       <column name="execution_date_time" comments="the date/time the diagnostic was run"/>
     </table>
     <table name="plp_diagnostic_summary" comments="PatientLevelPredictionModule: Diagnostic summary">
@@ -1053,10 +1149,18 @@
     <table name="plp_performances" comments="PatientLevelPredictionModule: Model performance">
       <column name="performance_id" comments="A unique identifier for the performance"/>
       <column name="model_design_id" comments="The corresponding model design id for development"/>
-      <column name="development_database_id" comments="The corresponding development database is"/>
-      <column name="validation_database_id" comments="The corresponding validation database is"/>
-      <column name="target_id" comments="The corresponding validation target cohort id"/>
-      <column name="outcome_id" comments="The corresponding validation outcome cohort id"/>
+      <column name="development_database_id" comments="The corresponding development database is">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
+      <column name="validation_database_id" comments="The corresponding validation database is">
+        <foreignKey table="database_meta_data" column="database_id"/>
+      </column>
+      <column name="target_id" comments="The corresponding validation target cohort id">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
+      <column name="outcome_id" comments="The corresponding validation outcome cohort id">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
       <column name="tar_id" comments="The corresponding validation time at risk id"/>
       <column name="plp_data_setting_id" comments="The corresponding validation data settings id"/>
       <column name="population_setting_id" comments="The corresponding validation population settings id"/>
@@ -1196,9 +1300,14 @@
       <column name="database_id" comments="Foreign key referencing the database."/>
     </table>
     <table name="sccs_exposures_outcome_set" comments="SelfControlledCaseSeriesModule: Exposure outcome set reference">
-      <column name="exposures_outcome_set_id" comments="A unique identifier for a set of exposures and an outcome."/>
+      <column name="exposures_outcome_set_id" comments="A unique identifier for a set of exposures and an outcome.">
+        <foreignKey table="sccs_covariate" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_exposure" column="exposures_outcome_set_id"/>
+      </column>
       <column name="outcome_id" comments="A cohort ID."/>
-      <column name="nesting_cohort_id" comments="A cohort ID."/>
+      <column name="nesting_cohort_id" comments="A cohort ID.">
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+      </column>
     </table>
     <table name="sccs_exposure" comments="SelfControlledCaseSeriesModule: Exposure reference">
       <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
@@ -1207,7 +1316,9 @@
     </table>
     <table name="sccs_spline" comments="SelfControlledCaseSeriesModule: Season, age, and calendar time splines">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="spline_type" comments="Either 'age', 'season', or 'calendar time'."/>
       <column name="knot_month" comments="Location of the knot. For age, the month since birth. For season, the month of the year. For calendar time, the month since 1-1-1970."/>
@@ -1222,9 +1333,22 @@
       <column name="model_type" comments="The type of censor model. Can be 'Weibull-Age'. 'Weibull-Interval', 'Gamma-Age', or 'Gamma-Interval'."/>
     </table>
     <table name="sccs_result" comments="SelfControlledCaseSeriesModule: Results">
-      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
-      <column name="covariate_id" comments="A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest."/>
+      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table.">
+        <foreignKey table="sccs_diagnostics_summary" column="analysis_id"/>
+        <foreignKey table="sccs_covariate" column="analysis_id"/>
+        <foreignKey table="sccs_analysis" column="analysis_id"/>
+      </column>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposure" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_covariate" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_diagnostics_summary" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
+      <column name="covariate_id" comments="A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest.">
+        <foreignKey table="sccs_covariate" column="covariate_id"/>
+        <foreignKey table="sccs_diagnostics_summary" column="covariate_id"/>
+      </column>
       <column name="rr" comments="The estimated relative risk (i.e. the incidence rate ratio)."/>
       <column name="ci_95_lb" comments="The lower bound of the 95% confidence interval of the relative risk."/>
       <column name="ci_95_ub" comments="The upper bound of the 95% confidence interval of the relative risk."/>
@@ -1248,13 +1372,29 @@
       <column name="calibrated_one_sided_p" comments="The calibrated one-sided p-value considering the null hypothesis of IRR &lt;= 1."/>
       <column name="calibrated_log_rr" comments="The log of the calibrated relative risk."/>
       <column name="calibrated_se_log_rr" comments="The standard error of the log of the calibrated relative risk."/>
-      <column name="database_id" comments="Foreign key referencing the database."/>
+      <column name="database_id" comments="Foreign key referencing the database.">
+        <foreignKey table="sccs_covariate" column="database_id"/>
+        <foreignKey table="database_meta_data" column="database_id"/>
+        <foreignKey table="sccs_diagnostics_summary" column="database_id"/>
+      </column>
     </table>
     <table name="sccs_covariate_result" comments="SelfControlledCaseSeriesModule: Covariate results">
-      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
-      <column name="database_id" comments="Foreign key referencing the database."/>
-      <column name="covariate_id" comments="The identifier for the covariate."/>
+      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table.">
+        <foreignKey table="sccs_covariate" column="analysis_id"/>
+        <foreignKey table="sccs_era" column="analysis_id"/>
+      </column>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_covariate" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_era" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
+      <column name="database_id" comments="Foreign key referencing the database.">
+        <foreignKey table="sccs_covariate" column="database_id"/>
+        <foreignKey table="sccs_era" column="database_id"/>
+      </column>
+      <column name="covariate_id" comments="The identifier for the covariate.">
+        <foreignKey table="sccs_covariate" column="covariate_id"/>
+      </column>
       <column name="rr" comments="The estimated relative risk (i.e. the incidence rate ratio)."/>
       <column name="ci_95_lb" comments="The lower bound of the 95% confidence interval of the relative risk."/>
       <column name="ci_95_ub" comments="The upper bound of the 95% confidence interval of the relative risk."/>
@@ -1263,7 +1403,9 @@
       <column name="sequence_number" comments="The place in the sequence of steps defining the final analysis cohort. 1 indicates the original exposed population without any inclusion criteria."/>
       <column name="description" comments="A description of the last restriction, e.g. &quot;Removing persons with the outcome prior&quot;."/>
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
       <column name="covariate_id" comments="A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest."/>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="outcome_subjects" comments="The number of subjects with at least one outcome."/>
@@ -1281,7 +1423,9 @@
     </table>
     <table name="sccs_time_trend" comments="SelfControlledCaseSeriesModule: Time trend diagnostic">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="calendar_year" comments="The calendar year (e.g. 2022)."/>
       <column name="calendar_month" comments="The calendar month (e.g. 1 for January)."/>
@@ -1291,7 +1435,9 @@
     </table>
     <table name="sccs_time_to_event" comments="SelfControlledCaseSeriesModule: Time-to-event diagnostic">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="era_id" comments="A foreign key referencing the sccs_era table. The identifier for the era of interest."/>
       <column name="week" comments="The number of the week relative to exposure. Week 0 starts on the day of exposure initiation."/>
@@ -1300,14 +1446,18 @@
     </table>
     <table name="sccs_age_spanning" comments="SelfControlledCaseSeriesModule: Age spanning diagnostic">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="age_month" comments="Age in months since birth."/>
       <column name="cover_before_after_subjects" comments="Number of subjects whose observation period covers this month as well as the one before and after."/>
     </table>
     <table name="sccs_calendar_time_spanning" comments="SelfControlledCaseSeriesModule: Calendar time spanning diagnostic">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="calendar_year" comments="Calendar year (e.g. 2022)"/>
       <column name="calendar_month" comments="Calendar month (e.g. 1 is January)."/>
@@ -1315,17 +1465,31 @@
     </table>
     <table name="sccs_event_dep_observation" comments="SelfControlledCaseSeriesModule: Event-dependent observation diagnostic">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="months_to_end" comments="Number of months until observation end."/>
       <column name="censored" comments="Whether the observation is censored (meaning, not equal to the end of database time). (1 = censored, 0 = not censored)."/>
       <column name="outcomes" comments="Number of outcomes observed during the month."/>
     </table>
     <table name="sccs_diagnostics_summary" comments="SelfControlledCaseSeriesModule: Diagnostic summary">
-      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
-      <column name="covariate_id" comments="The identifier for the covariate of interest."/>
-      <column name="database_id" comments="Foreign key referencing the database."/>
+      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table.">
+        <foreignKey table="sccs_analysis" column="analysis_id"/>
+        <foreignKey table="sccs_covariate" column="analysis_id"/>
+      </column>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_covariate" column="exposures_outcome_set_id"/>
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
+      <column name="covariate_id" comments="The identifier for the covariate of interest.">
+        <foreignKey table="sccs_covariate" column="covariate_id"/>
+      </column>
+      <column name="database_id" comments="Foreign key referencing the database.">
+        <foreignKey table="database_meta_data" column="database_id"/>
+        <foreignKey table="sccs_covariate" column="database_id"/>
+      </column>
       <column name="mdrr" comments="The minimum detectable relative risk."/>
       <column name="ease" comments="The expected absolute systematic error."/>
       <column name="time_trend_p" comments="The p for whether the mean monthly ratio between observed and expected is no greater than 1.25."/>

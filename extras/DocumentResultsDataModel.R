@@ -110,7 +110,12 @@ schemaMeta <- xml_new_root("schemaMeta",
                            "xsi:noNamespaceSchemaLocation" = "http://schemaspy.org/xsd/6/schemameta.xsd")
 
 # Add comments node
-xml_add_child(schemaMeta, "comments", "This is where we'll describe the Strategus results data model.")
+xml_add_child(
+  schemaMeta,
+  "comments",
+  "The tables in the results data model are grouped using a unique prefix for
+  each Strategus module. For example, the CharacterizationModule results tables
+  all start with \"c_\".")
 
 # Create tables node
 tables <- xml_add_child(schemaMeta, "tables")
@@ -127,7 +132,7 @@ resultsTableRelationships <-CohortGenerator::readCsv(
 for (i in seq_along(uniqueTableNames)) {
   # Add table node with attributes
   currentTableName <- uniqueTableNames[i]
-  print(currentTableName)
+  #print(currentTableName)
   # Get the table description, if it exists
   currentTableDescriptionInfo <- tableDescriptions %>%
     filter(.data$tableName == currentTableName)
@@ -144,14 +149,14 @@ for (i in seq_along(uniqueTableNames)) {
   for (j in 1:nrow(columnsForCurrentTable)) {
     curColumnName <- columnsForCurrentTable$columnName[j]
     description <- columnsForCurrentTable$description[j]
-    print(paste0("  -- ", curColumnName))
+    #print(paste0("  -- ", curColumnName))
     # Add column node with attributes
     columnNode <- xml_add_child(table, "column", name = curColumnName, comments = description)
     # Determine if this table + column has a FK relationship to any other tables
     curColumnFk <- resultsTableRelationships %>%
       filter(.data$tableName == currentTableName & .data$columnName == curColumnName)
     if (nrow(curColumnFk) > 0) {
-      print(paste0("-- FK FOUND FOR: ", currentTableName, ".", curColumnName))
+      #print(paste0("-- FK FOUND FOR: ", currentTableName, ".", curColumnName))
       for (k in 1:nrow(curColumnFk)) {
         fkTable <- curColumnFk$fkTableName[k]
         fkColumn <- curColumnFk$fkColumnName[k]
