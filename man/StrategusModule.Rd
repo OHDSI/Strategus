@@ -32,6 +32,7 @@ specification.}
 \item \href{#method-StrategusModule-new}{\code{StrategusModule$new()}}
 \item \href{#method-StrategusModule-execute}{\code{StrategusModule$execute()}}
 \item \href{#method-StrategusModule-createResultsDataModel}{\code{StrategusModule$createResultsDataModel()}}
+\item \href{#method-StrategusModule-getResultsDataModelSpecification}{\code{StrategusModule$getResultsDataModelSpecification()}}
 \item \href{#method-StrategusModule-uploadResults}{\code{StrategusModule$uploadResults()}}
 \item \href{#method-StrategusModule-createModuleSpecifications}{\code{StrategusModule$createModuleSpecifications()}}
 \item \href{#method-StrategusModule-createSharedResourcesSpecifications}{\code{StrategusModule$createSharedResourcesSpecifications()}}
@@ -106,6 +107,27 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StrategusModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{StrategusModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }

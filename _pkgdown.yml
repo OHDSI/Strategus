@@ -1,15 +1,16 @@
+url: https://ohdsi.github.io/Strategus/
 template:
   params:
     bootswatch: cosmo
-
 home:
   links:
   - text: Ask a question
     href: http://forums.ohdsi.org
-
 navbar:
   structure:
-    right: [hades, github]
+    right:
+    - hades
+    - github
   components:
     hades:
       text: hadesLogo

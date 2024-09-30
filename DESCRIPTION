@@ -12,7 +12,7 @@ Authors@R: c(
 Maintainer: Anthony Sena <sena@ohdsi.org>
 Description: An R package for coordinating and executing analytics using HADES modules.
 License: Apache License 2.0
-URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
+URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus, https://ohdsi.github.io/Strategus/
 BugReports: https://github.com/OHDSI/Strategus/issues
 Depends:
 	R (>= 4.2.0),

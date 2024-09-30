@@ -72,6 +72,18 @@ EvidenceSynthesisModule <- R6::R6Class(
       sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
       DatabaseConnector::executeSql(connection, sql)
     },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation(),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
+    },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications

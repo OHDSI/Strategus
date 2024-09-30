@@ -47,9 +47,9 @@ CohortMethodModule <- R6::R6Class(
       # TODO: Removing this to make the upload easier
       #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
-      resultsDataModel <- CohortGenerator::readCsv(file = system.file("csv", "resultsDataModelSpecification.csv", package = "CohortMethod"))
+      resultsDataModelSpecification <- self$getResultsDataModelSpecification()
       CohortGenerator::writeCsv(
-        x = resultsDataModel,
+        x = resultsDataModelSpecification,
         file = file.path(exportFolder, "resultsDataModelSpecification.csv"),
         warnOnFileNameCaseMismatch = FALSE
       )
@@ -66,6 +66,21 @@ CohortMethodModule <- R6::R6Class(
         databaseSchema = resultsDatabaseSchema,
         tablePrefix = tablePrefix
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file(
+          file.path("csv", "resultsDataModelSpecification.csv"),
+          package = "CohortMethod"
+        ),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails

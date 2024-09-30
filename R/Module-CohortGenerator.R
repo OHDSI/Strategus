@@ -67,6 +67,21 @@ CohortGeneratorModule <- R6::R6Class(
         tablePrefix = tablePrefix
       )
     },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file(
+          file.path("csv", "resultsDataModelSpecification.csv"),
+          package = "CohortGenerator"
+        ),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
+    },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
