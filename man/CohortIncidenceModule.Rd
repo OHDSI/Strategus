@@ -22,6 +22,7 @@ Computes incidence rates for cohorts against the OMOP CDM
 \item \href{#method-CohortIncidenceModule-new}{\code{CohortIncidenceModule$new()}}
 \item \href{#method-CohortIncidenceModule-execute}{\code{CohortIncidenceModule$execute()}}
 \item \href{#method-CohortIncidenceModule-createResultsDataModel}{\code{CohortIncidenceModule$createResultsDataModel()}}
+\item \href{#method-CohortIncidenceModule-getResultsDataModelSpecification}{\code{CohortIncidenceModule$getResultsDataModelSpecification()}}
 \item \href{#method-CohortIncidenceModule-uploadResults}{\code{CohortIncidenceModule$uploadResults()}}
 \item \href{#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}}
 \item \href{#method-CohortIncidenceModule-validateModuleSpecifications}{\code{CohortIncidenceModule$validateModuleSpecifications()}}
@@ -102,6 +103,27 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortIncidenceModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortIncidenceModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }
