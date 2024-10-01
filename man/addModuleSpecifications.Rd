@@ -2,7 +2,7 @@
 % Please edit documentation in R/Settings.R
 \name{addModuleSpecifications}
 \alias{addModuleSpecifications}
-\title{Add module specifications to analysis specifications}
+\title{Add generic module specifications to analysis specifications}
 \usage{
 addModuleSpecifications(analysisSpecifications, moduleSpecifications)
 }
@@ -16,5 +16,5 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Returns the \code{analysisSpecifications} object with the module specifications added.
 }
 \description{
-Add module specifications to analysis specifications
+Add generic module specifications to analysis specifications
 }

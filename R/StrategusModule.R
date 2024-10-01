@@ -4,6 +4,8 @@
 #' @description
 #' This is an internal class used by the StrategusModule (and child classes)
 #' execute function
+#' @noRd
+#' @keywords internal
 JobContext <- R6::R6Class(
   classname = "JobContext",
   public = list(
@@ -19,10 +21,10 @@ JobContext <- R6::R6Class(
 )
 
 # StrategusModule -------------
-#' @title StrategusModule defines the base class for each HADES Strategus module
+#' @title StrategusModule defines the base class for each Strategus HADES module
 #' @export
 #' @description
-#' Provides a base class for HADES Strategus modules to inherit
+#' Provides a base class for Strategus HADES modules to inherit
 StrategusModule <- R6::R6Class(
   classname = "StrategusModule",
   public = list(

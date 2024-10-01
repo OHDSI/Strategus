@@ -2,9 +2,7 @@
 % Please edit documentation in R/Module-EvidenceSynthesis.R
 \name{EvidenceSynthesisModule}
 \alias{EvidenceSynthesisModule}
-\title{Module for for combining causal effect estimates and study diagnostics
-across multiple data sites in a distributed study. This includes functions
-for performing meta-analysis and forest plots}
+\title{Meta-analysis with the \href{https://ohdsi.github.io/EvidenceSynthesis/}{HADES EvidenceSynthesis Package}}
 \description{
 Module for for combining causal effect estimates and study diagnostics
 across multiple data sites in a distributed study. This includes functions

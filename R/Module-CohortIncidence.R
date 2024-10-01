@@ -1,8 +1,8 @@
 # CohortIncidenceModule -------------
-#' @title Module for computing incidence rates for cohorts against an OMOP CDM
+#' @title Compute incidence with the \href{https://ohdsi.github.io/CohortIncidence/}{HADES CohortIncidence Package}
 #' @export
 #' @description
-#' Computes incidence rates for cohorts against the OMOP CDM
+#' Computes incidence rates for cohorts against the OMOP Common Data Model
 CohortIncidenceModule <- R6::R6Class(
   classname = "CohortIncidenceModule",
   inherit = StrategusModule,

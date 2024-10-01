@@ -1,16 +1,91 @@
 url: https://ohdsi.github.io/Strategus/
+
 template:
-  params:
+  bootstrap: 5
+  bslib:
     bootswatch: cosmo
+
 home:
   links:
   - text: Ask a question
     href: http://forums.ohdsi.org
+
+reference:
+  - title: "Create analysis specifications"
+    desc: >
+      Functions for creating the analysis specification to execute. An analysis
+      specification includes one or more Strategus HADES module settings which
+      are added to the analysis specification.
+    contents:
+      - addCharacterizationModuleSpecifications
+      - addCohortDiagnosticsModuleSpecifications
+      - addCohortGeneratorModuleSpecifications
+      - addCohortIncidenceModuleSpecifications
+      - addCohortMethodeModuleSpecifications
+      - addEvidenceSynthesisModuleSpecifications
+      - addModuleSpecifications
+      - addPatientLevelPredictionModuleSpecifications
+      - addSelfControlledCaseSeriesModuleSpecifications
+      - addSharedResources
+      - createEmptyAnalysisSpecificiations
+
+  - title: "Executing a study"
+    desc: >
+      These functions are used to create the settings necessary to execute
+      a study as defined by the contents of the analysis specification.
+    contents:
+      - execute
+      - createCdmExecutionSettings
+      - createResultsExecutionSettings
+      - getCdmDatabaseMetaData
+
+  - title: "OMOP CDM HADES Modules"
+    desc: >
+      These modules are designed to run against your OMOP CDM to carry
+      out their analyses.
+    contents:
+      - CharacterizationModule
+      - CohortDiagnosticsModule
+      - CohortGeneratorModule
+      - CohortIncidenceModule
+      - CohortMethodModule
+      - PatientLevelPredictionModule
+      - SelfControlledCaseSeriesModule
+
+  - title: "Results HADES Modules"
+    desc: >
+      These modules are designed to run against results that are produced
+      by one or more OMOP CDM HADES Modules. Results will be stored in
+      a PostgreSQL database.
+    contents:
+      - EvidenceSynthesisModule
+
+  - title: "Results Data Model Creation & Upload"
+    desc: >
+      These functions are used to create the PostgreSQL results data model
+      tables and to upload results produced by the HADES Strategus modules.
+    contents:
+      - createResultDataModel
+      - createResultsDataModelSettings
+      - uploadResults
+
+  - title: "Sharing results"
+    desc: >
+      These functions are used to prepare results to share with a
+      network study coordinator
+    contents:
+      - zipResults
+
+  - title: "R6 Strategus Module Classes"
+    desc: >
+      These R6 classes are used to define the structure of a HADES module
+    contents:
+      - StrategusModule
+
 navbar:
+  bg: dark
   structure:
-    right:
-    - hades
-    - github
+    right: [hades, github]
   components:
     hades:
       text: hadesLogo

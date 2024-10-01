@@ -21,7 +21,7 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-#' Add shared resources to analysis specifications
+#' Add shared resources (i.e. cohorts) to analysis specifications
 #'
 #' @template analysisSpecifications
 #' @param sharedResources   An object of type `SharedResources`.
@@ -40,7 +40,7 @@ addSharedResources <- function(analysisSpecifications, sharedResources) {
   return(analysisSpecifications)
 }
 
-#' Add module specifications to analysis specifications
+#' Add generic module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
 #' @template moduleSpecifications
@@ -62,7 +62,7 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' Add Characterization module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CharacterizationModule`.
+#' @param moduleSpecifications   Created by the \href{../../docs/reference/CharacterizationModule.html#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -81,7 +81,7 @@ addCharacterizationModuleSpecifications <- function(analysisSpecifications, modu
 #' Add Cohort Diagnostics module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortDiagnosticsModule`.
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortDiagnosticsModule.html#method-CohortDiagnosticsModule-createModuleSpecifications}{\code{CohortDiagnosticsModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -100,7 +100,7 @@ addCohortDiagnosticsModuleSpecifications <- function(analysisSpecifications, mod
 #' Add Cohort Generator module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortGeneratorModule`.
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortGeneratorModule.html#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -119,7 +119,7 @@ addCohortGeneratorModuleSpecifications <- function(analysisSpecifications, modul
 #' Add Cohort Incidence module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortIncidenceModule`.
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortIncidenceModule.html#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -138,7 +138,7 @@ addCohortIncidenceModuleSpecifications <- function(analysisSpecifications, modul
 #' Add Cohort Method module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortMethodModule`.
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortMethodModule.html#method-CohortMethodModule-createModuleSpecifications}{\code{CohortMethodModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -157,7 +157,7 @@ addCohortMethodeModuleSpecifications <- function(analysisSpecifications, moduleS
 #' Add Evidence Synthesis module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `EvidenceSynthesisModule`.
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/EvidenceSynthesisModule.html#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -176,7 +176,7 @@ addEvidenceSynthesisModuleSpecifications <- function(analysisSpecifications, mod
 #' Add Patient Level Prediction module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `PatientLevelPredictionModule`.
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/PatientLevelPredictionModule.html#method-PatientLevelPredictionModule-createModuleSpecifications}{\code{PatientLevelPredictionModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -195,7 +195,7 @@ addPatientLevelPredictionModuleSpecifications <- function(analysisSpecifications
 #' Add Self Controlled Case Series Module module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `SelfControlledCaseSeriesModule`.
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/SelfControlledCaseSeriesModule.html#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.

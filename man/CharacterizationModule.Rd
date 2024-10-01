@@ -2,10 +2,10 @@
 % Please edit documentation in R/Module-Characterization.R
 \name{CharacterizationModule}
 \alias{CharacterizationModule}
-\title{Module for generating cohort characterization information}
+\title{Characterize cohorts with the \href{https://ohdsi.github.io/Characterization/}{HADES Characterization Package}}
 \description{
-Computes cohort characterization information against the OMOP CDM
-package version 2.0.1
+Computes cohort characterization information against
+the OMOP Common Data Model
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CharacterizationModule}

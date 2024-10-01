@@ -30,6 +30,7 @@ OhdsiRTools::checkUsagePackage("Strategus")
 OhdsiRTools::updateCopyrightYearFolder()
 OhdsiRTools::findNonAsciiStringsInFolder()
 devtools::spell_check()
+devtools::document()
 
 # Create manual and vignettes:
 unlink("extras/Strategus.pdf")

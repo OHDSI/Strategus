@@ -13,6 +13,7 @@ Useful links:
 \itemize{
   \item \url{https://ohdsi.github.io/Strategus}
   \item \url{https://github.com/OHDSI/Strategus}
+  \item \url{https://ohdsi.github.io/Strategus/}
   \item Report bugs at \url{https://github.com/OHDSI/Strategus/issues}
 }
 

@@ -13,7 +13,7 @@ addPatientLevelPredictionModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{An object of type \code{PatientLevelPredictionModule}.}
+\item{moduleSpecifications}{Created by the \href{../../docs/reference/PatientLevelPredictionModule.html#method-PatientLevelPredictionModule-createModuleSpecifications}{\code{PatientLevelPredictionModule$createModuleSpecifications()}} function.}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added.

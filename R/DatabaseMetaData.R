@@ -31,7 +31,8 @@
 #' may be needed to purge old results for a given database identifier.
 #'
 #' @template resultsFolder
-#' @export
+#' @noRd
+#' @keywords internal
 getDatabaseIdentifierFilePath <- function(resultsFolder) {
   return(file.path(.getDatabaseMetaDataResultsFolder(resultsFolder), "database_meta_data.csv"))
 }

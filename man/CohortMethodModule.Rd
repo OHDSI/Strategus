@@ -2,10 +2,10 @@
 % Please edit documentation in R/Module-CohortMethod.R
 \name{CohortMethodModule}
 \alias{CohortMethodModule}
-\title{Module for performing new-user cohort studies}
+\title{New-user cohort studies with the \href{https://ohdsi.github.io/CohortMethod/}{HADES CohortMethod Package}}
 \description{
-Module for performing new-user cohort studies in an observational
-database in the OMOP Common Data Model.
+Module for performing new-user cohort studies against
+the OMOP Common Data Model
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortMethodModule}

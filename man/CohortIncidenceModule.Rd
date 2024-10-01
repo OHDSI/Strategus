@@ -2,9 +2,9 @@
 % Please edit documentation in R/Module-CohortIncidence.R
 \name{CohortIncidenceModule}
 \alias{CohortIncidenceModule}
-\title{Module for computing incidence rates for cohorts against an OMOP CDM}
+\title{Compute incidence with the \href{https://ohdsi.github.io/CohortIncidence/}{HADES CohortIncidence Package}}
 \description{
-Computes incidence rates for cohorts against the OMOP CDM
+Computes incidence rates for cohorts against the OMOP Common Data Model
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortIncidenceModule}

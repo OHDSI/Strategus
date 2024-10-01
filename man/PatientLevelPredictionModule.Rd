@@ -2,7 +2,7 @@
 % Please edit documentation in R/Module-PatientLevelPrediction.R
 \name{PatientLevelPredictionModule}
 \alias{PatientLevelPredictionModule}
-\title{Module for performing patient-level prediction studies}
+\title{Patient-level prediction with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}}
 \description{
 Module for performing patient-level prediction in an observational
 database in the OMOP Common Data Model.

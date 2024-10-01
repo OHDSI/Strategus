@@ -1,5 +1,5 @@
 # PatientLevelPredictionModule -------------
-#' @title Module for performing patient-level prediction studies
+#' @title Patient-level prediction with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}
 #' @export
 #' @description
 #' Module for performing patient-level prediction in an observational
