@@ -178,7 +178,7 @@ Creates the PatientLevelprediction Module Specifications
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{modelDesignList}}{description}
+\item{\code{modelDesignList}}{A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}}
 }
 \if{html}{\out{</div>}}
 }

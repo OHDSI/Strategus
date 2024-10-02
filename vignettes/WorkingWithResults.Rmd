@@ -1,0 +1,19 @@
+---
+title: "Working With Results"
+author: "Anthony G. Sena"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Working With Results}
+  %\VignetteEncoding{UTF-8} 
+always_allow_html: true
+---
+
+TODO

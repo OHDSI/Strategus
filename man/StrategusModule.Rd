@@ -2,9 +2,12 @@
 % Please edit documentation in R/StrategusModule.R
 \name{StrategusModule}
 \alias{StrategusModule}
-\title{StrategusModule defines the base class for each Strategus HADES module}
+\title{StrategusModule defines the base class for each HADES module}
 \description{
-Provides a base class for Strategus HADES modules to inherit
+StrategusModule serves as an internal base class that defines the core
+functions and structure to be inherited and implemented by any specific
+HADES module. It provides a standardized framework for creating modular
+components within the Strategus pipeline.
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}

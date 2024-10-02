@@ -21,10 +21,13 @@ JobContext <- R6::R6Class(
 )
 
 # StrategusModule -------------
-#' @title StrategusModule defines the base class for each Strategus HADES module
+#' @title StrategusModule defines the base class for each HADES module
 #' @export
 #' @description
-#' Provides a base class for Strategus HADES modules to inherit
+#' StrategusModule serves as an internal base class that defines the core
+#' functions and structure to be inherited and implemented by any specific
+#' HADES module. It provides a standardized framework for creating modular
+#' components within the Strategus pipeline.
 StrategusModule <- R6::R6Class(
   classname = "StrategusModule",
   public = list(

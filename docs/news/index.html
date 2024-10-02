@@ -18,7 +18,10 @@
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a></li>
+    <li><a class="dropdown-item" href="../articles/ExecuteStrategus.html">Execute Strategus</a></li>
+    <li><a class="dropdown-item" href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a></li>
+    <li><a class="dropdown-item" href="../articles/WorkingWithResults.html">UNKNOWN TITLE</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><a class="external-link nav-link" href="https://ohdsi.github.io/Hades">hadesLogo</a></li>
@@ -48,9 +51,8 @@
 <li>Moves the <code>incremental</code> setting to the execution settings vs. the module settings (<a href="https://github.com/OHDSI/Strategus/issues/155" class="external-link">#155</a>)</li>
 <li>Adds threading options via execution settings (<a href="https://github.com/OHDSI/Strategus/issues/151" class="external-link">#151</a>)</li>
 <li>Select subset of modules to execute from analysis specification (<a href="https://github.com/OHDSI/Strategus/issues/169" class="external-link">#169</a>)</li>
-<li>Ensure release of Strategus has Python dependencies (<a href="https://github.com/OHDSI/Strategus/issues/22" class="external-link">#22</a>) and OHDSI Shiny App dependencies (<a href="https://github.com/OHDSI/Strategus/issues/78" class="external-link">#78</a>). Note that this will be handled in the new <a href="https://github.com/ohdsi-studies/StrategusStudyRepoTemplate" class="external-link">StrategusStudyRepoTemplate</a>
-</li>
-<li>Document the results data model for HADES modules</li>
+<li>Ensure release of Strategus has Python dependencies (<a href="https://github.com/OHDSI/Strategus/issues/22" class="external-link">#22</a>) and OHDSI Shiny App dependencies (<a href="https://github.com/OHDSI/Strategus/issues/78" class="external-link">#78</a>). See <a href="https://github.com/ohdsi-studies/StrategusStudyRepoTemplate" class="external-link">StrategusStudyRepoTemplate</a> for more details.</li>
+<li>Document the results data model for HADES modules (<a href="https://github.com/OHDSI/Strategus/issues/143" class="external-link">#143</a>)</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-1-0-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-0"></a></h3>
@@ -117,7 +119,7 @@
 <ul><li>Breaking change: removed function <code>createExecutionSettings()</code> and replaced with 2 new functions: <code><a href="../reference/createCdmExecutionSettings.html">createCdmExecutionSettings()</a></code> and <code><a href="../reference/createResultsExecutionSettings.html">createResultsExecutionSettings()</a></code>. (<a href="https://github.com/OHDSI/Strategus/issues/19" class="external-link">#19</a>)</li>
 <li>Added Vignettes (<a href="https://github.com/OHDSI/Strategus/issues/23" class="external-link">#23</a>)</li>
 <li>Provide better support for <code>keyring</code> to handle named/locked keyrings (<a href="https://github.com/OHDSI/Strategus/issues/24" class="external-link">#24</a>)</li>
-<li>Add function to list Strategus modules (<a href="https://github.com/OHDSI/Strategus/issues/30" class="external-link">#30</a>)</li>
+<li>Add function to list HADES modules (<a href="https://github.com/OHDSI/Strategus/issues/30" class="external-link">#30</a>)</li>
 <li>Fixes from testing (<a href="https://github.com/OHDSI/Strategus/issues/36" class="external-link">#36</a>)</li>
 <li>Enforce module structure for proper use with renv (<a href="https://github.com/OHDSI/Strategus/issues/37" class="external-link">#37</a>)</li>
 <li>Support CDM 5.4 source table format (<a href="https://github.com/OHDSI/Strategus/issues/41" class="external-link">#41</a>)</li>

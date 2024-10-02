@@ -1,6 +1,6 @@
 Package: Strategus
 Type: Package
-Title: Coordinating and Executing Analytics Using HADES Modules
+Title: Coordinate and Execute OHDSI HADES Modules
 Version: 1.0.0
 Date: 2024-10-01
 Authors@R: c(
@@ -10,10 +10,9 @@ Authors@R: c(
 	person("Observational Health Data Science and Informatics", role = c("cph"))
   )
 Maintainer: Anthony Sena <sena@ohdsi.org>
-Description: An R package for coordinating and executing analytics using HADES modules.
-License: Apache License 2.0
-URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus, https://ohdsi.github.io/Strategus/
-BugReports: https://github.com/OHDSI/Strategus/issues
+Description: Coordinate and execute large scale analytics using OHDSI Health
+  Analytics Data-to-Evidence Suite (HADES) (<https://ohdsi.github.io/Hades/>) 
+  modules.
 Depends:
 	R (>= 4.2.0),
 	CohortGenerator (>= 0.11.0),
@@ -58,7 +57,10 @@ Remotes:
   ohdsi/PatientLevelPrediction,
   ohdsi/ResultModelManager,
   ohdsi/SelfControlledCaseSeries
+License: Apache License 2.0
 VignetteBuilder: knitr
+URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
+BugReports: https://github.com/OHDSI/Strategus/issues
 NeedsCompilation: no
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)

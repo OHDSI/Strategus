@@ -4,16 +4,15 @@
 \name{Strategus-package}
 \alias{Strategus}
 \alias{Strategus-package}
-\title{Strategus: Coordinating and Executing Analytics Using HADES Modules}
+\title{Strategus: Coordinate and Execute OHDSI HADES Modules}
 \description{
-An R package for coordinating and executing analytics using HADES modules.
+Coordinate and execute large scale analytics using OHDSI Health Analytics Data-to-Evidence Suite (HADES) (\url{https://ohdsi.github.io/Hades/}) modules.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://ohdsi.github.io/Strategus}
   \item \url{https://github.com/OHDSI/Strategus}
-  \item \url{https://ohdsi.github.io/Strategus/}
   \item Report bugs at \url{https://github.com/OHDSI/Strategus/issues}
 }
 

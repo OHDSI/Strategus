@@ -135,7 +135,7 @@ PatientLevelPredictionModule <- R6::R6Class(
       )
     },
     #' @description Creates the PatientLevelprediction Module Specifications
-    #' @param modelDesignList description
+    #' @param modelDesignList A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}
     createModuleSpecifications = function(modelDesignList) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {

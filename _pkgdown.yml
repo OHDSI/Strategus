@@ -39,7 +39,8 @@ reference:
       - createResultsExecutionSettings
       - getCdmDatabaseMetaData
 
-  - title: "OMOP CDM HADES Modules"
+  - title: "HADES Modules"
+  - subtitle: "OMOP CDM HADES Modules"
     desc: >
       These modules are designed to run against your OMOP CDM to carry
       out their analyses.
@@ -51,8 +52,7 @@ reference:
       - CohortMethodModule
       - PatientLevelPredictionModule
       - SelfControlledCaseSeriesModule
-
-  - title: "Results HADES Modules"
+  - subtitle: "Results HADES Modules"
     desc: >
       These modules are designed to run against results that are produced
       by one or more OMOP CDM HADES Modules. Results will be stored in
@@ -63,7 +63,7 @@ reference:
   - title: "Results Data Model Creation & Upload"
     desc: >
       These functions are used to create the PostgreSQL results data model
-      tables and to upload results produced by the HADES Strategus modules.
+      tables and to upload results produced by the HADES modules.
     contents:
       - createResultDataModel
       - createResultsDataModelSettings
@@ -76,9 +76,9 @@ reference:
     contents:
       - zipResults
 
-  - title: "R6 Strategus Module Classes"
+  - title: "Internal R6 Class"
     desc: >
-      These R6 classes are used to define the structure of a HADES module
+      This is a list of internal classes used by Strategus developers
     contents:
       - StrategusModule
 

@@ -44,13 +44,6 @@ rmarkdown::render("vignettes/CreatingAnalysisSpecification.Rmd",
                                           number_sections = TRUE))
 unlink("inst/doc/CreatingAnalysisSpecification.tex")
 
-rmarkdown::render("vignettes/CreatingModules.Rmd",
-                  output_file = "../inst/doc/CreatingModules.pdf",
-                  rmarkdown::pdf_document(latex_engine = "pdflatex",
-                                          toc = TRUE,
-                                          number_sections = TRUE))
-unlink("inst/doc/CreatingModules.tex")
-
 rmarkdown::render("vignettes/ExecuteStrategus.Rmd",
                   output_file = "../inst/doc/ExecuteStrategus.pdf",
                   rmarkdown::pdf_document(latex_engine = "pdflatex",

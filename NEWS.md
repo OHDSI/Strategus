@@ -12,9 +12,8 @@ Strategus 1.0.0
 - Moves the `incremental` setting to the execution settings vs. the module settings (#155)
 - Adds threading options via execution settings (#151)
 - Select subset of modules to execute from analysis specification (#169)
-- Ensure release of Strategus has Python dependencies (#22) and OHDSI Shiny App dependencies (#78). Note
-  that this will be handled in the new [StrategusStudyRepoTemplate](https://github.com/ohdsi-studies/StrategusStudyRepoTemplate)
-- Document the results data model for HADES modules
+- Ensure release of Strategus has Python dependencies (#22) and OHDSI Shiny App dependencies (#78). See [StrategusStudyRepoTemplate](https://github.com/ohdsi-studies/StrategusStudyRepoTemplate) for more details.
+- Document the results data model for HADES modules (#143)
 
 ## Bug Fixes
 - Make negative control outcome shared resource optional (#153)
@@ -82,7 +81,7 @@ Strategus 0.0.3
 - Breaking change: removed function `createExecutionSettings()` and replaced with 2 new functions: `createCdmExecutionSettings()` and `createResultsExecutionSettings()`. (#19)
 - Added Vignettes (#23)
 - Provide better support for `keyring` to handle named/locked keyrings (#24)
-- Add function to list Strategus modules (#30)
+- Add function to list HADES modules (#30)
 - Fixes from testing (#36)
 - Enforce module structure for proper use with renv (#37)
 - Support CDM 5.4 source table format (#41)
