@@ -91,6 +91,6 @@ execute(
 ```
 This will first instantiate all the modules if they haven't already been instantiated, and will then execute each module in sequence according to the analysis specifications. The results will appear in subfolders of the 'results_folder', as specified in the execution settings.
 
-```{r echo=FALSE}
+```{r eval=F, echo=FALSE}
 unlink(outputFolder, recursive = TRUE)
 ```

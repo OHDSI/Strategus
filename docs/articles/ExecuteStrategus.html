@@ -36,7 +36,7 @@
 <li><a class="dropdown-item" href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a></li>
     <li><a class="dropdown-item" href="../articles/ExecuteStrategus.html">Execute Strategus</a></li>
     <li><a class="dropdown-item" href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a></li>
-    <li><a class="dropdown-item" href="../articles/WorkingWithResults.html">UNKNOWN TITLE</a></li>
+    <li><a class="dropdown-item" href="../articles/WorkingWithResults.html">Working With Results</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -99,27 +99,16 @@ Eunomia. In your environment, the <code>connectionDetails</code> would
 be specific to your OMOP CDM. Please see the <a href="https://ohdsi.github.io/DatabaseConnector/articles/Connecting.html" class="external-link">DatabaseConnector</a>
 package documentation for more details.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Strategus">Strategus</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: CohortGenerator</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: DatabaseConnector</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: R6</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'Strategus'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:CohortGenerator':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     uploadResults</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/Eunomia" class="external-link">Eunomia</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Strategus">Strategus</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/Eunomia" class="external-link">Eunomia</a></span><span class="op">)</span></span>
 <span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Eunomia/man/getEunomiaConnectionDetails.html" class="external-link">getEunomiaConnectionDetails</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## attempting to download GiBleed</span></span></code></pre>
-<pre><code><span><span class="co">## attempting to extract and load: C:\Users\ADMIN_~3\AppData\Local\Temp\RtmpWyT6Sn/GiBleed_5.3.zip to: C:\Users\ADMIN_~3\AppData\Local\Temp\RtmpWyT6Sn/GiBleed_5.3.sqlite</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="creating-an-execution-settings-object">Creating an execution settings object<a class="anchor" aria-label="anchor" href="#creating-an-execution-settings-object"></a>
 </h3>
 <p>Next, we will use <code>Strategus</code> to create the CDM execution
 settings:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">outputFolder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"vignetteFolder"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">outputFolder</span><span class="op">)</span></span>
 <span><span class="va">executionSettings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCdmExecutionSettings.html">createCdmExecutionSettings</a></span><span class="op">(</span></span>
@@ -132,7 +121,7 @@ settings:</p>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Finally, we can write out the execution settings to the file system
 to capture this information.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ParallelLogger</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/ParallelLogger/reference/saveSettingsToJson.html" class="external-link">saveSettingsToJson</a></span><span class="op">(</span></span>
 <span>  object <span class="op">=</span> <span class="va">executionSettings</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outputFolder</span>, <span class="st">"eunomiaExecutionSettings.json"</span><span class="op">)</span></span>
@@ -147,7 +136,7 @@ to capture this information.</p>
 </h3>
 <p>For this study, we will use analysis specifications created
 elsewhere, and the execution settings we created earlier:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analysisSpecifications</span> <span class="op">&lt;-</span> <span class="fu">ParallelLogger</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/ParallelLogger/reference/loadSettingsFromJson.html" class="external-link">loadSettingsFromJson</a></span><span class="op">(</span></span>
 <span>  fileName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testdata/cdmModulesAnalysisSpecifications.json"</span>,</span>
 <span>    package <span class="op">=</span> <span class="st">"Strategus"</span></span>
@@ -158,7 +147,7 @@ elsewhere, and the execution settings we created earlier:</p>
 <span>  fileName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outputFolder</span>, <span class="st">"eunomiaExecutionSettings.json"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>And finally we execute the study:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/execute.html">execute</a></span><span class="op">(</span></span>
 <span>  connectionDetails <span class="op">=</span> <span class="va">connectionDetails</span>,</span>
 <span>  analysisSpecifications <span class="op">=</span> <span class="va">analysisSpecifications</span>,</span>
