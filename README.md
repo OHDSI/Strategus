@@ -12,6 +12,7 @@ Features
 ========
 - Design study analysis specifications
 - Execute study analysis specifications against the OMOP CDM
+- Upload and review study results
 
 Technology
 ============
@@ -36,8 +37,8 @@ User Documentation
 Documentation can be found on the [package website](https://ohdsi.github.io/Strategus).
 
 PDF versions of the documentation are also available:
-* Package manual: [Strategus.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/extras/Strategus.pdf)
-* Vignette: [Creating HADES Modules](https://github.com/OHDSI/Strategus/raw/main/inst/doc/CreatingModules.pdf)
+- Package manual: [Strategus.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/extras/Strategus.pdf)
+- Vignette: [Creating HADES Modules](https://github.com/OHDSI/Strategus/raw/main/inst/doc/CreatingModules.pdf)
 
 Support
 =======
