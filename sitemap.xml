@@ -1,6 +1,9 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://ohdsi.github.io/Strategus/404.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/articles/CreatingAnalysisSpecification.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/articles/ExecuteStrategus.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/articles/IntroductionToStrategus.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/articles/WorkingWithResults.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/articles/index.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/authors.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/index.html</loc></url>
@@ -11,7 +14,6 @@
 <url><loc>https://ohdsi.github.io/Strategus/reference/CohortIncidenceModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/CohortMethodModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/EvidenceSynthesisModule.html</loc></url>
-<url><loc>https://ohdsi.github.io/Strategus/reference/JobContext.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/PatientLevelPredictionModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/SelfControlledCaseSeriesModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/Strategus-package.html</loc></url>
@@ -33,7 +35,6 @@
 <url><loc>https://ohdsi.github.io/Strategus/reference/createResultsExecutionSettings.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/execute.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/getCdmDatabaseMetaData.html</loc></url>
-<url><loc>https://ohdsi.github.io/Strategus/reference/getDatabaseIdentifierFilePath.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/index.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/uploadResults.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/zipResults.html</loc></url>
