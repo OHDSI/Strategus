@@ -59,6 +59,8 @@ Strategus::createResultDataModel(
 
 **NOTE:**: The script above assumes you have set up the `study_results` schema before running this script. It also assumes that the `study_results` schema is empty. If you need to re-create the results data model for some reason, you will need to manually drop all of the tables and then you can re-use this script to create the tables.
 
+For more information on the tables and relationships in the results data model please see the [results data model documentation](https://ohdsi.github.io/Strategus/results-schema/index.html).
+
 ### Uploading results
 
 We will use the same inputs from the `createResultDataModel` to call the `uploadResults` function to upload the results to the results database.
