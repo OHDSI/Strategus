@@ -1,5 +1,5 @@
 # PatientLevelPredictionModule -------------
-#' @title Module for performing patient-level prediction studies
+#' @title Patient-level prediction with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}
 #' @export
 #' @description
 #' Module for performing patient-level prediction in an observational
@@ -135,7 +135,7 @@ PatientLevelPredictionModule <- R6::R6Class(
       )
     },
     #' @description Creates the PatientLevelprediction Module Specifications
-    #' @param modelDesignList description
+    #' @param modelDesignList A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}
     createModuleSpecifications = function(modelDesignList) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {

@@ -1,8 +1,8 @@
 # CohortGeneratorModule -------------
-#' @title Module for generating cohorts against an OMOP CDM
+#' @title Generate cohorts with the \href{https://ohdsi.github.io/CohortGenerator/}{HADES CohortGenerator Package}
 #' @export
 #' @description
-#' Generates cohorts against the OMOP CDM
+#' Generates cohorts against the OMOP Common Data Model
 CohortGeneratorModule <- R6::R6Class(
   classname = "CohortGeneratorModule",
   inherit = StrategusModule,

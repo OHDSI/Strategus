@@ -30,6 +30,7 @@ OhdsiRTools::checkUsagePackage("Strategus")
 OhdsiRTools::updateCopyrightYearFolder()
 OhdsiRTools::findNonAsciiStringsInFolder()
 devtools::spell_check()
+devtools::document()
 
 # Create manual and vignettes:
 unlink("extras/Strategus.pdf")
@@ -42,13 +43,6 @@ rmarkdown::render("vignettes/CreatingAnalysisSpecification.Rmd",
                                           toc = TRUE,
                                           number_sections = TRUE))
 unlink("inst/doc/CreatingAnalysisSpecification.tex")
-
-rmarkdown::render("vignettes/CreatingModules.Rmd",
-                  output_file = "../inst/doc/CreatingModules.pdf",
-                  rmarkdown::pdf_document(latex_engine = "pdflatex",
-                                          toc = TRUE,
-                                          number_sections = TRUE))
-unlink("inst/doc/CreatingModules.tex")
 
 rmarkdown::render("vignettes/ExecuteStrategus.Rmd",
                   output_file = "../inst/doc/ExecuteStrategus.pdf",

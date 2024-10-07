@@ -1,9 +1,9 @@
 # CohortMethodModule -------------
-#' @title Module for performing new-user cohort studies
+#' @title New-user cohort studies with the \href{https://ohdsi.github.io/CohortMethod/}{HADES CohortMethod Package}
 #' @export
 #' @description
-#' Module for performing new-user cohort studies in an observational
-#' database in the OMOP Common Data Model.
+#' Module for performing new-user cohort studies against
+#' the OMOP Common Data Model
 CohortMethodModule <- R6::R6Class(
   classname = "CohortMethodModule",
   inherit = StrategusModule,

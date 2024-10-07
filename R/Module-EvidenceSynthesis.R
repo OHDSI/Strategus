@@ -1,7 +1,5 @@
 # EvidenceSynthesisModule -------------
-#' @title Module for for combining causal effect estimates and study diagnostics
-#' across multiple data sites in a distributed study. This includes functions
-#' for performing meta-analysis and forest plots
+#' @title Meta-analysis with the \href{https://ohdsi.github.io/EvidenceSynthesis/}{HADES EvidenceSynthesis Package}
 #' @export
 #' @description
 #' Module for for combining causal effect estimates and study diagnostics

@@ -13,7 +13,7 @@ addEvidenceSynthesisModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{An object of type \code{EvidenceSynthesisModule}.}
+\item{moduleSpecifications}{Created by the \href{../../docs/reference/EvidenceSynthesisModule.html#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}} function.}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added.

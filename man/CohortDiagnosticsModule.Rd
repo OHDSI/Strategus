@@ -2,9 +2,9 @@
 % Please edit documentation in R/Module-CohortDiagnostics.R
 \name{CohortDiagnosticsModule}
 \alias{CohortDiagnosticsModule}
-\title{Module for the development and evaluation of phenotype algorithms}
+\title{Evaluate phenotypes with the \href{https://ohdsi.github.io/CohortDiagnostics/}{HADES CohortDiagnostics Package}}
 \description{
-Module for the development and evaluation of phenotype algorithms
+Development and evaluation of phenotype algorithms
 against the OMOP Common Data Model.
 }
 \section{Super class}{

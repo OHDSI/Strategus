@@ -2,7 +2,7 @@
 % Please edit documentation in R/Module-PatientLevelPrediction.R
 \name{PatientLevelPredictionModule}
 \alias{PatientLevelPredictionModule}
-\title{Module for performing patient-level prediction studies}
+\title{Patient-level prediction with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}}
 \description{
 Module for performing patient-level prediction in an observational
 database in the OMOP Common Data Model.
@@ -178,7 +178,7 @@ Creates the PatientLevelprediction Module Specifications
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{modelDesignList}}{description}
+\item{\code{modelDesignList}}{A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}}
 }
 \if{html}{\out{</div>}}
 }

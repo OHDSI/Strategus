@@ -1,10 +1,9 @@
 # SelfControlledCaseSeriesModule -------------
-#' @title Module for performing Self-Controlled Case Series (SCCS) analyses
-#' in an observational database in the OMOP Common Data Model.
+#' @title Self-Controlled Case Series design with the \href{https://ohdsi.github.io/SelfControlledCaseSeries/}{HADES SelfControlledCaseSeries Package}
 #' @export
 #' @description
 #' Module for performing Self-Controlled Case Series (SCCS) analyses
-#' in an observational database in the OMOP Common Data Model.
+#' against the OMOP Common Data Model.
 SelfControlledCaseSeriesModule <- R6::R6Class(
   classname = "SelfControlledCaseSeriesModule",
   inherit = StrategusModule,

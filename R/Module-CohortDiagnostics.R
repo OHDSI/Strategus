@@ -1,8 +1,8 @@
 # CohortDiagnosticsModule -------------
-#' @title Module for the development and evaluation of phenotype algorithms
+#' @title Evaluate phenotypes with the \href{https://ohdsi.github.io/CohortDiagnostics/}{HADES CohortDiagnostics Package}
 #' @export
 #' @description
-#' Module for the development and evaluation of phenotype algorithms
+#' Development and evaluation of phenotype algorithms
 #' against the OMOP Common Data Model.
 CohortDiagnosticsModule <- R6::R6Class(
   classname = "CohortDiagnosticsModule",

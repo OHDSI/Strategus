@@ -1,9 +1,9 @@
 # CharacterizationModule -------------
-#' @title Module for generating cohort characterization information
+#' @title Characterize cohorts with the \href{https://ohdsi.github.io/Characterization/}{HADES Characterization Package}
 #' @export
 #' @description
-#' Computes cohort characterization information against the OMOP CDM
-#' package version 2.0.1
+#' Computes cohort characterization information against
+#' the OMOP Common Data Model
 CharacterizationModule <- R6::R6Class(
   classname = "CharacterizationModule",
   inherit = StrategusModule,
