@@ -4,6 +4,8 @@ template:
   bootstrap: 5
   bslib:
     bootswatch: cosmo
+  includes:
+    in_header: <link rel="stylesheet" type="text/css" href="extra.css" />
 
 home:
   links:
@@ -102,6 +104,7 @@ navbar:
       text: Results model documentation
       href: results-schema/index.html
     hades:
-      text: hadesLogo
+      text: h
       href: https://ohdsi.github.io/Hades
+      aria-label: hadesLogo
 
