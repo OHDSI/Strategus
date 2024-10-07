@@ -104,7 +104,7 @@ navbar:
       text: Results model documentation
       href: results-schema/index.html
     hades:
-      text: h
+      text: hadesLogo
       href: https://ohdsi.github.io/Hades
       aria-label: hadesLogo
 

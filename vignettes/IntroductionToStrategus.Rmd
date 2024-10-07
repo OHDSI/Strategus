@@ -18,16 +18,15 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 
 The `Strategus` package is a new approach for coordinating and executing analytics using HADES modules. The goal is to have OHDSI network sites install `Strategus` and exchange an analysis specification in JSON format to execute a network study. The analysis specification will capture all of the design choices that pertain to the methods used in a given study. The analysis specification format aims to allow for combining different HADES modules together as a pipeline to execute a study.
 
-For more details, please see the [Strategus Study Repo Template](https://github.com/ohdsi-studies/StrategusStudyRepoTemplate)
+For more details on how Strategus is used as part of a network study, please see the [Strategus Study Repo Template](https://github.com/ohdsi-studies/StrategusStudyRepoTemplate).
 
 ## Using Strategus
 
 The high-level steps in using `Strategus` consists of the following:
 
-1. Create the analysis specification for the study. This will include things like picking the cohorts for the study and to specify the analysis settings for each the HADES modules (i.e. Cohort Diagnostics, Comparative Cohort Study, etc). See [here](CreatingAnalysisSpecification.html) for more details.
-2. Create the execution settings that specify how to connect to the OMOP CDM in your environment. See [here](CreateExecutionSettings.html) for more details.
-3. Execute the study using `Strategus` which will require both the analysis specification and the execution settings in order to run the study and extract the results. See [here](ExecuteStrategus.html) for more details.
-4. Upload the results and use Shiny to view the results _Coming Soon_.
+1. Create the analysis specification for the study. This will include things like picking the cohorts for the study and to specify the analysis settings for each the HADES modules (i.e. Cohort Diagnostics, Comparative Cohort Study, etc). See the [Creating Analysis Specification](CreatingAnalysisSpecification.html) article for more details.
+2. Create the execution settings that specify how to connect to the OMOP CDM in your environment and execute your study. See the [Execute Strategus](ExecuteStrategus.html) for more details.
+3. Upload the results and use Shiny to view the results. See the [Working with Results](WorkingWithResults.html) for more details.
 
 ## What is a HADES module?
 

@@ -57,21 +57,6 @@ ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_s
 ))
 ```
 
-### Cohort Definitions & Negative Control Outcomes
-
-This is the list of cohort definitions we will use when assembling the analysis specification for Strategus.
-
-```{r eval=FALSE}
-kable(cohortDefinitionSet[, c("cohortId", "cohortName")])
-```
-
-And the negative control outcomes when performing empirical calibration.
-
-```{r eval=FALSE}
-kable(ncoCohortSet)
-```
-
-
 # Assembling HADES modules
 
 The building blocks of the `Strategus` analysis specification are HADES modules. For purposes of this walk through, a module is a specific analytic task you would like to perform. As shown in the subsequent sections, the high-level pattern for using a module consists of:

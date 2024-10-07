@@ -20,11 +20,11 @@ always_allow_html: true
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-A Strategus study is defined by *analysis specifications*. These specifications describe which modules to run, with which settings. The [Creating Analysis Specification](CreatingAnalysisSpecification.Rmd) vignette describes how to create analysis specifications. In this vignette, we demonstrate how to run a study once it is specified.
+A Strategus study is defined by *analysis specifications*. These specifications describe which modules to run, with which settings. The [Creating Analysis Specification](CreatingAnalysisSpecification.Rmd) vignette describes how to create analysis specifications. In this vignette, we demonstrate how to run a study defined by an analysis specification.
 
 # Creating execution settings
 
-In addition to analysis specifications, Strategus also requires *execution settings*. The execution settings specify how the study should be executed in a specific environment, for example how to connect to a database, and what local folders to use. Many Strategus studies run against data in the OMOP Common Data Model (CDM), and in this vignette we focus on this type of studies. (Other studies, such as meta-analyses, may run against results data instead). In this example, we will make use of the [Eunomia](https://github.com/ohdsi/eunomia) data set which is an OMOP CDM with simulated data used for example purposes. When running a study against your own CDM data, you will need to specify the database connection details for your environment. Execution settings for studies against the CDM can be created using `createCdmExecutionSettings()`. 
+Strategus execution requires you to specify *execution settings*. The execution settings specify how the study should be executed in a specific environment, for example how to connect to a database, and what local folders to use. Many Strategus studies run against data in the OMOP Common Data Model (CDM), and in this vignette we focus on this type of studies. (Other studies, such as meta-analyses, may run against results data instead). In this example, we will make use of the [Eunomia](https://github.com/ohdsi/eunomia) data set which is an OMOP CDM with simulated data used for example purposes. When running a study against your own CDM data, you will need to specify the database connection details for your environment. Execution settings for studies against the CDM can be created using `createCdmExecutionSettings()`. 
 
 ## Creating the connection details
 
@@ -64,9 +64,7 @@ ParallelLogger::saveSettingsToJson(
 
 # Executing the study
 
-## Specifying the instantiated modules folder
-
-For this study, we will use analysis specifications created elsewhere, and the execution settings we created earlier:
+For this study, we will use an analysis specifications created for testing `Strategus`, and the execution settings we created earlier:
 
 ```{r eval=FALSE}
 analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
@@ -89,7 +87,10 @@ execute(
   executionSettings = executionSettings
 )
 ```
-This will first instantiate all the modules if they haven't already been instantiated, and will then execute each module in sequence according to the analysis specifications. The results will appear in subfolders of the 'results_folder', as specified in the execution settings.
+
+This will first instantiate all the modules if they haven't already been instantiated, and will then execute each module in sequence according to the analysis specifications. The results will appear in sub folders of the 'results_folder', as specified in the execution settings.
+
+Once the analysis is complete, you can review the study results. For more information see the [Working with Results](WorkingWithResults.html) article.
 
 ```{r eval=F, echo=FALSE}
 unlink(outputFolder, recursive = TRUE)
