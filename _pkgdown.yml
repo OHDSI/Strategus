@@ -108,3 +108,12 @@ navbar:
       href: https://ohdsi.github.io/Hades
       aria-label: hadesLogo
 
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - IntroductionToStrategus
+  - CreatingAnalysisSpecification
+  - ExecuteStrategus
+  - WorkingWithResults
+

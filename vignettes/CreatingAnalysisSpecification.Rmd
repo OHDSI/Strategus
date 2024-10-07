@@ -38,21 +38,26 @@ This walk through will show how to use `Strategus` to define an analysis specifi
 
 ## Setting up your R environment
 
-Use `renv` and the [renv.lock](https://github.com/ohdsi-studies/StrategusStudyRepoTemplate/blob/main/renv.lock) from the Strategus study template to set up your R environment. This is done by copying the `renv.lock` file into the root of a new project and the restore of the environment is done by calling [renv::restore()](https://rstudio.github.io/renv/reference/restore.html). This will ensure that you have all of the R dependencies including the OHDSI HADES libraries and Strategus.
+Use `renv` and the [renv.lock](https://github.com/ohdsi-studies/StrategusStudyRepoTemplate/blob/main/renv.lock) from the Strategus study template to set up your R environment. This is done by copying the `renv.lock` file into the root of a new project and the restore of the environment is done by calling [renv::restore()](https://rstudio.github.io/renv/reference/restore.html). This will ensure that you have all of the R dependencies including the OHDSI HADES libraries and Strategus. The following code will download the renv.lock file to your machine, install `renv` and restore the R environment:
+
+```{r results='hide', eval=FALSE}
+download.file("https://github.com/ohdsi-studies/StrategusStudyRepoTemplate/blob/main/renv.lock")
+install.packages("renv")
+renv::restore()
+```
 
 ## Cohorts for the study
 
 To start, we'll need to define cohorts and negative control outcomes to use in our example analysis specification. We've included the cohorts and negative control outcomes in the `Strategus` package for this example and the code below will load them for use when assembling the analysis specification.
 
 ```{r, results='hide', eval=FALSE}
-library(CohortGenerator)
-cohortDefinitionSet <- getCohortDefinitionSet(
+cohortDefinitionSet <- CohortGenerator::getCohortDefinitionSet(
   settingsFileName = "testdata/Cohorts.csv",
   jsonFolder = "testdata/cohorts",
   sqlFolder = "testdata/sql",
   packageName = "Strategus"
 )
-ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
+ncoCohortSet <- CohortGenerator::readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
   package = "Strategus"
 ))
 ```
@@ -115,31 +120,30 @@ The following code creates the `cohortIncidenceModuleSpecifications` to perform 
 
 ```{r eval=FALSE}
 ciModule <- CohortIncidenceModule$new()
-library(CohortIncidence)
 targets <- list(
-  createCohortRef(id = 1, name = "Celecoxib"),
-  createCohortRef(id = 2, name = "Diclofenac"),
-  createCohortRef(id = 4, name = "Celecoxib Age >= 30"),
-  createCohortRef(id = 5, name = "Diclofenac Age >= 30")
+  CohortIncidence::createCohortRef(id = 1, name = "Celecoxib"),
+  CohortIncidence::createCohortRef(id = 2, name = "Diclofenac"),
+  CohortIncidence::createCohortRef(id = 4, name = "Celecoxib Age >= 30"),
+  CohortIncidence::createCohortRef(id = 5, name = "Diclofenac Age >= 30")
 )
-outcomes <- list(createOutcomeDef(id = 1, name = "GI bleed", cohortId = 3, cleanWindow = 9999))
+outcomes <- list(CohortIncidence::createOutcomeDef(id = 1, name = "GI bleed", cohortId = 3, cleanWindow = 9999))
 
 tars <- list(
-  createTimeAtRiskDef(id = 1, startWith = "start", endWith = "end"),
-  createTimeAtRiskDef(id = 2, startWith = "start", endWith = "start", endOffset = 365)
+  CohortIncidence::createTimeAtRiskDef(id = 1, startWith = "start", endWith = "end"),
+  CohortIncidence::createTimeAtRiskDef(id = 2, startWith = "start", endWith = "start", endOffset = 365)
 )
-analysis1 <- createIncidenceAnalysis(
+analysis1 <- CohortIncidence::createIncidenceAnalysis(
   targets = c(1, 2, 4, 5),
   outcomes = c(1),
   tars = c(1, 2)
 )
 
-irDesign <- createIncidenceDesign(
+irDesign <- CohortIncidence::createIncidenceDesign(
   targetDefs = targets,
   outcomeDefs = outcomes,
   tars = tars,
   analysisList = list(analysis1),
-  strataSettings = createStrataSettings(
+  strataSettings = CohortIncidence::createStrataSettings(
     byYear = TRUE,
     byGender = TRUE
   )
@@ -170,10 +174,9 @@ The following code creates the `cohortMethodModuleSpecifications` to perform a c
 
 ```{r eval=FALSE}
 cmModule <- CohortMethodModule$new()
-library(CohortMethod)
 negativeControlOutcomes <- lapply(
   X = ncoCohortSet$cohortId,
-  FUN = createOutcome,
+  FUN = CohortMethod::createOutcome,
   outcomeOfInterest = FALSE,
   trueEffectSize = 1,
   priorOutcomeLookback = 30
@@ -181,7 +184,7 @@ negativeControlOutcomes <- lapply(
 
 outcomesOfInterest <- lapply(
   X = 3,
-  FUN = createOutcome,
+  FUN = CohortMethod::createOutcome,
   outcomeOfInterest = TRUE
 )
 
@@ -273,7 +276,6 @@ The following code creates the `sccsModuleSpecifications` to perform a self-cont
 
 ```{r eval=FALSE}
 sccsModule <- SelfControlledCaseSeriesModule$new()
-library(SelfControlledCaseSeries)
 
 # Exposures-outcomes -----------------------------------------------------------
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
@@ -283,15 +285,15 @@ exposureOfInterestIds <- c(1, 2)
 exposuresOutcomeList <- list()
 for (exposureOfInterestId in exposureOfInterestIds) {
   for (outcomeOfInterestId in outcomeOfInterestIds) {
-    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- createExposuresOutcome(
+    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- SelfControlledCaseSeries::createExposuresOutcome(
       outcomeId = outcomeOfInterestId,
-      exposures = list(createExposure(exposureId = exposureOfInterestId))
+      exposures = list(SelfControlledCaseSeries::createExposure(exposureId = exposureOfInterestId))
     )
   }
   for (negativeControlOutcomeId in negativeControlOutcomeIds) {
-    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- createExposuresOutcome(
+    exposuresOutcomeList[[length(exposuresOutcomeList) + 1]] <- SelfControlledCaseSeries::createExposuresOutcome(
       outcomeId = negativeControlOutcomeId,
-      exposures = list(createExposure(exposureId = exposureOfInterestId, trueEffectSize = 1))
+      exposures = list(SelfControlledCaseSeries::createExposure(exposureId = exposureOfInterestId, trueEffectSize = 1))
     )
   }
 }
