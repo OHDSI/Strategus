@@ -2,11 +2,10 @@
 % Please edit documentation in R/Module-SelfControlledCaseSeries.R
 \name{SelfControlledCaseSeriesModule}
 \alias{SelfControlledCaseSeriesModule}
-\title{Module for performing Self-Controlled Case Series (SCCS) analyses
-in an observational database in the OMOP Common Data Model.}
+\title{Self-Controlled Case Series design with the \href{https://ohdsi.github.io/SelfControlledCaseSeries/}{HADES SelfControlledCaseSeries Package}}
 \description{
 Module for performing Self-Controlled Case Series (SCCS) analyses
-in an observational database in the OMOP Common Data Model.
+against the OMOP Common Data Model.
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{SelfControlledCaseSeriesModule}

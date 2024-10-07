@@ -2,9 +2,9 @@
 % Please edit documentation in R/Module-CohortGenerator.R
 \name{CohortGeneratorModule}
 \alias{CohortGeneratorModule}
-\title{Module for generating cohorts against an OMOP CDM}
+\title{Generate cohorts with the \href{https://ohdsi.github.io/CohortGenerator/}{HADES CohortGenerator Package}}
 \description{
-Generates cohorts against the OMOP CDM
+Generates cohorts against the OMOP Common Data Model
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortGeneratorModule}

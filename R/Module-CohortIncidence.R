@@ -1,8 +1,8 @@
 # CohortIncidenceModule -------------
-#' @title Module for computing incidence rates for cohorts against an OMOP CDM
+#' @title Compute incidence with the \href{https://ohdsi.github.io/CohortIncidence/}{HADES CohortIncidence Package}
 #' @export
 #' @description
-#' Computes incidence rates for cohorts against the OMOP CDM
+#' Computes incidence rates for cohorts against the OMOP Common Data Model
 CohortIncidenceModule <- R6::R6Class(
   classname = "CohortIncidenceModule",
   inherit = StrategusModule,
@@ -141,12 +141,7 @@ CohortIncidenceModule <- R6::R6Class(
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
-
-      # use the results model spec that was saved along with the results output, not the embedded model spec.
-      resultsModelSpec <- readr::read_csv(
-        file = file.path(file.path(exportFolder, "resultsDataModelSpecification.csv")),
-        show_col_types = FALSE
-      )
+      resultsModelSpec <- self$getResultsDataModelSpecification()
 
       ResultModelManager::uploadResults(
         connectionDetails = resultsConnectionDetails,
