@@ -21,14 +21,17 @@ test_that("Test PLP Validation Module", {
 
   # add model to folder
   plpModel <-  readRDS(system.file("testdata/plpvmodule/plpModel.rds", package = "Strategus")) #readRDS("tests/plpModel.rds")
-  upperWorkDir <- dirname(workFolder)
-  dir.create(file.path(upperWorkDir,'ModelTransferModule_1'))
-  modelTransferFolder <- sort(dir(upperWorkDir, pattern = 'ModelTransferModule'), decreasing = T)[1]
-  modelSaveLocation <- file.path( upperWorkDir, modelTransferFolder, 'models') # hack to use work folder for model transfer
+  dir.create(file.path(workFolder,'ModelTransferModule_1'))
+  modelTransferFolder <- sort(dir(workFolder, pattern = 'ModelTransferModule'), decreasing = T)[1]
+  modelSaveLocation <- file.path(workFolder, modelTransferFolder, 'models') # hack to use work folder for model transfer
   PatientLevelPrediction::savePlpModel(
     plpModel,
     file.path(modelSaveLocation, 'model_1_1')
   )
+
+  createCohorts(connectionDetails = connectionDetails,
+                cdmDatabaseSchema = cdmDatabaseSchema,
+                cohortDatabaseSchema = workDatabaseSchema)
 
   # Create the validation settings and run the module
   plpvSettingsCreator <- PatientLevelPredictionValidationModule$new()
@@ -40,17 +43,17 @@ test_that("Test PLP Validation Module", {
   executionSettings <- createCdmExecutionSettings(
     workDatabaseSchema = workDatabaseSchema,
     cdmDatabaseSchema = cdmDatabaseSchema,
-    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "plpv_unit_test"),
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
     workFolder = workFolder,
     resultsFolder = resultsFolder
   )
 
-  #debugonce(Strategus::execute)
-  # Strategus::execute(
-  #   analysisSpecifications = analysisSpecifications,
-  #   executionSettings = executionSettings,
-  #   connectionDetails = connectionDetails
-  # )
+  debugonce(PatientLevelPredictionValidationModule$debug('execute'))
+  Strategus::execute(
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings,
+    connectionDetails = connectionDetails
+  )
 
   # TODO - Remove in favor of the code
   # above once I have more clarity on the

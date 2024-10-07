@@ -55,34 +55,37 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       # )
 
       # check the model locations are valid and apply model
-      upperWorkDir <- dirname(jobContext$moduleExecutionSettings$workFolder) # AGS: NOTE - Using the "root" folder as the expection is that the ModelTransferModule output is here
+      upperWorkDir <- jobContext$moduleExecutionSettings$workFolder # AGS: NOTE - Using the "root" folder as the expection is that the ModelTransferModule output is here
       modelTransferFolder <- sort(dir(upperWorkDir, pattern = 'ModelTransferModule'), decreasing = T)[1]
 
       modelSaveLocation <- file.path( upperWorkDir, modelTransferFolder, 'models') # hack to use work folder for model transfer
       modelInfo <- private$.getModelInfo(modelSaveLocation)
 
       designs <- list()
-      for (i in seq_len(nrow(modelInfo))) {
-        df <- modelInfo[i, ]
+      for (setting in jobContext$settings$validationComponentsList) {
+        matchingModels <- modelInfo %>%
+          dplyr::filter(targetId == setting$modelTargetId, outcomeId == setting$modelOutcomeId)
+        if (nrow(matchingModels) == 0) {
+          stop("No matching models found with targetId: ",
+               setting$modelTargetId, " and outcomeId: ", setting$modelOutcomeId)
+        }
 
         design <- PatientLevelPrediction::createValidationDesign(
-          targetId = df$target_id[1],
-          outcomeId = df$outcome_id[1],
-          plpModelList = as.list(df$modelPath),
-          restrictPlpDataSettings = jobContext$settings[[1]]$restrictPlpDataSettings,
-          populationSettings = jobContext$settings[[1]]$populationSettings
+          targetId = setting$targetId[1],
+          outcomeId = setting$outcomeId[1],
+          plpModelList = as.list(matchingModels$modelPath),
+          restrictPlpDataSettings = setting$restrictPlpDataSettings,
+          populationSettings = setting$populationSettings
         )
-        designs <- c(designs, design)
+        designs[[length(designs) + 1]] <- design
       }
-      databaseNames <- c()
-      databaseNames <- c(databaseNames, paste0(jobContext$moduleExecutionSettings$connectionDetailsReference))
 
       databaseDetails <- PatientLevelPrediction::createDatabaseDetails(
-        connectionDetails = jobContext$moduleExecutionSettings$connectionDetails,
+        connectionDetails = connectionDetails,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cdmDatabaseName = jobContext$moduleExecutionSettings$connectionDetailsReference,
-        cdmDatabaseId = jobContext$moduleExecutionSettings$databaseId,
+        cdmDatabaseName = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$cdmSourceAbbreviation,
+        cdmDatabaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema,
         cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
@@ -161,27 +164,26 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
     createModuleSpecifications = function(validationComponentsList = list(
       list(
         targetId = 1,
-        oucomeId = 4,
-        restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(), # vector
-        validationSettings = PatientLevelPrediction::createValidationSettings(
-          recalibrate = "weakRecalibration"
-        ),
-        populationSettings = PatientLevelPrediction::createStudyPopulationSettings(
-          riskWindowStart = 90,
-          riskWindowEnd = 360,
-          requireTimeAtRisk = F
-        )
+        outcomeId = 3,
+        modelTargetId = 1,
+        modelOutcomeId = 3,
+        restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+        populationSettings = NULL,
+        recalibrate = "weakRecalibration",
+        runCovariateSummary = TRUE
       ),
       list(
-        targetId = 3,
-        oucomeId = 4,
-        restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(), # vector
-        validationSettings = PatientLevelPrediction::createValidationSettings(
-          recalibrate = "weakRecalibration"
+        targetId = 4,
+        outcomeId = 3,
+        modelTargetId = 1,
+        modelOutcomeId = 3,
+        restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+        populationSettings = PatientLevelPrediction::createStudyPopulationSettings(),
+        recalibrate = "weakRecalibration",
+        runCovariateSummary = FALSE
         )
-
       )
-    )) {
+    ) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
@@ -211,21 +213,24 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
 
         if (is.null(model)) {
           model <- data.frame(
-            target_id = modelDesign$targetId,
-            outcome_id = modelDesign$outcomeId,
+            targetId = modelDesign$targetId,
+            outcomeId = modelDesign$outcomeId,
             modelPath = directory)
         } else {
           model <- rbind(model,
                          data.frame(
-                           target_id = modelDesign$targetId,
-                           outcome_id = modelDesign$outcomeId,
+                           targetId = modelDesign$targetId,
+                           outcomeId = modelDesign$outcomeId,
                            modelPath = directory))
         }
       }
 
       models <- model %>%
-        dplyr::group_by(.data$target_id, .data$outcome_id) %>%
+        dplyr::group_by(.data$targetId, .data$outcomeId) %>%
         dplyr::summarise(modelPath = list(.data$modelPath), .groups = "drop")
+      if (nrow(models) == 0) {
+        stop("No models found in ", strategusOutputPath)
+      }
       return(models)
     },
     # this updates the cohort table details in covariates
