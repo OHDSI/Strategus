@@ -48,21 +48,10 @@ test_that("Test PLP Validation Module", {
     resultsFolder = resultsFolder
   )
 
-  debugonce(PatientLevelPredictionValidationModule$debug('execute'))
+  # debugonce(PatientLevelPredictionValidationModule$debug('execute'))
   Strategus::execute(
     analysisSpecifications = analysisSpecifications,
     executionSettings = executionSettings,
     connectionDetails = connectionDetails
   )
-
-  # TODO - Remove in favor of the code
-  # above once I have more clarity on the
-  # settings
-  debugonce(plpvSettingsCreator$execute)
-  plpvSettingsCreator$execute(
-    analysisSpecifications = analysisSpecifications,
-    executionSettings = executionSettings,
-    connectionDetails = connectionDetails
-  )
-
 })
