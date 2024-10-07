@@ -10,7 +10,9 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Creating Analysis Specification">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Creating Analysis Specification">
+<link rel="stylesheet" type="text/css" href="extra.css">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -43,7 +45,7 @@
 <li class="nav-item"><a class="nav-link" href="../results-schema/index.html">Results model documentation</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://ohdsi.github.io/Hades">hadesLogo</a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://ohdsi.github.io/Hades" aria-label="hadesLogo">hadesLogo</a></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/OHDSI/Strategus/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
@@ -62,7 +64,7 @@
                         <h4 data-toc-skip class="author">Anthony G.
 Sena</h4>
             
-            <h4 data-toc-skip class="date">2024-10-03</h4>
+            <h4 data-toc-skip class="date">2024-10-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/update-docs/vignettes/CreatingAnalysisSpecification.Rmd" class="external-link"><code>vignettes/CreatingAnalysisSpecification.Rmd</code></a></small>
       <div class="d-none name"><code>CreatingAnalysisSpecification.Rmd</code></div>
@@ -108,18 +110,6 @@ the analysis specification.</p>
 <span><span class="va">ncoCohortSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/readCsv.html" class="external-link">readCsv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testdata/negative_controls_concept_set.csv"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"Strategus"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="cohort-definitions-negative-control-outcomes">Cohort Definitions &amp; Negative Control Outcomes<a class="anchor" aria-label="anchor" href="#cohort-definitions-negative-control-outcomes"></a>
-</h4>
-<p>This is the list of cohort definitions we will use when assembling
-the analysis specification for Strategus.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">kable</span><span class="op">(</span><span class="va">cohortDefinitionSet</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cohortId"</span>, <span class="st">"cohortName"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p>And the negative control outcomes when performing empirical
-calibration.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">kable</span><span class="op">(</span><span class="va">ncoCohortSet</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 </div>
 <div class="section level2">
@@ -154,7 +144,7 @@ any of the HADES modules. To do this, we will use the
 functions of the CohortGenerator module. In addition, we will use the
 <code>createModuleSpecifications</code> function to specify the cohort
 generation settings.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cgModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortGeneratorModule.html">CohortGeneratorModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the cohort definition shared resource element for the analysis specification</span></span>
@@ -180,7 +170,7 @@ generation settings.</p>
 <p>The following code creates the
 <code>cohortDiagnosticsModuleSpecifications</code> to run cohort
 diagnostics on the cohorts in the study.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortDiagnosticsModule.html">CohortDiagnosticsModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">cohortDiagnosticsModuleSpecifications</span> <span class="op">&lt;-</span> <span class="va">cdModule</span><span class="op">$</span><span class="fu">createModuleSpecifications</span><span class="op">(</span></span>
 <span>  runInclusionStatistics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -200,7 +190,7 @@ diagnostics on the cohorts in the study.</p>
 <p>The following code creates the
 <code>cohortIncidenceModuleSpecifications</code> to perform an incidence
 rate analysis for the target cohorts and outcome in this study.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ciModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortIncidenceModule.html">CohortIncidenceModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/CohortIncidence" class="external-link">CohortIncidence</a></span><span class="op">)</span></span>
 <span><span class="va">targets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -243,7 +233,7 @@ rate analysis for the target cohorts and outcome in this study.</p>
 <code>characterizationModuleSpecifications</code> to perform an
 characterization analysis for the target cohorts and outcome in this
 study.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CharacterizationModule.html">CharacterizationModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">characterizationModuleSpecifications</span> <span class="op">&lt;-</span> <span class="va">cModule</span><span class="op">$</span><span class="fu">createModuleSpecifications</span><span class="op">(</span></span>
 <span>  targetIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
@@ -256,7 +246,7 @@ study.</p>
 <p>The following code creates the
 <code>cohortMethodModuleSpecifications</code> to perform a comparative
 cohort analysis for this study.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cmModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortMethodModule.html">CohortMethodModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/CohortMethod" class="external-link">CohortMethod</a></span><span class="op">)</span></span>
 <span><span class="va">negativeControlOutcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
@@ -358,7 +348,7 @@ cohort analysis for this study.</p>
 </h3>
 <p>The following code creates the <code>sccsModuleSpecifications</code>
 to perform a self-controlled case series analysis for this study.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sccsModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/SelfControlledCaseSeriesModule.html">SelfControlledCaseSeriesModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/" class="external-link">SelfControlledCaseSeries</a></span><span class="op">)</span></span>
 <span></span>
@@ -470,7 +460,7 @@ to perform a self-controlled case series analysis for this study.</p>
 </h3>
 <p>The following code creates the <code>plpModuleSpecifications</code>
 to perform a patient-level prediction analysis for this study.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plpModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PatientLevelPredictionModule.html">PatientLevelPredictionModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">makeModelDesignSettings</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">targetId</span>, <span class="va">outcomeId</span>, <span class="va">popSettings</span>, <span class="va">covarSettings</span><span class="op">)</span> <span class="op">{</span></span>
@@ -524,7 +514,7 @@ to perform a patient-level prediction analysis for this study.</p>
 <p>Finally, we will use the various shared resources and module
 specifications to construct the full set of analysis specifications and
 save it to the file system in JSON format.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analysisSpecifications</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSpecificiations</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/addSharedResources.html">addSharedResources</a></span><span class="op">(</span><span class="va">cohortDefinitionSharedResource</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/addSharedResources.html">addSharedResources</a></span><span class="op">(</span><span class="va">ncoSharedResource</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
