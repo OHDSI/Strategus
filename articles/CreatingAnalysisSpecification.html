@@ -35,9 +35,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a></li>
+<li><a class="dropdown-item" href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a></li>
+    <li><a class="dropdown-item" href="../articles/CreatingAnalysisSpecification.html">Creating Analysis Specification</a></li>
     <li><a class="dropdown-item" href="../articles/ExecuteStrategus.html">Execute Strategus</a></li>
-    <li><a class="dropdown-item" href="../articles/IntroductionToStrategus.html">Introduction to Strategus</a></li>
     <li><a class="dropdown-item" href="../articles/WorkingWithResults.html">Working With Results</a></li>
   </ul>
 </li>
@@ -89,7 +89,13 @@ from the Strategus study template to set up your R environment. This is
 done by copying the <code>renv.lock</code> file into the root of a new
 project and the restore of the environment is done by calling <a href="https://rstudio.github.io/renv/reference/restore.html" class="external-link">renv::restore()</a>.
 This will ensure that you have all of the R dependencies including the
-OHDSI HADES libraries and Strategus.</p>
+OHDSI HADES libraries and Strategus. The following code will download
+the renv.lock file to your machine, install <code>renv</code> and
+restore the R environment:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="st">"https://github.com/ohdsi-studies/StrategusStudyRepoTemplate/blob/main/renv.lock"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"renv"</span><span class="op">)</span></span>
+<span><span class="fu">renv</span><span class="fu">::</span><span class="fu">restore</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="cohorts-for-the-study">Cohorts for the study<a class="anchor" aria-label="anchor" href="#cohorts-for-the-study"></a>
@@ -99,15 +105,14 @@ to use in our example analysis specification. We’ve included the cohorts
 and negative control outcomes in the <code>Strategus</code> package for
 this example and the code below will load them for use when assembling
 the analysis specification.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/CohortGenerator/" class="external-link">CohortGenerator</a></span><span class="op">)</span></span>
-<span><span class="va">cohortDefinitionSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortDefinitionSet.html" class="external-link">getCohortDefinitionSet</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cohortDefinitionSet</span> <span class="op">&lt;-</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortDefinitionSet.html" class="external-link">getCohortDefinitionSet</a></span><span class="op">(</span></span>
 <span>  settingsFileName <span class="op">=</span> <span class="st">"testdata/Cohorts.csv"</span>,</span>
 <span>  jsonFolder <span class="op">=</span> <span class="st">"testdata/cohorts"</span>,</span>
 <span>  sqlFolder <span class="op">=</span> <span class="st">"testdata/sql"</span>,</span>
 <span>  packageName <span class="op">=</span> <span class="st">"Strategus"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">ncoCohortSet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/readCsv.html" class="external-link">readCsv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testdata/negative_controls_concept_set.csv"</span>,</span>
+<span><span class="va">ncoCohortSet</span> <span class="op">&lt;-</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/readCsv.html" class="external-link">readCsv</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"testdata/negative_controls_concept_set.csv"</span>,</span>
 <span>  package <span class="op">=</span> <span class="st">"Strategus"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -144,7 +149,7 @@ any of the HADES modules. To do this, we will use the
 functions of the CohortGenerator module. In addition, we will use the
 <code>createModuleSpecifications</code> function to specify the cohort
 generation settings.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cgModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortGeneratorModule.html">CohortGeneratorModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the cohort definition shared resource element for the analysis specification</span></span>
@@ -170,7 +175,7 @@ generation settings.</p>
 <p>The following code creates the
 <code>cohortDiagnosticsModuleSpecifications</code> to run cohort
 diagnostics on the cohorts in the study.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortDiagnosticsModule.html">CohortDiagnosticsModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">cohortDiagnosticsModuleSpecifications</span> <span class="op">&lt;-</span> <span class="va">cdModule</span><span class="op">$</span><span class="fu">createModuleSpecifications</span><span class="op">(</span></span>
 <span>  runInclusionStatistics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -190,33 +195,32 @@ diagnostics on the cohorts in the study.</p>
 <p>The following code creates the
 <code>cohortIncidenceModuleSpecifications</code> to perform an incidence
 rate analysis for the target cohorts and outcome in this study.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ciModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortIncidenceModule.html">CohortIncidenceModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/CohortIncidence" class="external-link">CohortIncidence</a></span><span class="op">)</span></span>
 <span><span class="va">targets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, name <span class="op">=</span> <span class="st">"Celecoxib"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">2</span>, name <span class="op">=</span> <span class="st">"Diclofenac"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">4</span>, name <span class="op">=</span> <span class="st">"Celecoxib Age &gt;= 30"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">5</span>, name <span class="op">=</span> <span class="st">"Diclofenac Age &gt;= 30"</span><span class="op">)</span></span>
+<span>  <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, name <span class="op">=</span> <span class="st">"Celecoxib"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">2</span>, name <span class="op">=</span> <span class="st">"Diclofenac"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">4</span>, name <span class="op">=</span> <span class="st">"Celecoxib Age &gt;= 30"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createCohortRef.html" class="external-link">createCohortRef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">5</span>, name <span class="op">=</span> <span class="st">"Diclofenac Age &gt;= 30"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">outcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createOutcomeDef.html" class="external-link">createOutcomeDef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, name <span class="op">=</span> <span class="st">"GI bleed"</span>, cohortId <span class="op">=</span> <span class="fl">3</span>, cleanWindow <span class="op">=</span> <span class="fl">9999</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">outcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createOutcomeDef.html" class="external-link">createOutcomeDef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, name <span class="op">=</span> <span class="st">"GI bleed"</span>, cohortId <span class="op">=</span> <span class="fl">3</span>, cleanWindow <span class="op">=</span> <span class="fl">9999</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createTimeAtRiskDef.html" class="external-link">createTimeAtRiskDef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, startWith <span class="op">=</span> <span class="st">"start"</span>, endWith <span class="op">=</span> <span class="st">"end"</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createTimeAtRiskDef.html" class="external-link">createTimeAtRiskDef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">2</span>, startWith <span class="op">=</span> <span class="st">"start"</span>, endWith <span class="op">=</span> <span class="st">"start"</span>, endOffset <span class="op">=</span> <span class="fl">365</span><span class="op">)</span></span>
+<span>  <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createTimeAtRiskDef.html" class="external-link">createTimeAtRiskDef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span>, startWith <span class="op">=</span> <span class="st">"start"</span>, endWith <span class="op">=</span> <span class="st">"end"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createTimeAtRiskDef.html" class="external-link">createTimeAtRiskDef</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">2</span>, startWith <span class="op">=</span> <span class="st">"start"</span>, endWith <span class="op">=</span> <span class="st">"start"</span>, endOffset <span class="op">=</span> <span class="fl">365</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="va">analysis1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createIncidenceAnalysis.html" class="external-link">createIncidenceAnalysis</a></span><span class="op">(</span></span>
+<span><span class="va">analysis1</span> <span class="op">&lt;-</span> <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createIncidenceAnalysis.html" class="external-link">createIncidenceAnalysis</a></span><span class="op">(</span></span>
 <span>  targets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span>,</span>
 <span>  outcomes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
 <span>  tars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">irDesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createIncidenceDesign.html" class="external-link">createIncidenceDesign</a></span><span class="op">(</span></span>
+<span><span class="va">irDesign</span> <span class="op">&lt;-</span> <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createIncidenceDesign.html" class="external-link">createIncidenceDesign</a></span><span class="op">(</span></span>
 <span>  targetDefs <span class="op">=</span> <span class="va">targets</span>,</span>
 <span>  outcomeDefs <span class="op">=</span> <span class="va">outcomes</span>,</span>
 <span>  tars <span class="op">=</span> <span class="va">tars</span>,</span>
 <span>  analysisList <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">analysis1</span><span class="op">)</span>,</span>
-<span>  strataSettings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createStrataSettings.html" class="external-link">createStrataSettings</a></span><span class="op">(</span></span>
+<span>  strataSettings <span class="op">=</span> <span class="fu">CohortIncidence</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/CohortIncidence/man/createStrataSettings.html" class="external-link">createStrataSettings</a></span><span class="op">(</span></span>
 <span>    byYear <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    byGender <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span>
@@ -233,7 +237,7 @@ rate analysis for the target cohorts and outcome in this study.</p>
 <code>characterizationModuleSpecifications</code> to perform an
 characterization analysis for the target cohorts and outcome in this
 study.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CharacterizationModule.html">CharacterizationModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">characterizationModuleSpecifications</span> <span class="op">&lt;-</span> <span class="va">cModule</span><span class="op">$</span><span class="fu">createModuleSpecifications</span><span class="op">(</span></span>
 <span>  targetIds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
@@ -246,12 +250,11 @@ study.</p>
 <p>The following code creates the
 <code>cohortMethodModuleSpecifications</code> to perform a comparative
 cohort analysis for this study.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cmModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/CohortMethodModule.html">CohortMethodModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/CohortMethod" class="external-link">CohortMethod</a></span><span class="op">)</span></span>
 <span><span class="va">negativeControlOutcomes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
 <span>  X <span class="op">=</span> <span class="va">ncoCohortSet</span><span class="op">$</span><span class="va">cohortId</span>,</span>
-<span>  FUN <span class="op">=</span> <span class="va">createOutcome</span>,</span>
+<span>  FUN <span class="op">=</span> <span class="fu">CohortMethod</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/CohortMethod/reference/createOutcome.html" class="external-link">createOutcome</a></span>,</span>
 <span>  outcomeOfInterest <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  trueEffectSize <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  priorOutcomeLookback <span class="op">=</span> <span class="fl">30</span></span>
@@ -259,7 +262,7 @@ cohort analysis for this study.</p>
 <span></span>
 <span><span class="va">outcomesOfInterest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
 <span>  X <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  FUN <span class="op">=</span> <span class="va">createOutcome</span>,</span>
+<span>  FUN <span class="op">=</span> <span class="fu">CohortMethod</span><span class="fu">::</span><span class="va"><a href="https://ohdsi.github.io/CohortMethod/reference/createOutcome.html" class="external-link">createOutcome</a></span>,</span>
 <span>  outcomeOfInterest <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -348,9 +351,8 @@ cohort analysis for this study.</p>
 </h3>
 <p>The following code creates the <code>sccsModuleSpecifications</code>
 to perform a self-controlled case series analysis for this study.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sccsModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/SelfControlledCaseSeriesModule.html">SelfControlledCaseSeriesModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/" class="external-link">SelfControlledCaseSeries</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Exposures-outcomes -----------------------------------------------------------</span></span>
 <span><span class="va">negativeControlOutcomeIds</span> <span class="op">&lt;-</span> <span class="va">ncoCohortSet</span><span class="op">$</span><span class="va">cohortId</span></span>
@@ -360,15 +362,15 @@ to perform a self-controlled case series analysis for this study.</p>
 <span><span class="va">exposuresOutcomeList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">exposureOfInterestId</span> <span class="kw">in</span> <span class="va">exposureOfInterestIds</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">outcomeOfInterestId</span> <span class="kw">in</span> <span class="va">outcomeOfInterestIds</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">exposuresOutcomeList</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">exposuresOutcomeList</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposuresOutcome.html" class="external-link">createExposuresOutcome</a></span><span class="op">(</span></span>
+<span>    <span class="va">exposuresOutcomeList</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">exposuresOutcomeList</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">SelfControlledCaseSeries</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposuresOutcome.html" class="external-link">createExposuresOutcome</a></span><span class="op">(</span></span>
 <span>      outcomeId <span class="op">=</span> <span class="va">outcomeOfInterestId</span>,</span>
-<span>      exposures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposure.html" class="external-link">createExposure</a></span><span class="op">(</span>exposureId <span class="op">=</span> <span class="va">exposureOfInterestId</span><span class="op">)</span><span class="op">)</span></span>
+<span>      exposures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">SelfControlledCaseSeries</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposure.html" class="external-link">createExposure</a></span><span class="op">(</span>exposureId <span class="op">=</span> <span class="va">exposureOfInterestId</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">negativeControlOutcomeId</span> <span class="kw">in</span> <span class="va">negativeControlOutcomeIds</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">exposuresOutcomeList</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">exposuresOutcomeList</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposuresOutcome.html" class="external-link">createExposuresOutcome</a></span><span class="op">(</span></span>
+<span>    <span class="va">exposuresOutcomeList</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">exposuresOutcomeList</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">SelfControlledCaseSeries</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposuresOutcome.html" class="external-link">createExposuresOutcome</a></span><span class="op">(</span></span>
 <span>      outcomeId <span class="op">=</span> <span class="va">negativeControlOutcomeId</span>,</span>
-<span>      exposures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposure.html" class="external-link">createExposure</a></span><span class="op">(</span>exposureId <span class="op">=</span> <span class="va">exposureOfInterestId</span>, trueEffectSize <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>      exposures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">SelfControlledCaseSeries</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createExposure.html" class="external-link">createExposure</a></span><span class="op">(</span>exposureId <span class="op">=</span> <span class="va">exposureOfInterestId</span>, trueEffectSize <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span>
@@ -460,7 +462,7 @@ to perform a self-controlled case series analysis for this study.</p>
 </h3>
 <p>The following code creates the <code>plpModuleSpecifications</code>
 to perform a patient-level prediction analysis for this study.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plpModule</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/PatientLevelPredictionModule.html">PatientLevelPredictionModule</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">makeModelDesignSettings</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">targetId</span>, <span class="va">outcomeId</span>, <span class="va">popSettings</span>, <span class="va">covarSettings</span><span class="op">)</span> <span class="op">{</span></span>
@@ -514,7 +516,7 @@ to perform a patient-level prediction analysis for this study.</p>
 <p>Finally, we will use the various shared resources and module
 specifications to construct the full set of analysis specifications and
 save it to the file system in JSON format.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analysisSpecifications</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSpecificiations</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/addSharedResources.html">addSharedResources</a></span><span class="op">(</span><span class="va">cohortDefinitionSharedResource</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="../reference/addSharedResources.html">addSharedResources</a></span><span class="op">(</span><span class="va">ncoSharedResource</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
