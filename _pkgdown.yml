@@ -1,17 +1,119 @@
+url: https://ohdsi.github.io/Strategus/
+
 template:
-  params:
+  bootstrap: 5
+  bslib:
     bootswatch: cosmo
+  includes:
+    in_header: <link rel="stylesheet" type="text/css" href="extra.css" />
 
 home:
   links:
   - text: Ask a question
     href: http://forums.ohdsi.org
 
+reference:
+  - title: "Create analysis specifications"
+    desc: >
+      Functions for creating the analysis specification to execute. An analysis
+      specification includes one or more Strategus HADES module settings which
+      are added to the analysis specification.
+    contents:
+      - addCharacterizationModuleSpecifications
+      - addCohortDiagnosticsModuleSpecifications
+      - addCohortGeneratorModuleSpecifications
+      - addCohortIncidenceModuleSpecifications
+      - addCohortMethodeModuleSpecifications
+      - addEvidenceSynthesisModuleSpecifications
+      - addModuleSpecifications
+      - addPatientLevelPredictionModuleSpecifications
+      - addSelfControlledCaseSeriesModuleSpecifications
+      - addSharedResources
+      - createEmptyAnalysisSpecificiations
+
+  - title: "Executing a study"
+    desc: >
+      These functions are used to create the settings necessary to execute
+      a study as defined by the contents of the analysis specification.
+    contents:
+      - execute
+      - createCdmExecutionSettings
+      - createResultsExecutionSettings
+      - getCdmDatabaseMetaData
+
+  - title: "HADES Modules"
+  - subtitle: "OMOP CDM HADES Modules"
+    desc: >
+      These modules are designed to run against your OMOP CDM to carry
+      out their analyses.
+    contents:
+      - CharacterizationModule
+      - CohortDiagnosticsModule
+      - CohortGeneratorModule
+      - CohortIncidenceModule
+      - CohortMethodModule
+      - PatientLevelPredictionModule
+      - SelfControlledCaseSeriesModule
+  - subtitle: "Results HADES Modules"
+    desc: >
+      These modules are designed to run against results that are produced
+      by one or more OMOP CDM HADES Modules. Results must be stored in
+      a PostgreSQL database.
+    contents:
+      - EvidenceSynthesisModule
+
+  - title: "Results Data Model Creation & Upload"
+    desc: >
+      These functions are used to create the PostgreSQL results data model
+      tables and to upload results produced by the HADES modules.
+    contents:
+      - createResultDataModel
+      - createResultsDataModelSettings
+      - uploadResults
+
+  - title: "Sharing results"
+    desc: >
+      These functions are used to prepare results to share with a
+      network study coordinator
+    contents:
+      - zipResults
+
+  - title: "Internal R6 Class"
+    desc: >
+      This is a list of internal classes used by Strategus developers
+    contents:
+      - StrategusModule
+
 navbar:
+  bg: dark
   structure:
+    left:
+    - reference
+    - articles
+    - changelog
+    - resultsmodel
     right: [hades, github]
   components:
+    reference:
+      text: Reference
+      href: reference/index.html
+    changelog:
+      text: Changelog
+      href: news/index.html
+    resultsmodel:
+      text: Results model documentation
+      href: results-schema/index.html
     hades:
       text: hadesLogo
       href: https://ohdsi.github.io/Hades
+      aria-label: hadesLogo
+
+articles:
+- title: Articles
+  navbar: ~
+  contents:
+  - IntroductionToStrategus
+  - CreatingAnalysisSpecification
+  - ExecuteStrategus
+  - WorkingWithResults
 

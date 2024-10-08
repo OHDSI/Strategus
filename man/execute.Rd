@@ -4,14 +4,7 @@
 \alias{execute}
 \title{Execute analysis specifications.}
 \usage{
-execute(
-  analysisSpecifications,
-  executionSettings,
-  executionScriptFolder = NULL,
-  keyringName = NULL,
-  restart = FALSE,
-  enforceModuleDependencies = TRUE
-)
+execute(analysisSpecifications, executionSettings, connectionDetails)
 }
 \arguments{
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
@@ -20,32 +13,17 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \item{executionSettings}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
 
-\item{executionScriptFolder}{Optional: the path to use for storing the execution script.
-when NULL, this function will use a temporary
-file location to create the script to execute.}
-
-\item{keyringName}{The name of the keyring to operate on. This function assumes you have
-created the keyring before calling this function. It defaults to
-NULL to select the default keyring. If the keyring is password
-protected, the password must be stored in the environment variable
-STRATEGUS_KEYRING_PASSWORD so it is retrieved using the command
-Sys.getenv("STRATEGUS_KEYRING_PASSWORD")}
-
-\item{restart}{Restart run? Requires \code{executionScriptFolder} to be specified, and be
-the same as the \code{executionScriptFolder} used in the run to restart.}
-
-\item{enforceModuleDependencies}{When set to TRUE, Strategus will enforce
-module dependencies that are declared by each module. For example, the
-CohortDiagnostics module declares a dependency on the CohortGenerator module
-and Strategus will require that an analysis specification declare that both
-modules must exist in order to execute the analysis. When set to FALSE,
-Strategus will not enforce these module dependencies which assumes you have
-properly run all module dependencies yourself. Setting this to FALSE is not
-recommended since it is potentially unsafe.}
+\item{connectionDetails}{An object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 }
 \value{
-Does not return anything. Is called for the side-effect of executing the specified
-analyses.
+Returns a list of lists that contains
+\itemize{
+\item moduleName: The name of the module executed
+\item result: The result of the execution. See purrr::safely for details on
+this result.
+\item executionTime: The time for the module to execute
+}
 }
 \description{
 Execute analysis specifications.

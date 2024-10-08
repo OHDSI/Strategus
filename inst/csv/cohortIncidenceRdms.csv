@@ -1,0 +1,48 @@
+table_name,column_name,data_type,is_required,primary_key,description
+incidence_summary,ref_id,int,no,no,The reference identifier for the analysis
+incidence_summary,database_id,varchar(255),yes,no,The database identifier
+incidence_summary,source_name,varchar(255),no,no,The source name for the database
+incidence_summary,target_cohort_definition_id,bigint,no,no,Target cohort identifier
+incidence_summary,tar_id,bigint,no,no,Time-at-risk identifier
+incidence_summary,subgroup_id,bigint,no,no,Subgroup identifier
+incidence_summary,outcome_id,bigint,no,no,Outcome cohort identifier
+incidence_summary,age_group_id,int,no,no,Age group identifier
+incidence_summary,gender_id,int,no,no,Gender identifier
+incidence_summary,gender_name,varchar(255),no,no,Gender name
+incidence_summary,start_year,int,no,no,Start year
+incidence_summary,persons_at_risk_pe,bigint,no,no,Persons at risk pre-exclude (counts before excluding time at risk)
+incidence_summary,persons_at_risk,bigint,no,no,Persons at risk
+incidence_summary,person_days_pe,bigint,no,no,Person days pre-exclude (counts before excluding time at risk)
+incidence_summary,person_days,bigint,no,no,Person days
+incidence_summary,person_outcomes_pe,bigint,no,no,Person outcomes pre-exclude (counts before excluding time at risk)
+incidence_summary,person_outcomes,bigint,no,no,Person outcomes
+incidence_summary,outcomes_pe,bigint,no,no,Outcomes pre-exclude (counts before excluding time at risk)
+incidence_summary,outcomes,bigint,no,no,Outcomes
+incidence_summary,incidence_proportion_p100p,float,no,no,Incidence proportion (person_outcomes / persons_at_risk) per 100 people
+incidence_summary,incidence_rate_p100py,float,no,no,Incidence rate (outcomes / time_at_risk) per 100 person years
+target_def,ref_id,int,yes,yes,The reference identifier for the analysis
+target_def,target_cohort_definition_id,bigint,yes,yes,Target cohort identifier
+target_def,target_name,varchar(255),no,no,Target cohort name
+outcome_def,ref_id,int,yes,yes,The reference identifier for the analysis
+outcome_def,outcome_id,bigint,yes,yes,Outcome identifier
+outcome_def,outcome_cohort_definition_id,bigint,no,no,Outcome cohort identifier
+outcome_def,outcome_name,varchar(255),no,no,Outcome name
+outcome_def,clean_window,bigint,no,no,Clean window
+outcome_def,excluded_cohort_definition_id,bigint,no,no,Excluded cohort identifier
+tar_def,ref_id,int,yes,yes,The reference identifier for the analysis
+tar_def,tar_id,bigint,yes,yes,Time-at-risk identifier
+tar_def,tar_start_with,varchar(10),no,no,Time-at-risk start anchor
+tar_def,tar_start_offset,bigint,no,no,Time-at-risk start offset in days
+tar_def,tar_end_with,varchar(10),no,no,Time-at-risk end anchor
+tar_def,tar_end_offset,bigint,no,no,Time-at-risk end offset in days
+age_group_def,ref_id,int,yes,yes,The reference identifier for the analysis
+age_group_def,age_group_id,int,yes,yes,Age group identifier
+age_group_def,age_group_name,varchar(255),yes,no,Age group name
+age_group_def,min_age,int,no,no,Minimum age
+age_group_def,max_age,int,no,no,Maximum age
+subgroup_def,ref_id,int,yes,yes,The reference identifier for the analysis
+subgroup_def,subgroup_id,bigint,no,yes,The subgroup identifier
+subgroup_def,subgroup_name,varchar(255),no,no,The subgroup name
+target_outcome_ref,ref_id,int,yes,yes,The reference identifier for the analysis
+target_outcome_ref,target_cohort_id,bigint,yes,yes,The target cohort identifier
+target_outcome_ref,outcome_cohort_id,bigint,yes,yes,The outcome cohort identifier

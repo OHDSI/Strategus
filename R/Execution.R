@@ -14,52 +14,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Note: Using S3 for consistency with settings objects in PLP, CohortMethod, and
-# FeatureExtraction. If we want to use S4 or R6 we need to first adapt those
-# packages. This will be difficult, since these settings objects are used throughout
-# these packages, and are for example used in do.call() calls. We should also
-# carefully consider serialization and deserialization to JSON, which currently
-# uses custom functionality in ParallelLogger to maintain object attributes.
-
 #' Execute analysis specifications.
 #'
 #' @template AnalysisSpecifications
 #' @template executionSettings
-#' @param executionScriptFolder   Optional: the path to use for storing the execution script.
-#'                                when NULL, this function will use a temporary
-#'                                file location to create the script to execute.
-#' @template keyringName
-#' @param restart                 Restart run? Requires `executionScriptFolder` to be specified, and be
-#'                                the same as the `executionScriptFolder` used in the run to restart.
-#'
-#' @template enforceModuleDependencies
+#' @template connectionDetails
 #'
 #' @return
-#' Does not return anything. Is called for the side-effect of executing the specified
-#' analyses.
+#' Returns a list of lists that contains
+#' - moduleName: The name of the module executed
+#' - result: The result of the execution. See purrr::safely for details on
+#' this result.
+#' - executionTime: The time for the module to execute
 #'
 #' @export
 execute <- function(analysisSpecifications,
                     executionSettings,
-                    executionScriptFolder = NULL,
-                    keyringName = NULL,
-                    restart = FALSE,
-                    enforceModuleDependencies = TRUE) {
+                    connectionDetails) {
   errorMessages <- checkmate::makeAssertCollection()
-  keyringList <- keyring::keyring_list()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
-  checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Validate the execution settings
   if (is(executionSettings, "CdmExecutionSettings")) {
     # Assert that the temp emulation schema is set if required for the dbms
     # specified by the executionSettings
-    connectionDetails <- retrieveConnectionDetails(
-      connectionDetailsReference = executionSettings$connectionDetailsReference,
-      keyringName = keyringName
-    )
     DatabaseConnector::assertTempEmulationSchemaSet(
       dbms = connectionDetails$dbms,
       tempEmulationSchema = executionSettings$tempEmulationSchema
@@ -87,7 +67,6 @@ execute <- function(analysisSpecifications,
             return(TRUE)
           },
           warning = function(w) {
-            warning(w)
             return(FALSE)
           }
         )
@@ -101,149 +80,159 @@ execute <- function(analysisSpecifications,
     }
   }
 
-  # Validate the modules
-  modules <- ensureAllModulesInstantiated(
-    analysisSpecifications = analysisSpecifications,
-    enforceModuleDependencies = enforceModuleDependencies
-  )
-  if (isFALSE(modules$allModulesInstalled)) {
-    stop("Stopping execution due to module issues")
+  # Determine if the user has opted to subset to specific modules
+  # in the analysis specification. If so, validate that the
+  # modulesToExecute are present in the analysis specification
+  # before attempting to subset the analyses to run.
+  if (length(executionSettings$modulesToExecute) > 0) {
+    # Get the modules in the analysis specification with their
+    # index in the array
+    modulesWithIndex <- lapply(
+      X = seq_along(analysisSpecifications$moduleSpecifications),
+      FUN = function(i) {
+        list(
+          idx = i,
+          module = analysisSpecifications$moduleSpecifications[[i]]$module
+        )
+      }
+    )
+    modulesInAnalysisSpecification <- sapply(
+      X = modulesWithIndex,
+      FUN = function(x) {
+        x$module
+      }
+    )
+
+    modulesToExecuteString <- paste(executionSettings$modulesToExecute, collapse = ", ")
+    modulesInAnalysisSpecificationString <- paste(modulesInAnalysisSpecification, collapse = ", ")
+
+    # Stop if we cannot find all of the requested modules
+    # to execute in the overall analysis specification
+    if (!all(tolower(executionSettings$modulesToExecute) %in% tolower(modulesInAnalysisSpecification))) {
+      errorMsg <- paste0(
+        "The executionSettings specified to run only the modules: ",
+        modulesToExecuteString,
+        ".\n However the analysis specification includes the following modules: ",
+        modulesInAnalysisSpecificationString
+      )
+      stop(errorMsg)
+    }
+
+    # Subset the analysis specifications to those modules
+    # specified by the user
+    cli::cli_alert_info(paste0("Runnning a subset of modules: ", modulesToExecuteString))
+    moduleSubset <- unlist(
+      lapply(
+        X = modulesWithIndex,
+        FUN = function(x) {
+          if (tolower(x$module) %in% tolower(executionSettings$modulesToExecute)) {
+            return(x$idx)
+          }
+        }
+      )
+    )
+    analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[moduleSubset]
   }
 
-  if (is.null(executionScriptFolder)) {
-    executionScriptFolder <- tempfile("strategusTempSettings")
-    dir.create(executionScriptFolder)
-    on.exit(unlink(executionScriptFolder, recursive = TRUE))
-  } else if (!restart) {
-    if (dir.exists(executionScriptFolder)) {
-      unlink(executionScriptFolder, recursive = TRUE)
-    }
-    dir.create(executionScriptFolder, recursive = TRUE)
+
+  # Set up logging
+  if (!dir.exists(dirname(executionSettings$logFileName))) {
+    dir.create(dirname(executionSettings$logFileName), recursive = T)
   }
-  # Normalize path to convert from relative to absolute path
-  executionScriptFolder <- normalizePath(executionScriptFolder, mustWork = F)
+  ParallelLogger::addDefaultFileLogger(
+    name = "STRATEGUS_LOGGER",
+    fileName = executionSettings$logFileName
+  )
+  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
 
   if (is(executionSettings, "CdmExecutionSettings")) {
-    executionSettings$databaseId <- createDatabaseMetaData(
-      executionSettings = executionSettings,
-      keyringName = keyringName
+    cdmDatabaseMetaData <- getCdmDatabaseMetaData(
+      cdmExecutionSettings = executionSettings,
+      connectionDetails = connectionDetails
     )
+    executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
+    .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
   }
-  dependencies <- extractDependencies(modules$modules)
 
+  executionStatus <- list()
 
-  fileName <- generateTargetsScript(
-    analysisSpecifications = analysisSpecifications,
-    executionSettings = executionSettings,
-    dependencies = dependencies,
-    executionScriptFolder = executionScriptFolder,
-    restart = restart,
-    keyringName = keyringName
-  )
-  # targets::tar_manifest(script = fileName)
-  # targets::tar_glimpse(script = fileName)
-  targets::tar_make(script = fileName, store = file.path(executionScriptFolder, "_targets"))
+  # Execute the cohort generator module first if it exists
+  for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
+    moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
+    if (tolower(moduleName) == "cohortgeneratormodule") {
+      moduleExecutionStatus <- .executeModule(
+        moduleName = moduleName,
+        connectionDetails = connectionDetails,
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = executionSettings
+      )
+      executionStatus <- append(
+        executionStatus,
+        moduleExecutionStatus
+      )
+      break
+    }
+  }
+
+  # Execute any other modules
+  for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
+    moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
+    if (tolower(moduleName) != "cohortgeneratormodule") {
+      moduleExecutionStatus <- .executeModule(
+        moduleName = moduleName,
+        connectionDetails = connectionDetails,
+        analysisSpecifications = analysisSpecifications,
+        executionSettings = executionSettings
+      )
+      executionStatus <- append(
+        executionStatus,
+        moduleExecutionStatus
+      )
+    }
+  }
+
+  # Print a summary
+  cli::cli_h1("EXECUTION SUMMARY")
+  for (i in 1:length(executionStatus)) {
+    status <- executionStatus[[i]]
+    errorMessage <- ifelse(!is.null(status$result$error), status$result$error, "")
+    statusMessage <- sprintf("%s %s (Execution Time: %s)", status$moduleName, errorMessage, status$executionTime)
+    if (!is.null(status$result$error)) {
+      cli::cli_alert_danger(statusMessage)
+    } else {
+      cli::cli_alert_success(statusMessage)
+    }
+  }
+
+  invisible(executionStatus)
 }
 
-generateTargetsScript <- function(analysisSpecifications, executionSettings, dependencies, executionScriptFolder, keyringName, restart) {
-  fileName <- file.path(executionScriptFolder, "script.R")
-  if (restart) {
-    return(fileName)
-  }
-
-  ### Note anything inisde this block will be scoped inside the targets script file
-  targets::tar_script(
-    {
-      ##
-      # Generated by Strategus - not advisable to edit by hand
-      ##
-      analysisSpecificationsLoad <- readRDS(analysisSpecificationsFileName)
-      moduleToTargetNames <- readRDS(moduleToTargetNamesFileName)
-      dependencies <- readRDS(dependenciesFileName)
-
-      targets::tar_option_set(packages = c("Strategus", "keyring"), imports = c("Strategus", "keyring"))
-      targetList <- list(
-        targets::tar_target(analysisSpecifications, readRDS(analysisSpecificationsFileName)),
-        # NOTE Execution settings could be mapped to many different cdms making re-execution across cdms much simpler
-        targets::tar_target(executionSettings, readRDS(executionSettingsFileName)),
-        targets::tar_target(keyringSettings, readRDS(keyringSettingsFileName))
-      )
-
-      # factory for producing module targets based on their dependencies
-      # This could be inside Strategus as an exported function
-      # it would also be much cleaner to use a targets pattern = cross(analysisSpecifications$moduleSpecifications)
-      # however, working out how to handle dependencies wasn't obvious
-      # This approach could be modified to allow multiple executionSettings, but that would require a substantial re-write
-      for (i in 1:length(analysisSpecificationsLoad$moduleSpecifications)) {
-        moduleSpecification <- analysisSpecificationsLoad$moduleSpecifications[[i]]
-        targetName <- sprintf("%s_%d", moduleSpecification$module, i)
-        dependencyModules <- dependencies[dependencies$module == moduleSpecification$module, ]$dependsOn
-        dependencyTargetNames <- moduleToTargetNames[moduleToTargetNames$module %in% dependencyModules, ]$targetName
-
-        # Use of tar_target_raw allows dynamic names
-        targetList[[length(targetList) + 1]] <- targets::tar_target_raw(targetName,
-          substitute(Strategus:::runModule(analysisSpecifications, keyringSettings, i, executionSettings),
-            env = list(i = i)
-          ),
-          deps = c("analysisSpecifications", "keyringSettings", "executionSettings", dependencyTargetNames)
-        )
-
-        if (execResultsUpload) {
-          resultsTargetName <- paste0(targetName, "_results_upload")
-          targetList[[length(targetList) + 1]] <- targets::tar_target_raw(resultsTargetName,
-            substitute(Strategus:::runResultsUpload(analysisSpecifications, keyringSettings, i, executionSettings),
-              env = list(i = i)
-            ),
-            deps = c("analysisSpecifications", "keyringSettings", "executionSettings", targetName)
-          )
-        }
-      }
-      targetList
-    },
-    script = fileName
+.executeModule <- function(moduleName, connectionDetails, analysisSpecifications, executionSettings) {
+  moduleObject <- get(moduleName)$new()
+  safeExec <- purrr::safely(moduleObject$execute)
+  startTime <- Sys.time()
+  executionResult <- safeExec(
+    connectionDetails = connectionDetails,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
   )
-
-  # Store settings objects in the temp folder so they are available in targets
-  analysisSpecificationsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "analysisSpecifications.rds"))
-  saveRDS(analysisSpecifications, analysisSpecificationsFileName)
-  executionSettingsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "executionSettings.rds"))
-  saveRDS(executionSettings, executionSettingsFileName)
-  keyringSettingsFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "keyringSettings.rds"))
-  saveRDS(list(keyringName = keyringName), keyringSettingsFileName)
-
-  # Generate target names by module type
-  moduleToTargetNames <- list()
-  for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
-    moduleSpecification <- analysisSpecifications$moduleSpecifications[[i]]
-    targetName <- sprintf("%s_%d", moduleSpecification$module, i)
-    moduleToTargetNames[[length(moduleToTargetNames) + 1]] <- tibble(
-      module = moduleSpecification$module,
-      targetName = targetName
-    )
+  timeToExecute <- Sys.time() - startTime
+  # Emit any errors
+  if (!is.null(executionResult$error)) {
+    .printErrorMessage(executionResult$error$message)
   }
-  moduleToTargetNames <- bind_rows(moduleToTargetNames)
-  moduleToTargetNamesFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "moduleTargetNames.rds"))
-  saveRDS(moduleToTargetNames, moduleToTargetNamesFileName)
+  return(
+    list(
+      list(
+        moduleName = moduleName,
+        result = executionResult,
+        executionTime = paste0(signif(timeToExecute, 3), " ", attr(timeToExecute, "units"))
+      )
+    )
+  )
+}
 
-  dependenciesFileName <- .formatAndNormalizeFilePathForScript(file.path(executionScriptFolder, "dependencies.rds"))
-  saveRDS(dependencies, dependenciesFileName)
-
-  execResultsUpload <- all(c(
-    is(executionSettings, "CdmExecutionSettings"),
-    !is.null(executionSettings$resultsConnectionDetailsReference),
-    !is.null(executionSettings$resultsDatabaseSchema)
-  ))
-
-  # Settings required inside script. There is probably a much cleaner way of doing this
-  writeLines(c(
-    sprintf("analysisSpecificationsFileName <- '%s'", analysisSpecificationsFileName),
-    sprintf("executionSettingsFileName <- '%s'", executionSettingsFileName),
-    sprintf("keyringSettingsFileName <- '%s'", keyringSettingsFileName),
-    sprintf("moduleToTargetNamesFileName <- '%s'", moduleToTargetNamesFileName),
-    sprintf("dependenciesFileName <- '%s'", dependenciesFileName),
-    sprintf("execResultsUpload <- '%s'", execResultsUpload),
-    readLines(fileName)
-  ), fileName)
-
-  return(fileName)
+.printErrorMessage <- function(message) {
+  error <- cli::combine_ansi_styles("red")
+  cat(error(paste0("ERROR: ", message, "\n")))
 }

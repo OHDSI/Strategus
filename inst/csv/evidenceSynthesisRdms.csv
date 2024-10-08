@@ -1,0 +1,85 @@
+table_name,column_name,data_type,is_required,primary_key,min_cell_count,description
+es_analysis,evidence_synthesis_analysis_id,int,Yes,Yes,No,A unique identifier for the evidence synthesis analysis.
+es_analysis,evidence_synthesis_description,varchar(255),Yes,No,No,A description of the evidence synthesis analysis.
+es_analysis,source_method,varchar(100),Yes,No,No,The method used to produce the source estimates (e.g. 'CohortMethod').
+es_analysis,definition,varchar,Yes,No,No,A JSON string representing the settings of the evidence synthesis analysis.
+es_cm_diagnostics_summary,target_id,int,Yes,Yes,No,The identifier for the target cohort.
+es_cm_diagnostics_summary,comparator_id,int,Yes,Yes,No,The identifier for the comparator cohort.
+es_cm_diagnostics_summary,outcome_id,int,Yes,Yes,No,The identifier for the outcome cohort.
+es_cm_diagnostics_summary,analysis_id,int,Yes,Yes,No,A unique identifier for the cohort method analysis.
+es_cm_diagnostics_summary,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_cm_diagnostics_summary,mdrr,float,No,No,No,The minimum detectable relative risk.
+es_cm_diagnostics_summary,i_2,float,No,No,No,The I2 statistics for heterogeneity.
+es_cm_diagnostics_summary,tau,float,No,No,No,The estimated tau (standard deviation of the random-effects distribution).
+es_cm_diagnostics_summary,ease,float,No,No,No,The expected absolute systematic error.
+es_cm_diagnostics_summary,mdrr_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the MDRR diagnostic.
+es_cm_diagnostics_summary,i_2_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the I2 diagnostic.
+es_cm_diagnostics_summary,tau_diagnostic,varchar(13),Yes,No,No,PPASS/ NOT EVALUATED / FAIL classification of the tau diagnostic.
+es_cm_diagnostics_summary,ease_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the EASE diagnostic.
+es_cm_diagnostics_summary,unblind,int,Yes,No,No,"Is unblinding the result recommended? (1 = yes, 0 = no)"
+es_cm_result,target_id,int,Yes,Yes,No,The identifier for the target cohort.
+es_cm_result,comparator_id,int,Yes,Yes,No,The identifier for the comparator cohort.
+es_cm_result,outcome_id,int,Yes,Yes,No,The identifier for the outcome cohort.
+es_cm_result,analysis_id,int,Yes,Yes,No,A unique identifier for the cohort method analysis.
+es_cm_result,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_cm_result,rr,float,No,No,No,The estimated relative risk (e.g. the hazard ratio).
+es_cm_result,ci_95_lb,float,No,No,No,The lower bound of the 95% confidence interval of the relative risk.
+es_cm_result,ci_95_ub,float,No,No,No,The upper bound of the 95% confidence interval of the relative risk.
+es_cm_result,p,float,No,No,No,The two-sided p-value considering the null hypothesis of no effect.
+es_cm_result,one_sided_p,float,No,No,No,The one-sided p-value considering the null hypothesis of RR <= 1.
+es_cm_result,log_rr,float,No,No,No,The log of the relative risk.
+es_cm_result,se_log_rr,float,No,No,No,The standard error of the log of the relative risk.
+es_cm_result,target_subjects,int,No,No,Yes,The number of subject in the target cohort.
+es_cm_result,comparator_subjects,int,No,No,Yes,The number of subject in the comparator cohort.
+es_cm_result,target_days,int,No,No,No,The number of days observed in the target cohort.
+es_cm_result,comparator_days,int,No,No,No,The number of days observed in the comparator cohort.
+es_cm_result,target_outcomes,int,No,No,Yes,The number of outcomes observed in the target cohort.
+es_cm_result,comparator_outcomes,int,No,No,Yes,The number of outcomes observed in the comparator cohort.
+es_cm_result,n_databases,int,Yes,No,No,The number of databases that contributed to the meta-analytic estimate.
+es_cm_result,calibrated_rr,float,No,No,No,The calibrated relative risk.
+es_cm_result,calibrated_ci_95_lb,float,No,No,No,The lower bound of the calibrated 95% confidence interval of the relative risk.
+es_cm_result,calibrated_ci_95_ub,float,No,No,No,The upper bound of the calibrated 95% confidence interval of the relative risk.
+es_cm_result,calibrated_p,float,No,No,No,The calibrated two-sided p-value.
+es_cm_result,calibrated_one_sided_p,float,No,No,No,The calibrated one-sided p-value considering the null hypothesis of RR <= 1.
+es_cm_result,calibrated_log_rr,float,No,No,No,The log of the calibrated relative risk.
+es_cm_result,calibrated_se_log_rr,float,No,No,No,The standard error of the log of the calibrated relative risk.
+es_sccs_diagnostics_summary,exposures_outcome_set_id,int,Yes,Yes,No,A foreign key referencing the sccs_exposures_outcome_set table.
+es_sccs_diagnostics_summary,covariate_id,int,Yes,Yes,No,A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest.
+es_sccs_diagnostics_summary,analysis_id,int,Yes,Yes,No,A unique identifier for the cohort method analysis.
+es_sccs_diagnostics_summary,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_sccs_diagnostics_summary,mdrr,float,No,No,No,The minimum detectable relative risk.
+es_sccs_diagnostics_summary,i_2,float,No,No,No,The I2 statistics for heterogeneity.
+es_sccs_diagnostics_summary,tau,float,No,No,No,The estimated tau (standard deviation of the random-effects distribution).
+es_sccs_diagnostics_summary,ease,float,No,No,No,The expected absolute systematic error.
+es_sccs_diagnostics_summary,mdrr_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the MDRR diagnostic.
+es_sccs_diagnostics_summary,i_2_diagnostic,varchar(13),Yes,No,No,Pass / warning / fail classification of the I2 diagnostic.
+es_sccs_diagnostics_summary,tau_diagnostic,varchar(13),Yes,No,No,Pass / warning / fail classification of the tau diagnostic.
+es_sccs_diagnostics_summary,ease_diagnostic,varchar(13),Yes,No,No,Pass / warning / fail classification of the EASE diagnostic.
+es_sccs_diagnostics_summary,unblind,int,Yes,No,No,"Is unblinding the result recommended? (1 = yes, 0 = no)"
+es_sccs_result,analysis_id,int,Yes,Yes,No,A foreign key referencing the sccs_analysis table.
+es_sccs_result,exposures_outcome_set_id,int,Yes,Yes,No,A foreign key referencing the sccs_exposures_outcome_set table.
+es_sccs_result,covariate_id,int,Yes,Yes,No,A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest.
+es_sccs_result,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_sccs_result,rr,float,No,No,No,The estimated relative risk (i.e. the incidence rate ratio).
+es_sccs_result,ci_95_lb,float,No,No,No,The lower bound of the 95% confidence interval of the relative risk.
+es_sccs_result,ci_95_ub,float,No,No,No,The upper bound of the 95% confidence interval of the relative risk.
+es_sccs_result,p,float,No,No,No,The two-sided p-value considering the null hypothesis of no effect.
+es_sccs_result,one_sided_p,float,No,No,No,The one-sided p-value considering the null hypothesis of RR <= 1.
+es_sccs_result,outcome_subjects,int,Yes,No,Yes,The number of subjects with at least one outcome.
+es_sccs_result,outcome_events,int,Yes,No,Yes,The number of outcome events.
+es_sccs_result,outcome_observation_periods,int,Yes,No,Yes,The number of observation periods containing at least one outcome.
+es_sccs_result,covariate_subjects,int,Yes,No,Yes,The number of subjects having the covariate.
+es_sccs_result,covariate_days,int,Yes,No,Yes,The total covariate time in days.
+es_sccs_result,covariate_eras,int,Yes,No,Yes,The number of continuous eras of the covariate.
+es_sccs_result,covariate_outcomes,int,Yes,No,Yes,The number of outcomes observed during the covariate time.
+es_sccs_result,observed_days,int,Yes,No,Yes,The number of days subjects were observed.
+es_sccs_result,n_databases,int,Yes,No,No,The number of databases that contributed to the meta-analytic estimate.
+es_sccs_result,log_rr,float,No,No,No,The log of the relative risk.
+es_sccs_result,se_log_rr,float,No,No,No,The standard error of the log of the relative risk.
+es_sccs_result,calibrated_rr,float,No,No,No,The calibrated relative risk.
+es_sccs_result,calibrated_ci_95_lb,float,No,No,No,The lower bound of the calibrated 95% confidence interval of the relative risk.
+es_sccs_result,calibrated_ci_95_ub,float,No,No,No,The upper bound of the calibrated 95% confidence interval of the relative risk.
+es_sccs_result,calibrated_p,float,No,No,No,The calibrated two-sided p-value.
+es_sccs_result,calibrated_one_sided_p,float,No,No,No,The calibrated one-sided p-value considering the null hypothesis of RR <= 1.
+es_sccs_result,calibrated_log_rr,float,No,No,No,The log of the calibrated relative risk.
+es_sccs_result,calibrated_se_log_rr,float,No,No,No,The standard error of the log of the calibrated relative risk.

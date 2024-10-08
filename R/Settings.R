@@ -21,25 +21,9 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-#' Create an empty analysis specifications object.
+#' Add shared resources (i.e. cohorts) to analysis specifications
 #'
-#' @return
-#' An object of type `AnalysisSpecifications`.
-#'
-#' @export
-createEmptyAnalysisSpecificiations <- function() {
-  analysisSpecifications <- list(
-    sharedResources = list(),
-    moduleSpecifications = list()
-  )
-  class(analysisSpecifications) <- "AnalysisSpecifications"
-  return(analysisSpecifications)
-}
-
-#' Add shared resources to analysis specifications
-#'
-#' @param analysisSpecifications An object of type `AnalysisSpecifications` as created
-#'                               by [createEmptyAnalysisSpecificiations()].
+#' @template analysisSpecifications
 #' @param sharedResources   An object of type `SharedResources`.
 #'
 #' @return
@@ -56,11 +40,10 @@ addSharedResources <- function(analysisSpecifications, sharedResources) {
   return(analysisSpecifications)
 }
 
-#' Add module specifications to analysis specifications
+#' Add generic module specifications to analysis specifications
 #'
-#' @param analysisSpecifications An object of type `AnalysisSpecifications` as created
-#'                               by [createEmptyAnalysisSpecificiations()].
-#' @param moduleSpecifications   An object of type `ModuleSpecifications`.
+#' @template analysisSpecifications
+#' @template moduleSpecifications
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -76,10 +59,187 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
   return(analysisSpecifications)
 }
 
+#' Add Characterization module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications   Created by the \href{../../docs/reference/CharacterizationModule.html#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addCharacterizationModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CharacterizationModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Cohort Diagnostics module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortDiagnosticsModule.html#method-CohortDiagnosticsModule-createModuleSpecifications}{\code{CohortDiagnosticsModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addCohortDiagnosticsModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortDiagnosticsModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Cohort Generator module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortGeneratorModule.html#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addCohortGeneratorModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortGeneratorModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Cohort Incidence module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortIncidenceModule.html#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addCohortIncidenceModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortIncidenceModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Cohort Method module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/CohortMethodModule.html#method-CohortMethodModule-createModuleSpecifications}{\code{CohortMethodModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addCohortMethodeModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortMethodModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Evidence Synthesis module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/EvidenceSynthesisModule.html#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addEvidenceSynthesisModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "EvidenceSynthesisModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Patient Level Prediction module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/PatientLevelPredictionModule.html#method-PatientLevelPredictionModule-createModuleSpecifications}{\code{PatientLevelPredictionModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addPatientLevelPredictionModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "PatientLevelPredictionModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Self Controlled Case Series Module module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../../docs/reference/SelfControlledCaseSeriesModule.html#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addSelfControlledCaseSeriesModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "SelfControlledCaseSeriesModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+addAndValidateModuleSpecifications <- function(moduleName, analysisSpecifications, moduleSpecifications) {
+  moduleObj <- get(moduleName)$new()
+  moduleObj$validateModuleSpecifications(moduleSpecifications)
+  analysisSpecifications <- addModuleSpecifications(
+    analysisSpecifications = analysisSpecifications,
+    moduleSpecifications = moduleSpecifications
+  )
+  return(analysisSpecifications)
+}
+
+
+#' Create an empty analysis specifications object.
+#'
+#' @return
+#' An object of type `AnalysisSpecifications`.
+#'
+#' @export
+createEmptyAnalysisSpecificiations <- function() {
+  analysisSpecifications <- list(
+    sharedResources = list(),
+    moduleSpecifications = list()
+  )
+  class(analysisSpecifications) <- "AnalysisSpecifications"
+  return(analysisSpecifications)
+}
+
+
 #' Create CDM execution settings
 #'
-#' @param connectionDetailsReference A string that can be used to retrieve database connection details from a secure local
-#'                                   store.
 #' @param workDatabaseSchema         A database schema where intermediate data can be stored. The user (as identified in the
 #'                                   connection details) will need to have write access to this database schema.
 #' @param cdmDatabaseSchema          The database schema containing the data in CDM format. The user (as identified in the
@@ -89,22 +249,23 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #'                                   [CohortGenerator::getCohortTableNames()] function.
 #' @param tempEmulationSchema        Some database platforms like Oracle and Impala do not truly support temp tables. To emulate temp tables, provide a schema with write privileges where temp tables can be created.
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
-#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @template resultsFolder
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
-#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
-#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
-#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
-#'                                          details from a secure local store.
-#' @param resultsDatabaseSchema      A schema where the results tables are stored
+#' @param incremental                This value will be passed to each module that supports execution in an incremental manner. Modules
+#'                                   and their underlying packages may use the `workFolder` contents to determine their state of execution
+#'                                   and attempt to pick up where they left off when this value is set to TRUE.
+#' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
+#'                                   use all available cores on the machine.
+#' @param modulesToExecute           (Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
+#'                                   all modules in the analysis specification are executed.
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
 #'
 #' @export
-createCdmExecutionSettings <- function(connectionDetailsReference,
-                                       workDatabaseSchema,
+createCdmExecutionSettings <- function(workDatabaseSchema,
                                        cdmDatabaseSchema,
                                        cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort"),
                                        tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
@@ -112,12 +273,10 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
                                        resultsFolder,
                                        logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                        minCellCount = 5,
-                                       integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-                                       integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE),
-                                       resultsConnectionDetailsReference = NULL,
-                                       resultsDatabaseSchema = NULL) {
+                                       incremental = TRUE,
+                                       maxCores = parallel::detectCores(),
+                                       modulesToExecute = c()) {
   errorMessages <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(cdmDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertList(cohortTableNames, add = errorMessages)
@@ -125,10 +284,9 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
-  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
-  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
-  checkmate::assertCharacter(resultsConnectionDetailsReference, null.ok = TRUE, add = errorMessages)
-  checkmate::assertCharacter(resultsDatabaseSchema, null.ok = TRUE, add = errorMessages)
+  checkmate::assertLogical(incremental, add = errorMessages)
+  checkmate::assertInt(maxCores, add = errorMessages)
+  checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -136,59 +294,46 @@ createCdmExecutionSettings <- function(connectionDetailsReference,
   resultsFolder <- normalizePath(resultsFolder, mustWork = F)
   logFileName <- normalizePath(logFileName, mustWork = F)
 
-  executionSettings <- list(
-    connectionDetailsReference = connectionDetailsReference,
-    workDatabaseSchema = workDatabaseSchema,
-    cdmDatabaseSchema = cdmDatabaseSchema,
-    cohortTableNames = cohortTableNames,
-    tempEmulationSchema = tempEmulationSchema,
-    workFolder = workFolder,
-    resultsFolder = resultsFolder,
-    logFileName = logFileName,
-    minCellCount = minCellCount,
-    integerAsNumeric = integerAsNumeric,
-    integer64AsNumeric = integer64AsNumeric,
-    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-    resultsDatabaseSchema = resultsDatabaseSchema
-  )
+  executionSettings <- list()
+  for (name in names(formals(createCdmExecutionSettings))) {
+    executionSettings[[name]] <- get(name)
+  }
   class(executionSettings) <- c("CdmExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
 
 #' Create Results execution settings
 #'
-#' @param resultsConnectionDetailsReference A string that can be used to retrieve the results database connection
-#'                                          details from a secure local store.
-#' @param resultsDatabaseSchema      A schema where the results tables are stored
+#' @template resultsDatabaseSchema
 #' @param workFolder                 A folder in the local file system where intermediate results can be written.
-#' @param resultsFolder              A folder in the local file system where the module output will be written.
+#' @template resultsFolder
 #' @param logFileName                Logging information from Strategus and all modules will be located in this file. Individual modules will continue to have their own module-specific logs. By default this will be written to the root of the `resultsFolder`
 #' @param minCellCount               The minimum number of subjects contributing to a count before it can be included
 #'                                   in results.
-#' @param integerAsNumeric           Logical: should 32-bit integers be converted to numeric (double) values? If FALSE 32-bit integers will be represented using R's native `Integer` class. Default is TRUE
-#' @param integer64AsNumeric         Logical: should 64-bit integers be converted to numeric (double) values? If FALSE 64-bit integers will be represented using `bit64::integer64`.  Default is TRUE
+#' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
+#'                                   use all available cores on the machine.
+#' @param modulesToExecute           (Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
+#'                                   all modules in the analysis specification are executed.
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
 #'
 #' @export
-createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
-                                           resultsDatabaseSchema,
+createResultsExecutionSettings <- function(resultsDatabaseSchema,
                                            workFolder,
                                            resultsFolder,
                                            logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                            minCellCount = 5,
-                                           integerAsNumeric = getOption("databaseConnectorIntegerAsNumeric", default = TRUE),
-                                           integer64AsNumeric = getOption("databaseConnectorInteger64AsNumeric", default = TRUE)) {
+                                           maxCores = parallel::detectCores(),
+                                           modulesToExecute = c()) {
   errorMessages <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(resultsConnectionDetailsReference, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
-  checkmate::assertLogical(integerAsNumeric, max.len = 1, add = errorMessages)
-  checkmate::assertLogical(integer64AsNumeric, max.len = 1, add = errorMessages)
+  checkmate::assertInt(maxCores, add = errorMessages)
+  checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -196,193 +341,45 @@ createResultsExecutionSettings <- function(resultsConnectionDetailsReference,
   resultsFolder <- normalizePath(resultsFolder, mustWork = F)
   logFileName <- normalizePath(logFileName, mustWork = F)
 
-  executionSettings <- list(
-    resultsConnectionDetailsReference = resultsConnectionDetailsReference,
-    resultsDatabaseSchema = resultsDatabaseSchema,
-    workFolder = workFolder,
-    resultsFolder = resultsFolder,
-    logFileName = logFileName,
-    minCellCount = minCellCount,
-    integerAsNumeric = integerAsNumeric,
-    integer64AsNumeric = integer64AsNumeric
-  )
+  executionSettings <- list()
+  for (name in names(formals(createResultsExecutionSettings))) {
+    executionSettings[[name]] <- get(name)
+  }
   class(executionSettings) <- c("ResultsExecutionSettings", "ExecutionSettings")
   return(executionSettings)
 }
 
-
-
-# Note: assuming connectionDetails objects remain stable across the various module
-# versions.
-
-#' Store connection details in a secure location
-#'
-#' @param connectionDetails          An object of type `connectionDetails` as created by the
-#'                                   [DatabaseConnector::createConnectionDetails()] function.
-#' @param connectionDetailsReference  A string that can be used to retrieve the settings from
-#'                                    the secure store.
-#'
-#' @template keyringName
-#'
-#' @seealso [retrieveConnectionDetails()]
-#'
-#' @return
-#' Does not return anything. Is called for the side effect of having the connection details
-#' stored.
-#'
-#' @export
-storeConnectionDetails <- function(connectionDetails, connectionDetailsReference, keyringName = NULL) {
-  errorMessages <- checkmate::makeAssertCollection()
-  # Get the keyring list and verify that the keyring specified exists.
-  # In the case of the default NULL keyring, this will be represented as an empty
-  # string in the keyring list
-  keyringList <- keyring::keyring_list()
-  if (is(connectionDetails, "connectionDetails")) {
-    checkmate::assertClass(connectionDetails, "connectionDetails", add = errorMessages)
-  } else {
-    checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
-  }
-  checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
-  checkmate::assertChoice(x = keyringName, choices = keyringList$keyring, null.ok = TRUE, add = errorMessages)
-  checkmate::reportAssertions(collection = errorMessages)
-
-  # Evaluate functions used to secure details to allow serialization:
-  for (i in 1:length(connectionDetails)) {
-    if (is.function(connectionDetails[[i]])) {
-      detail <- connectionDetails[[i]]()
-      if (is.null(detail)) {
-        connectionDetails[[i]] <- .nullList() # Fixes Issue #74
-      } else {
-        connectionDetails[[i]] <- connectionDetails[[i]]()
-      }
-    }
-  }
-  connectionDetails <- ParallelLogger::convertSettingsToJson(connectionDetails)
-  # If the keyring is locked, unlock it, set the value and then re-lock it
-  keyringLocked <- unlockKeyring(keyringName = keyringName)
-  keyring::key_set_with_value(connectionDetailsReference, password = connectionDetails, keyring = keyringName)
-  if (keyringLocked) {
-    keyring::keyring_lock(keyring = keyringName)
-  }
-  invisible(NULL)
-}
-
-#' Retrieve connection details from the secure location
-#'
-#' @param connectionDetailsReference  A string that can be used to retrieve the settings from
-#'                                    the secure store.
-#'
-#' @template keyringName
-#'
-#' @seealso [storeConnectionDetails()]
-#'
-#' @return
-#' Returns an object of type `connectionDetails`.
-#'
-#' @export
-retrieveConnectionDetails <- function(connectionDetailsReference, keyringName = NULL) {
-  keyringList <- keyring::keyring_list()
-  errorMessages <- checkmate::makeAssertCollection()
-  checkmate::assertCharacter(connectionDetailsReference, len = 1, add = errorMessages)
-  checkmate::assertLogical(x = (is.null(keyringName) || keyringName %in% keyringList$keyring), add = errorMessages)
-  checkmate::reportAssertions(collection = errorMessages)
-
-  if (!connectionDetailsReference %in% keyring::key_list(keyring = keyringName)$service) {
-    stop("Connection details with connectionDetailsReference = \"", connectionDetailsReference, "\" were not found in your keyring. Please check that you have used the Strategus storeConnectionDetails function to save your connection details with this connectionDetailsReference name.")
-  }
-
-  # If the keyring is locked, unlock it, set the value and then re-lock it
-  keyringLocked <- unlockKeyring(keyringName = keyringName)
-
-  connectionDetails <- keyring::key_get(connectionDetailsReference, keyring = keyringName)
-  connectionDetails <- ParallelLogger::convertJsonToSettings(connectionDetails)
-
-  # Ensure that NA values are converted to NULL prior to calling
-  # DatabaseConnector. To do this, we'll construct a new connectionDetails
-  # list from keyring where the connectionDetails are NOT NA. This will
-  # allow for calling DatabaseConnector::createConnectionDetails with
-  # NULL values where NAs are present in the serialized version of the
-  # connectionDetails from keyring.
-  connectionDetailsConstructedFromKeyring <- list()
-  for (i in 1:length(connectionDetails)) {
-    if (isFALSE(is.na(connectionDetails[[i]]))) {
-      connectionDetailsConstructedFromKeyring[names(connectionDetails)[i]] <- connectionDetails[[i]]
-    }
-  }
-
-  connectionDetails <- do.call(DatabaseConnector::createConnectionDetails, connectionDetailsConstructedFromKeyring)
-
-  if (keyringLocked) {
-    keyring::keyring_lock(keyring = keyringName)
-  }
-
-  return(connectionDetails)
-}
-
-#' Provides a list of HADES modules to run through Strategus
+#' Create Results Data Model Settings
 #'
 #' @description
-#' This function provides a list of modules and their locations
-#' that may be used with Strategus.
+#' The results data model settings are used to create the results data
+#' model and to upload results.
+#'
+#' @template resultsDatabaseSchema
+#' @template resultsFolder
+#' @param logFileName     Log location for data model operations
 #'
 #' @return
-#' A data.frame() of modules that work with Strategus. This will contain:
-#' module = The name of the module
-#' version = The version of the module
-#' remote_repo = The remote location of the module (i.e. github.com)
-#' remote_username = The organization of the module (i.e. OHDSI)
-#' module_type = 'cdm' or 'results'. 'cdm' refers to modules that are designed to work against
-#' patient level data in the OMOP CDM format. 'results' refers to modules that are designed
-#' to work against a results database containing output from a 'cdm' module.
+#' An object of type `ResultsDataModelSettings`
 #'
 #' @export
-getModuleList <- function() {
-  moduleList <- CohortGenerator::readCsv(file = system.file("csv/modules.csv",
-    package = "Strategus",
-    mustWork = TRUE
-  ))
-  return(moduleList)
-}
+createResultsDataModelSettings <- function(resultsDatabaseSchema,
+                                           resultsFolder,
+                                           logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt")) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
 
-#' Helper function to unlock a keyring
-#'
-#' @description
-#' This helper function is used to unlock a keyring by using the password
-#' stored in Sys.getenv("STRATEGUS_KEYRING_PASSWORD"). It will alert
-#' the user if the environment variable with the password is not set.
-#'
-#' @template keyringName
-#'
-#' @return
-#' Returns TRUE if the keyring was unlocked using the password otherwise
-#' it returns FALSE
-#'
-#' @export
-unlockKeyring <- function(keyringName) {
-  # If the keyring is locked, unlock it, set the value and then re-lock it
-  keyringLocked <- keyring::keyring_is_locked(keyring = keyringName)
-  if (keyringLocked) {
-    x <- Sys.getenv("STRATEGUS_KEYRING_PASSWORD")
-    if (length(x) == 0 || x == "") {
-      stop(paste0("STRATEGUS_KEYRING_PASSWORD NOT FOUND. STRATEGUS_KEYRING_PASSWORD must be set using Sys.setenv(STRATEGUS_KEYRING_PASSWORD = \"<your password>\") to unlock the keyring: ", keyringName))
-    }
-    keyring::keyring_unlock(keyring = keyringName, password = Sys.getenv("STRATEGUS_KEYRING_PASSWORD"))
+  # Normalize paths to convert relative paths to absolute paths
+  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+  logFileName <- normalizePath(logFileName, mustWork = F)
+
+  executionSettings <- list()
+  for (name in names(formals(createResultsDataModelSettings))) {
+    executionSettings[[name]] <- get(name)
   }
-  return(keyringLocked)
-}
-
-#' @keywords internal
-.checkModuleFolderSetting <- function(x) {
-  if (length(x) == 0 || x == "") {
-    return(paste0("INSTANTIATED_MODULES_FOLDER environment variable has not been set. INSTANTIATED_MODULES_FOLDER must be set using Sys.setenv(INSTANTIATED_MODULES_FOLDER = \"/somepath\")"))
-  } else {
-    return(TRUE)
-  }
-}
-
-#' Used when serializing connection details to retain NULL values
-#'
-#' @keywords internal
-.nullList <- function() {
-  invisible(list(NULL))
+  class(executionSettings) <- c("ResultsDataModelSettings")
+  return(executionSettings)
 }

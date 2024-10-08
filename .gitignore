@@ -19,3 +19,7 @@ src/*.dll
 /Debug
 standalone/build/*
 _targets
+docs
+
+extras/rdms/public
+extras/rdms/*.class
