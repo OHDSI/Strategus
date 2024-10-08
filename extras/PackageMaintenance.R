@@ -58,8 +58,12 @@ rmarkdown::render("vignettes/IntroductionToStrategus.Rmd",
                                           number_sections = TRUE))
 unlink("inst/doc/IntroductionToStrategus.tex")
 
-pkgdown::build_site()
-OhdsiRTools::fixHadesLogo()
+rmarkdown::render("vignettes/WorkingWithResults.Rmd",
+                  output_file = "../inst/doc/WorkingWithResults.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/WorkingWithResults.tex")
 
 # Produce a study analysis specification for testing -----------
 library(Strategus)
