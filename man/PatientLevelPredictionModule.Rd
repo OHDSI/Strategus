@@ -170,7 +170,7 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \if{html}{\out{<a id="method-PatientLevelPredictionModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-PatientLevelPredictionModule-createModuleSpecifications}{}}}
 \subsection{Method \code{createModuleSpecifications()}}{
-Creates the PatientLevelprediction Module Specifications
+Creates the PatientLevelPrediction Module Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$createModuleSpecifications(modelDesignList)}\if{html}{\out{</div>}}
 }
