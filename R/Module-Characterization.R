@@ -38,10 +38,10 @@ CharacterizationModule <- R6::R6Class(
         outputDirectory = resultsFolder,
         executionPath = workFolder,
         csvFilePrefix = self$tablePrefix,
-        minCellCount =  jobContext$moduleExecutionSettings$minCellCount,
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
         minCharacterizationMean = jobContext$settings$minCharacterizationMean,
         incremental = jobContext$moduleExecutionSettings$incremental,
-        threads = as.double(ifelse(Sys.getenv('CharacterizationThreads') == "", 1,Sys.getenv('CharacterizationThreads') ))
+        threads = as.double(ifelse(Sys.getenv("CharacterizationThreads") == "", 1, Sys.getenv("CharacterizationThreads")))
       )
 
       # Export the resultsDataModelSpecification.csv
@@ -70,7 +70,7 @@ CharacterizationModule <- R6::R6Class(
         deleteExistingTables = T,
         createTables = T,
         tablePrefix = tablePrefix
-          )
+      )
     },
     #' @description Get the results data model specification for the module
     #' @template tablePrefix
@@ -122,78 +122,75 @@ CharacterizationModule <- R6::R6Class(
     #' @param caseCovariateSettings Covariates for the case-series characterization
     #' @param casePreTargetDuration The number of days before target start to use for case-series
     #' @param casePostOutcomeDuration The number of days after outcome start to use for case-series
-    createModuleSpecifications = function(
-      targetIds,
-      outcomeIds, # a vector of ids
-      outcomeWashoutDays = c(365), # same length as outcomeIds with the outcomeWashout
-      minPriorObservation = 365,
-      dechallengeStopInterval = 30,
-      dechallengeEvaluationWindow = 30,
-      riskWindowStart = c(1, 1),
-      startAnchor = c("cohort start", "cohort start"),
-      riskWindowEnd = c(0, 365),
-      endAnchor = c("cohort end", "cohort end"),
-      minCharacterizationMean = 0.01,
-      covariateSettings = FeatureExtraction::createCovariateSettings(
-        useDemographicsGender = T,
-        useDemographicsAge = T,
-        useDemographicsAgeGroup = T,
-        useDemographicsRace = T,
-        useDemographicsEthnicity = T,
-        useDemographicsIndexYear = T,
-        useDemographicsIndexMonth = T,
-        useDemographicsTimeInCohort = T,
-        useDemographicsPriorObservationTime = T,
-        useDemographicsPostObservationTime = T,
-        useConditionGroupEraLongTerm = T,
-        useDrugGroupEraOverlapping = T,
-        useDrugGroupEraLongTerm = T,
-        useProcedureOccurrenceLongTerm = T,
-        useMeasurementLongTerm = T,
-        useObservationLongTerm = T,
-        useDeviceExposureLongTerm = T,
-        useVisitConceptCountLongTerm = T,
-        useConditionGroupEraShortTerm = T,
-        useDrugGroupEraShortTerm = T,
-        useProcedureOccurrenceShortTerm = T,
-        useMeasurementShortTerm = T,
-        useObservationShortTerm = T,
-        useDeviceExposureShortTerm = T,
-        useVisitConceptCountShortTerm = T,
-        endDays = 0,
-        longTermStartDays =  -365,
-        shortTermStartDays = -30
-      ),
-      caseCovariateSettings = Characterization::createDuringCovariateSettings(
-        useConditionGroupEraDuring = T,
-        useDrugGroupEraDuring = T,
-        useProcedureOccurrenceDuring = T,
-        useDeviceExposureDuring = T,
-        useMeasurementDuring = T,
-        useObservationDuring = T,
-        useVisitConceptCountDuring = T
-      ),
-      casePreTargetDuration = 365,
-      casePostOutcomeDuration = 365
-    ) {
+    createModuleSpecifications = function(targetIds,
+                                          outcomeIds, # a vector of ids
+                                          outcomeWashoutDays = c(365), # same length as outcomeIds with the outcomeWashout
+                                          minPriorObservation = 365,
+                                          dechallengeStopInterval = 30,
+                                          dechallengeEvaluationWindow = 30,
+                                          riskWindowStart = c(1, 1),
+                                          startAnchor = c("cohort start", "cohort start"),
+                                          riskWindowEnd = c(0, 365),
+                                          endAnchor = c("cohort end", "cohort end"),
+                                          minCharacterizationMean = 0.01,
+                                          covariateSettings = FeatureExtraction::createCovariateSettings(
+                                            useDemographicsGender = T,
+                                            useDemographicsAge = T,
+                                            useDemographicsAgeGroup = T,
+                                            useDemographicsRace = T,
+                                            useDemographicsEthnicity = T,
+                                            useDemographicsIndexYear = T,
+                                            useDemographicsIndexMonth = T,
+                                            useDemographicsTimeInCohort = T,
+                                            useDemographicsPriorObservationTime = T,
+                                            useDemographicsPostObservationTime = T,
+                                            useConditionGroupEraLongTerm = T,
+                                            useDrugGroupEraOverlapping = T,
+                                            useDrugGroupEraLongTerm = T,
+                                            useProcedureOccurrenceLongTerm = T,
+                                            useMeasurementLongTerm = T,
+                                            useObservationLongTerm = T,
+                                            useDeviceExposureLongTerm = T,
+                                            useVisitConceptCountLongTerm = T,
+                                            useConditionGroupEraShortTerm = T,
+                                            useDrugGroupEraShortTerm = T,
+                                            useProcedureOccurrenceShortTerm = T,
+                                            useMeasurementShortTerm = T,
+                                            useObservationShortTerm = T,
+                                            useDeviceExposureShortTerm = T,
+                                            useVisitConceptCountShortTerm = T,
+                                            endDays = 0,
+                                            longTermStartDays = -365,
+                                            shortTermStartDays = -30
+                                          ),
+                                          caseCovariateSettings = Characterization::createDuringCovariateSettings(
+                                            useConditionGroupEraDuring = T,
+                                            useDrugGroupEraDuring = T,
+                                            useProcedureOccurrenceDuring = T,
+                                            useDeviceExposureDuring = T,
+                                            useMeasurementDuring = T,
+                                            useObservationDuring = T,
+                                            useVisitConceptCountDuring = T
+                                          ),
+                                          casePreTargetDuration = 365,
+                                          casePostOutcomeDuration = 365) {
       # input checks
-      if(!inherits(outcomeIds, "numeric")){
+      if (!inherits(outcomeIds, "numeric")) {
         stop("outcomeIds must be a numeric or a numeric vector")
       }
 
-      if(!inherits(outcomeWashoutDays, "numeric")){
+      if (!inherits(outcomeWashoutDays, "numeric")) {
         stop("outcomeWashoutDays must be a numeric or a numeric vector")
       }
-      if(length(outcomeIds) != length(outcomeWashoutDays)){
+      if (length(outcomeIds) != length(outcomeWashoutDays)) {
         stop("outcomeWashoutDaysVector and outcomeIds must be same length")
       }
-      if(length(minPriorObservation) != 1){
+      if (length(minPriorObservation) != 1) {
         stop("minPriorObservation needs to be length 1")
       }
-      if(length(riskWindowStart) != length(startAnchor) |
-         length(riskWindowEnd) != length(startAnchor) |
-         length(endAnchor) != length(startAnchor))
-      {
+      if (length(riskWindowStart) != length(startAnchor) |
+        length(riskWindowEnd) != length(startAnchor) |
+        length(endAnchor) != length(startAnchor)) {
         stop("Time-at-risk settings must be same length")
       }
 
@@ -201,7 +198,7 @@ CharacterizationModule <- R6::R6Class(
       outcomeWashoutDaysVector <- unique(outcomeWashoutDays)
       outcomeIdsList <- lapply(
         outcomeWashoutDaysVector,
-        function(x){
+        function(x) {
           ind <- which(outcomeWashoutDays == x)
           unique(outcomeIds[ind])
         }
@@ -222,8 +219,8 @@ CharacterizationModule <- R6::R6Class(
 
       aggregateCovariateSettings <- list()
 
-      for(i in 1:length(riskWindowStart)){
-        for(j in 1:length(outcomeIdsList)){
+      for (i in 1:length(riskWindowStart)) {
+        for (j in 1:length(outcomeIdsList)) {
           aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
             targetIds = targetIds,
             outcomeIds = outcomeIdsList[[j]],

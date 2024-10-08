@@ -1,7 +1,7 @@
 test_that("Execute study, upload results, excute results modules and upload results", {
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
   studyRootFolder <- file.path(tempDir, "EunomiaTestStudy")
@@ -69,7 +69,7 @@ test_that("Execute study, upload results, excute results modules and upload resu
   # Create cdm modules results data model -------------------------
   cdmModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -89,7 +89,7 @@ test_that("Execute study, upload results, excute results modules and upload resu
   # Execute results modules -------------------------
   resultsModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/resultsModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -167,7 +167,7 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
 
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -183,7 +183,7 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
 test_that("Negative control outcomes are optional", {
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -215,7 +215,7 @@ test_that("Negative control outcomes are optional", {
 test_that("Specify subset of modules to run with modules not in specification fails", {
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
   executionSettings <- createCdmExecutionSettings(
@@ -254,7 +254,7 @@ test_that("Specify subset of modules to run with modules not in specification fa
 test_that("Specify subset of modules to run", {
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 

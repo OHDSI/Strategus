@@ -108,7 +108,7 @@ execute <- function(analysisSpecifications,
 
     # Stop if we cannot find all of the requested modules
     # to execute in the overall analysis specification
-    if(!all(tolower(executionSettings$modulesToExecute) %in% tolower(modulesInAnalysisSpecification))) {
+    if (!all(tolower(executionSettings$modulesToExecute) %in% tolower(modulesInAnalysisSpecification))) {
       errorMsg <- paste0(
         "The executionSettings specified to run only the modules: ",
         modulesToExecuteString,
@@ -170,7 +170,7 @@ execute <- function(analysisSpecifications,
         executionStatus,
         moduleExecutionStatus
       )
-      break;
+      break
     }
   }
 

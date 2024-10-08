@@ -21,7 +21,7 @@ test_that("Test analysis specification creation", {
     addCohortSubsetDefinition(subsetDef)
 
   ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
-                                             package = "Strategus"
+    package = "Strategus"
   ))
 
   # Exposures-outcomes
@@ -201,7 +201,7 @@ test_that("Test analysis specification creation", {
   )
 
   # EvidenceSythesis ------------------
-  esModuleSettingsCreator = EvidenceSynthesisModule$new()
+  esModuleSettingsCreator <- EvidenceSynthesisModule$new()
   evidenceSynthesisSourceCm <- esModuleSettingsCreator$createEvidenceSynthesisSource(
     sourceMethod = "CohortMethod",
     likelihoodApproximation = "adaptive grid"

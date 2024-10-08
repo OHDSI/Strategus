@@ -157,9 +157,9 @@ PatientLevelPredictionModule <- R6::R6Class(
   ),
   private = list(
     .setCovariateSchemaTable = function(
-    modelDesignList,
-    cohortDatabaseSchema,
-    cohortTable) {
+        modelDesignList,
+        cohortDatabaseSchema,
+        cohortTable) {
       if (inherits(modelDesignList, "modelDesign")) {
         modelDesignList <- list(modelDesignList)
       }

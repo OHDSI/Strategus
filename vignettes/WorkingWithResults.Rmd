@@ -86,10 +86,10 @@ library(OhdsiShinyModules)
 shinyConfig <- initializeModuleConfig() |>
   addModuleConfig(
     createDefaultAboutConfig()
-  )  |>
+  ) |>
   addModuleConfig(
     createDefaultDatasourcesConfig()
-  )  |>
+  ) |>
   addModuleConfig(
     createDefaultCohortGeneratorConfig()
   ) |>
@@ -103,7 +103,7 @@ shinyConfig <- initializeModuleConfig() |>
     createDefaultPredictionConfig()
   ) |>
   addModuleConfig(
-   createDefaultEstimationConfig()
+    createDefaultEstimationConfig()
   )
 
 # now create the shiny app based on the config file and view the results
