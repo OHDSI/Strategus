@@ -87,5 +87,3 @@ uploadResults <- function(analysisSpecifications,
     )
   }
 }
-
-

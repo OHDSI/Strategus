@@ -50,7 +50,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         sccsDiagnosticThresholds = jobContext$settings$sccsDiagnosticThresholds
       )
       # TODO: Removing this to make the upload easier
-      #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
+      # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
       resultsDataModel <- self$getResultsDataModelSpecification()
       resultsDataModel <- resultsDataModel[file.exists(file.path(exportFolder, paste0(resultsDataModel$tableName, ".csv"))), ]

@@ -6,7 +6,6 @@ testResultsDataModelFormat <- function(moduleName) {
   rdms <- module$getResultsDataModelSpecification()
   expect_true(all(CohortGenerator::isSnakeCase(rdms$tableName)))
   expect_true(all(CohortGenerator::isSnakeCase(rdms$columnName)))
-
 }
 
 test_that("CharacterizationModule results data model is in correct format", {

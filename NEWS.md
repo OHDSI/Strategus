@@ -1,8 +1,6 @@
 Strategus 1.0.0
 ===============
 
-## Breaking Changes
-
 - Eliminated the dependencies for `keyring`, `renv` and `targets` (#135)
 - Centralized all modules into the Strategus package (#29, #45, #51, #140)
 - Strategus execution provides a summary of the execution time (#4) and continues after an error (#64, #141)
@@ -48,7 +46,7 @@ Strategus 0.1.0
 - Robust handling of connection details via keyring (#74)
 - Ensures uniqueness of all CDM tables when gathering database metadata (#82)
 - `tempEmulationSchema` added to execution settings and passed properly to modules (#82)
-- Adding logging to module initalization to detect `renv` restore errors (#82)
+- Adding logging to module initialization to detect `renv` restore errors (#82)
 - Adopt HADES-wide lock file in latest versions of all modules (#83)
 - Use renv >= v1.0.0 for all modules and Strategus (#83)
 - Add GitHub unit tests for HADES adopted version (currently v4.2.3) and the latest R versions for all modules and Strategus. (#83)

@@ -45,7 +45,7 @@ CohortMethodModule <- R6::R6Class(
         cmDiagnosticThresholds = jobContext$settings$cmDiagnosticThresholds
       )
       # TODO: Removing this to make the upload easier
-      #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
+      # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
       resultsDataModelSpecification <- self$getResultsDataModelSpecification()
       CohortGenerator::writeCsv(

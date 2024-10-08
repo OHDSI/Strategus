@@ -48,8 +48,8 @@ StrategusModule <- R6::R6Class(
     internalSharedResourcesClassName = "SharedResources",
     #' @description Initialize the module
     initialize = function() {
-      self$moduleName = class(self)[[1]]
-      self$moduleClassName = paste0(self$moduleName, "Specifications")
+      self$moduleName <- class(self)[[1]]
+      self$moduleClassName <- paste0(self$moduleName, "Specifications")
     },
     #' @description Executes the module
     #' @template connectionDetails
@@ -64,7 +64,7 @@ StrategusModule <- R6::R6Class(
 
       # Setup the job context
       private$.createJobContext(analysisSpecifications, executionSettings)
-      private$.message('EXECUTING: ', self$moduleName)
+      private$.message("EXECUTING: ", self$moduleName)
     },
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
@@ -75,7 +75,7 @@ StrategusModule <- R6::R6Class(
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
       checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
-      private$.message('CREATE RESULTS DATA MODEL: ', self$moduleName)
+      private$.message("CREATE RESULTS DATA MODEL: ", self$moduleName)
     },
     #' @description Get the results data model specification for the module
     #' @template tablePrefix
@@ -93,14 +93,14 @@ StrategusModule <- R6::R6Class(
 
       # Setup the job context
       private$.createJobContext(analysisSpecifications, resultsDataModelSettings)
-      private$.message('UPLOAD RESULTS: ', self$moduleName)
+      private$.message("UPLOAD RESULTS: ", self$moduleName)
     },
     #' @description Base function for creating the module settings object.
     #' Each module will have its own implementation and this base class method
     #' will be used to ensure the class of the specifications is set properly.
     #' @template moduleSpecifications
     createModuleSpecifications = function(moduleSpecifications) {
-      moduleSpecifications = list(
+      moduleSpecifications <- list(
         module = self$moduleName,
         settings = moduleSpecifications
       )
@@ -203,7 +203,7 @@ StrategusModule <- R6::R6Class(
         stop("Cohort definition shared resource not found!")
       }
       if ((is.null(cohortDefinitionSharedResource$subsetDefs) && !is.null(cohortDefinitionSharedResource$cohortSubsets)) ||
-          (!is.null(cohortDefinitionSharedResource$subsetDefs) && is.null(cohortDefinitionSharedResource$cohortSubsets))) {
+        (!is.null(cohortDefinitionSharedResource$subsetDefs) && is.null(cohortDefinitionSharedResource$cohortSubsets))) {
         stop("Cohort subset functionality requires specifying cohort subset definition & cohort subset identifiers.")
       }
       cohortDefinitionSet <- private$.getCohortDefinitionSetFromSharedResource(

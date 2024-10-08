@@ -153,4 +153,3 @@ if (!(Sys.getenv("CDM5_SQL_SERVER_USER") == "" &
     tempEmulationSchema = NULL
   )
 }
-

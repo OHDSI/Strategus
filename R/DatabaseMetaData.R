@@ -52,7 +52,7 @@ getDatabaseIdentifierFilePath <- function(resultsFolder) {
 getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
-  checkmate::assertClass(cdmExecutionSettings, "CdmExecutionSettings", add=errorMessages)
+  checkmate::assertClass(cdmExecutionSettings, "CdmExecutionSettings", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   connection <- DatabaseConnector::connect(connectionDetails)
@@ -223,4 +223,3 @@ getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
   )
   invisible(resultsDataModel)
 }
-

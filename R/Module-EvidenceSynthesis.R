@@ -66,7 +66,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       sql <- ResultModelManager::generateSqlSchema(
         csvFilepath = private$.getResultsDataModelSpecificationFileLocation()
       )
-      sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
+      sql <- SqlRender::render(sql = sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
       sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
       DatabaseConnector::executeSql(connection, sql)
     },
@@ -184,8 +184,9 @@ EvidenceSynthesisModule <- R6::R6Class(
         analysis[[name]] <- get(name)
       }
       class(analysis) <- c("FixedEffectsMetaAnalysis", "EvidenceSynthesisAnalysis")
-      if (evidenceSynthesisSource$likelihoodApproximation != "normal")
+      if (evidenceSynthesisSource$likelihoodApproximation != "normal") {
         stop("Fixed-effects meta-analysis only supports normal approximation of the likelihood.")
+      }
       return(analysis)
     },
     #' Create a parameter object for the function computeBayesianMetaAnalysis
@@ -436,9 +437,9 @@ EvidenceSynthesisModule <- R6::R6Class(
           TRUE ~ "FAIL"
         )) |>
         mutate(unblind = ifelse(.data$mdrrDiagnostic != "FAIL" &
-                                  .data$easeDiagnostic != "FAIL" &
-                                  .data$i2Diagnostic != "FAIL" &
-                                  .data$tauDiagnostic != "FAIL", 1, 0))
+          .data$easeDiagnostic != "FAIL" &
+          .data$i2Diagnostic != "FAIL" &
+          .data$tauDiagnostic != "FAIL", 1, 0))
       if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
         fileName <- file.path(resultsFolder, "es_cm_diagnostics_summary.csv")
       } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
@@ -833,8 +834,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         )
         trueEffectSizes <- trueEffectSizes |>
           mutate(trueEffectSize = ifelse(!is.na(.data$trueEffectSize) & .data$trueEffectSize == 0,
-                                         NA,
-                                         .data$trueEffectSize
+            NA,
+            .data$trueEffectSize
           ))
       } else if (evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
         key <- c("exposureId", "nestingCohortId", "outcomeId", "exposuresOutcomeSetId", "covariateId")
@@ -963,8 +964,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         )
         trueEffectSizes <- trueEffectSizes |>
           mutate(trueEffectSize = ifelse(!is.na(.data$trueEffectSize) & .data$trueEffectSize == 0,
-                                         NA,
-                                         .data$trueEffectSize
+            NA,
+            .data$trueEffectSize
           ))
       } else {
         stop(sprintf("Evidence synthesis for source method '%s' hasn't been implemented yet.", evidenceSynthesisSource$sourceMethod))

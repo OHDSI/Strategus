@@ -134,7 +134,7 @@ PatientLevelPredictionModule <- R6::R6Class(
         csvTableAppend = ""
       )
     },
-    #' @description Creates the PatientLevelprediction Module Specifications
+    #' @description Creates the PatientLevelPrediction Module Specifications
     #' @param modelDesignList A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}
     createModuleSpecifications = function(modelDesignList) {
       analysis <- list()
@@ -157,9 +157,9 @@ PatientLevelPredictionModule <- R6::R6Class(
   ),
   private = list(
     .setCovariateSchemaTable = function(
-    modelDesignList,
-    cohortDatabaseSchema,
-    cohortTable) {
+        modelDesignList,
+        cohortDatabaseSchema,
+        cohortTable) {
       if (inherits(modelDesignList, "modelDesign")) {
         modelDesignList <- list(modelDesignList)
       }
