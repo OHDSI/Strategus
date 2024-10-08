@@ -26,6 +26,9 @@ ModelTransferModule <- R6::R6Class(
       jobContext <- private$jobContext
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
+      if (!dir.exists(resultsFolder)) {
+        dir.create(resultsFolder, recursive = TRUE)
+      }
 
       private$.message("Validating inputs")
       inherits(jobContext, 'list')
@@ -239,11 +242,11 @@ ModelTransferModule <- R6::R6Class(
 
         user <- settings[i, ]$user
         repository <- settings[i, ]$repository
-        ref <- settings[i, ]$ref 
+        ref <- settings[i, ]$ref
 
         downloadRepo <- tryCatch({
           utils::download.file(
-            url = file.path("https://github.com", user, repository, "archive", 
+            url = file.path("https://github.com", user, repository, "archive",
                             paste0(ref,".zip")),
             destfile = file.path(tempdir(), "tempGitHub.zip")
           )}, error = function(e) {
@@ -270,7 +273,7 @@ ModelTransferModule <- R6::R6Class(
               tempdir(),
               "tempGitHub",
               paste0(repository, "-", ref),
-              "inst", 
+              "inst",
               modelsFolder,
               modelFolder
             )
