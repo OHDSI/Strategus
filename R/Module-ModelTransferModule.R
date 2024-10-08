@@ -59,7 +59,7 @@ ModelTransferModule <- R6::R6Class(
       localFileSettings <- jobContext$settings$localFileSettings
 
       modelLocationsS3 <- tryCatch({private$.getModelsFromS3(
-        s3Settings = s3Settings,
+        settings = s3Settings,
         saveFolder = modelSaveLocation
       )}, error = function(e){ParallelLogger::logInfo(e); return(NULL)}
       )
@@ -77,7 +77,7 @@ ModelTransferModule <- R6::R6Class(
       }
 
       modelLocationsLocalFiles <- tryCatch({private$.getModelsFromLocalFiles(
-        localFileSettings = localFileSettings$locations,
+        settings = localFileSettings,
         saveFolder = modelSaveLocation
       )}, error = function(e){ParallelLogger::logInfo(e); return(NULL)}
       )
@@ -88,10 +88,18 @@ ModelTransferModule <- R6::R6Class(
       private$.message(paste("Results available at:", resultsFolder))
     },
     #' @description Creates the ModelTransferModule Specifications
-    #' @param s3Settings description
-    #' @param githubSettings description
-    #' @param localFileSettings description
-    #' include steps to compute inclusion rule statistics.
+    #' @param s3Settings  a dataframe with columns:
+    #'              bucket - the S3 bucket to download from
+    #'              modelZipLocation - the subfolder in the bucket where the models are stored in a zip file
+    #'              region - the region of the S3 bucket
+    #' @param githubSettings a dataframe with columns:
+    #'              user - the github user/organization to download from
+    #'              repository - the github repository to download from
+    #'              ref - the branch/tag/commit to download from
+    #'              modelsFolder - the folder in the repository where the models are stored
+    #'              modelFolder - optional, the subfolder in the modelsFolder where a particular model is stored
+    #' @param localFileSettings a dataframe with a single column:
+    #'              locations - the location of the models on the local file system
     createModuleSpecifications = function(s3Settings = NULL,
                                           githubSettings = NULL,
                                           localFileSettings = NULL) {
@@ -114,9 +122,9 @@ ModelTransferModule <- R6::R6Class(
     }
   ),
   private = list(
-    .getModelsFromLocalFiles = function(localFileSettings, saveFolder) {
+    .getModelsFromLocalFiles = function(settings, saveFolder) {
 
-      if (is.null(localFileSettings)) {
+      if (is.null(settings)) {
         return(NULL)
       }
 
@@ -126,7 +134,7 @@ ModelTransferModule <- R6::R6Class(
 
       saveFolder <- file.path(saveFolder, "models")
 
-      localFileSettings <- fs::path_expand(localFileSettings)
+      localFileSettings <- fs::path_expand(settings$locations)
       saveFolder <- fs::path_expand(saveFolder)
 
       contents <- list.files(localFileSettings, recursive = TRUE, full.names = TRUE, include.dirs = FALSE)
