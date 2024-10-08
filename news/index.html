@@ -36,13 +36,11 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/OHDSI/Strategus/blob/update-docs/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/OHDSI/Strategus/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="strategus-100">Strategus 1.0.0<a class="anchor" aria-label="anchor" href="#strategus-100"></a></h2>
-<div class="section level3">
-<h3 id="breaking-changes-1-0-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-0-0"></a></h3>
 <ul><li>Eliminated the dependencies for <code>keyring</code>, <code>renv</code> and <code>targets</code> (<a href="https://github.com/OHDSI/Strategus/issues/135" class="external-link">#135</a>)</li>
 <li>Centralized all modules into the Strategus package (<a href="https://github.com/OHDSI/Strategus/issues/29" class="external-link">#29</a>, <a href="https://github.com/OHDSI/Strategus/issues/45" class="external-link">#45</a>, <a href="https://github.com/OHDSI/Strategus/issues/51" class="external-link">#51</a>, <a href="https://github.com/OHDSI/Strategus/issues/140" class="external-link">#140</a>)</li>
 <li>Strategus execution provides a summary of the execution time (<a href="https://github.com/OHDSI/Strategus/issues/4" class="external-link">#4</a>) and continues after an error (<a href="https://github.com/OHDSI/Strategus/issues/64" class="external-link">#64</a>, <a href="https://github.com/OHDSI/Strategus/issues/141" class="external-link">#141</a>)</li>
@@ -54,8 +52,7 @@
 <li>Select subset of modules to execute from analysis specification (<a href="https://github.com/OHDSI/Strategus/issues/169" class="external-link">#169</a>)</li>
 <li>Ensure release of Strategus has Python dependencies (<a href="https://github.com/OHDSI/Strategus/issues/22" class="external-link">#22</a>) and OHDSI Shiny App dependencies (<a href="https://github.com/OHDSI/Strategus/issues/78" class="external-link">#78</a>). See <a href="https://github.com/ohdsi-studies/StrategusStudyRepoTemplate" class="external-link">StrategusStudyRepoTemplate</a> for more details.</li>
 <li>Document the results data model for HADES modules (<a href="https://github.com/OHDSI/Strategus/issues/143" class="external-link">#143</a>)</li>
-</ul></div>
-<div class="section level3">
+</ul><div class="section level3">
 <h3 id="bug-fixes-1-0-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-0"></a></h3>
 <ul><li>Make negative control outcome shared resource optional (<a href="https://github.com/OHDSI/Strategus/issues/153" class="external-link">#153</a>)</li>
 <li>Export results data model specification file for PatientLevelPrediction (<a href="https://github.com/OHDSI/Strategus/issues/165" class="external-link">#165</a>)</li>
@@ -90,7 +87,7 @@
 <li>Ensures uniqueness of all CDM tables when gathering database metadata (<a href="https://github.com/OHDSI/Strategus/issues/82" class="external-link">#82</a>)</li>
 <li>
 <code>tempEmulationSchema</code> added to execution settings and passed properly to modules (<a href="https://github.com/OHDSI/Strategus/issues/82" class="external-link">#82</a>)</li>
-<li>Adding logging to module initalization to detect <code>renv</code> restore errors (<a href="https://github.com/OHDSI/Strategus/issues/82" class="external-link">#82</a>)</li>
+<li>Adding logging to module initialization to detect <code>renv</code> restore errors (<a href="https://github.com/OHDSI/Strategus/issues/82" class="external-link">#82</a>)</li>
 <li>Adopt HADES-wide lock file in latest versions of all modules (<a href="https://github.com/OHDSI/Strategus/issues/83" class="external-link">#83</a>)</li>
 <li>Use renv &gt;= v1.0.0 for all modules and Strategus (<a href="https://github.com/OHDSI/Strategus/issues/83" class="external-link">#83</a>)</li>
 <li>Add GitHub unit tests for HADES adopted version (currently v4.2.3) and the latest R versions for all modules and Strategus. (<a href="https://github.com/OHDSI/Strategus/issues/83" class="external-link">#83</a>)</li>

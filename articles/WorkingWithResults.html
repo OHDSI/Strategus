@@ -64,9 +64,9 @@
                         <h4 data-toc-skip class="author">Anthony G.
 Sena</h4>
             
-            <h4 data-toc-skip class="date">2024-10-07</h4>
+            <h4 data-toc-skip class="date">2024-10-08</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/update-docs/vignettes/WorkingWithResults.Rmd" class="external-link"><code>vignettes/WorkingWithResults.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/main/vignettes/WorkingWithResults.Rmd" class="external-link"><code>vignettes/WorkingWithResults.Rmd</code></a></small>
       <div class="d-none name"><code>WorkingWithResults.Rmd</code></div>
     </div>
 
@@ -170,10 +170,10 @@ in the <code>study_results</code> schema.</p>
 <span><span class="va">shinyConfig</span> <span class="op">&lt;-</span> <span class="fu">initializeModuleConfig</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">addModuleConfig</span><span class="op">(</span></span>
 <span>    <span class="fu">createDefaultAboutConfig</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">addModuleConfig</span><span class="op">(</span></span>
 <span>    <span class="fu">createDefaultDatasourcesConfig</span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="op">)</span>  <span class="op">|&gt;</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">addModuleConfig</span><span class="op">(</span></span>
 <span>    <span class="fu">createDefaultCohortGeneratorConfig</span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -187,7 +187,7 @@ in the <code>study_results</code> schema.</p>
 <span>    <span class="fu">createDefaultPredictionConfig</span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">addModuleConfig</span><span class="op">(</span></span>
-<span>   <span class="fu">createDefaultEstimationConfig</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">createDefaultEstimationConfig</span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># now create the shiny app based on the config file and view the results</span></span>
