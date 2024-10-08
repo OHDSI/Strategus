@@ -77,7 +77,11 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
           restrictPlpDataSettings = setting$restrictPlpDataSettings,
           populationSettings = setting$populationSettings
         )
-        designs[[length(designs) + 1]] <- design
+        # if design is single validationDesign instead of a list
+        if (inherits(design, "validationDesign")) {
+          design <- list(design)
+        }
+        designs <- c(designs, design)
       }
 
       databaseDetails <- PatientLevelPrediction::createDatabaseDetails(
