@@ -186,8 +186,8 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
         recalibrate = "weakRecalibration",
         runCovariateSummary = FALSE
         )
-      )
-    ) {
+      ),
+                                        logLevel = "INFO") {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
