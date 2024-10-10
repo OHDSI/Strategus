@@ -99,7 +99,7 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       PatientLevelPrediction::validateExternal(
         validationDesignList = designs,
         databaseDetails = databaseDetails,
-        logSettings = PatientLevelPrediction::createLogSettings(verbosity = 'INFO', logName = 'validatePLP'),
+        logSettings = PatientLevelPrediction::createLogSettings(verbosity = jobContext$settings$logLevel, logName = "validatePLP"),
         outputFolder = workFolder
       )
 
