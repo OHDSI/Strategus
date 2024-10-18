@@ -73,7 +73,7 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
         design <- PatientLevelPrediction::createValidationDesign(
           targetId = setting$targetId[1],
           outcomeId = setting$outcomeId[1],
-          plpModelList = as.list(matchingModels$modelPath),
+          plpModelList = as.list(matchingModels$modelPath[[1]]),
           restrictPlpDataSettings = setting$restrictPlpDataSettings,
           populationSettings = setting$populationSettings
         )
