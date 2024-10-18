@@ -427,7 +427,7 @@ Strategus::createResultDataModel(
 )
 
 # Upload results ---------------
-debugonce(Strategus::uploadResults)
+#debugonce(Strategus::uploadResults)
 Strategus::uploadResults(
   analysisSpecifications = analysisSpecifications,
   resultsDataModelSettings = resultsDataModelSettings,
