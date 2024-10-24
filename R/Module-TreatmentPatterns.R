@@ -1,6 +1,12 @@
+# TreatmentPatternsModule -------------
+#' @title Evaluate phenotypes with the \href{https://github.com/darwin-eu/TreatmentPatterns/}{DARWIN Treatment patterns Package}
+#' @export
+#' @description
+#' Characterisation and description of treatment patterns
+#' against the OMOP Common Data Model.
 TreatmentPatternsModule <- R6::R6Class(
   classname = "TreatmentPatternsModule",
-  inherit = strategusModule,
+  inherit = StrategusModule,
   public = list(
     #' @field tablePrefix The table prefix to append to the results tables
     tablePrefix = "c_",
@@ -50,21 +56,21 @@ TreatmentPatternsModule <- R6::R6Class(
 
       )
     },
-    #' @description Creates the CharacterizationModule Specifications
+    #' @description Creates the TreatmentPatternsnModule Specifications
     #' @param
-    #' @param cohorts
-    #' @param cohortTableName
-    #' @param cdm
-    #' @param connectionDetails
-    #' @param cdmSchema
-    #' @param resultSchema
+    #' @param cohorts cohorts to report patterns of
+    #' @param cohortTableName cohort table name
+    #' @param cdm cdmConnectorObject DNU not supported
+    #' @param connectionDetails Databaseconnector connectionDetails
+    #' @param cdmSchema CDM schema holding omop data
+    #' @param resultSchema writable schema for results
     #' @param tempEmulationSchema Schema used to emulate temp tables
-    #' @param includeTreatments
-    #' @param periodPriorToIndex
-    #' @param minEraDuration
-    #' @param splitEventCohorts
-    #' @param splitTime
-    #' @param eraCollapseSize
+    #' @param includeTreatments string indicating locus of intervention pathways
+    #' @param periodPriorToIndex lookback period
+    #' @param minEraDuration minimum length of era
+    #' @param splitEventCohorts which cohorts indicate split events
+    #' @param splitTime what time interval should cohorts be split
+    #' @param eraCollapseSize how large should eras be before collapse
     #' @param combinationWindow
     #' @param minPostCombinationDuration
     #' @param filterTreatments
@@ -303,4 +309,5 @@ TreatmentPatternsModule <- R6::R6Class(
         moduleSpecifications = moduleSpecifications
       )
     }
+)
 )
