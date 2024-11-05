@@ -217,11 +217,21 @@ StrategusModule <- R6::R6Class(
       if (length(cohortDefinitions) <= 0) {
         stop("No cohort definitions found")
       }
+      # Provide hook to allow for custom SQL generation based on the Circe-be
+      # generated SQL
+      cohortSqlOptimizationFunction <- getOption("strategus.cohortSqlOptimizationFunction")
+      useCohortSqlOptimizationFunction <- is.function(cohortSqlOptimizationFunction)
+      if (isTRUE(useCohortSqlOptimizationFunction)) {
+        private$.message("Constructing cohort definition set and using strategus.cohortSqlOptimizationFunction")
+      }
       cohortDefinitionSet <- CohortGenerator::createEmptyCohortDefinitionSet()
       for (i in 1:length(cohortDefinitions)) {
         cohortJson <- cohortDefinitions[[i]]$cohortDefinition
         cohortExpression <- CirceR::cohortExpressionFromJson(cohortJson)
         cohortSql <- CirceR::buildCohortQuery(cohortExpression, options = CirceR::createGenerateOptions(generateStats = generateStats))
+        if (isTRUE(useCohortSqlOptimizationFunction)) {
+          cohortSql <- cohortSqlOptimizationFunction(cohortSql)
+        }
         cohortDefinitionSet <- rbind(cohortDefinitionSet, data.frame(
           cohortId = as.double(cohortDefinitions[[i]]$cohortId),
           cohortName = cohortDefinitions[[i]]$cohortName,
