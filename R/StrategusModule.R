@@ -294,3 +294,33 @@ StrategusModule <- R6::R6Class(
     }
   )
 )
+
+# Utility function to set the cohort table & schema on
+# createCohortBasedCovariateSettings with information from
+# the execution settings (Issue #181)
+.replaceCovariateSettingsCohortTableNames <- function(covariateSettings, executionSettings) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertList(covariateSettings, min.len = 1, add = errorMessages)
+  checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  .replaceAttributes <- function(s) {
+    if (inherits(s, "covariateSettings") && "fun" %in% names(attributes(s))) {
+      if (attr(s, "fun") == "getDbCohortBasedCovariatesData") {
+        # Set the covariateCohortDatabaseSchema & covariateCohortTable values
+        s$covariateCohortDatabaseSchema = executionSettings$workDatabaseSchema
+        s$covariateCohortTable = executionSettings$cohortTableNames$cohortTable
+      }
+    }
+    return(s)
+  }
+  if (is.null(names(covariateSettings))) {
+    # List of lists
+    modifiedCovariateSettings <- lapply(covariateSettings, .replaceAttributes)
+  } else {
+    # Plain list
+    modifiedCovariateSettings <- .replaceAttributes(covariateSettings)
+  }
+  return(modifiedCovariateSettings)
+}
+

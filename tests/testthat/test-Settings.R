@@ -408,3 +408,37 @@ test_that("Create results data model settings", {
 
   expect_equal(class(settings), c("ResultsDataModelSettings"))
 })
+
+test_that("Test internal function for modifying covariate settings", {
+  cov1 <- FeatureExtraction::createDefaultCovariateSettings()
+  cov2 <- FeatureExtraction::createCohortBasedCovariateSettings(
+    analysisId = 999,
+    covariateCohorts = data.frame(
+      cohortId = 1,
+      cohortName = "test"
+    )
+  )
+  covariateSettings <- list(cov1, cov2)
+  workDatabaseSchema <- "foo"
+  cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "unit_test")
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = "main",
+    cohortTableNames = cohortTableNames,
+    workFolder = "temp",
+    resultsFolder = "temp"
+  )
+
+  test1 <- .replaceCovariateSettingsCohortTableNames(covariateSettings, executionSettings)
+  expect_equal(test1[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(test1[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
+
+  test2 <- .replaceCovariateSettingsCohortTableNames(cov1, executionSettings)
+  expect_equal(test2$covariateCohortDatabaseSchema, NULL)
+  expect_equal(test2$covariateCohortTable, NULL)
+
+  test3 <- .replaceCovariateSettingsCohortTableNames(cov2, executionSettings)
+  expect_equal(test3$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(test3$covariateCohortTable, cohortTableNames$cohortTable)
+
+})
