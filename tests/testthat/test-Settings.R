@@ -410,6 +410,10 @@ test_that("Create results data model settings", {
 })
 
 test_that("Test internal function for modifying covariate settings", {
+  # Create module settings that contain a combination of
+  # 1) covariate settings that do not contain cohort table settings
+  # 2) covariate settings that contain cohort table settings
+  # 3) a list of covariate setting that has 1 & 2 above
   cov1 <- FeatureExtraction::createDefaultCovariateSettings()
   cov2 <- FeatureExtraction::createCohortBasedCovariateSettings(
     analysisId = 999,
@@ -419,6 +423,16 @@ test_that("Test internal function for modifying covariate settings", {
     )
   )
   covariateSettings <- list(cov1, cov2)
+  moduleSettings <- list(
+    analysis = list(
+      something = covariateSettings,
+      somethingElse = list(
+        nested1 = cov1,
+        nested2 = cov2,
+        nested3 = covariateSettings
+      )
+    )
+  )
   workDatabaseSchema <- "foo"
   cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "unit_test")
   executionSettings <- createCdmExecutionSettings(
@@ -429,16 +443,20 @@ test_that("Test internal function for modifying covariate settings", {
     resultsFolder = "temp"
   )
 
-  test1 <- .replaceCovariateSettingsCohortTableNames(covariateSettings, executionSettings)
-  expect_equal(test1[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
-  expect_equal(test1[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
+  testReplacedModuleSettings <- .replaceCovariateSettings(moduleSettings, executionSettings)
+  expect_equal(testReplacedModuleSettings$analysis$something[[1]]$covariateCohortDatabaseSchema, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$something[[1]]$covariateCohortTable, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$something[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(testReplacedModuleSettings$analysis$something[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
 
-  test2 <- .replaceCovariateSettingsCohortTableNames(cov1, executionSettings)
-  expect_equal(test2$covariateCohortDatabaseSchema, NULL)
-  expect_equal(test2$covariateCohortTable, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested1$covariateCohortDatabaseSchema, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested1$covariateCohortTable, NULL)
 
-  test3 <- .replaceCovariateSettingsCohortTableNames(cov2, executionSettings)
-  expect_equal(test3$covariateCohortDatabaseSchema, workDatabaseSchema)
-  expect_equal(test3$covariateCohortTable, cohortTableNames$cohortTable)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested2$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested2$covariateCohortTable, cohortTableNames$cohortTable)
 
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[1]]$covariateCohortDatabaseSchema, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[1]]$covariateCohortTable, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
 })

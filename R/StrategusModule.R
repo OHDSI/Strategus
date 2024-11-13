@@ -159,14 +159,28 @@ StrategusModule <- R6::R6Class(
       }
       private$jobContext$settings <- moduleSpecification$settings
 
+      # Make sure that the covariate settings for the analysis are updated
+      # to reflect the location of the cohort tables
+      private$jobContext$settings <- .replaceCovariateSettings(
+        moduleSettings = private$jobContext$settings,
+        executionSettings = executionSettings
+      )
+
+
       # Assemble the job context from the analysis specification
       # for the given module.
       private$jobContext$sharedResources <- analysisSpecifications$sharedResources
       private$jobContext$moduleExecutionSettings <- executionSettings
       private$jobContext$moduleExecutionSettings$resultsSubFolder <- file.path(private$jobContext$moduleExecutionSettings$resultsFolder, self$moduleName)
+      if (!dir.exists(private$jobContext$moduleExecutionSettings$resultsSubFolder)) {
+        dir.create(private$jobContext$moduleExecutionSettings$resultsSubFolder, showWarnings = F, recursive = T)
+      }
 
       if (is(private$jobContext$moduleExecutionSettings, "ExecutionSettings")) {
         private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
+        if (!dir.exists(private$jobContext$moduleExecutionSettings$workSubFolder)) {
+          dir.create(private$jobContext$moduleExecutionSettings$workSubFolder, showWarnings = F, recursive = T)
+        }
       }
     },
     .getModuleSpecification = function(analysisSpecifications, moduleName) {
@@ -323,4 +337,31 @@ StrategusModule <- R6::R6Class(
   }
   return(modifiedCovariateSettings)
 }
+
+.replaceCovariateSettings <- function(moduleSettings, executionSettings) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertList(moduleSettings, min.len = 1, add = errorMessages)
+  checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  # A helper function to perform the replacement
+  for (i in seq_along(length(moduleSettings)))
+  replaceHelper <- function(x) {
+    if (is.list(x) && inherits(x, "covariateSettings")) {
+      # If the element is a list and of type covariate settings
+      # replace the cohort table names
+      return(.replaceCovariateSettingsCohortTableNames(x, executionSettings))
+    } else if (is.list(x)) {
+      # If the element is a list, recurse on each element
+      return(lapply(x, replaceHelper))
+    } else {
+      # If the element is not a list or "covariateSettings", return it as is
+      return(x)
+    }
+  }
+
+  # Call the helper function on the input list
+  return(replaceHelper(moduleSettings))
+}
+
 
