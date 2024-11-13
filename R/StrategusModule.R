@@ -317,7 +317,7 @@ StrategusModule <- R6::R6Class(
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
-  .replaceAttributes <- function(s) {
+  .replaceProperties <- function(s) {
     if (inherits(s, "covariateSettings") && "fun" %in% names(attributes(s))) {
       if (attr(s, "fun") == "getDbCohortBasedCovariatesData") {
         # Set the covariateCohortDatabaseSchema & covariateCohortTable values
@@ -329,10 +329,10 @@ StrategusModule <- R6::R6Class(
   }
   if (is.null(names(covariateSettings))) {
     # List of lists
-    modifiedCovariateSettings <- lapply(covariateSettings, .replaceAttributes)
+    modifiedCovariateSettings <- lapply(covariateSettings, .replaceProperties)
   } else {
     # Plain list
-    modifiedCovariateSettings <- .replaceAttributes(covariateSettings)
+    modifiedCovariateSettings <- .replaceProperties(covariateSettings)
   }
   return(modifiedCovariateSettings)
 }
@@ -351,7 +351,12 @@ StrategusModule <- R6::R6Class(
       return(.replaceCovariateSettingsCohortTableNames(x, executionSettings))
     } else if (is.list(x)) {
       # If the element is a list, recurse on each element
-      return(lapply(x, replaceHelper))
+      # Keep the original attributes by saving them before modification
+      attrs <- attributes(x)
+      newList <- lapply(x, replaceHelper)
+      # Restore attributes to the new list
+      attributes(newList) <- attrs
+      return(newList)
     } else {
       # If the element is not a list or "covariateSettings", return it as is
       return(x)
