@@ -317,7 +317,7 @@ StrategusModule <- R6::R6Class(
 .replaceCovariateSettingsCohortTableNames <- function(covariateSettings, executionSettings) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertList(covariateSettings, min.len = 1, add = errorMessages)
-  checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+  checkmate::assertClass(executionSettings, "CdmExecutionSettings", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   .replaceProperties <- function(s) {
@@ -343,7 +343,7 @@ StrategusModule <- R6::R6Class(
 .replaceCovariateSettings <- function(moduleSettings, executionSettings) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertList(moduleSettings, min.len = 1, add = errorMessages)
-  checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
+  checkmate::assertClass(executionSettings, "CdmExecutionSettings", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # A helper function to perform the replacement
