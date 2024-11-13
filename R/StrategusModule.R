@@ -160,11 +160,14 @@ StrategusModule <- R6::R6Class(
       private$jobContext$settings <- moduleSpecification$settings
 
       # Make sure that the covariate settings for the analysis are updated
-      # to reflect the location of the cohort tables
-      private$jobContext$settings <- .replaceCovariateSettings(
-        moduleSettings = private$jobContext$settings,
-        executionSettings = executionSettings
-      )
+      # to reflect the location of the cohort tables if we are executing
+      # on a CDM.
+      if (inherits(executionSettings, "CdmExecutionSettings")) {
+        private$jobContext$settings <- .replaceCovariateSettings(
+          moduleSettings = private$jobContext$settings,
+          executionSettings = executionSettings
+        )
+      }
 
       # Assemble the job context from the analysis specification
       # for the given module.
