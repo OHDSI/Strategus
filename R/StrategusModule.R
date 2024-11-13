@@ -166,7 +166,6 @@ StrategusModule <- R6::R6Class(
         executionSettings = executionSettings
       )
 
-
       # Assemble the job context from the analysis specification
       # for the given module.
       private$jobContext$sharedResources <- analysisSpecifications$sharedResources
@@ -345,7 +344,6 @@ StrategusModule <- R6::R6Class(
   checkmate::reportAssertions(collection = errorMessages)
 
   # A helper function to perform the replacement
-  for (i in seq_along(length(moduleSettings)))
   replaceHelper <- function(x) {
     if (is.list(x) && inherits(x, "covariateSettings")) {
       # If the element is a list and of type covariate settings
