@@ -471,4 +471,17 @@ test_that("Test internal function for modifying covariate settings", {
   expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
   expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
   expect_equal(class(testReplacedModuleSettings$analysis$esSettings), class(moduleSettings$analysis$esSettings))
+
+  # Additional tests for the table name replacement function
+  test1 <- .replaceCovariateSettingsCohortTableNames(covariateSettings, executionSettings)
+  expect_equal(test1[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(test1[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
+
+  test2 <- .replaceCovariateSettingsCohortTableNames(cov1, executionSettings)
+  expect_equal(test2$covariateCohortDatabaseSchema, NULL)
+  expect_equal(test2$covariateCohortTable, NULL)
+
+  test3 <- .replaceCovariateSettingsCohortTableNames(cov2, executionSettings)
+  expect_equal(test3$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(test3$covariateCohortTable, cohortTableNames$cohortTable)
 })
