@@ -334,8 +334,8 @@ StrategusModule <- R6::R6Class(
     if (inherits(s, "covariateSettings") && "fun" %in% names(attributes(s))) {
       if (attr(s, "fun") == "getDbCohortBasedCovariatesData") {
         # Set the covariateCohortDatabaseSchema & covariateCohortTable values
-        s$covariateCohortDatabaseSchema = executionSettings$workDatabaseSchema
-        s$covariateCohortTable = executionSettings$cohortTableNames$cohortTable
+        s$covariateCohortDatabaseSchema <- executionSettings$workDatabaseSchema
+        s$covariateCohortTable <- executionSettings$cohortTableNames$cohortTable
       }
     }
     return(s)
@@ -379,5 +379,3 @@ StrategusModule <- R6::R6Class(
   # Call the helper function on the input list
   return(replaceHelper(moduleSettings))
 }
-
-

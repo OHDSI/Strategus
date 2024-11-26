@@ -453,8 +453,8 @@ test_that("Test internal function for modifying covariate settings", {
 
   testReplacedModuleSettings <- .replaceCovariateSettings(moduleSettings, executionSettings)
   # For visual inspection
-  #ParallelLogger::saveSettingsToJson(moduleSettings, "before_unit_test.json")
-  #ParallelLogger::saveSettingsToJson(testReplacedModuleSettings, "after_unit_test.json")
+  # ParallelLogger::saveSettingsToJson(moduleSettings, "before_unit_test.json")
+  # ParallelLogger::saveSettingsToJson(testReplacedModuleSettings, "after_unit_test.json")
   expect_equal(testReplacedModuleSettings$analysis$something[[1]]$covariateCohortDatabaseSchema, NULL)
   expect_equal(testReplacedModuleSettings$analysis$something[[1]]$covariateCohortTable, NULL)
   expect_equal(testReplacedModuleSettings$analysis$something[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
