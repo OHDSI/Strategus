@@ -1,3 +1,9 @@
+Strategus 1.1.0
+===============
+- Inject cohort schema and table into `createCohortBasedCovariateSettings` (#181)
+- Provide hook to optimize cohort SQL construction (#179)
+- Fixes broken links in R6 class documentation (#183)
+
 Strategus 1.0.0
 ===============
 
