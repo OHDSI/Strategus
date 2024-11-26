@@ -13,7 +13,7 @@ addCharacterizationModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{Created by the \href{../../docs/reference/CharacterizationModule.html#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}} function.}
+\item{moduleSpecifications}{Created by the \href{../reference/CharacterizationModule.html#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}} function.}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added.
