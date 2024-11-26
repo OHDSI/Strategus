@@ -13,7 +13,7 @@ addCohortIncidenceModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{Created by the \href{../../docs/reference/CohortIncidenceModule.html#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}} function.}
+\item{moduleSpecifications}{Created by the \href{../reference/CohortIncidenceModule.html#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}} function.}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added.

@@ -408,3 +408,80 @@ test_that("Create results data model settings", {
 
   expect_equal(class(settings), c("ResultsDataModelSettings"))
 })
+
+test_that("Test internal function for modifying covariate settings", {
+  # Create module settings that contain a combination of
+  # 1) covariate settings that do not contain cohort table settings
+  # 2) covariate settings that contain cohort table settings
+  # 3) a list of covariate setting that has 1 & 2 above
+  # 4) Something other than a covariate setting object
+  esModuleSettingsCreator <- EvidenceSynthesisModule$new()
+  evidenceSynthesisSourceCmGrid <- esModuleSettingsCreator$createEvidenceSynthesisSource(
+    sourceMethod = "CohortMethod",
+    likelihoodApproximation = "adaptive grid"
+  )
+
+  cov1 <- FeatureExtraction::createDefaultCovariateSettings()
+  cov2 <- FeatureExtraction::createCohortBasedCovariateSettings(
+    analysisId = 999,
+    covariateCohorts = data.frame(
+      cohortId = 1,
+      cohortName = "test"
+    )
+  )
+  covariateSettings <- list(cov1, cov2)
+  moduleSettings <- list(
+    analysis = list(
+      something = covariateSettings,
+      somethingElse = list(
+        nested1 = cov1,
+        nested2 = cov2,
+        nested3 = covariateSettings
+      ),
+      esSettings = evidenceSynthesisSourceCmGrid
+    )
+  )
+  workDatabaseSchema <- "foo"
+  cohortTableNames <- CohortGenerator::getCohortTableNames(cohortTable = "unit_test")
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = "main",
+    cohortTableNames = cohortTableNames,
+    workFolder = "temp",
+    resultsFolder = "temp"
+  )
+
+  testReplacedModuleSettings <- .replaceCovariateSettings(moduleSettings, executionSettings)
+  # For visual inspection
+  # ParallelLogger::saveSettingsToJson(moduleSettings, "before_unit_test.json")
+  # ParallelLogger::saveSettingsToJson(testReplacedModuleSettings, "after_unit_test.json")
+  expect_equal(testReplacedModuleSettings$analysis$something[[1]]$covariateCohortDatabaseSchema, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$something[[1]]$covariateCohortTable, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$something[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(testReplacedModuleSettings$analysis$something[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
+
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested1$covariateCohortDatabaseSchema, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested1$covariateCohortTable, NULL)
+
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested2$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested2$covariateCohortTable, cohortTableNames$cohortTable)
+
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[1]]$covariateCohortDatabaseSchema, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[1]]$covariateCohortTable, NULL)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(testReplacedModuleSettings$analysis$somethingElse$nested3[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
+  expect_equal(class(testReplacedModuleSettings$analysis$esSettings), class(moduleSettings$analysis$esSettings))
+
+  # Additional tests for the table name replacement function
+  test1 <- .replaceCovariateSettingsCohortTableNames(covariateSettings, executionSettings)
+  expect_equal(test1[[2]]$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(test1[[2]]$covariateCohortTable, cohortTableNames$cohortTable)
+
+  test2 <- .replaceCovariateSettingsCohortTableNames(cov1, executionSettings)
+  expect_equal(test2$covariateCohortDatabaseSchema, NULL)
+  expect_equal(test2$covariateCohortTable, NULL)
+
+  test3 <- .replaceCovariateSettingsCohortTableNames(cov2, executionSettings)
+  expect_equal(test3$covariateCohortDatabaseSchema, workDatabaseSchema)
+  expect_equal(test3$covariateCohortTable, cohortTableNames$cohortTable)
+})
