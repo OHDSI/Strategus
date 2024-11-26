@@ -13,7 +13,7 @@ addSelfControlledCaseSeriesModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{Created by the \href{../../docs/reference/SelfControlledCaseSeriesModule.html#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}} function.}
+\item{moduleSpecifications}{Created by the \href{../reference/SelfControlledCaseSeriesModule.html#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}} function.}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added.

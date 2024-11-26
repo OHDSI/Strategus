@@ -13,7 +13,7 @@ addCohortGeneratorModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{Created by the \href{../../docs/reference/CohortGeneratorModule.html#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}} function.}
+\item{moduleSpecifications}{Created by the \href{../reference/CohortGeneratorModule.html#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}} function.}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added.
