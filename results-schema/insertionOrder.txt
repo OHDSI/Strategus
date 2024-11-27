@@ -18,6 +18,7 @@ cm_propensity_model
 plp_diagnostic_summary
 sccs_exposures_outcome_set
 c_cohort_details
+plp_cohorts
 cm_result
 database_meta_data
 cm_analysis
@@ -33,7 +34,6 @@ cd_index_event_breakdown
 cg_cohort_generation
 cg_cohort_inc_result
 cg_cohort_inclusion
-plp_cohorts
 sccs_age_spanning
 sccs_attrition
 sccs_calendar_time_spanning
