@@ -159,14 +159,30 @@ StrategusModule <- R6::R6Class(
       }
       private$jobContext$settings <- moduleSpecification$settings
 
+      # Make sure that the covariate settings for the analysis are updated
+      # to reflect the location of the cohort tables if we are executing
+      # on a CDM.
+      if (inherits(executionSettings, "CdmExecutionSettings")) {
+        private$jobContext$settings <- .replaceCovariateSettings(
+          moduleSettings = private$jobContext$settings,
+          executionSettings = executionSettings
+        )
+      }
+
       # Assemble the job context from the analysis specification
       # for the given module.
       private$jobContext$sharedResources <- analysisSpecifications$sharedResources
       private$jobContext$moduleExecutionSettings <- executionSettings
       private$jobContext$moduleExecutionSettings$resultsSubFolder <- file.path(private$jobContext$moduleExecutionSettings$resultsFolder, self$moduleName)
+      if (!dir.exists(private$jobContext$moduleExecutionSettings$resultsSubFolder)) {
+        dir.create(private$jobContext$moduleExecutionSettings$resultsSubFolder, showWarnings = F, recursive = T)
+      }
 
       if (is(private$jobContext$moduleExecutionSettings, "ExecutionSettings")) {
         private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
+        if (!dir.exists(private$jobContext$moduleExecutionSettings$workSubFolder)) {
+          dir.create(private$jobContext$moduleExecutionSettings$workSubFolder, showWarnings = F, recursive = T)
+        }
       }
     },
     .getModuleSpecification = function(analysisSpecifications, moduleName) {
@@ -217,11 +233,21 @@ StrategusModule <- R6::R6Class(
       if (length(cohortDefinitions) <= 0) {
         stop("No cohort definitions found")
       }
+      # Provide hook to allow for custom SQL generation based on the Circe-be
+      # generated SQL
+      cohortSqlOptimizationFunction <- getOption("strategus.cohortSqlOptimizationFunction")
+      useCohortSqlOptimizationFunction <- is.function(cohortSqlOptimizationFunction)
+      if (isTRUE(useCohortSqlOptimizationFunction)) {
+        private$.message("Constructing cohort definition set and using strategus.cohortSqlOptimizationFunction")
+      }
       cohortDefinitionSet <- CohortGenerator::createEmptyCohortDefinitionSet()
       for (i in 1:length(cohortDefinitions)) {
         cohortJson <- cohortDefinitions[[i]]$cohortDefinition
         cohortExpression <- CirceR::cohortExpressionFromJson(cohortJson)
         cohortSql <- CirceR::buildCohortQuery(cohortExpression, options = CirceR::createGenerateOptions(generateStats = generateStats))
+        if (isTRUE(useCohortSqlOptimizationFunction)) {
+          cohortSql <- cohortSqlOptimizationFunction(cohortSql)
+        }
         cohortDefinitionSet <- rbind(cohortDefinitionSet, data.frame(
           cohortId = as.double(cohortDefinitions[[i]]$cohortId),
           cohortName = cohortDefinitions[[i]]$cohortName,
@@ -294,3 +320,62 @@ StrategusModule <- R6::R6Class(
     }
   )
 )
+
+# Utility function to set the cohort table & schema on
+# createCohortBasedCovariateSettings with information from
+# the execution settings (Issue #181)
+.replaceCovariateSettingsCohortTableNames <- function(covariateSettings, executionSettings) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertList(covariateSettings, min.len = 1, add = errorMessages)
+  checkmate::assertClass(executionSettings, "CdmExecutionSettings", add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  .replaceProperties <- function(s) {
+    if (inherits(s, "covariateSettings") && "fun" %in% names(attributes(s))) {
+      if (attr(s, "fun") == "getDbCohortBasedCovariatesData") {
+        # Set the covariateCohortDatabaseSchema & covariateCohortTable values
+        s$covariateCohortDatabaseSchema <- executionSettings$workDatabaseSchema
+        s$covariateCohortTable <- executionSettings$cohortTableNames$cohortTable
+      }
+    }
+    return(s)
+  }
+  if (is.null(names(covariateSettings))) {
+    # List of lists
+    modifiedCovariateSettings <- lapply(covariateSettings, .replaceProperties)
+  } else {
+    # Plain list
+    modifiedCovariateSettings <- .replaceProperties(covariateSettings)
+  }
+  return(modifiedCovariateSettings)
+}
+
+.replaceCovariateSettings <- function(moduleSettings, executionSettings) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertList(moduleSettings, min.len = 1, add = errorMessages)
+  checkmate::assertClass(executionSettings, "CdmExecutionSettings", add = errorMessages)
+  checkmate::reportAssertions(collection = errorMessages)
+
+  # A helper function to perform the replacement
+  replaceHelper <- function(x) {
+    if (is.list(x) && inherits(x, "covariateSettings")) {
+      # If the element is a list and of type covariate settings
+      # replace the cohort table names
+      return(.replaceCovariateSettingsCohortTableNames(x, executionSettings))
+    } else if (is.list(x)) {
+      # If the element is a list, recurse on each element
+      # Keep the original attributes by saving them before modification
+      attrs <- attributes(x)
+      newList <- lapply(x, replaceHelper)
+      # Restore attributes to the new list
+      attributes(newList) <- attrs
+      return(newList)
+    } else {
+      # If the element is not a list or "covariateSettings", return it as is
+      return(x)
+    }
+  }
+
+  # Call the helper function on the input list
+  return(replaceHelper(moduleSettings))
+}

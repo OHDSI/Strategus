@@ -1067,10 +1067,10 @@
     <table name="plp_model_designs" comments="PatientLevelPredictionModule: Model designs">
       <column name="model_design_id" comments="a unique identifier for the model design settings"/>
       <column name="target_id" comments="the  identifier for the target cohort id">
-        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+        <foreignKey table="plp_cohorts" column="cohort_definition_id"/>
       </column>
       <column name="outcome_id" comments="the  identifier for the outcome cohort id">
-        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
+        <foreignKey table="plp_cohorts" column="cohort_definition_id"/>
       </column>
       <column name="tar_id" comments="the  identifier for the time at risk setting"/>
       <column name="plp_data_setting_id" comments="the  identifier for the plp data setting"/>
