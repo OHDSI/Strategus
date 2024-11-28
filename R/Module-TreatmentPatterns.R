@@ -1,20 +1,26 @@
 # TreatmentPatternsModule -------------
-#' @title Evaluate phenotypes with the \href{https://github.com/darwin-eu/TreatmentPatterns/}{DARWIN Treatment patterns Package}
+#' @title Evaluate phenotypes with the \href{https://github.com/darwin-eu/TreatmentPatterns/}{DARWIN TreatmentPatterns Package}
 #' @export
 #' @description
-#' Characterisation and description of treatment patterns
-#' against the OMOP Common Data Model.
+#' Characterisation and description of patterns of events (cohorts). against the OMOP Common Data Model.
 TreatmentPatternsModule <- R6::R6Class(
   classname = "TreatmentPatternsModule",
   inherit = StrategusModule,
+
+  ## Public ----
   public = list(
+    ### Fields ----
     #' @field tablePrefix The table prefix to append to the results tables
-    tablePrefix = "c_",
+    tablePrefix = "tp_",
+
+    ### Methods ----
     #' @description Initialize the module
     initialize = function() {
       super$initialize()
     },
+
     #' @description Execute Treatment Patterns
+    #'
     #' @template connectionDetails
     #' @template analysisSpecifications
     #' @template executionSettings
@@ -26,64 +32,107 @@ TreatmentPatternsModule <- R6::R6Class(
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
-      # if(!is.null(executionSettings$cdmConn)){
-      #   db <- DBI::dbConnect(odbc::odbc(),
-      #                        driver = cdmExecutionSettings$cdmDriver,
-      #                        server = cdmExecutionSettings$cdmDatabaseServer,
-      #                        Uid = cdmExecutionSettings$user,
-      #                        Pwd = cdmExecutionSettings$password,
-      #                        port = cdmExecutionSettings$port,
-      #                        Role = cdmExecutionSettings$role,
-      #                        Database = cdmExecutionSettings$database,
-      #                        Warehouse = cdmExecutionSettings$warehouse)
-      #   cdm <- CDMConnector::cdm_from_con(con,
-      #                                     cdm_schema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-      #                                     write_schema = jobContext$moduleExecutionSettings$workDatabaseSchema)
-      # }
-
-      TreatmentPatterns::executeTreatmentPatterns(
-        cohorts = jobContext$settings,
-        cohortTableName = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-        outputPath = resultsFolder,
-        connectionDetails = cdmExecutionSettings$connectionDetails,
-        cdmSchema =jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        resultSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        tempEmulationSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        minEraDuration = jobContext$moduleExecutionSettings$minEraDuration,
-        eraCollapseSize = jobContext$moduleExecutionSettings$EraCollapse,
-        combinationWindow = jobContext$moduleExecutionSettings$CombinationWindow,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount
-
+      spec <- jobContext$settings
+      outputEnv <- TreatmentPatterns::computePathways(
+        cohorts = spec$cohorts,
+        cohortTableName = spec$cohortTableName,
+        connectionDetails = connectionDetails,
+        cdmSchema = executionSettings$cdmDatabaseSchema,
+        resultSchema = executionSettings$workDatabaseSchema,
+        tempEmulationSchema = executionSettings$tempEmulationSchema,
+        includeTreatments = spec$includeTreatments,
+        indexDateOffset = spec$indexDateOffset,
+        minEraDuration = spec$minEraDuration,
+        splitEventCohorts = spec$splitEventCohorts,
+        splitTime = spec$splitTime,
+        eraCollapseSize = spec$eraCollapseSize,
+        combinationWindow = spec$combinationWindow,
+        minPostCombinationDuration = spec$minPostCombinationDuration,
+        filterTreatments = spec$filterTreatments,
+        maxPathLength = spec$maxPathLength
       )
+
+      if (!dir.exists(executionSettings$resultsFolder)) dir.create(executionSettings$resultsFolder, recursive = TRUE, showWarnings = FALSE)
+
+      TreatmentPatterns::export(
+        andromeda = outputEnv,
+        outputPath = executionSettings$resultsFolder,
+        ageWindow = spec$ageWindow,
+        minCellCount = executionSettings$minCellCount,
+        censorType = spec$censorType,
+        archiveName = NULL
+      )
+
+      on.exit(Andromeda::close(outputEnv))
     },
+
     #' @description Creates the TreatmentPatternsnModule Specifications
-    #' @param
-    #' @param cohorts cohorts to report patterns of
-    #' @param cohortTableName cohort table name
-    #' @param cdm cdmConnectorObject DNU not supported
-    #' @param connectionDetails Databaseconnector connectionDetails
-    #' @param cdmSchema CDM schema holding omop data
-    #' @param resultSchema writable schema for results
+    #'
+    #' @param cohorts (`data.frame()`)\cr
+    #' Data frame containing the following columns and data types:
+    #' \describe{
+    #'  \item{cohortId `numeric(1)`}{Cohort ID's of the cohorts to be used in the cohort table.}
+    #'  \item{cohortName `character(1)`}{Cohort names of the cohorts to be used in the cohort table.}
+    #'  \item{type `character(1)` \["target", "event', "exit"\]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
+    #' }
+    #' @param cohortTableName (`character(1)`)\cr
+    #' Cohort table name.
+    #' @param connectionDetails (`DatabaseConnector::createConnectionDetails()`: `NULL`)\cr
+    #' Optional; In congruence with `cdmSchema` and `resultSchema`. Ignores `cdm`.
+    #' @param cdmSchema (`character(1)`: `NULL`)\cr
+    #' Optional; In congruence with `connectionDetails` and `resultSchema`. Ignores `cdm`.
+    #' @param resultSchema (`character(1)`: `NULL`)\cr
+    #' Optional; In congruence with `connectionDetails` and `cdmSchema`. Ignores `cdm`.
     #' @param tempEmulationSchema Schema used to emulate temp tables
-    #' @param includeTreatments string indicating locus of intervention pathways
-    #' @param periodPriorToIndex lookback period
-    #' @param minEraDuration minimum length of era
-    #' @param splitEventCohorts which cohorts indicate split events
-    #' @param splitTime what time interval should cohorts be split
-    #' @param eraCollapseSize how large should eras be before collapse
-    #' @param combinationWindow
-    #' @param minPostCombinationDuration
-    #' @param filterTreatments
-    #' @param maxPathLength
+    #' @param includeTreatments (`character(1)`: `"startDate"`)\cr
+    #' \describe{
+    #'  \item{`"startDate"`}{Include treatments after the target cohort start date and onwards.}
+    #'  \item{`"endDate"`}{Include treatments before target cohort end date and before.}
+    #' }
+    #' @param indexDateOffset (`integer(1)`: `0`)\cr
+    #' Offset the index date of the `Target` cohort.
+    #' @param minEraDuration (`integer(1)`: `0`)\cr
+    #' Minimum time an event era should last to be included in analysis
+    #' @param splitEventCohorts (`character(n)`: `""`)\cr
+    #' Specify event cohort to split in acute (< X days) and therapy (>= X days)
+    #' @param splitTime (`integer(1)`: `30`)\cr
+    #' Specify number of days (X) at which each of the split event cohorts should
+    #' be split in acute and therapy
+    #' @param eraCollapseSize (`integer(1)`: `30`)\cr
+    #' Window of time between which two eras of the same event cohort are collapsed
+    #' into one era
+    #' @param combinationWindow (`integer(1)`: `30`)\cr
+    #' Window of time two event cohorts need to overlap to be considered a
+    #' combination treatment
+    #' @param minPostCombinationDuration (`integer(1)`: `30`)\cr
+    #' Minimum time an event era before or after a generated combination treatment
+    #' should last to be included in analysis
+    #' @param filterTreatments (`character(1)`: `"First"` \["first", "Changes", "all"\])\cr
+    #' Select first occurrence of (‘First’); changes between (‘Changes’); or all
+    #' event cohorts (‘All’).
+    #' @param maxPathLength (`integer(1)`: `5`)\cr
+    #' Maximum number of steps included in treatment pathway
+    #' @param ageWindow (`integer(n)`: `10`)\cr
+    #' Number of years to bin age groups into. It may also be a vector of integers.
+    #' I.e. `c(0, 18, 150)` which will results in age group `0-18` which includes
+    #' subjects `< 19`. And age group `18-150` which includes subjects `> 18`.
+    #' @param minCellCount (`integer(1)`: `5`)\cr
+    #' Minimum count required per pathway. Censors data below `x` as `<x`. This
+    #' minimum value will carry over to the sankey diagram and sunburst plot.
+    #' @param censorType (`character(1)`)\cr
+    #' \describe{
+    #'   \item{`"minCellCount"`}{Censors pathways <`minCellCount` to `minCellCount`.}
+    #'   \item{`"remove"`}{Censors pathways <`minCellCount` by removing them completely.}
+    #'   \item{`"mean"`}{Censors pathways <`minCellCount` to the mean of all frequencies below `minCellCount`}
+    #' }
     createModuleSpecifications = function(cohorts,
                                           cohortTableName,
-                                          cdm = NULL, # Not supporting
                                           connectionDetails = NULL,
                                           cdmSchema = NULL,
                                           resultSchema = NULL,
                                           tempEmulationSchema = NULL,
                                           includeTreatments = "startDate",
-                                          periodPriorToIndex = 0,
+                                          indexDateOffset = 0,
                                           minEraDuration = 0,
                                           splitEventCohorts = NULL,
                                           splitTime = NULL,
@@ -91,8 +140,11 @@ TreatmentPatternsModule <- R6::R6Class(
                                           combinationWindow = 30,
                                           minPostCombinationDuration = 30,
                                           filterTreatments = "First",
-                                          maxPathLength = 5
-    ){
+                                          maxPathLength = 5,
+                                          ageWindow = 5,
+                                          minCellCount = 1,
+                                          censorType = "minCellCount"
+    ) {
       # input checks
       validateComputePathways <- function() {
         args <- eval(
@@ -127,12 +179,12 @@ TreatmentPatternsModule <- R6::R6Class(
         )
 
         checkmate::assertNumeric(
-          args$periodPriorToIndex,
+          args$indexDateOffset,
           len = 1,
           finite = TRUE,
           null.ok = FALSE,
           add = assertCol,
-          .var.name = "periodPriorToIndex"
+          .var.name = "indexDateOffset"
         )
 
         checkmate::assertNumeric(
@@ -280,14 +332,6 @@ TreatmentPatternsModule <- R6::R6Class(
           .var.name = "resultSchema"
         )
 
-        checkmate::assertClass(
-          args$cdm,
-          classes = "cdm_reference",
-          null.ok = TRUE,
-          add = assertCol,
-          .var.name = "cdm"
-        )
-
         checkmate::reportAssertions(collection = assertCol)
       }
       validateComputePathways()
@@ -302,12 +346,14 @@ TreatmentPatternsModule <- R6::R6Class(
       )
       return(specifications)
     },
+
     #' @description Validate the module specifications
+    #'
     #' @param moduleSpecifications The CohortMethod module specifications
     validateModuleSpecifications = function(moduleSpecifications) {
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
     }
-)
+  )
 )
