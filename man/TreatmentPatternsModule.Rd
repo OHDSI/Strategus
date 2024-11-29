@@ -21,6 +21,9 @@ Characterisation and description of patterns of events (cohorts). against the OM
 \itemize{
 \item \href{#method-TreatmentPatternsModule-new}{\code{TreatmentPatternsModule$new()}}
 \item \href{#method-TreatmentPatternsModule-execute}{\code{TreatmentPatternsModule$execute()}}
+\item \href{#method-TreatmentPatternsModule-createResultsDataModel}{\code{TreatmentPatternsModule$createResultsDataModel()}}
+\item \href{#method-TreatmentPatternsModule-getResultsDataModelSpecification}{\code{TreatmentPatternsModule$getResultsDataModelSpecification()}}
+\item \href{#method-TreatmentPatternsModule-uploadResults}{\code{TreatmentPatternsModule$uploadResults()}}
 \item \href{#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}
 \item \href{#method-TreatmentPatternsModule-validateModuleSpecifications}{\code{TreatmentPatternsModule$validateModuleSpecifications()}}
 \item \href{#method-TreatmentPatternsModule-clone}{\code{TreatmentPatternsModule$clone()}}
@@ -29,10 +32,7 @@ Characterisation and description of patterns of events (cohorts). against the OM
 \if{html}{\out{
 <details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createResultsDataModel"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createResultsDataModel'><code>Strategus::StrategusModule$createResultsDataModel()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="getResultsDataModelSpecification"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-getResultsDataModelSpecification'><code>Strategus::StrategusModule$getResultsDataModelSpecification()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="uploadResults"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-uploadResults'><code>Strategus::StrategusModule$uploadResults()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
 </details>
@@ -69,8 +69,98 @@ Execute Treatment Patterns
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
 \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TreatmentPatternsModule-createResultsDataModel"></a>}}
+\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createResultsDataModel}{}}}
+\subsection{Method \code{createResultsDataModel()}}{
+Create the results data model for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createResultsDataModel(
+  resultsConnectionDetails,
+  resultsDatabaseSchema,
+  tablePrefix = ""
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TreatmentPatternsModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TreatmentPatternsModule-uploadResults"></a>}}
+\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-uploadResults}{}}}
+\subsection{Method \code{uploadResults()}}{
+Upload the results for TreatmentPatterns
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$uploadResults(
+  resultsConnectionDetails,
+  analysisSpecifications,
+  resultsDataModelSettings
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 }
 \if{html}{\out{</div>}}
 }

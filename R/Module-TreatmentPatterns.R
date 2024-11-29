@@ -1,4 +1,19 @@
-# TreatmentPatternsModule -------------
+# Copyright 2024 Observational Health Data Sciences and Informatics
+#
+# This file is part of Strategus
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #' @title Evaluate phenotypes with the \href{https://github.com/darwin-eu/TreatmentPatterns/}{DARWIN TreatmentPatterns Package}
 #' @export
 #' @description
@@ -66,6 +81,31 @@ TreatmentPatternsModule <- R6::R6Class(
       on.exit(Andromeda::close(outputEnv))
     },
 
+    #' @description Create the results data model for the module
+    #' @template resultsConnectionDetails
+    #' @template resultsDatabaseSchema
+    #' @template tablePrefix
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
+      super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
+      message("`createResultsDataModel()` is not implemented.")
+    },
+
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      super$getResultsDataModelSpecification()
+      message("`getResultsDataModelSpecification()` is not implemented")
+    },
+
+    #' @description Upload the results for TreatmentPatterns
+    #' @template resultsConnectionDetails
+    #' @template analysisSpecifications
+    #' @template resultsDataModelSettings
+    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
+      super$uplaodResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
+      message("`uploadResults()` is not implemented")
+    },
+
     #' @description Creates the TreatmentPatternsnModule Specifications
     #'
     #' @param cohorts (`data.frame()`)\cr
@@ -125,226 +165,33 @@ TreatmentPatternsModule <- R6::R6Class(
     #'   \item{`"remove"`}{Censors pathways <`minCellCount` by removing them completely.}
     #'   \item{`"mean"`}{Censors pathways <`minCellCount` to the mean of all frequencies below `minCellCount`}
     #' }
-    createModuleSpecifications = function(cohorts,
-                                          cohortTableName,
-                                          connectionDetails = NULL,
-                                          cdmSchema = NULL,
-                                          resultSchema = NULL,
-                                          tempEmulationSchema = NULL,
-                                          includeTreatments = "startDate",
-                                          indexDateOffset = 0,
-                                          minEraDuration = 0,
-                                          splitEventCohorts = NULL,
-                                          splitTime = NULL,
-                                          eraCollapseSize = 30,
-                                          combinationWindow = 30,
-                                          minPostCombinationDuration = 30,
-                                          filterTreatments = "First",
-                                          maxPathLength = 5,
-                                          ageWindow = 5,
-                                          minCellCount = 1,
-                                          censorType = "minCellCount"
+    createModuleSpecifications = function(
+      cohorts,
+      cohortTableName,
+      connectionDetails = NULL,
+      cdmSchema = NULL,
+      resultSchema = NULL,
+      tempEmulationSchema = NULL,
+      includeTreatments = "startDate",
+      indexDateOffset = 0,
+      minEraDuration = 0,
+      splitEventCohorts = NULL,
+      splitTime = NULL,
+      eraCollapseSize = 30,
+      combinationWindow = 30,
+      minPostCombinationDuration = 30,
+      filterTreatments = "First",
+      maxPathLength = 5,
+      ageWindow = 5,
+      minCellCount = 1,
+      censorType = "minCellCount"
     ) {
-      # input checks
-      validateComputePathways <- function() {
-        args <- eval(
-          # Expression to get names of function arguments in current function
-          expr = expression(mget(names(formals()))),
-          # Run expression in function that calls `validateComputePathways`
-          envir = sys.frame(sys.nframe() - 1)
-        )
-
-        if (args$minEraDuration > args$minPostCombinationDuration) {
-          warning("The `minPostCombinationDuration` is set lower than the `minEraDuration`, this might result in unexpected behavior")
-        }
-
-        if (args$minEraDuration > args$combinationWindow) {
-          warning("The `combinationWindow` is set lower than the `minEraDuration`, this might result in unexpected behavior")
-        }
-
-        assertCol <- checkmate::makeAssertCollection()
-
-        checkmate::assertCharacter(
-          args$includeTreatments,
-          len = 1,
-          add = assertCol,
-          .var.name = "includeTreatments"
-        )
-
-        checkmate::assertSubset(
-          args$includeTreatments,
-          choices = c("startDate", "endDate"),
-          add = assertCol,
-          .var.name = "includeTreatments"
-        )
-
-        checkmate::assertNumeric(
-          args$indexDateOffset,
-          len = 1,
-          finite = TRUE,
-          null.ok = FALSE,
-          add = assertCol,
-          .var.name = "indexDateOffset"
-        )
-
-        checkmate::assertNumeric(
-          x = args$minEraDuration,
-          lower = 0,
-          finite = TRUE,
-          len = 1,
-          null.ok = FALSE,
-          add = assertCol,
-          .var.name = "minEraDuration"
-        )
-
-        checkmate::assertIntegerish(
-          x = args$splitEventCohorts,
-          null.ok = TRUE,
-          add = assertCol,
-          .var.name = "splitEventCohorts"
-        )
-
-        checkmate::assertIntegerish(
-          x = args$splitTime,
-          lower = 0,
-          null.ok = TRUE,
-          add = assertCol,
-          .var.name = "splitTime"
-        )
-
-        checkmate::assertNumeric(
-          x = args$eraCollapseSize,
-          lower = 0,
-          finite = TRUE,
-          len = 1,
-          null.ok = FALSE,
-          add = assertCol,
-          .var.name = "eraCollapseSize"
-        )
-
-        checkmate::assertNumeric(
-          x = args$combinationWindow,
-          lower = 0,
-          finite = TRUE,
-          len = 1,
-          null.ok = FALSE,
-          add = assertCol,
-          .var.name = "combinationWindow"
-        )
-
-        checkmate::assertNumeric(
-          x = args$minPostCombinationDuration,
-          lower = 0,
-          finite = TRUE,
-          len = 1,
-          null.ok = FALSE,
-          add = assertCol,
-          .var.name = "minPostCombinationDuration"
-        )
-
-        checkmate::assertCharacter(
-          x = args$filterTreatments,
-          len = 1,
-          add = assertCol,
-          .var.name = "filterTreatments"
-        )
-
-        checkmate::assertSubset(
-          x = args$filterTreatments,
-          choices = c("First", "Changes", "All"),
-          add = assertCol,
-          .var.name = "filterTreatments"
-        )
-
-        checkmate::assertNumeric(
-          x = args$maxPathLength,
-          lower = 0,
-          upper = 5,
-          finite = TRUE,
-          len = 1,
-          null.ok = FALSE,
-          add = assertCol,
-          .var.name = "maxPathLength"
-        )
-
-        checkmate::assertDataFrame(
-          x = args$cohorts,
-          types = c("integerish", "character", "character"),
-          any.missing = FALSE,
-          all.missing = FALSE,
-          ncols = 3,
-          min.rows = 1,
-          col.names = "named",
-          add = assertCol,
-          .var.name = "cohorts"
-        )
-
-        checkmate::assertSubset(
-          x = names(args$cohorts),
-          choices = c("cohortId", "cohortName", "type"),
-          add = assertCol,
-          .var.name = "cohorts"
-        )
-
-        checkmate::assertSubset(
-          x = args$cohorts$type,
-          choices = c("event", "target", "exit"),
-          add = assertCol,
-          .var.name = "cohorts"
-        )
-
-        checkmate::assertCharacter(
-          x = args$cohortTableName,
-          len = 1,
-          null.ok = FALSE,
-          .var.name = "cohortTableName"
-        )
-
-        checkmate::assertClass(
-          x = args$connectionDetails,
-          classes = "ConnectionDetails",
-          null.ok = TRUE,
-          add = assertCol,
-          .var.name = "connectionDetails"
-        )
-
-        checkmate::assertCharacter(
-          x = args$connectionDetails$dbms,
-          len = 1,
-          null.ok = TRUE,
-          add = assertCol,
-          .var.name = "connectionDetails"
-        )
-
-        checkmate::assertCharacter(
-          args$cdmDatabaseSchema,
-          null.ok = TRUE,
-          len = 1,
-          add = assertCol,
-          .var.name = "cdmDatabaseSchema"
-        )
-
-        checkmate::assertCharacter(
-          args$resultSchema,
-          null.ok = TRUE,
-          len = 1,
-          add = assertCol,
-          .var.name = "resultSchema"
-        )
-
-        checkmate::reportAssertions(collection = assertCol)
-      }
-      validateComputePathways()
-
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
       }
 
-      specifications <- super$createModuleSpecifications(
-        moduleSpecifications = analysis
-      )
-      return(specifications)
+      super$createModuleSpecifications(analysis)
     },
 
     #' @description Validate the module specifications
