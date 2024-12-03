@@ -4,6 +4,8 @@ Strategus
 [![Build Status](https://github.com/OHDSI/Strategus/actions/workflows/R_CMD_check_Hades.yaml/badge.svg?branch=main)](https://github.com/OHDSI/Strategus/actions/workflows/R_CMD_check_Hades.yaml/badge.svg?branch=main)
 [![codecov.io](https://codecov.io/github/OHDSI/Strategus/coverage.svg?branch=main)](https://codecov.io/github/OHDSI/Strategus?branch=main)
 
+Strategus is part of [HADES](https://ohdsi.github.io/Hades).
+
 Introduction
 ============
 Strategus is an R package for coordinating and executing analytics using [OHDSI HADES](https://ohdsi.github.io/Hades/) modules. Please see the [Introduction To Strategus](https://ohdsi.github.io/Strategus/articles/IntroductionToStrategus.html) for more details.
@@ -20,7 +22,7 @@ Strategus is an R package.
 
 System Requirements
 ============
-Requires R (version 4.2.0 or higher). Installation on Windows requires [RTools](https://cran.r-project.org/bin/windows/Rtools/). Libraries used in Strategus require Java. Strategus requires you to setup your GitHub Personal Access Token as described [here](https://ohdsi.github.io/Hades/rSetup.html#GitHub_Personal_Access_Token)
+Requires R (version 4.2.0 or higher). Installation on Windows requires [RTools](https://cran.r-project.org/bin/windows/Rtools/). Libraries used in Strategus require Java.
 
 Installation
 =============
@@ -38,7 +40,10 @@ Documentation can be found on the [package website](https://ohdsi.github.io/Stra
 
 PDF versions of the documentation are also available:
 - Package manual: [Strategus.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/extras/Strategus.pdf)
-- Vignette: [Creating HADES Modules](https://github.com/OHDSI/Strategus/raw/main/inst/doc/CreatingModules.pdf)
+- Introduction to Strategus [IntroductionToStrategus.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/inst/doc/IntroductionToStrategus.pdf)
+- Creating analysis specification [CreatingAnalysisSpecification.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/inst/doc/CreatingAnalysisSpecification.pdf)
+- Execute Strategus [ExecuteStrategus.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/inst/doc/ExecuteStrategus.pdf)
+- Working with results [WorkingWithResults.pdf](https://raw.githubusercontent.com/OHDSI/Strategus/main/inst/doc/WorkingWithResults.pdf)
 
 Support
 =======
