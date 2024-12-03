@@ -1,8 +1,8 @@
 Package: Strategus
 Type: Package
 Title: Coordinate and Execute OHDSI HADES Modules
-Version: 1.1.0
-Date: 2024-11-26
+Version: 1.1.1
+Date: 2024-12-03
 Authors@R: c(
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
@@ -26,7 +26,6 @@ Imports:
   methods,
   ParallelLogger (>= 3.1.0),
   purrr,
-  readr,
   ResultModelManager (>= 0.5.8),
   rlang,
   SqlRender (>= 1.18.0)
@@ -43,6 +42,7 @@ Suggests:
   fs,
   knitr,
   PatientLevelPrediction,
+  readr,
   rmarkdown,
   RSQLite,
   SelfControlledCaseSeries,
