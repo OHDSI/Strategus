@@ -1,3 +1,7 @@
+Strategus 1.1.1
+===============
+- Fixes R CMD note and updates documentation for inclusion into HADES
+
 Strategus 1.1.0
 ===============
 - Inject cohort schema and table into `createCohortBasedCovariateSettings` (#181)
