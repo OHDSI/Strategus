@@ -23,6 +23,14 @@ CohortMethodModule <- R6::R6Class(
       jobContext <- private$jobContext
       multiThreadingSettings <- CohortMethod::createDefaultMultiThreadingSettings(jobContext$moduleExecutionSettings$maxCores)
 
+      # Provide hook to allow for overriding the number of threads
+      # used for database operations
+      getDbCohortMethodDataThreads <- as.integer(getOption("strategus.CohortMethodModule.getDbCohortMethodDataThreads"))
+      if (isTRUE(getDbCohortMethodDataThreads > 0)) {
+        private$.message(paste0("Detected strategus.CohortMethodModule.getDbCohortMethodDataThreads - setting value to: ", getDbCohortMethodDataThreads))
+        multiThreadingSettings$getDbCohortMethodDataThreads <- getDbCohortMethodDataThreads
+      }
+
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
