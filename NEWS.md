@@ -1,3 +1,7 @@
+Strategus 1.1.2
+===============
+- Add options for overriding number of threads for database operations (#190)
+
 Strategus 1.1.1
 ===============
 - Fixes R CMD note and updates documentation for inclusion into HADES
