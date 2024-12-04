@@ -75,16 +75,16 @@
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariate_ref"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12">
+            <parent catalog="strategus" column="setting_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariate_ref"/>
-            <parent catalog="strategus" column="setting_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_characterization_mean" nullable="false" remarks="Minimum fraction for feature extraction" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_cohort_id" nullable="false" remarks="The outcome cohort id" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
             <parent catalog="strategus" column="setting_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
             <parent catalog="strategus" column="setting_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariate_ref"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sum_value" nullable="false" remarks="The sum value" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="The target cohort id" size="0" type="Unknown" typeCode="12"/>
@@ -648,10 +648,10 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk" nullable="false" remarks="Persons at risk" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk_pe" nullable="false" remarks="Persons at risk pre-exclude (counts before excluding time at risk)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_tar_def"/>
-            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_subgroup_def"/>
-            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_age_group_def"/>
             <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_outcome_def"/>
+            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_tar_def"/>
+            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_age_group_def"/>
+            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_subgroup_def"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="source_name" nullable="false" remarks="The source name for the database" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="start_year" nullable="false" remarks="Start year" size="0" type="Unknown" typeCode="12"/>
@@ -715,8 +715,8 @@
       <table catalog="strategus" name="cm_analysis" numRows="0" remarks="CohortMethodModule: Analysis reference" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A unique identifier for an analysis." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_diagnostics_summary"/>
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_result"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_diagnostics_summary"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_result"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="definition" nullable="false" remarks="A CohortMethod JSON object specifying the analysis." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="description" nullable="false" remarks="A description for an analysis, e.g. 'On-treatment'." size="0" type="Unknown" typeCode="12"/>
@@ -959,8 +959,8 @@
       </table>
       <table catalog="strategus" name="cm_shared_covariate_balance" numRows="0" remarks="CohortMethodModule: Shared covariate balance" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the cm_analysis table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate_analysis"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate_analysis"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="comparator_id" nullable="false" remarks="The identifier for the comparator cohort." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="comparator_mean_after" nullable="false" remarks="The mean value of the covariate in the comparator cohort after propensity score adjustment." size="0" type="Unknown" typeCode="12"/>
@@ -1516,9 +1516,9 @@
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_era"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rr" nullable="false" remarks="The estimated relative risk (i.e. the incidence rate ratio)." size="0" type="Unknown" typeCode="12"/>
       </table>
@@ -1534,15 +1534,15 @@
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_result"/>
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ease" nullable="false" remarks="The expected absolute systematic error." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ease_diagnostic" nullable="false" remarks="Pass / warning / fail / not evaluated classification of the EASE diagnostic." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_result"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mdrr" nullable="false" remarks="The minimum detectable relative risk." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mdrr_diagnostic" nullable="false" remarks="Pass / warning / fail / not evaluated classification of the MDRR diagnostic." size="0" type="Unknown" typeCode="12"/>
@@ -1605,8 +1605,8 @@
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_spline"/>
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_time_to_event"/>
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_time_trend"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="nesting_cohort_id" nullable="false" remarks="A cohort ID." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_definition"/>
@@ -1625,8 +1625,8 @@
       <table catalog="strategus" name="sccs_result" numRows="0" remarks="SelfControlledCaseSeriesModule: Results" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_analysis"/>
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="calibrated_ci_95_lb" nullable="false" remarks="The lower bound of the calibrated 95% confidence interval of the relative risk." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="calibrated_ci_95_ub" nullable="false" remarks="The upper bound of the calibrated 95% confidence interval of the relative risk." size="0" type="Unknown" typeCode="12"/>
@@ -1640,21 +1640,21 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_days" nullable="false" remarks="The total covariate time in days." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_eras" nullable="false" remarks="The number of continuous eras of the covariate." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_id" nullable="false" remarks="A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
+            <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_outcomes" nullable="false" remarks="The number of outcomes observed during the covariate time." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_subjects" nullable="false" remarks="The number of subjects having the covariate." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="llr" nullable="false" remarks="The log of the likelihood ratio (of the MLE vs the null hypothesis of no effect)." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="log_rr" nullable="false" remarks="The log of the relative risk." size="0" type="Unknown" typeCode="12"/>
