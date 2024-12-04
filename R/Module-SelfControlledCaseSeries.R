@@ -25,6 +25,14 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       jobContext <- private$jobContext
       sccsMultiThreadingSettings <- SelfControlledCaseSeries::createDefaultSccsMultiThreadingSettings(jobContext$moduleExecutionSettings$maxCores)
 
+      # Provide hook to allow for overriding the number of threads
+      # used for database operations
+      getDbSccsDataThreads <- as.integer(getOption("strategus.SelfControlledCaseSeriesModule.getDbSccsDataThreads"))
+      if (isTRUE(getDbSccsDataThreads > 0)) {
+        private$.message(paste0("Detected strategus.SelfControlledCaseSeriesModule.getDbSccsDataThreads - setting value to: ", getDbSccsDataThreads))
+        sccsMultiThreadingSettings$getDbSccsDataThreads <- getDbSccsDataThreads
+      }
+
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
