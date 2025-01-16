@@ -80,6 +80,17 @@ execute <- function(analysisSpecifications,
     }
   }
 
+  # Set up logging
+  if (!dir.exists(dirname(executionSettings$logFileName))) {
+    dir.create(dirname(executionSettings$logFileName), recursive = T)
+  }
+  ParallelLogger::addDefaultFileLogger(
+    name = "STRATEGUS_LOGGER",
+    fileName = executionSettings$logFileName
+  )
+  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
+
+
   # Determine if the user has opted to subset to specific modules
   # in the analysis specification. If so, validate that the
   # modulesToExecute are present in the analysis specification
@@ -133,17 +144,6 @@ execute <- function(analysisSpecifications,
     )
     analysisSpecifications$moduleSpecifications <- analysisSpecifications$moduleSpecifications[moduleSubset]
   }
-
-
-  # Set up logging
-  if (!dir.exists(dirname(executionSettings$logFileName))) {
-    dir.create(dirname(executionSettings$logFileName), recursive = T)
-  }
-  ParallelLogger::addDefaultFileLogger(
-    name = "STRATEGUS_LOGGER",
-    fileName = executionSettings$logFileName
-  )
-  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
 
   if (is(executionSettings, "CdmExecutionSettings")) {
     cdmDatabaseMetaData <- getCdmDatabaseMetaData(
