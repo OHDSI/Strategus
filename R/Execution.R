@@ -172,7 +172,7 @@ execute <- function(analysisSpecifications,
       )
       # The absence of an error in moduleExecutionStatus$error
       # represents a success
-      cohortGenerationSuccessful <- ifelse(moduleExecutionStatus$status == "SUCCESS", TRUE, FALSE)
+      cohortGenerationSuccessful <- ifelse(moduleExecutionStatus[[1]]$status == "SUCCESS", TRUE, FALSE)
       executionStatus <- append(
         executionStatus,
         moduleExecutionStatus
