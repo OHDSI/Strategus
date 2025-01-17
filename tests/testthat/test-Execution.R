@@ -283,3 +283,41 @@ test_that("Specify subset of modules to run", {
 
   expect_true(all(modulesExecuted %in% modulesToExecute))
 })
+
+test_that("Stop if error occurs during cohort generation", {
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+      package = "Strategus"
+    )
+  )
+  # Add an ill-formed Circe expression to break the cohort generation process
+  analysisSpecifications$sharedResources[[1]]$cohortDefinitions[[6]] <- list(
+    cohortId = 6,
+    cohortName = "Failure",
+    cohortDefinition = "{}"
+  )
+
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "unit_test"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder")
+  )
+
+  output <- Strategus::execute(
+    connectionDetails = connectionDetails,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
+  )
+
+  # Verify cohort generator failed
+  cohortGeneratorStatus <- sapply(output, function(x) if (x$moduleName == "CohortGeneratorModule") x$status)
+  cohortGeneratorStatus <- unlist(cohortGeneratorStatus[-which(sapply(cohortGeneratorStatus, is.null))])
+  expect_true(cohortGeneratorStatus == "FAILED")
+
+  # Verify all other modules were skipped
+  allOtherModuleStatuses <- sapply(output, function(x) if (x$moduleName != "CohortGeneratorModule") x$status)
+  allOtherModuleStatuses <- unlist(allOtherModuleStatuses)
+  expect_true(all(allOtherModuleStatuses == "SKIPPED"))
+})
