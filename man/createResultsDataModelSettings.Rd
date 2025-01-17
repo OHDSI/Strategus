@@ -7,7 +7,8 @@
 createResultsDataModelSettings(
   resultsDatabaseSchema,
   resultsFolder,
-  logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt")
+  logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
+  modulesToExecute = c()
 )
 }
 \arguments{
@@ -16,6 +17,9 @@ createResultsDataModelSettings(
 \item{resultsFolder}{The root folder holding the study results.}
 
 \item{logFileName}{Log location for data model operations}
+
+\item{modulesToExecute}{(Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
+all modules in the analysis specification are executed.}
 }
 \value{
 An object of type \code{ResultsDataModelSettings}

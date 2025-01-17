@@ -41,6 +41,18 @@ createResultDataModel <- function(analysisSpecifications,
     resultsDataModelSettings = resultsDataModelSettings
   )
 
+  # Determine if the user has opted to subset to specific modules
+  # in the analysis specification. If so, validate that the
+  # modulesToExecute are present in the analysis specification
+  # before attempting to subset the analyses to run.
+  if (length(resultsDataModelSettings$modulesToExecute) > 0) {
+    analysisSpecifications <- .subsetAnalysisSpecificationByModulesToExecute(
+      analysisSpecifications = analysisSpecifications,
+      modulesToExecute = resultsDataModelSettings$modulesToExecute
+    )
+  }
+
+
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     moduleObj <- get(moduleName)$new()
@@ -76,6 +88,17 @@ uploadResults <- function(analysisSpecifications,
     resultsConnectionDetails = resultsConnectionDetails,
     resultsDataModelSettings = resultsDataModelSettings
   )
+
+  # Determine if the user has opted to subset to specific modules
+  # in the analysis specification. If so, validate that the
+  # modulesToExecute are present in the analysis specification
+  # before attempting to subset the analyses to run.
+  if (length(resultsDataModelSettings$modulesToExecute) > 0) {
+    analysisSpecifications <- .subsetAnalysisSpecificationByModulesToExecute(
+      analysisSpecifications = analysisSpecifications,
+      modulesToExecute = resultsDataModelSettings$modulesToExecute
+    )
+  }
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
