@@ -233,7 +233,7 @@ execute <- function(analysisSpecifications,
   cat(error(paste0("ERROR: ", message, "\n")))
 }
 
-.subsetAnalysisSpecificationByModulesToExecute <- function(analysisSpecification, modulesToExecute) {
+.subsetAnalysisSpecificationByModulesToExecute <- function(analysisSpecifications, modulesToExecute) {
   # Get the modules in the analysis specification with their
   # index in the array
   modulesWithIndex <- lapply(
