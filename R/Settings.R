@@ -258,8 +258,7 @@ createEmptyAnalysisSpecificiations <- function() {
 #'                                   and attempt to pick up where they left off when this value is set to TRUE.
 #' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
 #'                                   use all available cores on the machine.
-#' @param modulesToExecute           (Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
-#'                                   all modules in the analysis specification are executed.
+#' @template modulesToExecute
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -312,8 +311,7 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
 #'                                   in results.
 #' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
 #'                                   use all available cores on the machine.
-#' @param modulesToExecute           (Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
-#'                                   all modules in the analysis specification are executed.
+#' @template modulesToExecute
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -358,6 +356,7 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #' @template resultsDatabaseSchema
 #' @template resultsFolder
 #' @param logFileName     Log location for data model operations
+#' @template modulesToExecute
 #'
 #' @return
 #' An object of type `ResultsDataModelSettings`
@@ -365,11 +364,13 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #' @export
 createResultsDataModelSettings <- function(resultsDatabaseSchema,
                                            resultsFolder,
-                                           logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt")) {
+                                           logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
+                                           modulesToExecute = c()) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
+  checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
