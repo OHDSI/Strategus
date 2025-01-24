@@ -26,6 +26,18 @@ CharacterizationModule <- R6::R6Class(
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
+      # Handle cleaning of incremental folders/files
+      # 1) Always clean the incremental files
+      Characterization::cleanIncremental(
+        executionFolder = workFolder,
+        ignoreWhenEmpty = TRUE
+      )
+      # 2) If we're running in non-incremental mode,
+      #    make sure the work folder is completely cleaned
+      if (isFALSE(executionSettings$incremental)) {
+        Characterization::cleanNonIncremental(workFolder)
+      }
+
       Characterization::runCharacterizationAnalyses(
         connectionDetails = connectionDetails,
         targetDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
