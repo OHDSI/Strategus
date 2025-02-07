@@ -36,8 +36,23 @@ execute <- function(analysisSpecifications,
   checkmate::assertClass(executionSettings, "ExecutionSettings", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # Set up logging
+  if (!dir.exists(dirname(executionSettings$logFileName))) {
+    dir.create(dirname(executionSettings$logFileName), recursive = T)
+  }
+  ParallelLogger::addDefaultFileLogger(
+    name = "STRATEGUS_LOGGER",
+    fileName = executionSettings$logFileName
+  )
+  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
+
+  # Used to Keep track of the execution status
+  executionStatus <- list()
+
   # Validate the execution settings
   if (is(executionSettings, "CdmExecutionSettings")) {
+    message("Collecting OMOP CDM Metadata")
+
     # Assert that the temp emulation schema is set if required for the dbms
     # specified by the executionSettings
     DatabaseConnector::assertTempEmulationSchemaSet(
@@ -78,17 +93,23 @@ execute <- function(analysisSpecifications,
     if (tolower(connectionDetails$dbms) == "oracle" && !all(unlist(cohortTableChecks))) {
       stop("Your cohort table names are too long for Oracle. Please update your executionSettings to use shorter cohort table names and try again.")
     }
-  }
 
-  # Set up logging
-  if (!dir.exists(dirname(executionSettings$logFileName))) {
-    dir.create(dirname(executionSettings$logFileName), recursive = T)
+    # Obtain the database metadata for this CDM
+    executionResult <- .safeExecution(
+      fn = getCdmDatabaseMetaData,
+      cdmExecutionSettings = executionSettings,
+      connectionDetails = connectionDetails
+    )
+    databaseMetaDataSuccessful <- ifelse(executionResult$status == "SUCCESS", TRUE, FALSE)
+    if (isTRUE(databaseMetaDataSuccessful)) {
+      cdmDatabaseMetaData <- executionResult$result
+      executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
+      .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
+    } else {
+      errorMsg <-paste0("COULD NOT OBTAIN OMOP CDM Metadata! ERROR: ", executionResult$error)
+      stop(errorMsg)
+    }
   }
-  ParallelLogger::addDefaultFileLogger(
-    name = "STRATEGUS_LOGGER",
-    fileName = executionSettings$logFileName
-  )
-  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
 
 
   # Determine if the user has opted to subset to specific modules
@@ -101,17 +122,6 @@ execute <- function(analysisSpecifications,
       modulesToExecute = executionSettings$modulesToExecute
     )
   }
-
-  if (is(executionSettings, "CdmExecutionSettings")) {
-    cdmDatabaseMetaData <- getCdmDatabaseMetaData(
-      cdmExecutionSettings = executionSettings,
-      connectionDetails = connectionDetails
-    )
-    executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
-    .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
-  }
-
-  executionStatus <- list()
 
   # Execute the cohort generator module first if it exists
   # If cohort generation fails for any reason, update the
@@ -179,28 +189,39 @@ execute <- function(analysisSpecifications,
   invisible(executionStatus)
 }
 
+.safeExecution <- function(fn, ...) {
+  safeExec <- purrr::safely(fn)
+  startTime <- Sys.time()
+  functionResult <- safeExec(...)
+  timeToExecute <- Sys.time() - startTime
+  # Emit any errors
+  status <- ifelse(is.null(functionResult$error), "SUCCESS", "FAILED")
+  return(list(
+    result = functionResult$result,
+    error = functionResult$error,
+    timeToExecute = timeToExecute,
+    status = status
+  ))
+}
+
 .executeModule <- function(moduleName, connectionDetails, analysisSpecifications, executionSettings, skipExecution = FALSE) {
   if (isFALSE(skipExecution)) {
     moduleObject <- get(moduleName)$new()
-    safeExec <- purrr::safely(moduleObject$execute)
-    startTime <- Sys.time()
-    executionResult <- safeExec(
+    executionResult <- .safeExecution(
+      fn = moduleObject$execute,
       connectionDetails = connectionDetails,
       analysisSpecifications = analysisSpecifications,
       executionSettings = executionSettings
     )
-    timeToExecute <- Sys.time() - startTime
-    # Emit any errors
-    status <- ifelse(is.null(executionResult$error), "SUCCESS", "FAILED")
-    if (status == "FAILED") {
+    if (executionResult$status == "FAILED") {
       .printErrorMessage(executionResult$error$message)
     }
     return(
       .createModuleExecutionStatus(
         moduleName = moduleName,
-        status = status,
+        status = executionResult$status,
         errorMessage = executionResult$error$message,
-        executionTime = paste0(signif(timeToExecute, 3), " ", attr(timeToExecute, "units"))
+        executionTime = paste0(signif(executionResult$timeToExecute, 3), " ", attr(executionResult$timeToExecute, "units"))
       )
     )
   } else {
