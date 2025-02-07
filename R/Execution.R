@@ -46,7 +46,7 @@ execute <- function(analysisSpecifications,
   )
   on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
 
-  # Used to Keep track of the execution status
+  # Used to keep track of the execution status
   executionStatus <- list()
 
   # Validate the execution settings
@@ -172,7 +172,16 @@ execute <- function(analysisSpecifications,
   }
 
   # Print a summary
-  cli::cli_h1("EXECUTION SUMMARY")
+  .printExecutionSummary(
+    summaryTitle = "EXECUTION SUMMARY",
+    executionStatus = executionStatus
+  )
+
+  invisible(executionStatus)
+}
+
+.printExecutionSummary <- function(summaryTitle, executionStatus) {
+  cli::cli_h1(summaryTitle)
   for (i in 1:length(executionStatus)) {
     moduleStatus <- executionStatus[[i]]
     errorMessage <- ifelse(moduleStatus$status == "SUCCESS", "", moduleStatus$errorMessage)
@@ -185,8 +194,6 @@ execute <- function(analysisSpecifications,
       cli::cli_alert_success(moduleStatusMessage)
     }
   }
-
-  invisible(executionStatus)
 }
 
 .safeExecution <- function(fn, ...) {
