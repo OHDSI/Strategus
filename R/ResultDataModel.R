@@ -61,10 +61,9 @@ createResultDataModel <- function(analysisSpecifications,
     moduleObj <- get(moduleName)$new()
     moduleExecutionStatus <- .resultDataModelModuleExecution(
       moduleName = moduleName,
-      moduleFn = moduleObj$createResultsDataModel(
-        resultsConnectionDetails = resultsConnectionDetails,
-        resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema
-      )
+      functionName = "createResultsDataModel",
+      resultsConnectionDetails = resultsConnectionDetails,
+      resultsDataModelSettings = resultsDataModelSettings
     )
     executionStatus <- append(
       executionStatus,
@@ -126,11 +125,10 @@ uploadResults <- function(analysisSpecifications,
     moduleObj <- get(moduleName)$new()
     moduleExecutionStatus <- .resultDataModelModuleExecution(
       moduleName = moduleName,
-      moduleFn = moduleObj$uploadResults(
-        resultsConnectionDetails = resultsConnectionDetails,
-        analysisSpecifications = analysisSpecifications,
-        resultsDataModelSettings = resultsDataModelSettings
-      )
+      functionName = "uploadResults",
+      resultsConnectionDetails = resultsConnectionDetails,
+      resultsDataModelSettings = resultsDataModelSettings,
+      analysisSpecifications = analysisSpecifications
     )
     executionStatus <- append(
       executionStatus,
@@ -147,7 +145,7 @@ uploadResults <- function(analysisSpecifications,
   invisible(executionStatus)
 }
 
-.resultDataModelModuleExecution <- function(moduleName, functionName, resultsConnectionDetails, resultsDataModelSettings, analysisSpecifications) {
+.resultDataModelModuleExecution <- function(moduleName, functionName, resultsConnectionDetails, resultsDataModelSettings, analysisSpecifications = NULL) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertChoice(x = functionName, choices = c("createResultsDataModel", "uploadResults"))
   checkmate::reportAssertions(collection = errorMessages)
