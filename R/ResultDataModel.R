@@ -35,6 +35,9 @@ createResultDataModel <- function(analysisSpecifications,
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # Used to keep track of the execution status
+  executionStatus <- list()
+
   # The DatabaseMetaData is a special case...
   .createDatabaseMetadataResultsDataModel(
     resultsConnectionDetails = resultsConnectionDetails,
@@ -56,11 +59,25 @@ createResultDataModel <- function(analysisSpecifications,
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     moduleObj <- get(moduleName)$new()
-    moduleObj$createResultsDataModel(
+    moduleExecutionStatus <- .resultDataModelModuleExecution(
+      moduleName = moduleName,
+      functionName = "createResultsDataModel",
       resultsConnectionDetails = resultsConnectionDetails,
-      resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema
+      resultsDataModelSettings = resultsDataModelSettings
+    )
+    executionStatus <- append(
+      executionStatus,
+      moduleExecutionStatus
     )
   }
+
+  # Print a summary
+  .printExecutionSummary(
+    summaryTitle = "RESULT DATA MODEL CREATION SUMMARY",
+    executionStatus = executionStatus
+  )
+
+  invisible(executionStatus)
 }
 
 #' Upload results
@@ -83,6 +100,9 @@ uploadResults <- function(analysisSpecifications,
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # Used to keep track of the execution status
+  executionStatus <- list()
+
   # The DatabaseMetaData is a special case...
   .uploadDatabaseMetadata(
     resultsConnectionDetails = resultsConnectionDetails,
@@ -103,10 +123,59 @@ uploadResults <- function(analysisSpecifications,
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
     moduleObj <- get(moduleName)$new()
-    moduleObj$uploadResults(
+    moduleExecutionStatus <- .resultDataModelModuleExecution(
+      moduleName = moduleName,
+      functionName = "uploadResults",
+      resultsConnectionDetails = resultsConnectionDetails,
+      resultsDataModelSettings = resultsDataModelSettings,
+      analysisSpecifications = analysisSpecifications
+    )
+    executionStatus <- append(
+      executionStatus,
+      moduleExecutionStatus
+    )
+  }
+
+  # Print a summary
+  .printExecutionSummary(
+    summaryTitle = "UPLOAD SUMMARY",
+    executionStatus = executionStatus
+  )
+
+  invisible(executionStatus)
+}
+
+.resultDataModelModuleExecution <- function(moduleName, functionName, resultsConnectionDetails, resultsDataModelSettings, analysisSpecifications = NULL) {
+  errorMessages <- checkmate::makeAssertCollection()
+  checkmate::assertChoice(x = functionName, choices = c("createResultsDataModel", "uploadResults"))
+  checkmate::reportAssertions(collection = errorMessages)
+
+  moduleObject <- get(moduleName)$new()
+  moduleFn <- moduleObject[[functionName]]
+  if (functionName == "createResultsDataModel") {
+    executionResult <- .safeExecution(
+      fn = moduleFn,
+      resultsConnectionDetails = resultsConnectionDetails,
+      resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema
+    )
+  } else {
+    executionResult <- .safeExecution(
+      fn = moduleFn,
       resultsConnectionDetails = resultsConnectionDetails,
       analysisSpecifications = analysisSpecifications,
       resultsDataModelSettings = resultsDataModelSettings
     )
   }
+  if (executionResult$status == "FAILED") {
+    .printErrorMessage(executionResult$error$message)
+  }
+  return(
+    .createModuleExecutionStatus(
+      moduleName = moduleName,
+      status = executionResult$status,
+      errorMessage = executionResult$error$message,
+      executionTime = paste0(signif(executionResult$timeToExecute, 3), " ", attr(executionResult$timeToExecute, "units"))
+    )
+  )
 }
+
