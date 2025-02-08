@@ -106,7 +106,7 @@ execute <- function(analysisSpecifications,
       executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
       .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
     } else {
-      errorMsg <-paste0("COULD NOT OBTAIN OMOP CDM Metadata! ERROR: ", executionResult$error)
+      errorMsg <- paste0("COULD NOT OBTAIN OMOP CDM Metadata! ERROR: ", executionResult$error)
       stop(errorMsg)
     }
   }

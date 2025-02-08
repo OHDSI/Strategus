@@ -309,7 +309,7 @@ test_that("Specify subset of modules to run", {
   # Create cdm modules results data model -------------------------
   cdmModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
