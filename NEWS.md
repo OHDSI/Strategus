@@ -1,3 +1,12 @@
+Strategus 1.2.0
+===============
+- Provide summary information when creating the results data model and uploading results (#204)
+- Add error handling when obtaining OMOP CDM metadata (#201)
+- Strategus execution should stop if an error occurs during cohort generation (#189)
+- Support `modulesToExecute` parameter for results model creation & results upload (#177)
+- Better handling of incremental execution of Characterization (#194)
+- Ensure logging captures all output (#196)
+
 Strategus 1.1.2
 ===============
 - Add options for overriding number of threads for database operations (#190)
