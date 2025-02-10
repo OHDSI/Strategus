@@ -1,4 +1,4 @@
-# Copyright 2024 Observational Health Data Sciences and Informatics
+# Copyright 2025 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -106,7 +106,7 @@ execute <- function(analysisSpecifications,
       executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
       .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
     } else {
-      errorMsg <-paste0("COULD NOT OBTAIN OMOP CDM Metadata! ERROR: ", executionResult$error)
+      errorMsg <- paste0("COULD NOT OBTAIN OMOP CDM Metadata! ERROR: ", executionResult$error)
       stop(errorMsg)
     }
   }
