@@ -74,19 +74,61 @@ cohortDefinitionSet <- getCohortDefinitionSet(
 )
 subsetOperations <- list(
   createDemographicSubset(
-    name = "Demographic Criteria",
+    name = "Age 18 to 64",
     ageMin = 18,
     ageMax = 64
   )
 )
 subsetDef <- createCohortSubsetDefinition(
-  name = "test definition",
+  name = "age 18 to 64",
   definitionId = 1,
   subsetOperators = subsetOperations
 )
 cohortDefinitionSet <- cohortDefinitionSet |>
-  addCohortSubsetDefinition(subsetDef)
+  addCohortSubsetDefinition(subsetDef,
+                            targetCohortIds = c(1,2))
 
+subsetOperations <- list(CohortGenerator::createLimitSubset(
+  name = 'first event with 365 prior obs',
+  priorTime = 365,
+  limitTo = 'firstEver'
+  )
+)
+subsetDef <- createCohortSubsetDefinition(
+  name = 'first event with 365 prior obs',
+  definitionId = 2,
+  subsetOperators = subsetOperations
+)
+cohortDefinitionSet <- cohortDefinitionSet |>
+  addCohortSubsetDefinition(
+    subsetDef,
+    targetCohortIds = c(1,2)
+      )
+
+subsetOperations <- list(
+  createDemographicSubset(
+    name = "Age 18 to 64",
+    ageMin = 18,
+    ageMax = 64
+  ),
+  CohortGenerator::createLimitSubset(
+  name = 'first event with 365 prior obs',
+  priorTime = 365,
+  limitTo = 'firstEver'
+)
+)
+subsetDef <- createCohortSubsetDefinition(
+  name = 'age 18 to 64 and first event with 365 prior obs',
+  definitionId = 3,
+  subsetOperators = subsetOperations
+)
+cohortDefinitionSet <- cohortDefinitionSet |>
+  addCohortSubsetDefinition(
+    subsetDef,
+    targetCohortIds = c(1,2)
+  )
+
+# expand negative controls to get calibrated sccs (prior had too few results)
 ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_set.csv",
                                            package = "Strategus"
 ))
@@ -95,13 +137,6 @@ ncoCohortSet <- readCsv(file = system.file("testdata/negative_controls_concept_s
 negativeControlOutcomeIds <- ncoCohortSet$cohortId
 outcomeOfInterestIds <- c(3)
 exposureOfInterestIds <- c(1, 2)
-
-# Characterization -------------------------------
-cModuleSettingsCreator <- CharacterizationModule$new()
-cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-  targetIds = c(1, 2),
-  outcomeIds = 3
-)
 
 # Cohort Diagnostics -----------------
 cdModuleSettingsCreator <- CohortDiagnosticsModule$new()
@@ -132,7 +167,7 @@ cgModuleSpecifications <- cgModuleSettingsCreator$createModuleSpecifications()
 # Characterization -------------------------------
 cModuleSettingsCreator <- CharacterizationModule$new()
 cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-  targetIds = c(1, 2),
+  targetIds = c(1, 2, 1001, 2001),
   outcomeIds = 3
 )
 
@@ -141,8 +176,8 @@ ciModuleSettingsCreator <- CohortIncidenceModule$new()
 targets <- list(
   CohortIncidence::createCohortRef(id = 1, name = "Celecoxib"),
   CohortIncidence::createCohortRef(id = 2, name = "Diclofenac"),
-  CohortIncidence::createCohortRef(id = 4, name = "Celecoxib Age >= 30"),
-  CohortIncidence::createCohortRef(id = 5, name = "Diclofenac Age >= 30")
+  CohortIncidence::createCohortRef(id = 1001, name = "Celecoxib Age 18-64"),
+  CohortIncidence::createCohortRef(id = 2001, name = "Diclofenac Age 18-64")
 )
 outcomes <- list(CohortIncidence::createOutcomeDef(id = 1, name = "GI bleed", cohortId = 3, cleanWindow = 9999))
 
@@ -151,7 +186,7 @@ tars <- list(
   CohortIncidence::createTimeAtRiskDef(id = 2, startWith = "start", endWith = "start", endOffset = 365)
 )
 analysis1 <- CohortIncidence::createIncidenceAnalysis(
-  targets = c(1, 2, 4, 5),
+  targets = c(1, 2, 1001, 2001),
   outcomes = c(1),
   tars = c(1, 2)
 )
@@ -178,7 +213,7 @@ negativeControlOutcomes <- lapply(
   FUN = CohortMethod::createOutcome,
   outcomeOfInterest = FALSE,
   trueEffectSize = 1,
-  priorOutcomeLookback = 30
+  priorOutcomeLookback = 5 # reduced this as some neg controls are indications
 )
 
 outcomesOfInterest <- lapply(
@@ -193,14 +228,14 @@ outcomes <- append(
 )
 
 tcos1 <- CohortMethod::createTargetComparatorOutcomes(
-  targetId = 1,
-  comparatorId = 2,
+  targetId = 1002,
+  comparatorId = 2002,
   outcomes = outcomes,
   excludedCovariateConceptIds = c(1118084, 1124300)
 )
 tcos2 <- CohortMethod::createTargetComparatorOutcomes(
-  targetId = 4,
-  comparatorId = 5,
+  targetId = 1003,
+  comparatorId = 2003,
   outcomes = outcomes,
   excludedCovariateConceptIds = c(1118084, 1124300)
 )
@@ -221,7 +256,7 @@ createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(
   minDaysAtRisk = 1,
   riskWindowStart = 0,
   startAnchor = "cohort start",
-  riskWindowEnd = 30,
+  riskWindowEnd = 365, # expanding to get more outcomes
   endAnchor = "cohort end"
 )
 
@@ -263,7 +298,17 @@ analysesToExclude <- NULL
 cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
   cmAnalysisList = cmAnalysisList,
   targetComparatorOutcomesList = targetComparatorOutcomesList,
-  analysesToExclude = analysesToExclude
+  analysesToExclude = analysesToExclude,
+  refitPsForEveryOutcome = FALSE,
+  refitPsForEveryStudyPopulation = FALSE,
+  cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds(
+    mdrrThreshold = Inf,
+    easeThreshold = 0.60, # setting this higher to get passes given Eunomia limitations on neg controls
+    sdmThreshold = 0.1,
+    equipoiseThreshold = 0.2,
+    generalizabilitySdmThreshold = 1 # NOTE using default here
+  )
+
 )
 
 # EvidenceSythesis ------------------
@@ -318,13 +363,13 @@ plpPopulationSettings <- PatientLevelPrediction::createStudyPopulationSettings(
 plpCovarSettings <- FeatureExtraction::createDefaultCovariateSettings()
 
 modelDesignList <- list()
-for (i in 1:length(exposureOfInterestIds)) {
+for (i in 1:length(c(1002,1003))) {
   for (j in 1:length(outcomeOfInterestIds)) {
     modelDesignList <- append(
       modelDesignList,
       list(
         makeModelDesignSettings(
-          targetId = exposureOfInterestIds[i],
+          targetId = c(1002,1003)[i],
           outcomeId = outcomeOfInterestIds[j],
           popSettings = plpPopulationSettings,
           covarSettings = plpCovarSettings
@@ -361,12 +406,12 @@ getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
   studyStartDate = "",
   studyEndDate = "",
   maxCasesPerOutcome = 1e6,
-  useNestingCohort = TRUE,
-  nestingCohortId = 1,
+  useNestingCohort = FALSE, # turned this off
+  #nestingCohortId = 1,
   deleteCovariatesSmallCount = 0
 )
 
-createStudyPopulation6AndOlderArgs <- SelfControlledCaseSeries::createCreateStudyPopulationArgs(
+createStudyPopulationArgs <- SelfControlledCaseSeries::createCreateStudyPopulationArgs(
   minAge = 18,
   naivePeriod = 365
 )
@@ -384,8 +429,8 @@ covarExposureOfInt <- SelfControlledCaseSeries::createEraCovariateSettings(
   includeEraIds = "exposureId",
   start = 0,
   startAnchor = "era start",
-  end = 0,
-  endAnchor = "era end",
+  end = 365, # set this to 30 or 180 from era start?
+  endAnchor = "era end", # set to era start?
   profileLikelihood = TRUE,
   exposureOfInterest = TRUE
 )
@@ -422,9 +467,9 @@ fitSccsModelArgs <- SelfControlledCaseSeries::createFitSccsModelArgs(
 
 sccsAnalysis1 <- SelfControlledCaseSeries::createSccsAnalysis(
   analysisId = 1,
-  description = "SCCS age 18-",
+  description = "SCCS 18+",
   getDbSccsDataArgs = getDbSccsDataArgs,
-  createStudyPopulationArgs = createStudyPopulation6AndOlderArgs,
+  createStudyPopulationArgs = createStudyPopulationArgs,
   createIntervalDataArgs = createSccsIntervalDataArgs,
   fitSccsModelArgs = fitSccsModelArgs
 )
@@ -434,7 +479,13 @@ sccsAnalysisList <- list(sccsAnalysis1)
 sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
   sccsAnalysisList = sccsAnalysisList,
   exposuresOutcomeList = exposuresOutcomeList,
-  combineDataFetchAcrossOutcomes = FALSE
+  combineDataFetchAcrossOutcomes = FALSE,
+  sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds(
+    mdrrThreshold = Inf,
+    easeThreshold = 0.42,
+    timeTrendPThreshold = 0.05,
+    preExposurePThreshold = 0.05
+  )
 )
 
 
@@ -463,3 +514,4 @@ ParallelLogger::saveSettingsToJson(
   object = cdmModulesAnalysisSpecifications,
   fileName = "inst/testdata/resultsModulesAnalysisSpecifications.json"
 )
+
