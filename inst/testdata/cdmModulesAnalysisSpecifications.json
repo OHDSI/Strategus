@@ -952,10 +952,10 @@
           }
         ],
         "refitPsForEveryOutcome": false,
-        "refitPsForEveryStudyPopulation": true,
+        "refitPsForEveryStudyPopulation": false,
         "cmDiagnosticThresholds": {
-          "mdrrThreshold": 10,
-          "easeThreshold": 0.25,
+          "mdrrThreshold": "Inf",
+          "easeThreshold": 0.6,
           "sdmThreshold": 0.1,
           "equipoiseThreshold": 0.2,
           "generalizabilitySdmThreshold": 1,
@@ -1396,8 +1396,8 @@
         ],
         "combineDataFetchAcrossOutcomes": false,
         "sccsDiagnosticThresholds": {
-          "mdrrThreshold": 10,
-          "easeThreshold": 0.25,
+          "mdrrThreshold": "Inf",
+          "easeThreshold": 0.42,
           "timeTrendPThreshold": 0.05,
           "preExposurePThreshold": 0.05,
           "attr_class": "SccsDiagnosticThresholds"
@@ -1520,7 +1520,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 25379116,
+                  "seed": 64281744,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1535,7 +1535,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 64159,
+              "seed": 25792,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"
@@ -1662,7 +1662,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 31064723,
+                  "seed": 30559524,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1677,7 +1677,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 35897,
+              "seed": 92433,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"

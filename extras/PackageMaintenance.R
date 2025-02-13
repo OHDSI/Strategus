@@ -298,7 +298,17 @@ analysesToExclude <- NULL
 cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
   cmAnalysisList = cmAnalysisList,
   targetComparatorOutcomesList = targetComparatorOutcomesList,
-  analysesToExclude = analysesToExclude
+  analysesToExclude = analysesToExclude,
+  refitPsForEveryOutcome = FALSE,
+  refitPsForEveryStudyPopulation = FALSE,
+  cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds(
+    mdrrThreshold = Inf,
+    easeThreshold = 0.60, # setting this higher to get passes given Eunomia limitations on neg controls
+    sdmThreshold = 0.1,
+    equipoiseThreshold = 0.2,
+    generalizabilitySdmThreshold = 1 # NOTE using default here
+  )
+
 )
 
 # EvidenceSythesis ------------------
@@ -469,7 +479,13 @@ sccsAnalysisList <- list(sccsAnalysis1)
 sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
   sccsAnalysisList = sccsAnalysisList,
   exposuresOutcomeList = exposuresOutcomeList,
-  combineDataFetchAcrossOutcomes = FALSE
+  combineDataFetchAcrossOutcomes = FALSE,
+  sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds(
+    mdrrThreshold = Inf,
+    easeThreshold = 0.42,
+    timeTrendPThreshold = 0.05,
+    preExposurePThreshold = 0.05
+  )
 )
 
 
@@ -498,3 +514,4 @@ ParallelLogger::saveSettingsToJson(
   object = cdmModulesAnalysisSpecifications,
   fileName = "inst/testdata/resultsModulesAnalysisSpecifications.json"
 )
+
