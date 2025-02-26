@@ -1,8 +1,8 @@
 # CohortGeneratorModule -------------
-#' @title Module for generating cohorts against an OMOP CDM
+#' @title Generate cohorts with the \href{https://ohdsi.github.io/CohortGenerator/}{HADES CohortGenerator Package}
 #' @export
 #' @description
-#' Generates cohorts against the OMOP CDM
+#' Generates cohorts against the OMOP Common Data Model
 CohortGeneratorModule <- R6::R6Class(
   classname = "CohortGeneratorModule",
   inherit = StrategusModule,
@@ -28,7 +28,9 @@ CohortGeneratorModule <- R6::R6Class(
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
       jobContext <- private$jobContext
-      cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
+      cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext(
+        generateStats = jobContext$settings$generateStats
+      )
       negativeControlOutcomeSettings <- private$.createNegativeControlOutcomeSettingsFromJobContext()
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
       if (!dir.exists(resultsFolder)) {
@@ -46,6 +48,7 @@ CohortGeneratorModule <- R6::R6Class(
         detectOnDescendants = negativeControlOutcomeSettings$detectOnDescendants,
         outputFolder = resultsFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
         incremental = jobContext$moduleExecutionSettings$incremental,
         incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
       )
@@ -63,6 +66,21 @@ CohortGeneratorModule <- R6::R6Class(
         databaseSchema = resultsDatabaseSchema,
         tablePrefix = tablePrefix
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file(
+          file.path("csv", "resultsDataModelSpecification.csv"),
+          package = "CohortGenerator"
+        ),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails

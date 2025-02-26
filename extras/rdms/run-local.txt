@@ -1,0 +1,1 @@
+"E:\Program Files\Amazon Corretto\jdk17.0.12_7\bin\java.exe" -jar schemaspy-6.2.4.jar -vizjs -dp E:\jdbcDrivers -configFile schemaspy-config.properties -meta schema_meta.xml -desc "Results data model" -noTablePaging -noimplied

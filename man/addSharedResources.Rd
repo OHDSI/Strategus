@@ -2,7 +2,7 @@
 % Please edit documentation in R/Settings.R
 \name{addSharedResources}
 \alias{addSharedResources}
-\title{Add shared resources to analysis specifications}
+\title{Add shared resources (i.e. cohorts) to analysis specifications}
 \usage{
 addSharedResources(analysisSpecifications, sharedResources)
 }
@@ -16,5 +16,5 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Returns the \code{analysisSpecifications} object with the module specifications added.
 }
 \description{
-Add shared resources to analysis specifications
+Add shared resources (i.e. cohorts) to analysis specifications
 }

@@ -1,10 +1,9 @@
 # SelfControlledCaseSeriesModule -------------
-#' @title Module for performing Self-Controlled Case Series (SCCS) analyses
-#' in an observational database in the OMOP Common Data Model.
+#' @title Self-Controlled Case Series design with the \href{https://ohdsi.github.io/SelfControlledCaseSeries/}{HADES SelfControlledCaseSeries Package}
 #' @export
 #' @description
 #' Module for performing Self-Controlled Case Series (SCCS) analyses
-#' in an observational database in the OMOP Common Data Model.
+#' against the OMOP Common Data Model.
 SelfControlledCaseSeriesModule <- R6::R6Class(
   classname = "SelfControlledCaseSeriesModule",
   inherit = StrategusModule,
@@ -25,6 +24,14 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
 
       jobContext <- private$jobContext
       sccsMultiThreadingSettings <- SelfControlledCaseSeries::createDefaultSccsMultiThreadingSettings(jobContext$moduleExecutionSettings$maxCores)
+
+      # Provide hook to allow for overriding the number of threads
+      # used for database operations
+      getDbSccsDataThreads <- as.integer(getOption("strategus.SelfControlledCaseSeriesModule.getDbSccsDataThreads"))
+      if (isTRUE(getDbSccsDataThreads > 0)) {
+        private$.message(paste0("Detected strategus.SelfControlledCaseSeriesModule.getDbSccsDataThreads - setting value to: ", getDbSccsDataThreads))
+        sccsMultiThreadingSettings$getDbSccsDataThreads <- getDbSccsDataThreads
+      }
 
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
@@ -51,9 +58,9 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         sccsDiagnosticThresholds = jobContext$settings$sccsDiagnosticThresholds
       )
       # TODO: Removing this to make the upload easier
-      #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
+      # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
-      resultsDataModel <- CohortGenerator::readCsv(file = system.file("csv", "resultsDataModelSpecification.csv", package = "SelfControlledCaseSeries"))
+      resultsDataModel <- self$getResultsDataModelSpecification()
       resultsDataModel <- resultsDataModel[file.exists(file.path(exportFolder, paste0(resultsDataModel$tableName, ".csv"))), ]
       if (any(!startsWith(resultsDataModel$tableName, self$tablePrefix))) {
         stop("Table names do not have required prefix")
@@ -79,6 +86,18 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         connectionDetails = resultsConnectionDetails,
         databaseSchema = resultsDatabaseSchema,
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file("csv", "resultsDataModelSpecification.csv", package = "SelfControlledCaseSeries"),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails

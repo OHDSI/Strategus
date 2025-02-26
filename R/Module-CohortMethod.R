@@ -1,9 +1,9 @@
 # CohortMethodModule -------------
-#' @title Module for performing new-user cohort studies
+#' @title New-user cohort studies with the \href{https://ohdsi.github.io/CohortMethod/}{HADES CohortMethod Package}
 #' @export
 #' @description
-#' Module for performing new-user cohort studies in an observational
-#' database in the OMOP Common Data Model.
+#' Module for performing new-user cohort studies against
+#' the OMOP Common Data Model
 CohortMethodModule <- R6::R6Class(
   classname = "CohortMethodModule",
   inherit = StrategusModule,
@@ -22,6 +22,14 @@ CohortMethodModule <- R6::R6Class(
 
       jobContext <- private$jobContext
       multiThreadingSettings <- CohortMethod::createDefaultMultiThreadingSettings(jobContext$moduleExecutionSettings$maxCores)
+
+      # Provide hook to allow for overriding the number of threads
+      # used for database operations
+      getDbCohortMethodDataThreads <- as.integer(getOption("strategus.CohortMethodModule.getDbCohortMethodDataThreads"))
+      if (isTRUE(getDbCohortMethodDataThreads > 0)) {
+        private$.message(paste0("Detected strategus.CohortMethodModule.getDbCohortMethodDataThreads - setting value to: ", getDbCohortMethodDataThreads))
+        multiThreadingSettings$getDbCohortMethodDataThreads <- getDbCohortMethodDataThreads
+      }
 
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
@@ -45,11 +53,11 @@ CohortMethodModule <- R6::R6Class(
         cmDiagnosticThresholds = jobContext$settings$cmDiagnosticThresholds
       )
       # TODO: Removing this to make the upload easier
-      #unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
+      # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
-      resultsDataModel <- CohortGenerator::readCsv(file = system.file("csv", "resultsDataModelSpecification.csv", package = "CohortMethod"))
+      resultsDataModelSpecification <- self$getResultsDataModelSpecification()
       CohortGenerator::writeCsv(
-        x = resultsDataModel,
+        x = resultsDataModelSpecification,
         file = file.path(exportFolder, "resultsDataModelSpecification.csv"),
         warnOnFileNameCaseMismatch = FALSE
       )
@@ -66,6 +74,21 @@ CohortMethodModule <- R6::R6Class(
         databaseSchema = resultsDatabaseSchema,
         tablePrefix = tablePrefix
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file(
+          file.path("csv", "resultsDataModelSpecification.csv"),
+          package = "CohortMethod"
+        ),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails

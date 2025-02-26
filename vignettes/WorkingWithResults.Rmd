@@ -1,0 +1,118 @@
+---
+title: "Working With Results"
+author: "Anthony G. Sena"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Working With Results}
+  %\VignetteEncoding{UTF-8} 
+always_allow_html: true
+---
+
+```{r setup, include=FALSE, echo=FALSE, warning=FALSE}
+library(Strategus)
+options(width = 200)
+```
+
+# Working With Results
+
+Once you have executed an analysis specification through `Strategus` you will want to review results and share them with a network study coordinator. This vignette will cover the ways in which you can work with results produced by Strategus.
+
+## Manual review
+
+Each HADES module in an analysis specification will write results in comma-separated value (csv) format to the file system in the `resultsFolder` specified in the execution settings. These files may be reviewed with your favorite text editor to ensure that any policies related to censoring for your data source are met before sharing with a network coordinator. 
+
+## Reviewing results using R Shiny results viewer
+
+To review results produced by Strategus via the R Shiny, your results must be loaded into a PostgreSQL database. Strategus and the HADES modules provide a way to create the results database tables and upload the results. This guide assumes that you have access to a PostgreSQL instance with a database and schema called `study_results` and permission to create tables & upload results.
+
+### Creating the results data model
+
+In the code below, we start by creating the connection details to the PostgreSQL instance that we will use to create the results data model. Next, we'll create the `resultsDataModelSettings` to specify the schema to hold the results data model and the location where the Strategus results are stored on the file system. Finally, we'll create the results data model by passing in the `analysisSpecification` for the study which will detail which module's results tables to include in the results data model.
+
+```{r eval=F}
+resultsConnectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = "postgresql",
+  user = "user",
+  password = "password",
+  server = "127.0.0.1/strategus_results"
+)
+
+resultsDataModelSettings <- Strategus::createResultsDataModelSettings(
+  resultsDatabaseSchema = "study_results",
+  resultsFolder = "path/to/results",
+)
+
+Strategus::createResultDataModel(
+  analysisSpecifications = analysisSpecifications,
+  resultsDataModelSettings = resultsDataModelSettings,
+  resultsConnectionDetails = resultsConnectionDetails
+)
+```
+
+**NOTE:**: The script above assumes you have set up the `study_results` schema before running this script. It also assumes that the `study_results` schema is empty. If you need to re-create the results data model for some reason, you will need to manually drop all of the tables and then you can re-use this script to create the tables.
+
+For more information on the tables and relationships in the results data model please see the [results data model documentation](https://ohdsi.github.io/Strategus/results-schema/index.html).
+
+### Uploading results
+
+We will use the same inputs from the `createResultDataModel` to call the `uploadResults` function to upload the results to the results database.
+
+```{r eval=F}
+Strategus::uploadResults(
+  analysisSpecifications = analysisSpecifications,
+  resultsDataModelSettings = resultsDataModelSettings,
+  resultsConnectionDetails = resultsConnectionDetails
+)
+```
+
+
+### Reviewing results using R Shiny
+
+We will use the [ShinyAppBuilder](https://ohdsi.github.io/ShinyAppBuilder/) and [OhdsiShinyModules](https://ohdsi.github.io/OhdsiShinyModules/) to connect to the results database to review results. The code below is used to create a configuration that tells the Shiny results viewer which modules were used in the study and then it will launch the results viewer application and connect to the PostgreSQL database specified in the `resultsConnectionDetails` and display the results stored in the `study_results` schema.
+
+```{r eval=F}
+library(ShinyAppBuilder)
+library(OhdsiShinyModules)
+
+# ADD OR REMOVE MODULES TAILORED TO YOUR STUDY
+shinyConfig <- initializeModuleConfig() |>
+  addModuleConfig(
+    createDefaultAboutConfig()
+  ) |>
+  addModuleConfig(
+    createDefaultDatasourcesConfig()
+  ) |>
+  addModuleConfig(
+    createDefaultCohortGeneratorConfig()
+  ) |>
+  addModuleConfig(
+    createDefaultCohortDiagnosticsConfig()
+  ) |>
+  addModuleConfig(
+    createDefaultCharacterizationConfig()
+  ) |>
+  addModuleConfig(
+    createDefaultPredictionConfig()
+  ) |>
+  addModuleConfig(
+    createDefaultEstimationConfig()
+  )
+
+# now create the shiny app based on the config file and view the results
+# based on the connection
+ShinyAppBuilder::createShinyApp(
+  config = shinyConfig,
+  connectionDetails = resultsConnectionDetails,
+  resultDatabaseSettings = createDefaultResultDatabaseSettings(schema = "study_results"),
+  title = "Celecoxib vs. Diclofinac for the risk of GI Bleed",
+  studyDescription = "This study is showcasing the capabilities of running Strategus on Eunomia."
+)
+```

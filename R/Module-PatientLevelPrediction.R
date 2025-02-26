@@ -1,5 +1,5 @@
 # PatientLevelPredictionModule -------------
-#' @title Module for performing patient-level prediction studies
+#' @title Patient-level prediction with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}
 #' @export
 #' @description
 #' Module for performing patient-level prediction in an observational
@@ -34,7 +34,7 @@ PatientLevelPredictionModule <- R6::R6Class(
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cdmDatabaseName = jobContext$moduleExecutionSettings$connectionDetailsReference,
         cdmDatabaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        # tempEmulationSchema =  , is there s temp schema specified anywhere?
+        tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema,
         cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
@@ -73,6 +73,13 @@ PatientLevelPredictionModule <- R6::R6Class(
         fileAppend = NULL
       )
 
+      resultsDataModel <- self$getResultsDataModelSpecification()
+      CohortGenerator::writeCsv(
+        x = resultsDataModel,
+        file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
+        warnOnFileNameCaseMismatch = F
+      )
+
       private$.message(paste("Results available at:", resultsFolder))
     },
     #' @description Create the results data model for the module
@@ -89,6 +96,17 @@ PatientLevelPredictionModule <- R6::R6Class(
         createTables = T,
         tablePrefix = tablePrefix
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation()
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
@@ -116,8 +134,8 @@ PatientLevelPredictionModule <- R6::R6Class(
         csvTableAppend = ""
       )
     },
-    #' @description Creates the PatientLevelprediction Module Specifications
-    #' @param modelDesignList description
+    #' @description Creates the PatientLevelPrediction Module Specifications
+    #' @param modelDesignList A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}
     createModuleSpecifications = function(modelDesignList) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
@@ -138,10 +156,9 @@ PatientLevelPredictionModule <- R6::R6Class(
     }
   ),
   private = list(
-    .setCovariateSchemaTable = function(
-    modelDesignList,
-    cohortDatabaseSchema,
-    cohortTable) {
+    .setCovariateSchemaTable = function(modelDesignList,
+                                        cohortDatabaseSchema,
+                                        cohortTable) {
       if (inherits(modelDesignList, "modelDesign")) {
         modelDesignList <- list(modelDesignList)
       }
@@ -166,6 +183,12 @@ PatientLevelPredictionModule <- R6::R6Class(
       }
 
       return(modelDesignList)
+    },
+    .getResultsDataModelSpecificationFileLocation = function() {
+      return(system.file(
+        file.path("settings", "resultsDataModelSpecification.csv"),
+        package = "PatientLevelPrediction"
+      ))
     }
   )
 )

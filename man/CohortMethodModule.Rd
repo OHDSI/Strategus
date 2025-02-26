@@ -2,10 +2,10 @@
 % Please edit documentation in R/Module-CohortMethod.R
 \name{CohortMethodModule}
 \alias{CohortMethodModule}
-\title{Module for performing new-user cohort studies}
+\title{New-user cohort studies with the \href{https://ohdsi.github.io/CohortMethod/}{HADES CohortMethod Package}}
 \description{
-Module for performing new-user cohort studies in an observational
-database in the OMOP Common Data Model.
+Module for performing new-user cohort studies against
+the OMOP Common Data Model
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortMethodModule}
@@ -16,6 +16,7 @@ database in the OMOP Common Data Model.
 \item \href{#method-CohortMethodModule-new}{\code{CohortMethodModule$new()}}
 \item \href{#method-CohortMethodModule-execute}{\code{CohortMethodModule$execute()}}
 \item \href{#method-CohortMethodModule-createResultsDataModel}{\code{CohortMethodModule$createResultsDataModel()}}
+\item \href{#method-CohortMethodModule-getResultsDataModelSpecification}{\code{CohortMethodModule$getResultsDataModelSpecification()}}
 \item \href{#method-CohortMethodModule-uploadResults}{\code{CohortMethodModule$uploadResults()}}
 \item \href{#method-CohortMethodModule-createModuleSpecifications}{\code{CohortMethodModule$createModuleSpecifications()}}
 \item \href{#method-CohortMethodModule-validateModuleSpecifications}{\code{CohortMethodModule$validateModuleSpecifications()}}
@@ -92,6 +93,27 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortMethodModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortMethodModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortMethodModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }

@@ -1,8 +1,8 @@
 # CohortDiagnosticsModule -------------
-#' @title Module for the development and evaluation of phenotype algorithms
+#' @title Evaluate phenotypes with the \href{https://ohdsi.github.io/CohortDiagnostics/}{HADES CohortDiagnostics Package}
 #' @export
 #' @description
-#' Module for the development and evaluation of phenotype algorithms
+#' Development and evaluation of phenotype algorithms
 #' against the OMOP Common Data Model.
 CohortDiagnosticsModule <- R6::R6Class(
   classname = "CohortDiagnosticsModule",
@@ -42,19 +42,18 @@ CohortDiagnosticsModule <- R6::R6Class(
       # TODO: Removing this to make the upload easier
       # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
 
-      resultsDataModel <- CohortGenerator::readCsv(
-        file = system.file("settings", "resultsDataModelSpecification.csv", package = "CohortDiagnostics"),
-        warnOnCaseMismatch = FALSE
-      )
-      resultsDataModel <- resultsDataModel[file.exists(file.path(exportFolder, paste0(resultsDataModel$tableName, ".csv"))), ]
-      newTableNames <- paste0(self$tablePrefix, resultsDataModel$tableName)
+      # NOTE: CD exports data without the table prefix and this section
+      # will manipulate the files to include the table prefix
+      resultsDataModelSpecification <- private$.getResultsDataModelSpecification()
+      resultsDataModelSpecification <- resultsDataModelSpecification[file.exists(file.path(exportFolder, paste0(resultsDataModelSpecification$tableName, ".csv"))), ]
+      newTableNames <- paste0(self$tablePrefix, resultsDataModelSpecification$tableName)
       file.rename(
-        file.path(exportFolder, paste0(unique(resultsDataModel$tableName), ".csv")),
+        file.path(exportFolder, paste0(unique(resultsDataModelSpecification$tableName), ".csv")),
         file.path(exportFolder, paste0(unique(newTableNames), ".csv"))
       )
-      resultsDataModel$tableName <- newTableNames
+      resultsDataModelSpecification$tableName <- newTableNames
       CohortGenerator::writeCsv(
-        x = resultsDataModel,
+        x = resultsDataModelSpecification,
         file.path(exportFolder, "resultsDataModelSpecification.csv"),
         warnOnFileNameCaseMismatch = FALSE
       )
@@ -72,6 +71,14 @@ CohortDiagnosticsModule <- R6::R6Class(
         databaseSchema = resultsDatabaseSchema,
         tablePrefix = tablePrefix
       )
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- private$.getResultsDataModelSpecification()
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
@@ -207,6 +214,16 @@ CohortDiagnosticsModule <- R6::R6Class(
       }
         '
       ParallelLogger::convertJsonToSettings(covariateSettings)
+    },
+    .getResultsDataModelSpecification = function() {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file(
+          file.path("settings", "resultsDataModelSpecification.csv"),
+          package = "CohortDiagnostics"
+        ),
+        warnOnCaseMismatch = FALSE
+      )
+      return(resultsDataModelSpecification)
     }
   )
 )

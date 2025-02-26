@@ -2,9 +2,9 @@
 % Please edit documentation in R/Module-CohortGenerator.R
 \name{CohortGeneratorModule}
 \alias{CohortGeneratorModule}
-\title{Module for generating cohorts against an OMOP CDM}
+\title{Generate cohorts with the \href{https://ohdsi.github.io/CohortGenerator/}{HADES CohortGenerator Package}}
 \description{
-Generates cohorts against the OMOP CDM
+Generates cohorts against the OMOP Common Data Model
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortGeneratorModule}
@@ -28,6 +28,7 @@ analysis specification}
 \item \href{#method-CohortGeneratorModule-new}{\code{CohortGeneratorModule$new()}}
 \item \href{#method-CohortGeneratorModule-execute}{\code{CohortGeneratorModule$execute()}}
 \item \href{#method-CohortGeneratorModule-createResultsDataModel}{\code{CohortGeneratorModule$createResultsDataModel()}}
+\item \href{#method-CohortGeneratorModule-getResultsDataModelSpecification}{\code{CohortGeneratorModule$getResultsDataModelSpecification()}}
 \item \href{#method-CohortGeneratorModule-uploadResults}{\code{CohortGeneratorModule$uploadResults()}}
 \item \href{#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}}
 \item \href{#method-CohortGeneratorModule-createCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$createCohortSharedResourceSpecifications()}}
@@ -112,6 +113,27 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }

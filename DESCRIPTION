@@ -1,22 +1,21 @@
 Package: Strategus
 Type: Package
-Title: Coordinating and Executing Analytics Using HADES Modules
-Version: 1.0.0
-Date: 2024-07-10
+Title: Coordinate and Execute OHDSI HADES Modules
+Version: 1.2.0
+Date: 2024-02-10
 Authors@R: c(
-	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
+	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
 	person("Jamie", "Gilbert", role = c("aut")),
 	person("Observational Health Data Science and Informatics", role = c("cph"))
   )
 Maintainer: Anthony Sena <sena@ohdsi.org>
-Description: An R package for coordinating and executing analytics using HADES modules.
-License: Apache License 2.0
-URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
-BugReports: https://github.com/OHDSI/Strategus/issues
+Description: Coordinate and execute large scale analytics using OHDSI Health
+  Analytics Data-to-Evidence Suite (HADES) (<https://ohdsi.github.io/Hades/>) 
+  modules.
 Depends:
 	R (>= 4.2.0),
-	CohortGenerator (>= 0.8.0),
+	CohortGenerator (>= 0.11.0),
 	DatabaseConnector (>= 6.2.3),
   R6
 Imports:
@@ -27,12 +26,10 @@ Imports:
   methods,
   ParallelLogger (>= 3.1.0),
   purrr,
-  readr,
   ResultModelManager (>= 0.5.8),
   rlang,
   SqlRender (>= 1.18.0)
 Suggests:
-  aws.s3,
   Characterization,
   CirceR,
   CohortDiagnostics,
@@ -44,8 +41,8 @@ Suggests:
   FeatureExtraction,
   fs,
   knitr,
-  OhdsiSharing,
   PatientLevelPrediction,
+  readr,
   rmarkdown,
   RSQLite,
   SelfControlledCaseSeries,
@@ -57,13 +54,16 @@ Remotes:
   ohdsi/CohortGenerator,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
-  ohdsi/OhdsiSharing,
   ohdsi/PatientLevelPrediction,
   ohdsi/ResultModelManager,
   ohdsi/SelfControlledCaseSeries
+License: Apache License 2.0
 VignetteBuilder: knitr
+URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
+BugReports: https://github.com/OHDSI/Strategus/issues
 NeedsCompilation: no
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
+Language: en-US
 Config/testthat/edition: 3

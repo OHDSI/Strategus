@@ -1,4 +1,4 @@
-# Copyright 2024 Observational Health Data Sciences and Informatics
+# Copyright 2025 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Go document the full results data model -> DocumentResultsDataModel.R
+
 # Manually delete package from library. Avoids "Already in use" message when rebuilding
 unloadNamespace("Strategus")
 .rs.restartR()
@@ -28,6 +30,7 @@ OhdsiRTools::checkUsagePackage("Strategus")
 OhdsiRTools::updateCopyrightYearFolder()
 OhdsiRTools::findNonAsciiStringsInFolder()
 devtools::spell_check()
+devtools::document()
 
 # Create manual and vignettes:
 unlink("extras/Strategus.pdf")
@@ -40,13 +43,6 @@ rmarkdown::render("vignettes/CreatingAnalysisSpecification.Rmd",
                                           toc = TRUE,
                                           number_sections = TRUE))
 unlink("inst/doc/CreatingAnalysisSpecification.tex")
-
-rmarkdown::render("vignettes/CreatingModules.Rmd",
-                  output_file = "../inst/doc/CreatingModules.pdf",
-                  rmarkdown::pdf_document(latex_engine = "pdflatex",
-                                          toc = TRUE,
-                                          number_sections = TRUE))
-unlink("inst/doc/CreatingModules.tex")
 
 rmarkdown::render("vignettes/ExecuteStrategus.Rmd",
                   output_file = "../inst/doc/ExecuteStrategus.pdf",
@@ -62,9 +58,12 @@ rmarkdown::render("vignettes/IntroductionToStrategus.Rmd",
                                           number_sections = TRUE))
 unlink("inst/doc/IntroductionToStrategus.tex")
 
-pkgdown::build_site()
-OhdsiRTools::fixHadesLogo()
-
+rmarkdown::render("vignettes/WorkingWithResults.Rmd",
+                  output_file = "../inst/doc/WorkingWithResults.pdf",
+                  rmarkdown::pdf_document(latex_engine = "pdflatex",
+                                          toc = TRUE,
+                                          number_sections = TRUE))
+unlink("inst/doc/WorkingWithResults.tex")
 
 # Produce a study analysis specification for testing -----------
 library(Strategus)
@@ -115,8 +114,7 @@ cdModuleSpecifications <- cdModuleSettingsCreator$createModuleSpecifications(
   runBreakdownIndexEvents = TRUE,
   runIncidenceRate = TRUE,
   runCohortRelationship = TRUE,
-  runTemporalCohortCharacterization = TRUE,
-  incremental = FALSE
+  runTemporalCohortCharacterization = TRUE
 )
 
 # Cohort Generator -----------------
@@ -447,9 +445,8 @@ cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addCharacterizationModuleSpecifications(cModuleSpecifications) |>
   addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
   addCohortGeneratorModuleSpecifications(cgModuleSpecifications) |>
-  #addCohortIncidenceModuleSpecifications(ciModuleSpecifications) |>
+  addCohortIncidenceModuleSpecifications(ciModuleSpecifications) |>
   addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
-  #addEvidenceSynthesisModuleSpecifications(evidenceSynthesisAnalysisSpecifications) |>
   addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
   addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
 

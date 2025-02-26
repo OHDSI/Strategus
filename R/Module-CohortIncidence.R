@@ -1,8 +1,8 @@
 # CohortIncidenceModule -------------
-#' @title Module for computing incidence rates for cohorts against an OMOP CDM
+#' @title Compute incidence with the \href{https://ohdsi.github.io/CohortIncidence/}{HADES CohortIncidence Package}
 #' @export
 #' @description
-#' Computes incidence rates for cohorts against the OMOP CDM
+#' Computes incidence rates for cohorts against the OMOP Common Data Model
 CohortIncidenceModule <- R6::R6Class(
   classname = "CohortIncidenceModule",
   inherit = StrategusModule,
@@ -40,7 +40,7 @@ CohortIncidenceModule <- R6::R6Class(
       buildOptions <- CohortIncidence::buildOptions(
         cohortTable = paste0(private$jobContext$moduleExecutionSettings$workDatabaseSchema, ".", private$jobContext$moduleExecutionSettings$cohortTableNames$cohortTable),
         cdmDatabaseSchema = private$jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        sourceName = as.character(jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId),
+        sourceName = as.character(private$jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId),
         refId = refId
       )
 
@@ -72,31 +72,35 @@ CohortIncidenceModule <- R6::R6Class(
 
       for (tableName in names(executeResults)) {
         tableData <- executeResults[[tableName]]
-        if (tableName == 'incidence_summary') {
+        if (tableName == "incidence_summary") {
           if (nrow(tableData) > 0) {
             tableData$database_id <- private$jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
           } else {
             tableData$database_id <- character(0)
           }
         }
-        readr::write_csv(tableData, file.path(exportFolder, paste0(self$tablePrefix,tableName,".csv")))
+        readr::write_csv(tableData, file.path(exportFolder, paste0(self$tablePrefix, tableName, ".csv")))
       }
 
       # in addition to the output of the module, we will produce a T-O lookup table that can be used to filter results
       # to either 'Outcomes for T' or 'Targets for Outcomes'
 
       targetOutcomeDfList <- lapply(irDesign$analysisList, function(analysis) {
-        outcomeDefs <- Filter(function (o) o$id %in% analysis$outcomes, irDesign$outcomeDefs)
+        outcomeDefs <- Filter(function(o) o$id %in% analysis$outcomes, irDesign$outcomeDefs)
         outcome_cohort_id <- sapply(outcomeDefs, function(o) o$cohortId)
         as.data.frame(expand.grid(target_cohort_id = analysis$targets, outcome_cohort_id = outcome_cohort_id))
       })
 
       target_outcome_ref <- unique(do.call(rbind, targetOutcomeDfList))
       target_outcome_ref$ref_id <- refId
-      readr::write_csv(target_outcome_ref, file.path(exportFolder, paste0(self$tablePrefix,"target_outcome_ref",".csv")))
+      readr::write_csv(target_outcome_ref, file.path(exportFolder, paste0(self$tablePrefix, "target_outcome_ref", ".csv")))
 
-      resultsDataModel <- private$.getResultsDataModelSpecification()
-      readr::write_csv(resultsDataModel, file.path(exportFolder, "resultsDataModelSpecification.csv"))
+      resultsDataModelSpecification <- self$getResultsDataModelSpecification()
+      CohortGenerator::writeCsv(
+        x = resultsDataModelSpecification,
+        file.path(exportFolder, "resultsDataModelSpecification.csv"),
+        warnOnFileNameCaseMismatch = FALSE
+      )
 
       private$.message(paste("Results available at:", resultsFolder))
     },
@@ -114,10 +118,20 @@ CohortIncidenceModule <- R6::R6Class(
       on.exit(DatabaseConnector::disconnect(connection))
 
       # Create the results model
-      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = private$.getResultsDataModelSpecification())
-      sql <- SqlRender::render(sql= sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
+      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = self$getResultsDataModelSpecification())
+      sql <- SqlRender::render(sql = sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
       sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
       DatabaseConnector::executeSql(connection, sql)
+    },
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModelSpecification = function(tablePrefix = "") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation(),
+        warnOnCaseMismatch = FALSE
+      )
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
@@ -127,12 +141,7 @@ CohortIncidenceModule <- R6::R6Class(
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
-
-      # use the results model spec that was saved along with the results output, not the embedded model spec.
-      resultsModelSpec <- readr::read_csv(
-        file = file.path(file.path(exportFolder, "resultsDataModelSpecification.csv")),
-        show_col_types = FALSE
-      )
+      resultsModelSpec <- self$getResultsDataModelSpecification()
 
       ResultModelManager::uploadResults(
         connectionDetails = resultsConnectionDetails,
@@ -196,13 +205,6 @@ CohortIncidenceModule <- R6::R6Class(
       data[toCensor, "INCIDENCE_PROPORTION_P100P"] <- NA
 
       return(data)
-    },
-    .getResultsDataModelSpecification = function() {
-      rdms <- CohortGenerator::readCsv(
-        file = private$.getResultsDataModelSpecificationFileLocation()
-      )
-      rdms$tableName <-paste0(self$tablePrefix, rdms$tableName)
-      return(rdms)
     },
     .getResultsDataModelSpecificationFileLocation = function() {
       return(system.file(

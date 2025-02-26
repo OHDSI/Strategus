@@ -1,0 +1,97 @@
+---
+title: "Execute Strategus"
+author: "Anthony G. Sena"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Execute Strategus}
+  %\VignetteEncoding{UTF-8} 
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+A Strategus study is defined by *analysis specifications*. These specifications describe which modules to run, with which settings. The [Creating Analysis Specification](CreatingAnalysisSpecification.Rmd) vignette describes how to create analysis specifications. In this vignette, we demonstrate how to run a study defined by an analysis specification.
+
+# Creating execution settings
+
+Strategus execution requires you to specify *execution settings*. The execution settings specify how the study should be executed in a specific environment, for example how to connect to a database, and what local folders to use. Many Strategus studies run against data in the OMOP Common Data Model (CDM), and in this vignette we focus on this type of studies. (Other studies, such as meta-analyses, may run against results data instead). In this example, we will make use of the [Eunomia](https://github.com/ohdsi/eunomia) data set which is an OMOP CDM with simulated data used for example purposes. When running a study against your own CDM data, you will need to specify the database connection details for your environment. Execution settings for studies against the CDM can be created using `createCdmExecutionSettings()`. 
+
+## Creating the connection details
+
+In this example, we first create a `connectionDetails` for Eunomia. In your environment, the `connectionDetails` would be specific to your OMOP CDM. Please see the [DatabaseConnector](https://ohdsi.github.io/DatabaseConnector/articles/Connecting.html) package documentation for more details.
+
+```{r eval=FALSE}
+library(Strategus)
+library(Eunomia)
+connectionDetails <- getEunomiaConnectionDetails()
+```
+
+## Creating an execution settings object
+
+Next, we will use `Strategus` to create the CDM execution settings:
+
+```{r eval=FALSE}
+outputFolder <- tempfile("vignetteFolder")
+dir.create(outputFolder)
+executionSettings <- createCdmExecutionSettings(
+  workDatabaseSchema = "main",
+  cdmDatabaseSchema = "main",
+  cohortTableNames = CohortGenerator::getCohortTableNames(),
+  workFolder = file.path(outputFolder, "work_folder"),
+  resultsFolder = file.path(outputFolder, "results_folder"),
+  minCellCount = 5
+)
+```
+
+Finally, we can write out the execution settings to the file system to capture this information.
+
+```{r eval=FALSE}
+ParallelLogger::saveSettingsToJson(
+  object = executionSettings,
+  file.path(outputFolder, "eunomiaExecutionSettings.json")
+)
+```
+
+# Executing the study
+
+For this study, we will use an analysis specifications created for testing `Strategus`, and the execution settings we created earlier:
+
+```{r eval=FALSE}
+analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+  fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+    package = "Strategus"
+  )
+)
+
+executionSettings <- ParallelLogger::loadSettingsFromJson(
+  fileName = file.path(outputFolder, "eunomiaExecutionSettings.json")
+)
+```
+
+And finally we execute the study:
+
+```{r eval=FALSE}
+execute(
+  connectionDetails = connectionDetails,
+  analysisSpecifications = analysisSpecifications,
+  executionSettings = executionSettings
+)
+```
+
+This will first instantiate all the modules if they haven't already been instantiated, and will then execute each module in sequence according to the analysis specifications. The results will appear in sub folders of the 'results_folder', as specified in the execution settings.
+
+Once the analysis is complete, you can review the study results. For more information see the [Working with Results](WorkingWithResults.html) article.
+
+```{r eval=F, echo=FALSE}
+unlink(outputFolder, recursive = TRUE)
+```

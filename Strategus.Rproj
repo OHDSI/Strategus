@@ -1,4 +1,5 @@
 Version: 1.0
+ProjectId: 33476d3f-e097-4954-a223-a348664c34b9
 
 RestoreWorkspace: No
 SaveWorkspace: No
@@ -16,6 +17,7 @@ AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
 
 BuildType: Package
+PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageBuildArgs: --resave-data
 PackageCheckArgs: --no-manual --no-build-vignettes

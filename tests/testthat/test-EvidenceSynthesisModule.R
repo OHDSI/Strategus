@@ -19,7 +19,7 @@ createEsModuleSpecs <- function() {
   esModuleSettingsCreator <- EvidenceSynthesisModule$new()
   # Create EvidenceSynthesisModule settings ---------------------------------------
 
-  evidenceSynthesisSourceCmGrid <-  esModuleSettingsCreator$createEvidenceSynthesisSource(
+  evidenceSynthesisSourceCmGrid <- esModuleSettingsCreator$createEvidenceSynthesisSource(
     sourceMethod = "CohortMethod",
     likelihoodApproximation = "adaptive grid"
   )

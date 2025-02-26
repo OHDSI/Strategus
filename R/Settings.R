@@ -1,4 +1,4 @@
-# Copyright 2024 Observational Health Data Sciences and Informatics
+# Copyright 2025 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -21,7 +21,7 @@
 # carefully consider serialization and deserialization to JSON, which currently
 # uses custom functionality in ParallelLogger to maintain object attributes.
 
-#' Add shared resources to analysis specifications
+#' Add shared resources (i.e. cohorts) to analysis specifications
 #'
 #' @template analysisSpecifications
 #' @param sharedResources   An object of type `SharedResources`.
@@ -40,7 +40,7 @@ addSharedResources <- function(analysisSpecifications, sharedResources) {
   return(analysisSpecifications)
 }
 
-#' Add module specifications to analysis specifications
+#' Add generic module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
 #' @template moduleSpecifications
@@ -62,7 +62,7 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
 #' Add Characterization module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CharacterizationModule`.
+#' @param moduleSpecifications   Created by the \href{../reference/CharacterizationModule.html#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -81,7 +81,7 @@ addCharacterizationModuleSpecifications <- function(analysisSpecifications, modu
 #' Add Cohort Diagnostics module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortDiagnosticsModule`.
+#' @param moduleSpecifications  Created by the \href{../reference/CohortDiagnosticsModule.html#method-CohortDiagnosticsModule-createModuleSpecifications}{\code{CohortDiagnosticsModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -100,7 +100,7 @@ addCohortDiagnosticsModuleSpecifications <- function(analysisSpecifications, mod
 #' Add Cohort Generator module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortGeneratorModule`.
+#' @param moduleSpecifications  Created by the \href{../reference/CohortGeneratorModule.html#method-CohortGeneratorModule-createModuleSpecifications}{\code{CohortGeneratorModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -119,7 +119,7 @@ addCohortGeneratorModuleSpecifications <- function(analysisSpecifications, modul
 #' Add Cohort Incidence module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortIncidenceModule`.
+#' @param moduleSpecifications  Created by the \href{../reference/CohortIncidenceModule.html#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -138,7 +138,7 @@ addCohortIncidenceModuleSpecifications <- function(analysisSpecifications, modul
 #' Add Cohort Method module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `CohortMethodModule`.
+#' @param moduleSpecifications  Created by the \href{../reference/CohortMethodModule.html#method-CohortMethodModule-createModuleSpecifications}{\code{CohortMethodModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -157,7 +157,7 @@ addCohortMethodeModuleSpecifications <- function(analysisSpecifications, moduleS
 #' Add Evidence Synthesis module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `EvidenceSynthesisModule`.
+#' @param moduleSpecifications  Created by the \href{../reference/EvidenceSynthesisModule.html#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -176,7 +176,7 @@ addEvidenceSynthesisModuleSpecifications <- function(analysisSpecifications, mod
 #' Add Patient Level Prediction module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `PatientLevelPredictionModule`.
+#' @param moduleSpecifications  Created by the \href{../reference/PatientLevelPredictionModule.html#method-PatientLevelPredictionModule-createModuleSpecifications}{\code{PatientLevelPredictionModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -195,7 +195,7 @@ addPatientLevelPredictionModuleSpecifications <- function(analysisSpecifications
 #' Add Self Controlled Case Series Module module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications   An object of type `SelfControlledCaseSeriesModule`.
+#' @param moduleSpecifications  Created by the \href{../reference/SelfControlledCaseSeriesModule.html#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}} function.
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added.
@@ -258,6 +258,7 @@ createEmptyAnalysisSpecificiations <- function() {
 #'                                   and attempt to pick up where they left off when this value is set to TRUE.
 #' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
 #'                                   use all available cores on the machine.
+#' @template modulesToExecute
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -272,7 +273,8 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
                                        logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                        minCellCount = 5,
                                        incremental = TRUE,
-                                       maxCores = parallel::detectCores()) {
+                                       maxCores = parallel::detectCores(),
+                                       modulesToExecute = c()) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(cdmDatabaseSchema, len = 1, add = errorMessages)
@@ -283,6 +285,7 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::assertLogical(incremental, add = errorMessages)
   checkmate::assertInt(maxCores, add = errorMessages)
+  checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -308,6 +311,8 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
 #'                                   in results.
 #' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
 #'                                   use all available cores on the machine.
+#' @template modulesToExecute
+#'
 #' @return
 #' An object of type `ExecutionSettings`.
 #'
@@ -317,7 +322,8 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
                                            resultsFolder,
                                            logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                            minCellCount = 5,
-                                           maxCores = parallel::detectCores()) {
+                                           maxCores = parallel::detectCores(),
+                                           modulesToExecute = c()) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
@@ -325,6 +331,7 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::assertInt(maxCores, add = errorMessages)
+  checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -349,6 +356,7 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #' @template resultsDatabaseSchema
 #' @template resultsFolder
 #' @param logFileName     Log location for data model operations
+#' @template modulesToExecute
 #'
 #' @return
 #' An object of type `ResultsDataModelSettings`
@@ -356,11 +364,13 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #' @export
 createResultsDataModelSettings <- function(resultsDatabaseSchema,
                                            resultsFolder,
-                                           logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt")) {
+                                           logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
+                                           modulesToExecute = c()) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
+  checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths

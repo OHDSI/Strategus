@@ -1,7 +1,7 @@
 test_that("Execute study, upload results, excute results modules and upload results", {
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
   studyRootFolder <- file.path(tempDir, "EunomiaTestStudy")
@@ -69,7 +69,7 @@ test_that("Execute study, upload results, excute results modules and upload resu
   # Create cdm modules results data model -------------------------
   cdmModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -89,7 +89,7 @@ test_that("Execute study, upload results, excute results modules and upload resu
   # Execute results modules -------------------------
   resultsModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/resultsModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -167,7 +167,7 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
 
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -183,7 +183,7 @@ test_that("Execute on Oracle stops if table names exceed length limit", {
 test_that("Negative control outcomes are optional", {
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -210,4 +210,157 @@ test_that("Negative control outcomes are optional", {
     "Generating cohort set",
     ignore.case = TRUE
   )
+})
+
+test_that("Specify subset of modules to run with modules not in specification fails", {
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+      package = "Strategus"
+    )
+  )
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "unit_test"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder"),
+    modulesToExecute = c("foobar")
+  )
+
+  expect_error(
+    Strategus::execute(
+      connectionDetails = connectionDetails,
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings
+    )
+  )
+
+  executionSettings <- createResultsExecutionSettings(
+    resultsDatabaseSchema = "main",
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder"),
+    modulesToExecute = c("foobar")
+  )
+
+  expect_error(
+    Strategus::execute(
+      connectionDetails = connectionDetails,
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings
+    )
+  )
+})
+
+test_that("Specify subset of modules to run", {
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+      package = "Strategus"
+    )
+  )
+
+  modulesToExecute <- c("CohortGeneratorModule", "CohortIncidenceModule")
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "unit_test"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder"),
+    modulesToExecute = modulesToExecute
+  )
+
+  output <- Strategus::execute(
+    connectionDetails = connectionDetails,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
+  )
+
+  modulesExecuted <- sapply(
+    X = output,
+    FUN = function(x) {
+      x$moduleName
+    }
+  )
+
+  expect_true(all(modulesExecuted %in% modulesToExecute))
+
+  # Create a results DB and upload results
+  dbFilePath <- file.path(tempDir, "testdm.sqlite")
+  mydb <- dbConnect(RSQLite::SQLite(), dbFilePath)
+  dbDisconnect(mydb)
+
+  withr::defer(
+    {
+      unlink(dbFilePath, recursive = TRUE, force = TRUE)
+    },
+    testthat::teardown_env()
+  )
+
+  resultsConnectionDetails <- DatabaseConnector::createConnectionDetails(
+    dbms = "sqlite",
+    server = dbFilePath
+  )
+
+  resultsDataModelSettings <- Strategus::createResultsDataModelSettings(
+    resultsDatabaseSchema = "main",
+    resultsFolder = executionSettings$resultsFolder,
+    modulesToExecute = modulesToExecute
+  )
+
+  # Create cdm modules results data model -------------------------
+  cdmModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+      package = "Strategus"
+    )
+  )
+
+  Strategus::createResultDataModel(
+    analysisSpecifications = cdmModulesAnalysisSpecifications,
+    resultsDataModelSettings = resultsDataModelSettings,
+    resultsConnectionDetails = resultsConnectionDetails
+  )
+
+  # Upload cdm related results --------------------
+  Strategus::uploadResults(
+    analysisSpecifications = analysisSpecifications,
+    resultsDataModelSettings = resultsDataModelSettings,
+    resultsConnectionDetails = resultsConnectionDetails
+  )
+})
+
+test_that("Stop if error occurs during cohort generation", {
+  analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
+    fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
+      package = "Strategus"
+    )
+  )
+  # Add an ill-formed Circe expression to break the cohort generation process
+  analysisSpecifications$sharedResources[[1]]$cohortDefinitions[[6]] <- list(
+    cohortId = 6,
+    cohortName = "Failure",
+    cohortDefinition = "{}"
+  )
+
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = workDatabaseSchema,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "unit_test"),
+    workFolder = file.path(tempDir, "work_folder"),
+    resultsFolder = file.path(tempDir, "results_folder")
+  )
+
+  output <- Strategus::execute(
+    connectionDetails = connectionDetails,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
+  )
+
+  # Verify cohort generator failed
+  cohortGeneratorStatus <- sapply(output, function(x) if (x$moduleName == "CohortGeneratorModule") x$status)
+  cohortGeneratorStatus <- unlist(cohortGeneratorStatus[-which(sapply(cohortGeneratorStatus, is.null))])
+  expect_true(cohortGeneratorStatus == "FAILED")
+
+  # Verify all other modules were skipped
+  allOtherModuleStatuses <- sapply(output, function(x) if (x$moduleName != "CohortGeneratorModule") x$status)
+  allOtherModuleStatuses <- unlist(allOtherModuleStatuses)
+  expect_true(all(allOtherModuleStatuses == "SKIPPED"))
 })

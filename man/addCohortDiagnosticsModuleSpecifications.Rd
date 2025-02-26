@@ -13,7 +13,7 @@ addCohortDiagnosticsModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{An object of type \code{CohortDiagnosticsModule}.}
+\item{moduleSpecifications}{Created by the \href{../reference/CohortDiagnosticsModule.html#method-CohortDiagnosticsModule-createModuleSpecifications}{\code{CohortDiagnosticsModule$createModuleSpecifications()}} function.}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added.

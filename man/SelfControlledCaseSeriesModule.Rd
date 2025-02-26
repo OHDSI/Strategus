@@ -2,11 +2,10 @@
 % Please edit documentation in R/Module-SelfControlledCaseSeries.R
 \name{SelfControlledCaseSeriesModule}
 \alias{SelfControlledCaseSeriesModule}
-\title{Module for performing Self-Controlled Case Series (SCCS) analyses
-in an observational database in the OMOP Common Data Model.}
+\title{Self-Controlled Case Series design with the \href{https://ohdsi.github.io/SelfControlledCaseSeries/}{HADES SelfControlledCaseSeries Package}}
 \description{
 Module for performing Self-Controlled Case Series (SCCS) analyses
-in an observational database in the OMOP Common Data Model.
+against the OMOP Common Data Model.
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{SelfControlledCaseSeriesModule}
@@ -24,6 +23,7 @@ in an observational database in the OMOP Common Data Model.
 \item \href{#method-SelfControlledCaseSeriesModule-new}{\code{SelfControlledCaseSeriesModule$new()}}
 \item \href{#method-SelfControlledCaseSeriesModule-execute}{\code{SelfControlledCaseSeriesModule$execute()}}
 \item \href{#method-SelfControlledCaseSeriesModule-createResultsDataModel}{\code{SelfControlledCaseSeriesModule$createResultsDataModel()}}
+\item \href{#method-SelfControlledCaseSeriesModule-getResultsDataModelSpecification}{\code{SelfControlledCaseSeriesModule$getResultsDataModelSpecification()}}
 \item \href{#method-SelfControlledCaseSeriesModule-uploadResults}{\code{SelfControlledCaseSeriesModule$uploadResults()}}
 \item \href{#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}}
 \item \href{#method-SelfControlledCaseSeriesModule-validateModuleSpecifications}{\code{SelfControlledCaseSeriesModule$validateModuleSpecifications()}}
@@ -104,6 +104,29 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$getResultsDataModelSpecification(
+  tablePrefix = ""
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }

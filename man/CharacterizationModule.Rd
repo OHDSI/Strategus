@@ -2,10 +2,10 @@
 % Please edit documentation in R/Module-Characterization.R
 \name{CharacterizationModule}
 \alias{CharacterizationModule}
-\title{Module for generating cohort characterization information}
+\title{Characterize cohorts with the \href{https://ohdsi.github.io/Characterization/}{HADES Characterization Package}}
 \description{
-Computes cohort characterization information against the OMOP CDM
-package version 2.0.1
+Computes cohort characterization information against
+the OMOP Common Data Model
 }
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CharacterizationModule}
@@ -23,6 +23,7 @@ package version 2.0.1
 \item \href{#method-CharacterizationModule-new}{\code{CharacterizationModule$new()}}
 \item \href{#method-CharacterizationModule-execute}{\code{CharacterizationModule$execute()}}
 \item \href{#method-CharacterizationModule-createResultsDataModel}{\code{CharacterizationModule$createResultsDataModel()}}
+\item \href{#method-CharacterizationModule-getResultsDataModelSpecification}{\code{CharacterizationModule$getResultsDataModelSpecification()}}
 \item \href{#method-CharacterizationModule-uploadResults}{\code{CharacterizationModule$uploadResults()}}
 \item \href{#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}}
 \item \href{#method-CharacterizationModule-clone}{\code{CharacterizationModule$clone()}}
@@ -103,6 +104,27 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
 \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CharacterizationModule-getResultsDataModelSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-CharacterizationModule-getResultsDataModelSpecification}{}}}
+\subsection{Method \code{getResultsDataModelSpecification()}}{
+Get the results data model specification for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 
 \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
 }
