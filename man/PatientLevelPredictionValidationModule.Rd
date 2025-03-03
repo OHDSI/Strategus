@@ -33,6 +33,7 @@ built using the PatientLevelPrediction package.
 <details open><summary>Inherited methods</summary>
 <ul>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="getResultsDataModelSpecification"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-getResultsDataModelSpecification'><code>Strategus::StrategusModule$getResultsDataModelSpecification()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
 </details>
@@ -152,22 +153,26 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Creates the PatientLevelPredictionValidation Module Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionValidationModule$createModuleSpecifications(
-  validationComponentsList = list(list(targetId = 1, oucomeId = 4,
+  validationList = list(PatientLevelPrediction::createValidationDesign(plpModelList =
+    list(file.path("location_to_model")), targetId = 1, outcomeId = 3,
     restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
-    validationSettings = PatientLevelPrediction::createValidationSettings(recalibrate =
-    "weakRecalibration"), populationSettings =
-    PatientLevelPrediction::createStudyPopulationSettings(riskWindowStart = 90,
-    riskWindowEnd = 360, requireTimeAtRisk = F)), list(targetId = 3, oucomeId = 4,
-    restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
-    validationSettings = PatientLevelPrediction::createValidationSettings(recalibrate =
-    "weakRecalibration")))
+    populationSettings = NULL, recalibrate = "weakRecalibration", runCovariateSummary =
+    TRUE), PatientLevelPrediction::createValidationDesign(plpModelList =
+    list(file.path("location_to_model")), targetId = 4, outcomeId = 3,
+    restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(), 
+ 
+       populationSettings = NULL, recalibrate = "weakRecalibration", runCovariateSummary
+    = TRUE)),
+  logLevel = "INFO"
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{validationComponentsList}}{description}
+\item{\code{validationList}}{A list of validation designs from \code{PatientLevelPrediction::createValidationDesign}}
+
+\item{\code{logLevel}}{The logging level while executing the model validation.}
 }
 \if{html}{\out{</div>}}
 }

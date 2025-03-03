@@ -9,7 +9,7 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
   inherit = StrategusModule,
   public = list(
     #' @field tablePrefix The table prefix to append to the results tables
-    tablePrefix = "val_",
+    tablePrefix = "plp_",
     #' @description Initialize the module
     initialize = function() {
       super$initialize()
@@ -22,6 +22,8 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
+
+      private$.message("Executing PLP Validation")
 
       jobContext <- private$jobContext
       #cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
@@ -42,48 +44,20 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
         stop("Execution settings not found in job context")
       }
 
-      #workFolder <- jobContext$moduleExecutionSettings$workSubFolder
-      #resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
+      # hack to eval modelList strings using package name
+      # this converts system.file('model_folder', package = 'study') to the path
+      private$.message("Updating modelDesigns in validationlist")
+      jobContext$settings$validationList <- private$.updatePlpModelList(validationList = jobContext$settings$validationList)
 
-      private$.message("Executing PLP Validation")
-      #moduleInfo <- getModuleInfo()
+      # update covariate settings schema and table to use cohort generator settings
+      private$.message("Updating schema and table name for cohort covariates")
+      jobContext$settings$validationList <- private$.setCovariateSchemaTable(
+        validationList = jobContext$settings$validationList,
+        cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
+      )
 
-      # find where cohortDefinitions are as sharedResources is a list
-      # cohortDefinitionSet <- createCohortDefinitionSetFromJobContext(
-      #   sharedResources = jobContext$sharedResources,
-      #   settings = jobContext$settings
-      # )
-
-      # check the model locations are valid and apply model
-      upperWorkDir <- jobContext$moduleExecutionSettings$workFolder # AGS: NOTE - Using the "root" folder as the expection is that the ModelTransferModule output is here
-      modelTransferFolder <- sort(dir(upperWorkDir, pattern = 'ModelTransferModule'), decreasing = T)[1]
-
-      modelSaveLocation <- file.path( upperWorkDir, modelTransferFolder, 'models') # hack to use work folder for model transfer
-      modelInfo <- private$.getModelInfo(modelSaveLocation)
-
-      designs <- list()
-      for (setting in jobContext$settings$validationComponentsList) {
-        matchingModels <- modelInfo %>%
-          dplyr::filter(targetId == setting$modelTargetId, outcomeId == setting$modelOutcomeId)
-        if (nrow(matchingModels) == 0) {
-          stop("No matching models found with targetId: ",
-               setting$modelTargetId, " and outcomeId: ", setting$modelOutcomeId)
-        }
-
-        design <- PatientLevelPrediction::createValidationDesign(
-          targetId = setting$targetId[1],
-          outcomeId = setting$outcomeId[1],
-          plpModelList = as.list(matchingModels$modelPath[[1]]),
-          restrictPlpDataSettings = setting$restrictPlpDataSettings,
-          populationSettings = setting$populationSettings
-        )
-        # if design is single validationDesign instead of a list
-        if (inherits(design, "validationDesign")) {
-          design <- list(design)
-        }
-        designs <- c(designs, design)
-      }
-
+      private$.message("Setting databaseDetails")
       databaseDetails <- PatientLevelPrediction::createDatabaseDetails(
         connectionDetails = connectionDetails,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
@@ -96,13 +70,20 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
 
+      private$.message("Creating cohortDefinitionSet")
+      cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
+
+      private$.message("Running validateExternal in PatientLevelPrediction")
+      # TODO Add connectionDetails into this after PLP is updated?
       PatientLevelPrediction::validateExternal(
-        validationDesignList = designs,
+        validationDesignList = jobContext$settings$validationList,
         databaseDetails = databaseDetails,
         logSettings = PatientLevelPrediction::createLogSettings(verbosity = jobContext$settings$logLevel, logName = "validatePLP"),
         outputFolder = workFolder
+        #,cohortDefinitions = cohortDefinitionSet
       )
 
+      private$.message("Exporting results to csv")
       sqliteConnectionDetails <- DatabaseConnector::createConnectionDetails(
         dbms = 'sqlite',
         server = file.path(workFolder, "sqlite", "databaseFile.sqlite")
@@ -164,30 +145,30 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       )
     },
     #' @description Creates the PatientLevelPredictionValidation Module Specifications
-    #' @param validationComponentsList description
-    createModuleSpecifications = function(validationComponentsList = list(
-      list(
+    #' @param validationList A list of validation designs from `PatientLevelPrediction::createValidationDesign`
+    #' @param logLevel The logging level while executing the model validation.
+    createModuleSpecifications = function(
+    validationList = list(
+      PatientLevelPrediction::createValidationDesign(
+        plpModelList = list(file.path('location_to_model')),
         targetId = 1,
         outcomeId = 3,
-        modelTargetId = 1,
-        modelOutcomeId = 3,
         restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
         populationSettings = NULL,
         recalibrate = "weakRecalibration",
         runCovariateSummary = TRUE
       ),
-      list(
+      PatientLevelPrediction::createValidationDesign(
+        plpModelList = list(file.path('location_to_model')),
         targetId = 4,
         outcomeId = 3,
-        modelTargetId = 1,
-        modelOutcomeId = 3,
         restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
-        populationSettings = PatientLevelPrediction::createStudyPopulationSettings(),
+        populationSettings = NULL,
         recalibrate = "weakRecalibration",
-        runCovariateSummary = FALSE
-        )
-      ),
-                                        logLevel = "INFO") {
+        runCovariateSummary = TRUE
+      )
+    ),
+    logLevel = "INFO") {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
@@ -207,57 +188,70 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
     }
   ),
   private = list(
-    .getModelInfo = function(strategusOutputPath) {
-      modelDesigns <- list.files(strategusOutputPath, pattern = "modelDesign.json",
-                                 recursive = TRUE, full.names = TRUE)
-      model <- NULL
-      for (modelFilePath in modelDesigns) {
-        directory <- dirname(modelFilePath)
-        modelDesign <- ParallelLogger::loadSettingsFromJson(modelFilePath)
+    .setCovariateSchemaTable = function(validationList,
+                                        cohortDatabaseSchema,
+                                        cohortTable) {
+      if (inherits(validationList, "validationDesign")) {
+        validationList <- list(validationList)
+      }
 
-        if (is.null(model)) {
-          model <- data.frame(
-            targetId = modelDesign$targetId,
-            outcomeId = modelDesign$outcomeId,
-            modelPath = directory)
-        } else {
-          model <- rbind(model,
-                         data.frame(
-                           targetId = modelDesign$targetId,
-                           outcomeId = modelDesign$outcomeId,
-                           modelPath = directory))
+      for (i in 1:length(validationList)) {
+
+        if (inherits(validationList[[i]]$plpModelList, "plpModel")) {
+          validationList[[i]]$plpModelList <- list(validationList[[i]]$plpModelList)
+        }
+
+        for(j in 1:length(validationList[[i]]$plpModelList)){
+          covariateSettings <- validationList[[i]]$plpModelList[[j]]$modelDesign$covariateSettings
+
+          if (inherits(covariateSettings, "covariateSettings")) {
+            covariateSettings <- list(covariateSettings)
+          }
+
+          for (k in 1:length(covariateSettings)) {
+            if ("cohortDatabaseSchema" %in% names(covariateSettings[[k]])) {
+              covariateSettings[[k]]$cohortDatabaseSchema <- cohortDatabaseSchema
+            }
+            if ("cohortTable" %in% names(covariateSettings[[k]])) {
+              covariateSettings[[k]]$cohortTable <- cohortTable
+            }
+          }
+
+          validationList[[i]]$plpModelList[[j]]$modelDesign$covariateSettings <- covariateSettings
         }
       }
 
-      models <- model %>%
-        dplyr::group_by(.data$targetId, .data$outcomeId) %>%
-        dplyr::summarise(modelPath = list(.data$modelPath), .groups = "drop")
-      if (nrow(models) == 0) {
-        stop("No models found in ", strategusOutputPath)
-      }
-      return(models)
+      return(validationList)
     },
-    # this updates the cohort table details in covariates
-    .updateCovariates = function(plpModel, cohortTable, cohortDatabaseSchema){
+    .updatePlpModelList = function(validationList){
 
-      covSettings <- plpModel$modelDesign$covariateSettings
-      # if a single setting make it into a list to force consistency
-      if (inherits(covSettings, 'covariateSettings')) {
-        covSettings <- list(covSettings)
+      if(inherits(validationList,"validationDesign")){
+        validationList <- list(validationList)
       }
 
-      for (i in 1:length(covSettings)) {
-        if ('cohortTable' %in% names(covSettings[[i]])) {
-          covSettings[[i]]$cohortTable <- cohortTable
+      for(i in 1:length(validationList)){
+        if(inherits(validationList[[i]]$plpModelList, "plpModel")){
+          validationList[[i]]$plpModelList <- list(validationList[[i]]$plpModelList)
         }
-        if ('cohortDatabaseSchema' %in% names(covSettings[[i]])) {
-          covSettings[[i]]$cohortDatabaseSchema <- cohortDatabaseSchema
+
+        for(j in 1:length(validationList[[i]]$plpModelList)){
+          # code to convert the package type to a file path for the model
+          # in the package
+          if(!is.null(validationList[[i]]$plpModelList[[j]]$type)){
+            if(validationList[[i]]$plpModelList[[j]]$type == 'package'){
+              validationList[[i]]$plpModelList[[j]] <- PatientLevelPrediction::loadPlpModel(system.file(
+                validationList[[i]]$plpModelList[[j]]$modelFolder,
+                package = validationList[[i]]$plpModelList[[j]]$package
+              ))
+            }
+          }
+
+          # add other type changes here
         }
+
       }
 
-      plpModel$modelDesign$covariateSettings <- covSettings
-
-      return(plpModel)
+      return(validationList)
     }
   )
 )

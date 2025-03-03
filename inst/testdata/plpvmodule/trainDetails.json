@@ -1,0 +1,23 @@
+{
+  "analysisId": "Eunomia",
+  "analysisSource": "",
+  "developmentDatabase": "main",
+  "attrition": {
+    "outcomeId": [3, 3, 3, 3],
+    "description": ["Original cohorts", "Initial plpData cohort or population", "No prior outcome", "Removing non-outcome subjects with insufficient time at risk (if any)"],
+    "targetCount": [1800, 1800, 1800, 1767],
+    "uniquePeople": [1800, 1800, 1800, 1767],
+    "outcomes": [355, 355, 355, 355],
+    "attr_class": "data.frame",
+    "attr_row.names": [1, 2, 3, 4]
+  },
+  "trainingTime": "0.0867469310760498 secs",
+  "trainingDate": "2023-04-04",
+  "modelName": "logistic",
+  "finalModelParameters": {
+    "variance": 0.1559,
+    "log_likelihood": -644.432
+  },
+  "hyperParamSearch": [0.5936, 0.5783, 0.631],
+  "developmentDatabaseId": "main"
+}
