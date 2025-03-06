@@ -211,6 +211,25 @@ addSelfControlledCaseSeriesModuleSpecifications <- function(analysisSpecificatio
   )
 }
 
+#' Add Treatment Patterns Module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications Created by the "tbd"
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added
+#'
+#' @export
+addTreatmentPatternsModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "TreatmentPatternsModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
 #' Add Patient Level Prediction Validation Module module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
