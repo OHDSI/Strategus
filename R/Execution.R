@@ -163,11 +163,6 @@ execute <- function(analysisSpecifications,
         executionStatus,
         moduleExecutionStatus
       )
-    } else {
-      executionStatus <- append(
-        executionStatus,
-        moduleExecutionStatus
-      )
     }
   }
 
