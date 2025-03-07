@@ -317,6 +317,29 @@ StrategusModule <- R6::R6Class(
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(executionSettings, "ResultsExecutionSettings", add = errorMessages)
       checkmate::assertInt(executionSettings$maxCores, lower = 1, upper = parallel::detectCores())
+    },
+    .dataFrameToList = function(df) {
+      myList <- list()
+      for (i in 1:nrow(df)) {
+        rowData <- list()
+        for (col in colnames(df)) {
+          rowData[[col]] <- df[[col]][i]
+        }
+        myList[[i]] <- rowData
+      }
+      return(myList)
+    },
+    .listToDataFrame = function(myList) {
+      # Check if the list is empty
+      if (length(myList) == 0) {
+        stop("The provided list is empty.")
+      }
+
+      # Convert the list to a data.frame
+      dataFrame <- do.call(rbind, lapply(myList, as.data.frame))
+
+      # Return the resulting data.frame
+      return(dataFrame)
     }
   )
 )

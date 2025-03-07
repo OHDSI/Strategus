@@ -128,7 +128,7 @@ CohortGeneratorModule <- R6::R6Class(
       }
 
       sharedResource <- list()
-      cohortDefinitionSetFiltered <- private$.listafy(parentCohortDefinitionSet)
+      cohortDefinitionSetFiltered <- super$.dataFrameToList(parentCohortDefinitionSet)
       sharedResource["cohortDefinitions"] <- list(cohortDefinitionSetFiltered)
 
       if (length(subsetDefinitions)) {
@@ -205,20 +205,6 @@ CohortGeneratorModule <- R6::R6Class(
         className = self$negativeControlOutcomeSharedResourcesClassName,
         sharedResourcesSpecifications = negativeControlOutcomeCohortSharedResourceSpecifications
       )
-    }
-  ),
-  private = list(
-    .listafy = function(df) {
-      mylist <- list()
-      for (i in 1:nrow(df)) {
-        cohortData <- list(
-          cohortId = df$cohortId[i],
-          cohortName = df$cohortName[i],
-          cohortDefinition = df$json[i]
-        )
-        mylist[[i]] <- cohortData
-      }
-      return(mylist)
     }
   )
 )

@@ -48,8 +48,9 @@ TreatmentPatternsModule <- R6::R6Class(
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       spec <- jobContext$settings
+      cohorts <- super$.listToDataFrame(spec$cohorts)
       outputEnv <- TreatmentPatterns::computePathways(
-        cohorts = spec$cohorts,
+        cohorts = cohorts,
         cohortTableName = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         connectionDetails = connectionDetails,
         cdmSchema = executionSettings$cdmDatabaseSchema,
@@ -211,7 +212,11 @@ TreatmentPatternsModule <- R6::R6Class(
     ) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
-        analysis[[name]] <- get(name)
+        if (name == "cohorts") {
+          analysis[[name]] <- super$.dataFrameToList(get(name))
+        } else {
+          analysis[[name]] <- get(name)
+        }
       }
 
       super$createModuleSpecifications(analysis)
