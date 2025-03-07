@@ -7,7 +7,7 @@ test_that("TreatmentPatterns: execute method", {
 
   testSettings <- generateCohortTable()
 
-  tp <- TreatmentPatternsModule$new()
+  tp <- Strategus::TreatmentPatternsModule$new()
 
   modSpec <- tp$createModuleSpecifications(
     cohorts = testSettings$cohorts,
@@ -23,7 +23,8 @@ test_that("TreatmentPatterns: execute method", {
     maxPathLength = 5
   )
 
-  analysisSpec <- Strategus::createEmptyAnalysisSpecificiations()
+  analysisSpecifications <- Strategus::createEmptyAnalysisSpecificiations() |>
+    Strategus::addTreatmentPatternsModuleSpecifications(modSpec)
 
   executionSettings <- Strategus::createCdmExecutionSettings(
     workDatabaseSchema = testSettings$resultSchema,
@@ -38,21 +39,18 @@ test_that("TreatmentPatterns: execute method", {
     maxCores = 1
   )
 
-  tp$execute(
+  Strategus::execute(
     connectionDetails = testSettings$connectionDetails,
-    analysisSpecifications = addTreatmentPatternsModuleSpecifications(
-      analysisSpecifications = analysisSpec,
-      moduleSpecifications = modSpec
-    ),
+    analysisSpecifications = analysisSpecifications,
     executionSettings = executionSettings
   )
 
-  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "attrition.csv")))
-  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "counts_age.csv")))
-  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "counts_sex.csv")))
-  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "counts_year.csv")))
-  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "metadata.csv")))
-  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "summary_event_duration.csv")))
-  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "treatment_pathways.csv")))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "attrition.csv"))))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "counts_age.csv"))))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "counts_sex.csv"))))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "counts_year.csv"))))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "metadata.csv"))))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "summary_event_duration.csv"))))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "treatment_pathways.csv"))))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "resultsDataModelSpecification.csv")))
 })

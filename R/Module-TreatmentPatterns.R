@@ -68,8 +68,6 @@ TreatmentPatternsModule <- R6::R6Class(
         maxPathLength = spec$maxPathLength
       )
 
-      if (!dir.exists(resultsFolder)) dir.create(resultsFolder, recursive = TRUE, showWarnings = FALSE)
-
       TreatmentPatterns::export(
         andromeda = outputEnv,
         outputPath = resultsFolder,
@@ -79,7 +77,34 @@ TreatmentPatternsModule <- R6::R6Class(
         archiveName = NULL
       )
 
-      on.exit(Andromeda::close(outputEnv))
+      on.exit(
+        Andromeda::saveAndromeda(
+          andromeda = outputEnv,
+          fileName = file.path(workFolder, "outputEnv")
+        )
+      )
+
+      # HACK: Append the database_id to all exported results
+      csvFiles <- list.files(resultsFolder, pattern = "\\.csv$", full.names = TRUE)
+      for (file in csvFiles) {
+        if (tools::file_path_sans_ext(basename(file)) != "analyses") {
+          data <- CohortGenerator::readCsv(
+            file = file
+          )
+          data$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
+          CohortGenerator::writeCsv(
+            x = data,
+            file = file,
+            warnOnCaseMismatch = FALSE
+          )
+        }
+      }
+
+      # Rename all exported files to include the module prefix to the file name
+      for (file in csvFiles) {
+        newFileName <- file.path(resultsFolder, paste0(self$tablePrefix, basename(file)))
+        file.rename(file, newFileName)
+      }
 
       # Export the resultsDataModelSpecification.csv
       resultsDataModelSpecification <- self$getResultsDataModelSpecification()
@@ -117,11 +142,10 @@ TreatmentPatternsModule <- R6::R6Class(
     #' @description Get the results data model specification for the module
     #' @template tablePrefix
     getResultsDataModelSpecification = function(tablePrefix = "") {
-      super$getResultsDataModelSpecification()
-
-      resultsDataModelSpecification <- TreatmentPatterns::getResultsDataModelSpecifications()
-
-      # add the prefix to the tableName column
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = private$.getResultsDataModelSpecificationFileLocation(),
+        warnOnCaseMismatch = FALSE
+      )
       resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
       return(resultsDataModelSpecification)
     },
@@ -229,6 +253,14 @@ TreatmentPatternsModule <- R6::R6Class(
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
+    }
+  ),
+  private = list(
+    .getResultsDataModelSpecificationFileLocation = function() {
+      return(system.file(
+        file.path("csv", "treatmentPatternsRdms.csv"),
+        package = "Strategus"
+      ))
     }
   )
 )
