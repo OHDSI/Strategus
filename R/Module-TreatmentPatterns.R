@@ -17,7 +17,7 @@
 #' @title Evaluate phenotypes with the \href{https://github.com/darwin-eu/TreatmentPatterns/}{DARWIN TreatmentPatterns Package}
 #' @export
 #' @description
-#' Characterisation and description of patterns of events (cohorts). against the OMOP Common Data Model.
+#' Characterization and description of patterns of events (cohorts). against the OMOP Common Data Model.
 TreatmentPatternsModule <- R6::R6Class(
   classname = "TreatmentPatternsModule",
   inherit = StrategusModule,
