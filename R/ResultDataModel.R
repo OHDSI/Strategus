@@ -58,7 +58,6 @@ createResultDataModel <- function(analysisSpecifications,
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
-    moduleObj <- get(moduleName)$new()
     moduleExecutionStatus <- .resultDataModelModuleExecution(
       moduleName = moduleName,
       functionName = "createResultsDataModel",
@@ -122,7 +121,6 @@ uploadResults <- function(analysisSpecifications,
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
-    moduleObj <- get(moduleName)$new()
     moduleExecutionStatus <- .resultDataModelModuleExecution(
       moduleName = moduleName,
       functionName = "uploadResults",
