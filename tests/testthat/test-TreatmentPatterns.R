@@ -56,4 +56,5 @@ test_that("TreatmentPatterns: execute method", {
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "metadata.csv")))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "summary_event_duration.csv")))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "treatment_pathways.csv")))
+  expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "resultsDataModelSpecification.csv")))
 })

@@ -79,6 +79,18 @@ TreatmentPatternsModule <- R6::R6Class(
       )
 
       on.exit(Andromeda::close(outputEnv))
+
+      # Export the resultsDataModelSpecification.csv
+      resultsDataModelSpecification <- self$getResultsDataModelSpecification()
+
+      CohortGenerator::writeCsv(
+        x = resultsDataModelSpecification,
+        file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
+        warnOnCaseMismatch = FALSE,
+        warnOnFileNameCaseMismatch = FALSE,
+        warnOnUploadRuleViolations = FALSE
+      )
+
       private$.message(paste("Results available at:", resultsFolder))
     },
 
@@ -86,16 +98,31 @@ TreatmentPatternsModule <- R6::R6Class(
     #' @template resultsConnectionDetails
     #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
+    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
-      message("`createResultsDataModel()` is not implemented.")
-    },
+      if (resultsConnectionDetails$dbms == "sqlite" & resultsDatabaseSchema != "main") {
+        stop("Invalid schema for sqlite, use databaseSchema = 'main'")
+      }
 
+      connection <- DatabaseConnector::connect(resultsConnectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+
+      # Create the results model
+      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = self$getResultsDataModelSpecification())
+      sql <- SqlRender::render(sql = sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
+      sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
+      DatabaseConnector::executeSql(connection, sql)
+    },
     #' @description Get the results data model specification for the module
     #' @template tablePrefix
     getResultsDataModelSpecification = function(tablePrefix = "") {
       super$getResultsDataModelSpecification()
-      message("`getResultsDataModelSpecification()` is not implemented")
+
+      resultsDataModelSpecification <- TreatmentPatterns::getResultsDataModelSpecifications()
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
     },
 
     #' @description Upload the results for TreatmentPatterns
@@ -103,10 +130,19 @@ TreatmentPatternsModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template resultsDataModelSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
-      super$uplaodResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
-      message("`uploadResults()` is not implemented")
-    },
+      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
+      resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+      exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+      resultsModelSpec <- self$getResultsDataModelSpecification()
 
+      ResultModelManager::uploadResults(
+        connectionDetails = resultsConnectionDetails,
+        schema = resultsDataModelSettings$resultsDatabaseSchema,
+        resultsFolder = resultsFolder,
+        purgeSiteDataBeforeUploading = FALSE,
+        specifications = resultsModelSpec
+      )
+    },
     #' @description Creates the TreatmentPatternsnModule Specifications
     #'
     #' @param cohorts (`data.frame()`)\cr
