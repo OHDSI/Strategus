@@ -47,8 +47,6 @@ test_that("TreatmentPatterns: execute method", {
     executionSettings = executionSettings
   )
 
-  print(dir(executionSettings$resultsFolder, recursive = T, all.files = T, full.names = T))
-  print(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "attrition.csv")))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "attrition.csv")))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "counts_age.csv")))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "counts_sex.csv")))
