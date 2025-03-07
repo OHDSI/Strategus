@@ -5,17 +5,57 @@
         {
           "cohortId": 1,
           "cohortName": "Celecoxib",
-          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Celecoxib\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"140587\",\n              \"CONCEPT_ID\": 1118084,\n              \"CONCEPT_NAME\": \"celecoxib\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"All\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"All\"\n  },\n  \"InclusionRules\": [],\n  \"EndStrategy\": {\n    \"CustomEra\": {\n      \"DrugCodesetId\": 0,\n      \"GapDays\": 30,\n      \"Offset\": 0\n    }\n  },\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}\n"
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"Celecoxib\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"140587\",\r\n              \"CONCEPT_ID\": 1118084,\r\n              \"CONCEPT_NAME\": \"celecoxib\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugEra\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"All\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"All\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 30,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 0\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}\r\n"
         },
         {
           "cohortId": 2,
           "cohortName": "Diclofenac",
-          "cohortDefinition": "{\n  \"ConceptSets\": [\n    {\n      \"id\": 0,\n      \"name\": \"Diclofenac\",\n      \"expression\": {\n        \"items\": [\n          {\n            \"concept\": {\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\n              \"CONCEPT_CODE\": \"3355\",\n              \"CONCEPT_ID\": 1124300,\n              \"CONCEPT_NAME\": \"diclofenac\",\n              \"DOMAIN_ID\": \"Drug\",\n              \"INVALID_REASON\": \"V\",\n              \"INVALID_REASON_CAPTION\": \"Valid\",\n              \"STANDARD_CONCEPT\": \"S\",\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\n              \"VOCABULARY_ID\": \"RxNorm\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"PrimaryCriteria\": {\n    \"CriteriaList\": [\n      {\n        \"DrugEra\": {\n          \"CodesetId\": 0\n        }\n      }\n    ],\n    \"ObservationWindow\": {\n      \"PriorDays\": 0,\n      \"PostDays\": 0\n    },\n    \"PrimaryCriteriaLimit\": {\n      \"Type\": \"All\"\n    }\n  },\n  \"QualifiedLimit\": {\n    \"Type\": \"First\"\n  },\n  \"ExpressionLimit\": {\n    \"Type\": \"All\"\n  },\n  \"InclusionRules\": [],\n  \"EndStrategy\": {\n    \"CustomEra\": {\n      \"DrugCodesetId\": 0,\n      \"GapDays\": 30,\n      \"Offset\": 0\n    }\n  },\n  \"CensoringCriteria\": [],\n  \"CollapseSettings\": {\n    \"CollapseType\": \"ERA\",\n    \"EraPad\": 0\n  },\n  \"CensorWindow\": {},\n  \"cdmVersionRange\": \">=5.0.0\"\n}\n"
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"Diclofenac\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3355\",\r\n              \"CONCEPT_ID\": 1124300,\r\n              \"CONCEPT_NAME\": \"diclofenac\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugEra\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"All\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"All\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 30,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 0\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}\r\n"
         },
         {
           "cohortId": 3,
           "cohortName": "GI bleed",
-          "cohortDefinition": "{\n\t\"cdmVersionRange\" : \">=5.0.0\",\n\t\"PrimaryCriteria\" : {\n\t\t\"CriteriaList\" : [\n\t\t\t{\n\t\t\t\t\"ConditionOccurrence\" : {\n\t\t\t\t\t\"CodesetId\" : 0,\n\t\t\t\t\t\"ConditionTypeExclude\" : false\n\t\t\t\t}\n\t\t\t}\n\t\t],\n\t\t\"ObservationWindow\" : {\n\t\t\t\"PriorDays\" : 0,\n\t\t\t\"PostDays\" : 0\n\t\t},\n\t\t\"PrimaryCriteriaLimit\" : {\n\t\t\t\"Type\" : \"All\"\n\t\t}\n\t},\n\t\"ConceptSets\" : [\n\t\t{\n\t\t\t\"id\" : 0,\n\t\t\t\"name\" : \"GI bleed\",\n\t\t\t\"expression\" : {\n\t\t\t\t\"items\" : [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"concept\" : {\n\t\t\t\t\t\t\t\"CONCEPT_ID\" : 192671,\n\t\t\t\t\t\t\t\"CONCEPT_NAME\" : \"Gastrointestinal hemorrhage\",\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT\" : \"S\",\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT_CAPTION\" : \"Standard\",\n\t\t\t\t\t\t\t\"INVALID_REASON\" : \"V\",\n\t\t\t\t\t\t\t\"INVALID_REASON_CAPTION\" : \"Valid\",\n\t\t\t\t\t\t\t\"CONCEPT_CODE\" : \"74474003\",\n\t\t\t\t\t\t\t\"DOMAIN_ID\" : \"Condition\",\n\t\t\t\t\t\t\t\"VOCABULARY_ID\" : \"SNOMED\",\n\t\t\t\t\t\t\t\"CONCEPT_CLASS_ID\" : \"Clinical Finding\"\n\t\t\t\t\t\t},\n\t\t\t\t\t\t\"isExcluded\" : false,\n\t\t\t\t\t\t\"includeDescendants\" : true,\n\t\t\t\t\t\t\"includeMapped\" : false\n\t\t\t\t\t}\n\t\t\t\t]\n\t\t\t}\n\t\t}\n\t],\n\t\"QualifiedLimit\" : {\n\t\t\"Type\" : \"First\"\n\t},\n\t\"ExpressionLimit\" : {\n\t\t\"Type\" : \"First\"\n\t},\n\t\"InclusionRules\" : [],\n\t\"EndStrategy\" : {\n\t\t\"DateOffset\" : {\n\t\t\t\"DateField\" : \"StartDate\",\n\t\t\t\"Offset\" : 0\n\t\t}\n\t},\n\t\"CensoringCriteria\" : [],\n\t\"CollapseSettings\" : {\n\t\t\"CollapseType\" : \"ERA\",\n\t\t\"EraPad\" : 0\n\t},\n\t\"CensorWindow\" : {}\n}"
+          "cohortDefinition": "{\r\n\t\"cdmVersionRange\" : \">=5.0.0\",\r\n\t\"PrimaryCriteria\" : {\r\n\t\t\"CriteriaList\" : [\r\n\t\t\t{\r\n\t\t\t\t\"ConditionOccurrence\" : {\r\n\t\t\t\t\t\"CodesetId\" : 0,\r\n\t\t\t\t\t\"ConditionTypeExclude\" : false\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"ObservationWindow\" : {\r\n\t\t\t\"PriorDays\" : 0,\r\n\t\t\t\"PostDays\" : 0\r\n\t\t},\r\n\t\t\"PrimaryCriteriaLimit\" : {\r\n\t\t\t\"Type\" : \"All\"\r\n\t\t}\r\n\t},\r\n\t\"ConceptSets\" : [\r\n\t\t{\r\n\t\t\t\"id\" : 0,\r\n\t\t\t\"name\" : \"GI bleed\",\r\n\t\t\t\"expression\" : {\r\n\t\t\t\t\"items\" : [\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t\"concept\" : {\r\n\t\t\t\t\t\t\t\"CONCEPT_ID\" : 192671,\r\n\t\t\t\t\t\t\t\"CONCEPT_NAME\" : \"Gastrointestinal hemorrhage\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT\" : \"S\",\r\n\t\t\t\t\t\t\t\"STANDARD_CONCEPT_CAPTION\" : \"Standard\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON\" : \"V\",\r\n\t\t\t\t\t\t\t\"INVALID_REASON_CAPTION\" : \"Valid\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CODE\" : \"74474003\",\r\n\t\t\t\t\t\t\t\"DOMAIN_ID\" : \"Condition\",\r\n\t\t\t\t\t\t\t\"VOCABULARY_ID\" : \"SNOMED\",\r\n\t\t\t\t\t\t\t\"CONCEPT_CLASS_ID\" : \"Clinical Finding\"\r\n\t\t\t\t\t\t},\r\n\t\t\t\t\t\t\"isExcluded\" : false,\r\n\t\t\t\t\t\t\"includeDescendants\" : true,\r\n\t\t\t\t\t\t\"includeMapped\" : false\r\n\t\t\t\t\t}\r\n\t\t\t\t]\r\n\t\t\t}\r\n\t\t}\r\n\t],\r\n\t\"QualifiedLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"ExpressionLimit\" : {\r\n\t\t\"Type\" : \"First\"\r\n\t},\r\n\t\"InclusionRules\" : [],\r\n\t\"EndStrategy\" : {\r\n\t\t\"DateOffset\" : {\r\n\t\t\t\"DateField\" : \"StartDate\",\r\n\t\t\t\"Offset\" : 0\r\n\t\t}\r\n\t},\r\n\t\"CensoringCriteria\" : [],\r\n\t\"CollapseSettings\" : {\r\n\t\t\"CollapseType\" : \"ERA\",\r\n\t\t\"EraPad\" : 0\r\n\t},\r\n\t\"CensorWindow\" : {}\r\n}"
+        },
+        {
+          "cohortId": 4,
+          "cohortName": "Acetaminophen",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Acetaminophen\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"161\",\r\n              \"CONCEPT_ID\": 1125315,\r\n              \"CONCEPT_NAME\": \"acetaminophen\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            },\r\n            \"includeDescendants\": true\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugExposure\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 0,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 30\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
+        },
+        {
+          "cohortId": 5,
+          "cohortName": "Amoxicillin",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Amoxicillin\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"723\",\r\n              \"CONCEPT_ID\": 1713332,\r\n              \"CONCEPT_NAME\": \"amoxicillin\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            },\r\n            \"includeDescendants\": true\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugExposure\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 0,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 30\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
+        },
+        {
+          "cohortId": 6,
+          "cohortName": "Aspirin",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Aspirin\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"1191\",\r\n              \"CONCEPT_ID\": 1112807,\r\n              \"CONCEPT_NAME\": \"aspirin\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            },\r\n            \"includeDescendants\": true\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugExposure\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 0,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 30\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
+        },
+        {
+          "cohortId": 7,
+          "cohortName": "Clavulanate",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Clavulanate\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"48203\",\r\n              \"CONCEPT_ID\": 1759842,\r\n              \"CONCEPT_NAME\": \"clavulanate\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            },\r\n            \"includeDescendants\": true\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugExposure\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 0,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 30\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
+        },
+        {
+          "cohortId": 8,
+          "cohortName": "Death",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Death\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Event\",\r\n              \"CONCEPT_CODE\": \"419620001\",\r\n              \"CONCEPT_ID\": 4306655,\r\n              \"CONCEPT_NAME\": \"Death\",\r\n              \"DOMAIN_ID\": \"Observation\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"SNOMED\",\r\n              \"VALID_START_DATE\": \"1900-01-31\",\r\n              \"VALID_END_DATE\": \"2099-12-31\"\r\n            },\r\n            \"includeDescendants\": true\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugExposure\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 0,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 30\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
+        },
+        {
+          "cohortId": 9,
+          "cohortName": "Doxylamine",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Doxylamine\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3642\",\r\n              \"CONCEPT_ID\": 738818,\r\n              \"CONCEPT_NAME\": \"doxylamine\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            },\r\n            \"includeDescendants\": true\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugExposure\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 0,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 30\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
+        },
+        {
+          "cohortId": 10,
+          "cohortName": "PenicillinV",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Penicillin V\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"7984\",\r\n              \"CONCEPT_ID\": 1729720,\r\n              \"CONCEPT_NAME\": \"penicillin V\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            },\r\n            \"includeDescendants\": true\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugExposure\": {\r\n          \"CodesetId\": 0\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 0,\r\n      \"PostDays\": 0\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [],\r\n  \"EndStrategy\": {\r\n    \"CustomEra\": {\r\n      \"DrugCodesetId\": 0,\r\n      \"GapDays\": 0,\r\n      \"Offset\": 0\r\n    }\r\n  },\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 30\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
+        },
+        {
+          "cohortId": 11,
+          "cohortName": "ViralSinusitis",
+          "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Viral Sinusitis diagnosis\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Clinical Finding\",\r\n              \"CONCEPT_CODE\": \"444814009\",\r\n              \"CONCEPT_ID\": 40481087,\r\n              \"CONCEPT_NAME\": \"Viral sinusitis\",\r\n              \"DOMAIN_ID\": \"Condition\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"SNOMED\"\r\n            }\r\n          }\r\n        ]\r\n      }\r\n    },\r\n    {\r\n      \"id\": 1,\r\n      \"name\": \"[MVK] Viral Sinusistis drugs\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"161\",\r\n              \"CONCEPT_ID\": 1125315,\r\n              \"CONCEPT_NAME\": \"acetaminophen\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"723\",\r\n              \"CONCEPT_ID\": 1713332,\r\n              \"CONCEPT_NAME\": \"amoxicillin\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"1191\",\r\n              \"CONCEPT_ID\": 1112807,\r\n              \"CONCEPT_NAME\": \"aspirin\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"48203\",\r\n              \"CONCEPT_ID\": 1759842,\r\n              \"CONCEPT_NAME\": \"clavulanate\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"7984\",\r\n              \"CONCEPT_ID\": 1729720,\r\n              \"CONCEPT_NAME\": \"penicillin V\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3642\",\r\n              \"CONCEPT_ID\": 738818,\r\n              \"CONCEPT_NAME\": \"doxylamine\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3642\",\r\n              \"CONCEPT_ID\": 738818,\r\n              \"CONCEPT_NAME\": \"doxylamine\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3289\",\r\n              \"CONCEPT_ID\": 1119510,\r\n              \"CONCEPT_NAME\": \"dextromethorphan\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"5640\",\r\n              \"CONCEPT_ID\": 1177480,\r\n              \"CONCEPT_NAME\": \"ibuprofen\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"140587\",\r\n              \"CONCEPT_ID\": 1118084,\r\n              \"CONCEPT_NAME\": \"celecoxib\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"7258\",\r\n              \"CONCEPT_ID\": 1115008,\r\n              \"CONCEPT_NAME\": \"naproxen\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Event\",\r\n              \"CONCEPT_CODE\": \"419620001\",\r\n              \"CONCEPT_ID\": 4306655,\r\n              \"CONCEPT_NAME\": \"Death\",\r\n              \"DOMAIN_ID\": \"Observation\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"SNOMED\",\r\n              \"VALID_START_DATE\": \"2006-01-31\",\r\n              \"VALID_END_DATE\": \"2099-12-31\"\r\n            }\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugEra\": {\r\n          \"CodesetId\": 1\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 365,\r\n      \"PostDays\": 1095\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [\r\n    {\r\n      \"name\": \"Viral Sinusitis diagnosis\",\r\n      \"expression\": {\r\n        \"Type\": \"ALL\",\r\n        \"CriteriaList\": [\r\n          {\r\n            \"Criteria\": {\r\n              \"ConditionOccurrence\": {\r\n                \"CodesetId\": 0\r\n              }\r\n            },\r\n            \"StartWindow\": {\r\n              \"Start\": {\r\n                \"Coeff\": -1\r\n              },\r\n              \"End\": {\r\n                \"Coeff\": 1\r\n              },\r\n              \"UseEventEnd\": false\r\n            },\r\n            \"IgnoreObservationPeriod\": true,\r\n            \"Occurrence\": {\r\n              \"Type\": 2,\r\n              \"Count\": 1\r\n            }\r\n          }\r\n        ],\r\n        \"DemographicCriteriaList\": [],\r\n        \"Groups\": []\r\n      }\r\n    },\r\n    {\r\n      \"name\": \"Index year\",\r\n      \"expression\": {\r\n        \"Type\": \"ALL\",\r\n        \"CriteriaList\": [],\r\n        \"DemographicCriteriaList\": [\r\n          {\r\n            \"OccurrenceStartDate\": {\r\n              \"Value\": \"1949-12-31\",\r\n              \"Op\": \"gt\"\r\n            }\r\n          }\r\n        ],\r\n        \"Groups\": []\r\n      }\r\n    }\r\n  ],\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 0\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
         }
       ],
       "subsetDefs": [
@@ -128,6 +168,68 @@
     }
   ],
   "moduleSpecifications": [
+    {
+      "module": "CohortGeneratorModule",
+      "settings": {
+        "generateStats": true
+      },
+      "attr_class": ["ModuleSpecifications", "CohortGeneratorModuleSpecifications"]
+    },
+    {
+      "module": "CohortDiagnosticsModule",
+      "settings": {
+        "runInclusionStatistics": true,
+        "runIncludedSourceConcepts": true,
+        "runOrphanConcepts": true,
+        "runTimeSeries": false,
+        "runVisitContext": true,
+        "runBreakdownIndexEvents": true,
+        "runIncidenceRate": true,
+        "runCohortRelationship": true,
+        "runTemporalCohortCharacterization": true,
+        "temporalCovariateSettings": {
+          "temporal": true,
+          "temporalSequence": false,
+          "DemographicsGender": true,
+          "DemographicsAge": true,
+          "DemographicsAgeGroup": true,
+          "DemographicsRace": true,
+          "DemographicsEthnicity": true,
+          "DemographicsIndexYear": true,
+          "DemographicsIndexMonth": true,
+          "DemographicsPriorObservationTime": true,
+          "DemographicsPostObservationTime": true,
+          "DemographicsTimeInCohort": true,
+          "DemographicsIndexYearMonth": true,
+          "ConditionOccurrence": true,
+          "ConditionEraStart": true,
+          "ConditionEraOverlap": true,
+          "ConditionEraGroupOverlap": true,
+          "DrugEraStart": true,
+          "DrugEraGroupOverlap": true,
+          "ProcedureOccurrence": true,
+          "DeviceExposure": true,
+          "Measurement": true,
+          "Observation": true,
+          "CharlsonIndex": true,
+          "Dcsi": true,
+          "Chads2": true,
+          "Chads2Vasc": true,
+          "temporalStartDays": [-9999, -365, -180, -30, -365, -30, 0, 1, 31, -9999],
+          "temporalEndDays": [0, 0, 0, 0, -31, -1, 0, 30, 365, 9999],
+          "includedCovariateConceptIds": [],
+          "addDescendantsToInclude": false,
+          "excludedCovariateConceptIds": [],
+          "addDescendantsToExclude": false,
+          "includedCovariateIds": [],
+          "attr_class": "covariateSettings",
+          "attr_fun": "getDbDefaultCovariateData"
+        },
+        "minCharacterizationMean": 0.01,
+        "irWashoutPeriod": 0
+      },
+      "attr_class": ["ModuleSpecifications", "CohortDiagnosticsModuleSpecifications"]
+    },
     {
       "module": "CharacterizationModule",
       "settings": {
@@ -305,68 +407,6 @@
       "attr_class": ["ModuleSpecifications", "CharacterizationModuleSpecifications"]
     },
     {
-      "module": "CohortDiagnosticsModule",
-      "settings": {
-        "runInclusionStatistics": true,
-        "runIncludedSourceConcepts": true,
-        "runOrphanConcepts": true,
-        "runTimeSeries": false,
-        "runVisitContext": true,
-        "runBreakdownIndexEvents": true,
-        "runIncidenceRate": true,
-        "runCohortRelationship": true,
-        "runTemporalCohortCharacterization": true,
-        "temporalCovariateSettings": {
-          "temporal": true,
-          "temporalSequence": false,
-          "DemographicsGender": true,
-          "DemographicsAge": true,
-          "DemographicsAgeGroup": true,
-          "DemographicsRace": true,
-          "DemographicsEthnicity": true,
-          "DemographicsIndexYear": true,
-          "DemographicsIndexMonth": true,
-          "DemographicsPriorObservationTime": true,
-          "DemographicsPostObservationTime": true,
-          "DemographicsTimeInCohort": true,
-          "DemographicsIndexYearMonth": true,
-          "ConditionOccurrence": true,
-          "ConditionEraStart": true,
-          "ConditionEraOverlap": true,
-          "ConditionEraGroupOverlap": true,
-          "DrugEraStart": true,
-          "DrugEraGroupOverlap": true,
-          "ProcedureOccurrence": true,
-          "DeviceExposure": true,
-          "Measurement": true,
-          "Observation": true,
-          "CharlsonIndex": true,
-          "Dcsi": true,
-          "Chads2": true,
-          "Chads2Vasc": true,
-          "temporalStartDays": [-9999, -365, -180, -30, -365, -30, 0, 1, 31, -9999],
-          "temporalEndDays": [0, 0, 0, 0, -31, -1, 0, 30, 365, 9999],
-          "includedCovariateConceptIds": [],
-          "addDescendantsToInclude": false,
-          "excludedCovariateConceptIds": [],
-          "addDescendantsToExclude": false,
-          "includedCovariateIds": [],
-          "attr_class": "covariateSettings",
-          "attr_fun": "getDbDefaultCovariateData"
-        },
-        "minCharacterizationMean": 0.01,
-        "irWashoutPeriod": 0
-      },
-      "attr_class": ["ModuleSpecifications", "CohortDiagnosticsModuleSpecifications"]
-    },
-    {
-      "module": "CohortGeneratorModule",
-      "settings": {
-        "generateStats": true
-      },
-      "attr_class": ["ModuleSpecifications", "CohortGeneratorModuleSpecifications"]
-    },
-    {
       "module": "CohortIncidenceModule",
       "settings": {
         "irDesign": {
@@ -435,6 +475,110 @@
         }
       },
       "attr_class": ["ModuleSpecifications", "CohortIncidenceModuleSpecifications"]
+    },
+    {
+      "module": "TreatmentPatternsModule",
+      "settings": {
+        "cohorts": [
+          {
+            "cohortId": 11,
+            "cohortName": "ViralSinusitis",
+            "type": "target"
+          },
+          {
+            "cohortId": 1,
+            "cohortName": "Celecoxib",
+            "type": "event"
+          },
+          {
+            "cohortId": 2,
+            "cohortName": "Diclofenac",
+            "type": "event"
+          },
+          {
+            "cohortId": 3,
+            "cohortName": "GI bleed",
+            "type": "event"
+          },
+          {
+            "cohortId": 4,
+            "cohortName": "Acetaminophen",
+            "type": "event"
+          },
+          {
+            "cohortId": 5,
+            "cohortName": "Amoxicillin",
+            "type": "event"
+          },
+          {
+            "cohortId": 6,
+            "cohortName": "Aspirin",
+            "type": "event"
+          },
+          {
+            "cohortId": 7,
+            "cohortName": "Clavulanate",
+            "type": "event"
+          },
+          {
+            "cohortId": 9,
+            "cohortName": "Doxylamine",
+            "type": "event"
+          },
+          {
+            "cohortId": 10,
+            "cohortName": "PenicillinV",
+            "type": "event"
+          },
+          {
+            "cohortId": 1001,
+            "cohortName": "Celecoxib - age 18 to 64 Age 18 to 64",
+            "type": "event"
+          },
+          {
+            "cohortId": 2001,
+            "cohortName": "Diclofenac - age 18 to 64 Age 18 to 64",
+            "type": "event"
+          },
+          {
+            "cohortId": 1002,
+            "cohortName": "Celecoxib - first event with 365 prior obs first event with 365 prior obs",
+            "type": "event"
+          },
+          {
+            "cohortId": 2002,
+            "cohortName": "Diclofenac - first event with 365 prior obs first event with 365 prior obs",
+            "type": "event"
+          },
+          {
+            "cohortId": 1003,
+            "cohortName": "Celecoxib - age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
+            "type": "event"
+          },
+          {
+            "cohortId": 2003,
+            "cohortName": "Diclofenac - age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
+            "type": "event"
+          },
+          {
+            "cohortId": 8,
+            "cohortName": "Death",
+            "type": "exit"
+          }
+        ],
+        "includeTreatments": "startDate",
+        "indexDateOffset": 0,
+        "minEraDuration": 7,
+        "eraCollapseSize": 14,
+        "combinationWindow": 7,
+        "minPostCombinationDuration": 7,
+        "filterTreatments": "First",
+        "maxPathLength": 5,
+        "ageWindow": 5,
+        "minCellCount": 1,
+        "censorType": "minCellCount"
+      },
+      "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
     },
     {
       "module": "CohortMethodModule",
@@ -1520,7 +1664,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 64281744,
+                  "seed": 21082718,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1535,7 +1679,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 25792,
+              "seed": 86655,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"
@@ -1662,7 +1806,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 30559524,
+                  "seed": 25200427,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1677,7 +1821,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 92433,
+              "seed": 13703,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"

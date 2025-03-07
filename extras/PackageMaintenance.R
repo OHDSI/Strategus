@@ -67,11 +67,17 @@ unlink("inst/doc/WorkingWithResults.tex")
 
 # Produce a study analysis specification for testing -----------
 library(Strategus)
+source("tests/testthat/helper-TreatmentPatterns.R") # Needed for creating settings
 cohortDefinitionSet <- getCohortDefinitionSet(
   settingsFileName = system.file("testdata/Cohorts.csv", package = "Strategus"),
   jsonFolder = system.file("testdata/cohorts", package = "Strategus"),
   sqlFolder = system.file("testdata/sql", package = "Strategus")
 )
+
+# Add TreatmentPatterns cohorts to the cohort definition set
+cohortDefinitionSet <- cohortDefinitionSet[, names(CohortGenerator::createEmptyCohortDefinitionSet())]
+cohortDefinitionSet <- appendTreatmentPatternsCohorts(cohortDefinitionSet)
+
 subsetOperations <- list(
   createDemographicSubset(
     name = "Age 18 to 64",
@@ -204,6 +210,23 @@ irDesign <- CohortIncidence::createIncidenceDesign(
 
 ciModuleSpecifications <- ciModuleSettingsCreator$createModuleSpecifications(
   irDesign = irDesign$toList()
+)
+
+# Treatment Patterns --------------------
+treatmentPatternsCohorts <- getTreatmentPatternsCohorts(cohortDefinitionSet)
+tpModuleSettingsCreator <- TreatmentPatternsModule$new()
+tpModuleSpecifications <- tpModuleSettingsCreator$createModuleSpecifications(
+  cohorts = treatmentPatternsCohorts,
+  includeTreatments = "startDate",
+  indexDateOffset = 0,
+  minEraDuration = 7,
+  splitEventCohorts = NULL,
+  splitTime = NULL,
+  eraCollapseSize = 14,
+  combinationWindow = 7,
+  minPostCombinationDuration = 7,
+  filterTreatments = "First",
+  maxPathLength = 5
 )
 
 # Cohort Method ----------------------
@@ -493,10 +516,11 @@ sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications
 cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
-  addCharacterizationModuleSpecifications(cModuleSpecifications) |>
-  addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
   addCohortGeneratorModuleSpecifications(cgModuleSpecifications) |>
+  addCohortDiagnosticsModuleSpecifications(cdModuleSpecifications) |>
+  addCharacterizationModuleSpecifications(cModuleSpecifications) |>
   addCohortIncidenceModuleSpecifications(ciModuleSpecifications) |>
+  addTreatmentPatternsModuleSpecifications(tpModuleSpecifications) |>
   addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
   addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
   addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
