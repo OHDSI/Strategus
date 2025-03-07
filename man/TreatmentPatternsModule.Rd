@@ -173,11 +173,6 @@ Creates the TreatmentPatternsnModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
   cohorts,
-  cohortTableName,
-  connectionDetails = NULL,
-  cdmSchema = NULL,
-  resultSchema = NULL,
-  tempEmulationSchema = NULL,
   includeTreatments = "startDate",
   indexDateOffset = 0,
   minEraDuration = 0,
@@ -204,20 +199,6 @@ Data frame containing the following columns and data types:
 \item{cohortName \code{character(1)}}{Cohort names of the cohorts to be used in the cohort table.}
 \item{type \code{character(1)} ["target", "event', "exit"]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
 }}
-
-\item{\code{cohortTableName}}{(\code{character(1)})\cr
-Cohort table name.}
-
-\item{\code{connectionDetails}}{(\code{DatabaseConnector::createConnectionDetails()}: \code{NULL})\cr
-Optional; In congruence with \code{cdmSchema} and \code{resultSchema}. Ignores \code{cdm}.}
-
-\item{\code{cdmSchema}}{(\code{character(1)}: \code{NULL})\cr
-Optional; In congruence with \code{connectionDetails} and \code{resultSchema}. Ignores \code{cdm}.}
-
-\item{\code{resultSchema}}{(\code{character(1)}: \code{NULL})\cr
-Optional; In congruence with \code{connectionDetails} and \code{cdmSchema}. Ignores \code{cdm}.}
-
-\item{\code{tempEmulationSchema}}{Schema used to emulate temp tables}
 
 \item{\code{includeTreatments}}{(\code{character(1)}: \code{"startDate"})\cr
 \describe{

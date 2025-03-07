@@ -50,11 +50,11 @@ TreatmentPatternsModule <- R6::R6Class(
       spec <- jobContext$settings
       outputEnv <- TreatmentPatterns::computePathways(
         cohorts = spec$cohorts,
-        cohortTableName = spec$cohortTableName,
+        cohortTableName = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         connectionDetails = connectionDetails,
         cdmSchema = executionSettings$cdmDatabaseSchema,
         resultSchema = executionSettings$workDatabaseSchema,
-        tempEmulationSchema = executionSettings$tempEmulationSchema,
+        tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
         includeTreatments = spec$includeTreatments,
         indexDateOffset = spec$indexDateOffset,
         minEraDuration = spec$minEraDuration,
@@ -67,11 +67,11 @@ TreatmentPatternsModule <- R6::R6Class(
         maxPathLength = spec$maxPathLength
       )
 
-      if (!dir.exists(executionSettings$resultsFolder)) dir.create(executionSettings$resultsFolder, recursive = TRUE, showWarnings = FALSE)
+      if (!dir.exists(resultsFolder)) dir.create(resultsFolder, recursive = TRUE, showWarnings = FALSE)
 
       TreatmentPatterns::export(
         andromeda = outputEnv,
-        outputPath = executionSettings$resultsFolder,
+        outputPath = resultsFolder,
         ageWindow = spec$ageWindow,
         minCellCount = executionSettings$minCellCount,
         censorType = spec$censorType,
@@ -79,6 +79,7 @@ TreatmentPatternsModule <- R6::R6Class(
       )
 
       on.exit(Andromeda::close(outputEnv))
+      private$.message(paste("Results available at:", resultsFolder))
     },
 
     #' @description Create the results data model for the module
@@ -115,15 +116,6 @@ TreatmentPatternsModule <- R6::R6Class(
     #'  \item{cohortName `character(1)`}{Cohort names of the cohorts to be used in the cohort table.}
     #'  \item{type `character(1)` \["target", "event', "exit"\]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
     #' }
-    #' @param cohortTableName (`character(1)`)\cr
-    #' Cohort table name.
-    #' @param connectionDetails (`DatabaseConnector::createConnectionDetails()`: `NULL`)\cr
-    #' Optional; In congruence with `cdmSchema` and `resultSchema`. Ignores `cdm`.
-    #' @param cdmSchema (`character(1)`: `NULL`)\cr
-    #' Optional; In congruence with `connectionDetails` and `resultSchema`. Ignores `cdm`.
-    #' @param resultSchema (`character(1)`: `NULL`)\cr
-    #' Optional; In congruence with `connectionDetails` and `cdmSchema`. Ignores `cdm`.
-    #' @param tempEmulationSchema Schema used to emulate temp tables
     #' @param includeTreatments (`character(1)`: `"startDate"`)\cr
     #' \describe{
     #'  \item{`"startDate"`}{Include treatments after the target cohort start date and onwards.}
@@ -167,11 +159,6 @@ TreatmentPatternsModule <- R6::R6Class(
     #' }
     createModuleSpecifications = function(
       cohorts,
-      cohortTableName,
-      connectionDetails = NULL,
-      cdmSchema = NULL,
-      resultSchema = NULL,
-      tempEmulationSchema = NULL,
       includeTreatments = "startDate",
       indexDateOffset = 0,
       minEraDuration = 0,
