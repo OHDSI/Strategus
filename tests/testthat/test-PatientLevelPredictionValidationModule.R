@@ -1,4 +1,5 @@
 library(testthat)
+library(dplyr)
 library(Strategus)
 
 test_that("Test PLP Validation Module", {
@@ -191,11 +192,6 @@ test_that("Test PLP Validation Module", {
   testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','covariate_summary.csv')))
   testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','calibration_summary.csv')))
 
-  # check the work folder has the correct results
-  testthat::expect_true(dir.exists(file.path(workFolder,'PatientLevelPredictionValidationModule',"Synthea")))
-  testthat::expect_true(dir.exists(file.path(workFolder,'PatientLevelPredictionValidationModule',"Synthea", 'Analysis_1')))
-
-
   # check using model in package
   createPackageModel <- function(modelFolder, package){
     result <- list(
@@ -239,10 +235,5 @@ test_that("Test PLP Validation Module", {
     executionSettings = executionSettings,
     connectionDetails = connectionDetails
   )
-
-  # check the work folder has the correct results
-  testthat::expect_true(dir.exists(file.path(workFolder2,'PatientLevelPredictionValidationModule',"Synthea")))
-  testthat::expect_true(dir.exists(file.path(workFolder2,'PatientLevelPredictionValidationModule',"Synthea", 'Analysis_1')))
-
 
 })

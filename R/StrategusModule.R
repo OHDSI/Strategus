@@ -205,7 +205,7 @@ StrategusModule <- R6::R6Class(
       }
       invisible(returnVal)
     },
-    .createCohortDefinitionSetFromJobContext = function(generateStats) {
+    .createCohortDefinitionSetFromJobContext = function(generateStats = FALSE) {
       jobContext <- private$jobContext
       cohortDefinitions <- list()
       if (length(jobContext$sharedResources) <= 0) {
