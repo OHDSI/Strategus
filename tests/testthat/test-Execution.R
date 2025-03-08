@@ -188,10 +188,12 @@ test_that("Negative control outcomes are optional", {
   )
 
   # Remove the nco section
-  analysisSpecifications$sharedResources <- list(analysisSpecifications$sharedResources[[1]])
+  cdIndex <- which(sapply(analysisSpecifications$sharedResources, function(x) class(x)[1]) == "CohortDefinitionSharedResources")
+  analysisSpecifications$sharedResources <- list(analysisSpecifications$sharedResources[[cdIndex]])
 
   # Remove all but CG
-  analysisSpecifications$moduleSpecifications <- list(analysisSpecifications$moduleSpecifications[[3]])
+  cgModuleIndex <- which(sapply(analysisSpecifications$moduleSpecifications, function(x) x$module) == "CohortGeneratorModule")
+  analysisSpecifications$moduleSpecifications <- list(analysisSpecifications$moduleSpecifications[[cgModuleIndex]])
 
   executionSettings <- createCdmExecutionSettings(
     workDatabaseSchema = workDatabaseSchema,
@@ -333,9 +335,12 @@ test_that("Stop if error occurs during cohort generation", {
       package = "Strategus"
     )
   )
+
   # Add an ill-formed Circe expression to break the cohort generation process
-  analysisSpecifications$sharedResources[[1]]$cohortDefinitions[[6]] <- list(
-    cohortId = 6,
+  cdIndex <- which(sapply(analysisSpecifications$sharedResources, function(x) class(x)[1]) == "CohortDefinitionSharedResources")
+  cdLength <- length(analysisSpecifications$sharedResources[[cdIndex]]$cohortDefinitions)
+  analysisSpecifications$sharedResources[[cdIndex]]$cohortDefinitions[[cdLength + 1]] <- list(
+    cohortId = cdLength + 1,
     cohortName = "Failure",
     cohortDefinition = "{}"
   )

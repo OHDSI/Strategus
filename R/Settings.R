@@ -211,6 +211,45 @@ addSelfControlledCaseSeriesModuleSpecifications <- function(analysisSpecificatio
   )
 }
 
+#' Add Treatment Patterns Module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications Created by the "tbd"
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added
+#'
+#' @export
+addTreatmentPatternsModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "TreatmentPatternsModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+#' Add Patient Level Prediction Validation Module module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications  Created by the \href{../reference/PatientLevelPredictionValidationModule.html#method-PatientLevelPredictionValidationModule-createModuleSpecifications}{\code{PatientLevelPredictionValidationModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addPatientLevelPredictionValidationModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "PatientLevelPredictionValidationModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
+
 addAndValidateModuleSpecifications <- function(moduleName, analysisSpecifications, moduleSpecifications) {
   moduleObj <- get(moduleName)$new()
   moduleObj$validateModuleSpecifications(moduleSpecifications)

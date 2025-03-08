@@ -1,8 +1,8 @@
 Package: Strategus
 Type: Package
 Title: Coordinate and Execute OHDSI HADES Modules
-Version: 1.2.0
-Date: 2024-02-10
+Version: 1.3.0
+Date: 2025-03-07
 Authors@R: c(
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
@@ -47,6 +47,7 @@ Suggests:
   RSQLite,
   SelfControlledCaseSeries,
   testthat (>= 3.0.0),
+  TreatmentPatterns,
   withr
 Remotes:
   ohdsi/Characterization,

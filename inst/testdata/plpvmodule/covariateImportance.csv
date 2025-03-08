@@ -1,0 +1,98 @@
+"covariateId","covariateName","analysisId","conceptId","covariateValue"
+4285898210,"condition_era group during day -365 through -1 days relative to index: Polyp of colon",210,4285898,0.660717789316573
+30753210,"condition_era group during day -365 through -1 days relative to index: Esophagitis",210,30753,0.51970553469849
+920293406,"drug_era during day -365 through -1 days relative to index: Nitrofurantoin",406,920293,0.421813027570672
+1125315406,"drug_era during day -365 through -1 days relative to index: Acetaminophen",406,1125315,-0.261426619610899
+4283893210,"condition_era group during day -365 through -1 days relative to index: Sinusitis",210,4283893,-0.0669402778528852
+8507001,"gender = MALE",1,8507,0.0452626918229865
+1713332406,"drug_era during day -365 through -1 days relative to index: Amoxicillin",406,1713332,-0.0135008537122988
+8003,"age group:  40 -  44",3,0,0.00329562784750316
+6003,"age group:  30 -  34",3,0,-4.28293978321841e-06
+372328210,"condition_era group during day -365 through -1 days relative to index: Otitis media",210,372328,0
+260139210,"condition_era group during day -365 through -1 days relative to index: Acute bronchitis",210,260139,0
+40481087210,"condition_era group during day -365 through -1 days relative to index: Viral sinusitis",210,40481087,0
+4218389210,"condition_era group during day -365 through -1 days relative to index: Whiplash injury to neck",210,4218389,0
+4156265210,"condition_era group during day -365 through -1 days relative to index: Facial laceration",210,4156265,0
+4112343210,"condition_era group during day -365 through -1 days relative to index: Acute viral pharyngitis",210,4112343,0
+4116491210,"condition_era group during day -365 through -1 days relative to index: Escherichia coli urinary tract infection",210,4116491,0
+28060210,"condition_era group during day -365 through -1 days relative to index: Streptococcal sore throat",210,28060,0
+81893210,"condition_era group during day -365 through -1 days relative to index: Ulcerative colitis",210,81893,0
+257012210,"condition_era group during day -365 through -1 days relative to index: Chronic sinusitis",210,257012,0
+4029498210,"condition_era group during day -365 through -1 days relative to index: Seizure disorder",210,4029498,0
+4152936210,"condition_era group during day -365 through -1 days relative to index: Laceration of thigh",210,4152936,0
+4296204210,"condition_era group during day -365 through -1 days relative to index: First degree burn",210,4296204,0
+4310024210,"condition_era group during day -365 through -1 days relative to index: Angiodysplasia of stomach",210,4310024,0
+4280726210,"condition_era group during day -365 through -1 days relative to index: Seasonal allergic rhinitis",210,4280726,0
+4296205210,"condition_era group during day -365 through -1 days relative to index: Second degree burn",210,4296205,0
+4278672210,"condition_era group during day -365 through -1 days relative to index: Fracture of forearm",210,4278672,0
+4237458210,"condition_era group during day -365 through -1 days relative to index: Fracture of clavicle",210,4237458,0
+81151210,"condition_era group during day -365 through -1 days relative to index: Sprain of ankle",210,81151,0
+198199210,"condition_era group during day -365 through -1 days relative to index: Pyelonephritis",210,198199,0
+40486433210,"condition_era group during day -365 through -1 days relative to index: Perennial allergic rhinitis",210,40486433,0
+378001210,"condition_era group during day -365 through -1 days relative to index: Concussion with no loss of consciousness",210,378001,0
+4001336210,"condition_era group during day -365 through -1 days relative to index: Concussion injury of brain",210,4001336,0
+4132546210,"condition_era group during day -365 through -1 days relative to index: Traumatic brain injury",210,4132546,0
+4294548210,"condition_era group during day -365 through -1 days relative to index: Acute bacterial sinusitis",210,4294548,0
+78272210,"condition_era group during day -365 through -1 days relative to index: Sprain of wrist",210,78272,0
+4155034210,"condition_era group during day -365 through -1 days relative to index: Laceration of forearm",210,4155034,0
+195588210,"condition_era group during day -365 through -1 days relative to index: Cystitis",210,195588,0
+134438210,"condition_era group during day -365 through -1 days relative to index: Contact dermatitis",210,134438,0
+317576210,"condition_era group during day -365 through -1 days relative to index: Coronary arteriosclerosis",210,317576,0
+4056621210,"condition_era group during day -365 through -1 days relative to index: Recurrent urinary tract infection",210,4056621,0
+198809210,"condition_era group during day -365 through -1 days relative to index: Acute cholecystitis",210,198809,0
+196456210,"condition_era group during day -365 through -1 days relative to index: Gallstone",210,196456,0
+4134304210,"condition_era group during day -365 through -1 days relative to index: Fracture subluxation of wrist",210,4134304,0
+80809210,"condition_era group during day -365 through -1 days relative to index: Rheumatoid arthritis",210,80809,0
+4048171210,"condition_era group during day -365 through -1 days relative to index: Perennial allergic rhinitis with seasonal variation",210,4048171,0
+4109685210,"condition_era group during day -365 through -1 days relative to index: Laceration of foot",210,4109685,0
+258780210,"condition_era group during day -365 through -1 days relative to index: Emphysematous bronchitis",210,258780,0
+4035415210,"condition_era group during day -365 through -1 days relative to index: Tear of meniscus of knee",210,4035415,0
+439777210,"condition_era group during day -365 through -1 days relative to index: Anemia",210,439777,0
+4113008210,"condition_era group during day -365 through -1 days relative to index: Laceration of hand",210,4113008,0
+375671210,"condition_era group during day -365 through -1 days relative to index: Concussion with loss of consciousness",210,375671,0
+4149245210,"condition_era group during day -365 through -1 days relative to index: Rupture of patellar tendon",210,4149245,0
+4084167210,"condition_era group during day -365 through -1 days relative to index: Acute allergic reaction",210,4084167,0
+4142905210,"condition_era group during day -365 through -1 days relative to index: Fracture of rib",210,4142905,0
+321042210,"condition_era group during day -365 through -1 days relative to index: Cardiac arrest",210,321042,0
+1729720406,"drug_era during day -365 through -1 days relative to index: Penicillin V",406,1729720,0
+1759842406,"drug_era during day -365 through -1 days relative to index: Clavulanate",406,1759842,0
+933724406,"drug_era during day -365 through -1 days relative to index: Phenazopyridine",406,933724,0
+1124957406,"drug_era during day -365 through -1 days relative to index: Oxycodone",406,1124957,0
+1728416406,"drug_era during day -365 through -1 days relative to index: Penicillin G",406,1728416,0
+738818406,"drug_era during day -365 through -1 days relative to index: Doxylamine",406,738818,0
+1119510406,"drug_era during day -365 through -1 days relative to index: Dextromethorphan",406,1119510,0
+1102527406,"drug_era during day -365 through -1 days relative to index: Meperidine",406,1102527,0
+1174888406,"drug_era during day -365 through -1 days relative to index: Hydrocodone",406,1174888,0
+1115008406,"drug_era during day -365 through -1 days relative to index: Naproxen",406,1115008,0
+1361711406,"drug_era during day -365 through -1 days relative to index: Nitroglycerin",406,1361711,0
+1539403406,"drug_era during day -365 through -1 days relative to index: Simvastatin",406,1539403,0
+1305058406,"drug_era during day -365 through -1 days relative to index: Methotrexate",406,1305058,0
+975125406,"drug_era during day -365 through -1 days relative to index: Hydrocortisone",406,975125,0
+1150770406,"drug_era during day -365 through -1 days relative to index: Astemizole",406,1150770,0
+1332418406,"drug_era during day -365 through -1 days relative to index: Amlodipine",406,1332418,0
+1322184406,"drug_era during day -365 through -1 days relative to index: clopidogrel",406,1322184,0
+1177480406,"drug_era during day -365 through -1 days relative to index: Ibuprofen",406,1177480,0
+19010482406,"drug_era during day -365 through -1 days relative to index: Cyclosporine",406,19010482,0
+708298406,"drug_era during day -365 through -1 days relative to index: Midazolam",406,708298,0
+967823406,"drug_era during day -365 through -1 days relative to index: Sodium Chloride",406,967823,0
+1154029406,"drug_era during day -365 through -1 days relative to index: Fentanyl",406,1154029,0
+1741122406,"drug_era during day -365 through -1 days relative to index: tazobactam",406,1741122,0
+1000560406,"drug_era during day -365 through -1 days relative to index: Ondansetron",406,1000560,0
+753626406,"drug_era during day -365 through -1 days relative to index: Propofol",406,753626,0
+1110410406,"drug_era during day -365 through -1 days relative to index: Morphine",406,1110410,0
+1367571406,"drug_era during day -365 through -1 days relative to index: heparin",406,1367571,0
+1521369406,"drug_era during day -365 through -1 days relative to index: Norethindrone",406,1521369,0
+1746114406,"drug_era during day -365 through -1 days relative to index: Piperacillin",406,1746114,0
+19003953406,"drug_era during day -365 through -1 days relative to index: Rocuronium",406,19003953,0
+782043406,"drug_era during day -365 through -1 days relative to index: Isoflurane",406,782043,0
+1551099406,"drug_era during day -365 through -1 days relative to index: Prednisone",406,1551099,0
+1738521406,"drug_era during day -365 through -1 days relative to index: Doxycycline",406,1738521,0
+1778162406,"drug_era during day -365 through -1 days relative to index: Cefuroxime",406,1778162,0
+1112807406,"drug_era during day -365 through -1 days relative to index: Aspirin",406,1112807,0
+914335406,"drug_era during day -365 through -1 days relative to index: Atropine",406,914335,0
+1309944406,"drug_era during day -365 through -1 days relative to index: Amiodarone",406,1309944,0
+1343916406,"drug_era during day -365 through -1 days relative to index: Epinephrine",406,1343916,0
+1149380406,"drug_era during day -365 through -1 days relative to index: fluticasone",406,1149380,0
+1137529406,"drug_era during day -365 through -1 days relative to index: salmeterol",406,1137529,0
+9003,"age group:  45 -  49",3,0,0
+1002,"age in years",2,0,0

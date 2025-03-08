@@ -1,0 +1,75 @@
+table_name,column_name,data_type,is_required,primary_key,description
+analyses,analysis_id,int,yes,no,Analysis identifier
+analyses,description,varchar,yes,no,Analysis description
+arguments,analysis_id,int,yes,no,Analysis identifier
+arguments,arguments,varchar,no,no,Arguments as JSON
+arguments,database_id,integer,TRUE,TRUE,Unique identifier for the database
+attrition,analysis_id,int,yes,no,Analysis identifier foreign key
+attrition,database_id,integer,TRUE,TRUE,Unique identifier for the database
+attrition,number_records,int,yes,no,Number of records
+attrition,number_subjects,int,yes,no,Number of subjects
+attrition,reason,varchar,yes,no,Reason description
+attrition,reason_id,int,yes,no,Reason Identifier
+attrition,target_cohort_id,integer,FALSE,FALSE,Target cohort ID
+attrition,target_cohort_name,varchar,FALSE,FALSE,Target cohort name
+attrition,time_stamp,bigint,yes,no,Time stamp in seconds since epoch (1970-01-01)
+cdm_source_info,analysis_id,int,yes,no,Analysis identifier foreign key
+cdm_source_info,cdm_etl_reference,varchar,yes,no,CDM ETL Reference
+cdm_source_info,cdm_holder,varchar,yes,no,Cdm holder
+cdm_source_info,cdm_release_date,date,yes,no,CDM release date
+cdm_source_info,cdm_source_abbreviation,varchar,yes,no,CDM Source Abbreviation
+cdm_source_info,cdm_source_name,varchar,yes,no,CDM Source Name
+cdm_source_info,cdm_version,varchar,yes,no,CDM version
+cdm_source_info,database_id,integer,TRUE,TRUE,Unique identifier for the database
+cdm_source_info,source_description,varchar,yes,no,Source description
+cdm_source_info,source_documentation_reference,varchar,yes,no,Source Documentation Reference
+cdm_source_info,source_release_date,date,yes,no,Source release date
+cdm_source_info,vocabulary_version,varchar,yes,no,Vocabulary version
+counts_age,age,int,yes,no,Age in years
+counts_age,analysis_id,int,yes,no,Analysis identifier foreign key
+counts_age,database_id,integer,TRUE,TRUE,Unique identifier for the database
+counts_age,n,varchar,yes,no,Count per age. May be <x
+counts_age,target_cohort_id,integer,FALSE,FALSE,Target cohort ID
+counts_age,target_cohort_name,varchar,FALSE,FALSE,Target cohort name
+counts_sex,analysis_id,int,yes,no,Analysis identifier foreign key
+counts_sex,database_id,integer,TRUE,TRUE,Unique identifier for the database
+counts_sex,n,varchar,yes,no,Count per sex. May be <x
+counts_sex,sex,varchar,yes,no,Sex group
+counts_sex,target_cohort_id,integer,FALSE,FALSE,Target cohort ID
+counts_sex,target_cohort_name,varchar,FALSE,FALSE,Target cohort name
+counts_year,analysis_id,int,yes,no,Analysis identifier foreign key
+counts_year,database_id,integer,TRUE,TRUE,Unique identifier for the database
+counts_year,n,varchar,yes,no,Count per year. May be <x
+counts_year,target_cohort_id,integer,FALSE,FALSE,Target cohort ID
+counts_year,target_cohort_name,varchar,FALSE,FALSE,Target cohort name
+counts_year,index_year,integer,FALSE,FALSE,Calendar year
+metadata,analysis_id,int,yes,no,Analysis identifier foreign key
+metadata,database_id,integer,TRUE,TRUE,Unique identifier for the database
+metadata,execution_end,bigint,yes,no,Time stamp in seconds since epoch (1970-01-01)
+metadata,execution_start,bigint,yes,no,Time stamp in seconds since epoch (1970-01-01)
+metadata,package_version,varchar,yes,no,TreatmentPatterns version
+metadata,platform,varchar,yes,no,Platform (Example: x86_64-w64-mingw32)
+metadata,r_version,varchar,yes,no,R version
+summary_event_duration,analysis_id,int,yes,no,Analysis identifier foreign key
+summary_event_duration,duration_average,float,yes,no,Average duration in days
+summary_event_duration,event_count,int,yes,no,Count of (combination) event
+summary_event_duration,database_id,integer,TRUE,TRUE,Unique identifier for the database
+summary_event_duration,event_name,varchar,yes,no,Name of (combination) event
+summary_event_duration,line,varchar,yes,no,Position in pathway. I.e. 1 equals the first event in a pathway. 2 the second etc. Overall indicates across the entire pathway
+summary_event_duration,duration_max,int,yes,no,Maximum duration in days
+summary_event_duration,duration_median,int,yes,no,Median duration in days
+summary_event_duration,duration_min,int,yes,no,Minimum duration in days
+summary_event_duration,duration_q_1,int,yes,no,Q1 duration in days
+summary_event_duration,duration_q_2,int,yes,no,Q2 duration in days
+summary_event_duration,duration_sd,float,yes,no,Standard Deviation of duration in days
+summary_event_duration,target_cohort_id,integer,FALSE,FALSE,Target cohort ID
+summary_event_duration,target_cohort_name,varchar,FALSE,FALSE,Target cohort name
+treatment_pathways,age,varchar,yes,no,Age stratum
+treatment_pathways,analysis_id,int,yes,no,Analysis identifier foreign key
+treatment_pathways,database_id,integer,TRUE,TRUE,Unique identifier for the database
+treatment_pathways,freq,int,yes,no,Count of pathway
+treatment_pathways,index_year,varchar,yes,no,Target index year stratum
+treatment_pathways,pathway,varchar,yes,no,Pathway
+treatment_pathways,sex,varchar,yes,no,Sex stratum
+treatment_pathways,target_cohort_id,integer,FALSE,FALSE,Target cohort ID
+treatment_pathways,target_cohort_name,varchar,FALSE,FALSE,Target cohort name
