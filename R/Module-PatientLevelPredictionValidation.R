@@ -1,5 +1,5 @@
 # PatientLevelPredictionValidationModule -------------
-#' @title Module for performing validation of patient-level prediction models
+#' @title Validation of patient-level prediction models with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}
 #' @export
 #' @description
 #' Module for performing patient-level prediction model validation for models
