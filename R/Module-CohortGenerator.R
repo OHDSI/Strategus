@@ -128,7 +128,7 @@ CohortGeneratorModule <- R6::R6Class(
       }
 
       sharedResource <- list()
-      cohortDefinitionSetFiltered <-  private$.listafy(parentCohortDefinitionSet)
+      cohortDefinitionSetFiltered <- private$.listafy(parentCohortDefinitionSet)
       sharedResource["cohortDefinitions"] <- list(cohortDefinitionSetFiltered)
 
       if (length(subsetDefinitions)) {

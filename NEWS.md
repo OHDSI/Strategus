@@ -1,3 +1,16 @@
+Strategus 1.3.0
+===============
+
+New Features
+
+- Adds TreatmentPatterns module (experimental) (#186)
+- Adds PatientLevePredictionValidation module (experimental) (#164)
+
+Fixes
+
+- Example analysis specification modifications for better testing (#210)
+- Remove redundant messages in the execution summary (#213)
+
 Strategus 1.2.0
 ===============
 - Provide summary information when creating the results data model and uploading results (#204)

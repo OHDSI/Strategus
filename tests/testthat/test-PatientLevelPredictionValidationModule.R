@@ -28,9 +28,10 @@ test_that("Test PLP Validation Module", {
     cohortDatabaseSchema = workDatabaseSchema
   )
 
-  cohortDefinitionSet <- cohortDefinitionSet %>% dplyr::rename(
-    cohortName = "name"
-  ) %>%
+  cohortDefinitionSet <- cohortDefinitionSet %>%
+    dplyr::rename(
+      cohortName = "name"
+    ) %>%
     mutate(
       json = '{
   "ConceptSets": [
@@ -125,7 +126,7 @@ test_that("Test PLP Validation Module", {
   "CensorWindow": {},
   "cdmVersionRange": ">=5.0.0"
 }',
-      sql = ''
+      sql = ""
     )
 
   # add the cohortDefSet into shared resource
@@ -133,7 +134,7 @@ test_that("Test PLP Validation Module", {
   cohortDefinitionShared <- cohortGeneratorModule$createCohortSharedResourceSpecifications(cohortDefinitionSet)
 
   # add model to folder
-  plpModel <-  PatientLevelPrediction::loadPlpModel(system.file("testdata/plpvmodule", package = "Strategus")) #readRDS("tests/plpModel.rds")
+  plpModel <- PatientLevelPrediction::loadPlpModel(system.file("testdata/plpvmodule", package = "Strategus")) # readRDS("tests/plpModel.rds")
 
   # Create the validation settings and run the module
   plpvSettingsCreator <- PatientLevelPredictionValidationModule$new()
@@ -166,40 +167,40 @@ test_that("Test PLP Validation Module", {
   )
 
   # check the csv files are all there:
-  testthat::expect_true(dir.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','cohorts.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','cohort_definition.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','database_meta_data.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','database_details.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','tars.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','tidy_covariates_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','sample_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','plp_data_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','split_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','feature_engineering_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','population_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','covariate_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','model_settings.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','model_designs.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','models.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','performances.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','recalibrations.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','attrition.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','evaluation_statistics.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','threshold_summary.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','prediction_distribution.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','demographic_summary.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','covariate_summary.csv')))
-  testthat::expect_true(file.exists(file.path(resultsFolder,'PatientLevelPredictionValidationModule','calibration_summary.csv')))
+  testthat::expect_true(dir.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "cohorts.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "cohort_definition.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "database_meta_data.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "database_details.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "tars.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "tidy_covariates_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "sample_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "plp_data_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "split_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "feature_engineering_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "population_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "covariate_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "model_settings.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "model_designs.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "models.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "performances.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "recalibrations.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "attrition.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "evaluation_statistics.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "threshold_summary.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "prediction_distribution.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "demographic_summary.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "covariate_summary.csv")))
+  testthat::expect_true(file.exists(file.path(resultsFolder, "PatientLevelPredictionValidationModule", "calibration_summary.csv")))
 
   # check using model in package
-  createPackageModel <- function(modelFolder, package){
+  createPackageModel <- function(modelFolder, package) {
     result <- list(
-      type = 'package',
+      type = "package",
       modelFolder = modelFolder,
       package = package
     )
-    class(result) <- 'plpModel'
+    class(result) <- "plpModel"
 
     return(result)
   }
@@ -209,13 +210,13 @@ test_that("Test PLP Validation Module", {
   plpvSettingsCreator <- PatientLevelPredictionValidationModule$new()
   plpModuleSettings <- plpvSettingsCreator$createModuleSpecifications(
     validationList = PatientLevelPrediction::createValidationDesign(
-        targetId = 1,
-        outcomeId = 3,
+      targetId = 1,
+      outcomeId = 3,
       plpModelList = list(createPackageModel(
-        package = 'Strategus',
-        modelFolder = 'testdata/plpvmodule'
+        package = "Strategus",
+        modelFolder = "testdata/plpvmodule"
       ))
-      )
+    )
   )
 
   analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
@@ -235,5 +236,4 @@ test_that("Test PLP Validation Module", {
     executionSettings = executionSettings,
     connectionDetails = connectionDetails
   )
-
 })

@@ -1,4 +1,4 @@
-# Copyright 2024 Observational Health Data Sciences and Informatics
+# Copyright 2025 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -17,7 +17,7 @@
 #' @title Evaluate phenotypes with the \href{https://github.com/darwin-eu/TreatmentPatterns/}{DARWIN TreatmentPatterns Package}
 #' @export
 #' @description
-#' Characterisation and description of patterns of events (cohorts). against the OMOP Common Data Model.
+#' Characterization and description of patterns of events (cohorts). against the OMOP Common Data Model.
 TreatmentPatternsModule <- R6::R6Class(
   classname = "TreatmentPatternsModule",
   inherit = StrategusModule,
@@ -218,22 +218,20 @@ TreatmentPatternsModule <- R6::R6Class(
     #'   \item{`"remove"`}{Censors pathways <`minCellCount` by removing them completely.}
     #'   \item{`"mean"`}{Censors pathways <`minCellCount` to the mean of all frequencies below `minCellCount`}
     #' }
-    createModuleSpecifications = function(
-      cohorts,
-      includeTreatments = "startDate",
-      indexDateOffset = 0,
-      minEraDuration = 0,
-      splitEventCohorts = NULL,
-      splitTime = NULL,
-      eraCollapseSize = 30,
-      combinationWindow = 30,
-      minPostCombinationDuration = 30,
-      filterTreatments = "First",
-      maxPathLength = 5,
-      ageWindow = 5,
-      minCellCount = 1,
-      censorType = "minCellCount"
-    ) {
+    createModuleSpecifications = function(cohorts,
+                                          includeTreatments = "startDate",
+                                          indexDateOffset = 0,
+                                          minEraDuration = 0,
+                                          splitEventCohorts = NULL,
+                                          splitTime = NULL,
+                                          eraCollapseSize = 30,
+                                          combinationWindow = 30,
+                                          minPostCombinationDuration = 30,
+                                          filterTreatments = "First",
+                                          maxPathLength = 5,
+                                          ageWindow = 5,
+                                          minCellCount = 1,
+                                          censorType = "minCellCount") {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         if (name == "cohorts") {

@@ -15,8 +15,10 @@ appendTreatmentPatternsCohorts <- function(cohortDefinitionSet = CohortGenerator
   cohortJsonFiles <- list.files(
     system.file(
       package = "TreatmentPatterns",
-      "exampleCohorts"),
-    full.names = TRUE)
+      "exampleCohorts"
+    ),
+    full.names = TRUE
+  )
 
   # NOTE: If this function is called with a non-empty
   # cohortDefinitionSet then we want to append the new cohorts
@@ -26,13 +28,15 @@ appendTreatmentPatternsCohorts <- function(cohortDefinitionSet = CohortGenerator
     cohortJsonFileName <- cohortJsonFiles[i]
     cohortName <- tools::file_path_sans_ext(basename(cohortJsonFileName))
     cohortJson <- readChar(cohortJsonFileName, file.info(
-      cohortJsonFileName)$size)
+      cohortJsonFileName
+    )$size)
 
     cohortExpression <- CirceR::cohortExpressionFromJson(cohortJson)
 
     cohortSql <- CirceR::buildCohortQuery(
       cohortExpression,
-      options = CirceR::createGenerateOptions(generateStats = FALSE))
+      options = CirceR::createGenerateOptions(generateStats = FALSE)
+    )
     cohortDefinitionSet <- rbind(
       cohortDefinitionSet,
       data.frame(
@@ -40,7 +44,9 @@ appendTreatmentPatternsCohorts <- function(cohortDefinitionSet = CohortGenerator
         cohortName = cohortName,
         sql = cohortSql,
         json = cohortJson,
-        stringsAsFactors = FALSE))
+        stringsAsFactors = FALSE
+      )
+    )
   }
 
   return(cohortDefinitionSet)
@@ -79,12 +85,14 @@ generateCohortTable <- function() {
     cohortsToCreate <- appendTreatmentPatternsCohorts()
 
     cohortTableNames <- CohortGenerator::getCohortTableNames(
-      cohortTable = cohortTableName)
+      cohortTable = cohortTableName
+    )
 
     CohortGenerator::createCohortTables(
       connectionDetails = connectionDetails,
       cohortDatabaseSchema = resultSchema,
-      cohortTableNames = cohortTableNames)
+      cohortTableNames = cohortTableNames
+    )
 
     # Generate the cohorts
     cohortsGenerated <- CohortGenerator::generateCohortSet(
@@ -92,7 +100,8 @@ generateCohortTable <- function() {
       cdmDatabaseSchema = cdmSchema,
       cohortDatabaseSchema = resultSchema,
       cohortTableNames = cohortTableNames,
-      cohortDefinitionSet = cohortsToCreate)
+      cohortDefinitionSet = cohortsToCreate
+    )
 
     cohorts <- getTreatmentPatternsCohorts(cohortsToCreate)
 
