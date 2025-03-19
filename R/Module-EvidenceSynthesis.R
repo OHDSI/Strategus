@@ -720,35 +720,14 @@ EvidenceSynthesisModule <- R6::R6Class(
         mutate(nDatabases = nDatabases)
       return(estimate)
     },
-    .hasUnblindForEvidenceSynthesisColumn = function(connection, databaseSchema, table) {
-      row <- DatabaseConnector::renderTranslateQuerySql(
-        connection = connection,
-        sql = "SELECT TOP 1 * FROM @database_schema.@table;",
-        database_schema = databaseSchema,
-        table = table,
-        snakeCaseToCamelCase = TRUE
-      )
-      return("unlindForEvidenceSynthesis" %in% colnames(row))
-    },
     .getPerDatabaseEstimates = function(connection, databaseSchema, evidenceSynthesisSource) {
       if (evidenceSynthesisSource$sourceMethod == "CohortMethod") {
         key <- c("targetId", "comparatorId", "outcomeId")
         databaseIds <- evidenceSynthesisSource$databaseIds
         analysisIds <- evidenceSynthesisSource$analysisIds
-        if (private$.hasUnblindForEvidenceSynthesisColumn(connection, databaseSchema, "cm_diagnostics_summary")) {
-          unblindColumn <- "unblind_for_evidence_synthesis"
-        } else {
-          unblindColumn <- "unblind"
-        }
-        # For backwards compatibility, when CohortMethod did not generate diagnostics
-        # for negative controls: if negative control (outcome_of_interest = 0) then
-        # still unblind.
         sql <- "SELECT cm_result.*,
         mdrr,
-        CASE
-          WHEN @unblind_column IS NULL THEN 1 - outcome_of_interest
-          ELSE @unblind_column
-        END AS unblind
+        unblind_for_evidence_synthesis AS unblind
       FROM @database_schema.cm_result
       INNER JOIN @database_schema.cm_target_comparator_outcome
         ON cm_result.target_id = cm_target_comparator_outcome.target_id
@@ -768,7 +747,6 @@ EvidenceSynthesisModule <- R6::R6Class(
           connection = connection,
           sql = sql,
           database_schema = databaseSchema,
-          unblind_column = unblindColumn,
           database_ids = if (is.null(databaseIds)) "" else private$.quoteSql(databaseIds),
           analysis_ids = if (is.null(analysisIds)) "" else analysisIds,
           snakeCaseToCamelCase = TRUE
@@ -841,20 +819,12 @@ EvidenceSynthesisModule <- R6::R6Class(
         key <- c("exposureId", "nestingCohortId", "outcomeId", "exposuresOutcomeSetId", "covariateId")
         databaseIds <- evidenceSynthesisSource$databaseIds
         analysisIds <- evidenceSynthesisSource$analysisIds
-        if (private$.hasUnblindForEvidenceSynthesisColumn(connection, databaseSchema, "sccs_diagnostics_summary")) {
-          unblindColumn <- "unblind_for_evidence_synthesis"
-        } else {
-          unblindColumn <- "unblind"
-        }
         sql <- "SELECT sccs_result.*,
         sccs_covariate.era_id AS exposure_id,
         outcome_id,
         nesting_cohort_id,
         mdrr,
-        CASE
-          WHEN @unblind_column IS NULL THEN CASE WHEN true_effect_size IS NULL THEN 0 ELSE 1 END
-          ELSE @unblind_column
-        END AS unblind
+        unblind_for_evidence_synthesis AS unblind
       FROM @database_schema.sccs_result
       INNER JOIN @database_schema.sccs_exposures_outcome_set
         ON sccs_result.exposures_outcome_set_id = sccs_exposures_outcome_set.exposures_outcome_set_id
@@ -879,7 +849,6 @@ EvidenceSynthesisModule <- R6::R6Class(
           connection = connection,
           sql = sql,
           database_schema = databaseSchema,
-          unblind_column = unblindColumn,
           database_ids = if (is.null(databaseIds)) "" else private$.quoteSql(databaseIds),
           analysis_ids = if (is.null(analysisIds)) "" else analysisIds,
           snakeCaseToCamelCase = TRUE
