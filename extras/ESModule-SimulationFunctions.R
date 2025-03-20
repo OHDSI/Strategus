@@ -33,7 +33,7 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
     analysisId = analysisId,
     databaseId = seq_len(nSites),
     mdrr = 2,
-    unblind = runif(nSites) < 0.9
+    unblindForEvidenceSynthesis = runif(nSites) < 0.9
   )
 
   populations <- EvidenceSynthesis::simulatePopulations(simulationSettings)
@@ -238,7 +238,7 @@ simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1
     analysisId = !!analysisId,
     databaseId = seq_len(nSites),
     mdrr = 2,
-    unblind = runif(nSites) < 0.9
+    unblindForEvidenceSynthesis = runif(nSites) < 0.9
   )
   DatabaseConnector::insertTable(
     connection = connection,
