@@ -244,7 +244,7 @@ test_that("Include only allowed SCCS estimates in meta-analysis", {
       sccs_diagnostics_summary.covariate_id,
       sccs_diagnostics_summary.analysis_id,
       sccs_diagnostics_summary.database_id,
-      unblind AS include_1
+      unblind_for_evidence_synthesis AS include_1
     FROM main.sccs_exposure
     INNER JOIN main.sccs_diagnostics_summary
       ON sccs_exposure.exposures_outcome_set_id = sccs_diagnostics_summary.exposures_outcome_set_id
