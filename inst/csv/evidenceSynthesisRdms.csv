@@ -31,8 +31,8 @@ es_cm_result,log_rr,float,No,No,No,The log of the relative risk.
 es_cm_result,se_log_rr,float,No,No,No,The standard error of the log of the relative risk.
 es_cm_result,target_subjects,int,No,No,Yes,The number of subject in the target cohort.
 es_cm_result,comparator_subjects,int,No,No,Yes,The number of subject in the comparator cohort.
-es_cm_result,target_days,int,No,No,No,The number of days observed in the target cohort.
-es_cm_result,comparator_days,int,No,No,No,The number of days observed in the comparator cohort.
+es_cm_result,target_days,bigint,No,No,No,The number of days observed in the target cohort.
+es_cm_result,comparator_days,bigint,No,No,No,The number of days observed in the comparator cohort.
 es_cm_result,target_outcomes,int,No,No,Yes,The number of outcomes observed in the target cohort.
 es_cm_result,comparator_outcomes,int,No,No,Yes,The number of outcomes observed in the comparator cohort.
 es_cm_result,n_databases,int,Yes,No,No,The number of databases that contributed to the meta-analytic estimate.
@@ -69,10 +69,10 @@ es_sccs_result,outcome_subjects,int,Yes,No,Yes,The number of subjects with at le
 es_sccs_result,outcome_events,int,Yes,No,Yes,The number of outcome events.
 es_sccs_result,outcome_observation_periods,int,Yes,No,Yes,The number of observation periods containing at least one outcome.
 es_sccs_result,covariate_subjects,int,Yes,No,Yes,The number of subjects having the covariate.
-es_sccs_result,covariate_days,int,Yes,No,Yes,The total covariate time in days.
+es_sccs_result,covariate_days,bigint,Yes,No,Yes,The total covariate time in days.
 es_sccs_result,covariate_eras,int,Yes,No,Yes,The number of continuous eras of the covariate.
 es_sccs_result,covariate_outcomes,int,Yes,No,Yes,The number of outcomes observed during the covariate time.
-es_sccs_result,observed_days,int,Yes,No,Yes,The number of days subjects were observed.
+es_sccs_result,observed_days,bigint,Yes,No,Yes,The number of days subjects were observed.
 es_sccs_result,n_databases,int,Yes,No,No,The number of databases that contributed to the meta-analytic estimate.
 es_sccs_result,log_rr,float,No,No,No,The log of the relative risk.
 es_sccs_result,se_log_rr,float,No,No,No,The standard error of the log of the relative risk.
