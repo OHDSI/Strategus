@@ -76,6 +76,8 @@ jobs:
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "22.04"))')
+          sudo apt-get update
+          sudo apt-get upgrade
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
