@@ -68,11 +68,15 @@ jobs:
         run: |
           sudo apt-get install -y libssh-dev
           Rscript -e 'install.packages(c("remotes", "Rcpp"))'
-          Rscript -e 'install.packages("RJSONIO", type = "binary")'
           while read -r cmd
           do
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "22.04"))')
+          sudo apt update -qq
+          sudo apt install --no-install-recommends software-properties-common dirmngr
+          wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+          sudo add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+          sudo apt install --no-install-recommends r-base
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
