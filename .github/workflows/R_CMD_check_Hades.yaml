@@ -67,6 +67,9 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y libssh-dev
+          sudo apt-get install r-base
+          sudo apt-get install r-base-dev
+          sudo apt-get install libjson-c-dev
           sudo apt-get install gfortran
           Rscript -e 'install.packages(c("remotes", "Rcpp"))'
           while read -r cmd
