@@ -214,7 +214,7 @@ addSelfControlledCaseSeriesModuleSpecifications <- function(analysisSpecificatio
 #' Add Treatment Patterns Module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
-#' @param moduleSpecifications Created by the "tbd"
+#' @param moduleSpecifications Created by the \href{../reference/TreatmentPatternsModule.html#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}
 #'
 #' @return
 #' Returns the `analysisSpecifications` object with the module specifications added

@@ -13,7 +13,7 @@ addTreatmentPatternsModuleSpecifications(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{moduleSpecifications}{Created by the "tbd"}
+\item{moduleSpecifications}{Created by the \href{../reference/TreatmentPatternsModule.html#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}}
 }
 \value{
 Returns the \code{analysisSpecifications} object with the module specifications added

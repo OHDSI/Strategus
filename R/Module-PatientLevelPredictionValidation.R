@@ -1,5 +1,5 @@
 # PatientLevelPredictionValidationModule -------------
-#' @title Module for performing validation of patient-level prediction models
+#' @title Validation of patient-level prediction models with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}
 #' @export
 #' @description
 #' Module for performing patient-level prediction model validation for models
@@ -26,13 +26,13 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       private$.message("Executing PLP Validation")
 
       jobContext <- private$jobContext
-      #cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
+      # cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
-      #library(PatientLevelPrediction)
+      # library(PatientLevelPrediction)
       private$.message("Validating inputs")
-      inherits(jobContext, 'list')
+      inherits(jobContext, "list")
 
       if (is.null(jobContext$settings)) {
         stop("Analysis settings not found in job context")
@@ -80,21 +80,21 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
         databaseDetails = databaseDetails,
         logSettings = PatientLevelPrediction::createLogSettings(verbosity = jobContext$settings$logLevel, logName = "validatePLP"),
         outputFolder = workFolder
-        #,cohortDefinitions = cohortDefinitionSet
+        # ,cohortDefinitions = cohortDefinitionSet
       )
 
       private$.message("Exporting results to csv")
       sqliteConnectionDetails <- DatabaseConnector::createConnectionDetails(
-        dbms = 'sqlite',
+        dbms = "sqlite",
         server = file.path(workFolder, "sqlite", "databaseFile.sqlite")
       )
 
       PatientLevelPrediction::extractDatabaseToCsv(
         connectionDetails = sqliteConnectionDetails,
         databaseSchemaSettings = PatientLevelPrediction::createDatabaseSchemaSettings(
-          resultSchema = 'main',
-          tablePrefix = '',
-          targetDialect = 'sqlite',
+          resultSchema = "main",
+          tablePrefix = "",
+          targetDialect = "sqlite",
           tempEmulationSchema = NULL
         ),
         csvFolder = resultsFolder,
@@ -148,27 +148,27 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
     #' @param validationList A list of validation designs from `PatientLevelPrediction::createValidationDesign`
     #' @param logLevel The logging level while executing the model validation.
     createModuleSpecifications = function(
-    validationList = list(
-      PatientLevelPrediction::createValidationDesign(
-        plpModelList = list(file.path('location_to_model')),
-        targetId = 1,
-        outcomeId = 3,
-        restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
-        populationSettings = NULL,
-        recalibrate = "weakRecalibration",
-        runCovariateSummary = TRUE
-      ),
-      PatientLevelPrediction::createValidationDesign(
-        plpModelList = list(file.path('location_to_model')),
-        targetId = 4,
-        outcomeId = 3,
-        restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
-        populationSettings = NULL,
-        recalibrate = "weakRecalibration",
-        runCovariateSummary = TRUE
-      )
-    ),
-    logLevel = "INFO") {
+        validationList = list(
+          PatientLevelPrediction::createValidationDesign(
+            plpModelList = list(file.path("location_to_model")),
+            targetId = 1,
+            outcomeId = 3,
+            restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+            populationSettings = NULL,
+            recalibrate = "weakRecalibration",
+            runCovariateSummary = TRUE
+          ),
+          PatientLevelPrediction::createValidationDesign(
+            plpModelList = list(file.path("location_to_model")),
+            targetId = 4,
+            outcomeId = 3,
+            restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+            populationSettings = NULL,
+            recalibrate = "weakRecalibration",
+            runCovariateSummary = TRUE
+          )
+        ),
+        logLevel = "INFO") {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
@@ -196,12 +196,11 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
       }
 
       for (i in 1:length(validationList)) {
-
         if (inherits(validationList[[i]]$plpModelList, "plpModel")) {
           validationList[[i]]$plpModelList <- list(validationList[[i]]$plpModelList)
         }
 
-        for(j in 1:length(validationList[[i]]$plpModelList)){
+        for (j in 1:length(validationList[[i]]$plpModelList)) {
           covariateSettings <- validationList[[i]]$plpModelList[[j]]$modelDesign$covariateSettings
 
           if (inherits(covariateSettings, "covariateSettings")) {
@@ -223,22 +222,21 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
 
       return(validationList)
     },
-    .updatePlpModelList = function(validationList){
-
-      if(inherits(validationList,"validationDesign")){
+    .updatePlpModelList = function(validationList) {
+      if (inherits(validationList, "validationDesign")) {
         validationList <- list(validationList)
       }
 
-      for(i in 1:length(validationList)){
-        if(inherits(validationList[[i]]$plpModelList, "plpModel")){
+      for (i in 1:length(validationList)) {
+        if (inherits(validationList[[i]]$plpModelList, "plpModel")) {
           validationList[[i]]$plpModelList <- list(validationList[[i]]$plpModelList)
         }
 
-        for(j in 1:length(validationList[[i]]$plpModelList)){
+        for (j in 1:length(validationList[[i]]$plpModelList)) {
           # code to convert the package type to a file path for the model
           # in the package
-          if(!is.null(validationList[[i]]$plpModelList[[j]]$type)){
-            if(validationList[[i]]$plpModelList[[j]]$type == 'package'){
+          if (!is.null(validationList[[i]]$plpModelList[[j]]$type)) {
+            if (validationList[[i]]$plpModelList[[j]]$type == "package") {
               validationList[[i]]$plpModelList[[j]] <- PatientLevelPrediction::loadPlpModel(system.file(
                 validationList[[i]]$plpModelList[[j]]$modelFolder,
                 package = validationList[[i]]$plpModelList[[j]]$package
@@ -248,7 +246,6 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
 
           # add other type changes here
         }
-
       }
 
       return(validationList)

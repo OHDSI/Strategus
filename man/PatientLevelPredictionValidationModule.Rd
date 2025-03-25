@@ -2,7 +2,7 @@
 % Please edit documentation in R/Module-PatientLevelPredictionValidation.R
 \name{PatientLevelPredictionValidationModule}
 \alias{PatientLevelPredictionValidationModule}
-\title{Module for performing validation of patient-level prediction models}
+\title{Validation of patient-level prediction models with the \href{https://ohdsi.github.io/PatientLevelPrediction/}{HADES PatientLevelPrediction Package}}
 \description{
 Module for performing patient-level prediction model validation for models
 built using the PatientLevelPrediction package.

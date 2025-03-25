@@ -65,6 +65,9 @@ rmarkdown::render("vignettes/WorkingWithResults.Rmd",
                                           number_sections = TRUE))
 unlink("inst/doc/WorkingWithResults.tex")
 
+# Run pkgdown to verify there are no site build errors ---------
+pkgdown::build_site()
+
 # Produce a study analysis specification for testing -----------
 library(Strategus)
 source("tests/testthat/helper-TreatmentPatterns.R") # Needed for creating settings

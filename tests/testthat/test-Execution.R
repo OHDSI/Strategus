@@ -339,8 +339,8 @@ test_that("Stop if error occurs during cohort generation", {
   # Add an ill-formed Circe expression to break the cohort generation process
   cdIndex <- which(sapply(analysisSpecifications$sharedResources, function(x) class(x)[1]) == "CohortDefinitionSharedResources")
   cdLength <- length(analysisSpecifications$sharedResources[[cdIndex]]$cohortDefinitions)
-  analysisSpecifications$sharedResources[[cdIndex]]$cohortDefinitions[[cdLength+1]] <- list(
-    cohortId = cdLength+1,
+  analysisSpecifications$sharedResources[[cdIndex]]$cohortDefinitions[[cdLength + 1]] <- list(
+    cohortId = cdLength + 1,
     cohortName = "Failure",
     cohortDefinition = "{}"
   )

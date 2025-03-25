@@ -27,7 +27,9 @@ reference:
       - addEvidenceSynthesisModuleSpecifications
       - addModuleSpecifications
       - addPatientLevelPredictionModuleSpecifications
+      - addPatientLevelPredictionValidationModuleSpecifications
       - addSelfControlledCaseSeriesModuleSpecifications
+      - addTreatmentPatternsModuleSpecifications
       - addSharedResources
       - createEmptyAnalysisSpecificiations
 
@@ -53,7 +55,9 @@ reference:
       - CohortIncidenceModule
       - CohortMethodModule
       - PatientLevelPredictionModule
+      - PatientLevelPredictionValidationModule
       - SelfControlledCaseSeriesModule
+      - TreatmentPatternsModule
   - subtitle: "Results HADES Modules"
     desc: >
       These modules are designed to run against results that are produced
