@@ -153,6 +153,159 @@ PatientLevelPredictionModule <- R6::R6Class(
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
+    },
+    #' @description Summarize the uploaded results for the module
+    #' @template resultsConnectionDetails
+    #' @template resultsDataModelSettings
+    summarizeResults = function(resultsConnectionDetails, resultsDataModelSettings) {
+      # initialize checks
+
+      schema <- resultsDataModelSettings$resultsDatabaseSchema
+      prefix <- self$tablePrefix
+
+      checks <- c()
+
+      # connect to resultsConnectionDetails
+      connectionHandler <- ResultModelManager::ConnectionHandler$new(
+        connectionDetails = resultsConnectionDetails
+      )
+
+      # get cohort count
+      result <- connectionHandler$queryDb(
+        "select count(distinct cohort_id) as N from @schema.@prefixcohorts",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'cohorts',database = '-', check = 'count count', value = result$n))
+
+      # get database count
+      result <- connectionHandler$queryDb(
+        "select count(distinct database_id) as N from @schema.@prefixdatabase_meta_data",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'database_meta_data',database = '-', check = 'database count', value = result$n))
+
+      # get tar count
+      result <- connectionHandler$queryDb(
+        "select count(distinct tar_id) as N from @schema.@prefixtars",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'tars',database = '-', check = 'tar count', value = result$n))
+
+      # get population count
+      result <- connectionHandler$queryDb(
+        "select count(distinct population_setting_id) as N from @schema.@prefixpopulation_settings",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'population_settings',database = '-', check = 'population count', value = result$n))
+
+      # get covariate count
+      result <- connectionHandler$queryDb(
+        "select count(distinct covariate_setting_id) as N from @schema.@prefixcovariate_settings",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'covariate_settings',database = '-', check = 'covariate count', value = result$n))
+
+      # get model count
+      result <- connectionHandler$queryDb(
+        "select count(distinct model_setting_id) as N from @schema.@prefixmodel_settings",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'model_settings',database = '-', check = 'model count', value = result$n))
+
+      # get split count
+      result <- connectionHandler$queryDb(
+        "select count(distinct split_setting_id) as N from @schema.@prefixsplit_settings",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'split_settings',database = '-', check = 'split count', value = result$n))
+
+      # get plp_data_settings count
+      result <- connectionHandler$queryDb(
+        "select count(distinct plp_data_setting_id) as N from @schema.@prefixplp_data_settings",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'plp_data_settings',database = '-', check = 'data setting count', value = result$n))
+
+      # get tidy_covariates_setting count
+      result <- connectionHandler$queryDb(
+        "select count(distinct tidy_covariates_setting_id) as N from @schema.@prefixtidy_covariates_settings",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'tidy_covariates_settings',database = '-', check = 'tidy covariates count', value = result$n))
+
+      # get sample_settings count
+      result <- connectionHandler$queryDb(
+        "select count(distinct sample_setting_id) as N from @schema.@prefixsample_settings",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'sample_settings',database = '-', check = 'sample setting count', value = result$n))
+
+
+      # get model_designs count
+      result <- connectionHandler$queryDb(
+        "select count(distinct model_design_id) as N from @schema.@prefixmodel_designs",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'model_designs',database = '-', check = 'model design count', value = result$n))
+
+      # get diagnostic count of cohorts per database
+      result <- connectionHandler$queryDb(
+        "select
+      dd.database_meta_data_id as database_id,
+      count(distinct md.target_id) as t_n,
+      count(distinct md.outcome_id) as o_n
+      from @schema.@prefixdiagnostics d
+      inner join
+      @schema.@prefixmodel_designs md
+      on
+      md.model_design_id = d.model_design_id
+      inner join
+      @schema.@prefixdatabase_details dd
+      on d.database_id = dd.database_id
+      group by dd.database_id;",
+        schema = schema,
+        prefix = prefix
+      )
+      if(nrow(result)>0){
+        checks <- rbind(checks, data.frame(table = 'diagnostic',database = result$databaseId, check = 'target count', value = result$tN))
+        checks <- rbind(checks, data.frame(table = 'diagnostic',database = result$databaseId, check = 'outcome count', value = result$oN))
+      }
+
+
+      # get performance count of cohorts per database
+      result <- connectionHandler$queryDb(
+        "select
+      dd.database_meta_data_id as database_id,
+      count(distinct p.target_id) as t_n,
+      count(distinct p.outcome_id) as o_n
+      from @schema.@prefixperformances p
+      inner join
+      @schema.@prefixdatabase_details dd
+      on p.development_database_id = dd.database_id
+      group by dd.database_id;",
+        schema = schema,
+        prefix = prefix
+      )
+      if(nrow(result)>0){
+        checks <- rbind(checks, data.frame(table = 'performance',database = result$databaseId, check = 'target count', value = result$tN))
+        checks <- rbind(checks, data.frame(table = 'performance',database = result$databaseId, check = 'outcome count', value = result$oN))
+      }
+
+      message('PatientLevelPrediction uploaded result summary:')
+      # print out the checksprint(checks)
+
+      return(checks)
     }
   ),
   private = list(

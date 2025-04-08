@@ -263,6 +263,89 @@ CharacterizationModule <- R6::R6Class(
         )
       )
       return(specifications)
+    },
+    #' @description Summarize the uploaded results for the module
+    #' @template resultsConnectionDetails
+    #' @template resultsDataModelSettings
+    summarizeResults = function(resultsConnectionDetails, resultsDataModelSettings) {
+      # initialize checks
+
+      schema <- resultsDataModelSettings$resultsDatabaseSchema
+      prefix <- self$tablePrefix
+
+      checks <- c()
+
+      # connect to resultsConnectionDetails
+      connectionHandler <- ResultModelManager::ConnectionHandler$new(
+        connectionDetails = resultsConnectionDetails
+      )
+
+      # get time to event database count
+      result <- connectionHandler$queryDb(
+        "select count(distinct database_id) as N from @schema.@prefixtime_to_event",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'time_to_event',database = '-', check = 'database count', value = result$n))
+
+      # get dechall-rechall database count
+      result <- connectionHandler$queryDb(
+        "select count(distinct database_id) as N from @schema.@prefixdechallenge_rechallenge",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'dechallenge_rechallenge',database = '-', check = 'database count', value = result$n))
+
+      # get covariates database count
+      result <- connectionHandler$queryDb(
+        "select count(distinct database_id) as N from @schema.@prefixcohort_counts",
+        schema = schema,
+        prefix = prefix
+      )
+      checks <- rbind(checks, data.frame(table = 'covariates',database = '-', check = 'database count', value = result$n))
+
+      # check target and outcomes cohorts per database
+      result <- connectionHandler$queryDb(
+        'select database_id,
+         count(distinct target_cohort_definition_id) as t_n,
+         count(distinct outcome_cohort_definition_id) as o_n
+
+         from @schema.@prefixtime_to_event
+         group by database_id;',
+        schema = schema,
+        prefix = prefix)
+      checks <- rbind(checks, data.frame(table = 'time_to_event',database = result$databaseId, check = 'target count', value = result$tN))
+      checks <- rbind(checks, data.frame(table = 'time_to_event',database = result$databaseId, check = 'outcome count', value = result$oN))
+
+      # check target and outcomes cohorts per database
+      result <- connectionHandler$queryDb(
+        'select database_id,
+         count(distinct target_cohort_definition_id) as t_n,
+         count(distinct outcome_cohort_definition_id) as o_n
+
+         from @schema.@prefixdechallenge_rechallenge
+         group by database_id;',
+        schema = schema,
+        prefix = prefix)
+      checks <- rbind(checks, data.frame(table = 'dechallenge_rechallenge',database = result$databaseId, check = 'target count', value = result$tN))
+      checks <- rbind(checks, data.frame(table = 'dechallenge_rechallenge',database = result$databaseId, check = 'outcome count', value = result$oN))
+
+      # check target and outcomes cohorts per database
+      result <- connectionHandler$queryDb(
+        'select database_id,
+         count(distinct target_cohort_id) as t_n,
+         count(distinct outcome_cohort_id) as o_n
+         from @schema.@prefixcohort_counts
+         group by database_id;',
+        schema = schema,
+        prefix = prefix)
+      checks <- rbind(checks, data.frame(table = 'covariates',database = result$databaseId, check = 'target count', value = result$tN))
+      checks <- rbind(checks, data.frame(table = 'covariates',database = result$databaseId, check = 'outcome count', value = result$oN))
+
+      message('Characterization uploaded result summary:')
+      # print out the checksprint(checks)
+
+      return(checks)
     }
   ),
   private = list(
