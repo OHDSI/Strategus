@@ -129,8 +129,6 @@ CohortDiagnosticsModule <- R6::R6Class(
     #' @param runVisitContext             Generate and export index-date visit context?
     #' @param runBreakdownIndexEvents     Generate and export the breakdown of index events?
     #' @param runIncidenceRate            Generate and export the cohort incidence  rates?
-    #' @param runCohortRelationship       Generate and export the cohort relationship? Cohort relationship checks the temporal
-    #'                                    relationship between two or more cohorts.
     #' @param runTemporalCohortCharacterization   Generate and export the temporal cohort characterization?
     #'                                            Only records with values greater than 0.001 are returned.
     #' @param temporalCovariateSettings   Either an object of type \code{covariateSettings} as created using one of
@@ -172,7 +170,7 @@ CohortDiagnosticsModule <- R6::R6Class(
   ),
   private = list(
     .getDefaultCovariateSettings = function() {
-      covariateSettings <- CohortDiagnostics::getDefaultCovariateSettings()
+      CohortDiagnostics::getDefaultCovariateSettings()
     },
     .getResultsDataModelSpecification = function() {
       resultsDataModelSpecification <- CohortGenerator::readCsv(

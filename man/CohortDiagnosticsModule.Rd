@@ -181,7 +181,6 @@ Creates the CohortDiagnostics Module Specifications
   runVisitContext = TRUE,
   runBreakdownIndexEvents = TRUE,
   runIncidenceRate = TRUE,
-  runCohortRelationship = TRUE,
   runTemporalCohortCharacterization = TRUE,
   temporalCovariateSettings = private$.getDefaultCovariateSettings(),
   minCharacterizationMean = 0.01,
@@ -209,9 +208,6 @@ in the analysis specification}
 \item{\code{runBreakdownIndexEvents}}{Generate and export the breakdown of index events?}
 
 \item{\code{runIncidenceRate}}{Generate and export the cohort incidence  rates?}
-
-\item{\code{runCohortRelationship}}{Generate and export the cohort relationship? Cohort relationship checks the temporal
-relationship between two or more cohorts.}
 
 \item{\code{runTemporalCohortCharacterization}}{Generate and export the temporal cohort characterization?
 Only records with values greater than 0.001 are returned.}
