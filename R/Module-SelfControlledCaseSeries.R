@@ -161,6 +161,113 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
+    },
+    #' @description Partitions the module specifications into smaller jobs
+    #' @template analysisSpecifications
+    #' @param specificationFolder A directory where the partitioned jsons will be saved to
+    partitionModuleSpecifications = function(analysisSpecifications, specificationFolder) {
+      
+      moduleVector <- unlist(lapply(analysisSpecifications$moduleSpecifications, function(ms) ms$module))
+      selfInd <- which(moduleVector == self$moduleName)
+      if(length(selfInd) == 0){
+        message(paste0('No specification found for ',self$moduleName))
+        invisible(return(FALSE))
+      }
+      selfSpecification <- analysisSpecifications$moduleSpecifications[[selfInd]]
+      
+      
+      #outcomeId, nestingCohortId, exposure:exposureId/exposureIdRef/trueEffectSize
+      
+      # Split by nestingCohortId and exposureId or by outcomeId
+      
+      eoComponents <- .extractExposuresOutcomeComponents(selfSpecification$settings$exposuresOutcomeList)
+        
+      convertNulls <- function(x){
+        if(x == 'null'){
+          return(NULL)
+        }
+        return(as.double(x))
+      }
+      
+      # create partition list for each exposure and outcome
+      exposureOI <- unique(eoComponents$exposureId)
+      listOfEO <- list()
+      for(i in 1:length(exposureOI)){
+        subset <- eoComponents[eoComponents$exposureId== exposureOI[i],]
+        mainComps <- unique(subset[,c('outcomeId','nestingCohortId')])
+        
+        tempList <- list()
+        for(j in 1:nrow(mainComps)){
+          
+          ind <- which(subset$outcomeId == mainComps$outcomeId[j] & subset$nestingCohortId == mainComps$nestingCohortId[j])
+          
+          tempList[[j]] <- list(
+            outcomeId = mainComps$outcomeId[j],
+            nestingCohortId = convertNulls(mainComps$nestingCohortId[j]),
+            exposures = lapply(ind, function(k){
+              res <- list(
+                exposureId = subset$exposureId[k],
+                exposureIdRef = subset$exposureIdRef[k],
+                trueEffectSize = convertNulls(subset$trueEffectSize[k])
+              )
+              class(res) <- 'Exposure'
+              return(res)
+            }
+            )
+          )
+        }
+        listOfEO[[length(listOfEO) + 1]] <- tempList
+      }
+
+      
+      # create base setting with just shared resources and self spec
+      baseSettings <- list(
+        sharedResources = analysisSpecifications$sharedResources,
+        moduleSpecifications = list(selfSpecification)
+      )
+      
+      # now save each json spec 
+      if(!dir.exists(specificationFolder)){
+        dir.create(specificationFolder, recursive = T)
+      }
+      
+      for(i in 1:length(listOfEO)){
+        tempSettings <- baseSettings
+        tempSettings$moduleSpecifications[[1]]$settings$exposuresOutcomeList <- listOfEO[[i]]
+        
+        # save as spec_i.json - same name for each module but will be
+        # in a different folder
+        ParallelLogger::saveSettingsToJson(
+          object = tempSettings, 
+          fileName = file.path(specificationFolder, paste0('spec_',exposureOI[i],'.json'))
+        )
+      }
+      
+      # TODO: could return the parititioned modelDesigns or the list of tempSettings
+      #       or a status/message
+      invisible(return(TRUE))
+      
+      
     }
   )
 )
+
+
+.extractExposuresOutcomeComponents <- function(exposuresOutcomeList){
+  do.call('rbind', lapply(exposuresOutcomeList, function(eol){
+    merge(
+      data.frame(
+        outcomeId = eol$outcomeId,
+        nestingCohortId = ifelse(is.null(eol$nestingCohortId), 'null', eol$nestingCohortId)
+      ),
+      do.call('rbind', lapply(eol$exposures,
+                              function(x) data.frame(
+                                exposureId = x$exposureId,
+                                exposureIdRef = x$exposureIdRef,
+                                trueEffectSize = ifelse(is.null(x$trueEffectSize), 'null', x$trueEffectSize))
+      ))
+    )
+  }
+  ))
+}
+

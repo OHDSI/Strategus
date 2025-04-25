@@ -190,6 +190,64 @@ CohortMethodModule <- R6::R6Class(
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
+    },
+    #' @description Partitions the module specifications into smaller jobs
+    #' @template analysisSpecifications
+    #' @param specificationFolder A directory where the partitioned jsons will be saved to
+    partitionModuleSpecifications = function(analysisSpecifications, specificationFolder) {
+      
+      moduleVector <- unlist(lapply(analysisSpecifications$moduleSpecifications, function(ms) ms$module))
+      selfInd <- which(moduleVector == self$moduleName)
+      if(length(selfInd) == 0){
+        message(paste0('No specification found for ',self$moduleName))
+        invisible(return(FALSE))
+      }
+      selfSpecification <- analysisSpecifications$moduleSpecifications[[selfInd]]
+      
+      # selfSpecification$settings$targetComparatorOutcomesList
+      #                            cmAnalysisList
+      #                            refitPsForEveryOutcome
+      #                            refitPsForEveryStudyPopulation
+      #                            cmDiagnosticThresholds
+      
+      targetIds <- unlist(lapply(selfSpecification$settings$targetComparatorOutcomesList, function(tco) tco$targetId))
+
+      # split up selfSpecification$settings$targetComparatorOutcomesList 
+      
+      # for each uniqueTargetIds extract out the targetComparatorOutcomesList
+      # for the targetId
+      listOfTCO <- lapply(
+        X = unique(targetIds), 
+        FUN = function(tId){
+          selfSpecification$settings$targetComparatorOutcomesList[which(tId == targetIds)]
+        })
+      
+      # create base setting with just shared resources and self spec
+      baseSettings <- list(
+        sharedResources = analysisSpecifications$sharedResources,
+        moduleSpecifications = list(selfSpecification)
+      )
+      
+      # now save each json spec 
+      if(!dir.exists(specificationFolder)){
+        dir.create(specificationFolder, recursive = T)
+      }
+      
+      for(i in 1:length(listOfTCO)){
+        tempSettings <- baseSettings
+        tempSettings$moduleSpecifications[[1]]$settings$targetComparatorOutcomesList <- listOfTCO[[i]]
+        
+        # save as spec_i.json - same name for each module but will be
+        # in a different folder
+        ParallelLogger::saveSettingsToJson(
+          object = tempSettings, 
+          fileName = file.path(specificationFolder, paste0('spec_',unique(targetIds)[i],'.json'))
+        )
+      }
+      
+      # TODO: could return the parititioned modelDesigns or the list of tempSettings
+      #       or a status/message
+      invisible(return(TRUE))
     }
   )
 )
