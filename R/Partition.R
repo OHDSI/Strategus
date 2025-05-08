@@ -9,35 +9,40 @@
 #'
 #' @export
 partitionModule <- function(analysisSpecifications, specificationFolder) {
-  
+
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(specificationFolder, "character" , add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
-  
+
+  modulePartitionFiles <- list()
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
-    modulePartitionStatus <- .partitionModule(
+    modulePartitionFiles[[i]] <- .partitionModule(
       moduleName = moduleName,
       analysisSpecifications = analysisSpecifications,
       specificationFolder = specificationFolder
     )
   }
+
+  names(modulePartitionFiles) <- unlist(lapply(analysisSpecifications$moduleSpecifications, function(x) x$module))
+
+  return(modulePartitionFiles)
 }
 
 .partitionModule <- function(moduleName, analysisSpecifications, specificationFolder) {
-  
+
   moduleObject <- get(moduleName)$new()
-  
+
   # save partitioned jsons per module into specificationFolder with each
   # moduleName as a subfolder and then spec_i.jsons in those
   partitionResult <- moduleObject$partitionModuleSpecifications(
-    analysisSpecifications = analysisSpecifications, 
+    analysisSpecifications = analysisSpecifications,
     specificationFolder = file.path(specificationFolder, moduleName)
   )
-  
+
   #if (executionResult$status == "FAILED") {
   #  .printErrorMessage(executionResult$error$message)
   #}
-  invisible(return(TRUE))
+  invisible(return(partitionResult))
 }

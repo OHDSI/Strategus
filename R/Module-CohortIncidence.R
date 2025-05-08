@@ -180,7 +180,7 @@ CohortIncidenceModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @param specificationFolder A directory where the partitioned jsons will be saved to
     partitionModuleSpecifications = function(analysisSpecifications, specificationFolder) {
-      
+
       moduleVector <- unlist(lapply(analysisSpecifications$moduleSpecifications, function(ms) ms$module))
       selfInd <- moduleVector == self$moduleName
       if(sum(selfInd) == 0){
@@ -188,30 +188,34 @@ CohortIncidenceModule <- R6::R6Class(
         invisible(return(FALSE))
       }
       selfSpecification <- analysisSpecifications$moduleSpecifications[selfInd]
-      
+
+      specHashId <- digest::digest2int(
+        x = as.character(ParallelLogger::convertSettingsToJson(selfSpecification))
+      )
+
       # save the CohortGenerator as it is because we do not need to split
       # create base setting with just shared resources and self spec
       baseSettings <- list(
         sharedResources = analysisSpecifications$sharedResources,
         moduleSpecifications = selfSpecification
       )
-      
-      # now save the cohort generator json spec 
+
+      # now save the cohort generator json spec
       if(!dir.exists(specificationFolder)){
         dir.create(specificationFolder, recursive = T)
       }
-      
+
       # save as spec_1.json - same name for each module but will be
       # in a different folder
       ParallelLogger::saveSettingsToJson(
-        object = baseSettings, 
-        fileName = file.path(specificationFolder, paste0('spec_1.json'))
+        object = baseSettings,
+        fileName = file.path(specificationFolder, paste0('spec_',specHashId,'.json'))
       )
-      
-      
+
+
       # TODO: could return the parititioned modelDesigns or the list of tempSettings
       #       or a status/message
-      invisible(return(TRUE))
+      invisible(return(file.path(specificationFolder, paste0('spec_',specHashId,'.json'))))
     }
   ),
   private = list(

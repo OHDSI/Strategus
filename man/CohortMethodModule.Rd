@@ -20,6 +20,7 @@ the OMOP Common Data Model
 \item \href{#method-CohortMethodModule-uploadResults}{\code{CohortMethodModule$uploadResults()}}
 \item \href{#method-CohortMethodModule-createModuleSpecifications}{\code{CohortMethodModule$createModuleSpecifications()}}
 \item \href{#method-CohortMethodModule-validateModuleSpecifications}{\code{CohortMethodModule$validateModuleSpecifications()}}
+\item \href{#method-CohortMethodModule-partitionModuleSpecifications}{\code{CohortMethodModule$partitionModuleSpecifications()}}
 \item \href{#method-CohortMethodModule-clone}{\code{CohortMethodModule$clone()}}
 }
 }
@@ -147,6 +148,9 @@ is an object of class \code{connectionDetails} as created by the
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
 \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 }
 \if{html}{\out{</div>}}
@@ -230,6 +234,32 @@ Validate the module specifications
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{moduleSpecifications}}{The CohortMethod module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortMethodModule-partitionModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortMethodModule-partitionModuleSpecifications}{}}}
+\subsection{Method \code{partitionModuleSpecifications()}}{
+Partitions the module specifications into smaller jobs
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortMethodModule$partitionModuleSpecifications(
+  analysisSpecifications,
+  specificationFolder
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{specificationFolder}}{A directory where the partitioned jsons will be saved to}
 }
 \if{html}{\out{</div>}}
 }

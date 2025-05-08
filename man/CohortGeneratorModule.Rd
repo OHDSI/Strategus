@@ -36,6 +36,7 @@ analysis specification}
 \item \href{#method-CohortGeneratorModule-validateModuleSpecifications}{\code{CohortGeneratorModule$validateModuleSpecifications()}}
 \item \href{#method-CohortGeneratorModule-validateCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$validateCohortSharedResourceSpecifications()}}
 \item \href{#method-CohortGeneratorModule-validateNegativeControlOutcomeCohortSharedResourceSpecifications}{\code{CohortGeneratorModule$validateNegativeControlOutcomeCohortSharedResourceSpecifications()}}
+\item \href{#method-CohortGeneratorModule-partitionModuleSpecifications}{\code{CohortGeneratorModule$partitionModuleSpecifications()}}
 \item \href{#method-CohortGeneratorModule-clone}{\code{CohortGeneratorModule$clone()}}
 }
 }
@@ -75,6 +76,9 @@ Generates the cohorts
 \describe{
 \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
@@ -163,6 +167,9 @@ is an object of class \code{connectionDetails} as created by the
 \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
@@ -294,6 +301,35 @@ Validate the cohort shared resource specifications
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{negativeControlOutcomeCohortSharedResourceSpecifications}}{The cohort shared resource specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortGeneratorModule-partitionModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortGeneratorModule-partitionModuleSpecifications}{}}}
+\subsection{Method \code{partitionModuleSpecifications()}}{
+Partitions the module specifications into smaller jobs
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortGeneratorModule$partitionModuleSpecifications(
+  analysisSpecifications,
+  specificationFolder
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{specificationFolder}}{A directory where the partitioned jsons will be saved to}
 }
 \if{html}{\out{</div>}}
 }

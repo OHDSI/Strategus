@@ -27,6 +27,7 @@ against the OMOP Common Data Model.
 \item \href{#method-SelfControlledCaseSeriesModule-uploadResults}{\code{SelfControlledCaseSeriesModule$uploadResults()}}
 \item \href{#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}}
 \item \href{#method-SelfControlledCaseSeriesModule-validateModuleSpecifications}{\code{SelfControlledCaseSeriesModule$validateModuleSpecifications()}}
+\item \href{#method-SelfControlledCaseSeriesModule-partitionModuleSpecifications}{\code{SelfControlledCaseSeriesModule$partitionModuleSpecifications()}}
 \item \href{#method-SelfControlledCaseSeriesModule-clone}{\code{SelfControlledCaseSeriesModule$clone()}}
 }
 }
@@ -66,6 +67,9 @@ Executes the SelfControlledCaseSeries package
 \describe{
 \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
@@ -163,6 +167,9 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
 \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 }
 \if{html}{\out{</div>}}
@@ -214,6 +221,35 @@ Validate the module specifications
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{moduleSpecifications}}{The SelfControlledCaseSeries module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-partitionModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-partitionModuleSpecifications}{}}}
+\subsection{Method \code{partitionModuleSpecifications()}}{
+Partitions the module specifications into smaller jobs
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$partitionModuleSpecifications(
+  analysisSpecifications,
+  specificationFolder
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{specificationFolder}}{A directory where the partitioned jsons will be saved to}
 }
 \if{html}{\out{</div>}}
 }

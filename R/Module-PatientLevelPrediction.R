@@ -22,7 +22,7 @@ PatientLevelPredictionModule <- R6::R6Class(
       super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
-      jobContext <- private$jobContext 
+      jobContext <- private$jobContext
       cohortDefinitionSet <- super$.createCohortDefinitionSetFromJobContext()
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -314,56 +314,63 @@ PatientLevelPredictionModule <- R6::R6Class(
 
       moduleVector <- unlist(lapply(analysisSpecifications$moduleSpecifications, function(ms) ms$module))
       selfInd <- which(moduleVector == self$moduleName)
-      
+
       if(length(selfInd) == 0){
         message(paste0('No specification found for ',self$moduleName))
         invisible(return(FALSE))
       }
       selfSpecification <- analysisSpecifications$moduleSpecifications[[selfInd]]
-      
+
       modelDesignList <- selfSpecification$settings$modelDesignList
       #TODO can modelDesignList be a single modelDesign?  If so, check and cast to list
-  
+
       # split the modelDesign list by targetId
       targetIds <- unlist(lapply(modelDesignList, function(md){md$targetId}))
-      
+
       # for each targetId create a seperate modelDesignList
       listOfmodelDesignList <- lapply(
-        X = unique(targetIds), 
+        X = unique(targetIds),
         FUN = function(tId){
           modelDesignList[which(tId == targetIds)]
       })
-      
+
       # create base setting with just shared resources and self spec
       baseSettings <- list(
         sharedResources = analysisSpecifications$sharedResources,
         moduleSpecifications = list(selfSpecification)
       )
-      
-      # now save each json spec 
+
+      # now save each json spec
       if(!dir.exists(specificationFolder)){
         dir.create(specificationFolder, recursive = T)
       }
 
+      fileVector <- c()
       for(i in 1:length(listOfmodelDesignList)){
-        # replace complete modelList with the small modelList 
+        # replace complete modelList with the small modelList
         # for each partition of modelList
         # TODO: could also reduce the sharedResources cohort definitions to just
         # those needed for the partition
         tempSettings <- baseSettings
         tempSettings$moduleSpecifications[[1]]$settings$modelDesignList <- listOfmodelDesignList[[i]]
-        
+
+        specHashId <- digest::digest2int(
+          x = as.character(ParallelLogger::convertSettingsToJson(tempSettings$moduleSpecifications))
+        )
+        tempFilePath <- file.path(specificationFolder, paste0('spec_',unique(targetIds)[i],'_',specHashId,'.json'))
+        fileVector <- c(fileVector,tempFilePath)
+
         # save as spec_i.json - same name for each module but will be
         # in a different folder
         ParallelLogger::saveSettingsToJson(
-          object = tempSettings, 
-          fileName = file.path(specificationFolder, paste0('spec_',unique(targetIds)[i],'.json'))
+          object = tempSettings,
+          fileName = tempFilePath
           )
       }
-      
+
       # TODO: could return the parititioned modelDesigns or the list of tempSettings
       #       or a status/message
-      invisible(return(TRUE))
+      invisible(return(fileVector))
     }
   ),
   private = list(

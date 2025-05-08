@@ -27,6 +27,8 @@ database in the OMOP Common Data Model.
 \item \href{#method-PatientLevelPredictionModule-uploadResults}{\code{PatientLevelPredictionModule$uploadResults()}}
 \item \href{#method-PatientLevelPredictionModule-createModuleSpecifications}{\code{PatientLevelPredictionModule$createModuleSpecifications()}}
 \item \href{#method-PatientLevelPredictionModule-validateModuleSpecifications}{\code{PatientLevelPredictionModule$validateModuleSpecifications()}}
+\item \href{#method-PatientLevelPredictionModule-summarizeResults}{\code{PatientLevelPredictionModule$summarizeResults()}}
+\item \href{#method-PatientLevelPredictionModule-partitionModuleSpecifications}{\code{PatientLevelPredictionModule$partitionModuleSpecifications()}}
 \item \href{#method-PatientLevelPredictionModule-clone}{\code{PatientLevelPredictionModule$clone()}}
 }
 }
@@ -73,6 +75,9 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
 \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
 }
@@ -95,6 +100,10 @@ Create the results data model for the module
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
 \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
@@ -155,11 +164,20 @@ is an object of class \code{connectionDetails} as created by the
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 
 \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 }
@@ -196,6 +214,69 @@ Validate the module specifications
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{moduleSpecifications}}{The PatientLevelPrediction module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PatientLevelPredictionModule-summarizeResults"></a>}}
+\if{latex}{\out{\hypertarget{method-PatientLevelPredictionModule-summarizeResults}{}}}
+\subsection{Method \code{summarizeResults()}}{
+Summarize the uploaded results for the module
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$summarizeResults(
+  resultsConnectionDetails,
+  resultsDataModelSettings
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+is an object of class \code{connectionDetails} as created by the
+\code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+
+\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PatientLevelPredictionModule-partitionModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-PatientLevelPredictionModule-partitionModuleSpecifications}{}}}
+\subsection{Method \code{partitionModuleSpecifications()}}{
+Paritions the module specifications into smaller jobs
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$partitionModuleSpecifications(
+  analysisSpecifications,
+  specificationFolder
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{specificationFolder}}{A directory where the partitioned jsons will be saved to}
 }
 \if{html}{\out{</div>}}
 }

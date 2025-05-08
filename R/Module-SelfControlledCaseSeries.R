@@ -166,7 +166,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @param specificationFolder A directory where the partitioned jsons will be saved to
     partitionModuleSpecifications = function(analysisSpecifications, specificationFolder) {
-      
+
       moduleVector <- unlist(lapply(analysisSpecifications$moduleSpecifications, function(ms) ms$module))
       selfInd <- which(moduleVector == self$moduleName)
       if(length(selfInd) == 0){
@@ -174,33 +174,33 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         invisible(return(FALSE))
       }
       selfSpecification <- analysisSpecifications$moduleSpecifications[[selfInd]]
-      
-      
+
+
       #outcomeId, nestingCohortId, exposure:exposureId/exposureIdRef/trueEffectSize
-      
+
       # Split by nestingCohortId and exposureId or by outcomeId
-      
+
       eoComponents <- .extractExposuresOutcomeComponents(selfSpecification$settings$exposuresOutcomeList)
-        
+
       convertNulls <- function(x){
         if(x == 'null'){
           return(NULL)
         }
         return(as.double(x))
       }
-      
+
       # create partition list for each exposure and outcome
       exposureOI <- unique(eoComponents$exposureId)
       listOfEO <- list()
       for(i in 1:length(exposureOI)){
         subset <- eoComponents[eoComponents$exposureId== exposureOI[i],]
         mainComps <- unique(subset[,c('outcomeId','nestingCohortId')])
-        
+
         tempList <- list()
         for(j in 1:nrow(mainComps)){
-          
+
           ind <- which(subset$outcomeId == mainComps$outcomeId[j] & subset$nestingCohortId == mainComps$nestingCohortId[j])
-          
+
           tempList[[j]] <- list(
             outcomeId = mainComps$outcomeId[j],
             nestingCohortId = convertNulls(mainComps$nestingCohortId[j]),
@@ -219,35 +219,43 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         listOfEO[[length(listOfEO) + 1]] <- tempList
       }
 
-      
+
       # create base setting with just shared resources and self spec
       baseSettings <- list(
         sharedResources = analysisSpecifications$sharedResources,
         moduleSpecifications = list(selfSpecification)
       )
-      
-      # now save each json spec 
+
+      # now save each json spec
       if(!dir.exists(specificationFolder)){
         dir.create(specificationFolder, recursive = T)
       }
-      
+
+      fileVector <- c()
       for(i in 1:length(listOfEO)){
         tempSettings <- baseSettings
         tempSettings$moduleSpecifications[[1]]$settings$exposuresOutcomeList <- listOfEO[[i]]
-        
+
+        specHashId <- digest::digest2int(
+          x = as.character(ParallelLogger::convertSettingsToJson(tempSettings$moduleSpecifications))
+        )
+        tempFilePath <- file.path(specificationFolder, paste0('spec_',exposureOI[i],'_',specHashId,'.json'))
+
+        fileVector <- c(fileVector,tempFilePath)
+
         # save as spec_i.json - same name for each module but will be
         # in a different folder
         ParallelLogger::saveSettingsToJson(
-          object = tempSettings, 
-          fileName = file.path(specificationFolder, paste0('spec_',exposureOI[i],'.json'))
+          object = tempSettings,
+          fileName = tempFilePath
         )
       }
-      
+
       # TODO: could return the parititioned modelDesigns or the list of tempSettings
       #       or a status/message
-      invisible(return(TRUE))
-      
-      
+      invisible(return(fileVector))
+
+
     }
   )
 )
