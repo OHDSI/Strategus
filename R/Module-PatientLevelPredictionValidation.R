@@ -208,8 +208,14 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
           }
 
           for (k in 1:length(covariateSettings)) {
+            if ("covariateCohortDatabaseSchema" %in% names(covariateSettings[[k]])) {
+              covariateSettings[[k]]$covariateCohortDatabaseSchema <- cohortDatabaseSchema
+            }
             if ("cohortDatabaseSchema" %in% names(covariateSettings[[k]])) {
               covariateSettings[[k]]$cohortDatabaseSchema <- cohortDatabaseSchema
+            }
+            if ("covariateCohortTable" %in% names(covariateSettings[[k]])) {
+              covariateSettings[[k]]$covariateCohortTable <- cohortTable
             }
             if ("cohortTable" %in% names(covariateSettings[[k]])) {
               covariateSettings[[k]]$cohortTable <- cohortTable
