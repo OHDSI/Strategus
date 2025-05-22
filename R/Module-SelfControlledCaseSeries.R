@@ -46,7 +46,8 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       args$customCovariateTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outputFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$sccsMultiThreadingSettings <- sccsMultiThreadingSettings
-      args$sccsDiagnosticThresholds <- NULL
+      # TODO - this is not working since moving from JSON -> R6 appears to be problematic
+      args$sccsAnalysesSpecifications <- SelfControlledCaseSeries::convertJsonToSccsAnalysesSpecifications(private$.listToJson(jobContext$settings$sccsAnalysesSpecifications))
       do.call(SelfControlledCaseSeries::runSccsAnalyses, args)
 
       exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -135,16 +136,8 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       )
     },
     #' @description Creates the SelfControlledCaseSeries Module Specifications
-    #' @param sccsAnalysisList description
-    #' @param exposuresOutcomeList description
-    #' @param analysesToExclude description
-    #' @param combineDataFetchAcrossOutcomes description
-    #' @param sccsDiagnosticThresholds description
-    createModuleSpecifications = function(sccsAnalysisList,
-                                          exposuresOutcomeList,
-                                          analysesToExclude = NULL,
-                                          combineDataFetchAcrossOutcomes = FALSE,
-                                          sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()) {
+    #' @param sccsAnalysesSpecifications An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications
+    createModuleSpecifications = function(sccsAnalysesSpecifications) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
@@ -160,6 +153,19 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
     validateModuleSpecifications = function(moduleSpecifications) {
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
+      )
+    }
+  ),
+  private = list(
+    # TODO: Remove this once SCCS has a function to go from List -> R6
+    .listToJson = function(settingsList) {
+      return(
+        jsonlite::toJSON(
+          settingsList,
+          auto_unbox = TRUE,
+          pretty = TRUE,
+          null = "null"
+        )
       )
     }
   )
