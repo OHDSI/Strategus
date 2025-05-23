@@ -185,7 +185,6 @@
         "runVisitContext": true,
         "runBreakdownIndexEvents": true,
         "runIncidenceRate": true,
-        "runCohortRelationship": true,
         "runTemporalCohortCharacterization": true,
         "temporalCovariateSettings": {
           "temporal": true,
