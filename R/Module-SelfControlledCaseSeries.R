@@ -46,8 +46,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       args$customCovariateTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outputFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$sccsMultiThreadingSettings <- sccsMultiThreadingSettings
-      # TODO - this is not working since moving from JSON -> R6 appears to be problematic
-      args$sccsAnalysesSpecifications <- SelfControlledCaseSeries::convertJsonToSccsAnalysesSpecifications(private$.listToJson(jobContext$settings$sccsAnalysesSpecifications))
+      args$sccsAnalysesSpecifications <- SelfControlledCaseSeries::convertUntypedListToSccsAnalysesSpecifications(jobContext$settings$sccsAnalysesSpecifications)
       do.call(SelfControlledCaseSeries::runSccsAnalyses, args)
 
       exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -55,8 +54,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         outputFolder = jobContext$moduleExecutionSettings$workSubFolder,
         exportFolder = exportFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        sccsDiagnosticThresholds = jobContext$settings$sccsDiagnosticThresholds
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount
       )
       # TODO: Removing this to make the upload easier
       # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
@@ -153,19 +151,6 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
     validateModuleSpecifications = function(moduleSpecifications) {
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
-      )
-    }
-  ),
-  private = list(
-    # TODO: Remove this once SCCS has a function to go from List -> R6
-    .listToJson = function(settingsList) {
-      return(
-        jsonlite::toJSON(
-          settingsList,
-          auto_unbox = TRUE,
-          pretty = TRUE,
-          null = "null"
-        )
       )
     }
   )

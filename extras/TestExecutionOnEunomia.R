@@ -9,9 +9,10 @@ analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
 studyRootFolder <- file.path("extras", "EunomiaTestStudy")
 workFolder <- file.path(studyRootFolder, "work_folder")
 resultsFolder <- file.path(studyRootFolder, "results_folder")
-if (!dir.exists(studyRootFolder)) {
-  dir.create(studyRootFolder, recursive = TRUE)
+if (dir.exists(studyRootFolder)) {
+  unlink(studyRootFolder, recursive = TRUE, force = TRUE)
 }
+dir.create(studyRootFolder, recursive = TRUE)
 
 # Execute the study ---------------------------
 executionSettings <- createCdmExecutionSettings(
@@ -30,16 +31,6 @@ ParallelLogger::saveSettingsToJson(
 
 executionSettings <- ParallelLogger::loadSettingsFromJson(
   fileName = file.path(studyRootFolder, "eunomiaExecutionSettings.json")
-)
-
-executionSettings$databaseId <- 12346
-sccsModule <- Strategus::SelfControlledCaseSeriesModule$new()
-
-debugonce(sccsModule$execute)
-sccsModule$execute(
-  connectionDetails = connectionDetails,
-  analysisSpecifications = analysisSpecifications,
-  executionSettings = executionSettings
 )
 
 Strategus::execute(
