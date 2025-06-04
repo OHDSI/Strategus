@@ -565,13 +565,13 @@
             "type": "exit"
           }
         ],
-        "censorType" = "minCellCount",
-        "overlapMethod" = "truncate",
-        "concatTargets" = true,
-        "startAnchor" = "startDate",
-        "windowStart" = 0,
-        "endAnchor" = "endDate",
-        "windowEnd" = 0
+        "censorType": "minCellCount",
+        "overlapMethod": "truncate",
+        "concatTargets": true,
+        "startAnchor": "startDate",
+        "windowStart": 0,
+        "endAnchor": "endDate",
+        "windowEnd": 0
         "minEraDuration": 7,
         "eraCollapseSize": 14,
         "combinationWindow": 7,
