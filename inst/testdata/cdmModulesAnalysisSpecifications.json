@@ -565,7 +565,6 @@
             "type": "exit"
           }
         ],
-        "censorType": "minCellCount",
         "overlapMethod": "truncate",
         "concatTargets": true,
         "startAnchor": "startDate",
