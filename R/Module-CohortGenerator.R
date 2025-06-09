@@ -40,6 +40,7 @@ CohortGeneratorModule <- R6::R6Class(
       CohortGenerator::runCohortGeneration(
         connectionDetails = connectionDetails,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
+        tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema,
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cohortTableNames = jobContext$moduleExecutionSettings$cohortTableNames,
         cohortDefinitionSet = cohortDefinitionSet,

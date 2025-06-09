@@ -55,7 +55,7 @@ TreatmentPatternsModule <- R6::R6Class(
         connectionDetails = connectionDetails,
         cdmSchema = executionSettings$cdmDatabaseSchema,
         resultSchema = executionSettings$workDatabaseSchema,
-        tempEmulationSchema = getOption("sqlRenderTempEmulationSchema"),
+        tempEmulationSchema = executionSettings$tempEmulationSchema,
         includeTreatments = spec$includeTreatments,
         indexDateOffset = spec$indexDateOffset,
         minEraDuration = spec$minEraDuration,
