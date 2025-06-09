@@ -36,7 +36,6 @@ CohortDiagnosticsModule <- R6::R6Class(
       args$cohortTableNames <- jobContext$moduleExecutionSettings$cohortTableNames
       args$incrementalFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$minCellCount <- jobContext$moduleExecutionSettings$minCellCount
-      args$cohortIds <- jobContext$moduleExecutionSettings$cohortIds
       do.call(CohortDiagnostics::executeDiagnostics, args)
 
       # TODO: Removing this to make the upload easier
