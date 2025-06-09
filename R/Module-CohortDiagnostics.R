@@ -32,11 +32,11 @@ CohortDiagnosticsModule <- R6::R6Class(
       args$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
+      args$tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema
       args$cohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
       args$cohortTableNames <- jobContext$moduleExecutionSettings$cohortTableNames
       args$incrementalFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$minCellCount <- jobContext$moduleExecutionSettings$minCellCount
-      args$cohortIds <- jobContext$moduleExecutionSettings$cohortIds
       do.call(CohortDiagnostics::executeDiagnostics, args)
 
       # TODO: Removing this to make the upload easier
