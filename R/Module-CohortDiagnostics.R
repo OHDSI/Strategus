@@ -35,6 +35,7 @@ CohortDiagnosticsModule <- R6::R6Class(
       args$tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema
       args$cohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
       args$cohortTableNames <- jobContext$moduleExecutionSettings$cohortTableNames
+      args$incremental <- jobContext$moduleExecutionSettings$incremental
       args$incrementalFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$minCellCount <- jobContext$moduleExecutionSettings$minCellCount
       do.call(CohortDiagnostics::executeDiagnostics, args)
