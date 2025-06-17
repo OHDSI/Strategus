@@ -214,35 +214,6 @@ CREATE TABLE results.cd_cohort_inc_stats (
 	 person_total NUMERIC,
 	PRIMARY KEY(database_id,cohort_id,rule_sequence,mode_id)
 );
-CREATE TABLE results.cd_cohort_relationships (
-  	 database_id VARCHAR NOT NULL,
-	 cohort_id BIGINT NOT NULL,
-	 comparator_cohort_id BIGINT NOT NULL,
-	 start_day BIGINT NOT NULL,
-	 end_day NUMERIC NOT NULL,
-	 subjects BIGINT,
-	 sub_cs_before_ts BIGINT,
-	 sub_cs_on_ts BIGINT,
-	 sub_cs_after_ts BIGINT,
-	 sub_cs_before_te BIGINT,
-	 sub_cs_on_te BIGINT,
-	 sub_cs_after_te BIGINT,
-	 sub_cs_window_t BIGINT,
-	 sub_ce_window_t BIGINT,
-	 sub_cs_window_ts BIGINT,
-	 sub_cs_window_te BIGINT,
-	 sub_ce_window_ts BIGINT,
-	 sub_ce_window_te BIGINT,
-	 sub_c_within_t BIGINT,
-	 c_days_before_ts BIGINT,
-	 c_days_before_te BIGINT,
-	 c_days_within_t_days BIGINT,
-	 c_days_after_ts BIGINT,
-	 c_days_after_te BIGINT,
-	 t_days BIGINT,
-	 c_days BIGINT,
-	PRIMARY KEY(database_id,cohort_id,comparator_cohort_id,start_day,end_day)
-);
 CREATE TABLE results.cd_cohort_summary_stats (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
@@ -385,6 +356,7 @@ CREATE TABLE results.cd_temporal_covariate_ref (
 	 covariate_name VARCHAR,
 	 analysis_id INT,
 	 concept_id BIGINT,
+	 value_as_concept_id BIGINT,
 	PRIMARY KEY(covariate_id)
 );
 CREATE TABLE results.cd_temporal_covariate_value (
@@ -885,8 +857,8 @@ CREATE TABLE results.es_cm_result (
 	 se_log_rr NUMERIC,
 	 target_subjects INT,
 	 comparator_subjects INT,
-	 target_days INT,
-	 comparator_days INT,
+	 target_days BIGINT,
+	 comparator_days BIGINT,
 	 target_outcomes INT,
 	 comparator_outcomes INT,
 	 n_databases INT,
@@ -929,10 +901,10 @@ CREATE TABLE results.es_sccs_result (
 	 outcome_events INT,
 	 outcome_observation_periods INT,
 	 covariate_subjects INT,
-	 covariate_days INT,
+	 covariate_days BIGINT,
 	 covariate_eras INT,
 	 covariate_outcomes INT,
-	 observed_days INT,
+	 observed_days BIGINT,
 	 n_databases INT,
 	 log_rr NUMERIC,
 	 se_log_rr NUMERIC,
@@ -1235,6 +1207,8 @@ CREATE TABLE results.sccs_covariate_analysis (
 	 covariate_analysis_id INT NOT NULL,
 	 covariate_analysis_name VARCHAR,
 	 variable_of_interest INT,
+	 pre_exposure INT,
+	 end_of_observation_period INT,
 	PRIMARY KEY(analysis_id,covariate_analysis_id)
 );
 CREATE TABLE results.sccs_covariate (
@@ -1342,6 +1316,7 @@ CREATE TABLE results.sccs_attrition (
 CREATE TABLE results.sccs_likelihood_profile (
   	 log_rr NUMERIC NOT NULL,
 	 log_likelihood NUMERIC,
+	 gradient NUMERIC,
 	 covariate_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
@@ -1357,6 +1332,10 @@ CREATE TABLE results.sccs_time_trend (
 	 observed_subjects INT,
 	 ratio NUMERIC,
 	 adjusted_ratio NUMERIC,
+	 outcome_rate NUMERIC,
+	 adjusted_rate NUMERIC,
+	 stable INT,
+	 p NUMERIC,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
 CREATE TABLE results.sccs_time_to_event (
@@ -1386,6 +1365,33 @@ CREATE TABLE results.sccs_calendar_time_spanning (
 	 cover_before_after_subjects INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
+CREATE TABLE results.sccs_diagnostics_summary (
+  	 analysis_id INT NOT NULL,
+	 exposures_outcome_set_id INT NOT NULL,
+	 covariate_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
+	 time_stability_p NUMERIC,
+	 time_stability_diagnostic VARCHAR(20),
+	 event_exposure_lb NUMERIC,
+	 event_exposure_ub NUMERIC,
+	 event_exposure_diagnostic VARCHAR(20),
+	 event_observation_lb NUMERIC,
+	 event_observation_ub NUMERIC,
+	 event_observation_diagnostic VARCHAR(20),
+	 rare_outcome_prevalence NUMERIC,
+	 rare_outcome_diagnostic VARCHAR(20),
+	 ease NUMERIC,
+	 ease_diagnostic VARCHAR(20),
+	 mdrr NUMERIC,
+	 mdrr_diagnostic VARCHAR(20),
+	 unblind INT,
+	 unblind_for_evidence_synthesis INT,
+	 time_trend_p NUMERIC,
+	 pre_exposure_p NUMERIC,
+	 time_trend_diagnostic VARCHAR(20),
+	 pre_exposure_diagnostic VARCHAR(20),
+	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
+);
 CREATE TABLE results.sccs_event_dep_observation (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
@@ -1395,20 +1401,98 @@ CREATE TABLE results.sccs_event_dep_observation (
 	 outcomes INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,months_to_end,censored)
 );
-CREATE TABLE results.sccs_diagnostics_summary (
-  	 analysis_id INT NOT NULL,
-	 exposures_outcome_set_id INT NOT NULL,
-	 covariate_id INT NOT NULL,
-	 database_id VARCHAR NOT NULL,
-	 mdrr NUMERIC,
-	 ease NUMERIC,
-	 time_trend_p NUMERIC,
-	 pre_exposure_p NUMERIC,
-	 mdrr_diagnostic VARCHAR(20),
-	 ease_diagnostic VARCHAR(20),
-	 time_trend_diagnostic VARCHAR(20),
-	 pre_exposure_diagnostic VARCHAR(20),
-	 unblind INT,
-	 unblind_for_evidence_synthesis INT,
-	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
+-- TreatmentPatternsModule Tables
+CREATE TABLE results.tp_analyses (
+  	 analysis_id INT,
+	 description VARCHAR
+);
+CREATE TABLE results.tp_arguments (
+  	 analysis_id INT,
+	 arguments VARCHAR,
+	 database_id INTEGER
+);
+CREATE TABLE results.tp_attrition (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 number_records INT,
+	 number_subjects INT,
+	 reason VARCHAR,
+	 reason_id INT,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR,
+	 time_stamp BIGINT
+);
+CREATE TABLE results.tp_cdm_source_info (
+  	 analysis_id INT,
+	 cdm_etl_reference VARCHAR,
+	 cdm_holder VARCHAR,
+	 cdm_release_date DATE,
+	 cdm_source_abbreviation VARCHAR,
+	 cdm_source_name VARCHAR,
+	 cdm_version VARCHAR,
+	 database_id INTEGER,
+	 source_description VARCHAR,
+	 source_documentation_reference VARCHAR,
+	 source_release_date DATE,
+	 vocabulary_version VARCHAR
+);
+CREATE TABLE results.tp_counts_age (
+  	 age INT,
+	 analysis_id INT,
+	 database_id INTEGER,
+	 n VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
+);
+CREATE TABLE results.tp_counts_sex (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 n VARCHAR,
+	 sex VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
+);
+CREATE TABLE results.tp_counts_year (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 n VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR,
+	 index_year INTEGER
+);
+CREATE TABLE results.tp_metadata (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 execution_end BIGINT,
+	 execution_start BIGINT,
+	 package_version VARCHAR,
+	 platform VARCHAR,
+	 r_version VARCHAR
+);
+CREATE TABLE results.tp_summary_event_duration (
+  	 analysis_id INT,
+	 duration_average NUMERIC,
+	 event_count INT,
+	 database_id INTEGER,
+	 event_name VARCHAR,
+	 line VARCHAR,
+	 duration_max INT,
+	 duration_median INT,
+	 duration_min INT,
+	 duration_q_1 INT,
+	 duration_q_2 INT,
+	 duration_sd NUMERIC,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
+);
+CREATE TABLE results.tp_treatment_pathways (
+  	 age VARCHAR,
+	 analysis_id INT,
+	 database_id INTEGER,
+	 freq INT,
+	 index_year VARCHAR,
+	 pathway VARCHAR,
+	 sex VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
 );
