@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><database name="strategus" schema="results" type="PostgreSQL - 17.4 (Debian 17.4-1.pgdg120+2)">
+<?xml version="1.0" encoding="UTF-8"?><database name="strategus" schema="results" type="PostgreSQL - 17.5 (Debian 17.5-1.pgdg120+1)">
    <tables>
       <table catalog="strategus" name="c_analysis_ref" numRows="0" remarks="CharacterizationModule: Analysis reference" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="The analysis identifier" size="0" type="Unknown" typeCode="12"/>
@@ -83,8 +83,8 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_cohort_id" nullable="false" remarks="The outcome cohort id" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="setting_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariate_ref"/>
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
             <parent catalog="strategus" column="setting_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sum_value" nullable="false" remarks="The sum value" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="The target cohort id" size="0" type="Unknown" typeCode="12"/>
@@ -97,8 +97,8 @@
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariate_ref"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariate_ref"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_settings"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="max_value" nullable="false" remarks="The max value" size="0" type="Unknown" typeCode="12"/>
@@ -172,8 +172,8 @@
             <child catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariates"/>
             <child catalog="strategus" column="setting_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariates"/>
             <child catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_covariates_continuous"/>
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_cohort_details"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="end_anchor" nullable="false" remarks="The end anchor" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_prior_observation" nullable="false" remarks="Minimum time observed before index" size="0" type="Unknown" typeCode="12"/>
@@ -248,34 +248,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="name" nullable="false" remarks="name of inclusion rule" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rule_sequence" nullable="false" remarks="inclusion rule sequence used to determine rule" size="0" type="Unknown" typeCode="12"/>
       </table>
-      <table catalog="strategus" name="cd_cohort_relationships" numRows="0" remarks="CohortDiagnosticsModule: Cohort relationships" schema="results" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="c_days" nullable="false" remarks="comparator days" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="c_days_after_te" nullable="false" remarks="comparator cohort days after target start date (offset)" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="c_days_after_ts" nullable="false" remarks="comparator cohort days within target cohort days (offset)" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="c_days_before_te" nullable="false" remarks="comparator cohort days before target start date (offset)" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="c_days_before_ts" nullable="false" remarks="comparator cohort days within target (offset) days" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="c_days_within_t_days" nullable="false" remarks="comparator cohort days before target end date (offset)" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_id" nullable="false" remarks="target cohort id" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="comparator_cohort_id" nullable="false" remarks="comparator cohort id" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="database identifier" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="end_day" nullable="false" remarks="end day" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="start_day" nullable="false" remarks="start day" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_c_within_t" nullable="false" remarks="comparator cohort subjects end within period (incidence) relative to target end date" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_ce_window_t" nullable="false" remarks="comparator cohort subjects start within period (incidence) relative to target start date and end date" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_ce_window_te" nullable="false" remarks="comparator cohort subjects end within period (incidence) relative to target start date" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_ce_window_ts" nullable="false" remarks="comparator cohort subjects start within period (incidence) relative to target end date" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_after_te" nullable="false" remarks="How many subjects in comparator cohort start on first target cohort end" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_after_ts" nullable="false" remarks="How many subjects in comparator cohort start with first target cohort start" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_before_te" nullable="false" remarks="How many subjects in comparator cohort start after first target cohort start" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_before_ts" nullable="false" remarks="present in both target and comparator" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_on_te" nullable="false" remarks="How many subjects in comparator cohort start after first target cohort end" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_on_ts" nullable="false" remarks="How many subjects in comparator cohort start prior to first target cohort start" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_window_t" nullable="false" remarks="How many subjects in comparator cohort start after first target cohort end" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_window_te" nullable="false" remarks="comparator cohort subjects start within period (incidence) relative to target start date" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sub_cs_window_ts" nullable="false" remarks="comparator cohort subjects start within period (incidence) relative to target start date and end date" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="subjects" nullable="false" remarks="number of subjects total" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="t_days" nullable="false" remarks="target days" size="0" type="Unknown" typeCode="12"/>
-      </table>
       <table catalog="strategus" name="cd_cohort_summary_stats" numRows="0" remarks="CohortDiagnosticsModule: Cohort summary stats" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="base_count" nullable="false" remarks="base count of cohort" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_id" nullable="false" remarks="cohort id" size="0" type="Unknown" typeCode="12"/>
@@ -328,7 +300,7 @@
          <primaryKey column="concept_set_id" sequenceNumberInPK="2"/>
       </table>
       <table catalog="strategus" name="cd_concept_synonym" numRows="0" remarks="CohortDiagnosticsModule: Concept synonym" schema="results" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="concept_id" nullable="false" remarks="concpt id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="concept_id" nullable="false" remarks="concept id" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="concept_synonym_name" nullable="false" remarks="concept synonym name" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="language_concept_id" nullable="false" remarks="lanague id" size="0" type="Unknown" typeCode="12"/>
       </table>
@@ -438,6 +410,7 @@
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cd_temporal_covariate_value"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_name" nullable="false" remarks="name of covariate" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="value_as_concept_id" nullable="false" remarks="maps to a concept id for categorical variables (where present)" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="cd_temporal_covariate_value" numRows="0" remarks="CohortDiagnosticsModule: Binary covariate values" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_id" nullable="false" remarks="cohort identifier" size="0" type="Unknown" typeCode="12"/>
@@ -541,6 +514,8 @@
             <child catalog="strategus" column="outcome_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_diagnostics_summary"/>
             <child catalog="strategus" column="target_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_diagnostics_summary"/>
             <child catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_cohorts"/>
+            <child catalog="strategus" column="outcome_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_model_designs"/>
+            <child catalog="strategus" column="target_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_model_designs"/>
             <child catalog="strategus" column="outcome_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_performances"/>
             <child catalog="strategus" column="target_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_performances"/>
             <child catalog="strategus" column="nesting_cohort_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
@@ -648,10 +623,10 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk" nullable="false" remarks="Persons at risk" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk_pe" nullable="false" remarks="Persons at risk pre-exclude (counts before excluding time at risk)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_age_group_def"/>
             <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_tar_def"/>
-            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_outcome_def"/>
+            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_age_group_def"/>
             <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_subgroup_def"/>
+            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_outcome_def"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="source_name" nullable="false" remarks="The source name for the database" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="start_year" nullable="false" remarks="Start year" size="0" type="Unknown" typeCode="12"/>
@@ -773,8 +748,8 @@
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mean_after" nullable="false" remarks="The mean value of the covariate in the union of the target and comparator cohort after propensity score adjustment." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mean_before" nullable="false" remarks="The mean value of the covariate in the union of the target and comparator cohort before propensity score adjustment." size="0" type="Unknown" typeCode="12"/>
@@ -959,8 +934,8 @@
       </table>
       <table catalog="strategus" name="cm_shared_covariate_balance" numRows="0" remarks="CohortMethodModule: Shared covariate balance" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the cm_analysis table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate_analysis"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate_analysis"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="comparator_id" nullable="false" remarks="The identifier for the comparator cohort." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="comparator_mean_after" nullable="false" remarks="The mean value of the covariate in the comparator cohort after propensity score adjustment." size="0" type="Unknown" typeCode="12"/>
@@ -1159,13 +1134,10 @@
       </table>
       <table catalog="strategus" name="plp_cohorts" numRows="0" remarks="PatientLevelPredictionModule: Cohort identifier reference" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_definition_id" nullable="false" remarks="the identifier in ATLAS for the cohort" size="0" type="Unknown" typeCode="12">
-            <child catalog="strategus" column="outcome_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_model_designs"/>
-            <child catalog="strategus" column="target_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_model_designs"/>
             <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_definition"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_id" nullable="false" remarks="a unique identifier for the cohort in the plp results database" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_name" nullable="false" remarks="the name of the cohort" size="0" type="Unknown" typeCode="12"/>
-         <primaryKey column="cohort_definition_id" sequenceNumberInPK="1"/>
       </table>
       <table catalog="strategus" name="plp_covariate_settings" numRows="0" remarks="PatientLevelPredictionModule: Covariate settings" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_setting_id" nullable="false" remarks="a unique identifier for the covaraite settings" size="0" type="Unknown" typeCode="12"/>
@@ -1286,7 +1258,7 @@
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="model_setting_id" nullable="false" remarks="the  identifier for the model setting" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_id" nullable="false" remarks="the  identifier for the outcome cohort id" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_cohorts"/>
+            <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_definition"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="plp_data_setting_id" nullable="false" remarks="the  identifier for the plp data setting" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="population_setting_id" nullable="false" remarks="the  identifier for the population setting" size="0" type="Unknown" typeCode="12"/>
@@ -1294,7 +1266,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="split_setting_id" nullable="false" remarks="the  identifier for the split setting" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tar_id" nullable="false" remarks="the  identifier for the time at risk setting" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_id" nullable="false" remarks="the  identifier for the target cohort id" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="plp_cohorts"/>
+            <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_definition"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tidy_covariates_setting_id" nullable="false" remarks="the  identifier for the tidy covariate setting" size="0" type="Unknown" typeCode="12"/>
          <primaryKey column="model_design_id" sequenceNumberInPK="1"/>
@@ -1437,7 +1409,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_id" nullable="false" remarks="A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="description" nullable="false" remarks="A description of the last restriction, e.g. &quot;Removing persons with the outcome prior&quot;." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="description" nullable="false" remarks="A description of the last restriction, e.g. 'Removing persons with the outcome prior'." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
          </column>
@@ -1499,6 +1471,8 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_analysis_id" nullable="false" remarks="A unique identifier for a covariate analysis." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_analysis_name" nullable="false" remarks="A name for a covariate analysis, e.g. 'Pre-exposure'." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="end_of_observation_period" nullable="false" remarks="Does the variable represent the end of the observation period (1 = yes, 0 = no)." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="pre_exposure" nullable="false" remarks="Does the variable represent a pre-exposure period (1 = yes, 0 = no)." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="variable_of_interest" nullable="false" remarks="Is the variable of interest (1 = yes, 0 = no)." size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="sccs_covariate_result" numRows="0" remarks="SelfControlledCaseSeriesModule: Covariate results" schema="results" type="TABLE">
@@ -1512,21 +1486,21 @@
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_era"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_era"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_era"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_era"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rr" nullable="false" remarks="The estimated relative risk (i.e. the incidence rate ratio)." size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="sccs_diagnostics_summary" numRows="0" remarks="SelfControlledCaseSeriesModule: Diagnostic summary" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_result"/>
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_analysis"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_id" nullable="false" remarks="The identifier for the covariate of interest." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_result"/>
@@ -1534,20 +1508,30 @@
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_result"/>
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ease" nullable="false" remarks="The expected absolute systematic error." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ease_diagnostic" nullable="false" remarks="Pass / warning / fail / not evaluated classification of the EASE diagnostic." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_exposure_diagnostic" nullable="false" remarks="Pass / fail / not evaluated classification of the event-exposure independence diagnostic." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_exposure_lb" nullable="false" remarks="Lower bound of the 95% CI for the pre-expososure estimate" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_exposure_ub" nullable="false" remarks="Upper bound of the 95% CI for the pre-expososure estimate" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_observation_diagnostic" nullable="false" remarks="Pass / fail / not evaluated classification of the event-observation period dependence diagnostic." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_observation_lb" nullable="false" remarks="Lower bound of the 95% CI for the end of observation probe estimate" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_observation_ub" nullable="false" remarks="Upper bound of the 95% CI for the end of observation probe estimate" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_result"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mdrr" nullable="false" remarks="The minimum detectable relative risk." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mdrr_diagnostic" nullable="false" remarks="Pass / warning / fail / not evaluated classification of the MDRR diagnostic." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="pre_exposure_diagnostic" nullable="false" remarks="Pass / warning / fail / not evaluated classification of the time trend (unstalbe months) diagnostic." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="pre_exposure_p" nullable="false" remarks="One-sided p-value for whether the rate before expore is higher than after, against the null of no difference." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rare_outcome_diagnostic" nullable="false" remarks="Pass / fail / not evaluated classification of the rare outcome diagnostic." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rare_outcome_prevalence" nullable="false" remarks="The proportion of people in the underlying population who have the outcome at least once." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_stability_diagnostic" nullable="false" remarks="Pass / fail / not evaluated classification of the time stability diagnostic." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_stability_p" nullable="false" remarks="The p for whether the mean monthly ratio between observed and expected exceeds the specified threshold." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_trend_diagnostic" nullable="false" remarks="Pass / warning / fail / not evaluated classification of the time trend (unstalbe months) diagnostic." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_trend_p" nullable="false" remarks="The p for whether the mean monthly ratio between observed and expected is no greater than 1.25." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="unblind" nullable="false" remarks="Is unblinding the result recommended? (1 = yes, 0 = no)" size="0" type="Unknown" typeCode="12"/>
@@ -1605,8 +1589,8 @@
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_spline"/>
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_time_to_event"/>
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_time_trend"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="nesting_cohort_id" nullable="false" remarks="A cohort ID." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_definition"/>
@@ -1619,14 +1603,15 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_id" nullable="false" remarks="The identifier for the covariate of interest." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="gradient" nullable="false" remarks="The gradient of the log likelihood." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="log_likelihood" nullable="false" remarks="The normalized log likelihood." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="log_rr" nullable="false" remarks="The log of the relative risk where the likelihood is sampled." size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="sccs_result" numRows="0" remarks="SelfControlledCaseSeriesModule: Results" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_analysis"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="calibrated_ci_95_lb" nullable="false" remarks="The lower bound of the calibrated 95% confidence interval of the relative risk." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="calibrated_ci_95_ub" nullable="false" remarks="The upper bound of the calibrated 95% confidence interval of the relative risk." size="0" type="Unknown" typeCode="12"/>
@@ -1646,15 +1631,15 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_outcomes" nullable="false" remarks="The number of outcomes observed during the covariate time." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_subjects" nullable="false" remarks="The number of subjects having the covariate." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="llr" nullable="false" remarks="The log of the likelihood ratio (of the MLE vs the null hypothesis of no effect)." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="log_rr" nullable="false" remarks="The log of the relative risk." size="0" type="Unknown" typeCode="12"/>
@@ -1689,6 +1674,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="week" nullable="false" remarks="The number of the week relative to exposure. Week 0 starts on the day of exposure initiation." size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="sccs_time_trend" numRows="0" remarks="SelfControlledCaseSeriesModule: Time trend diagnostic" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="adjusted_rate" nullable="false" remarks="The outcome rate, adjusted for age, season, or calendar time, as specified in the analysis." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="adjusted_ratio" nullable="false" remarks="Observed over expected ratio, where the expected count is adjusted for age, season, or calendar time, as specified in the analysis." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="calendar_month" nullable="false" remarks="The calendar month (e.g. 1 for January)." size="0" type="Unknown" typeCode="12"/>
@@ -1698,7 +1684,104 @@
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="observed_subjects" nullable="false" remarks="Number of people observed during the month." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_rate" nullable="false" remarks="Number of outcomes divided by the number of subjects." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="p" nullable="false" remarks="The two-sided p-value against the null hypothesis that the rate is equal to the mean." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ratio" nullable="false" remarks="Observed over expected ratio, where the expected count assumes a constant rate over time." size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="stable" nullable="false" remarks="Does the adjusted rate not deviate significantly from the mean? (1 = stable, 0 = unstable)" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_analyses" numRows="0" remarks="TreatmentPatternsModule: List of analyses" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="description" nullable="false" remarks="Analysis description" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_arguments" numRows="0" remarks="TreatmentPatternsModule: List of analysis arguments" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="arguments" nullable="false" remarks="Arguments as JSON" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_attrition" numRows="0" remarks="TreatmentPatternsModule: Treatment patterns attrition" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="number_records" nullable="false" remarks="Number of records" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="number_subjects" nullable="false" remarks="Number of subjects" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="reason" nullable="false" remarks="Reason description" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="reason_id" nullable="false" remarks="Reason Identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="Target cohort ID" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_name" nullable="false" remarks="Target cohort name" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_stamp" nullable="false" remarks="Time stamp in seconds since epoch (1970-01-01)" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_cdm_source_info" numRows="0" remarks="TreatmentPatternsModule: CDM source information" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cdm_etl_reference" nullable="false" remarks="CDM ETL Reference" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cdm_holder" nullable="false" remarks="Cdm holder" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cdm_release_date" nullable="false" remarks="CDM release date" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cdm_source_abbreviation" nullable="false" remarks="CDM Source Abbreviation" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cdm_source_name" nullable="false" remarks="CDM Source Name" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cdm_version" nullable="false" remarks="CDM version" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="source_description" nullable="false" remarks="Source description" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="source_documentation_reference" nullable="false" remarks="Source Documentation Reference" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="source_release_date" nullable="false" remarks="Source release date" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="vocabulary_version" nullable="false" remarks="Vocabulary version" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_counts_age" numRows="0" remarks="TreatmentPatternsModule: Age counts" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="age" nullable="false" remarks="Age in years" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n" nullable="false" remarks="Count per age. May be &lt;x" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="Target cohort ID" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_name" nullable="false" remarks="Target cohort name" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_counts_sex" numRows="0" remarks="TreatmentPatternsModule: Sex counts" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n" nullable="false" remarks="Count per sex. May be &lt;x" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sex" nullable="false" remarks="Sex group" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="Target cohort ID" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_name" nullable="false" remarks="Target cohort name" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_counts_year" numRows="0" remarks="TreatmentPatternsModule: Year counts" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="index_year" nullable="false" remarks="Calendar year" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n" nullable="false" remarks="Count per year. May be &lt;x" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="Target cohort ID" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_name" nullable="false" remarks="Target cohort name" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_metadata" numRows="0" remarks="TreatmentPatternsModule: Metadata" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="execution_end" nullable="false" remarks="Time stamp in seconds since epoch (1970-01-01)" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="execution_start" nullable="false" remarks="Time stamp in seconds since epoch (1970-01-01)" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="package_version" nullable="false" remarks="TreatmentPatterns version" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="platform" nullable="false" remarks="Platform (Example: x86_64-w64-mingw32)" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="r_version" nullable="false" remarks="R version" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_summary_event_duration" numRows="0" remarks="TreatmentPatternsModule: Summary event duration" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="duration_average" nullable="false" remarks="Average duration in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="duration_max" nullable="false" remarks="Maximum duration in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="duration_median" nullable="false" remarks="Median duration in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="duration_min" nullable="false" remarks="Minimum duration in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="duration_q_1" nullable="false" remarks="Q1 duration in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="duration_q_2" nullable="false" remarks="Q2 duration in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="duration_sd" nullable="false" remarks="Standard Deviation of duration in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_count" nullable="false" remarks="Count of (combination) event" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_name" nullable="false" remarks="Name of (combination) event" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="line" nullable="false" remarks="Position in pathway. I.e. 1 equals the first event in a pathway. 2 the second etc. Overall indicates across the entire pathway" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="Target cohort ID" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_name" nullable="false" remarks="Target cohort name" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="tp_treatment_pathways" numRows="0" remarks="TreatmentPatternsModule: Treatment pathways" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="age" nullable="false" remarks="Age stratum" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="Analysis identifier foreign key" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="freq" nullable="false" remarks="Count of pathway" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="index_year" nullable="false" remarks="Target index year stratum" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="pathway" nullable="false" remarks="Pathway" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sex" nullable="false" remarks="Sex stratum" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_id" nullable="false" remarks="Target cohort ID" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_name" nullable="false" remarks="Target cohort name" size="0" type="Unknown" typeCode="12"/>
       </table>
    </tables>
 </database>

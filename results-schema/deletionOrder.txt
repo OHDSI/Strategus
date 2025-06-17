@@ -1,3 +1,13 @@
+tp_treatment_pathways
+tp_summary_event_duration
+tp_metadata
+tp_counts_year
+tp_counts_sex
+tp_counts_age
+tp_cdm_source_info
+tp_attrition
+tp_arguments
+tp_analyses
 sccs_likelihood_profile
 sccs_covariate_analysis
 sccs_censor_model
@@ -59,7 +69,6 @@ cd_concept_synonym
 cd_concept_relationship
 cd_concept_ancestor
 cd_cohort_summary_stats
-cd_cohort_relationships
 cd_cohort_inclusion
 cd_cohort_inc_stats
 cd_cohort_inc_result
@@ -89,6 +98,7 @@ sccs_event_dep_observation
 sccs_calendar_time_spanning
 sccs_attrition
 sccs_age_spanning
+plp_cohorts
 cg_cohort_inclusion
 cg_cohort_inc_result
 cg_cohort_generation
@@ -104,7 +114,6 @@ cm_diagnostics_summary
 cm_analysis
 database_meta_data
 cm_result
-plp_cohorts
 c_cohort_details
 sccs_exposures_outcome_set
 plp_diagnostic_summary

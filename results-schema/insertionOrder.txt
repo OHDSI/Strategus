@@ -18,7 +18,6 @@ cm_propensity_model
 plp_diagnostic_summary
 sccs_exposures_outcome_set
 c_cohort_details
-plp_cohorts
 cm_result
 database_meta_data
 cm_analysis
@@ -34,6 +33,7 @@ cd_index_event_breakdown
 cg_cohort_generation
 cg_cohort_inc_result
 cg_cohort_inclusion
+plp_cohorts
 sccs_age_spanning
 sccs_attrition
 sccs_calendar_time_spanning
@@ -63,7 +63,6 @@ cd_cohort
 cd_cohort_inc_result
 cd_cohort_inc_stats
 cd_cohort_inclusion
-cd_cohort_relationships
 cd_cohort_summary_stats
 cd_concept_ancestor
 cd_concept_relationship
@@ -125,3 +124,13 @@ plp_tidy_covariates_settings
 sccs_censor_model
 sccs_covariate_analysis
 sccs_likelihood_profile
+tp_analyses
+tp_arguments
+tp_attrition
+tp_cdm_source_info
+tp_counts_age
+tp_counts_sex
+tp_counts_year
+tp_metadata
+tp_summary_event_duration
+tp_treatment_pathways

@@ -14,7 +14,7 @@
 <g id="node1" class="node">
 <title>cd_temporal_covariate_ref</title>
 <g id="a_node1"><a xlink:href="../../tables/cd_temporal_covariate_ref.html" xlink:title="cd_temporal_covariate_ref" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="291,-62.7 291,-196.7 555,-196.7 555,-62.7 291,-62.7"/>
+<polygon fill="#ffffff" stroke="transparent" points="291,-40.7 291,-196.7 555,-196.7 555,-40.7 291,-40.7"/>
 <polygon fill="#f5f5f5" stroke="transparent" points="293,-171.7 293,-194.7 553,-194.7 553,-171.7 293,-171.7"/>
 <polygon fill="none" stroke="#000000" points="293,-171.7 293,-194.7 553,-194.7 553,-171.7 293,-171.7"/>
 <text text-anchor="start" x="298" y="-180.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cd_temporal_covariate_ref</text>
@@ -37,16 +37,20 @@
 <text text-anchor="start" x="313" y="-90.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">covariate_name</text>
 <polygon fill="none" stroke="#000000" points="491,-83.7 491,-105.7 553,-105.7 553,-83.7 491,-83.7"/>
 <text text-anchor="start" x="493.878" y="-91.4" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
-<polygon fill="#ffffff" stroke="transparent" points="293,-64.7 293,-83.7 383,-83.7 383,-64.7 293,-64.7"/>
-<polygon fill="none" stroke="#000000" points="293,-64.7 293,-83.7 383,-83.7 383,-64.7 293,-64.7"/>
-<text text-anchor="start" x="296" y="-70.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
-<polygon fill="#ffffff" stroke="transparent" points="383,-64.7 383,-83.7 491,-83.7 491,-64.7 383,-64.7"/>
-<polygon fill="none" stroke="#000000" points="383,-64.7 383,-83.7 491,-83.7 491,-64.7 383,-64.7"/>
-<text text-anchor="start" x="455.6105" y="-70.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="491,-64.7 491,-83.7 553,-83.7 553,-64.7 491,-64.7"/>
-<polygon fill="none" stroke="#000000" points="491,-64.7 491,-83.7 553,-83.7 553,-64.7 491,-64.7"/>
-<text text-anchor="start" x="534.4053" y="-70.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 &gt;</text>
-<polygon fill="none" stroke="#000000" stroke-width="2" points="292,-63.7 292,-195.7 554,-195.7 554,-63.7 292,-63.7"/>
+<polygon fill="none" stroke="#000000" points="293,-61.7 293,-83.7 491,-83.7 491,-61.7 293,-61.7"/>
+<text text-anchor="start" x="313" y="-68.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">value_as_concept_id</text>
+<polygon fill="none" stroke="#000000" points="491,-61.7 491,-83.7 553,-83.7 553,-61.7 491,-61.7"/>
+<text text-anchor="start" x="493.878" y="-69.4" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
+<polygon fill="#ffffff" stroke="transparent" points="293,-42.7 293,-61.7 383,-61.7 383,-42.7 293,-42.7"/>
+<polygon fill="none" stroke="#000000" points="293,-42.7 293,-61.7 383,-61.7 383,-42.7 293,-42.7"/>
+<text text-anchor="start" x="296" y="-48.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
+<polygon fill="#ffffff" stroke="transparent" points="383,-42.7 383,-61.7 491,-61.7 491,-42.7 383,-42.7"/>
+<polygon fill="none" stroke="#000000" points="383,-42.7 383,-61.7 491,-61.7 491,-42.7 383,-42.7"/>
+<text text-anchor="start" x="455.6105" y="-48.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="491,-42.7 491,-61.7 553,-61.7 553,-42.7 491,-42.7"/>
+<polygon fill="none" stroke="#000000" points="491,-42.7 491,-61.7 553,-61.7 553,-42.7 491,-42.7"/>
+<text text-anchor="start" x="534.4053" y="-48.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 &gt;</text>
+<polygon fill="none" stroke="#000000" stroke-width="2" points="292,-41.7 292,-195.7 554,-195.7 554,-41.7 292,-41.7"/>
 </a>
 </g>
 </g>
