@@ -32,7 +32,7 @@ CohortDiagnosticsModule <- R6::R6Class(
       args$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
-      args$tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema
+      args$tempEmulationSchema <- jobContext$moduleExecutionSettings$tempEmulationSchema
       args$cohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
       args$cohortTableNames <- jobContext$moduleExecutionSettings$cohortTableNames
       args$incremental <- jobContext$moduleExecutionSettings$incremental
