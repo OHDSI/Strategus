@@ -44,6 +44,7 @@ CharacterizationModule <- R6::R6Class(
         targetTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema,
         cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         characterizationSettings = jobContext$settings$analysis,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,

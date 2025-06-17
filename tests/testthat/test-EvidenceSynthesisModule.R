@@ -140,7 +140,7 @@ getDatabaseIds <- function(setting, databaseIds) {
 
 test_that("Include only allowed CM estimates in meta-analysis", {
   # Should only include estimates in meta-analysis that are
-  # 1. Either unblinded or not outcome of interest
+  # 1. Unblinded (unblind_for_evidence_synthesis = 1)
   # 2. Has a valid estimate (normal approx) or LL profile (adaptive grid)
   # 3. Is not excluded in createEvidenceSynthesisSource()
   connection <- DatabaseConnector::connect(esTestDataConnectionDetails)
@@ -156,7 +156,7 @@ test_that("Include only allowed CM estimates in meta-analysis", {
       cm_target_comparator_outcome.outcome_id,
       analysis_id,
       database_id,
-      unblind AS include_1
+      unblind_for_evidence_synthesis AS include_1
     FROM main.cm_target_comparator_outcome
     LEFT JOIN main.cm_diagnostics_summary
       ON cm_diagnostics_summary.target_id = cm_target_comparator_outcome.target_id
@@ -244,7 +244,7 @@ test_that("Include only allowed SCCS estimates in meta-analysis", {
       sccs_diagnostics_summary.covariate_id,
       sccs_diagnostics_summary.analysis_id,
       sccs_diagnostics_summary.database_id,
-      unblind AS include_1
+      unblind_for_evidence_synthesis AS include_1
     FROM main.sccs_exposure
     INNER JOIN main.sccs_diagnostics_summary
       ON sccs_exposure.exposures_outcome_set_id = sccs_diagnostics_summary.exposures_outcome_set_id

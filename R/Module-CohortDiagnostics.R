@@ -32,11 +32,12 @@ CohortDiagnosticsModule <- R6::R6Class(
       args$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
+      args$tempEmulationSchema <- jobContext$moduleExecutionSettings$tempEmulationSchema
       args$cohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
       args$cohortTableNames <- jobContext$moduleExecutionSettings$cohortTableNames
+      args$incremental <- jobContext$moduleExecutionSettings$incremental
       args$incrementalFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$minCellCount <- jobContext$moduleExecutionSettings$minCellCount
-      args$cohortIds <- jobContext$moduleExecutionSettings$cohortIds
       do.call(CohortDiagnostics::executeDiagnostics, args)
 
       # TODO: Removing this to make the upload easier
@@ -173,47 +174,7 @@ CohortDiagnosticsModule <- R6::R6Class(
   ),
   private = list(
     .getDefaultCovariateSettings = function() {
-      covariateSettings <- '
-      {
-        "temporal": true,
-        "temporalSequence": false,
-        "DemographicsGender": true,
-        "DemographicsAge": true,
-        "DemographicsAgeGroup": true,
-        "DemographicsRace": true,
-        "DemographicsEthnicity": true,
-        "DemographicsIndexYear": true,
-        "DemographicsIndexMonth": true,
-        "DemographicsPriorObservationTime": true,
-        "DemographicsPostObservationTime": true,
-        "DemographicsTimeInCohort": true,
-        "DemographicsIndexYearMonth": true,
-        "ConditionOccurrence": true,
-        "ConditionEraStart": true,
-        "ConditionEraOverlap": true,
-        "ConditionEraGroupOverlap": true,
-        "DrugEraStart": true,
-        "DrugEraGroupOverlap": true,
-        "ProcedureOccurrence": true,
-        "DeviceExposure": true,
-        "Measurement": true,
-        "Observation": true,
-        "CharlsonIndex": true,
-        "Dcsi": true,
-        "Chads2": true,
-        "Chads2Vasc": true,
-        "temporalStartDays": [-9999, -365, -180, -30, -365, -30, 0, 1, 31, -9999],
-        "temporalEndDays": [0, 0, 0, 0, -31, -1, 0, 30, 365, 9999],
-        "includedCovariateConceptIds": [],
-        "addDescendantsToInclude": false,
-        "excludedCovariateConceptIds": [],
-        "addDescendantsToExclude": false,
-        "includedCovariateIds": [],
-        "attr_class": "covariateSettings",
-        "attr_fun": "getDbDefaultCovariateData"
-      }
-        '
-      ParallelLogger::convertJsonToSettings(covariateSettings)
+      CohortDiagnostics::getDefaultCovariateSettings()
     },
     .getResultsDataModelSpecification = function() {
       resultsDataModelSpecification <- CohortGenerator::readCsv(

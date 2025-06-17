@@ -1,10 +1,20 @@
+Strategus 1.3.1
+===============
+
+- EvidenceSynthesis results model - make target/comparator days bigint (#212)
+- EvidenceSynthesis results model - make observed_days bigint (#221)
+- Not using unblind_for_evidence_synthesis even if exists (#218)
+- CohortDiagnosticsModule bug with cohort ID specification (#234)
+- `tempEmulationSchema` not being passed to all modules (#229)
+- CohortDiagnostics incremental flag not passed (#237)
+
 Strategus 1.3.0
 ===============
 
 New Features
 
 - Adds TreatmentPatterns module (experimental) (#186)
-- Adds PatientLevePredictionValidation module (experimental) (#164)
+- Adds PatientLevelPredictionValidation module (experimental) (#164)
 
 Fixes
 

@@ -59,7 +59,6 @@ cdModuleSpecifications <- cdModuleSettingsCreator$createModuleSpecifications(
   runVisitContext = TRUE,
   runBreakdownIndexEvents = TRUE,
   runIncidenceRate = TRUE,
-  runCohortRelationship = TRUE,
   runTemporalCohortCharacterization = TRUE,
   incremental = FALSE
 )

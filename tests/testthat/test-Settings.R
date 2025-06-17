@@ -47,7 +47,6 @@ test_that("Test analysis specification creation", {
     runVisitContext = TRUE,
     runBreakdownIndexEvents = TRUE,
     runIncidenceRate = TRUE,
-    runCohortRelationship = TRUE,
     runTemporalCohortCharacterization = TRUE
   )
 
