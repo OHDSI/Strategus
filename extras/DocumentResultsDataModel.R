@@ -53,6 +53,11 @@ fileNameCleaned <- sub("^Module-", "", moduleFileList)  # Remove "Module-"
 fileNameCleaned <- sub("\\.R$", "", fileNameCleaned)  # Remove ".R"
 moduleList <- paste0(fileNameCleaned, "Module")
 
+# Remove the PLP Validation module since its results model
+# is captured by the PLP module
+modulesToExcludeFromDocumentation <- c("PatientLevelPredictionValidationModule")
+moduleList <- moduleList[!moduleList %in% modulesToExcludeFromDocumentation]
+
 for(module in moduleList) {
   m <- get(module)$new()
   rdms <- m$getResultsDataModelSpecification()
@@ -80,6 +85,27 @@ for(module in moduleList) {
 #   x = tableDescriptions,
 #   file = "./extras/rdms/table_descriptions.csv"
 # )
+
+# Determine if there are any new tables that require documentation
+existingTableDescriptions <- CohortGenerator::readCsv(
+  file = "./extras/rdms/table_descriptions.csv"
+)
+allTables <- fullResultsDataModel |>
+  distinct(tableDefinedBy, tableName)
+# Find any missing tables - if missing from
+# the list of existing tables this means there are newly
+# added tables
+missingTables <- allTables |>
+  dplyr::anti_join(existingTableDescriptions, by = dplyr::join_by("tableName")) |>
+  dplyr::mutate(description = "todo")
+removedTables <- existingTableDescriptions |>
+  dplyr::anti_join(allTables, by = dplyr::join_by("tableName")) |>
+  dplyr::mutate(missingFrom = "removedTables")
+
+if (nrow(missingTables) || nrow(removedTables)) {
+  CohortGenerator::writeCsv(x = missingTables, file = "./extras/rdms/missing_tables.csv")
+  stop("There are missing/removed tables. Please review and edit ./extras/rdms/table_descriptions.csv")
+}
 
 # Save the OHDSI-SQL
 SqlRender::writeSql(
