@@ -2,6 +2,8 @@ library(testthat)
 library(dplyr)
 
 test_that("TreatmentPatterns: execute method", {
+  skip_if(!require("TreatmentPatterns", quietly = TRUE, character.only = TRUE, warn.conflicts = FALSE))
+
   tempDir <- file.path(tempdir(), "Strategus-TP")
   on.exit(unlink(tempDir, recursive = TRUE))
 

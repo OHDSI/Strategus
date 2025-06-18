@@ -47,7 +47,7 @@ Suggests:
   RSQLite,
   SelfControlledCaseSeries,
   testthat (>= 3.0.0),
-  TreatmentPatterns,
+  TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
   ohdsi/Characterization,
