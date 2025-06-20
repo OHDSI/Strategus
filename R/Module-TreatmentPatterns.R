@@ -49,6 +49,7 @@ TreatmentPatternsModule <- R6::R6Class(
 
       spec <- jobContext$settings
       cohorts <- super$.listToDataFrame(spec$cohorts)
+
       outputEnv <- TreatmentPatterns::computePathways(
         cohorts = cohorts,
         cohortTableName = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
@@ -224,9 +225,18 @@ TreatmentPatternsModule <- R6::R6Class(
     #' @param windowStart (`numeric(1)`: `0`) Offset for `startAnchor` in days.
     #' @param endAnchor (`character(1)`: `"endDate"`) End date anchor. One of: `"startDate"`, `"endDate"`
     #' @param windowEnd (`numeric(1)`: `0`) Offset for `endAnchor` in days.
+    #' @param indexDateOffset (`integer(1)`: `0`)\cr
+    #' `DEPRECATED`
+    #' Offset the index date of the `Target` cohort.
+    #' @param includeTreatments (`character(1)`: `"startDate"`)\cr
+    #' `DEPRECATED`
+    #' \describe{
+    #'  \item{`"startDate"`}{Include treatments after the target cohort start date and onwards.}
+    #'  \item{`"endDate"`}{Include treatments before target cohort end date and before.}
+    #' }
     createModuleSpecifications = function(cohorts,
-                                          includeTreatments = "startDate",
-                                          indexDateOffset = 0,
+                                          includeTreatments = NULL,
+                                          indexDateOffset = NULL,
                                           minEraDuration = 0,
                                           splitEventCohorts = NULL,
                                           splitTime = NULL,
@@ -244,6 +254,14 @@ TreatmentPatternsModule <- R6::R6Class(
                                           windowStart = 0,
                                           endAnchor = "endDate",
                                           windowEnd = 0) {
+      if (!is.null(indexDateOffset)) {
+        warning("`indexDateOffset` is deprecated in TreatmentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
+      }
+
+      if (!is.null(includeTreatments)) {
+        warning("`includeTreatments` is deprecated in TreatentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
+      }
+
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         if (name == "cohorts") {
