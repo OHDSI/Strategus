@@ -241,34 +241,6 @@
       <column name="gain_count" comments="number of people gained from rule"/>
       <column name="person_total" comments="person total"/>
     </table>
-    <table name="cd_cohort_relationships" comments="CohortDiagnosticsModule: Cohort relationships">
-      <column name="database_id" comments="database identifier"/>
-      <column name="cohort_id" comments="target cohort id"/>
-      <column name="comparator_cohort_id" comments="comparator cohort id"/>
-      <column name="start_day" comments="start day"/>
-      <column name="end_day" comments="end day"/>
-      <column name="subjects" comments="number of subjects total"/>
-      <column name="sub_cs_before_ts" comments="present in both target and comparator"/>
-      <column name="sub_cs_on_ts" comments="How many subjects in comparator cohort start prior to first target cohort start"/>
-      <column name="sub_cs_after_ts" comments="How many subjects in comparator cohort start with first target cohort start"/>
-      <column name="sub_cs_before_te" comments="How many subjects in comparator cohort start after first target cohort start"/>
-      <column name="sub_cs_on_te" comments="How many subjects in comparator cohort start after first target cohort end"/>
-      <column name="sub_cs_after_te" comments="How many subjects in comparator cohort start on first target cohort end"/>
-      <column name="sub_cs_window_t" comments="How many subjects in comparator cohort start after first target cohort end"/>
-      <column name="sub_ce_window_t" comments="comparator cohort subjects start within period (incidence) relative to target start date and end date"/>
-      <column name="sub_cs_window_ts" comments="comparator cohort subjects start within period (incidence) relative to target start date and end date"/>
-      <column name="sub_cs_window_te" comments="comparator cohort subjects start within period (incidence) relative to target start date"/>
-      <column name="sub_ce_window_ts" comments="comparator cohort subjects start within period (incidence) relative to target end date"/>
-      <column name="sub_ce_window_te" comments="comparator cohort subjects end within period (incidence) relative to target start date"/>
-      <column name="sub_c_within_t" comments="comparator cohort subjects end within period (incidence) relative to target end date"/>
-      <column name="c_days_before_ts" comments="comparator cohort days within target (offset) days"/>
-      <column name="c_days_before_te" comments="comparator cohort days before target start date (offset)"/>
-      <column name="c_days_within_t_days" comments="comparator cohort days before target end date (offset)"/>
-      <column name="c_days_after_ts" comments="comparator cohort days within target cohort days (offset)"/>
-      <column name="c_days_after_te" comments="comparator cohort days after target start date (offset)"/>
-      <column name="t_days" comments="target days"/>
-      <column name="c_days" comments="comparator days"/>
-    </table>
     <table name="cd_cohort_summary_stats" comments="CohortDiagnosticsModule: Cohort summary stats">
       <column name="database_id" comments="database identifier"/>
       <column name="cohort_id" comments="cohort id"/>
@@ -310,7 +282,7 @@
       <column name="concept_set_expression" comments="concept set expression"/>
     </table>
     <table name="cd_concept_synonym" comments="CohortDiagnosticsModule: Concept synonym">
-      <column name="concept_id" comments="concpt id"/>
+      <column name="concept_id" comments="concept id"/>
       <column name="concept_synonym_name" comments="concept synonym name"/>
       <column name="language_concept_id" comments="lanague id"/>
     </table>
@@ -413,6 +385,7 @@
         <foreignKey table="cd_temporal_analysis_ref" column="analysis_id"/>
       </column>
       <column name="concept_id" comments="concept identifier"/>
+      <column name="value_as_concept_id" comments="maps to a concept id for categorical variables (where present)"/>
     </table>
     <table name="cd_temporal_covariate_value" comments="CohortDiagnosticsModule: Binary covariate values">
       <column name="cohort_id" comments="cohort identifier"/>
@@ -1067,10 +1040,10 @@
     <table name="plp_model_designs" comments="PatientLevelPredictionModule: Model designs">
       <column name="model_design_id" comments="a unique identifier for the model design settings"/>
       <column name="target_id" comments="the  identifier for the target cohort id">
-        <foreignKey table="plp_cohorts" column="cohort_definition_id"/>
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
       </column>
       <column name="outcome_id" comments="the  identifier for the outcome cohort id">
-        <foreignKey table="plp_cohorts" column="cohort_definition_id"/>
+        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
       </column>
       <column name="tar_id" comments="the  identifier for the time at risk setting"/>
       <column name="plp_data_setting_id" comments="the  identifier for the plp data setting"/>
@@ -1281,6 +1254,8 @@
       <column name="covariate_analysis_id" comments="A unique identifier for a covariate analysis."/>
       <column name="covariate_analysis_name" comments="A name for a covariate analysis, e.g. 'Pre-exposure'."/>
       <column name="variable_of_interest" comments="Is the variable of interest (1 = yes, 0 = no)."/>
+      <column name="pre_exposure" comments="Does the variable represent a pre-exposure period (1 = yes, 0 = no)."/>
+      <column name="end_of_observation_period" comments="Does the variable represent the end of the observation period (1 = yes, 0 = no)."/>
     </table>
     <table name="sccs_covariate" comments="SelfControlledCaseSeriesModule: Covariate reference">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
@@ -1401,7 +1376,7 @@
     </table>
     <table name="sccs_attrition" comments="SelfControlledCaseSeriesModule: Attrition table">
       <column name="sequence_number" comments="The place in the sequence of steps defining the final analysis cohort. 1 indicates the original exposed population without any inclusion criteria."/>
-      <column name="description" comments="A description of the last restriction, e.g. &quot;Removing persons with the outcome prior&quot;."/>
+      <column name="description" comments="A description of the last restriction, e.g. 'Removing persons with the outcome prior'."/>
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
       <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
         <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
@@ -1416,6 +1391,7 @@
     <table name="sccs_likelihood_profile" comments="SelfControlledCaseSeriesModule: Likelihood profile">
       <column name="log_rr" comments="The log of the relative risk where the likelihood is sampled."/>
       <column name="log_likelihood" comments="The normalized log likelihood."/>
+      <column name="gradient" comments="The gradient of the log likelihood."/>
       <column name="covariate_id" comments="The identifier for the covariate of interest."/>
       <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
@@ -1432,6 +1408,10 @@
       <column name="observed_subjects" comments="Number of people observed during the month."/>
       <column name="ratio" comments="Observed over expected ratio, where the expected count assumes a constant rate over time."/>
       <column name="adjusted_ratio" comments="Observed over expected ratio, where the expected count is adjusted for age, season, or calendar time, as specified in the analysis."/>
+      <column name="outcome_rate" comments="Number of outcomes divided by the number of subjects."/>
+      <column name="adjusted_rate" comments="The outcome rate, adjusted for age, season, or calendar time, as specified in the analysis."/>
+      <column name="stable" comments="Does the adjusted rate not deviate significantly from the mean? (1 = stable, 0 = unstable)"/>
+      <column name="p" comments="The two-sided p-value against the null hypothesis that the rate is equal to the mean."/>
     </table>
     <table name="sccs_time_to_event" comments="SelfControlledCaseSeriesModule: Time-to-event diagnostic">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
@@ -1463,16 +1443,6 @@
       <column name="calendar_month" comments="Calendar month (e.g. 1 is January)."/>
       <column name="cover_before_after_subjects" comments="Number of subjects whose observation period covers this month as well as the one before and after."/>
     </table>
-    <table name="sccs_event_dep_observation" comments="SelfControlledCaseSeriesModule: Event-dependent observation diagnostic">
-      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
-      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
-        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
-      </column>
-      <column name="database_id" comments="Foreign key referencing the database."/>
-      <column name="months_to_end" comments="Number of months until observation end."/>
-      <column name="censored" comments="Whether the observation is censored (meaning, not equal to the end of database time). (1 = censored, 0 = not censored)."/>
-      <column name="outcomes" comments="Number of outcomes observed during the month."/>
-    </table>
     <table name="sccs_diagnostics_summary" comments="SelfControlledCaseSeriesModule: Diagnostic summary">
       <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table.">
         <foreignKey table="sccs_analysis" column="analysis_id"/>
@@ -1490,16 +1460,130 @@
         <foreignKey table="database_meta_data" column="database_id"/>
         <foreignKey table="sccs_covariate" column="database_id"/>
       </column>
-      <column name="mdrr" comments="The minimum detectable relative risk."/>
+      <column name="time_stability_p" comments="The p for whether the mean monthly ratio between observed and expected exceeds the specified threshold."/>
+      <column name="time_stability_diagnostic" comments="Pass / fail / not evaluated classification of the time stability diagnostic."/>
+      <column name="event_exposure_lb" comments="Lower bound of the 95% CI for the pre-expososure estimate"/>
+      <column name="event_exposure_ub" comments="Upper bound of the 95% CI for the pre-expososure estimate"/>
+      <column name="event_exposure_diagnostic" comments="Pass / fail / not evaluated classification of the event-exposure independence diagnostic."/>
+      <column name="event_observation_lb" comments="Lower bound of the 95% CI for the end of observation probe estimate"/>
+      <column name="event_observation_ub" comments="Upper bound of the 95% CI for the end of observation probe estimate"/>
+      <column name="event_observation_diagnostic" comments="Pass / fail / not evaluated classification of the event-observation period dependence diagnostic."/>
+      <column name="rare_outcome_prevalence" comments="The proportion of people in the underlying population who have the outcome at least once."/>
+      <column name="rare_outcome_diagnostic" comments="Pass / fail / not evaluated classification of the rare outcome diagnostic."/>
       <column name="ease" comments="The expected absolute systematic error."/>
-      <column name="time_trend_p" comments="The p for whether the mean monthly ratio between observed and expected is no greater than 1.25."/>
-      <column name="pre_exposure_p" comments="One-sided p-value for whether the rate before expore is higher than after, against the null of no difference."/>
-      <column name="mdrr_diagnostic" comments="Pass / warning / fail / not evaluated classification of the MDRR diagnostic."/>
       <column name="ease_diagnostic" comments="Pass / warning / fail / not evaluated classification of the EASE diagnostic."/>
-      <column name="time_trend_diagnostic" comments="Pass / warning / fail / not evaluated classification of the time trend (unstalbe months) diagnostic."/>
-      <column name="pre_exposure_diagnostic" comments="Pass / warning / fail / not evaluated classification of the time trend (unstalbe months) diagnostic."/>
+      <column name="mdrr" comments="The minimum detectable relative risk."/>
+      <column name="mdrr_diagnostic" comments="Pass / warning / fail / not evaluated classification of the MDRR diagnostic."/>
       <column name="unblind" comments="Is unblinding the result recommended? (1 = yes, 0 = no)"/>
       <column name="unblind_for_evidence_synthesis" comments="Is unblinding the result for inclusion in evidence synthesis recommended? This ignores the MDRR diagnostic. (1 = yes, 0 = no)"/>
+      <column name="time_trend_p" comments="The p for whether the mean monthly ratio between observed and expected is no greater than 1.25."/>
+      <column name="pre_exposure_p" comments="One-sided p-value for whether the rate before expore is higher than after, against the null of no difference."/>
+      <column name="time_trend_diagnostic" comments="Pass / warning / fail / not evaluated classification of the time trend (unstalbe months) diagnostic."/>
+      <column name="pre_exposure_diagnostic" comments="Pass / warning / fail / not evaluated classification of the time trend (unstalbe months) diagnostic."/>
+    </table>
+    <table name="sccs_event_dep_observation" comments="SelfControlledCaseSeriesModule: Event-dependent observation diagnostic">
+      <column name="analysis_id" comments="A foreign key referencing the sccs_analysis table."/>
+      <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table.">
+        <foreignKey table="sccs_exposures_outcome_set" column="exposures_outcome_set_id"/>
+      </column>
+      <column name="database_id" comments="Foreign key referencing the database."/>
+      <column name="months_to_end" comments="Number of months until observation end."/>
+      <column name="censored" comments="Whether the observation is censored (meaning, not equal to the end of database time). (1 = censored, 0 = not censored)."/>
+      <column name="outcomes" comments="Number of outcomes observed during the month."/>
+    </table>
+    <table name="tp_analyses" comments="TreatmentPatternsModule: List of analyses">
+      <column name="analysis_id" comments="Analysis identifier"/>
+      <column name="description" comments="Analysis description"/>
+    </table>
+    <table name="tp_arguments" comments="TreatmentPatternsModule: List of analysis arguments">
+      <column name="analysis_id" comments="Analysis identifier"/>
+      <column name="arguments" comments="Arguments as JSON"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+    </table>
+    <table name="tp_attrition" comments="TreatmentPatternsModule: Treatment patterns attrition">
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="number_records" comments="Number of records"/>
+      <column name="number_subjects" comments="Number of subjects"/>
+      <column name="reason" comments="Reason description"/>
+      <column name="reason_id" comments="Reason Identifier"/>
+      <column name="target_cohort_id" comments="Target cohort ID"/>
+      <column name="target_cohort_name" comments="Target cohort name"/>
+      <column name="time_stamp" comments="Time stamp in seconds since epoch (1970-01-01)"/>
+    </table>
+    <table name="tp_cdm_source_info" comments="TreatmentPatternsModule: CDM source information">
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="cdm_etl_reference" comments="CDM ETL Reference"/>
+      <column name="cdm_holder" comments="Cdm holder"/>
+      <column name="cdm_release_date" comments="CDM release date"/>
+      <column name="cdm_source_abbreviation" comments="CDM Source Abbreviation"/>
+      <column name="cdm_source_name" comments="CDM Source Name"/>
+      <column name="cdm_version" comments="CDM version"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="source_description" comments="Source description"/>
+      <column name="source_documentation_reference" comments="Source Documentation Reference"/>
+      <column name="source_release_date" comments="Source release date"/>
+      <column name="vocabulary_version" comments="Vocabulary version"/>
+    </table>
+    <table name="tp_counts_age" comments="TreatmentPatternsModule: Age counts">
+      <column name="age" comments="Age in years"/>
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="n" comments="Count per age. May be &lt;x"/>
+      <column name="target_cohort_id" comments="Target cohort ID"/>
+      <column name="target_cohort_name" comments="Target cohort name"/>
+    </table>
+    <table name="tp_counts_sex" comments="TreatmentPatternsModule: Sex counts">
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="n" comments="Count per sex. May be &lt;x"/>
+      <column name="sex" comments="Sex group"/>
+      <column name="target_cohort_id" comments="Target cohort ID"/>
+      <column name="target_cohort_name" comments="Target cohort name"/>
+    </table>
+    <table name="tp_counts_year" comments="TreatmentPatternsModule: Year counts">
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="n" comments="Count per year. May be &lt;x"/>
+      <column name="target_cohort_id" comments="Target cohort ID"/>
+      <column name="target_cohort_name" comments="Target cohort name"/>
+      <column name="index_year" comments="Calendar year"/>
+    </table>
+    <table name="tp_metadata" comments="TreatmentPatternsModule: Metadata">
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="execution_end" comments="Time stamp in seconds since epoch (1970-01-01)"/>
+      <column name="execution_start" comments="Time stamp in seconds since epoch (1970-01-01)"/>
+      <column name="package_version" comments="TreatmentPatterns version"/>
+      <column name="platform" comments="Platform (Example: x86_64-w64-mingw32)"/>
+      <column name="r_version" comments="R version"/>
+    </table>
+    <table name="tp_summary_event_duration" comments="TreatmentPatternsModule: Summary event duration">
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="duration_average" comments="Average duration in days"/>
+      <column name="event_count" comments="Count of (combination) event"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="event_name" comments="Name of (combination) event"/>
+      <column name="line" comments="Position in pathway. I.e. 1 equals the first event in a pathway. 2 the second etc. Overall indicates across the entire pathway"/>
+      <column name="duration_max" comments="Maximum duration in days"/>
+      <column name="duration_median" comments="Median duration in days"/>
+      <column name="duration_min" comments="Minimum duration in days"/>
+      <column name="duration_q_1" comments="Q1 duration in days"/>
+      <column name="duration_q_2" comments="Q2 duration in days"/>
+      <column name="duration_sd" comments="Standard Deviation of duration in days"/>
+      <column name="target_cohort_id" comments="Target cohort ID"/>
+      <column name="target_cohort_name" comments="Target cohort name"/>
+    </table>
+    <table name="tp_treatment_pathways" comments="TreatmentPatternsModule: Treatment pathways">
+      <column name="age" comments="Age stratum"/>
+      <column name="analysis_id" comments="Analysis identifier foreign key"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="freq" comments="Count of pathway"/>
+      <column name="index_year" comments="Target index year stratum"/>
+      <column name="pathway" comments="Pathway"/>
+      <column name="sex" comments="Sex stratum"/>
+      <column name="target_cohort_id" comments="Target cohort ID"/>
+      <column name="target_cohort_name" comments="Target cohort name"/>
     </table>
   </tables>
 </schemaMeta>

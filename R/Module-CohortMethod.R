@@ -34,6 +34,7 @@ CohortMethodModule <- R6::R6Class(
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
+      args$tempEmulationSchema <- jobContext$moduleExecutionSettings$tempEmulationSchema
       args$exposureDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
       args$exposureTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outcomeDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
