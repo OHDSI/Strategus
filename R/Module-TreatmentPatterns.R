@@ -254,11 +254,11 @@ TreatmentPatternsModule <- R6::R6Class(
                                           windowStart = 0,
                                           endAnchor = "endDate",
                                           windowEnd = 0) {
-      if (!is.null(spec$indexDateOffset)) {
+      if (!is.null(indexDateOffset)) {
         warning("`indexDateOffset` is deprecated in TreatmentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
       }
 
-      if (!is.null(spec$includeTreatments)) {
+      if (!is.null(includeTreatments)) {
         warning("`includeTreatments` is deprecated in TreatentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
       }
 
