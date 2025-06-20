@@ -196,7 +196,6 @@ CREATE TABLE @database_schema.@table_prefix@c_cohort_counts (
 {DEFAULT @cd_cohort_inclusion = cd_cohort_inclusion}
 {DEFAULT @cd_cohort_inc_result = cd_cohort_inc_result}
 {DEFAULT @cd_cohort_inc_stats = cd_cohort_inc_stats}
-{DEFAULT @cd_cohort_relationships = cd_cohort_relationships}
 {DEFAULT @cd_cohort_summary_stats = cd_cohort_summary_stats}
 {DEFAULT @cd_concept = cd_concept}
 {DEFAULT @cd_concept_ancestor = cd_concept_ancestor}
@@ -274,36 +273,6 @@ CREATE TABLE @database_schema.@table_prefix@cd_cohort_inc_stats (
 	 gain_count FLOAT,
 	 person_total FLOAT,
 	PRIMARY KEY(database_id,cohort_id,rule_sequence,mode_id)
-);
- 
-CREATE TABLE @database_schema.@table_prefix@cd_cohort_relationships (
-  	 database_id VARCHAR NOT NULL,
-	 cohort_id BIGINT NOT NULL,
-	 comparator_cohort_id BIGINT NOT NULL,
-	 start_day BIGINT NOT NULL,
-	 end_day FLOAT NOT NULL,
-	 subjects BIGINT,
-	 sub_cs_before_ts BIGINT,
-	 sub_cs_on_ts BIGINT,
-	 sub_cs_after_ts BIGINT,
-	 sub_cs_before_te BIGINT,
-	 sub_cs_on_te BIGINT,
-	 sub_cs_after_te BIGINT,
-	 sub_cs_window_t BIGINT,
-	 sub_ce_window_t BIGINT,
-	 sub_cs_window_ts BIGINT,
-	 sub_cs_window_te BIGINT,
-	 sub_ce_window_ts BIGINT,
-	 sub_ce_window_te BIGINT,
-	 sub_c_within_t BIGINT,
-	 c_days_before_ts BIGINT,
-	 c_days_before_te BIGINT,
-	 c_days_within_t_days BIGINT,
-	 c_days_after_ts BIGINT,
-	 c_days_after_te BIGINT,
-	 t_days BIGINT,
-	 c_days BIGINT,
-	PRIMARY KEY(database_id,cohort_id,comparator_cohort_id,start_day,end_day)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cd_cohort_summary_stats (
@@ -464,6 +433,7 @@ CREATE TABLE @database_schema.@table_prefix@cd_temporal_covariate_ref (
 	 covariate_name VARCHAR,
 	 analysis_id INT,
 	 concept_id BIGINT,
+	 value_as_concept_id BIGINT,
 	PRIMARY KEY(covariate_id)
 );
  
@@ -1048,8 +1018,8 @@ CREATE TABLE @database_schema.@table_prefix@es_cm_result (
 	 se_log_rr FLOAT,
 	 target_subjects INT,
 	 comparator_subjects INT,
-	 target_days INT,
-	 comparator_days INT,
+	 target_days BIGINT,
+	 comparator_days BIGINT,
 	 target_outcomes INT,
 	 comparator_outcomes INT,
 	 n_databases INT,
@@ -1094,10 +1064,10 @@ CREATE TABLE @database_schema.@table_prefix@es_sccs_result (
 	 outcome_events INT,
 	 outcome_observation_periods INT,
 	 covariate_subjects INT,
-	 covariate_days INT,
+	 covariate_days BIGINT,
 	 covariate_eras INT,
 	 covariate_outcomes INT,
-	 observed_days INT,
+	 observed_days BIGINT,
 	 n_databases INT,
 	 log_rr FLOAT,
 	 se_log_rr FLOAT,
@@ -1467,8 +1437,8 @@ CREATE TABLE @database_schema.@table_prefix@plp_demographic_summary (
 {DEFAULT @sccs_time_to_event = sccs_time_to_event}
 {DEFAULT @sccs_age_spanning = sccs_age_spanning}
 {DEFAULT @sccs_calendar_time_spanning = sccs_calendar_time_spanning}
-{DEFAULT @sccs_event_dep_observation = sccs_event_dep_observation}
 {DEFAULT @sccs_diagnostics_summary = sccs_diagnostics_summary}
+{DEFAULT @sccs_event_dep_observation = sccs_event_dep_observation}
   
 CREATE TABLE @database_schema.@table_prefix@sccs_analysis (
   	 analysis_id INT NOT NULL,
@@ -1482,6 +1452,8 @@ CREATE TABLE @database_schema.@table_prefix@sccs_covariate_analysis (
 	 covariate_analysis_id INT NOT NULL,
 	 covariate_analysis_name VARCHAR,
 	 variable_of_interest INT,
+	 pre_exposure INT,
+	 end_of_observation_period INT,
 	PRIMARY KEY(analysis_id,covariate_analysis_id)
 );
  
@@ -1599,6 +1571,7 @@ CREATE TABLE @database_schema.@table_prefix@sccs_attrition (
 CREATE TABLE @database_schema.@table_prefix@sccs_likelihood_profile (
   	 log_rr FLOAT NOT NULL,
 	 log_likelihood FLOAT,
+	 gradient FLOAT,
 	 covariate_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
@@ -1615,6 +1588,10 @@ CREATE TABLE @database_schema.@table_prefix@sccs_time_trend (
 	 observed_subjects INT,
 	 ratio FLOAT,
 	 adjusted_ratio FLOAT,
+	 outcome_rate FLOAT,
+	 adjusted_rate FLOAT,
+	 stable INT,
+	 p FLOAT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
  
@@ -1648,6 +1625,34 @@ CREATE TABLE @database_schema.@table_prefix@sccs_calendar_time_spanning (
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,calendar_year,calendar_month)
 );
  
+CREATE TABLE @database_schema.@table_prefix@sccs_diagnostics_summary (
+  	 analysis_id INT NOT NULL,
+	 exposures_outcome_set_id INT NOT NULL,
+	 covariate_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
+	 time_stability_p FLOAT,
+	 time_stability_diagnostic VARCHAR(20),
+	 event_exposure_lb FLOAT,
+	 event_exposure_ub FLOAT,
+	 event_exposure_diagnostic VARCHAR(20),
+	 event_observation_lb FLOAT,
+	 event_observation_ub FLOAT,
+	 event_observation_diagnostic VARCHAR(20),
+	 rare_outcome_prevalence FLOAT,
+	 rare_outcome_diagnostic VARCHAR(20),
+	 ease FLOAT,
+	 ease_diagnostic VARCHAR(20),
+	 mdrr FLOAT,
+	 mdrr_diagnostic VARCHAR(20),
+	 unblind INT,
+	 unblind_for_evidence_synthesis INT,
+	 time_trend_p FLOAT,
+	 pre_exposure_p FLOAT,
+	 time_trend_diagnostic VARCHAR(20),
+	 pre_exposure_diagnostic VARCHAR(20),
+	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
+);
+ 
 CREATE TABLE @database_schema.@table_prefix@sccs_event_dep_observation (
   	 analysis_id INT NOT NULL,
 	 exposures_outcome_set_id INT NOT NULL,
@@ -1657,21 +1662,119 @@ CREATE TABLE @database_schema.@table_prefix@sccs_event_dep_observation (
 	 outcomes INT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,database_id,months_to_end,censored)
 );
+-- TreatmentPatternsModule Tables
+{DEFAULT @table_prefix = ''}
+{DEFAULT @tp_analyses = tp_analyses}
+{DEFAULT @tp_arguments = tp_arguments}
+{DEFAULT @tp_attrition = tp_attrition}
+{DEFAULT @tp_cdm_source_info = tp_cdm_source_info}
+{DEFAULT @tp_counts_age = tp_counts_age}
+{DEFAULT @tp_counts_sex = tp_counts_sex}
+{DEFAULT @tp_counts_year = tp_counts_year}
+{DEFAULT @tp_metadata = tp_metadata}
+{DEFAULT @tp_summary_event_duration = tp_summary_event_duration}
+{DEFAULT @tp_treatment_pathways = tp_treatment_pathways}
+  
+CREATE TABLE @database_schema.@table_prefix@tp_analyses (
+  	 analysis_id INT,
+	 description VARCHAR
+);
  
-CREATE TABLE @database_schema.@table_prefix@sccs_diagnostics_summary (
-  	 analysis_id INT NOT NULL,
-	 exposures_outcome_set_id INT NOT NULL,
-	 covariate_id INT NOT NULL,
-	 database_id VARCHAR NOT NULL,
-	 mdrr FLOAT,
-	 ease FLOAT,
-	 time_trend_p FLOAT,
-	 pre_exposure_p FLOAT,
-	 mdrr_diagnostic VARCHAR(20),
-	 ease_diagnostic VARCHAR(20),
-	 time_trend_diagnostic VARCHAR(20),
-	 pre_exposure_diagnostic VARCHAR(20),
-	 unblind INT,
-	 unblind_for_evidence_synthesis INT,
-	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,database_id)
+CREATE TABLE @database_schema.@table_prefix@tp_arguments (
+  	 analysis_id INT,
+	 arguments VARCHAR,
+	 database_id INTEGER
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_attrition (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 number_records INT,
+	 number_subjects INT,
+	 reason VARCHAR,
+	 reason_id INT,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR,
+	 time_stamp BIGINT
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_cdm_source_info (
+  	 analysis_id INT,
+	 cdm_etl_reference VARCHAR,
+	 cdm_holder VARCHAR,
+	 cdm_release_date DATE,
+	 cdm_source_abbreviation VARCHAR,
+	 cdm_source_name VARCHAR,
+	 cdm_version VARCHAR,
+	 database_id INTEGER,
+	 source_description VARCHAR,
+	 source_documentation_reference VARCHAR,
+	 source_release_date DATE,
+	 vocabulary_version VARCHAR
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_counts_age (
+  	 age INT,
+	 analysis_id INT,
+	 database_id INTEGER,
+	 n VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_counts_sex (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 n VARCHAR,
+	 sex VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_counts_year (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 n VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR,
+	 index_year INTEGER
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_metadata (
+  	 analysis_id INT,
+	 database_id INTEGER,
+	 execution_end BIGINT,
+	 execution_start BIGINT,
+	 package_version VARCHAR,
+	 platform VARCHAR,
+	 r_version VARCHAR
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_summary_event_duration (
+  	 analysis_id INT,
+	 duration_average FLOAT,
+	 event_count INT,
+	 database_id INTEGER,
+	 event_name VARCHAR,
+	 line VARCHAR,
+	 duration_max INT,
+	 duration_median INT,
+	 duration_min INT,
+	 duration_q_1 INT,
+	 duration_q_2 INT,
+	 duration_sd FLOAT,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_treatment_pathways (
+  	 age VARCHAR,
+	 analysis_id INT,
+	 database_id INTEGER,
+	 freq INT,
+	 index_year VARCHAR,
+	 pathway VARCHAR,
+	 sex VARCHAR,
+	 target_cohort_id INTEGER,
+	 target_cohort_name VARCHAR
 );
