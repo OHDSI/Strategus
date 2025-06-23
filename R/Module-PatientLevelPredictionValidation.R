@@ -147,28 +147,27 @@ PatientLevelPredictionValidationModule <- R6::R6Class(
     #' @description Creates the PatientLevelPredictionValidation Module Specifications
     #' @param validationList A list of validation designs from `PatientLevelPrediction::createValidationDesign`
     #' @param logLevel The logging level while executing the model validation.
-    createModuleSpecifications = function(
-        validationList = list(
-          PatientLevelPrediction::createValidationDesign(
-            plpModelList = list(file.path("location_to_model")),
-            targetId = 1,
-            outcomeId = 3,
-            restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
-            populationSettings = NULL,
-            recalibrate = "weakRecalibration",
-            runCovariateSummary = TRUE
-          ),
-          PatientLevelPrediction::createValidationDesign(
-            plpModelList = list(file.path("location_to_model")),
-            targetId = 4,
-            outcomeId = 3,
-            restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
-            populationSettings = NULL,
-            recalibrate = "weakRecalibration",
-            runCovariateSummary = TRUE
-          )
-        ),
-        logLevel = "INFO") {
+    createModuleSpecifications = function(validationList = list(
+                                            PatientLevelPrediction::createValidationDesign(
+                                              plpModelList = list(file.path("location_to_model")),
+                                              targetId = 1,
+                                              outcomeId = 3,
+                                              restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+                                              populationSettings = NULL,
+                                              recalibrate = "weakRecalibration",
+                                              runCovariateSummary = TRUE
+                                            ),
+                                            PatientLevelPrediction::createValidationDesign(
+                                              plpModelList = list(file.path("location_to_model")),
+                                              targetId = 4,
+                                              outcomeId = 3,
+                                              restrictPlpDataSettings = PatientLevelPrediction::createRestrictPlpDataSettings(),
+                                              populationSettings = NULL,
+                                              recalibrate = "weakRecalibration",
+                                              runCovariateSummary = TRUE
+                                            )
+                                          ),
+                                          logLevel = "INFO") {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)

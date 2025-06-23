@@ -565,8 +565,12 @@
             "type": "exit"
           }
         ],
-        "includeTreatments": "startDate",
-        "indexDateOffset": 0,
+        "overlapMethod": "truncate",
+        "concatTargets": true,
+        "startAnchor": "startDate",
+        "windowStart": 0,
+        "endAnchor": "endDate",
+        "windowEnd": 0,
         "minEraDuration": 7,
         "eraCollapseSize": 14,
         "combinationWindow": 7,

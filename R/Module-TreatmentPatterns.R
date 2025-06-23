@@ -49,6 +49,7 @@ TreatmentPatternsModule <- R6::R6Class(
 
       spec <- jobContext$settings
       cohorts <- super$.listToDataFrame(spec$cohorts)
+
       outputEnv <- TreatmentPatterns::computePathways(
         cohorts = cohorts,
         cohortTableName = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
@@ -56,8 +57,10 @@ TreatmentPatternsModule <- R6::R6Class(
         cdmSchema = executionSettings$cdmDatabaseSchema,
         resultSchema = executionSettings$workDatabaseSchema,
         tempEmulationSchema = executionSettings$tempEmulationSchema,
-        includeTreatments = spec$includeTreatments,
-        indexDateOffset = spec$indexDateOffset,
+        startAnchor = spec$startAnchor,
+        windowStart = spec$windowStart,
+        endAnchor = spec$endAnchor,
+        windowEnd = spec$windowEnd,
         minEraDuration = spec$minEraDuration,
         splitEventCohorts = spec$splitEventCohorts,
         splitTime = spec$splitTime,
@@ -65,7 +68,9 @@ TreatmentPatternsModule <- R6::R6Class(
         combinationWindow = spec$combinationWindow,
         minPostCombinationDuration = spec$minPostCombinationDuration,
         filterTreatments = spec$filterTreatments,
-        maxPathLength = spec$maxPathLength
+        maxPathLength = spec$maxPathLength,
+        overlapMethod = spec$overlapMethod,
+        concatTargets = spec$concatTargets
       )
 
       TreatmentPatterns::export(
@@ -177,13 +182,6 @@ TreatmentPatternsModule <- R6::R6Class(
     #'  \item{cohortName `character(1)`}{Cohort names of the cohorts to be used in the cohort table.}
     #'  \item{type `character(1)` \["target", "event', "exit"\]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
     #' }
-    #' @param includeTreatments (`character(1)`: `"startDate"`)\cr
-    #' \describe{
-    #'  \item{`"startDate"`}{Include treatments after the target cohort start date and onwards.}
-    #'  \item{`"endDate"`}{Include treatments before target cohort end date and before.}
-    #' }
-    #' @param indexDateOffset (`integer(1)`: `0`)\cr
-    #' Offset the index date of the `Target` cohort.
     #' @param minEraDuration (`integer(1)`: `0`)\cr
     #' Minimum time an event era should last to be included in analysis
     #' @param splitEventCohorts (`character(n)`: `""`)\cr
@@ -218,9 +216,27 @@ TreatmentPatternsModule <- R6::R6Class(
     #'   \item{`"remove"`}{Censors pathways <`minCellCount` by removing them completely.}
     #'   \item{`"mean"`}{Censors pathways <`minCellCount` to the mean of all frequencies below `minCellCount`}
     #' }
+    #' @param overlapMethod (`character(1)`: `"truncate"`) Method to decide how to deal
+    #' with overlap that is not significant enough for combination. `"keep"` will
+    #' keep the dates as is. `"truncate"` truncates the first occurring event to
+    #' the start date of the next event.
+    #' @param concatTargets (`logical(1)`: `TRUE`) Should multiple target cohorts for the same person be concatenated or not?
+    #' @param startAnchor (`character(1)`: `"startDate"`) Start date anchor. One of: `"startDate"`, `"endDate"`
+    #' @param windowStart (`numeric(1)`: `0`) Offset for `startAnchor` in days.
+    #' @param endAnchor (`character(1)`: `"endDate"`) End date anchor. One of: `"startDate"`, `"endDate"`
+    #' @param windowEnd (`numeric(1)`: `0`) Offset for `endAnchor` in days.
+    #' @param indexDateOffset (`integer(1)`: `0`)\cr
+    #' `DEPRECATED`
+    #' Offset the index date of the `Target` cohort.
+    #' @param includeTreatments (`character(1)`: `"startDate"`)\cr
+    #' `DEPRECATED`
+    #' \describe{
+    #'  \item{`"startDate"`}{Include treatments after the target cohort start date and onwards.}
+    #'  \item{`"endDate"`}{Include treatments before target cohort end date and before.}
+    #' }
     createModuleSpecifications = function(cohorts,
-                                          includeTreatments = "startDate",
-                                          indexDateOffset = 0,
+                                          includeTreatments = NULL,
+                                          indexDateOffset = NULL,
                                           minEraDuration = 0,
                                           splitEventCohorts = NULL,
                                           splitTime = NULL,
@@ -231,7 +247,21 @@ TreatmentPatternsModule <- R6::R6Class(
                                           maxPathLength = 5,
                                           ageWindow = 5,
                                           minCellCount = 1,
-                                          censorType = "minCellCount") {
+                                          censorType = "minCellCount",
+                                          overlapMethod = "truncate",
+                                          concatTargets = TRUE,
+                                          startAnchor = "startDate",
+                                          windowStart = 0,
+                                          endAnchor = "endDate",
+                                          windowEnd = 0) {
+      if (!is.null(indexDateOffset)) {
+        warning("`indexDateOffset` is deprecated in TreatmentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
+      }
+
+      if (!is.null(includeTreatments)) {
+        warning("`includeTreatments` is deprecated in TreatentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
+      }
+
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         if (name == "cohorts") {
