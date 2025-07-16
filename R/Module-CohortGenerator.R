@@ -127,7 +127,7 @@ CohortGeneratorModule <- R6::R6Class(
           dplyr::filter(!.data$isTemplatedCohort)
 
         templateDefs <- lapply(templateDefinitions, function(x) { x$toList(forStrategus = TRUE) })
-        sharedResource["templateDefs"] <- templateDefs
+        sharedResource$templateDefs <- templateDefs
       }
 
       subsetDefinitions <- CohortGenerator::getSubsetDefinitions(cohortDefinitionSet)
@@ -141,14 +141,14 @@ CohortGeneratorModule <- R6::R6Class(
 
 
       cohortDefinitionSetFiltered <- private$.listafy(parentCohortDefinitionSet)
-      sharedResource["cohortDefinitions"] <- list(cohortDefinitionSetFiltered)
+      sharedResource$cohortDefinitions <- list(cohortDefinitionSetFiltered)
 
       if (length(subsetDefinitions)) {
         # Subset definitions
         subsetDefinitionsJson <- lapply(subsetDefinitions, function(x) {
           x$toJSON()
         })
-        sharedResource["subsetDefs"] <- list(subsetDefinitionsJson)
+        sharedResource$subsetDefs <- list(subsetDefinitionsJson)
 
         # Filter to the subsets
         subsetCohortDefinitionSet <- cohortDefinitionSet[cohortDefinitionSet$isSubset, ]
@@ -161,7 +161,7 @@ CohortGeneratorModule <- R6::R6Class(
           )
           subsetIdMapping[[i]] <- idMapping
         }
-        sharedResource["cohortSubsets"] <- list(subsetIdMapping)
+        sharedResource$cohortSubsets <- list(subsetIdMapping)
       }
 
       sharedResource <- super$createSharedResourcesSpecifications(
