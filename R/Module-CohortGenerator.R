@@ -120,7 +120,15 @@ CohortGeneratorModule <- R6::R6Class(
         stop("cohortDefinitionSet is not properly defined")
       }
 
+      templateDefinitions <- CohortGenerator::getTemplateDefinitions(cohortDefinitionSet)
+      if (length(templateDefinitions) > 0) {
+        # Don't save templates as regular cohorts, this is handled entirely in the template definitions
+        cohortDefinitionSet <- cohortDefinitionSet |>
+          dplyr::filter(!.data$isTemplatedCohort)
+      }
+
       subsetDefinitions <- CohortGenerator::getSubsetDefinitions(cohortDefinitionSet)
+
       if (length(subsetDefinitions) > 0) {
         # Filter the cohort definition set to the "parent" cohorts.
         parentCohortDefinitionSet <- cohortDefinitionSet[!cohortDefinitionSet$isSubset, ]
@@ -151,6 +159,10 @@ CohortGeneratorModule <- R6::R6Class(
           subsetIdMapping[[i]] <- idMapping
         }
         sharedResource["cohortSubsets"] <- list(subsetIdMapping)
+      }
+
+      if (length(templateDefinitions)) {
+        sharedResource["templateDefs"] <- lapply(templateDefinitions, function(x) { x$toList() })
       }
 
       sharedResource <- super$createSharedResourcesSpecifications(

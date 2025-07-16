@@ -52,7 +52,7 @@ Suggests:
 Remotes:
   ohdsi/Characterization,
   ohdsi/CohortDiagnostics,
-  ohdsi/CohortGenerator,
+  ohdsi/CohortGenerator@cohort_templates,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
   ohdsi/PatientLevelPrediction,
