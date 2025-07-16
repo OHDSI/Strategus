@@ -119,7 +119,7 @@ CohortGeneratorModule <- R6::R6Class(
       if (!CohortGenerator::isCohortDefinitionSet(cohortDefinitionSet)) {
         stop("cohortDefinitionSet is not properly defined")
       }
-
+      sharedResource <- list()
       templateDefinitions <- CohortGenerator::getTemplateDefinitions(cohortDefinitionSet)
       if (length(templateDefinitions) > 0) {
         # Don't save templates as regular cohorts, this is handled entirely in the template definitions
@@ -128,7 +128,6 @@ CohortGeneratorModule <- R6::R6Class(
 
         templateDefs <- lapply(templateDefinitions, function(x) { x$toList(forStrategus = TRUE) })
         sharedResource["templateDefs"] <- templateDefs
-        browser()
       }
 
       subsetDefinitions <- CohortGenerator::getSubsetDefinitions(cohortDefinitionSet)
@@ -140,7 +139,7 @@ CohortGeneratorModule <- R6::R6Class(
         parentCohortDefinitionSet <- cohortDefinitionSet
       }
 
-      sharedResource <- list()
+
       cohortDefinitionSetFiltered <- private$.listafy(parentCohortDefinitionSet)
       sharedResource["cohortDefinitions"] <- list(cohortDefinitionSetFiltered)
 
