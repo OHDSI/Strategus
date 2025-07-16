@@ -125,6 +125,10 @@ CohortGeneratorModule <- R6::R6Class(
         # Don't save templates as regular cohorts, this is handled entirely in the template definitions
         cohortDefinitionSet <- cohortDefinitionSet |>
           dplyr::filter(!.data$isTemplatedCohort)
+
+        templateDefs <- lapply(templateDefinitions, function(x) { x$toList(forStrategus = TRUE) })
+        sharedResource["templateDefs"] <- templateDefs
+        browser()
       }
 
       subsetDefinitions <- CohortGenerator::getSubsetDefinitions(cohortDefinitionSet)
@@ -159,10 +163,6 @@ CohortGeneratorModule <- R6::R6Class(
           subsetIdMapping[[i]] <- idMapping
         }
         sharedResource["cohortSubsets"] <- list(subsetIdMapping)
-      }
-
-      if (length(templateDefinitions)) {
-        sharedResource["templateDefs"] <- lapply(templateDefinitions, function(x) { x$toList() })
       }
 
       sharedResource <- super$createSharedResourcesSpecifications(
