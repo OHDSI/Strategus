@@ -175,26 +175,14 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Creates the SelfControlledCaseSeries Module Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$createModuleSpecifications(
-  sccsAnalysisList,
-  exposuresOutcomeList,
-  analysesToExclude = NULL,
-  combineDataFetchAcrossOutcomes = FALSE,
-  sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()
+  sccsAnalysesSpecifications
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{sccsAnalysisList}}{description}
-
-\item{\code{exposuresOutcomeList}}{description}
-
-\item{\code{analysesToExclude}}{description}
-
-\item{\code{combineDataFetchAcrossOutcomes}}{description}
-
-\item{\code{sccsDiagnosticThresholds}}{description}
+\item{\code{sccsAnalysesSpecifications}}{An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications}
 }
 \if{html}{\out{</div>}}
 }

@@ -47,7 +47,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       args$customCovariateTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outputFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$sccsMultiThreadingSettings <- sccsMultiThreadingSettings
-      args$sccsDiagnosticThresholds <- NULL
+      args$sccsAnalysesSpecifications <- SelfControlledCaseSeries::convertUntypedListToSccsAnalysesSpecifications(jobContext$settings$sccsAnalysesSpecifications)
       do.call(SelfControlledCaseSeries::runSccsAnalyses, args)
 
       exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -55,8 +55,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         outputFolder = jobContext$moduleExecutionSettings$workSubFolder,
         exportFolder = exportFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        sccsDiagnosticThresholds = jobContext$settings$sccsDiagnosticThresholds
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount
       )
       # TODO: Removing this to make the upload easier
       # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
@@ -136,16 +135,8 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       )
     },
     #' @description Creates the SelfControlledCaseSeries Module Specifications
-    #' @param sccsAnalysisList description
-    #' @param exposuresOutcomeList description
-    #' @param analysesToExclude description
-    #' @param combineDataFetchAcrossOutcomes description
-    #' @param sccsDiagnosticThresholds description
-    createModuleSpecifications = function(sccsAnalysisList,
-                                          exposuresOutcomeList,
-                                          analysesToExclude = NULL,
-                                          combineDataFetchAcrossOutcomes = FALSE,
-                                          sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()) {
+    #' @param sccsAnalysesSpecifications An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications
+    createModuleSpecifications = function(sccsAnalysesSpecifications) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
