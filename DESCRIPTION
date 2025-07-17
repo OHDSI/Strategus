@@ -35,7 +35,7 @@ Suggests:
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
   CohortMethod,
-  Cyclops,
+  Cyclops (>= 3.6.0),
   Eunomia,
   EvidenceSynthesis,
   FeatureExtraction,
@@ -53,6 +53,7 @@ Remotes:
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
+  ohdsi/Cyclops@develop,
   ohdsi/SelfControlledCaseSeries,
   ohdsi/EvidenceSynthesis@pooled_sccs
 License: Apache License 2.0
