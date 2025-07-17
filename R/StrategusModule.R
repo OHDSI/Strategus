@@ -257,6 +257,14 @@ StrategusModule <- R6::R6Class(
         ))
       }
 
+      if (length(cohortDefinitionSharedResource$templateDefs)) {
+        for (tplDef in cohortDefinitionSharedResource$templateDefs) {
+          template <- CohortGenerator::CohortTemplateDefinition$new(tplDef)
+          cohortDefinitionSet <- cohortDefinitionSet |>
+            CohortGenerator::addCohortTemplateDefintion(template)
+        }
+      }
+
       if (length(cohortDefinitionSharedResource$subsetDefs)) {
         subsetDefinitions <- lapply(cohortDefinitionSharedResource$subsetDefs, CohortGenerator::CohortSubsetDefinition$new)
         for (subsetDef in subsetDefinitions) {
