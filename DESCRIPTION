@@ -37,7 +37,7 @@ Suggests:
   CohortMethod,
   Cyclops,
   Eunomia,
-  EvidenceSynthesis (>= 1.0.0),
+  EvidenceSynthesis,
   FeatureExtraction,
   fs,
   knitr,
