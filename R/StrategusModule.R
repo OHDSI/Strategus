@@ -9,13 +9,13 @@
 JobContext <- R6::R6Class(
   classname = "JobContext",
   public = list(
-        #' @field sharedResources Shared resources for execution
-        #' TODO: Revisit to break this into fields for cohorts, subsets,
-        #' negative controls,
+    #' @field sharedResources Shared resources for execution
+    #' TODO: Revisit to break this into fields for cohorts, subsets,
+    #' negative controls,
     sharedResources = list(),
-        #' @field settings Module settings
+    #' @field settings Module settings
     settings = list(),
-        #' @field moduleExecutionSettings Module execution settings
+    #' @field moduleExecutionSettings Module execution settings
     moduleExecutionSettings = list()
   )
 )
@@ -31,30 +31,30 @@ JobContext <- R6::R6Class(
 StrategusModule <- R6::R6Class(
   classname = "StrategusModule",
   public = list(
-        #' @field moduleName The name of the module taken from the class name.
-        #' This is set in the constructor of the class.
+    #' @field moduleName The name of the module taken from the class name.
+    #' This is set in the constructor of the class.
     moduleName = "",
-        #' @field moduleClassName The class name that identifies
-        #' the module specifications in the overall analysis specification.
-        #' This is set in the constructor of the class.
+    #' @field moduleClassName The class name that identifies
+    #' the module specifications in the overall analysis specification.
+    #' This is set in the constructor of the class.
     moduleClassName = "",
-        #' @field internalModuleSpecificationClassName A constant value.
-        #' The base class name that identifies a module specification
-        #' in the analysis specification.
+    #' @field internalModuleSpecificationClassName A constant value.
+    #' The base class name that identifies a module specification
+    #' in the analysis specification.
     internalModuleSpecificationClassName = "ModuleSpecifications",
-        #' @field internalSharedResourcesClassName A constant value. The class name
-        #' that identifies the shared resources section in the overall analysis
-        #' specification.
+    #' @field internalSharedResourcesClassName A constant value. The class name
+    #' that identifies the shared resources section in the overall analysis
+    #' specification.
     internalSharedResourcesClassName = "SharedResources",
-        #' @description Initialize the module
+    #' @description Initialize the module
     initialize = function() {
       self$moduleName <- class(self)[[1]]
       self$moduleClassName <- paste0(self$moduleName, "Specifications")
     },
-        #' @description Executes the module
-        #' @template connectionDetails
-        #' @template analysisSpecifications
-        #' @template executionSettings
+    #' @description Executes the module
+    #' @template connectionDetails
+    #' @template analysisSpecifications
+    #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(connectionDetails, "ConnectionDetails", add = errorMessages)
@@ -66,10 +66,10 @@ StrategusModule <- R6::R6Class(
       private$.createJobContext(analysisSpecifications, executionSettings)
       private$.message("EXECUTING: ", self$moduleName)
     },
-        #' @description Create the results data model for the module
-        #' @template resultsConnectionDetails
-        #' @template resultsDatabaseSchema
-        #' @template tablePrefix
+    #' @description Create the results data model for the module
+    #' @template resultsConnectionDetails
+    #' @template resultsDatabaseSchema
+    #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
@@ -77,14 +77,14 @@ StrategusModule <- R6::R6Class(
       checkmate::reportAssertions(collection = errorMessages)
       private$.message("CREATE RESULTS DATA MODEL: ", self$moduleName)
     },
-        #' @description Get the results data model specification for the module
-        #' @template tablePrefix
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
     getResultsDataModelSpecification = function(tablePrefix = "") {
     },
-        #' @description Upload the results for the module
-        #' @template resultsConnectionDetails
-        #' @template analysisSpecifications
-        #' @template resultsDataModelSettings
+    #' @description Upload the results for the module
+    #' @template resultsConnectionDetails
+    #' @template analysisSpecifications
+    #' @template resultsDataModelSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
@@ -95,10 +95,10 @@ StrategusModule <- R6::R6Class(
       private$.createJobContext(analysisSpecifications, resultsDataModelSettings)
       private$.message("UPLOAD RESULTS: ", self$moduleName)
     },
-        #' @description Base function for creating the module settings object.
-        #' Each module will have its own implementation and this base class method
-        #' will be used to ensure the class of the specifications is set properly.
-        #' @template moduleSpecifications
+    #' @description Base function for creating the module settings object.
+    #' Each module will have its own implementation and this base class method
+    #' will be used to ensure the class of the specifications is set properly.
+    #' @template moduleSpecifications
     createModuleSpecifications = function(moduleSpecifications) {
       moduleSpecifications <- list(
         module = self$moduleName,
@@ -107,32 +107,32 @@ StrategusModule <- R6::R6Class(
       class(moduleSpecifications) <- c(self$internalModuleSpecificationClassName, self$moduleClassName)
       return(moduleSpecifications)
     },
-        #' @description Base function for creating the shared resources settings object.
-        #' Each module will have its own implementation if it needs to create
-        #' a shared resource.
-        #' @param className The class name of the shared resources specifications
-        #' @param sharedResourcesSpecifications The shared resources specifications
+    #' @description Base function for creating the shared resources settings object.
+    #' Each module will have its own implementation if it needs to create
+    #' a shared resource.
+    #' @param className The class name of the shared resources specifications
+    #' @param sharedResourcesSpecifications The shared resources specifications
     createSharedResourcesSpecifications = function(className, sharedResourcesSpecifications) {
       class(sharedResourcesSpecifications) <- c(className, self$internalSharedResourcesClassName)
       return(sharedResourcesSpecifications)
     },
-        #' @description Base function for validating the module settings object.
-        #' Each module will have its own implementation and this base class method
-        #' will be used to ensure the module specifications are valid ahead of
-        #' execution
-        #' @template moduleSpecifications
+    #' @description Base function for validating the module settings object.
+    #' Each module will have its own implementation and this base class method
+    #' will be used to ensure the module specifications are valid ahead of
+    #' execution
+    #' @template moduleSpecifications
     validateModuleSpecifications = function(moduleSpecifications) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(moduleSpecifications, self$internalModuleSpecificationClassName)
       checkmate::assertClass(moduleSpecifications, self$moduleClassName)
       checkmate::reportAssertions(collection = errorMessages)
     },
-        #' @description Base function for validating the shared resources
-        #' specification settings object. Each module will have its own
-        #' implementation and this base class method will be used to ensure
-        #' the module specifications are valid ahead of execution
-        #' @param className The class name of the shared resources specifications
-        #' @param sharedResourcesSpecifications The shared resources specifications
+    #' @description Base function for validating the shared resources
+    #' specification settings object. Each module will have its own
+    #' implementation and this base class method will be used to ensure
+    #' the module specifications are valid ahead of execution
+    #' @param className The class name of the shared resources specifications
+    #' @param sharedResourcesSpecifications The shared resources specifications
     validateSharedResourcesSpecifications = function(className, sharedResourcesSpecifications) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertClass(sharedResourcesSpecifications, self$internalSharedResourcesClassName)
@@ -173,39 +173,15 @@ StrategusModule <- R6::R6Class(
       # for the given module.
       private$jobContext$sharedResources <- analysisSpecifications$sharedResources
       private$jobContext$moduleExecutionSettings <- executionSettings
-      private$
-        jobContext$
-        moduleExecutionSettings$
-        resultsSubFolder <- file.path(private$
-                                        jobContext$
-                                        moduleExecutionSettings$
-                                        resultsFolder, self$moduleName)
-      if (!dir.exists(private$
-                        jobContext$
-                        moduleExecutionSettings$
-                        resultsSubFolder)) {
-        dir.create(private$
-                     jobContext$
-                     moduleExecutionSettings$
-                     resultsSubFolder, showWarnings = F, recursive = T)
+      private$jobContext$moduleExecutionSettings$resultsSubFolder <- file.path(private$jobContext$moduleExecutionSettings$resultsFolder, self$moduleName)
+      if (!dir.exists(private$jobContext$moduleExecutionSettings$resultsSubFolder)) {
+        dir.create(private$jobContext$moduleExecutionSettings$resultsSubFolder, showWarnings = F, recursive = T)
       }
 
       if (is(private$jobContext$moduleExecutionSettings, "ExecutionSettings")) {
-        private$
-          jobContext$
-          moduleExecutionSettings$
-          workSubFolder <- file.path(private$
-                                       jobContext$
-                                       moduleExecutionSettings$
-                                       workFolder, self$moduleName)
-        if (!dir.exists(private$
-                          jobContext$
-                          moduleExecutionSettings$
-                          workSubFolder)) {
-          dir.create(private$
-                       jobContext$
-                       moduleExecutionSettings$
-                       workSubFolder, showWarnings = F, recursive = T)
+        private$jobContext$moduleExecutionSettings$workSubFolder <- file.path(private$jobContext$moduleExecutionSettings$workFolder, self$moduleName)
+        if (!dir.exists(private$jobContext$moduleExecutionSettings$workSubFolder)) {
+          dir.create(private$jobContext$moduleExecutionSettings$workSubFolder, showWarnings = F, recursive = T)
         }
       }
     },
@@ -301,6 +277,7 @@ StrategusModule <- R6::R6Class(
           )
         }
       }
+
       return(cohortDefinitionSet)
     },
     .createNegativeControlOutcomeSettingsFromJobContext = function() {
@@ -310,9 +287,7 @@ StrategusModule <- R6::R6Class(
         className = "NegativeControlOutcomeSharedResources"
       )
       if (!is.null(negativeControlSharedResource)) {
-        negativeControlOutcomes <- negativeControlSharedResource$
-          negativeControlOutcomes$
-          negativeControlOutcomeCohortSet
+        negativeControlOutcomes <- negativeControlSharedResource$negativeControlOutcomes$negativeControlOutcomeCohortSet
         if (length(negativeControlOutcomes) <= 0) {
           stop("Negative control outcome shared resource found but no negative control outcomes were provided.")
         }
@@ -330,12 +305,8 @@ StrategusModule <- R6::R6Class(
         }
         invisible(list(
           cohortSet = negativeControlOutcomeCohortSet,
-          occurrenceType = negativeControlSharedResource$
-            negativeControlOutcomes$
-            occurrenceType,
-          detectOnDescendants = negativeControlSharedResource$
-            negativeControlOutcomes$
-            detectOnDescendants
+          occurrenceType = negativeControlSharedResource$negativeControlOutcomes$occurrenceType,
+          detectOnDescendants = negativeControlSharedResource$negativeControlOutcomes$detectOnDescendants
         ))
       } else {
         invisible(list(
@@ -400,7 +371,6 @@ StrategusModule <- R6::R6Class(
     }
     return(s)
   }
-
   if (is.null(names(covariateSettings))) {
     # List of lists
     modifiedCovariateSettings <- lapply(covariateSettings, .replaceProperties)
