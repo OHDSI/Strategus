@@ -192,7 +192,7 @@ Create an evidence synthesis source}
   sourceMethod = "CohortMethod",
   databaseIds = NULL,
   analysisIds = NULL,
-  likelihoodApproximation = "adaptive grid"
+  likelihoodApproximation = "grid with gradients"
 )}\if{html}{\out{</div>}}
 }
 
@@ -207,7 +207,8 @@ Create an evidence synthesis source}
 \item{\code{analysisIds}}{The source method analysis IDs to include. Use \code{analysisIds = NULL} to include all
 analysis IDs.}
 
-\item{\code{likelihoodApproximation}}{The type of likelihood approximation. Can be "adaptive grid" or "normal".}
+\item{\code{likelihoodApproximation}}{The type of likelihood approximation. Can be "adaptive grid", "normal", or "grid
+with gradients".}
 }
 \if{html}{\out{</div>}}
 }
