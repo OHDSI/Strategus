@@ -45,16 +45,14 @@ Suggests:
   readr,
   rmarkdown,
   RSQLite,
-  SelfControlledCaseSeries (>= 6.0.0),
+  SelfControlledCaseSeries,
   testthat (>= 3.0.0),
   TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod,
-  ohdsi/EvidenceSynthesis@pooled_sccs,
-  ohdsi/Cyclops@develop
+  ohdsi/CohortMethod
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
