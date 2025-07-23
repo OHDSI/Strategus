@@ -53,9 +53,7 @@ Remotes:
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
-  ohdsi/Cyclops@develop,
-  ohdsi/SelfControlledCaseSeries,
-  ohdsi/EvidenceSynthesis@pooled_sccs
+  ohdsi/EvidenceSynthesis@develop
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
