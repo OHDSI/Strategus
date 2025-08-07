@@ -1,0 +1,215 @@
+---
+title: "Cohort Survival Analysis with Strategus"
+author: "Strategus Team"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cohort Survival Analysis with Strategus}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This vignette demonstrates how to use the Cohort Survival module in Strategus to perform cohort survival analysis on observational data in the OMOP Common Data Model (CDM). The Cohort Survival module integrates the [CohortSurvival](https://github.com/darwin-eu/CohortSurvival) package to provide comprehensive cohort survival analysis capabilities.
+
+## Prerequisites
+
+To use the Cohort Survival module, you need to install the CohortSurvival package:
+
+```r
+# Install CohortSurvival from GitHub
+remotes::install_github("darwin-eu/CohortSurvival")
+```
+
+## Setting up the Analysis
+
+First, let's create the analysis specifications for a cohort survival analysis study:
+
+```{r}
+library(Strategus)
+
+# Create empty analysis specifications
+analysisSpecifications <- createEmptyAnalysisSpecificiations()
+
+# Create cohort survival analysis module specifications
+cohortSurvivalModuleSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
+  analysisType = "single_event",
+  targetCohortTable = "cohort_table",
+  outcomeCohortTable = "cohort_table",
+  strata = list(c("age_group"), c("sex")),
+  timeGap = 7,
+  followUp = 365,
+  minCellCount = 5
+)
+
+# Add the cohort survival analysis module to the analysis specifications
+analysisSpecifications <- addCohortSurvivalModuleSpecifications(
+  analysisSpecifications = analysisSpecifications,
+  moduleSpecifications = cohortSurvivalModuleSpecifications
+)
+```
+
+## Competing Risk Analysis
+
+You can also perform competing risk cohort survival analysis:
+
+```{r}
+# Create competing risk cohort survival analysis specifications
+competingRiskSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
+  analysisType = "competing_risk",
+  targetCohortTable = "cohort_table",
+  outcomeCohortTable = "cohort_table",
+  competingOutcomeCohortTable = "cohort_table",
+  strata = list(c("age_group")),
+  timeGap = 7,
+  followUp = 365,
+  minCellCount = 5
+)
+
+# Add to analysis specifications
+analysisSpecifications <- addCohortSurvivalModuleSpecifications(
+  analysisSpecifications = analysisSpecifications,
+  moduleSpecifications = competingRiskSpecifications
+)
+```
+
+## Execution Settings
+
+Set up the execution settings for your database:
+
+```{r}
+# Create execution settings
+executionSettings <- createCdmExecutionSettings(
+  workDatabaseSchema = "scratch_schema",
+  cdmDatabaseSchema = "cdm_schema",
+  cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort_table"),
+  tempEmulationSchema = NULL,
+  workFolder = "path/to/work/folder",
+  resultsFolder = "path/to/results/folder",
+  logFileName = "cohort_survival_analysis_log.txt",
+  minCellCount = 5,
+  incremental = FALSE,
+  maxCores = 4
+)
+```
+
+## Running the Analysis
+
+Execute the cohort survival analysis:
+
+```{r}
+# Execute the analysis
+execute(
+  connectionDetails = connectionDetails,
+  analysisSpecifications = analysisSpecifications,
+  executionSettings = executionSettings
+)
+```
+
+## Results
+
+The Cohort Survival module will generate several output files:
+
+- **Cohort survival estimates**: CSV files containing survival probabilities and confidence intervals
+- **Stratified results**: Results broken down by stratification variables
+- **Summary statistics**: Median survival times, restricted mean survival, etc.
+
+## Visualization
+
+After running the analysis, you can use the CohortSurvival package to create visualizations:
+
+```{r}
+# Load the results
+survivalResults <- CohortSurvival::readSurvivalResults("path/to/results/folder")
+
+# Create survival plots
+CohortSurvival::plotSurvival(survivalResults, 
+                             colour = "strata_level", 
+                             facet = "strata_name")
+```
+
+## Advanced Configuration
+
+### Custom Strata
+
+You can define custom stratification variables:
+
+```{r}
+# Define custom strata
+customStrata <- list(
+  c("age_group", "sex"),
+  c("comorbidity"),
+  c("age_group", "comorbidity", "sex")
+)
+
+cohortSurvivalModuleSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
+  analysisType = "single_event",
+  targetCohortTable = "cohort_table",
+  outcomeCohortTable = "cohort_table",
+  strata = customStrata,
+  timeGap = 7,
+  followUp = 365,
+  minCellCount = 5
+)
+```
+
+### Time Windows
+
+Adjust the time gap and follow-up periods:
+
+```{r}
+# Short-term analysis (30 days)
+shortTermSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
+  analysisType = "single_event",
+  targetCohortTable = "cohort_table",
+  outcomeCohortTable = "cohort_table",
+  timeGap = 1,      # Daily intervals
+  followUp = 30,    # 30-day follow-up
+  minCellCount = 5
+)
+
+# Long-term analysis (5 years)
+longTermSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
+  analysisType = "single_event",
+  targetCohortTable = "cohort_table",
+  outcomeCohortTable = "cohort_table",
+  timeGap = 30,     # Monthly intervals
+  followUp = 1825,  # 5-year follow-up
+  minCellCount = 5
+)
+```
+
+## Integration with Other Modules
+
+The Cohort Survival module can be combined with other Strategus modules:
+
+```{r}
+# Add cohort generation
+cohortGeneratorSpecifications <- CohortGeneratorModule$new()$createModuleSpecifications()
+
+# Add cohort survival analysis
+cohortSurvivalSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
+  analysisType = "single_event",
+  targetCohortTable = "cohort_table",
+  outcomeCohortTable = "cohort_table"
+)
+
+# Combine in analysis specifications
+analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+  addCohortGeneratorModuleSpecifications(cohortGeneratorSpecifications) |>
+  addCohortSurvivalModuleSpecifications(cohortSurvivalSpecifications)
+```
+
+## Conclusion
+
+The Cohort Survival module in Strategus provides a powerful and flexible way to perform cohort survival analysis on observational data. By integrating with the CohortSurvival package, it offers both single event and competing risk cohort survival analysis capabilities with comprehensive stratification options.
+
+For more information about the CohortSurvival package, visit the [GitHub repository](https://github.com/darwin-eu/CohortSurvival). 

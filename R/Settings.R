@@ -230,6 +230,25 @@ addTreatmentPatternsModuleSpecifications <- function(analysisSpecifications, mod
   )
 }
 
+#' Add Cohort Survival Module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications Created by the \href{../reference/CohortSurvivalModule.html#method-CohortSurvivalModule-createModuleSpecifications}{\code{CohortSurvivalModule$createModuleSpecifications()}}
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added
+#'
+#' @export
+addCohortSurvivalModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "CohortSurvivalModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
 #' Add Patient Level Prediction Validation Module module specifications to analysis specifications
 #'
 #' @template analysisSpecifications

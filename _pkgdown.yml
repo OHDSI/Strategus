@@ -9,8 +9,8 @@ template:
 
 home:
   links:
-  - text: Ask a question
-    href: http://forums.ohdsi.org
+    - text: Ask a question
+      href: http://forums.ohdsi.org
 
 reference:
   - title: "Create analysis specifications"
@@ -29,6 +29,7 @@ reference:
       - addPatientLevelPredictionModuleSpecifications
       - addPatientLevelPredictionValidationModuleSpecifications
       - addSelfControlledCaseSeriesModuleSpecifications
+      - addCohortSurvivalModuleSpecifications
       - addTreatmentPatternsModuleSpecifications
       - addSharedResources
       - createEmptyAnalysisSpecificiations
@@ -57,6 +58,7 @@ reference:
       - PatientLevelPredictionModule
       - PatientLevelPredictionValidationModule
       - SelfControlledCaseSeriesModule
+      - CohortSurvivalModule
       - TreatmentPatternsModule
   - subtitle: "Results HADES Modules"
     desc: >
@@ -92,10 +94,10 @@ navbar:
   bg: dark
   structure:
     left:
-    - reference
-    - articles
-    - changelog
-    - resultsmodel
+      - reference
+      - articles
+      - changelog
+      - resultsmodel
     right: [hades, github]
   components:
     reference:
@@ -113,11 +115,10 @@ navbar:
       aria-label: hadesLogo
 
 articles:
-- title: Articles
-  navbar: ~
-  contents:
-  - IntroductionToStrategus
-  - CreatingAnalysisSpecification
-  - ExecuteStrategus
-  - WorkingWithResults
-
+  - title: Articles
+    navbar: ~
+    contents:
+      - IntroductionToStrategus
+      - CreatingAnalysisSpecification
+      - ExecuteStrategus
+      - WorkingWithResults
