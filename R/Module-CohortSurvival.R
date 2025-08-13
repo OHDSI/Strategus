@@ -43,8 +43,8 @@ CohortSurvivalModule <- R6::R6Class(
         targetCohortTable = settings$targetCohortTable,
         outcomeCohortTable = settings$outcomeCohortTable,
         strata = settings$strata,
-        eventGap = settings$timeGap,
-        followUpDays = settings$followUp,
+        eventGap = settings$eventGap
+        followUpDays = settings$followUpDays,
       )
 
       private$.message("Export data to csv files")
@@ -154,16 +154,14 @@ CohortSurvivalModule <- R6::R6Class(
     #' @param targetCohortTable The name of the target cohort table.
     #' @param outcomeCohortTable The name of the outcome cohort table.
     #' @param strata A list of stratification variables. Each element should be a character vector of column names.
-    #' @param timeGap The time gap for the analysis in days.
-    #' @param followUp The follow-up period in days.
-    #' @param minCellCount The minimum cell count for privacy protection.
+    #' @param eventGap The time gap for the analysis in days.
+    #' @param followUpDays The follow-up period in days.
     #'
     createModuleSpecifications = function(targetCohortTable,
                                           outcomeCohortTable,
                                           strata = NULL,
-                                          timeGap = 7,
-                                          followUp = 365,
-                                          minCellCount = 5) {
+                                          eventGap = 7,
+                                          followUpDays = 365) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
