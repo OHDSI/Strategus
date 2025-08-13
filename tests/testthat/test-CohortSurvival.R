@@ -10,7 +10,6 @@ test_that("CohortSurvival: execute method", {
   sa <- Strategus::CohortSurvivalModule$new()
 
   modSpec <- sa$createModuleSpecifications(
-    analysisType = "single_event",
     targetCohortTable = "cohort_table",
     outcomeCohortTable = "cohort_table",
     strata = list(c("age_group"), c("sex")),
@@ -43,14 +42,12 @@ test_that("CohortSurvival: execute method", {
   expect_equal(sa$tablePrefix, "cohort_survival_")
 })
 
-test_that("CohortSurvival: competing risk specifications", {
+test_that("CohortSurvival: basic specifications", {
   sa <- Strategus::CohortSurvivalModule$new()
 
   modSpec <- sa$createModuleSpecifications(
-    analysisType = "competing_risk",
     targetCohortTable = "cohort_table",
     outcomeCohortTable = "cohort_table",
-    competingOutcomeCohortTable = "cohort_table",
     strata = list(c("age_group")),
     timeGap = 7,
     followUp = 365,
@@ -58,6 +55,6 @@ test_that("CohortSurvival: competing risk specifications", {
   )
 
   expect_true(inherits(modSpec, "ModuleSpecifications"))
-  expect_equal(modSpec$settings$analysisType, "competing_risk")
-  expect_equal(modSpec$settings$competingOutcomeCohortTable, "cohort_table")
+  expect_equal(modSpec$settings$targetCohortTable, "cohort_table")
+  expect_equal(modSpec$settings$outcomeCohortTable, "cohort_table")
 }) 

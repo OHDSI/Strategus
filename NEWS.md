@@ -1,5 +1,10 @@
-Strategus 1.3.1
-===============
+# Strategus 1.3.1
+
+New Features
+
+- Adds CohortSurvival module (experimental) - integrates CohortSurvival package v1.0.2 for Kaplan-Meier survival analysis
+
+Fixes
 
 - EvidenceSynthesis results model - make target/comparator days bigint (#212)
 - EvidenceSynthesis results model - make observed_days bigint (#221)
@@ -8,8 +13,7 @@ Strategus 1.3.1
 - `tempEmulationSchema` not being passed to all modules (#229)
 - CohortDiagnostics incremental flag not passed (#237)
 
-Strategus 1.3.0
-===============
+# Strategus 1.3.0
 
 New Features
 
@@ -21,8 +25,8 @@ Fixes
 - Example analysis specification modifications for better testing (#210)
 - Remove redundant messages in the execution summary (#213)
 
-Strategus 1.2.0
-===============
+# Strategus 1.2.0
+
 - Provide summary information when creating the results data model and uploading results (#204)
 - Add error handling when obtaining OMOP CDM metadata (#201)
 - Strategus execution should stop if an error occurs during cohort generation (#189)
@@ -30,22 +34,21 @@ Strategus 1.2.0
 - Better handling of incremental execution of Characterization (#194)
 - Ensure logging captures all output (#196)
 
-Strategus 1.1.2
-===============
+# Strategus 1.1.2
+
 - Add options for overriding number of threads for database operations (#190)
 
-Strategus 1.1.1
-===============
+# Strategus 1.1.1
+
 - Fixes R CMD note and updates documentation for inclusion into HADES
 
-Strategus 1.1.0
-===============
+# Strategus 1.1.0
+
 - Inject cohort schema and table into `createCohortBasedCovariateSettings` (#181)
 - Provide hook to optimize cohort SQL construction (#179)
 - Fixes broken links in R6 class documentation (#183)
 
-Strategus 1.0.0
-===============
+# Strategus 1.0.0
 
 - Eliminated the dependencies for `keyring`, `renv` and `targets` (#135)
 - Centralized all modules into the Strategus package (#29, #45, #51, #140)
@@ -60,22 +63,23 @@ Strategus 1.0.0
 - Document the results data model for HADES modules (#143)
 
 ## Bug Fixes
+
 - Make negative control outcome shared resource optional (#153)
 - Export results data model specification file for PatientLevelPrediction (#165)
 
-Strategus 0.3.0
-===============
+# Strategus 0.3.0
+
 - Provide option to skip modules (#87)
 - Central log file for execution (#132)
 - Create function to collect all results into a single ZIP file for sharing (#46)
 - Install latest modules (#125)
 
-Strategus 0.2.1
-===============
+# Strategus 0.2.1
+
 - Update SelfControlledCaseSeries Module to v0.4.1
 
-Strategus 0.2.0
-===============
+# Strategus 0.2.0
+
 - Add functions for developers to help with renv.lock file validation (#69)
 - Use renv project profiles for modules (#94)
 - Convert relative paths to absolute path before passing to a module (#99)
@@ -85,8 +89,7 @@ Strategus 0.2.0
 - Pass temp emulation schema properly (#76)
 - Remove local library package dependencies (#96)
 
-Strategus 0.1.0
-===============
+# Strategus 0.1.0
 
 - Adds an initial implementation for uploading results to a results database (#72)
 - Robust handling of connection details via keyring (#74)
@@ -101,26 +104,22 @@ Strategus 0.1.0
 - Allow for passing `renv`configuration options when running Strategus (#88)
 - Adds SQL for test cohorts to package (#1)
 
-Strategus 0.0.6
-===============
+# Strategus 0.0.6
 
-- Update SCCS module reference `inst/testdata/analysisSpecification.json` 
+- Update SCCS module reference `inst/testdata/analysisSpecification.json`
 
-Strategus 0.0.5
-===============
+# Strategus 0.0.5
 
 - Required metadata tables check fails with DatabaseConnector < 6.0 (#61)
 - Update module references and add script to run Strategus on Eunomia in `extras/ExecuteStrategusOnEunomia.R` (#66)
 
-Strategus 0.0.4
-===============
+# Strategus 0.0.4
 
 - Add DB Platform Tests (#53)
 - Add error handling for missing/empty tables (#54)
 - Remove uniqueness check for module table prefix (#55)
 
-Strategus 0.0.3
-===============
+# Strategus 0.0.3
 
 - Breaking change: removed function `createExecutionSettings()` and replaced with 2 new functions: `createCdmExecutionSettings()` and `createResultsExecutionSettings()`. (#19)
 - Added Vignettes (#23)
@@ -131,15 +130,11 @@ Strategus 0.0.3
 - Support CDM 5.4 source table format (#41)
 - Add unit tests (#47)
 
-
-Strategus 0.0.2
-===============
+# Strategus 0.0.2
 
 - Updates renv to 0.15.5
 - Call renv::use() for each module
 
-
-Strategus 0.0.1
-===============
+# Strategus 0.0.1
 
 Initial version

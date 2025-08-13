@@ -1,8 +1,8 @@
 # CohortSurvivalModule -------------
-#' @title Cohort survival analysis with the \href{https://github.com/darwin-eu/CohortSurvival}{CohortSurvival Package}
+#' @title Kaplan-Meier survival analysis with the \href{https://github.com/darwin-eu/CohortSurvival}{CohortSurvival Package}
 #' @export
 #' @description
-#' Module for performing cohort survival analysis in observational
+#' Module for performing Kaplan-Meier survival analysis in observational
 #' databases in the OMOP Common Data Model using the CohortSurvival package.
 CohortSurvivalModule <- R6::R6Class(
   classname = "CohortSurvivalModule",
@@ -27,51 +27,34 @@ CohortSurvivalModule <- R6::R6Class(
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       # Create CDM object for CohortSurvival
-      cdm <- CohortSurvival::cdmFromCon(
+      cdm <- CDMConnector::cdm_from_con(
         con = DatabaseConnector::connect(connectionDetails),
-        cdmSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        writeSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cohortTables = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
+        cdm_schema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
+        write_schema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        cohort_tables = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
 
       # Get settings from job context
       settings <- jobContext$settings
       
-      # Run cohort survival analyses based on settings
-      if (settings$analysisType == "single_event") {
-        # Single event cohort survival analysis
-        survivalResults <- CohortSurvival::estimateSingleEventSurvival(
-          cdm = cdm,
-          targetCohortTable = settings$targetCohortTable,
-          outcomeCohortTable = settings$outcomeCohortTable,
-          strata = settings$strata,
-          timeGap = settings$timeGap,
-          followUp = settings$followUp,
-          minCellCount = jobContext$moduleExecutionSettings$minCellCount
-        )
-      } else if (settings$analysisType == "competing_risk") {
-        # Competing risk cohort survival analysis
-        survivalResults <- CohortSurvival::estimateCompetingRiskSurvival(
-          cdm = cdm,
-          targetCohortTable = settings$targetCohortTable,
-          outcomeCohortTable = settings$outcomeCohortTable,
-          competingOutcomeCohortTable = settings$competingOutcomeCohortTable,
-          strata = settings$strata,
-          timeGap = settings$timeGap,
-          followUp = settings$followUp,
-          minCellCount = jobContext$moduleExecutionSettings$minCellCount
-        )
-      } else {
-        stop("Invalid analysis type. Must be 'single_event' or 'competing_risk'")
-      }
+      # Run Kaplan-Meier survival analysis
+      survivalResults <- CohortSurvival::estimateSingleEventSurvival(
+        cdm = cdm,
+        targetCohortTable = settings$targetCohortTable,
+        outcomeCohortTable = settings$outcomeCohortTable,
+        strata = settings$strata,
+        timeGap = settings$timeGap,
+        followUp = settings$followUp,
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount
+      )
 
       private$.message("Export data to csv files")
 
       # Export results to CSV
-      CohortSurvival::exportSurvivalResults(
+      CohortGenerator::writeCsv(
         x = survivalResults,
-        path = resultsFolder,
-        fileName = "survival_results"
+        file = file.path(resultsFolder, "survival_results.csv"),
+        warnOnFileNameCaseMismatch = FALSE
       )
 
       # Write results data model specification
@@ -83,7 +66,7 @@ CohortSurvivalModule <- R6::R6Class(
       )
 
       # Disconnect from CDM
-      CohortSurvival::cdmDisconnect(cdm)
+      CDMConnector::cdm_disconnect(cdm)
 
       private$.message(paste("Results available at:", resultsFolder))
     },
@@ -94,29 +77,29 @@ CohortSurvivalModule <- R6::R6Class(
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
       
-      # Create cohort survival analysis results tables
-      CohortSurvival::createSurvivalResultTables(
-        connectionDetails = resultsConnectionDetails,
-        targetDialect = resultsConnectionDetails$dbms,
-        resultSchema = resultsDatabaseSchema,
-        deleteTables = FALSE,
-        createTables = TRUE,
-        tablePrefix = tablePrefix
-      )
+      # Create Kaplan-Meier survival analysis results tables
+      # Note: CohortSurvival doesn't have a createSurvivalResultTables function
+      # Results are stored as CSV files and can be uploaded using standard methods
+      private$.message("Survival results will be stored as CSV files")
     },
     #' @description Get the results data model specification for the module
     #' @template tablePrefix
     getResultsDataModelSpecification = function(tablePrefix = self$tablePrefix) {
-      resultsDataModelSpecification <- CohortGenerator::readCsv(
-        file = system.file(
-          file.path("csv", "survivalResultsDataModelSpecification.csv"),
-          package = "CohortSurvival"
-        ),
-        warnOnCaseMismatch = FALSE
+      # Create a simple results data model specification for survival results
+      # Since CohortSurvival doesn't provide a predefined data model specification
+      resultsDataModelSpecification <- data.frame(
+        tableName = paste0(tablePrefix, "survival_results"),
+        columnName = c("cdm_name", "target_cohort", "outcome_name", "strata_name", "strata_level", 
+                      "time", "n_risk", "n_event", "n_censor", "survival", "survival_se", 
+                      "survival_lower", "survival_upper", "cumulative_failure", "cumulative_failure_se",
+                      "cumulative_failure_lower", "cumulative_failure_upper"),
+        dataType = c("VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)",
+                    "INTEGER", "INTEGER", "INTEGER", "INTEGER", "FLOAT", "FLOAT", "FLOAT", "FLOAT",
+                    "FLOAT", "FLOAT", "FLOAT", "FLOAT"),
+        isRequired = c(rep("Yes", 17)),
+        primaryKey = c("No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No"),
+        emptyIsNa = c(rep("Yes", 17))
       )
-
-      # Add the prefix to the tableName column
-      resultsDataModelSpecification$tableName <- paste0(tablePrefix, resultsDataModelSpecification$tableName)
       return(resultsDataModelSpecification)
     },
     #' @description Upload the results for the module
@@ -136,42 +119,42 @@ CohortSurvivalModule <- R6::R6Class(
       )
 
       if (length(csvFiles) > 0) {
-        # Upload each CSV file to the results database
+        # Upload each CSV file to the results database using standard methods
         for (csvFile in csvFiles) {
-          CohortSurvival::uploadSurvivalResults(
-            connectionDetails = resultsConnectionDetails,
-            schema = resultsDataModelSettings$resultsDatabaseSchema,
-            csvFile = csvFile,
-            tablePrefix = self$tablePrefix,
-            purgeSiteDataBeforeUploading = FALSE
+          # Read the CSV file
+          data <- CohortGenerator::readCsv(csvFile, warnOnCaseMismatch = FALSE)
+          
+          # Upload to database using DatabaseConnector
+          DatabaseConnector::insertTable(
+            connection = DatabaseConnector::connect(resultsConnectionDetails),
+            tableName = paste0(resultsDataModelSettings$resultsDatabaseSchema, ".", 
+                              self$tablePrefix, "survival_results"),
+            data = data,
+            dropTableIfExists = FALSE,
+            createTable = TRUE,
+            tempTable = FALSE
           )
         }
       }
 
-      private$.message("Cohort survival analysis results uploaded successfully")
+      private$.message("Kaplan-Meier survival analysis results uploaded successfully")
     },
-    #' @description Creates the Cohort Survival Module Specifications
+    #' @description Creates the Kaplan-Meier Survival Module Specifications
     #'
     #' @details
-    #' Run cohort survival analyses for target cohorts and outcomes. This function supports both
-    #' single event survival analysis and competing risk survival analysis.
+    #' Run Kaplan-Meier survival analyses for target cohorts and outcomes.
     #'
     #' After completion, survival results can be plotted using the [CohortSurvival::plotSurvival()] function.
     #'
-    #' @param analysisType The type of survival analysis to perform. Must be either "single_event" 
-    #'                     or "competing_risk".
     #' @param targetCohortTable The name of the target cohort table.
     #' @param outcomeCohortTable The name of the outcome cohort table.
-    #' @param competingOutcomeCohortTable The name of the competing outcome cohort table (required for competing risk analysis).
     #' @param strata A list of stratification variables. Each element should be a character vector of column names.
     #' @param timeGap The time gap for the analysis in days.
     #' @param followUp The follow-up period in days.
     #' @param minCellCount The minimum cell count for privacy protection.
     #'
-    createModuleSpecifications = function(analysisType,
-                                          targetCohortTable,
+    createModuleSpecifications = function(targetCohortTable,
                                           outcomeCohortTable,
-                                          competingOutcomeCohortTable = NULL,
                                           strata = NULL,
                                           timeGap = 7,
                                           followUp = 365,
@@ -187,17 +170,11 @@ CohortSurvivalModule <- R6::R6Class(
       return(specifications)
     },
     #' @description Validate the module specifications
-    #' @param moduleSpecifications The Cohort Survival module specifications
+    #' @param moduleSpecifications The Kaplan-Meier Survival module specifications
     validateModuleSpecifications = function(moduleSpecifications) {
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
-      
-      # Additional validation for cohort survival analysis specific requirements
-      if (moduleSpecifications$settings$analysisType == "competing_risk" && 
-          is.null(moduleSpecifications$settings$competingOutcomeCohortTable)) {
-        stop("competingOutcomeCohortTable is required for competing risk analysis")
-      }
     }
   )
 )

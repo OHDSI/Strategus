@@ -230,7 +230,7 @@ addTreatmentPatternsModuleSpecifications <- function(analysisSpecifications, mod
   )
 }
 
-#' Add Cohort Survival Module specifications to analysis specifications
+#' Add Kaplan-Meier Survival Module specifications to analysis specifications
 #'
 #' @template analysisSpecifications
 #' @param moduleSpecifications Created by the \href{../reference/CohortSurvivalModule.html#method-CohortSurvivalModule-createModuleSpecifications}{\code{CohortSurvivalModule$createModuleSpecifications()}}

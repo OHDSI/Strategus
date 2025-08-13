@@ -1,10 +1,10 @@
 ---
-title: "Cohort Survival Analysis with Strategus"
+title: "Kaplan-Meier Survival Analysis with Strategus"
 author: "Strategus Team"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Cohort Survival Analysis with Strategus}
+  %\VignetteIndexEntry{Kaplan-Meier Survival Analysis with Strategus}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,20 +18,34 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-This vignette demonstrates how to use the Cohort Survival module in Strategus to perform cohort survival analysis on observational data in the OMOP Common Data Model (CDM). The Cohort Survival module integrates the [CohortSurvival](https://github.com/darwin-eu/CohortSurvival) package to provide comprehensive cohort survival analysis capabilities.
+This vignette demonstrates how to use the Kaplan-Meier Survival module in Strategus to perform Kaplan-Meier survival analysis on observational data in the OMOP Common Data Model (CDM). The Kaplan-Meier Survival module integrates the [CohortSurvival](https://github.com/darwin-eu/CohortSurvival) package to provide Kaplan-Meier survival analysis capabilities.
 
 ## Prerequisites
 
-To use the Cohort Survival module, you need to install the CohortSurvival package:
+To use the Kaplan-Meier Survival module, you need to install the CohortSurvival package and its dependencies:
 
 ```r
-# Install CohortSurvival from GitHub
+# Install CohortSurvival and its dependencies from GitHub
+# Note: These packages require specific versions as specified in the DESCRIPTION file
+remotes::install_github("darwin-eu/CDMConnector")
+remotes::install_github("darwin-eu/PatientProfiles")
+remotes::install_github("darwin-eu/omopgenerics")
+remotes::install_github("darwin-eu/visOmopResults")
 remotes::install_github("darwin-eu/CohortSurvival")
+
+# Install survival package if not already installed
+if (!requireNamespace("survival", quietly = TRUE)) {
+  install.packages("survival")
+}
+
+# Load required libraries
+library(CohortSurvival)
+library(CDMConnector)
 ```
 
 ## Setting up the Analysis
 
-First, let's create the analysis specifications for a cohort survival analysis study:
+First, let's create the analysis specifications for a Kaplan-Meier survival analysis study:
 
 ```{r}
 library(Strategus)
@@ -39,9 +53,8 @@ library(Strategus)
 # Create empty analysis specifications
 analysisSpecifications <- createEmptyAnalysisSpecificiations()
 
-# Create cohort survival analysis module specifications
+# Create Kaplan-Meier survival analysis module specifications
 cohortSurvivalModuleSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
-  analysisType = "single_event",
   targetCohortTable = "cohort_table",
   outcomeCohortTable = "cohort_table",
   strata = list(c("age_group"), c("sex")),
@@ -50,36 +63,14 @@ cohortSurvivalModuleSpecifications <- CohortSurvivalModule$new()$createModuleSpe
   minCellCount = 5
 )
 
-# Add the cohort survival analysis module to the analysis specifications
+# Add the Kaplan-Meier survival analysis module to the analysis specifications
 analysisSpecifications <- addCohortSurvivalModuleSpecifications(
   analysisSpecifications = analysisSpecifications,
   moduleSpecifications = cohortSurvivalModuleSpecifications
 )
 ```
 
-## Competing Risk Analysis
 
-You can also perform competing risk cohort survival analysis:
-
-```{r}
-# Create competing risk cohort survival analysis specifications
-competingRiskSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
-  analysisType = "competing_risk",
-  targetCohortTable = "cohort_table",
-  outcomeCohortTable = "cohort_table",
-  competingOutcomeCohortTable = "cohort_table",
-  strata = list(c("age_group")),
-  timeGap = 7,
-  followUp = 365,
-  minCellCount = 5
-)
-
-# Add to analysis specifications
-analysisSpecifications <- addCohortSurvivalModuleSpecifications(
-  analysisSpecifications = analysisSpecifications,
-  moduleSpecifications = competingRiskSpecifications
-)
-```
 
 ## Execution Settings
 
@@ -103,7 +94,7 @@ executionSettings <- createCdmExecutionSettings(
 
 ## Running the Analysis
 
-Execute the cohort survival analysis:
+Execute the Kaplan-Meier survival analysis:
 
 ```{r}
 # Execute the analysis
@@ -116,9 +107,9 @@ execute(
 
 ## Results
 
-The Cohort Survival module will generate several output files:
+The Kaplan-Meier Survival module will generate several output files:
 
-- **Cohort survival estimates**: CSV files containing survival probabilities and confidence intervals
+- **Kaplan-Meier survival estimates**: CSV files containing survival probabilities and confidence intervals
 - **Stratified results**: Results broken down by stratification variables
 - **Summary statistics**: Median survival times, restricted mean survival, etc.
 
@@ -128,12 +119,17 @@ After running the analysis, you can use the CohortSurvival package to create vis
 
 ```{r}
 # Load the results
-survivalResults <- CohortSurvival::readSurvivalResults("path/to/results/folder")
+survivalResults <- CohortGenerator::readCsv("path/to/results/folder/survival_results.csv")
 
-# Create survival plots
-CohortSurvival::plotSurvival(survivalResults, 
-                             colour = "strata_level", 
-                             facet = "strata_name")
+# Create Kaplan-Meier survival plots using the survival results
+# Note: You can use ggplot2 or other plotting libraries to visualize the results
+library(ggplot2)
+ggplot(survivalResults, aes(x = time, y = survival, color = strata_level)) +
+  geom_line() +
+  facet_wrap(~strata_name) +
+  labs(title = "Kaplan-Meier Survival Curves", 
+       x = "Time (days)", 
+       y = "Survival Probability")
 ```
 
 ## Advanced Configuration
@@ -151,7 +147,6 @@ customStrata <- list(
 )
 
 cohortSurvivalModuleSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
-  analysisType = "single_event",
   targetCohortTable = "cohort_table",
   outcomeCohortTable = "cohort_table",
   strata = customStrata,
@@ -168,7 +163,6 @@ Adjust the time gap and follow-up periods:
 ```{r}
 # Short-term analysis (30 days)
 shortTermSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
-  analysisType = "single_event",
   targetCohortTable = "cohort_table",
   outcomeCohortTable = "cohort_table",
   timeGap = 1,      # Daily intervals
@@ -178,7 +172,6 @@ shortTermSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications
 
 # Long-term analysis (5 years)
 longTermSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
-  analysisType = "single_event",
   targetCohortTable = "cohort_table",
   outcomeCohortTable = "cohort_table",
   timeGap = 30,     # Monthly intervals
@@ -189,15 +182,14 @@ longTermSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
 
 ## Integration with Other Modules
 
-The Cohort Survival module can be combined with other Strategus modules:
+The Kaplan-Meier Survival module can be combined with other Strategus modules:
 
 ```{r}
 # Add cohort generation
 cohortGeneratorSpecifications <- CohortGeneratorModule$new()$createModuleSpecifications()
 
-# Add cohort survival analysis
+# Add Kaplan-Meier survival analysis
 cohortSurvivalSpecifications <- CohortSurvivalModule$new()$createModuleSpecifications(
-  analysisType = "single_event",
   targetCohortTable = "cohort_table",
   outcomeCohortTable = "cohort_table"
 )
@@ -210,6 +202,6 @@ analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
 
 ## Conclusion
 
-The Cohort Survival module in Strategus provides a powerful and flexible way to perform cohort survival analysis on observational data. By integrating with the CohortSurvival package, it offers both single event and competing risk cohort survival analysis capabilities with comprehensive stratification options.
+The Kaplan-Meier Survival module in Strategus provides a powerful and flexible way to perform Kaplan-Meier survival analysis on observational data. By integrating with the CohortSurvival package, it offers comprehensive Kaplan-Meier survival analysis capabilities with stratification options.
 
 For more information about the CohortSurvival package, visit the [GitHub repository](https://github.com/darwin-eu/CohortSurvival). 
