@@ -27,7 +27,7 @@ CohortSurvivalModule <- R6::R6Class(
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       # Create CDM object for CohortSurvival
-      cdm <- CDMConnector::cdm_from_con(
+      cdm <- CDMConnector::cdmFromCon(
         con = DatabaseConnector::connect(connectionDetails),
         cdm_schema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         write_schema = jobContext$moduleExecutionSettings$workDatabaseSchema,
@@ -66,7 +66,7 @@ CohortSurvivalModule <- R6::R6Class(
       )
 
       # Disconnect from CDM
-      CDMConnector::cdm_disconnect(cdm)
+      CDMConnector::cdmDisconnect(cdm)
 
       private$.message(paste("Results available at:", resultsFolder))
     },
