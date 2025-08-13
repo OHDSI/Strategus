@@ -43,9 +43,8 @@ CohortSurvivalModule <- R6::R6Class(
         targetCohortTable = settings$targetCohortTable,
         outcomeCohortTable = settings$outcomeCohortTable,
         strata = settings$strata,
-        timeGap = settings$timeGap,
-        followUp = settings$followUp,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount
+        eventGap = settings$timeGap,
+        followUpDays = settings$followUp,
       )
 
       private$.message("Export data to csv files")
