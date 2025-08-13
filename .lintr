@@ -1,0 +1,4 @@
+linters: with_defaults(
+  line_length_linter = NULL, # Disable line length warnings
+  object_name_linter = NULL  # Disable object name warnings
+)

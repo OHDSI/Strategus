@@ -29,14 +29,14 @@ CohortSurvivalModule <- R6::R6Class(
       # Create CDM object for CohortSurvival
       cdm <- CDMConnector::cdmFromCon(
         con = DatabaseConnector::connect(connectionDetails),
-        cdm_schema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        write_schema = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cohort_tables = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
+        cdmSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
+        writeSchema =  = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        cohortTables =  = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
 
       # Get settings from job context
       settings <- jobContext$settings
-      
+
       # Run Kaplan-Meier survival analysis
       survivalResults <- CohortSurvival::estimateSingleEventSurvival(
         cdm = cdm,
@@ -76,7 +76,7 @@ CohortSurvivalModule <- R6::R6Class(
     #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
-      
+
       # Create Kaplan-Meier survival analysis results tables
       # Note: CohortSurvival doesn't have a createSurvivalResultTables function
       # Results are stored as CSV files and can be uploaded using standard methods
@@ -89,13 +89,17 @@ CohortSurvivalModule <- R6::R6Class(
       # Since CohortSurvival doesn't provide a predefined data model specification
       resultsDataModelSpecification <- data.frame(
         tableName = paste0(tablePrefix, "survival_results"),
-        columnName = c("cdm_name", "target_cohort", "outcome_name", "strata_name", "strata_level", 
-                      "time", "n_risk", "n_event", "n_censor", "survival", "survival_se", 
-                      "survival_lower", "survival_upper", "cumulative_failure", "cumulative_failure_se",
-                      "cumulative_failure_lower", "cumulative_failure_upper"),
-        dataType = c("VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)",
-                    "INTEGER", "INTEGER", "INTEGER", "INTEGER", "FLOAT", "FLOAT", "FLOAT", "FLOAT",
-                    "FLOAT", "FLOAT", "FLOAT", "FLOAT"),
+        columnName = c(
+          "cdm_name", "target_cohort", "outcome_name", "strata_name", "strata_level",
+          "time", "n_risk", "n_event", "n_censor", "survival", "survival_se",
+          "survival_lower", "survival_upper", "cumulative_failure", "cumulative_failure_se",
+          "cumulative_failure_lower", "cumulative_failure_upper"
+        ),
+        dataType = c(
+          "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)",
+          "INTEGER", "INTEGER", "INTEGER", "INTEGER", "FLOAT", "FLOAT", "FLOAT", "FLOAT",
+          "FLOAT", "FLOAT", "FLOAT", "FLOAT"
+        ),
         isRequired = c(rep("Yes", 17)),
         primaryKey = c("No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No"),
         emptyIsNa = c(rep("Yes", 17))
@@ -110,7 +114,7 @@ CohortSurvivalModule <- R6::R6Class(
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
 
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
-      
+
       # Find CSV files in the results folder
       csvFiles <- list.files(
         path = resultsFolder,
@@ -123,12 +127,14 @@ CohortSurvivalModule <- R6::R6Class(
         for (csvFile in csvFiles) {
           # Read the CSV file
           data <- CohortGenerator::readCsv(csvFile, warnOnCaseMismatch = FALSE)
-          
+
           # Upload to database using DatabaseConnector
           DatabaseConnector::insertTable(
             connection = DatabaseConnector::connect(resultsConnectionDetails),
-            tableName = paste0(resultsDataModelSettings$resultsDatabaseSchema, ".", 
-                              self$tablePrefix, "survival_results"),
+            tableName = paste0(
+              resultsDataModelSettings$resultsDatabaseSchema, ".",
+              self$tablePrefix, "survival_results"
+            ),
             data = data,
             dropTableIfExists = FALSE,
             createTable = TRUE,
