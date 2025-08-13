@@ -30,8 +30,8 @@ CohortSurvivalModule <- R6::R6Class(
       cdm <- CDMConnector::cdmFromCon(
         con = DatabaseConnector::connect(connectionDetails),
         cdmSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
-        writeSchema =  = jobContext$moduleExecutionSettings$workDatabaseSchema,
-        cohortTables =  = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
+        writeSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        cohortTables = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
 
       # Get settings from job context
