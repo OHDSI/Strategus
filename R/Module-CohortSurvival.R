@@ -43,7 +43,7 @@ CohortSurvivalModule <- R6::R6Class(
         targetCohortTable = settings$targetCohortTable,
         outcomeCohortTable = settings$outcomeCohortTable,
         strata = settings$strata,
-        eventGap = settings$eventGap
+        eventGap = settings$eventGap,
         followUpDays = settings$followUpDays,
       )
 
