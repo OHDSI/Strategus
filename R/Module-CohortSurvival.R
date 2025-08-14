@@ -41,7 +41,9 @@ CohortSurvivalModule <- R6::R6Class(
       survivalResults <- CohortSurvival::estimateSingleEventSurvival(
         cdm = cdm,
         targetCohortTable = settings$targetCohortTable,
+        targetCohortId = settings$targetCohortId,
         outcomeCohortTable = settings$outcomeCohortTable,
+        outcomeCohortId = settings$outcomeCohortId,
         strata = settings$strata,
         eventGap = settings$eventGap,
         followUpDays = settings$followUpDays,
@@ -158,7 +160,9 @@ CohortSurvivalModule <- R6::R6Class(
     #' @param followUpDays The follow-up period in days.
     #'
     createModuleSpecifications = function(targetCohortTable,
+                                          targetCohortId,
                                           outcomeCohortTable,
+                                          outcomeCohortId,
                                           strata = NULL,
                                           eventGap = 7,
                                           followUpDays = 365) {
