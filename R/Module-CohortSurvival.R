@@ -9,7 +9,7 @@ CohortSurvivalModule <- R6::R6Class(
   inherit = StrategusModule,
   public = list(
     #' @field tablePrefix The table prefix to append to the results tables
-    tablePrefix = "cohort_survival_",
+    tablePrefix = "cs_",
     #' @description Initialize the module
     initialize = function() {
       super$initialize()
@@ -43,7 +43,7 @@ CohortSurvivalModule <- R6::R6Class(
         targetCohortTable = settings$targetCohortTable,
         targetCohortId = settings$targetCohortId,
         outcomeCohortTable = settings$outcomeCohortTable,
-        outcomeCohortId = settings$outcomeCohortId
+        outcomeCohortId = settings$outcomeCohortId,
         strata = settings$strata,
         eventGap = settings$eventGap,
         followUpDays = settings$followUpDays,
