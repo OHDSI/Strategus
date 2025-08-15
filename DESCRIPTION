@@ -54,7 +54,7 @@ Suggests:
   omopgenerics (>= 1.1.0),
   survival (>= 3.7.0),
   ggplot2,
-  visOmopResults (>= 1.0.0)
+  visOmopResults (>= 1.0.0),
   CDMConnector (>= 2.0.0),
 Remotes:
   darwin-eu/CohortSurvival,
