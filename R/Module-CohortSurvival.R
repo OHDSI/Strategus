@@ -26,9 +26,11 @@ CohortSurvivalModule <- R6::R6Class(
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
+      # get a DBI Connection object - Cohort Survival works with this only
+      dbi_conn <- DatabaseConnector::connect(connectionDetails)@dbiConnection
       # Create CDM object for CohortSurvival
       cdm <- CDMConnector::cdmFromCon(
-        con = DatabaseConnector::connect(connectionDetails),
+        con = dbi_conn,
         cdmSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
         writeSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cohortTables = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
