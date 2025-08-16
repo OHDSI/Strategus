@@ -39,20 +39,31 @@ CohortSurvivalModule <- R6::R6Class(
       # Get settings from job context
       settings <- jobContext$settings
 
-      # Run Kaplan-Meier survival analysis
-      survivalResults <- CohortSurvival::estimateSingleEventSurvival(
-        cdm = cdm,
-        targetCohortTable = settings$targetCohortTable,
-        targetCohortId = settings$targetCohortId,
-        outcomeCohortTable = settings$outcomeCohortTable,
-        outcomeCohortId = settings$outcomeCohortId,
-        strata = settings$strata,
-        eventGap = settings$eventGap,
-        followUpDays = settings$followUpDays,
-      )
-
+      if (settings$analysisType == "single_event") {
+        # Run Kaplan-Meier survival analysis
+        survivalResults <- CohortSurvival::estimateSingleEventSurvival(
+          cdm = cdm,
+          targetCohortTable = settings$targetCohortTable,
+          targetCohortId = settings$targetCohortId,
+          outcomeCohortTable = settings$outcomeCohortTable,
+          outcomeCohortId = settings$outcomeCohortId,
+          strata = settings$strata
+        )
+      } else if (settings$analysisType == "competing_risk") {
+        # Competing risk cohort survival analysis
+        survivalResults <- CohortSurvival::estimateCompetingRiskSurvival(
+          cdm = cdm,
+          targetCohortTable = settings$targetCohortTable,
+          targetCohortId = settings$targetCohortId,
+          outcomeCohortTable = settings$outcomeCohortTable,
+          outcomeCohortId = settings$outcomeCohortId,
+          competingOutcomeCohortTable = settings$competingOutcomeCohortTable,
+          strata = settings$strata
+        )
+      } else {
+        stop("Invalid analysis type. Must be 'single_event' or 'competing_risk'")
+      }
       private$.message("Export data to csv files")
-
       # Export results to CSV
       CohortGenerator::writeCsv(
         x = survivalResults,
@@ -145,16 +156,12 @@ CohortSurvivalModule <- R6::R6Class(
           )
         }
       }
-
-      private$.message("Kaplan-Meier survival analysis results uploaded successfully")
+      private$.message("Cohort survival analysis results uploaded successfully")
     },
     #' @description Creates the Kaplan-Meier Survival Module Specifications
     #'
     #' @details
     #' Run Kaplan-Meier survival analyses for target cohorts and outcomes.
-    #'
-    #' After completion, survival results can be plotted using the [CohortSurvival::plotSurvival()] function.
-    #'
     #' @param targetCohortTable The name of the target cohort table.
     #' @param outcomeCohortTable The name of the outcome cohort table.
     #' @param strata A list of stratification variables. Each element should be a character vector of column names.
