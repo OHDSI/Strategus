@@ -174,7 +174,9 @@ CohortSurvivalModule <- R6::R6Class(
                                           outcomeCohortId,
                                           strata = NULL,
                                           eventGap = 7,
-                                          followUpDays = 365) {
+                                          followUpDays = 365,
+                                          competingOutcomeCohortTable = NULL,
+                                          analysisType = "single_event") {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
