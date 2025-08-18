@@ -28,6 +28,61 @@ CohortSurvivalModule <- R6::R6Class(
 
       # get a DBI Connection object - Cohort Survival works with this only
       dbi_conn <- DatabaseConnector::connect(connectionDetails)@dbiConnection
+
+      # Get settings from job context
+      settings <- jobContext$settings
+      # ---- Handle strata ----
+      strata_param <- NULL
+      if (!is.null(settings$strata)) {
+        cohort_cols <- DBI::dbListFields(dbi_conn, settings$targetCohortTable)
+        for (strata_name in settings$strata) {
+          sanitized_name <- tolower(strata_name)
+          sanitized_name <- gsub("[^[:alnum:][:space:]]", "", sanitized_name)
+          sanitized_name <- gsub("\\s+", "_", sanitized_name)
+          column_name <- paste0("strata_", sanitized_name)
+
+          if (!(column_name %in% cohort_cols)) {
+            if (strata_name == "gender") {
+              # Add gender strata as text
+              DBI::dbExecute(dbi_conn, paste0(
+                "ALTER TABLE ", settings$targetCohortTable, " ADD COLUMN ", column_name, " TEXT;"
+              ))
+              DBI::dbExecute(dbi_conn, paste0(
+                "UPDATE ", settings$targetCohortTable, " AS c ",
+                "SET ", column_name, " = CASE ",
+                "WHEN p.gender_concept_id = 8507 THEN 'male' ",
+                "WHEN p.gender_concept_id = 8532 THEN 'female' ",
+                "ELSE 'unknown' END ",
+                "FROM person p WHERE c.subject_id = p.person_id;"
+              ))
+            } else if (strata_name == "age") {
+              # Add age group strata as text
+              DBI::dbExecute(dbi_conn, paste0(
+                "ALTER TABLE ", settings$targetCohortTable, " ADD COLUMN ", column_name, " TEXT;"
+              ))
+              current_year <- as.numeric(format(Sys.Date(), "%Y"))
+              DBI::dbExecute(dbi_conn, paste0(
+              "UPDATE ", settings$targetCohortTable, " AS c ",
+              "SET ", column_name, " = CASE ",
+              "WHEN (", current_year, " - p.year_of_birth) < 18 THEN '0-17' ",
+              "WHEN (", current_year, " - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34' ",
+              "WHEN (", current_year, " - p.year_of_birth) BETWEEN 35 AND 49 THEN '35-49' ",
+              "WHEN (", current_year, " - p.year_of_birth) BETWEEN 50 AND 64 THEN '50-64' ",
+              "ELSE '65+' END ",
+              "FROM person p WHERE c.subject_id = p.person_id;"
+            ))
+            }
+          }
+        }
+
+        # Pass all strata columns to survival function
+        cohort_cols <- DBI::dbListFields(dbi_conn, settings$targetCohortTable)
+        strata_cols <- cohort_cols[grepl("^strata_", cohort_cols)]
+        if (length(strata_cols) > 0) {
+          strata_param <- lapply(strata_cols, function(col) c(col))
+        }
+      }
+      
       # Create CDM object for CohortSurvival
       cdm <- CDMConnector::cdmFromCon(
         con = dbi_conn,
@@ -35,10 +90,6 @@ CohortSurvivalModule <- R6::R6Class(
         writeSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cohortTables = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
-
-      # Get settings from job context
-      settings <- jobContext$settings
-
       if (settings$analysisType == "single_event") {
         # Run Kaplan-Meier survival analysis
         survivalResults <- CohortSurvival::estimateSingleEventSurvival(
@@ -47,8 +98,16 @@ CohortSurvivalModule <- R6::R6Class(
           targetCohortId = settings$targetCohortId,
           outcomeCohortTable = settings$outcomeCohortTable,
           outcomeCohortId = settings$outcomeCohortId,
-          strata = settings$strata
+          strata = settings$strata,
+          eventGap = settings$eventGap,
+          followUpDays = settings$followUpDays
         )
+        # Apply appropriate plotting based on strata
+        surv_plot <- if (length(strata_cols) > 0) {
+            CohortSurvival::plotSurvival(survivalResults, facet = strata_cols)
+        } else {
+            CohortSurvival::plotSurvival(survivalResults)
+        }
       } else if (settings$analysisType == "competing_risk") {
         # Competing risk cohort survival analysis
         survivalResults <- CohortSurvival::estimateCompetingRiskSurvival(
@@ -58,11 +117,16 @@ CohortSurvivalModule <- R6::R6Class(
           outcomeCohortTable = settings$outcomeCohortTable,
           outcomeCohortId = settings$outcomeCohortId,
           competingOutcomeCohortTable = settings$competingOutcomeCohortTable,
-          strata = settings$strata
+          eventGap = settings$eventGap,
+          followUpDays = settings$followUpDays
         )
+        # plot survival results
+        surv_plot <- CohortSurvival::plotSurvival(survivalResults, cumulativeFailure = TRUE)
+
       } else {
         stop("Invalid analysis type. Must be 'single_event' or 'competing_risk'")
       }
+      
       private$.message("Export data to csv files")
       # Export results to CSV
       CohortGenerator::writeCsv(
