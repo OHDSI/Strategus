@@ -126,6 +126,9 @@ CohortSurvivalModule <- R6::R6Class(
       } else {
         stop("Invalid analysis type. Must be 'single_event' or 'competing_risk'")
       }
+      # plot survival results and save as PNG
+      library(ggplot2)
+      ggplot2::ggsave("./survival_plot.png", surv_plot, width = 8, height = 6)
       
       private$.message("Export data to csv files")
       # Export results to CSV
