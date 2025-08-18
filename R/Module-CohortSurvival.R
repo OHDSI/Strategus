@@ -98,7 +98,7 @@ CohortSurvivalModule <- R6::R6Class(
           targetCohortId = settings$targetCohortId,
           outcomeCohortTable = settings$outcomeCohortTable,
           outcomeCohortId = settings$outcomeCohortId,
-          strata = settings$strata,
+          strata = strata_param,
           eventGap = settings$eventGap,
           followUpDays = settings$followUpDays
         )
@@ -228,7 +228,7 @@ CohortSurvivalModule <- R6::R6Class(
     #' @description Creates the Kaplan-Meier Survival Module Specifications
     #'
     #' @details
-    #' Run Kaplan-Meier survival analyses for target cohorts and outcomes.
+    #' create module specifications for survival analysis of single event as well as competing risk
     #' @param targetCohortTable The name of the target cohort table.
     #' @param outcomeCohortTable The name of the outcome cohort table.
     #' @param strata A list of stratification variables. Each element should be a character vector of column names.
