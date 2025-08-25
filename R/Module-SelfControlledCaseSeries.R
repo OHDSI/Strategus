@@ -150,15 +150,24 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
                                           sccsAnalysisList = NULL,
                                           exposuresOutcomeList = NULL,
                                           analysesToExclude = NULL,
-                                          combineDataFetchAcrossOutcomes = FALSE,
-                                          sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()) {
+                                          combineDataFetchAcrossOutcomes = NULL,
+                                          sccsDiagnosticThresholds = NULL) {
 
+      paramDeprecatedMessage <- "`%s` is now part of the `sccsAnalysesSpecifications` in SelfControlledCaseSeries v6. Please upgrade to SelfControlledCaseSeries v6 and use the `sccsAnalysesSpecifications` parameter when specifying the input to this module."
       if (!is.null(sccsAnalysisList)) {
-        stop("`sccsAnalysisList` is removed in SelfControlledCaseSeries v6. Please upgrade to SelfControlledCaseSeries v6 and specify `sccsAnalysesSpecifications` instead.")
+        stop(sprintf(paramDeprecatedMessage, "sccsAnalysisList"))
       }
 
       if (!is.null(exposuresOutcomeList)) {
-        stop("`exposuresOutcomeList` is removed in SelfControlledCaseSeries v6. Please upgrade to SelfControlledCaseSeries v6 and specify `sccsAnalysesSpecifications` instead.")
+        stop(sprintf(paramDeprecatedMessage, "exposuresOutcomeList"))
+      }
+
+      if (!is.null(combineDataFetchAcrossOutcomes)) {
+        stop(sprintf(paramDeprecatedMessage, "combineDataFetchAcrossOutcomes"))
+      }
+
+      if (!is.null(sccsDiagnosticThresholds)) {
+        stop(sprintf(paramDeprecatedMessage, "sccsDiagnosticThresholds"))
       }
 
       analysis <- list()

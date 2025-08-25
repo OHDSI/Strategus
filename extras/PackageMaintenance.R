@@ -219,8 +219,10 @@ treatmentPatternsCohorts <- getTreatmentPatternsCohorts(cohortDefinitionSet)
 tpModuleSettingsCreator <- TreatmentPatternsModule$new()
 tpModuleSpecifications <- tpModuleSettingsCreator$createModuleSpecifications(
   cohorts = treatmentPatternsCohorts,
-  includeTreatments = "startDate",
-  indexDateOffset = 0,
+  startAnchor = "startDate",
+  windowStart = 0,
+  endAnchor = "endDate",
+  windowEnd = 0,
   minEraDuration = 7,
   splitEventCohorts = NULL,
   splitTime = NULL,

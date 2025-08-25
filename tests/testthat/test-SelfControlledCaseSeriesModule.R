@@ -14,4 +14,16 @@ test_that("SelfControlledCaseSeriesModule - create module settings compatible fo
       exposuresOutcomeList = list()
     )
   )
+
+  expect_error(
+    sccsModule$createModuleSpecifications(
+      combineDataFetchAcrossOutcomes = FALSE
+    )
+  )
+
+  expect_error(
+    sccsModule$createModuleSpecifications(
+      sccsDiagnosticThresholds = list()
+    )
+  )
 })
