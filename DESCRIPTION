@@ -56,8 +56,7 @@ Remotes:
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod,
   ohdsi/PatientLevelPrediction,
-  ohdsi/ResultModelManager,
-  ohdsi/SelfControlledCaseSeries@version_6
+  ohdsi/ResultModelManager
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
