@@ -141,11 +141,11 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
     },
     #' @description Creates the SelfControlledCaseSeries Module Specifications
     #' @param sccsAnalysesSpecifications An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications
-    #' @param sccsAnalysisList Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
-    #' @param exposuresOutcomeList Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
-    #' @param analysesToExclude Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
-    #' @param combineDataFetchAcrossOutcomes Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
-    #' @param sccsDiagnosticThresholds Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param sccsAnalysisList Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param exposuresOutcomeList Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param analysesToExclude Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param combineDataFetchAcrossOutcomes Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param sccsDiagnosticThresholds Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
     createModuleSpecifications = function(sccsAnalysesSpecifications,
                                           sccsAnalysisList = NULL,
                                           exposuresOutcomeList = NULL,
@@ -154,11 +154,11 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
                                           sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()) {
 
       if (!is.null(sccsAnalysisList)) {
-        warning("`sccsAnalysisList` is deprecated in SelfControlledCaseSeries v6.0, please use: `sccsAnalysesSpecifications` instead.")
+        stop("`sccsAnalysisList` is removed in SelfControlledCaseSeries v6. Please upgrade to SelfControlledCaseSeries v6 and specify `sccsAnalysesSpecifications` instead.")
       }
 
       if (!is.null(exposuresOutcomeList)) {
-        warning("`exposuresOutcomeList` is deprecated in TreatentPatterns v6.0, please use: `sccsAnalysesSpecifications` instead.")
+        stop("`exposuresOutcomeList` is removed in SelfControlledCaseSeries v6. Please upgrade to SelfControlledCaseSeries v6 and specify `sccsAnalysesSpecifications` instead.")
       }
 
       analysis <- list()
