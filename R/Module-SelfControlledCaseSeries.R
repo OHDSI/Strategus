@@ -141,7 +141,26 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
     },
     #' @description Creates the SelfControlledCaseSeries Module Specifications
     #' @param sccsAnalysesSpecifications An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications
-    createModuleSpecifications = function(sccsAnalysesSpecifications) {
+    #' @param sccsAnalysisList Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param exposuresOutcomeList Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param analysesToExclude Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param combineDataFetchAcrossOutcomes Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param sccsDiagnosticThresholds Deprecated with SelfControlledCaseSeries v6.0 - please use the `sccsAnalysesSpecifications` parameter instead.
+    createModuleSpecifications = function(sccsAnalysesSpecifications,
+                                          sccsAnalysisList = NULL,
+                                          exposuresOutcomeList = NULL,
+                                          analysesToExclude = NULL,
+                                          combineDataFetchAcrossOutcomes = FALSE,
+                                          sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()) {
+
+      if (!is.null(sccsAnalysisList)) {
+        warning("`sccsAnalysisList` is deprecated in SelfControlledCaseSeries v6.0, please use: `sccsAnalysesSpecifications` instead.")
+      }
+
+      if (!is.null(exposuresOutcomeList)) {
+        warning("`exposuresOutcomeList` is deprecated in TreatentPatterns v6.0, please use: `sccsAnalysesSpecifications` instead.")
+      }
+
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
