@@ -59,9 +59,9 @@
         }
       ],
       "subsetDefs": [
-        "{\n  \"name\": \"age 18 to 64\",\n  \"definitionId\": 1,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    }\n  ],\n  \"packageVersion\": \"0.11.2\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
-        "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.11.2\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
-        "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.11.2\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}"
+        "{\n  \"name\": \"age 18 to 64\",\n  \"definitionId\": 1,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
+        "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
+        "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}"
       ],
       "cohortSubsets": [
         {
@@ -185,6 +185,7 @@
         "runVisitContext": true,
         "runBreakdownIndexEvents": true,
         "runIncidenceRate": true,
+        "runCohortRelationship": true,
         "runTemporalCohortCharacterization": true,
         "temporalCovariateSettings": {
           "temporal": true,
@@ -209,7 +210,10 @@
           "ProcedureOccurrence": true,
           "DeviceExposure": true,
           "Measurement": true,
+          "MeasurementRangeGroup": true,
+          "MeasurementValueAsConcept": true,
           "Observation": true,
+          "ObservationValueAsConcept": true,
           "CharlsonIndex": true,
           "Dcsi": true,
           "Chads2": true,
@@ -565,12 +569,6 @@
             "type": "exit"
           }
         ],
-        "overlapMethod": "truncate",
-        "concatTargets": true,
-        "startAnchor": "startDate",
-        "windowStart": 0,
-        "endAnchor": "endDate",
-        "windowEnd": 0,
         "minEraDuration": 7,
         "eraCollapseSize": 14,
         "combinationWindow": 7,
@@ -579,7 +577,13 @@
         "maxPathLength": 5,
         "ageWindow": 5,
         "minCellCount": 1,
-        "censorType": "minCellCount"
+        "censorType": "minCellCount",
+        "overlapMethod": "truncate",
+        "concatTargets": true,
+        "startAnchor": "startDate",
+        "windowStart": 0,
+        "endAnchor": "endDate",
+        "windowEnd": 0
       },
       "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
     },
@@ -848,8 +852,9 @@
                     "covariateIds": []
                   },
                   "default": [],
-                  "skip": 1
-                }
+                  "delim": ","
+                },
+                "attr_problems": {}
               },
               "attr_class": "args"
             },
@@ -1114,440 +1119,415 @@
     {
       "module": "SelfControlledCaseSeriesModule",
       "settings": {
-        "sccsAnalysisList": [
-          {
-            "analysisId": 1,
-            "description": "SCCS 18+",
-            "getDbSccsDataArgs": {
-              "useCustomCovariates": false,
-              "useNestingCohort": false,
-              "deleteCovariatesSmallCount": 0,
-              "studyStartDate": "",
-              "studyEndDate": "",
-              "maxCasesPerOutcome": 1000000,
-              "exposureIds": "exposureId",
-              "customCovariateIds": "",
-              "attr_class": "args"
-            },
-            "createStudyPopulationArgs": {
-              "firstOutcomeOnly": false,
-              "naivePeriod": 365,
-              "minAge": 18,
-              "attr_class": "args"
-            },
-            "createIntervalDataArgs": {
-              "eraCovariateSettings": [
+        "sccsAnalysesSpecifications": {
+          "controlType": "outcome",
+          "sccsDiagnosticThresholds": {
+            "eventExposureDependenceNullBounds": [0.8, 1.25],
+            "eventObservationDependenceNullBounds": [0.5, 2],
+            "rareOutcomeMaxPrevalence": 0.1,
+            "timeTrendMaxRatio": 1.1,
+            "easeThreshold": 0.25,
+            "mdrrThreshold": 10
+          },
+          "combineDataFetchAcrossOutcomes": false,
+          "analysesToExclude": null,
+          "exposuresOutcomeList": [
+            {
+              "nestingCohortId": null,
+              "exposures": [
                 {
-                  "includeEraIds": "exposureId",
-                  "label": "Pre-exposure",
-                  "stratifyById": false,
-                  "start": -30,
-                  "startAnchor": "era start",
-                  "end": -1,
-                  "endAnchor": "era start",
-                  "firstOccurrenceOnly": false,
-                  "allowRegularization": false,
-                  "profileLikelihood": false,
-                  "exposureOfInterest": false,
-                  "isControlInterval": false,
-                  "attr_class": "EraCovariateSettings"
-                },
-                {
-                  "includeEraIds": "exposureId",
-                  "label": "Main",
-                  "stratifyById": false,
-                  "start": 0,
-                  "startAnchor": "era start",
-                  "end": 365,
-                  "endAnchor": "era end",
-                  "firstOccurrenceOnly": false,
-                  "allowRegularization": false,
-                  "profileLikelihood": true,
-                  "exposureOfInterest": true,
-                  "isControlInterval": false,
-                  "attr_class": "EraCovariateSettings"
+                  "trueEffectSize": null,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
                 }
               ],
-              "seasonalityCovariateSettings": {
-                "seasonKnots": 5,
-                "allowRegularization": true,
-                "computeConfidenceIntervals": false,
-                "attr_class": "SeasonalityCovariateSettings"
-              },
-              "calendarTimeCovariateSettings": {
-                "calendarTimeKnots": 5,
-                "allowRegularization": true,
-                "computeConfidenceIntervals": false,
-                "attr_class": "CalendarTimeCovariateSettings"
-              },
-              "minCasesForTimeCovariates": 100000,
-              "eventDependentObservation": false,
-              "attr_class": "args"
+              "outcomeId": 3
             },
-            "fitSccsModelArgs": {
-              "prior": {
-                "priorType": "laplace",
-                "variance": 1,
-                "exclude": null,
-                "graph": null,
-                "neighborhood": null,
-                "useCrossValidation": true,
-                "forceIntercept": false,
-                "attr_class": "cyclopsPrior"
-              },
-              "control": {
-                "maxIterations": 1000,
-                "tolerance": 1e-06,
-                "convergenceType": "gradient",
-                "autoSearch": true,
-                "fold": 10,
-                "lowerLimit": 0.01,
-                "upperLimit": 20,
-                "gridSteps": 10,
-                "minCVData": 100,
-                "cvRepetitions": 1,
-                "noiseLevel": "quiet",
-                "threads": 1,
-                "seed": 1,
-                "resetCoefficients": true,
-                "startingVariance": 0.1,
-                "useKKTSwindle": false,
-                "tuneSwindle": 10,
-                "selectorType": "byPid",
-                "initialBound": 2,
-                "maxBoundCount": 5,
-                "algorithm": "ccd",
-                "doItAll": true,
-                "syncCV": false,
-                "attr_class": "cyclopsControl"
-              },
-              "profileBounds": [-2.3026, 2.3026],
-              "attr_class": "args"
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10037
             },
-            "attr_class": "SccsAnalysis"
-          }
-        ],
-        "exposuresOutcomeList": [
-          {
-            "outcomeId": 3,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": null,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10037,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10038,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10039,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10040,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10041,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10042,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10043,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10044,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10046,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10047,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10048,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10049,
-            "exposures": [
-              {
-                "exposureId": 1,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 3,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": null,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10037,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10038,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10039,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10040,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10041,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10042,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10043,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10044,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10046,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10047,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10048,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          },
-          {
-            "outcomeId": 10049,
-            "exposures": [
-              {
-                "exposureId": 2,
-                "exposureIdRef": "exposureId",
-                "trueEffectSize": 1,
-                "attr_class": "Exposure"
-              }
-            ],
-            "attr_class": "ExposuresOutcome"
-          }
-        ],
-        "combineDataFetchAcrossOutcomes": false,
-        "sccsDiagnosticThresholds": {
-          "mdrrThreshold": "Inf",
-          "easeThreshold": 0.42,
-          "timeTrendPThreshold": 0.05,
-          "preExposurePThreshold": 0.05,
-          "attr_class": "SccsDiagnosticThresholds"
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10038
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10039
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10040
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10041
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10042
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10043
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10044
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10046
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10047
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10048
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 1
+                }
+              ],
+              "outcomeId": 10049
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": null,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 3
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10037
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10038
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10039
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10040
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10041
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10042
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10043
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10044
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10046
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10047
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10048
+            },
+            {
+              "nestingCohortId": null,
+              "exposures": [
+                {
+                  "trueEffectSize": 1,
+                  "exposureIdRef": "exposureId",
+                  "exposureId": 2
+                }
+              ],
+              "outcomeId": 10049
+            }
+          ],
+          "sccsAnalysisList": [
+            {
+              "fitSccsModelArgs": {
+                "profileBounds": [-2.3026, 2.3026],
+                "profileGrid": null,
+                "control": {
+                  "maxIterations": 1000,
+                  "tolerance": 1e-06,
+                  "convergenceType": "gradient",
+                  "autoSearch": true,
+                  "fold": 10,
+                  "lowerLimit": 0.01,
+                  "upperLimit": 20,
+                  "gridSteps": 10,
+                  "minCVData": 100,
+                  "cvRepetitions": 1,
+                  "noiseLevel": "quiet",
+                  "threads": 1,
+                  "seed": 1,
+                  "resetCoefficients": true,
+                  "startingVariance": 0.1,
+                  "useKKTSwindle": false,
+                  "tuneSwindle": 10,
+                  "selectorType": "byPid",
+                  "initialBound": 2,
+                  "maxBoundCount": 5,
+                  "algorithm": "ccd",
+                  "doItAll": true,
+                  "syncCV": false
+                },
+                "prior": {
+                  "priorType": "laplace",
+                  "variance": 1,
+                  "exclude": null,
+                  "graph": null,
+                  "neighborhood": null,
+                  "useCrossValidation": true,
+                  "forceIntercept": false
+                }
+              },
+              "createIntervalDataArgs": {
+                "eventDependentObservation": false,
+                "endOfObservationEraLength": 30,
+                "minCasesForTimeCovariates": 100000,
+                "calendarTimeCovariateSettings": {
+                  "computeConfidenceIntervals": false,
+                  "allowRegularization": true,
+                  "calendarTimeKnots": 5
+                },
+                "seasonalityCovariateSettings": {
+                  "computeConfidenceIntervals": false,
+                  "allowRegularization": true,
+                  "seasonKnots": 5
+                },
+                "ageCovariateSettings": null,
+                "eraCovariateSettings": [
+                  {
+                    "preExposure": true,
+                    "exposureOfInterest": false,
+                    "profileLikelihood": false,
+                    "allowRegularization": false,
+                    "firstOccurrenceOnly": false,
+                    "endAnchor": "era start",
+                    "end": -1,
+                    "startAnchor": "era start",
+                    "start": -30,
+                    "stratifyById": false,
+                    "label": "Pre-exposure",
+                    "excludeEraIds": null,
+                    "includeEraIds": "exposureId"
+                  },
+                  {
+                    "preExposure": false,
+                    "exposureOfInterest": true,
+                    "profileLikelihood": true,
+                    "allowRegularization": false,
+                    "firstOccurrenceOnly": false,
+                    "endAnchor": "era end",
+                    "end": 365,
+                    "startAnchor": "era start",
+                    "start": 0,
+                    "stratifyById": false,
+                    "label": "Main",
+                    "excludeEraIds": null,
+                    "includeEraIds": "exposureId"
+                  }
+                ]
+              },
+              "createStudyPopulationArgs": {
+                "restrictTimeToEraId": null,
+                "genderConceptIds": null,
+                "maxAge": null,
+                "minAge": 18,
+                "naivePeriod": 365,
+                "firstOutcomeOnly": false
+              },
+              "getDbSccsDataArgs": {
+                "customCovariateIds": null,
+                "exposureIds": "exposureId",
+                "maxCasesPerOutcome": 1000000,
+                "studyEndDates": null,
+                "studyStartDates": null,
+                "deleteCovariatesSmallCount": 0,
+                "nestingCohortId": null
+              },
+              "description": "SCCS 18+",
+              "analysisId": 1
+            }
+          ]
         }
       },
       "attr_class": ["ModuleSpecifications", "SelfControlledCaseSeriesModuleSpecifications"]
@@ -1667,7 +1647,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 21082718,
+                  "seed": 93739120,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1682,7 +1662,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 86655,
+              "seed": 95791,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"
@@ -1690,7 +1670,7 @@
             "executeSettings": {
               "runSplitData": true,
               "runSampleData": false,
-              "runFeatureEngineering": false,
+              "runfeatureEngineering": false,
               "runPreprocessData": true,
               "runModelDevelopment": true,
               "runCovariateSummary": true,
@@ -1809,7 +1789,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 25200427,
+                  "seed": 46144016,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1824,7 +1804,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 13703,
+              "seed": 47715,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"
@@ -1832,7 +1812,7 @@
             "executeSettings": {
               "runSplitData": true,
               "runSampleData": false,
-              "runFeatureEngineering": false,
+              "runfeatureEngineering": false,
               "runPreprocessData": true,
               "runModelDevelopment": true,
               "runCovariateSummary": true,
