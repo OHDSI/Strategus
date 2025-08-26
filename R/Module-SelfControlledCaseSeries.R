@@ -28,9 +28,20 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       # Provide hook to allow for overriding the number of threads
       # used for database operations
       getDbSccsDataThreads <- as.integer(getOption("strategus.SelfControlledCaseSeriesModule.getDbSccsDataThreads"))
+      fitSccsModelThreads <- as.integer(getOption("strategus.SelfControlledCaseSeriesModule.fitSccsModelThreads"))
       if (isTRUE(getDbSccsDataThreads > 0)) {
         private$.message(paste0("Detected strategus.SelfControlledCaseSeriesModule.getDbSccsDataThreads - setting value to: ", getDbSccsDataThreads))
         sccsMultiThreadingSettings$getDbSccsDataThreads <- getDbSccsDataThreads
+      }
+      if (isTRUE(fitSccsModelThreads > 0)) {
+        private$.message(paste0("Detected strategus.SelfControlledCaseSeriesModule.fitSccsModelThreads - setting value to: ", fitSccsModelThreads))
+        sccsMultiThreadingSettings$fitSccsModelThreads <- fitSccsModelThreads
+      }
+
+      # Add a check to ensure that the module specifications conform to the new
+      # SCCS v6 approach
+      if (is.null(jobContext$settings$sccsAnalysesSpecifications)) {
+        stop("The SelfControlledCaseSeriesModule specification is missing the required `sccsAnalysesSpecifications` setting. Please recreate the SelfControlledCaseSeriesModule specification and update the analysis specification.")
       }
 
       args <- jobContext$settings
@@ -47,7 +58,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       args$customCovariateTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outputFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$sccsMultiThreadingSettings <- sccsMultiThreadingSettings
-      args$sccsDiagnosticThresholds <- NULL
+      args$sccsAnalysesSpecifications <- SelfControlledCaseSeries::convertUntypedListToSccsAnalysesSpecifications(jobContext$settings$sccsAnalysesSpecifications)
       do.call(SelfControlledCaseSeries::runSccsAnalyses, args)
 
       exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -55,8 +66,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         outputFolder = jobContext$moduleExecutionSettings$workSubFolder,
         exportFolder = exportFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        sccsDiagnosticThresholds = jobContext$settings$sccsDiagnosticThresholds
+        minCellCount = jobContext$moduleExecutionSettings$minCellCount
       )
       # TODO: Removing this to make the upload easier
       # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
@@ -136,16 +146,36 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       )
     },
     #' @description Creates the SelfControlledCaseSeries Module Specifications
-    #' @param sccsAnalysisList description
-    #' @param exposuresOutcomeList description
-    #' @param analysesToExclude description
-    #' @param combineDataFetchAcrossOutcomes description
-    #' @param sccsDiagnosticThresholds description
-    createModuleSpecifications = function(sccsAnalysisList,
-                                          exposuresOutcomeList,
+    #' @param sccsAnalysesSpecifications An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications
+    #' @param sccsAnalysisList Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param exposuresOutcomeList Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param analysesToExclude Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param combineDataFetchAcrossOutcomes Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    #' @param sccsDiagnosticThresholds Deprecated with SelfControlledCaseSeries v6 - please use the `sccsAnalysesSpecifications` parameter instead.
+    createModuleSpecifications = function(sccsAnalysesSpecifications,
+                                          sccsAnalysisList = NULL,
+                                          exposuresOutcomeList = NULL,
                                           analysesToExclude = NULL,
-                                          combineDataFetchAcrossOutcomes = FALSE,
-                                          sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds()) {
+                                          combineDataFetchAcrossOutcomes = NULL,
+                                          sccsDiagnosticThresholds = NULL) {
+
+      paramDeprecatedMessage <- "`%s` is now part of the `sccsAnalysesSpecifications` in SelfControlledCaseSeries v6. Please upgrade to SelfControlledCaseSeries v6 and use the `sccsAnalysesSpecifications` parameter when specifying the input to this module."
+      if (!is.null(sccsAnalysisList)) {
+        stop(sprintf(paramDeprecatedMessage, "sccsAnalysisList"))
+      }
+
+      if (!is.null(exposuresOutcomeList)) {
+        stop(sprintf(paramDeprecatedMessage, "exposuresOutcomeList"))
+      }
+
+      if (!is.null(combineDataFetchAcrossOutcomes)) {
+        stop(sprintf(paramDeprecatedMessage, "combineDataFetchAcrossOutcomes"))
+      }
+
+      if (!is.null(sccsDiagnosticThresholds)) {
+        stop(sprintf(paramDeprecatedMessage, "sccsDiagnosticThresholds"))
+      }
+
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
