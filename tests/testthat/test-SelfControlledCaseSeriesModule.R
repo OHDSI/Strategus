@@ -53,7 +53,7 @@ test_that("Verify SCCS v5 module specs fails to execute with error", {
   sccsModuleSpecifications$settings$sccsAnalysisList <- list()
   sccsModuleSpecifications$settings$exposuresOutcomeList <- list()
 
-  analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+  analysisSpecifications <- createEmptyAnalysisSpecifications() |>
     addModuleSpecifications(sccsModuleSpecifications)
 
   executionSettings <- createCdmExecutionSettings(

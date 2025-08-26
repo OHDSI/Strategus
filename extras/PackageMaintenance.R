@@ -510,7 +510,7 @@ sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications
 
 
 # Create analysis specifications CDM modules ---------------
-cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   addCohortGeneratorModuleSpecifications(cgModuleSpecifications) |>
@@ -528,7 +528,7 @@ ParallelLogger::saveSettingsToJson(
 )
 
 # Create analysis specifications results modules ---------------
-cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addEvidenceSynthesisModuleSpecifications(evidenceSynthesisAnalysisSpecifications)
 
 ParallelLogger::saveSettingsToJson(

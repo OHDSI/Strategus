@@ -372,7 +372,7 @@ test_that("Test analysis specification creation", {
 
 
   # Create analysis specifications ---------------
-  analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+  analysisSpecifications <- createEmptyAnalysisSpecifications() |>
     addSharedResources(cohortSharedResourcesSpecifications) |>
     addSharedResources(ncoCohortSharedResourceSpecifications) |>
     addCharacterizationModuleSpecifications(cModuleSpecifications) |>
@@ -386,6 +386,12 @@ test_that("Test analysis specification creation", {
 
   expect_equal(length(analysisSpecifications$sharedResources), 2)
   expect_equal(length(analysisSpecifications$moduleSpecifications), 8)
+})
+
+test_that("Calling misspelled createEmptyAnalysisSpecificiations throws warning", {
+  expect_warning(
+    createEmptyAnalysisSpecificiations()
+  )
 })
 
 test_that("Create results execution settings", {
