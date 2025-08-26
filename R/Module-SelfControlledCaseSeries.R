@@ -41,7 +41,7 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
       # Add a check to ensure that the module specifications conform to the new
       # SCCS v6 approach
       if (is.null(jobContext$settings$sccsAnalysesSpecifications)) {
-        stop("The SelfControlledCaseSeriesModule specification must contain the `sccsAnalysesSpecifications`. Please recreate the SelfControlledCaseSeriesModule specifications and try again.")
+        stop("The SelfControlledCaseSeriesModule specification is missing the required `sccsAnalysesSpecifications` setting. Please recreate the SelfControlledCaseSeriesModule specification and update the analysis specification.")
       }
 
       args <- jobContext$settings
