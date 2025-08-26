@@ -260,17 +260,6 @@ addAndValidateModuleSpecifications <- function(moduleName, analysisSpecification
   return(analysisSpecifications)
 }
 
-
-#' DEPRECATED DUE TO MISSPELLING
-#'
-#' @seealso [createEmptyAnalysisSpecifications()]
-#'
-#' @export
-createEmptyAnalysisSpecificiations <- function() {
-  warning("This function will be deprecated due to a misspelling. Please use `createEmptyAnalysisSpecifications` instead.")
-  return(createEmptyAnalysisSpecifications())
-}
-
 #' Create an empty analysis specifications object.
 #'
 #' @return
@@ -286,6 +275,15 @@ createEmptyAnalysisSpecifications <- function() {
   return(analysisSpecifications)
 }
 
+#' DEPRECATED DUE TO MISSPELLING
+#'
+#' @seealso [createEmptyAnalysisSpecifications()]
+#'
+#' @export
+createEmptyAnalysisSpecificiations <- function() {
+  warning("This function will be deprecated due to a misspelling. Please use `createEmptyAnalysisSpecifications` instead.")
+  return(createEmptyAnalysisSpecifications())
+}
 
 
 #' Create CDM execution settings
