@@ -291,10 +291,7 @@ test_that("Test analysis specification creation", {
   }
 
   getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
-    studyStartDate = "",
-    studyEndDate = "",
     maxCasesPerOutcome = 1e6,
-    useNestingCohort = TRUE,
     nestingCohortId = 1,
     deleteCovariatesSmallCount = 0
   )
@@ -364,10 +361,13 @@ test_that("Test analysis specification creation", {
 
   sccsAnalysisList <- list(sccsAnalysis1)
 
-  sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
+  sccsAnalysisSpecifications <- SelfControlledCaseSeries::createSccsAnalysesSpecifications(
     sccsAnalysisList = sccsAnalysisList,
-    exposuresOutcomeList = exposuresOutcomeList,
-    combineDataFetchAcrossOutcomes = FALSE
+    exposuresOutcomeList = exposuresOutcomeList
+  )
+
+  sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
+    sccsAnalysesSpecifications = sccsAnalysisSpecifications$toList()
   )
 
 

@@ -40,7 +40,7 @@ PatientLevelPredictionModule <- R6::R6Class(
         outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
 
-      jobContext$settings <- private$.setCovariateSchemaTable(
+      jobContext$settings$modelDesignList <- private$.setCovariateSchemaTable(
         modelDesignList = jobContext$settings$modelDesignList,
         cohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
@@ -49,9 +49,10 @@ PatientLevelPredictionModule <- R6::R6Class(
       # run the models
       PatientLevelPrediction::runMultiplePlp(
         databaseDetails = databaseDetails,
-        modelDesignList = jobContext$settings,
+        modelDesignList = jobContext$settings$modelDesignList,
         cohortDefinitions = cohortDefinitionSet,
-        saveDirectory = workFolder
+        saveDirectory = workFolder,
+        skipDiagnostics = jobContext$settings$skipDiagnostics
       )
 
       private$.message("Export data to csv files")
@@ -136,7 +137,8 @@ PatientLevelPredictionModule <- R6::R6Class(
     },
     #' @description Creates the PatientLevelPrediction Module Specifications
     #' @param modelDesignList A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}
-    createModuleSpecifications = function(modelDesignList) {
+    #' @param skipDiagnostics Whether to run the diagnostics based on PROBAST before model development
+    createModuleSpecifications = function(modelDesignList, skipDiagnostics = FALSE) {
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)
