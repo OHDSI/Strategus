@@ -1,4 +1,4 @@
-test_that("Execute study, upload results, excute results modules and upload results", {
+test_that("Execute study, upload results, execute results modules and upload results", {
   analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
       package = "Strategus"

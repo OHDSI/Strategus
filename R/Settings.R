@@ -411,19 +411,21 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #'
 #' @export
 createResultsDataModelSettings <- function(resultsDatabaseSchema,
-                                           resultsFolder,
+                                           resultsFolder = NULL,
                                            logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
                                            modulesToExecute = c()) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
-  checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
+  checkmate::assertCharacter(resultsFolder, len = 1, null.ok = TRUE, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
-  resultsFolder <- normalizePath(resultsFolder, mustWork = F)
   logFileName <- normalizePath(logFileName, mustWork = F)
+  if (!is.null(resultsFolder)) {
+    resultsFolder <- normalizePath(resultsFolder, mustWork = F)
+  }
 
   executionSettings <- list()
   for (name in names(formals(createResultsDataModelSettings))) {

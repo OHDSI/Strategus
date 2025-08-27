@@ -40,8 +40,7 @@ createResultDataModel <- function(analysisSpecifications,
 
   # The DatabaseMetaData is a special case...
   .createDatabaseMetadataResultsDataModel(
-    resultsConnectionDetails = resultsConnectionDetails,
-    resultsDataModelSettings = resultsDataModelSettings
+    resultsConnectionDetails = resultsConnectionDetails
   )
 
   # Determine if the user has opted to subset to specific modules
@@ -97,6 +96,7 @@ uploadResults <- function(analysisSpecifications,
   checkmate::assertClass(analysisSpecifications, "AnalysisSpecifications", add = errorMessages)
   checkmate::assertClass(resultsDataModelSettings, "ResultsDataModelSettings", add = errorMessages)
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
+  checkmate::assertCharacter(resultsDataModelSettings$resultsFolder, len = 1)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Used to keep track of the execution status
