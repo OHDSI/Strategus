@@ -219,8 +219,10 @@ treatmentPatternsCohorts <- getTreatmentPatternsCohorts(cohortDefinitionSet)
 tpModuleSettingsCreator <- TreatmentPatternsModule$new()
 tpModuleSpecifications <- tpModuleSettingsCreator$createModuleSpecifications(
   cohorts = treatmentPatternsCohorts,
-  includeTreatments = "startDate",
-  indexDateOffset = 0,
+  startAnchor = "startDate",
+  windowStart = 0,
+  endAnchor = "endDate",
+  windowEnd = 0,
   minEraDuration = 7,
   splitEventCohorts = NULL,
   splitTime = NULL,
@@ -508,7 +510,7 @@ sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications
 
 
 # Create analysis specifications CDM modules ---------------
-cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   addCohortGeneratorModuleSpecifications(cgModuleSpecifications) |>
@@ -526,7 +528,7 @@ ParallelLogger::saveSettingsToJson(
 )
 
 # Create analysis specifications results modules ---------------
-cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addEvidenceSynthesisModuleSpecifications(evidenceSynthesisAnalysisSpecifications)
 
 ParallelLogger::saveSettingsToJson(

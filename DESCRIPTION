@@ -37,23 +37,22 @@ Suggests:
   CohortMethod,
   Cyclops (>= 3.6.0),
   Eunomia,
-  EvidenceSynthesis,
+  EvidenceSynthesis (>= 1.0.0),
   FeatureExtraction,
   fs,
   knitr,
-  PatientLevelPrediction,
+  PatientLevelPrediction (>= 6.5.0),
   readr,
   rmarkdown,
   RSQLite,
-  SelfControlledCaseSeries,
+  SelfControlledCaseSeries (>= 6.0.0),
   testthat (>= 3.0.0),
   TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod,
-  ohdsi/EvidenceSynthesis@develop
+  ohdsi/CohortMethod
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus

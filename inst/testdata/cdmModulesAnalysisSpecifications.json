@@ -60,8 +60,8 @@
       ],
       "subsetDefs": [
         "{\n  \"name\": \"age 18 to 64\",\n  \"definitionId\": 1,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
-        "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
-        "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}"
+        "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
+        "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}"
       ],
       "cohortSubsets": [
         {
@@ -185,6 +185,7 @@
         "runVisitContext": true,
         "runBreakdownIndexEvents": true,
         "runIncidenceRate": true,
+        "runCohortRelationship": true,
         "runTemporalCohortCharacterization": true,
         "temporalCovariateSettings": {
           "temporal": true,
@@ -209,7 +210,10 @@
           "ProcedureOccurrence": true,
           "DeviceExposure": true,
           "Measurement": true,
+          "MeasurementRangeGroup": true,
+          "MeasurementValueAsConcept": true,
           "Observation": true,
+          "ObservationValueAsConcept": true,
           "CharlsonIndex": true,
           "Dcsi": true,
           "Chads2": true,
@@ -565,12 +569,6 @@
             "type": "exit"
           }
         ],
-        "overlapMethod": "truncate",
-        "concatTargets": true,
-        "startAnchor": "startDate",
-        "windowStart": 0,
-        "endAnchor": "endDate",
-        "windowEnd": 0,
         "minEraDuration": 7,
         "eraCollapseSize": 14,
         "combinationWindow": 7,
@@ -579,7 +577,13 @@
         "maxPathLength": 5,
         "ageWindow": 5,
         "minCellCount": 1,
-        "censorType": "minCellCount"
+        "censorType": "minCellCount",
+        "overlapMethod": "truncate",
+        "concatTargets": true,
+        "startAnchor": "startDate",
+        "windowStart": 0,
+        "endAnchor": "endDate",
+        "windowEnd": 0
       },
       "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
     },
@@ -1643,7 +1647,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 77961870,
+                  "seed": 93739120,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1658,7 +1662,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 66696,
+              "seed": 95791,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"
@@ -1785,7 +1789,7 @@
                   "modelType": "logistic",
                   "addIntercept": true,
                   "useControl": true,
-                  "seed": 96652302,
+                  "seed": 46144016,
                   "name": "Lasso Logistic Regression",
                   "threads": -1,
                   "tolerance": 2e-06,
@@ -1800,7 +1804,7 @@
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 5396,
+              "seed": 47715,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"

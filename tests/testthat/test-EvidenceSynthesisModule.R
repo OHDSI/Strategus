@@ -109,7 +109,7 @@ createEsModuleSpecs <- function() {
     )
   )
 
-  analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
+  analysisSpecifications <- createEmptyAnalysisSpecifications() %>%
     addModuleSpecifications(evidenceSynthesisModuleSpecs)
 
   return(analysisSpecifications)

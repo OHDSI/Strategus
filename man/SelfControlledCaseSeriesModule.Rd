@@ -175,7 +175,12 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Creates the SelfControlledCaseSeries Module Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$createModuleSpecifications(
-  sccsAnalysesSpecifications
+  sccsAnalysesSpecifications,
+  sccsAnalysisList = NULL,
+  exposuresOutcomeList = NULL,
+  analysesToExclude = NULL,
+  combineDataFetchAcrossOutcomes = NULL,
+  sccsDiagnosticThresholds = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -183,6 +188,16 @@ Creates the SelfControlledCaseSeries Module Specifications
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{sccsAnalysesSpecifications}}{An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications}
+
+\item{\code{sccsAnalysisList}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+
+\item{\code{exposuresOutcomeList}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+
+\item{\code{analysesToExclude}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+
+\item{\code{combineDataFetchAcrossOutcomes}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+
+\item{\code{sccsDiagnosticThresholds}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
 }
 \if{html}{\out{</div>}}
 }
