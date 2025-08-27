@@ -1,7 +1,6 @@
 # This file was part of EvidenceSynthesisModule
 
 
-# Note: this requires Cyclops >= 3.6.0 to compute the gradients
 library(dplyr)
 source("extras/ESModule-SimulationFunctions.R")
 

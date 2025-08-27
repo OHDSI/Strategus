@@ -370,9 +370,6 @@ test_that("Test analysis specification creation", {
     sccsAnalysesSpecifications = sccsAnalysisSpecifications$toList()
   )
 
-  sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
-    sccsAnalysesSpecifications = sccsAnalysisSpecifications
-  )
 
   # Create analysis specifications ---------------
   analysisSpecifications <- createEmptyAnalysisSpecifications() |>
