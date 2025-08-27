@@ -164,7 +164,7 @@ getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
   )
 }
 
-.createDatabaseMetadataResultsDataModel <- function(resultsConnectionDetails) {
+.createDatabaseMetadataResultsDataModel <- function(resultsConnectionDetails, resultsDataModelSettings) {
   rlang::inform("Creating results data model for database metadata")
   connection <- DatabaseConnector::connect(resultsConnectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))

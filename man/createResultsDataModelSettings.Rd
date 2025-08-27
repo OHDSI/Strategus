@@ -6,7 +6,7 @@
 \usage{
 createResultsDataModelSettings(
   resultsDatabaseSchema,
-  resultsFolder,
+  resultsFolder = NULL,
   logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
   modulesToExecute = c()
 )
