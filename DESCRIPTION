@@ -35,9 +35,9 @@ Suggests:
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
   CohortMethod,
-  Cyclops,
+  Cyclops (>= 3.6.0),
   Eunomia,
-  EvidenceSynthesis,
+  EvidenceSynthesis (>= 1.0.0),
   FeatureExtraction,
   fs,
   knitr,
@@ -50,7 +50,6 @@ Suggests:
   TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
-  ohdsi/Characterization,
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod
