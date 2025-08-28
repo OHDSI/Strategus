@@ -135,6 +135,9 @@ CharacterizationModule <- R6::R6Class(
     #' @param caseCovariateSettings Covariates for the case-series characterization
     #' @param casePreTargetDuration The number of days before target start to use for case-series
     #' @param casePostOutcomeDuration The number of days after outcome start to use for case-series
+    #' @param includeTimeToEvent Lets you skip running a time to event analyses when set to FALSE
+    #' @param includeDechallengeRechallenge Lets you skip running a dechallenge-rechallenge analyses when set to FALSE
+    #' @param includeAggregateCovariate Lets you skip running the aggregate covariate analyses when set to FALSE
     createModuleSpecifications = function(targetIds,
                                           outcomeIds, # a vector of ids
                                           outcomeWashoutDays = c(365), # same length as outcomeIds with the outcomeWashout
@@ -186,12 +189,15 @@ CharacterizationModule <- R6::R6Class(
                                             useVisitConceptCountDuring = T
                                           ),
                                           casePreTargetDuration = 365,
-                                          casePostOutcomeDuration = 365) {
+                                          casePostOutcomeDuration = 365,
+                                          includeTimeToEvent = TRUE,
+                                          includeDechallengeRechallenge = TRUE,
+                                          includeAggregateCovariate = TRUE
+                                          ) {
       # input checks
       if (!inherits(outcomeIds, "numeric")) {
         stop("outcomeIds must be a numeric or a numeric vector")
       }
-
       if (!inherits(outcomeWashoutDays, "numeric")) {
         stop("outcomeWashoutDays must be a numeric or a numeric vector")
       }
@@ -206,6 +212,9 @@ CharacterizationModule <- R6::R6Class(
         length(endAnchor) != length(startAnchor)) {
         stop("Time-at-risk settings must be same length")
       }
+      if (!any(includeTimeToEvent, includeDechallengeRechallenge, includeAggregateCovariate)) {
+        stop("You must include at least one characterization analysis")
+      }
 
       # group the outcomeIds with the same outcomeWashoutDays
       outcomeWashoutDaysVector <- unique(outcomeWashoutDays)
@@ -218,42 +227,58 @@ CharacterizationModule <- R6::R6Class(
       )
 
 
-      timeToEventSettings <- Characterization::createTimeToEventSettings(
-        targetIds = targetIds,
-        outcomeIds = outcomeIds
-      )
-
-      dechallengeRechallengeSettings <- Characterization::createDechallengeRechallengeSettings(
-        targetIds = targetIds,
-        outcomeIds = outcomeIds,
-        dechallengeStopInterval = dechallengeStopInterval,
-        dechallengeEvaluationWindow = dechallengeEvaluationWindow
-      )
-
-      aggregateCovariateSettings <- list()
-
-      for (i in 1:length(riskWindowStart)) {
-        for (j in 1:length(outcomeIdsList)) {
-          aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
+      if(includeTimeToEvent){
+        timeToEventSettings <- list(
+          Characterization::createTimeToEventSettings(
             targetIds = targetIds,
-            outcomeIds = outcomeIdsList[[j]],
-            minPriorObservation = minPriorObservation,
-            outcomeWashoutDays = outcomeWashoutDaysVector[j],
-            riskWindowStart = riskWindowStart[i],
-            startAnchor = startAnchor[i],
-            riskWindowEnd = riskWindowEnd[i],
-            endAnchor = endAnchor[i],
-            covariateSettings = covariateSettings,
-            caseCovariateSettings = caseCovariateSettings,
-            casePreTargetDuration = casePreTargetDuration,
-            casePostOutcomeDuration = casePostOutcomeDuration
+            outcomeIds = outcomeIds
           )
+        )
+      } else{
+        timeToEventSettings <- NULL
+      }
+
+      if(includeDechallengeRechallenge){
+        dechallengeRechallengeSettings <- list(
+          Characterization::createDechallengeRechallengeSettings(
+            targetIds = targetIds,
+            outcomeIds = outcomeIds,
+            dechallengeStopInterval = dechallengeStopInterval,
+            dechallengeEvaluationWindow = dechallengeEvaluationWindow
+          )
+        )
+      } else{
+        dechallengeRechallengeSettings <- NULL
+      }
+
+
+      if(includeAggregateCovariate){
+        aggregateCovariateSettings <- list()
+        for (i in 1:length(riskWindowStart)) {
+          for (j in 1:length(outcomeIdsList)) {
+            aggregateCovariateSettings[[length(aggregateCovariateSettings) + 1]] <- Characterization::createAggregateCovariateSettings(
+              targetIds = targetIds,
+              outcomeIds = outcomeIdsList[[j]],
+              minPriorObservation = minPriorObservation,
+              outcomeWashoutDays = outcomeWashoutDaysVector[j],
+              riskWindowStart = riskWindowStart[i],
+              startAnchor = startAnchor[i],
+              riskWindowEnd = riskWindowEnd[i],
+              endAnchor = endAnchor[i],
+              covariateSettings = covariateSettings,
+              caseCovariateSettings = caseCovariateSettings,
+              casePreTargetDuration = casePreTargetDuration,
+              casePostOutcomeDuration = casePostOutcomeDuration
+            )
+          }
         }
+      } else{
+        aggregateCovariateSettings <- NULL
       }
 
       analysis <- Characterization::createCharacterizationSettings(
-        timeToEventSettings = list(timeToEventSettings),
-        dechallengeRechallengeSettings = list(dechallengeRechallengeSettings),
+        timeToEventSettings = timeToEventSettings,
+        dechallengeRechallengeSettings = dechallengeRechallengeSettings,
         aggregateCovariateSettings = aggregateCovariateSettings
       )
 

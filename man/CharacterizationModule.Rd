@@ -204,7 +204,10 @@ Creates the CharacterizationModule Specifications
     = T, useMeasurementDuring = T, useObservationDuring = T, useVisitConceptCountDuring =
     T),
   casePreTargetDuration = 365,
-  casePostOutcomeDuration = 365
+  casePostOutcomeDuration = 365,
+  includeTimeToEvent = TRUE,
+  includeDechallengeRechallenge = TRUE,
+  includeAggregateCovariate = TRUE
 )}\if{html}{\out{</div>}}
 }
 
@@ -240,6 +243,12 @@ Creates the CharacterizationModule Specifications
 \item{\code{casePreTargetDuration}}{The number of days before target start to use for case-series}
 
 \item{\code{casePostOutcomeDuration}}{The number of days after outcome start to use for case-series}
+
+\item{\code{includeTimeToEvent}}{Lets you skip running a time to event analyses when set to FALSE}
+
+\item{\code{includeDechallengeRechallenge}}{Lets you skip running a dechallenge-rechallenge analyses when set to FALSE}
+
+\item{\code{includeAggregateCovariate}}{Lets you skip running the aggregate covariate analyses when set to FALSE}
 }
 \if{html}{\out{</div>}}
 }
