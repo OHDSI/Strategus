@@ -198,7 +198,6 @@ CharacterizationModule <- R6::R6Class(
       if (!inherits(outcomeIds, "numeric")) {
         stop("outcomeIds must be a numeric or a numeric vector")
       }
-
       if (!inherits(outcomeWashoutDays, "numeric")) {
         stop("outcomeWashoutDays must be a numeric or a numeric vector")
       }
@@ -212,6 +211,9 @@ CharacterizationModule <- R6::R6Class(
         length(riskWindowEnd) != length(startAnchor) |
         length(endAnchor) != length(startAnchor)) {
         stop("Time-at-risk settings must be same length")
+      }
+      if (!any(includeTimeToEvent, includeDechallengeRechallenge, includeAggregateCovariate)) {
+        stop("You must include at least one characterization analysis")
       }
 
       # group the outcomeIds with the same outcomeWashoutDays
