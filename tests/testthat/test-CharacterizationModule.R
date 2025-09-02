@@ -46,6 +46,4 @@ test_that("Verify createModuleSpecification input validation works properly", {
     includeAggregateCovariate = FALSE
   )
   expect_true(is.null(specs$settings$analysis$aggregateCovariateSettings))
-
-
 })

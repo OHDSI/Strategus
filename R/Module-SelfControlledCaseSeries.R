@@ -158,7 +158,6 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
                                           analysesToExclude = NULL,
                                           combineDataFetchAcrossOutcomes = NULL,
                                           sccsDiagnosticThresholds = NULL) {
-
       paramDeprecatedMessage <- "`%s` is now part of the `sccsAnalysesSpecifications` in SelfControlledCaseSeries v6. Please upgrade to SelfControlledCaseSeries v6 and use the `sccsAnalysesSpecifications` parameter when specifying the input to this module."
       if (!is.null(sccsAnalysisList)) {
         stop(sprintf(paramDeprecatedMessage, "sccsAnalysisList"))
