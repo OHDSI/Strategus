@@ -9,7 +9,7 @@ against the OMOP Common Data Model."><link rel="stylesheet" type="text/css" href
 
     <a class="navbar-brand me-2" href="../index.html">Strategus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@ against the OMOP Common Data Model."><link rel="stylesheet" type="text/css" href
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Self-Controlled Case Series design with the <a href="https://ohdsi.github.io/SelfControlledCaseSeries/" class="external-link">HADES SelfControlledCaseSeries Package</a></h1>
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/v1.3.1/R/Module-SelfControlledCaseSeries.R" class="external-link"><code>R/Module-SelfControlledCaseSeries.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/main/R/Module-SelfControlledCaseSeries.R" class="external-link"><code>R/Module-SelfControlledCaseSeries.R</code></a></small>
       <div class="d-none name"><code>SelfControlledCaseSeriesModule.Rd</code></div>
     </div>
 
@@ -229,34 +229,39 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 <p>Creates the SelfControlledCaseSeries Module Specifications</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">SelfControlledCaseSeriesModule</span><span class="op">$</span><span class="fu">createModuleSpecifications</span><span class="op">(</span></span>
-<span>  <span class="va">sccsAnalysisList</span>,</span>
-<span>  <span class="va">exposuresOutcomeList</span>,</span>
+<span>  <span class="va">sccsAnalysesSpecifications</span>,</span>
+<span>  sccsAnalysisList <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exposuresOutcomeList <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  analysesToExclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  combineDataFetchAcrossOutcomes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  sccsDiagnosticThresholds <span class="op">=</span> <span class="fu">SelfControlledCaseSeries</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/SelfControlledCaseSeries/reference/createSccsDiagnosticThresholds.html" class="external-link">createSccsDiagnosticThresholds</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  combineDataFetchAcrossOutcomes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sccsDiagnosticThresholds <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>sccsAnalysisList</code></dt>
-<dd><p>description</p></dd>
+<p></p><div class="arguments"><dl><dt><code>sccsAnalysesSpecifications</code></dt>
+<dd><p>An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications</p></dd>
+
+
+<dt><code>sccsAnalysisList</code></dt>
+<dd><p>Deprecated with SelfControlledCaseSeries v6 - please use the <code>sccsAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>exposuresOutcomeList</code></dt>
-<dd><p>description</p></dd>
+<dd><p>Deprecated with SelfControlledCaseSeries v6 - please use the <code>sccsAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>analysesToExclude</code></dt>
-<dd><p>description</p></dd>
+<dd><p>Deprecated with SelfControlledCaseSeries v6 - please use the <code>sccsAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>combineDataFetchAcrossOutcomes</code></dt>
-<dd><p>description</p></dd>
+<dd><p>Deprecated with SelfControlledCaseSeries v6 - please use the <code>sccsAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>sccsDiagnosticThresholds</code></dt>
-<dd><p>description</p></dd>
+<dd><p>Deprecated with SelfControlledCaseSeries v6 - please use the <code>sccsAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 </dl><p></p></div>

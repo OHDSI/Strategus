@@ -33,6 +33,7 @@
 <url><loc>https://ohdsi.github.io/Strategus/reference/addSharedResources.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/addTreatmentPatternsModuleSpecifications.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/createCdmExecutionSettings.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/createEmptyAnalysisSpecifications.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/createEmptyAnalysisSpecificiations.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/createResultDataModel.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.html</loc></url>
