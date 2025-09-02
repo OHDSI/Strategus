@@ -1,3 +1,14 @@
+Strategus 1.4.0
+===============
+
+- Update TreatmentPatterns module to support >= v3.1.0 (#233)
+- Update SelfConrolledCaseSeries module to support >= v6.0.0 (#231)
+- Update PatientLevelPrediction module to support >= v6.5.0 and to skip diagnostics (#247)
+- Adds more flexible analyses options for Characterization module (#248)
+- Fix spelling of `createEmptyAnalysisSpecifications` function (#249)
+- Update CohortIncidence module to use lower case columns to support upcoming DatabaseConnector v7 (#244)
+- Support new likelihood profiling (grid with gradients using Hermite interpolation) in EvidenceSynthesis v1.0 (#243)
+
 Strategus 1.3.1
 ===============
 
