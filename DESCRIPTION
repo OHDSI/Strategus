@@ -2,7 +2,7 @@ Package: Strategus
 Type: Package
 Title: Coordinate and Execute OHDSI HADES Modules
 Version: 1.4.0
-Date: 2025-06-17
+Date: 2025-09-02
 Authors@R: c(
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),

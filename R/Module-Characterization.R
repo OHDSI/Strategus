@@ -192,8 +192,7 @@ CharacterizationModule <- R6::R6Class(
                                           casePostOutcomeDuration = 365,
                                           includeTimeToEvent = TRUE,
                                           includeDechallengeRechallenge = TRUE,
-                                          includeAggregateCovariate = TRUE
-                                          ) {
+                                          includeAggregateCovariate = TRUE) {
       # input checks
       if (!inherits(outcomeIds, "numeric")) {
         stop("outcomeIds must be a numeric or a numeric vector")
@@ -227,18 +226,18 @@ CharacterizationModule <- R6::R6Class(
       )
 
 
-      if(includeTimeToEvent){
+      if (includeTimeToEvent) {
         timeToEventSettings <- list(
           Characterization::createTimeToEventSettings(
             targetIds = targetIds,
             outcomeIds = outcomeIds
           )
         )
-      } else{
+      } else {
         timeToEventSettings <- NULL
       }
 
-      if(includeDechallengeRechallenge){
+      if (includeDechallengeRechallenge) {
         dechallengeRechallengeSettings <- list(
           Characterization::createDechallengeRechallengeSettings(
             targetIds = targetIds,
@@ -247,12 +246,12 @@ CharacterizationModule <- R6::R6Class(
             dechallengeEvaluationWindow = dechallengeEvaluationWindow
           )
         )
-      } else{
+      } else {
         dechallengeRechallengeSettings <- NULL
       }
 
 
-      if(includeAggregateCovariate){
+      if (includeAggregateCovariate) {
         aggregateCovariateSettings <- list()
         for (i in 1:length(riskWindowStart)) {
           for (j in 1:length(outcomeIdsList)) {
@@ -272,7 +271,7 @@ CharacterizationModule <- R6::R6Class(
             )
           }
         }
-      } else{
+      } else {
         aggregateCovariateSettings <- NULL
       }
 
