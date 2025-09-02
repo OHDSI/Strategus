@@ -173,8 +173,8 @@ Creates the TreatmentPatternsnModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
   cohorts,
-  includeTreatments = "startDate",
-  indexDateOffset = 0,
+  includeTreatments = NULL,
+  indexDateOffset = NULL,
   minEraDuration = 0,
   splitEventCohorts = NULL,
   splitTime = NULL,
@@ -185,7 +185,13 @@ Creates the TreatmentPatternsnModule Specifications
   maxPathLength = 5,
   ageWindow = 5,
   minCellCount = 1,
-  censorType = "minCellCount"
+  censorType = "minCellCount",
+  overlapMethod = "truncate",
+  concatTargets = TRUE,
+  startAnchor = "startDate",
+  windowStart = 0,
+  endAnchor = "endDate",
+  windowEnd = 0
 )}\if{html}{\out{</div>}}
 }
 
@@ -201,12 +207,14 @@ Data frame containing the following columns and data types:
 }}
 
 \item{\code{includeTreatments}}{(\code{character(1)}: \code{"startDate"})\cr
+\code{DEPRECATED}
 \describe{
 \item{\code{"startDate"}}{Include treatments after the target cohort start date and onwards.}
 \item{\code{"endDate"}}{Include treatments before target cohort end date and before.}
 }}
 
 \item{\code{indexDateOffset}}{(\code{integer(1)}: \code{0})\cr
+\code{DEPRECATED}
 Offset the index date of the \code{Target} cohort.}
 
 \item{\code{minEraDuration}}{(\code{integer(1)}: \code{0})\cr
@@ -253,6 +261,21 @@ minimum value will carry over to the sankey diagram and sunburst plot.}
 \item{\code{"remove"}}{Censors pathways <\code{minCellCount} by removing them completely.}
 \item{\code{"mean"}}{Censors pathways <\code{minCellCount} to the mean of all frequencies below \code{minCellCount}}
 }}
+
+\item{\code{overlapMethod}}{(\code{character(1)}: \code{"truncate"}) Method to decide how to deal
+with overlap that is not significant enough for combination. \code{"keep"} will
+keep the dates as is. \code{"truncate"} truncates the first occurring event to
+the start date of the next event.}
+
+\item{\code{concatTargets}}{(\code{logical(1)}: \code{TRUE}) Should multiple target cohorts for the same person be concatenated or not?}
+
+\item{\code{startAnchor}}{(\code{character(1)}: \code{"startDate"}) Start date anchor. One of: \code{"startDate"}, \code{"endDate"}}
+
+\item{\code{windowStart}}{(\code{numeric(1)}: \code{0}) Offset for \code{startAnchor} in days.}
+
+\item{\code{endAnchor}}{(\code{character(1)}: \code{"endDate"}) End date anchor. One of: \code{"startDate"}, \code{"endDate"}}
+
+\item{\code{windowEnd}}{(\code{numeric(1)}: \code{0}) Offset for \code{endAnchor} in days.}
 }
 \if{html}{\out{</div>}}
 }

@@ -19,11 +19,6 @@ createEsModuleSpecs <- function() {
   esModuleSettingsCreator <- EvidenceSynthesisModule$new()
   # Create EvidenceSynthesisModule settings ---------------------------------------
 
-  evidenceSynthesisSourceCmGrid <- esModuleSettingsCreator$createEvidenceSynthesisSource(
-    sourceMethod = "CohortMethod",
-    likelihoodApproximation = "adaptive grid"
-  )
-
   evidenceSynthesisSourceCmNormal <- esModuleSettingsCreator$createEvidenceSynthesisSource(
     sourceMethod = "CohortMethod",
     databaseIds = c(1, 2, 4),
@@ -31,9 +26,17 @@ createEsModuleSpecs <- function() {
     likelihoodApproximation = "normal"
   )
 
-  evidenceSynthesisSourceSccsGrid <- esModuleSettingsCreator$createEvidenceSynthesisSource(
-    sourceMethod = "SelfControlledCaseSeries",
+  # Note: even though the simulated data was approximated using "grid with gradients", we can also
+  # use it for "adaptive grid". The grid is just not really adaptive, and the gradients will be
+  # ignored. This is not recommended for real-world use, but fine for testing.
+  evidenceSynthesisSourceCmAdaptiveGrid <- esModuleSettingsCreator$createEvidenceSynthesisSource(
+    sourceMethod = "CohortMethod",
     likelihoodApproximation = "adaptive grid"
+  )
+
+  evidenceSynthesisSourceCmGridWithGradients <- esModuleSettingsCreator$createEvidenceSynthesisSource(
+    sourceMethod = "CohortMethod",
+    likelihoodApproximation = "grid with gradients"
   )
 
   evidenceSynthesisSourceSccsNormal <- esModuleSettingsCreator$createEvidenceSynthesisSource(
@@ -41,6 +44,16 @@ createEsModuleSpecs <- function() {
     databaseIds = c(1, 2, 4),
     analysisIds = c(1, 3),
     likelihoodApproximation = "normal"
+  )
+
+  evidenceSynthesisSourceSccsAdaptiveGrid <- esModuleSettingsCreator$createEvidenceSynthesisSource(
+    sourceMethod = "SelfControlledCaseSeries",
+    likelihoodApproximation = "adaptive grid"
+  )
+
+  evidenceSynthesisSourceSccsGridWithGradients <- esModuleSettingsCreator$createEvidenceSynthesisSource(
+    sourceMethod = "SelfControlledCaseSeries",
+    likelihoodApproximation = "grid with gradients"
   )
 
   fixedEffectsMetaAnalysisCm <- esModuleSettingsCreator$createFixedEffectsMetaAnalysis(
@@ -53,38 +66,50 @@ createEsModuleSpecs <- function() {
     evidenceSynthesisSource = evidenceSynthesisSourceCmNormal
   )
 
-  bayesianMetaAnalysisCm <- esModuleSettingsCreator$createBayesianMetaAnalysis(
+  bayesianMetaAnalysisCmAdaptiveGrid <- esModuleSettingsCreator$createBayesianMetaAnalysis(
     evidenceSynthesisAnalysisId = 3,
-    evidenceSynthesisSource = evidenceSynthesisSourceCmGrid
+    evidenceSynthesisSource = evidenceSynthesisSourceCmAdaptiveGrid
+  )
+
+  bayesianMetaAnalysisCmGridWithGradients <- esModuleSettingsCreator$createBayesianMetaAnalysis(
+    evidenceSynthesisAnalysisId = 4,
+    evidenceSynthesisSource = evidenceSynthesisSourceCmGridWithGradients
   )
 
   fixedEffectsMetaAnalysisSccs <- esModuleSettingsCreator$createFixedEffectsMetaAnalysis(
-    evidenceSynthesisAnalysisId = 4,
-    evidenceSynthesisSource = evidenceSynthesisSourceSccsNormal
-  )
-
-  randomEffectsMetaAnalysisSccs <- esModuleSettingsCreator$createRandomEffectsMetaAnalysis(
     evidenceSynthesisAnalysisId = 5,
     evidenceSynthesisSource = evidenceSynthesisSourceSccsNormal
   )
 
-  bayesianMetaAnalysisSccs <- esModuleSettingsCreator$createBayesianMetaAnalysis(
+  randomEffectsMetaAnalysisSccs <- esModuleSettingsCreator$createRandomEffectsMetaAnalysis(
     evidenceSynthesisAnalysisId = 6,
-    evidenceSynthesisSource = evidenceSynthesisSourceSccsGrid
+    evidenceSynthesisSource = evidenceSynthesisSourceSccsNormal
+  )
+
+  bayesianMetaAnalysisSccsAdaptiveGrid <- esModuleSettingsCreator$createBayesianMetaAnalysis(
+    evidenceSynthesisAnalysisId = 7,
+    evidenceSynthesisSource = evidenceSynthesisSourceSccsAdaptiveGrid
+  )
+
+  bayesianMetaAnalysisSccsGridWithGradients <- esModuleSettingsCreator$createBayesianMetaAnalysis(
+    evidenceSynthesisAnalysisId = 8,
+    evidenceSynthesisSource = evidenceSynthesisSourceSccsGridWithGradients
   )
 
   evidenceSynthesisModuleSpecs <- esModuleSettingsCreator$createModuleSpecifications(
     evidenceSynthesisAnalysisList = list(
       fixedEffectsMetaAnalysisCm,
       randomEffectsMetaAnalysisCm,
-      bayesianMetaAnalysisCm,
+      bayesianMetaAnalysisCmAdaptiveGrid,
+      bayesianMetaAnalysisCmGridWithGradients,
       fixedEffectsMetaAnalysisSccs,
       randomEffectsMetaAnalysisSccs,
-      bayesianMetaAnalysisSccs
+      bayesianMetaAnalysisSccsAdaptiveGrid,
+      bayesianMetaAnalysisSccsGridWithGradients
     )
   )
 
-  analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
+  analysisSpecifications <- createEmptyAnalysisSpecifications() %>%
     addModuleSpecifications(evidenceSynthesisModuleSpecs)
 
   return(analysisSpecifications)
@@ -312,7 +337,8 @@ test_that("Include only allowed SCCS estimates in meta-analysis", {
 
   results <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_sccs_result.csv"))
   results <- results %>%
-    left_join(allowed, by = join_by(exposuresOutcomeSetId, covariateId, analysisId, evidenceSynthesisAnalysisId))
+    left_join(allowed, by = join_by(exposuresOutcomeSetId, covariateId, analysisId, evidenceSynthesisAnalysisId)) %>%
+    filter(analysisId == 8)
   expect_true(all(results$nDatabases == results$nAllowed))
 })
 

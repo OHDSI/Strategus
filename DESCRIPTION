@@ -1,8 +1,8 @@
 Package: Strategus
 Type: Package
 Title: Coordinate and Execute OHDSI HADES Modules
-Version: 1.3.1
-Date: 2025-06-17
+Version: 1.4.0
+Date: 2025-09-02
 Authors@R: c(
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
@@ -35,29 +35,24 @@ Suggests:
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
   CohortMethod,
-  Cyclops,
+  Cyclops (>= 3.6.0),
   Eunomia,
-  EvidenceSynthesis,
+  EvidenceSynthesis (>= 1.0.0),
   FeatureExtraction,
   fs,
   knitr,
-  PatientLevelPrediction,
+  PatientLevelPrediction (>= 6.5.0),
   readr,
   rmarkdown,
   RSQLite,
-  SelfControlledCaseSeries,
+  SelfControlledCaseSeries (>= 6.0.0),
   testthat (>= 3.0.0),
-  TreatmentPatterns,
+  TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
-  ohdsi/Characterization,
   ohdsi/CohortDiagnostics,
-  ohdsi/CohortGenerator,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod,
-  ohdsi/PatientLevelPrediction,
-  ohdsi/ResultModelManager,
-  ohdsi/SelfControlledCaseSeries
+  ohdsi/CohortMethod
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus

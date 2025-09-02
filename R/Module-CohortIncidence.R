@@ -59,6 +59,7 @@ CohortIncidenceModule <- R6::R6Class(
       private$.message("Export data")
 
       # apply minCellCount to  executeResults
+      colnames(executeResults$incidence_summary) <- toupper(colnames(executeResults$incidence_summary))
       minCellCount <- private$jobContext$moduleExecutionSettings$minCellCount
       if (minCellCount > 0) {
         executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSONS_AT_RISK_PE", minCellCount)

@@ -113,14 +113,15 @@ EvidenceSynthesisModule <- R6::R6Class(
     #' @param databaseIds             The database  IDs to include. Use `databaseIds = NULL` to include all database IDs.
     #' @param analysisIds             The source method analysis IDs to include. Use `analysisIds = NULL` to include all
     #'                                analysis IDs.
-    #' @param likelihoodApproximation The type of likelihood approximation. Can be "adaptive grid" or "normal".
+    #' @param likelihoodApproximation The type of likelihood approximation. Can be "adaptive grid", "normal", or "grid
+    #'                                with gradients".
     #'
     #' @return
     #' An object of type `EvidenceSynthesisSource`.
     createEvidenceSynthesisSource = function(sourceMethod = "CohortMethod",
                                              databaseIds = NULL,
                                              analysisIds = NULL,
-                                             likelihoodApproximation = "adaptive grid") {
+                                             likelihoodApproximation = "grid with gradients") {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertChoice(sourceMethod, c("CohortMethod", "SelfControlledCaseSeries"), add = errorMessages)
       if (is.character(databaseIds)) {
@@ -129,7 +130,7 @@ EvidenceSynthesisModule <- R6::R6Class(
         checkmate::assertIntegerish(databaseIds, null.ok = TRUE, add = errorMessages)
       }
       checkmate::assertIntegerish(analysisIds, null.ok = TRUE, add = errorMessages)
-      checkmate::assertChoice(likelihoodApproximation, c("adaptive grid", "normal"), add = errorMessages)
+      checkmate::assertChoice(likelihoodApproximation, c("adaptive grid", "normal", "grid with gradients"), add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
 
       analysis <- list()
@@ -565,6 +566,17 @@ EvidenceSynthesisModule <- R6::R6Class(
           ) |>
           group_by(.data$databaseId) |>
           group_split()
+      } else if (analysisSettings$evidenceSynthesisSource$likelihoodApproximation == "grid with gradients") {
+        includedDbs <- unique(llApproximations$databaseId)
+        llApproximations <- llApproximations |>
+          select(
+            point = .data$logRr,
+            value = .data$logLikelihood,
+            derivative = .data$gradient,
+            .data$databaseId
+          ) |>
+          group_by(.data$databaseId) |>
+          group_split()
       }
       nDatabases <- length(includedDbs)
       subset <- subset |>
@@ -687,6 +699,7 @@ EvidenceSynthesisModule <- R6::R6Class(
           args$evidenceSynthesisDescription <- NULL
           args$evidenceSynthesisSource <- NULL
           args$controlType <- NULL
+          args$showProgressBar <- FALSE
           args$data <- llApproximations
           estimate <- do.call(EvidenceSynthesis::computeBayesianMetaAnalysis, args)
           p <- EmpiricalCalibration::computeTraditionalP(
@@ -771,8 +784,15 @@ EvidenceSynthesisModule <- R6::R6Class(
               "logRr",
               "seLogRr"
             )
-        } else if (evidenceSynthesisSource$likelihoodApproximation == "adaptive grid") {
-          sql <- "SELECT cm_likelihood_profile.*
+        } else if (evidenceSynthesisSource$likelihoodApproximation %in% c("adaptive grid", "grid with gradients")) {
+          sql <- "SELECT target_id,
+            comparator_id,
+            outcome_id,
+            analysis_id,
+            database_id,
+            log_rr,
+            log_likelihood
+      {@approximation == 'grid with gradients'} ? {  ,gradient}
       FROM @database_schema.cm_likelihood_profile
       WHERE log_likelihood IS NOT NULL
       {@database_ids != ''} ? {  AND cm_likelihood_profile.database_id IN (@database_ids)}
@@ -784,6 +804,7 @@ EvidenceSynthesisModule <- R6::R6Class(
             database_schema = databaseSchema,
             database_ids = if (is.null(databaseIds)) "" else private$.quoteSql(databaseIds),
             analysis_ids = if (is.null(analysisIds)) "" else analysisIds,
+            approximation = evidenceSynthesisSource$likelihoodApproximation,
             snakeCaseToCamelCase = TRUE
           ) |>
             inner_join(
@@ -875,8 +896,14 @@ EvidenceSynthesisModule <- R6::R6Class(
               "logRr",
               "seLogRr"
             )
-        } else if (evidenceSynthesisSource$likelihoodApproximation == "adaptive grid") {
-          sql <- "SELECT sccs_likelihood_profile.*
+        } else if (evidenceSynthesisSource$likelihoodApproximation %in% c("adaptive grid", "grid with gradients")) {
+          sql <- "SELECT exposures_outcome_set_id,
+            covariate_id,
+            analysis_id,
+            database_id,
+            log_rr,
+            log_likelihood
+      {@approximation == 'grid with gradients'} ? {  ,gradient}
       FROM @database_schema.sccs_likelihood_profile
       WHERE log_likelihood IS NOT NULL
       {@database_ids != ''} ? {  AND sccs_likelihood_profile.database_id IN (@database_ids)}
@@ -888,6 +915,7 @@ EvidenceSynthesisModule <- R6::R6Class(
             database_schema = databaseSchema,
             database_ids = if (is.null(databaseIds)) "" else private$.quoteSql(databaseIds),
             analysis_ids = if (is.null(analysisIds)) "" else analysisIds,
+            approximation = evidenceSynthesisSource$likelihoodApproximation,
             snakeCaseToCamelCase = TRUE
           ) |>
             inner_join(

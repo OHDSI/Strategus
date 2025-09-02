@@ -260,20 +260,29 @@ addAndValidateModuleSpecifications <- function(moduleName, analysisSpecification
   return(analysisSpecifications)
 }
 
-
 #' Create an empty analysis specifications object.
 #'
 #' @return
 #' An object of type `AnalysisSpecifications`.
 #'
 #' @export
-createEmptyAnalysisSpecificiations <- function() {
+createEmptyAnalysisSpecifications <- function() {
   analysisSpecifications <- list(
     sharedResources = list(),
     moduleSpecifications = list()
   )
   class(analysisSpecifications) <- "AnalysisSpecifications"
   return(analysisSpecifications)
+}
+
+#' DEPRECATED DUE TO MISSPELLING
+#'
+#' @seealso [createEmptyAnalysisSpecifications()]
+#'
+#' @export
+createEmptyAnalysisSpecificiations <- function() {
+  warning("This function will be deprecated due to a misspelling. Please use `createEmptyAnalysisSpecifications` instead.")
+  return(createEmptyAnalysisSpecifications())
 }
 
 
