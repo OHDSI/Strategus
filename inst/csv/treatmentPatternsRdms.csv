@@ -20,6 +20,7 @@ cdm_source_info,cdm_release_date,date,yes,no,CDM release date
 cdm_source_info,cdm_source_abbreviation,varchar,yes,no,CDM Source Abbreviation
 cdm_source_info,cdm_source_name,varchar,yes,no,CDM Source Name
 cdm_source_info,cdm_version,varchar,yes,no,CDM version
+cdm_source_info,cdm_version_concept_id,int4,FALSE,no,CDM version concept identifier
 cdm_source_info,database_id,integer,TRUE,TRUE,Unique identifier for the database
 cdm_source_info,source_description,varchar,yes,no,Source description
 cdm_source_info,source_documentation_reference,varchar,yes,no,Source Documentation Reference
