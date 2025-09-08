@@ -1,3 +1,8 @@
+Strategus 1.4.1
+===============
+
+- Patch for PatientLevelPredictionModule & PatientLevelPredictionValidationModule to handle covariate cohort tables (#227)
+
 Strategus 1.4.0
 ===============
 
