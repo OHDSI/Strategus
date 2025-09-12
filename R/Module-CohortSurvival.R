@@ -94,9 +94,9 @@ CohortSurvivalModule <- R6::R6Class(
         # Run Kaplan-Meier survival analysis
         survivalResults <- CohortSurvival::estimateSingleEventSurvival(
           cdm = cdm,
-          targetCohortTable = settings$targetCohortTable,
+          targetCohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
           targetCohortId = settings$targetCohortId,
-          outcomeCohortTable = settings$outcomeCohortTable,
+          outcomeCohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
           outcomeCohortId = settings$outcomeCohortId,
           strata = strata_param,
           eventGap = settings$eventGap,
@@ -112,9 +112,9 @@ CohortSurvivalModule <- R6::R6Class(
         # Competing risk cohort survival analysis
         survivalResults <- CohortSurvival::estimateCompetingRiskSurvival(
           cdm = cdm,
-          targetCohortTable = settings$targetCohortTable,
+          targetCohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
           targetCohortId = settings$targetCohortId,
-          outcomeCohortTable = settings$outcomeCohortTable,
+          outcomeCohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
           outcomeCohortId = settings$outcomeCohortId,
           competingOutcomeCohortTable = settings$competingOutcomeCohortTable,
           eventGap = settings$eventGap,
@@ -229,15 +229,11 @@ CohortSurvivalModule <- R6::R6Class(
     #'
     #' @details
     #' create module specifications for survival analysis of single event as well as competing risk
-    #' @param targetCohortTable The name of the target cohort table.
-    #' @param outcomeCohortTable The name of the outcome cohort table.
     #' @param strata A list of stratification variables. Each element should be a character vector of column names.
     #' @param eventGap The time gap for the analysis in days.
     #' @param followUpDays The follow-up period in days.
     #'
-    createModuleSpecifications = function(targetCohortTable,
-                                          targetCohortId,
-                                          outcomeCohortTable,
+    createModuleSpecifications = function(targetCohortId,
                                           outcomeCohortId,
                                           strata = NULL,
                                           eventGap = 7,
