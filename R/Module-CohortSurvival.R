@@ -33,8 +33,9 @@ CohortSurvivalModule <- R6::R6Class(
       settings <- jobContext$settings
       # ---- Handle strata ----
       strata_param <- NULL
+      strata_cols <- list()
       if (!is.null(settings$strata)) {
-        cohort_cols <- DBI::dbListFields(dbi_conn, settings$targetCohortTable)
+        cohort_cols <- DBI::dbListFields(dbi_conn, jobContext$moduleExecutionSettings$cohortTableNames$cohortTable)
         for (strata_name in settings$strata) {
           sanitized_name <- tolower(strata_name)
           sanitized_name <- gsub("[^[:alnum:][:space:]]", "", sanitized_name)
@@ -45,10 +46,10 @@ CohortSurvivalModule <- R6::R6Class(
             if (strata_name == "gender") {
               # Add gender strata as text
               DBI::dbExecute(dbi_conn, paste0(
-                "ALTER TABLE ", settings$targetCohortTable, " ADD COLUMN ", column_name, " TEXT;"
+                "ALTER TABLE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " ADD COLUMN ", column_name, " TEXT;"
               ))
               DBI::dbExecute(dbi_conn, paste0(
-                "UPDATE ", settings$targetCohortTable, " AS c ",
+                "UPDATE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " AS c ",
                 "SET ", column_name, " = CASE ",
                 "WHEN p.gender_concept_id = 8507 THEN 'male' ",
                 "WHEN p.gender_concept_id = 8532 THEN 'female' ",
@@ -58,11 +59,11 @@ CohortSurvivalModule <- R6::R6Class(
             } else if (strata_name == "age") {
               # Add age group strata as text
               DBI::dbExecute(dbi_conn, paste0(
-                "ALTER TABLE ", settings$targetCohortTable, " ADD COLUMN ", column_name, " TEXT;"
+                "ALTER TABLE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " ADD COLUMN ", column_name, " TEXT;"
               ))
               current_year <- as.numeric(format(Sys.Date(), "%Y"))
               DBI::dbExecute(dbi_conn, paste0(
-              "UPDATE ", settings$targetCohortTable, " AS c ",
+              "UPDATE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " AS c ",
               "SET ", column_name, " = CASE ",
               "WHEN (", current_year, " - p.year_of_birth) < 18 THEN '0-17' ",
               "WHEN (", current_year, " - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34' ",
@@ -76,7 +77,7 @@ CohortSurvivalModule <- R6::R6Class(
         }
 
         # Pass all strata columns to survival function
-        cohort_cols <- DBI::dbListFields(dbi_conn, settings$targetCohortTable)
+        cohort_cols <- DBI::dbListFields(dbi_conn, jobContext$moduleExecutionSettings$cohortTableNames$cohortTable)
         strata_cols <- cohort_cols[grepl("^strata_", cohort_cols)]
         if (length(strata_cols) > 0) {
           strata_param <- lapply(strata_cols, function(col) c(col))
