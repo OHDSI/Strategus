@@ -1,3 +1,4 @@
+library(omopgenerics)
 # CohortSurvivalModule -------------
 #' @title Kaplan-Meier survival analysis with the \href{https://github.com/darwin-eu/CohortSurvival}{CohortSurvival Package}
 #' @export
@@ -104,11 +105,11 @@ CohortSurvivalModule <- R6::R6Class(
           followUpDays = settings$followUpDays
         )
         # Apply appropriate plotting based on strata
-        surv_plot <- if (length(strata_cols) > 0) {
-            CohortSurvival::plotSurvival(survivalResults, facet = strata_cols)
-        } else {
-            CohortSurvival::plotSurvival(survivalResults)
-        }
+        # surv_plot <- if (length(strata_cols) > 0) {
+        #     CohortSurvival::plotSurvival(survivalResults, facet = strata_cols)
+        # } else {
+        #     CohortSurvival::plotSurvival(survivalResults)
+        # }
       } else if (settings$analysisType == "competing_risk") {
         # Competing risk cohort survival analysis
         survivalResults <- CohortSurvival::estimateCompetingRiskSurvival(
@@ -122,30 +123,31 @@ CohortSurvivalModule <- R6::R6Class(
           followUpDays = settings$followUpDays
         )
         # plot survival results
-        surv_plot <- CohortSurvival::plotSurvival(survivalResults, cumulativeFailure = TRUE)
+        #surv_plot <- CohortSurvival::plotSurvival(survivalResults, cumulativeFailure = TRUE)
 
       } else {
         stop("Invalid analysis type. Must be 'single_event' or 'competing_risk'")
       }
       # plot survival results and save as PNG
-      library(ggplot2)
-      ggplot2::ggsave("./survival_plot.png", surv_plot, width = 8, height = 6)
+      #library(ggplot2)
+      #ggplot2::ggsave("./survival_plot.png", surv_plot, width = 8, height = 6)
       
       private$.message("Export data to csv files")
       # Export results to CSV
-      CohortGenerator::writeCsv(
-        x = survivalResults,
-        file = file.path(resultsFolder, "survival_results.csv"),
-        warnOnFileNameCaseMismatch = FALSE
-      )
+      omopgenerics::exportSummarisedResult(surv, fileName = file.path(resultsFolder, "survival_results.csv"))
+      # CohortGenerator::writeCsv(
+      #   x = survivalResults,
+      #   file = file.path(resultsFolder, "survival_results.csv"),
+      #   warnOnFileNameCaseMismatch = FALSE
+      # )
 
       # Write results data model specification
-      resultsDataModelSpecification <- self$getResultsDataModelSpecification()
-      CohortGenerator::writeCsv(
-        x = resultsDataModelSpecification,
-        file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
-        warnOnFileNameCaseMismatch = FALSE
-      )
+      # resultsDataModelSpecification <- self$getResultsDataModelSpecification()
+      # CohortGenerator::writeCsv(
+      #   x = resultsDataModelSpecification,
+      #   file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
+      #   warnOnFileNameCaseMismatch = FALSE
+      # )
 
       # Disconnect from CDM
       CDMConnector::cdmDisconnect(cdm)
