@@ -1820,7 +1820,8 @@
             },
             "attr_class": "modelDesign"
           }
-        ]
+        ],
+        "skipDiagnostics": false
       },
       "attr_class": ["ModuleSpecifications", "PatientLevelPredictionModuleSpecifications"]
     }
