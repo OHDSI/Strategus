@@ -26,9 +26,14 @@ CohortMethodModule <- R6::R6Class(
       # Provide hook to allow for overriding the number of threads
       # used for database operations
       getDbCohortMethodDataThreads <- as.integer(getOption("strategus.CohortMethodModule.getDbCohortMethodDataThreads"))
+      fitOutcomeModelThreads <- as.integer(getOption("strategus.CohortMethodModule.fitOutcomeModelThreads"))
       if (isTRUE(getDbCohortMethodDataThreads > 0)) {
         private$.message(paste0("Detected strategus.CohortMethodModule.getDbCohortMethodDataThreads - setting value to: ", getDbCohortMethodDataThreads))
         multiThreadingSettings$getDbCohortMethodDataThreads <- getDbCohortMethodDataThreads
+      }
+      if (isTRUE(fitOutcomeModelThreads > 0)) {
+        private$.message(paste0("Detected strategus.CohortMethodModule.fitOutcomeModelThreads - setting value to: ", fitOutcomeModelThreads))
+        multiThreadingSettings$fitOutcomeModelThreads <- fitOutcomeModelThreads
       }
 
       args <- jobContext$settings

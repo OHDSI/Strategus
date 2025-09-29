@@ -348,7 +348,7 @@ plpModuleSpecifications <- plpModuleSettingsCreator$createModuleSpecifications(
 )
 
 # Create analysis specifications ---------------
-analysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+analysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   addCohortGeneratorModuleSpecifications(cgModuleSettings) |>
@@ -463,7 +463,7 @@ evidenceSynthesisAnalysisList <- list(metaAnalysisCm, metaAnalysisSccs)
 evidenceSynthesisAnalysisSpecifications <- esModuleSettingsCreator$createModuleSpecifications(
   evidenceSynthesisAnalysisList
 )
-esAnalysisSpecifications <- Strategus::createEmptyAnalysisSpecificiations() |>
+esAnalysisSpecifications <- Strategus::createEmptyAnalysisSpecifications() |>
   Strategus::addModuleSpecifications(evidenceSynthesisAnalysisSpecifications)
 
 ParallelLogger::saveSettingsToJson(esAnalysisSpecifications, file.path(outputFolder, "evidenceSynthesisAnalysisSpecifications.json"))

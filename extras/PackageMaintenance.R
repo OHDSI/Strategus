@@ -219,8 +219,10 @@ treatmentPatternsCohorts <- getTreatmentPatternsCohorts(cohortDefinitionSet)
 tpModuleSettingsCreator <- TreatmentPatternsModule$new()
 tpModuleSpecifications <- tpModuleSettingsCreator$createModuleSpecifications(
   cohorts = treatmentPatternsCohorts,
-  includeTreatments = "startDate",
-  indexDateOffset = 0,
+  startAnchor = "startDate",
+  windowStart = 0,
+  endAnchor = "endDate",
+  windowEnd = 0,
   minEraDuration = 7,
   splitEventCohorts = NULL,
   splitTime = NULL,
@@ -428,11 +430,7 @@ for (exposureOfInterestId in exposureOfInterestIds) {
 }
 
 getDbSccsDataArgs <- SelfControlledCaseSeries::createGetDbSccsDataArgs(
-  studyStartDate = "",
-  studyEndDate = "",
   maxCasesPerOutcome = 1e6,
-  useNestingCohort = FALSE, # turned this off
-  #nestingCohortId = 1,
   deleteCovariatesSmallCount = 0
 )
 
@@ -501,21 +499,18 @@ sccsAnalysis1 <- SelfControlledCaseSeries::createSccsAnalysis(
 
 sccsAnalysisList <- list(sccsAnalysis1)
 
-sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
+sccsAnalysesSpecifications <- SelfControlledCaseSeries::createSccsAnalysesSpecifications(
   sccsAnalysisList = sccsAnalysisList,
-  exposuresOutcomeList = exposuresOutcomeList,
-  combineDataFetchAcrossOutcomes = FALSE,
-  sccsDiagnosticThresholds = SelfControlledCaseSeries::createSccsDiagnosticThresholds(
-    mdrrThreshold = Inf,
-    easeThreshold = 0.42,
-    timeTrendPThreshold = 0.05,
-    preExposurePThreshold = 0.05
-  )
+  exposuresOutcomeList = exposuresOutcomeList
+)
+
+sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications(
+  sccsAnalysesSpecifications = sccsAnalysesSpecifications$toList()
 )
 
 
 # Create analysis specifications CDM modules ---------------
-cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addSharedResources(cohortSharedResourcesSpecifications) |>
   addSharedResources(ncoCohortSharedResourceSpecifications) |>
   addCohortGeneratorModuleSpecifications(cgModuleSpecifications) |>
@@ -533,7 +528,7 @@ ParallelLogger::saveSettingsToJson(
 )
 
 # Create analysis specifications results modules ---------------
-cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecificiations() |>
+cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addEvidenceSynthesisModuleSpecifications(evidenceSynthesisAnalysisSpecifications)
 
 ParallelLogger::saveSettingsToJson(

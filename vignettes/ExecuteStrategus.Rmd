@@ -46,7 +46,7 @@ dir.create(outputFolder)
 executionSettings <- createCdmExecutionSettings(
   workDatabaseSchema = "main",
   cdmDatabaseSchema = "main",
-  cohortTableNames = CohortGenerator::getCohortTableNames(),
+  cohortTableNames = CohortGenerator::getCohortTableNames("strategus_test"),
   workFolder = file.path(outputFolder, "work_folder"),
   resultsFolder = file.path(outputFolder, "results_folder"),
   minCellCount = 5

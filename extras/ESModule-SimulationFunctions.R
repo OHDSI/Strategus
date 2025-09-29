@@ -16,6 +16,9 @@
 
 # Functions used in extras/ESModule-SimulateResultsForTesting.R
 
+# targetId = 1; comparatorId = 2; outcomeId = 3; analysisId = 4; hazardRatio = 1; nSites = 10
+
+library(dplyr)
 library(survival)
 
 simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRatio = 1, nSites = 10) {
@@ -43,8 +46,8 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
   for (i in seq_along(populations)) {
     population <- populations[[i]]
     cyclopsData <- Cyclops::createCyclopsData(Surv(time, y) ~ x + strata(stratumId),
-      data = population,
-      modelType = "cox"
+                                              data = population,
+                                              modelType = "cox"
     )
     cyclopsFit <- Cyclops::fitCyclopsModel(cyclopsData)
     ci <- tryCatch(
@@ -56,7 +59,8 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
       }
     )
     normal <- EvidenceSynthesis::approximateLikelihood(cyclopsFit, "x", approximation = "normal")
-    adaptiveGrid <- EvidenceSynthesis::approximateLikelihood(cyclopsFit, "x", approximation = "adaptive grid")
+    # nonNormal <- EvidenceSynthesis::approximateLikelihood(cyclopsFit, "x", approximation = "adaptive grid")
+    nonNormal <- EvidenceSynthesis::approximateLikelihood(cyclopsFit, "x", approximation = "grid with gradients")
     z <- normal$logRr / normal$seLogRr
     p <- 2 * pmin(pnorm(z), 1 - pnorm(z))
     cmResult[[i]] <- tibble(
@@ -78,10 +82,11 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
       logRr = normal$logRr,
       seLogRr = normal$seLogRr
     )
-    cmLikelihoodProfile[[i]] <- adaptiveGrid %>%
+    cmLikelihoodProfile[[i]] <- nonNormal %>%
       rename(
-        logRr = .data$point,
-        logLikelihood = .data$value
+        logRr = "point",
+        logLikelihood = "value",
+        gradient = "derivative"
       ) %>%
       mutate(
         targetId = targetId,
@@ -128,6 +133,7 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
   )
 }
 
+# exposureId = 1; incidenceRateRatio = 1
 simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1, nSites = 10) {
   simulationRiskWindows <- list(SelfControlledCaseSeries::createSimulationRiskWindow(relativeRisks = incidenceRateRatio))
 
@@ -138,6 +144,7 @@ simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1
   )
   sccsResult <- list()
   sccsLikelihoodProfile <- list()
+  # i = 1
   for (i in seq_len(nSites)) {
     sccsData <- SelfControlledCaseSeries::simulateSccsData(
       nCases = 1000,
@@ -146,8 +153,10 @@ simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1
     studyPop <- SelfControlledCaseSeries::createStudyPopulation(
       sccsData = sccsData,
       outcomeId = outcomeId,
-      firstOutcomeOnly = TRUE,
-      naivePeriod = 180
+      createStudyPopulationArgs = SelfControlledCaseSeries::createCreateStudyPopulationArgs(
+        firstOutcomeOnly = TRUE,
+        naivePeriod = 180
+      )
     )
     eraCovariateSettings <- SelfControlledCaseSeries::createEraCovariateSettings(
       includeEraIds = exposureId,
@@ -156,10 +165,16 @@ simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1
     sccsIntervalData <- SelfControlledCaseSeries::createSccsIntervalData(
       studyPopulation = studyPop,
       sccsData = sccsData,
-      eraCovariateSettings = eraCovariateSettings
+      createSccsIntervalDataArgs = SelfControlledCaseSeries::createCreateSccsIntervalDataArgs(
+        eraCovariateSettings = eraCovariateSettings
+      )
     )
     model <- SelfControlledCaseSeries::fitSccsModel(
-      sccsIntervalData = sccsIntervalData
+      sccsIntervalData = sccsIntervalData,
+      fitSccsModelArgs = SelfControlledCaseSeries::createFitSccsModelArgs(
+        profileGrid = seq(log(0.1), log(10), length.out = 8),
+        profileBounds = NULL
+      )
     )
     covariateSettings <- model$metaData$covariateSettingsList[[1]]
     attrition <- model$metaData$attrition[nrow(model$metaData$attrition), ]
@@ -196,7 +211,8 @@ simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1
     sccsLikelihoodProfile[[i]] <- model$logLikelihoodProfiles[[1]] %>%
       rename(
         logRr = "point",
-        logLikelihood = "value"
+        logLikelihood = "value",
+        gradient = "derivative"
       ) %>%
       mutate(
         exposuresOutcomeSetId = outcomeId,

@@ -2,13 +2,13 @@
 % Please edit documentation in R/Settings.R
 \name{createEmptyAnalysisSpecificiations}
 \alias{createEmptyAnalysisSpecificiations}
-\title{Create an empty analysis specifications object.}
+\title{DEPRECATED DUE TO MISSPELLING}
 \usage{
 createEmptyAnalysisSpecificiations()
 }
-\value{
-An object of type \code{AnalysisSpecifications}.
-}
 \description{
-Create an empty analysis specifications object.
+DEPRECATED DUE TO MISSPELLING
+}
+\seealso{
+\code{\link[=createEmptyAnalysisSpecifications]{createEmptyAnalysisSpecifications()}}
 }

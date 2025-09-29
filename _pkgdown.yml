@@ -31,6 +31,7 @@ reference:
       - addSelfControlledCaseSeriesModuleSpecifications
       - addTreatmentPatternsModuleSpecifications
       - addSharedResources
+      - createEmptyAnalysisSpecifications
       - createEmptyAnalysisSpecificiations
 
   - title: "Executing a study"

@@ -25,7 +25,7 @@ test_that("TreatmentPatterns: execute method", {
     maxPathLength = 5
   )
 
-  analysisSpecifications <- Strategus::createEmptyAnalysisSpecificiations() |>
+  analysisSpecifications <- Strategus::createEmptyAnalysisSpecifications() |>
     Strategus::addTreatmentPatternsModuleSpecifications(modSpec)
 
   executionSettings <- Strategus::createCdmExecutionSettings(

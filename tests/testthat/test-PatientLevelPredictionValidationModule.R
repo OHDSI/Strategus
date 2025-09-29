@@ -148,7 +148,7 @@ test_that("Test PLP Validation Module", {
     )
   )
 
-  analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
+  analysisSpecifications <- createEmptyAnalysisSpecifications() %>%
     Strategus::addSharedResources(cohortDefinitionShared) %>%
     addModuleSpecifications(plpModuleSettings)
 
@@ -219,7 +219,7 @@ test_that("Test PLP Validation Module", {
     )
   )
 
-  analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
+  analysisSpecifications <- createEmptyAnalysisSpecifications() %>%
     Strategus::addSharedResources(cohortDefinitionShared) %>%
     addModuleSpecifications(plpModuleSettings)
 

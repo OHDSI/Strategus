@@ -45,7 +45,7 @@ etmSpecs <- etm$createModuleSpecifications(list(foo = "bar"))
 sm <- SimpleModule$new()
 smSpecs <- sm$createModuleSpecifications(list(foo = "bar"))
 
-analysisSpecifications <- Strategus::createEmptyAnalysisSpecificiations() |>
+analysisSpecifications <- Strategus::createEmptyAnalysisSpecifications() |>
   Strategus::addModuleSpecifications(smSpecs) |>
   Strategus::addModuleSpecifications(etmSpecs) |>
   Strategus::addModuleSpecifications(smSpecs)

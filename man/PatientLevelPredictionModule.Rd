@@ -172,13 +172,18 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \subsection{Method \code{createModuleSpecifications()}}{
 Creates the PatientLevelPrediction Module Specifications
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$createModuleSpecifications(modelDesignList)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{PatientLevelPredictionModule$createModuleSpecifications(
+  modelDesignList,
+  skipDiagnostics = FALSE
+)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{modelDesignList}}{A list of model designs created using \code{PatientLevelPrediction::createModelDesign()}}
+
+\item{\code{skipDiagnostics}}{Whether to run the diagnostics based on PROBAST before model development}
 }
 \if{html}{\out{</div>}}
 }

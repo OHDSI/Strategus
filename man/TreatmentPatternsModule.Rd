@@ -173,8 +173,8 @@ Creates the TreatmentPatternsnModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
   cohorts,
-  includeTreatments = "startDate",
-  indexDateOffset = 0,
+  includeTreatments = NULL,
+  indexDateOffset = NULL,
   minEraDuration = 0,
   splitEventCohorts = NULL,
   splitTime = NULL,
@@ -205,6 +205,17 @@ Data frame containing the following columns and data types:
 \item{cohortName \code{character(1)}}{Cohort names of the cohorts to be used in the cohort table.}
 \item{type \code{character(1)} ["target", "event', "exit"]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
 }}
+
+\item{\code{includeTreatments}}{(\code{character(1)}: \code{"startDate"})\cr
+\code{DEPRECATED}
+\describe{
+\item{\code{"startDate"}}{Include treatments after the target cohort start date and onwards.}
+\item{\code{"endDate"}}{Include treatments before target cohort end date and before.}
+}}
+
+\item{\code{indexDateOffset}}{(\code{integer(1)}: \code{0})\cr
+\code{DEPRECATED}
+Offset the index date of the \code{Target} cohort.}
 
 \item{\code{minEraDuration}}{(\code{integer(1)}: \code{0})\cr
 Minimum time an event era should last to be included in analysis}
