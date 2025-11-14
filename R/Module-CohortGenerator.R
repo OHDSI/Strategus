@@ -50,8 +50,7 @@ CohortGeneratorModule <- R6::R6Class(
         outputFolder = resultsFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        incremental = jobContext$moduleExecutionSettings$incremental,
-        incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
+        incremental = jobContext$moduleExecutionSettings$incremental
       )
 
       private$.message(paste("Results available at:", resultsFolder))
