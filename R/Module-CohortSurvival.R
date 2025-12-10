@@ -1,4 +1,6 @@
 library(omopgenerics)
+library(DBI)
+library(RPostgres)
 # CohortSurvivalModule -------------
 #' @title Kaplan-Meier survival analysis with the \href{https://github.com/darwin-eu/CohortSurvival}{CohortSurvival Package}
 #' @export
@@ -27,16 +29,16 @@ CohortSurvivalModule <- R6::R6Class(
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
-      # get a DBI Connection object - Cohort Survival works with this only
-      dbi_conn <- NULL
-      conn <- DatabaseConnector::connect(connectionDetails)
-      if (inherits(conn, "DatabaseConnectorDbiConnection")) {
-        dbi_conn <- conn@dbiConnection
-      } else if (inherits(conn, "DatabaseConnectorJdbcConnection")) {
-        dbi_conn <- conn@jConnection
-      } else {
-        dbi_conn <- conn
-      }
+      # Establish a DBI connection using RPostgres
+      dbi_conn <- dbConnect(
+        Postgres(),
+        dbname = connectionDetails$database,
+        host = connectionDetails$server,
+        port = connectionDetails$port,
+        user = connectionDetails$user,
+        password = connectionDetails$password
+      )
+      on.exit(dbDisconnect(dbi_conn))  # Ensure the connection is closed
 
       # Get settings from job context
       settings <- jobContext$settings
@@ -44,7 +46,7 @@ CohortSurvivalModule <- R6::R6Class(
       strata_param <- NULL
       strata_cols <- list()
       if (!is.null(settings$strata)) {
-        cohort_cols <- DBI::dbListFields(dbi_conn, jobContext$moduleExecutionSettings$cohortTableNames$cohortTable)
+        cohort_cols <- dbListFields(dbi_conn, jobContext$moduleExecutionSettings$cohortTableNames$cohortTable)
         for (strata_name in settings$strata) {
           sanitized_name <- tolower(strata_name)
           sanitized_name <- gsub("[^[:alnum:][:space:]]", "", sanitized_name)
@@ -54,10 +56,10 @@ CohortSurvivalModule <- R6::R6Class(
           if (!(column_name %in% cohort_cols)) {
             if (strata_name == "gender") {
               # Add gender strata as text
-              DBI::dbExecute(dbi_conn, paste0(
+              dbExecute(dbi_conn, paste0(
                 "ALTER TABLE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " ADD COLUMN ", column_name, " TEXT;"
               ))
-              DBI::dbExecute(dbi_conn, paste0(
+              dbExecute(dbi_conn, paste0(
                 "UPDATE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " AS c ",
                 "SET ", column_name, " = CASE ",
                 "WHEN p.gender_concept_id = 8507 THEN 'male' ",
@@ -67,32 +69,32 @@ CohortSurvivalModule <- R6::R6Class(
               ))
             } else if (strata_name == "age") {
               # Add age group strata as text
-              DBI::dbExecute(dbi_conn, paste0(
+              dbExecute(dbi_conn, paste0(
                 "ALTER TABLE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " ADD COLUMN ", column_name, " TEXT;"
               ))
               current_year <- as.numeric(format(Sys.Date(), "%Y"))
-              DBI::dbExecute(dbi_conn, paste0(
-              "UPDATE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " AS c ",
-              "SET ", column_name, " = CASE ",
-              "WHEN (", current_year, " - p.year_of_birth) < 18 THEN '0-17' ",
-              "WHEN (", current_year, " - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34' ",
-              "WHEN (", current_year, " - p.year_of_birth) BETWEEN 35 AND 49 THEN '35-49' ",
-              "WHEN (", current_year, " - p.year_of_birth) BETWEEN 50 AND 64 THEN '50-64' ",
-              "ELSE '65+' END ",
-              "FROM person p WHERE c.subject_id = p.person_id;"
-            ))
+              dbExecute(dbi_conn, paste0(
+                "UPDATE ", jobContext$moduleExecutionSettings$cohortTableNames$cohortTable, " AS c ",
+                "SET ", column_name, " = CASE ",
+                "WHEN (", current_year, " - p.year_of_birth) < 18 THEN '0-17' ",
+                "WHEN (", current_year, " - p.year_of_birth) BETWEEN 18 AND 34 THEN '18-34' ",
+                "WHEN (", current_year, " - p.year_of_birth) BETWEEN 35 AND 49 THEN '35-49' ",
+                "WHEN (", current_year, " - p.year_of_birth) BETWEEN 50 AND 64 THEN '50-64' ",
+                "ELSE '65+' END ",
+                "FROM person p WHERE c.subject_id = p.person_id;"
+              ))
             }
           }
         }
 
         # Pass all strata columns to survival function
-        cohort_cols <- DBI::dbListFields(dbi_conn, jobContext$moduleExecutionSettings$cohortTableNames$cohortTable)
+        cohort_cols <- dbListFields(dbi_conn, jobContext$moduleExecutionSettings$cohortTableNames$cohortTable)
         strata_cols <- cohort_cols[grepl("^strata_", cohort_cols)]
         if (length(strata_cols) > 0) {
           strata_param <- lapply(strata_cols, function(col) c(col))
         }
       }
-      
+
       # Create CDM object for CohortSurvival
       cdm <- CDMConnector::cdmFromCon(
         con = dbi_conn,
@@ -134,15 +136,6 @@ CohortSurvivalModule <- R6::R6Class(
       CDMConnector::cdmDisconnect(cdm)
       private$.message("Successfully exported data to csv files")
 
-      # private$.message("Creating results data model specification")
-      # resultsDataModelSpecification <- self$getResultsDataModelSpecification()
-      # CohortGenerator::writeCsv(
-      #   x = resultsDataModelSpecification,
-      #   file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
-      #   warnOnFileNameCaseMismatch = FALSE
-      # )
-      # private$.message("Successfully created results data model specification")
-      
       private$.message(paste("Results available at:", resultsFolder))
     },
 
