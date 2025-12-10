@@ -1,0 +1,19 @@
+CREATE TABLE @database_schema.@table_prefixcs_survival_results (
+    cdm_name VARCHAR(255) NOT NULL,
+    target_cohort VARCHAR(255) NOT NULL,
+    outcome_name VARCHAR(255) NOT NULL,
+    strata_name VARCHAR(255) NOT NULL,
+    strata_level VARCHAR(255) NOT NULL,
+    time INTEGER NOT NULL,
+    n_risk INTEGER NOT NULL,
+    n_event INTEGER NOT NULL,
+    n_censor INTEGER NOT NULL,
+    survival FLOAT NOT NULL,
+    survival_se FLOAT NOT NULL,
+    survival_lower FLOAT NOT NULL,
+    survival_upper FLOAT NOT NULL,
+    cumulative_failure FLOAT NOT NULL,
+    cumulative_failure_se FLOAT NOT NULL,
+    cumulative_failure_lower FLOAT NOT NULL,
+    cumulative_failure_upper FLOAT NOT NULL
+);

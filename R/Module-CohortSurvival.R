@@ -119,13 +119,41 @@ CohortSurvivalModule <- R6::R6Class(
       } else {
         stop("Invalid analysis type. Must be 'single_event' or 'competing_risk'")
       }
-      private$.message("Export data to csv files")
+      private$.message("Exporting data to csv files")
       # Export results to CSV
       omopgenerics::exportSummarisedResult(survivalResults, fileName = file.path(resultsFolder, "survival_results.csv"))
       # Disconnect from CDM
       CDMConnector::cdmDisconnect(cdm)
+      private$.message("Successfully exported data to csv files")
+
+      # private$.message("Creating results data model specification")
+      # resultsDataModelSpecification <- self$getResultsDataModelSpecification()
+      # CohortGenerator::writeCsv(
+      #   x = resultsDataModelSpecification,
+      #   file = file.path(resultsFolder, "resultsDataModelSpecification.csv"),
+      #   warnOnFileNameCaseMismatch = FALSE
+      # )
+      # private$.message("Successfully created results data model specification")
+      
       private$.message(paste("Results available at:", resultsFolder))
     },
+
+    #' @description Get the results data model specification for the module
+    #' @template tablePrefix
+    getResultsDataModel = function(tablePrefix = "cs_") {
+      resultsDataModelSpecification <- CohortGenerator::readCsv(
+        file = system.file(
+          file.path("csv", "resultsDataModelSpecification.csv"),
+          package = "CohortSurvival"
+        ),
+        warnOnCaseMismatch = FALSE
+      )
+
+      # add the prefix to the tableName column
+      resultsDataModelSpecification$tableName <- paste0(tablePrefix, resultsDataModelSpecification$tableName)
+      return(resultsDataModelSpecification)
+    },
+    
     #' @description Create the results data model for the module
     #' @template resultsConnectionDetails
     #' @template resultsDatabaseSchema
@@ -133,35 +161,29 @@ CohortSurvivalModule <- R6::R6Class(
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
 
-      # Create Kaplan-Meier survival analysis results tables
-      # Note: CohortSurvival doesn't have a createSurvivalResultTables function
-      # Results are stored as CSV files and can be uploaded using standard methods
-      private$.message("Survival results will be stored as CSV files")
-    },
-    #' @description Get the results data model specification for the module
-    #' @template tablePrefix
-    getResultsDataModelSpecification = function(tablePrefix = self$tablePrefix) {
-      # Create a simple results data model specification for survival results
-      # Since CohortSurvival doesn't provide a predefined data model specification
-      resultsDataModelSpecification <- data.frame(
-        tableName = paste0(tablePrefix, "survival_results"),
-        columnName = c(
-          "cdm_name", "target_cohort", "outcome_name", "strata_name", "strata_level",
-          "time", "n_risk", "n_event", "n_censor", "survival", "survival_se",
-          "survival_lower", "survival_upper", "cumulative_failure", "cumulative_failure_se",
-          "cumulative_failure_lower", "cumulative_failure_upper"
-        ),
-        dataType = c(
-          "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)", "VARCHAR(255)",
-          "INTEGER", "INTEGER", "INTEGER", "INTEGER", "FLOAT", "FLOAT", "FLOAT", "FLOAT",
-          "FLOAT", "FLOAT", "FLOAT", "FLOAT"
-        ),
-        isRequired = c(rep("Yes", 17)),
-        primaryKey = c("No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No", "No"),
-        emptyIsNa = c(rep("Yes", 17))
+      if (connectionDetails$dbms == "sqlite" & databaseSchema != "main") {
+        stop("Invalid schema for sqlite, use databaseSchema = 'main'")
+      }
+      connection <- DatabaseConnector::connect(connectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+      # Create first version of results model:
+      sql <- SqlRender::loadRenderTranslateSql(
+        sqlFilename = "CreateResultsDataModel.sql",
+        packageName = "CohortSurvival",
+        dbms = connection@dbms,
+        database_schema = databaseSchema,
+        table_prefix = tablePrefix
       )
-      return(resultsDataModelSpecification)
+      DatabaseConnector::executeSql(connection, sql)
+      # Migrate to current version:
+      # migrateDataModel(
+      #   connectionDetails = connectionDetails,
+      #   databaseSchema = databaseSchema,
+      #   tablePrefix = tablePrefix
+      # )
+      private$.message("Results data model created successfully")
     },
+    
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
@@ -169,30 +191,17 @@ CohortSurvivalModule <- R6::R6Class(
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
 
-      resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
-      zipFiles <- list.files(
-        path = resultsFolder,
-        pattern = "\\.zip$",
-        full.names = TRUE
-      )
-
-      if (length(zipFiles) > 0) {
-        zipFileName <- zipFiles[1]
-      } else {
-        # Create a zip file from the results in the directory
-        DatabaseConnector::createZipFile(
-          zipFile = "results.zip",
-          files = list.files(resultsFolder, pattern = ".*\\.csv$"),
-          rootFolder = resultsFolder
-        )
-        zipFileName <- file.path(resultsFolder, "results.zip")
-      }
-
-      CohortMethod::uploadResults(
+      ResultModelManager::uploadResults(
         connectionDetails = resultsConnectionDetails,
         schema = resultsDataModelSettings$resultsDatabaseSchema,
-        zipFileName = zipFileName,
-        purgeSiteDataBeforeUploading = FALSE
+        resultsFolder = private$jobContext$moduleExecutionSettings$resultsSubFolder,
+        tablePrefix = resultsDataModelSettings$tablePrefix,
+        forceOverWriteOfSpecifications = FALSE,
+        purgeSiteDataBeforeUploading = TRUE,
+        runCheckAndFixCommands = FALSE,
+        specifications = self$getResultsDataModelSpecifications(resultsDataModelSettings$tablePrefix),
+        warnOnMissingTable = FALSE,
+        ...
       )
       private$.message("Cohort survival analysis results uploaded successfully")
     },
