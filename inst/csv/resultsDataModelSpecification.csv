@@ -1,0 +1,14 @@
+tableName,columnName,dataType,isRequired,primaryKey
+survival_results,result_id,INTEGER,No,No
+survival_results,cdm_name,VARCHAR(255),No,No
+survival_results,group_name,VARCHAR(255),No,No
+survival_results,group_level,VARCHAR(255),No,No
+survival_results,strata_name,VARCHAR(255),No,No
+survival_results,strata_level,VARCHAR(255),No,No
+survival_results,variable_name,VARCHAR(255),No,No
+survival_results,variable_level,VARCHAR(255),No,No
+survival_results,estimate_name,VARCHAR(255),No,No
+survival_results,estimate_type,VARCHAR(100),No,No
+survival_results,estimate_value,TEXT,No,No
+survival_results,additional_name,VARCHAR(255),No,No
+survival_results,additional_level,VARCHAR(255),No,No
