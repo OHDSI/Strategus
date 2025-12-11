@@ -22,8 +22,6 @@ CohortSurvivalModule <- R6::R6Class(
     #' @param analysisSpecifications The analysis specifications for the study
     #' @template executionSettings
     execute = function(connectionDetails, analysisSpecifications, executionSettings) {
-      cat("\n Checkpoint 0 - ############################")
-      flush.console()
       super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
@@ -37,8 +35,6 @@ CohortSurvivalModule <- R6::R6Class(
       dbname <- server_parts[2]
 
       # Establish a DBI connection using RPostgres
-      cat("\n Checkpoint 1 - ############################")
-      flush.console()
       dbi_conn <- dbConnect(
         RPostgres::Postgres(),
         dbname = dbname,
@@ -49,8 +45,6 @@ CohortSurvivalModule <- R6::R6Class(
       )
       on.exit(dbDisconnect(dbi_conn))  # Ensure the connection is closed
       
-      cat("\n Checkpoint 1.1 - ############################")
-      flush.console()
       # Get settings from job context
       settings <- jobContext$settings
       # ---- Handle strata ----
@@ -64,9 +58,7 @@ CohortSurvivalModule <- R6::R6Class(
         # Create DBI identifier for the fully qualified table (schema + table)
         fully_qualified_table_id <- DBI::Id(schema = schema_name, table = table_name)
         cohort_cols <- dbListFields(dbi_conn, name = fully_qualified_table_id)
-        cat("\n Checkpoint 1.2 - ############################")
-        cat("\n cohort_cols: ", paste(cohort_cols, collapse = ", "))
-        flush.console()
+        
         for (strata_name in settings$strata) {
           sanitized_name <- tolower(strata_name)
           sanitized_name <- gsub("[^[:alnum:][:space:]]", "", sanitized_name)
@@ -81,7 +73,7 @@ CohortSurvivalModule <- R6::R6Class(
               dbExecute(dbi_conn, paste0(
                 "ALTER TABLE ", fully_qualified_table_name, " ADD COLUMN ", column_name, " TEXT;"
               ))
-              cat("\n Checkpoint 1.3 - ############################\n")
+              
               # Replace person table with fully qualified name
               fully_qualified_person_table <- paste(schema_name, "person", sep = ".")
               dbExecute(dbi_conn, paste0(
@@ -92,7 +84,7 @@ CohortSurvivalModule <- R6::R6Class(
                 "ELSE 'unknown' END ",
                 "FROM ", fully_qualified_person_table, " p WHERE c.subject_id = p.person_id;"
               ))
-              cat("\n Checkpoint 1.4 - ############################\n")
+              
             } else if (strata_name == "age") {
               # Add age group strata as text
               dbExecute(dbi_conn, paste0(
@@ -121,8 +113,7 @@ CohortSurvivalModule <- R6::R6Class(
           strata_param <- lapply(strata_cols, function(col) c(col))
         }
       }
-      cat("\n Checkpoint 2 - ############################")
-      flush.console()
+      
       # Create CDM object for CohortSurvival
       cdm <- CDMConnector::cdmFromCon(
         con = dbi_conn,
@@ -130,8 +121,7 @@ CohortSurvivalModule <- R6::R6Class(
         writeSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
         cohortTables = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       )
-      cat("\n Checkpoint 3 - ############################")
-      flush.console()
+      
       if (settings$analysisType == "single_event") {
         # Run Kaplan-Meier survival analysis
         survivalResults <- CohortSurvival::estimateSingleEventSurvival(
@@ -160,8 +150,7 @@ CohortSurvivalModule <- R6::R6Class(
         stop("Invalid analysis type. Must be 'single_event' or 'competing_risk'")
       }
       private$.message("Exporting data to csv files")
-      cat("\n Checkpoint 4 - ############################")
-      flush.console()
+      
       # Export results to CSV
       omopgenerics::exportSummarisedResult(survivalResults, fileName = file.path(resultsFolder, "survival_results.csv"))
       # Disconnect from CDM
@@ -222,9 +211,7 @@ CohortSurvivalModule <- R6::R6Class(
     #' @template analysisSpecifications
     #' @template resultsDataModelSettings
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
-      cat("\n Checkpoint 1 - ############################\n")
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
-      cat("\n Checkpoint 2 - ############################\n")
       
       # Dynamically locate and load resultsDataModelSpecification.csv using system.file
       resultsDataModelSpecification <- readr::read_csv(
