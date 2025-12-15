@@ -53,17 +53,18 @@ CohortSurvivalModule <- R6::R6Class(
       if (!is.null(settings$strata)) {
         table_name <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
         schema_name <- jobContext$moduleExecutionSettings$workDatabaseSchema
-        cat("\n schema_name: ", schema_name)
 
         # Create DBI identifier for the fully qualified table (schema + table)
         fully_qualified_table_id <- DBI::Id(schema = schema_name, table = table_name)
         cohort_cols <- dbListFields(dbi_conn, name = fully_qualified_table_id)
+        
         
         for (strata_name in settings$strata) {
           sanitized_name <- tolower(strata_name)
           sanitized_name <- gsub("[^[:alnum:][:space:]]", "", sanitized_name)
           sanitized_name <- gsub("\\s+", "_", sanitized_name)
           column_name <- paste0("strata_", sanitized_name)
+          
 
           if (!(column_name %in% cohort_cols)) {
             # Use schema-qualified table name for dbExecute
@@ -75,7 +76,7 @@ CohortSurvivalModule <- R6::R6Class(
               ))
               
               # Replace person table with fully qualified name
-              fully_qualified_person_table <- paste(schema_name, "person", sep = ".")
+              fully_qualified_person_table <- paste0(schema_name, ".person")
               dbExecute(dbi_conn, paste0(
                 "UPDATE ", fully_qualified_table_name, " AS c ",
                 "SET ", column_name, " = CASE ",
@@ -91,6 +92,7 @@ CohortSurvivalModule <- R6::R6Class(
                 "ALTER TABLE ", fully_qualified_table_name, " ADD COLUMN ", column_name, " TEXT;"
               ))
               current_year <- as.numeric(format(Sys.Date(), "%Y"))
+              fully_qualified_person_table <- paste0(schema_name, ".person")
               dbExecute(dbi_conn, paste0(
                 "UPDATE ", fully_qualified_table_name, " AS c ",
                 "SET ", column_name, " = CASE ",

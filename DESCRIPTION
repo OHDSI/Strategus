@@ -56,6 +56,7 @@ Suggests:
   ggplot2,
   visOmopResults (>= 1.0.0),
   CDMConnector (>= 2.0.0),
+  RPostgres (>= 1.4.8),
 Remotes:
   darwin-eu/CohortSurvival,
   darwin-eu/PatientProfiles,
