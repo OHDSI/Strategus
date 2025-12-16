@@ -131,7 +131,7 @@ TreatmentPatternsModule <- R6::R6Class(
             }
 
 
-            if (file.exists(file.path(workFolder, "success_summary.csv"))) {
+            if (file.exists(file.path(workFolder, "treatment_pathway_runs.csv"))) {
               append <- TRUE
             } else {
               append <- FALSE
@@ -141,17 +141,18 @@ TreatmentPatternsModule <- R6::R6Class(
               analysis_id = idx,
               target_names = paste(targets$target_cohort_name, collapse = ";"),
               target_ids = paste(targets$target_cohort_id, collapse = ";"),
+              error = "Pass",
               timestamp = Sys.time(),
               stringsAsFactors = FALSE
             )
-            readr::write_csv(x = success, file = file.path(workFolder, "success_summary.csv"), append = append)
+            readr::write_csv(x = success, file = file.path(workFolder, "treatment_pathway_runs.csv"), append = append)
           },
           error = function(err) {
             message("Pathway for Analysis", idx, ":", conditionMessage(err))
             errors[[length(errors) + 1]] <- sprintf("Analysis '%s' pathway construction failed: %s", idx, conditionMessage(err))
 
 
-            if (file.exists(file.path(workFolder, "errors_summary.csv"))) {
+            if (file.exists(file.path(workFolder, "treatment_pathway_runs.csv"))) {
               append <- TRUE
             } else {
               append <- FALSE
@@ -166,7 +167,7 @@ TreatmentPatternsModule <- R6::R6Class(
               stringsAsFactors = FALSE
             )
 
-            readr::write_csv(x = error, file = file.path(workFolder, "errors_summary.csv"), append = append)
+            readr::write_csv(x = error, file = file.path(workFolder, "treatment_pathway_runs.csv"), append = append)
           }
         )
       }
@@ -219,7 +220,7 @@ TreatmentPatternsModule <- R6::R6Class(
 
       if (length(errors) > 0) {
         msg <- sprintf(
-          "Module failed: %d analysis(es) failed. See logs and per-analysis artifacts in '%s' (errors_summary.csv)",
+          "Module failed: %d analysis(es) failed. See logs and per-analysis artifacts in '%s' (treatment_pathway_runs.csv)",
           length(errors),
           workFolder
         )

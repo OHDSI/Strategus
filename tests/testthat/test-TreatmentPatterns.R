@@ -13,8 +13,10 @@ test_that("TreatmentPatterns: execute method", {
 
   modSpec <- tp$createModuleSpecifications(
     cohorts = testSettings$cohorts,
-    includeTreatments = "startDate",
-    indexDateOffset = 0,
+    startAnchor = "startDate",
+    windowStart = 0,
+    endAnchor = "endDate",
+    windowEnd = 0,
     minEraDuration = 7,
     splitEventCohorts = NULL,
     splitTime = NULL,
@@ -141,8 +143,10 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
         list(3, "Aspirin"),
         list(6, "Doxylamin")
       ),
-      includeTreatments = "startDate",
-      indexDateOffset = 0,
+      startAnchor = "startDate",
+      windowStart = 0,
+      endAnchor = "endDate",
+      windowEnd = 0,
       minEraDuration = 7,
       splitEventCohorts = NULL,
       splitTime = NULL,
@@ -163,8 +167,10 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
       exitCohorts = list(
         list(8, "death")
       ),
-      includeTreatments = "startDate",
-      indexDateOffset = 0,
+      startAnchor = "startDate",
+      windowStart = 0,
+      endAnchor = "endDate",
+      windowEnd = 0,
       minEraDuration = 7,
       splitEventCohorts = NULL,
       splitTime = NULL,
@@ -172,7 +178,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
       combinationWindow = 7,
       minPostCombinationDuration = 7,
       filterTreatments = "First",
-      maxPathLength = 5
+      maxPathLength = 7
     )
   )
 

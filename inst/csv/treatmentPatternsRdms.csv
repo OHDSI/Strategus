@@ -73,8 +73,8 @@ treatment_pathways,pathway,varchar,yes,no,Pathway
 treatment_pathways,sex,varchar,yes,no,Sex stratum
 treatment_pathways,target_cohort_id,integer,FALSE,FALSE,Target cohort ID
 treatment_pathways,target_cohort_name,varchar,FALSE,FALSE,Target cohort name
-analysis_cohorts,target_cohort_name,varchar,no,no,Target cohort name
-analysis_cohorts,target_cohort_id,int,yes,yes,Target cohort Id
-analysis_cohorts,event_cohort_name,varchar,no,no,Event cohort name
-analysis_cohorts,event_cohort_id,int,yes,yes,Event cohort Id
-analysis_cohorts,analysis_id,int,yes,yes,Analysis identifier foreign key
+analysis_cohorts,target_cohort_name,varchar,No,No,Target cohort name
+analysis_cohorts,target_cohort_id,int,Yes,Yes,Target cohort Id
+analysis_cohorts,event_cohort_name,varchar,No,No,Event cohort name
+analysis_cohorts,event_cohort_id,int,Yes,Yes,Event cohort Id
+analysis_cohorts,analysis_id,int,Yes,Yes,Analysis identifier foreign key
