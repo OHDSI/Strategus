@@ -387,10 +387,6 @@ TreatmentPatternsModule <- R6::R6Class(
     #' @param tpAnalysisList (`list()`)\cr
     #' A list of analysis specification objects.
     #' Each element should be a list created by \code{createAnalysisSpecification}
-    #' @examples
-    #' analysis1 <- createAnalysisSpecification(targetCohorts1, eventCohorts1, ...)
-    #' analysis2 <- createAnalysisSpecification(targetCohorts2, eventCohorts2, ...)
-    #' multiSpec <- createMultiAnalysisModuleSpecification(list(spec1, spec2))
     createMultiAnalysisModuleSpecification = function(tpAnalysisList) {
       specification <- super$createModuleSpecifications(
         moduleSpecifications = list(tpAnalysisList = tpAnalysisList)

@@ -6,16 +6,6 @@
 \description{
 Characterization and description of patterns of events (cohorts). against the OMOP Common Data Model.
 }
-\examples{
-
-## ------------------------------------------------
-## Method `TreatmentPatternsModule$createMultiAnalysisModuleSpecification`
-## ------------------------------------------------
-
-analysis1 <- createAnalysisSpecification(analysisId1, targetCohorts1, eventCohorts1, ...)
-analysis2 <- createAnalysisSpecification(analysisId2, targetCohorts2, eventCohorts2, ...)
-multiSpec <- createMultiAnalysisModuleSpecification(list(spec1, spec2))
-}
 \section{Super class}{
 \code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{TreatmentPatternsModule}
 }
@@ -322,16 +312,6 @@ Each element should be a list created by \code{createAnalysisSpecification}}
 }
 \if{html}{\out{</div>}}
 }
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{analysis1 <- createAnalysisSpecification(targetCohorts1, eventCohorts1, ...)
-analysis2 <- createAnalysisSpecification(targetCohorts2, eventCohorts2, ...)
-multiSpec <- createMultiAnalysisModuleSpecification(list(spec1, spec2))
-}
-\if{html}{\out{</div>}}
-
-}
-
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-createAnalysisSpecification"></a>}}
