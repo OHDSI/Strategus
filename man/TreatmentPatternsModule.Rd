@@ -12,8 +12,8 @@ Characterization and description of patterns of events (cohorts). against the OM
 ## Method `TreatmentPatternsModule$createMultiAnalysisModuleSpecification`
 ## ------------------------------------------------
 
-analysis1 <- createAnalysisSpecification(targetCohorts1, eventCohorts1, ...)
-analysis2 <- createAnalysisSpecification(targetCohorts2, eventCohorts2, ...)
+analysis1 <- createAnalysisSpecification(analysisId1, targetCohorts1, eventCohorts1, ...)
+analysis2 <- createAnalysisSpecification(analysisId2, targetCohorts2, eventCohorts2, ...)
 multiSpec <- createMultiAnalysisModuleSpecification(list(spec1, spec2))
 }
 \section{Super class}{
@@ -184,6 +184,7 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Creates the TreatmentPatternsnModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
+  analysisId = 1,
   cohorts,
   description = "",
   includeTreatments = NULL,
@@ -212,6 +213,9 @@ Creates the TreatmentPatternsnModule Specifications
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{analysisId}}{(\code{numeric(1)})
+Unique identifier for the TreatmentPatterns analysis}
+
 \item{\code{cohorts}}{(\code{data.frame()})\cr
 Data frame containing the following columns and data types:
 \describe{
@@ -336,6 +340,7 @@ multiSpec <- createMultiAnalysisModuleSpecification(list(spec1, spec2))
 Creates a settings list describing a TreatmentPatterns analysis. This specification is used by createMultiAnalysisModuleSpecification
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createAnalysisSpecification(
+  analysisId,
   targetCohorts,
   eventCohorts,
   exitCohorts = list(),
@@ -366,6 +371,9 @@ Creates a settings list describing a TreatmentPatterns analysis. This specificat
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{analysisId}}{(\code{numeric(1)})
+Unique identifier for the TreatmentPatterns analysis}
+
 \item{\code{targetCohorts}}{(\code{list()})\cr
 List of target cohorts in list-of-lists form:
 e.g. \code{list(list(1, "Hypertension"), list(2, "Diabetes"))}.Each inner list must contain \code{cohortId} (integer) and \code{cohortName} (string)}
@@ -484,7 +492,7 @@ Validate the module specifications
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{moduleSpecifications}}{The CohortMethod module specifications}
+\item{\code{moduleSpecifications}}{The treatment patterns module specifications}
 }
 \if{html}{\out{</div>}}
 }

@@ -30,12 +30,14 @@ test_that("TreatmentPatterns: execute method", {
   analysisSpecifications <- Strategus::createEmptyAnalysisSpecifications() |>
     Strategus::addTreatmentPatternsModuleSpecifications(modSpec)
 
+  workFolder <- file.path(tempDir, "work_folder")
+
   executionSettings <- Strategus::createCdmExecutionSettings(
     workDatabaseSchema = testSettings$resultSchema,
     cdmDatabaseSchema = testSettings$cdmSchema,
     cohortTableNames = CohortGenerator::getCohortTableNames(cohortTable = "cohort_table"),
     tempEmulationSchema = NULL,
-    workFolder = file.path(tempDir, "work_folder"),
+    workFolder = workFolder,
     resultsFolder = file.path(tempDir, "results_folder"),
     logFileName = "log.txt",
     minCellCount = 5,
@@ -57,6 +59,7 @@ test_that("TreatmentPatterns: execute method", {
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "summary_event_duration.csv"))))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "treatment_pathways.csv"))))
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "resultsDataModelSpecification.csv")))
+  expect_true(file.exists(file.path(workFolder, "TreatmentPatternsModule/", "passed_pathway_runs.csv")))
 })
 
 
@@ -73,6 +76,7 @@ test_that("Bad Cohort Names", {
   expect_error(
     modSpecs <- list(
       tp$createAnalysisSpecification(
+        analysisId = 8,
         targetCohorts = list(
           list(8, "Viral+Sinusitis")
         ),
@@ -96,6 +100,7 @@ test_that("Bad Cohort Names", {
         maxPathLength = 5
       ),
       tp$createAnalysisSpecification(
+        analysisId = 10,
         targetCohorts = list(
           list(8, "ViralSinusitis")
         ),
@@ -135,6 +140,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
 
   modSpecs <- list(
     tp$createAnalysisSpecification(
+      analysisId = 8,
       targetCohorts = list(
         list(8, "ViralSinusitis")
       ),
@@ -157,6 +163,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
       maxPathLength = 5
     ),
     tp$createAnalysisSpecification(
+      analysisId = 10,
       targetCohorts = list(
         list(8, "ViralSinusitis")
       ),
