@@ -73,6 +73,7 @@ treatment_pathways,index_year,varchar,Yes,No,Target index year stratum
 treatment_pathways,pathway,varchar,Yes,No,Pathway
 treatment_pathways,sex,varchar,Yes,No,Sex stratum
 treatment_pathways,target_cohort_id,int,No,No,Target cohort ID
+treatment_pathways,target_cohort_name,varchar,No,No,Target cohort name
 analysis_cohorts,target_cohort_name,varchar,No,No,Target cohort name
 analysis_cohorts,target_cohort_id,int,Yes,Yes,Target cohort Id
 analysis_cohorts,event_cohort_name,varchar,No,No,Event cohort name
