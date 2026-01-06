@@ -56,7 +56,7 @@ summary_event_duration,duration_average,float,Yes,No,Average duration in days
 summary_event_duration,event_count,int,Yes,No,Count of (combination) event
 summary_event_duration,database_id,varchar,Yes,No,Unique identifier for the database
 summary_event_duration,event_name,varchar,Yes,Yes,Name of (combination) event
-summary_event_duration,line,varchar,Yes,No,Position in pathway. I.e. 1 equals the first event in a pathway. 2 the second etc. Overall indicates across the entire pathway
+summary_event_duration,line,varchar,Yes,Yes,Position in pathway. I.e. 1 equals the first event in a pathway. 2 the second etc. Overall indicates across the entire pathway
 summary_event_duration,duration_max,int,Yes,No,Maximum duration in days
 summary_event_duration,duration_median,int,Yes,No,Median duration in days
 summary_event_duration,duration_min,int,Yes,No,Minimum duration in days
