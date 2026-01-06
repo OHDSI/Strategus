@@ -70,11 +70,22 @@ CohortMethodModule <- R6::R6Class(
     #' @template tablePrefix
     createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = "") {
       super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
-      CohortMethod::createResultsDataModel(
-        connectionDetails = resultsConnectionDetails,
-        databaseSchema = resultsDatabaseSchema,
-        tablePrefix = tablePrefix
-      )
+      # createResultsDataModel method executes migrations that are not compatible
+      # with Data2Evidence - the migrations include altering the column types
+      # which is not supported in TrexDB.
+      # CohortMethod::createResultsDataModel(
+      #   connectionDetails = resultsConnectionDetails,
+      #   databaseSchema = resultsDatabaseSchema,
+      #   tablePrefix = tablePrefix
+      # )
+      connection <- DatabaseConnector::connect(resultsConnectionDetails)
+      on.exit(DatabaseConnector::disconnect(connection))
+
+      # Create the results model
+      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = self$getResultsDataModelSpecification())
+      sql <- SqlRender::render(sql = sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
+      sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
+      DatabaseConnector::executeSql(connection, sql)
     },
     #' @description Get the results data model specification for the module
     #' @template tablePrefix
