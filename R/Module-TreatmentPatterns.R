@@ -43,12 +43,32 @@ TreatmentPatternsModule <- R6::R6Class(
       super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
+
       jobContext <- private$jobContext
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       spec <- jobContext$settings
-      analysisList <- jobContext$settings$tpAnalysisList
+      analysisList <- spec$tpAnalysisList
+
+      if (is.null(analysisList)) {
+        settings <- list()
+        for (setting in names(spec)) {
+          settings[[setting]] <- spec[[setting]]
+        }
+
+        # new parameters(cross compatibility)
+        if (is.null(spec$analysisId)) {
+          settings[["analysisId"]] <- 1
+        }
+        if (is.null(spec$description)) {
+          settings[["description"]] <- ""
+        }
+        if (is.null(spec$stratify)) {
+          settings[["stratify"]] <- FALSE
+        }
+        analysisList <- list(settings)
+      }
 
       errorMessages <- character()
       env <- environment()
@@ -75,7 +95,12 @@ TreatmentPatternsModule <- R6::R6Class(
       pathwayResult <- NULL
 
       for (idx in seq_along(analysisList)) {
-        analysis <- analysisList[[idx]]
+        if (!is.null(analysisList[[idx]]$settings)) {
+          analysis <- analysisList[[idx]]$settings
+        } else {
+          analysis <- analysisList[[idx]]
+        }
+
         analysisId <- analysis$analysisId
 
         if (length(passedPathways) > 0 && analysisId %in% passedPathways) {
@@ -277,6 +302,13 @@ TreatmentPatternsModule <- R6::R6Class(
     #'  \item{cohortName `character(1)`}{Cohort names of the cohorts to be used in the cohort table.}
     #'  \item{type `character(1)` \["target", "event', "exit"\]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
     #' }
+    #' @param targetCohorts (`list()`)\cr
+    #' List of target cohorts in list-of-lists form:
+    #' e.g. `list(list(1, "Hypertension"), list(2, "Diabetes"))`.Each inner list must contain `cohortId` (integer) and `cohortName` (string)
+    #' @param eventCohorts (`list()`)\cr
+    #' Same structure as `targetCohorts`. These cohorts are treated as events/treatments
+    #' @param exitCohorts (`list()`)\cr
+    #' Same structure; if provided these are treated as exit cohorts
     #' @param description (`character(1)`)
     #' Description for analysis
     #' @param minEraDuration (`integer(1)`: `0`)\cr
@@ -334,7 +366,10 @@ TreatmentPatternsModule <- R6::R6Class(
     #' @param stratify (`logical(1)`)\cr
     #' This will perform pairwise stratification between age, sex, and index year if set TRUE
     createModuleSpecifications = function(analysisId = 1,
-                                          cohorts,
+                                          cohorts = NULL,
+                                          targetCohorts = NULL,
+                                          eventCohorts = NULL,
+                                          exitCohorts = NULL,
                                           description = "",
                                           includeTreatments = NULL,
                                           indexDateOffset = NULL,
@@ -364,158 +399,37 @@ TreatmentPatternsModule <- R6::R6Class(
         warning("`includeTreatments` is deprecated in TreatentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
       }
 
-      settings <- list()
-      for (name in names(formals(self$createModuleSpecifications))) {
-        if (name == "cohorts") {
-          settings[[name]] <- super$.dataFrameToList(get(name))
-        } else {
-          settings[[name]] <- get(name)
+      if (is.null(cohorts) && (is.null(targetCohorts) | is.null(eventCohorts))) {
+        stop(sprintf("specify cohort or targetCohorts and eventCohorts"))
+      }
+
+      # construct cohorts
+      if (is.null(cohorts)) {
+        targetCohorts <- as.data.frame(do.call(rbind, targetCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "target")
+        eventCohorts <- as.data.frame(do.call(rbind, eventCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "event")
+        exitCohorts <- if (length(exitCohorts) > 0) {
+          exitCohorts <- as.data.frame(do.call(rbind, exitCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "exit")
         }
+
+        if (!is.null(exitCohorts) && nrow(exitCohorts) > 0) {
+          cohorts <- dplyr::bind_rows(targetCohorts, eventCohorts, exitCohorts)
+        } else {
+          cohorts <- dplyr::bind_rows(targetCohorts, eventCohorts)
+        }
+
+        colnames(cohorts) <- c("cohortId", "cohortName", "type")
+        cohorts$cohortId <- as.integer(cohorts$cohortId)
+        cohorts$cohortName <- as.character(cohorts$cohortName)
+        cohorts$type <- as.character(cohorts$type)
       }
 
-      analysis <- list(tpAnalysisList = list(settings))
-
-      specification <- super$createModuleSpecifications(
-        moduleSpecifications = analysis
-      )
-
-      return(specification)
-    },
-    #' @description
-    #' Runs multiple analyses using a list of analysis specification objects (as produced by\code{createAnalysisSpecification}) into a single module specification
-    #'
-    #' @param tpAnalysisList (`list()`)\cr
-    #' A list of analysis specification objects.
-    #' Each element should be a list created by \code{createAnalysisSpecification}
-    createMultiAnalysisModuleSpecification = function(tpAnalysisList) {
-      specification <- super$createModuleSpecifications(
-        moduleSpecifications = list(tpAnalysisList = tpAnalysisList)
-      )
-      return(specification)
-    },
-    #' @description
-    #' Creates a settings list describing a TreatmentPatterns analysis. This specification is used by createMultiAnalysisModuleSpecification
-    #'
-    #' @param analysisId (`numeric(1)`)
-    #' Unique identifier for the TreatmentPatterns analysis
-    #' @param targetCohorts (`list()`)\cr
-    #' List of target cohorts in list-of-lists form:
-    #' e.g. `list(list(1, "Hypertension"), list(2, "Diabetes"))`.Each inner list must contain `cohortId` (integer) and `cohortName` (string)
-    #' @param eventCohorts (`list()`)\cr
-    #' Same structure as `targetCohorts`. These cohorts are treated as events/treatments
-    #' @param exitCohorts (`list()`)\cr
-    #' Same structure; if provided these are treated as exit cohorts
-    #' @param description (`character(1)`)\cr
-    #' Description for analysis
-    #' @param minEraDuration (`integer(1)`: `0`)\cr
-    #' Minimum time an event era should last to be included in analysis
-    #' @param splitEventCohorts (`character(n)`: `""`)\cr
-    #' Specify event cohort to split in acute (< X days) and therapy (>= X days)
-    #' @param splitTime (`integer(1)`: `30`)\cr
-    #' Specify number of days (X) at which each of the split event cohorts should
-    #' be split in acute and therapy
-    #' @param eraCollapseSize (`integer(1)`: `30`)\cr
-    #' Window of time between which two eras of the same event cohort are collapsed
-    #' into one era
-    #' @param combinationWindow (`integer(1)`: `30`)\cr
-    #' Window of time two event cohorts need to overlap to be considered a
-    #' combination treatment
-    #' @param minPostCombinationDuration (`integer(1)`: `30`)\cr
-    #' Minimum time an event era before or after a generated combination treatment
-    #' should last to be included in analysis
-    #' @param filterTreatments (`character(1)`: `"First"` \["first", "Changes", "all"\])\cr
-    #' Select first occurrence of (‘First’); changes between (‘Changes’); or all
-    #' event cohorts (‘All’).
-    #' @param maxPathLength (`integer(1)`: `5`)\cr
-    #' Maximum number of steps included in treatment pathway
-    #' @param ageWindow (`integer(n)`: `10`)\cr
-    #' Number of years to bin age groups into. It may also be a vector of integers.
-    #' I.e. `c(0, 18, 150)` which will results in age group `0-18` which includes
-    #' subjects `< 19`. And age group `18-150` which includes subjects `> 18`.
-    #' @param minCellCount (`integer(1)`: `5`)\cr
-    #' Minimum count required per pathway. Censors data below `x` as `<x`. This
-    #' minimum value will carry over to the sankey diagram and sunburst plot.
-    #' @param censorType (`character(1)`)\cr
-    #' \describe{
-    #'   \item{`"minCellCount"`}{Censors pathways <`minCellCount` to `minCellCount`.}
-    #'   \item{`"remove"`}{Censors pathways <`minCellCount` by removing them completely.}
-    #'   \item{`"mean"`}{Censors pathways <`minCellCount` to the mean of all frequencies below `minCellCount`}
-    #' }
-    #' @param overlapMethod (`character(1)`: `"truncate"`) Method to decide how to deal
-    #' with overlap that is not significant enough for combination. `"keep"` will
-    #' keep the dates as is. `"truncate"` truncates the first occurring event to
-    #' the start date of the next event.
-    #' @param concatTargets (`logical(1)`: `TRUE`) Should multiple target cohorts for the same person be concatenated or not?
-    #' @param startAnchor (`character(1)`: `"startDate"`) Start date anchor. One of: `"startDate"`, `"endDate"`
-    #' @param windowStart (`numeric(1)`: `0`) Offset for `startAnchor` in days.
-    #' @param endAnchor (`character(1)`: `"endDate"`) End date anchor. One of: `"startDate"`, `"endDate"`
-    #' @param windowEnd (`numeric(1)`: `0`) Offset for `endAnchor` in days.
-    #' @param indexDateOffset (`integer(1)`: `0`)\cr
-    #' `DEPRECATED`
-    #' Offset the index date of the `Target` cohort.
-    #' @param includeTreatments (`character(1)`: `"startDate"`)\cr
-    #' `DEPRECATED`
-    #' \describe{
-    #'  \item{`"startDate"`}{Include treatments after the target cohort start date and onwards.}
-    #'  \item{`"endDate"`}{Include treatments before target cohort end date and before.}
-    #' }
-    #' @param stratify (`logical(1)`)\cr
-    #' This will perform pairwise stratification between age, sex, and index year if set TRUE
-    #'
-    #' @details
-    #' - cohortName must not contain `-` or `+`. Cohort names are validated as
-    #'   (perl-compatible) regular expressions. If invalid, an informative error is
-    #'   raised.
-    #'
-    #' @return A `list` describing analysis settings. Keys include:
-    #'  - `cohorts`: list of cohort definitions (each item has `cohortId`,
-    #'     `cohortName`, `type`)
-    #'  - all parameters passed to this function (same names)
-    createAnalysisSpecification = function(analysisId,
-                                           targetCohorts,
-                                           eventCohorts,
-                                           exitCohorts = list(),
-                                           description = "",
-                                           includeTreatments = NULL,
-                                           indexDateOffset = NULL,
-                                           minEraDuration = 0,
-                                           splitEventCohorts = NULL,
-                                           splitTime = NULL,
-                                           eraCollapseSize = 30,
-                                           combinationWindow = 30,
-                                           minPostCombinationDuration = 30,
-                                           filterTreatments = "First",
-                                           maxPathLength = 5,
-                                           ageWindow = 5,
-                                           minCellCount = 1,
-                                           censorType = "minCellCount",
-                                           overlapMethod = "truncate",
-                                           concatTargets = TRUE,
-                                           startAnchor = "startDate",
-                                           windowStart = 0,
-                                           endAnchor = "endDate",
-                                           windowEnd = 0,
-                                           stratify = FALSE) {
-      if (!is.null(indexDateOffset)) {
-        warning("`indexDateOffset` is deprecated in TreatmentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
-      }
-
-      if (!is.null(includeTreatments)) {
-        warning("`includeTreatments` is deprecated in TreatentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
-      }
-
-      if (is.null(targetCohorts) | is.null(eventCohorts)) {
-        stop(sprintf("targetCohorts or eventCohorts are empty"))
-      }
-
-      # validate target names
-      for (cohort in c(targetCohorts, eventCohorts, exitCohorts)) {
-        pattern <- cohort[[2]]
+      # validate user input
+      for (cohort in cohorts$cohortName) {
         tryCatch(
           {
             # Attempt to compile the regex by running grepl on an empty string
-            grepl(pattern, "", perl = TRUE)
-            if (grepl("[-+]", pattern, perl = TRUE)) {
+            grepl(cohort, "", perl = TRUE)
+            if (grepl("[-+]", cohort, perl = TRUE)) {
               stop(sprintf("Invalid target cohort name; remove -/+"))
             }
           },
@@ -523,7 +437,7 @@ TreatmentPatternsModule <- R6::R6Class(
             stop(
               sprintf(
                 "Invalid target cohort name '%s': %s",
-                pattern, e$message
+                cohort, e$message
               ),
               call. = FALSE
             )
@@ -531,40 +445,39 @@ TreatmentPatternsModule <- R6::R6Class(
         )
       }
 
-      targetCohorts <- as.data.frame(do.call(rbind, targetCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "target")
+      analysis <- list()
+      analysis[["cohorts"]] <- super$.dataFrameToList(cohorts)
 
-      eventCohorts <- as.data.frame(do.call(rbind, eventCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "event")
-
-      exitCohorts <- if (length(exitCohorts) > 0) {
-        exitCohorts <- as.data.frame(do.call(rbind, exitCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "exit")
-      }
-
-
-      if (!is.null(exitCohorts) && nrow(exitCohorts) > 0) {
-        cohorts <- dplyr::bind_rows(targetCohorts, eventCohorts, exitCohorts)
-      } else {
-        cohorts <- dplyr::bind_rows(targetCohorts, eventCohorts)
-      }
-
-      colnames(cohorts) <- c("cohortId", "cohortName", "type")
-
-      cohorts$cohortId <- as.integer(cohorts$cohortId)
-      cohorts$cohortName <- as.character(cohorts$cohortName)
-      cohorts$type <- as.character(cohorts$type)
-
-      cohorts <- super$.dataFrameToList(cohorts)
-
-      settings <- list()
-      settings[["cohorts"]] <- cohorts
-
-      params <- names(formals(self$createAnalysisSpecification))
-      for (name in params) {
-        if (!(name %in% c("targetCohorts", "eventCohorts", "exitCohorts"))) {
-          settings[[name]] <- get(name)
+      for (name in names(formals(self$createModuleSpecifications))) {
+        if (!(name %in% c("cohorts", "targetCohorts", "eventCohorts", "exitCohorts"))) {
+          analysis[[name]] <- get(name)
         }
       }
 
-      return(settings)
+      specification <- super$createModuleSpecifications(analysis)
+
+      return(specification)
+    },
+    #' @description
+    #' Runs multiple analyses using a list of analysis specification objects (as produced by\code{createModuleSpecifications}) into a single module specification
+    #'
+    #' @param tpAnalysisList (`list()`)\cr
+    #' A list of analysis specification objects.
+    #' Each element should be a list created by \code{createAnalysisSpecification}
+    createMultiAnalysisModuleSpecification = function(tpAnalysisList) {
+      analysisIds <- list()
+      for (analysis in tpAnalysisList) {
+        analysisIds[[length(analysisIds) + 1]] <- analysis$settings$analysisId
+      }
+
+      if (anyDuplicated(analysisIds)) {
+        stop("Each analysis need unique id")
+      }
+
+      specification <- super$createModuleSpecifications(
+        moduleSpecifications = list(tpAnalysisList = tpAnalysisList)
+      )
+      return(specification)
     },
     #' @description Validate the module specifications
     #'

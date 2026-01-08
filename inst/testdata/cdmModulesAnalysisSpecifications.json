@@ -484,160 +484,181 @@
       "settings": {
         "tpAnalysisList": [
           {
-            "cohorts": [
-              {
-                "cohortId": 11,
-                "cohortName": "ViralSinusitis",
-                "type": "target"
-              },
-              {
-                "cohortId": 1,
-                "cohortName": "Celecoxib",
-                "type": "event"
-              },
-              {
-                "cohortId": 2,
-                "cohortName": "Diclofenac",
-                "type": "event"
-              },
-              {
-                "cohortId": 3,
-                "cohortName": "GI bleed",
-                "type": "event"
-              },
-              {
-                "cohortId": 4,
-                "cohortName": "Acetaminophen",
-                "type": "event"
-              },
-              {
-                "cohortId": 5,
-                "cohortName": "Amoxicillin",
-                "type": "event"
-              },
-              {
-                "cohortId": 6,
-                "cohortName": "Aspirin",
-                "type": "event"
-              },
-              {
-                "cohortId": 7,
-                "cohortName": "Clavulanate",
-                "type": "event"
-              },
-              {
-                "cohortId": 9,
-                "cohortName": "Doxylamine",
-                "type": "event"
-              },
-              {
-                "cohortId": 10,
-                "cohortName": "PenicillinV",
-                "type": "event"
-              },
-              {
-                "cohortId": 1001,
-                "cohortName": "Celecoxib: age 18 to 64 Age 18 to 64",
-                "type": "event"
-              },
-              {
-                "cohortId": 2001,
-                "cohortName": "Diclofenac: age 18 to 64 Age 18 to 64",
-                "type": "event"
-              },
-              {
-                "cohortId": 1002,
-                "cohortName": "Celecoxib: first event with 365 prior obs first event with 365 prior obs",
-                "type": "event"
-              },
-              {
-                "cohortId": 2002,
-                "cohortName": "Diclofenac: first event with 365 prior obs first event with 365 prior obs",
-                "type": "event"
-              },
-              {
-                "cohortId": 1003,
-                "cohortName": "Celecoxib: age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
-                "type": "event"
-              },
-              {
-                "cohortId": 2003,
-                "cohortName": "Diclofenac: age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
-                "type": "event"
-              },
-              {
-                "cohortId": 8,
-                "cohortName": "death",
-                "type": "exit"
-              }
-            ],
-            "analysisId": 1,
-            "description": "Analysis 1",
-            "minEraDuration": 7,
-            "eraCollapseSize": 14,
-            "combinationWindow": 7,
-            "minPostCombinationDuration": 7,
-            "filterTreatments": "First",
-            "maxPathLength": 5,
-            "ageWindow": 5,
-            "minCellCount": 1,
-            "censorType": "minCellCount",
-            "overlapMethod": "truncate",
-            "concatTargets": true,
-            "startAnchor": "startDate",
-            "windowStart": 0,
-            "endAnchor": "endDate",
-            "windowEnd": 0,
-            "stratify": false
+            "module": "TreatmentPatternsModule",
+            "settings": {
+              "cohorts": [
+                {
+                  "cohortId": 11,
+                  "cohortName": "ViralSinusitis",
+                  "type": "target"
+                },
+                {
+                  "cohortId": 1,
+                  "cohortName": "Celecoxib",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 2,
+                  "cohortName": "Diclofenac",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 3,
+                  "cohortName": "GI bleed",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 4,
+                  "cohortName": "Acetaminophen",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 5,
+                  "cohortName": "Amoxicillin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 6,
+                  "cohortName": "Aspirin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 7,
+                  "cohortName": "Clavulanate",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 9,
+                  "cohortName": "Doxylamine",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 10,
+                  "cohortName": "PenicillinV",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 1001,
+                  "cohortName": "Celecoxib: age 18 to 64 Age 18 to 64",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 2001,
+                  "cohortName": "Diclofenac: age 18 to 64 Age 18 to 64",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 2002,
+                  "cohortName": "Diclofenac: first event with 365 prior obs first event with 365 prior obs",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 1003,
+                  "cohortName": "Celecoxib: age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 2003,
+                  "cohortName": "Diclofenac: age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 8,
+                  "cohortName": "death",
+                  "type": "exit"
+                }
+              ],
+              "analysisId": 1,
+              "description": "Analysis 1",
+              "minEraDuration": 7,
+              "eraCollapseSize": 14,
+              "combinationWindow": 7,
+              "minPostCombinationDuration": 7,
+              "filterTreatments": "First",
+              "maxPathLength": 5,
+              "ageWindow": 5,
+              "minCellCount": 1,
+              "censorType": "minCellCount",
+              "overlapMethod": "truncate",
+              "concatTargets": true,
+              "startAnchor": "startDate",
+              "windowStart": 0,
+              "endAnchor": "endDate",
+              "windowEnd": 0,
+              "stratify": false
+            },
+            "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
           },
           {
-            "cohorts": [
-              {
-                "cohortId": 11,
-                "cohortName": "ViralSinusitis",
-                "type": "target"
-              },
-              {
-                "cohortId": 1,
-                "cohortName": "Celecoxib",
-                "type": "event"
-              },
-              {
-                "cohortId": 2,
-                "cohortName": "Diclofenac",
-                "type": "event"
-              },
-              {
-                "cohortId": 3,
-                "cohortName": "GI bleed",
-                "type": "event"
-              },
-              {
-                "cohortId": 4,
-                "cohortName": "Acetaminophen",
-                "type": "event"
-              }
-            ],
-            "analysisId": 2,
-            "description": "Analysis 2",
-            "includeTreatments": "startDate",
-            "indexDateOffset": 0,
-            "minEraDuration": 7,
-            "eraCollapseSize": 14,
-            "combinationWindow": 7,
-            "minPostCombinationDuration": 7,
-            "filterTreatments": "First",
-            "maxPathLength": 5,
-            "ageWindow": 5,
-            "minCellCount": 1,
-            "censorType": "minCellCount",
-            "overlapMethod": "truncate",
-            "concatTargets": true,
-            "startAnchor": "startDate",
-            "windowStart": 0,
-            "endAnchor": "endDate",
-            "windowEnd": 0,
-            "stratify": false
+            "module": "TreatmentPatternsModule",
+            "settings": {
+              "cohorts": [
+                {
+                  "cohortId": 11,
+                  "cohortName": "ViralSinusitis",
+                  "type": "target"
+                },
+                {
+                  "cohortId": 1,
+                  "cohortName": "Celecoxib",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 2,
+                  "cohortName": "Diclofenac",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 3,
+                  "cohortName": "GI bleed",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 4,
+                  "cohortName": "Acetaminophen",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 5,
+                  "cohortName": "Amoxicillin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 6,
+                  "cohortName": "Aspirin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 7,
+                  "cohortName": "Clavulanate",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 8,
+                  "cohortName": "death",
+                  "type": "exit"
+                }
+              ],
+              "analysisId": 2,
+              "description": "Analysis 1",
+              "minEraDuration": 7,
+              "eraCollapseSize": 14,
+              "combinationWindow": 7,
+              "minPostCombinationDuration": 7,
+              "filterTreatments": "First",
+              "maxPathLength": 5,
+              "ageWindow": 5,
+              "minCellCount": 1,
+              "censorType": "minCellCount",
+              "overlapMethod": "truncate",
+              "concatTargets": true,
+              "startAnchor": "startDate",
+              "windowStart": 0,
+              "endAnchor": "endDate",
+              "windowEnd": 0,
+              "stratify": true
+            },
+            "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
           }
         ]
       },

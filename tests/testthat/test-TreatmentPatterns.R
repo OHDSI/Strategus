@@ -58,7 +58,6 @@ test_that("TreatmentPatterns Backwards Compatibility ", {
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, "resultsDataModelSpecification.csv")))
 })
 
-
 test_that("TreatmentPatterns execute single analysis", {
   skip_if(!require("TreatmentPatterns", quietly = TRUE, character.only = TRUE, warn.conflicts = FALSE))
 
@@ -120,7 +119,6 @@ test_that("TreatmentPatterns execute single analysis", {
   expect_true(file.exists(file.path(workFolder, "TreatmentPatternsModule/", "passed_pathway_runs.csv")))
 })
 
-
 test_that("Bad Cohort Names", {
   skip_if(!require("TreatmentPatterns", quietly = TRUE, character.only = TRUE, warn.conflicts = FALSE))
 
@@ -130,10 +128,9 @@ test_that("Bad Cohort Names", {
   testSettings <- generateCohortTable()
   tp <- Strategus::TreatmentPatternsModule$new()
 
-
   expect_error(
     modSpecs <- list(
-      tp$createAnalysisSpecification(
+      tp$createModuleSpecifications(
         analysisId = 8,
         targetCohorts = list(
           list(8, "Viral+Sinusitis")
@@ -159,7 +156,7 @@ test_that("Bad Cohort Names", {
         filterTreatments = "First",
         maxPathLength = 5
       ),
-      tp$createAnalysisSpecification(
+      tp$createModuleSpecifications(
         analysisId = 10,
         targetCohorts = list(
           list(8, "ViralSinusitis")
@@ -192,7 +189,7 @@ test_that("Bad Cohort Names", {
 
   expect_error(
     modSpecs <- list(
-      tp$createAnalysisSpecification(
+      tp$createModuleSpecifications(
         analysisId = 8,
         targetCohorts = list(
           list(8, "ViralSinusitis")
@@ -215,10 +212,73 @@ test_that("Bad Cohort Names", {
         maxPathLength = 5
       )
     ),
-    "targetCohorts or eventCohorts are empty"
+    "specify cohort or targetCohorts and eventCohorts"
   )
 })
 
+test_that("Unique Analysis Ids", {
+  tp <- Strategus::TreatmentPatternsModule$new()
+
+
+  modSpecs <- list(
+    tp$createModuleSpecifications(
+      targetCohorts = list(
+        list(8, "ViralSinusitis")
+      ),
+      eventCohorts = list(
+        list(1, "Acetaminophen"),
+        list(3, "Aspirin"),
+        list(6, "Doxylamin")
+      ),
+      exitCohorts = list(
+        list(8, "death")
+      ),
+      startAnchor = "startDate",
+      windowStart = 0,
+      endAnchor = "endDate",
+      windowEnd = 0,
+      minEraDuration = 7,
+      splitEventCohorts = NULL,
+      splitTime = NULL,
+      eraCollapseSize = 14,
+      combinationWindow = 7,
+      minPostCombinationDuration = 7,
+      filterTreatments = "First",
+      maxPathLength = 5
+    ),
+    tp$createModuleSpecifications(
+      targetCohorts = list(
+        list(8, "ViralSinusitis")
+      ),
+      eventCohorts = list(
+        list(1, "Acetaminophen"),
+        list(3, "Aspirin"),
+        list(6, "Doxylamin"),
+        list(7, "PenicillinV")
+      ),
+      exitCohorts = list(
+        list(8, "death")
+      ),
+      startAnchor = "startDate",
+      windowStart = 0,
+      endAnchor = "endDate",
+      windowEnd = 0,
+      minEraDuration = 7,
+      splitEventCohorts = NULL,
+      splitTime = NULL,
+      eraCollapseSize = 14,
+      combinationWindow = 7,
+      minPostCombinationDuration = 7,
+      filterTreatments = "First",
+      maxPathLength = 5
+    )
+  )
+
+  expect_error(
+    tp$createMultiAnalysisModuleSpecification(tpAnalysisList = modSpecs),
+    "Each analysis need unique id"
+  )
+})
 
 test_that("TreatmentPatterns: execute method with multiple analysis", {
   skip_if(!require("TreatmentPatterns", quietly = TRUE, character.only = TRUE, warn.conflicts = FALSE))
@@ -230,7 +290,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
   tp <- Strategus::TreatmentPatternsModule$new()
 
   modSpecs <- list(
-    tp$createAnalysisSpecification(
+    tp$createModuleSpecifications(
       analysisId = 8,
       targetCohorts = list(
         list(8, "ViralSinusitis")
@@ -253,7 +313,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
       filterTreatments = "First",
       maxPathLength = 5
     ),
-    tp$createAnalysisSpecification(
+    tp$createModuleSpecifications(
       analysisId = 10,
       targetCohorts = list(
         list(8, "ViralSinusitis")
@@ -314,9 +374,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
   expect_true(file.exists(file.path(executionSettings$resultsFolder, tp$moduleName, paste0(tp$tablePrefix, "analysis_cohorts.csv"))))
 })
 
-
-
-test_that("TreatmentPatterns:  pathway failed", {
+test_that("TreatmentPatterns: pathway failed", {
   skip_if(!require("TreatmentPatterns", quietly = TRUE, character.only = TRUE, warn.conflicts = FALSE))
 
   tempDir <- file.path(tempdir(), "Strategus-TP")
@@ -326,7 +384,7 @@ test_that("TreatmentPatterns:  pathway failed", {
   tp <- Strategus::TreatmentPatternsModule$new()
 
   modSpecs <- list(
-    tp$createAnalysisSpecification(
+    tp$createModuleSpecifications(
       analysisId = 8,
       targetCohorts = list(
         list(8, "ViralSinusitis")

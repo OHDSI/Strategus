@@ -26,7 +26,6 @@ Characterization and description of patterns of events (cohorts). against the OM
 \item \href{#method-TreatmentPatternsModule-uploadResults}{\code{TreatmentPatternsModule$uploadResults()}}
 \item \href{#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}
 \item \href{#method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{\code{TreatmentPatternsModule$createMultiAnalysisModuleSpecification()}}
-\item \href{#method-TreatmentPatternsModule-createAnalysisSpecification}{\code{TreatmentPatternsModule$createAnalysisSpecification()}}
 \item \href{#method-TreatmentPatternsModule-validateModuleSpecifications}{\code{TreatmentPatternsModule$validateModuleSpecifications()}}
 \item \href{#method-TreatmentPatternsModule-clone}{\code{TreatmentPatternsModule$clone()}}
 }
@@ -175,7 +174,10 @@ Creates the TreatmentPatternsnModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
   analysisId = 1,
-  cohorts,
+  cohorts = NULL,
+  targetCohorts = NULL,
+  eventCohorts = NULL,
+  exitCohorts = NULL,
   description = "",
   includeTreatments = NULL,
   indexDateOffset = NULL,
@@ -213,6 +215,16 @@ Data frame containing the following columns and data types:
 \item{cohortName \code{character(1)}}{Cohort names of the cohorts to be used in the cohort table.}
 \item{type \code{character(1)} ["target", "event', "exit"]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
 }}
+
+\item{\code{targetCohorts}}{(\code{list()})\cr
+List of target cohorts in list-of-lists form:
+e.g. \code{list(list(1, "Hypertension"), list(2, "Diabetes"))}.Each inner list must contain \code{cohortId} (integer) and \code{cohortName} (string)}
+
+\item{\code{eventCohorts}}{(\code{list()})\cr
+Same structure as \code{targetCohorts}. These cohorts are treated as events/treatments}
+
+\item{\code{exitCohorts}}{(\code{list()})\cr
+Same structure; if provided these are treated as exit cohorts}
 
 \item{\code{description}}{(\code{character(1)})
 Description for analysis}
@@ -298,7 +310,7 @@ This will perform pairwise stratification between age, sex, and index year if se
 \if{html}{\out{<a id="method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{}}}
 \subsection{Method \code{createMultiAnalysisModuleSpecification()}}{
-Runs multiple analyses using a list of analysis specification objects (as produced by\code{createAnalysisSpecification}) into a single module specification
+Runs multiple analyses using a list of analysis specification objects (as produced by\code{createModuleSpecifications}) into a single module specification
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createMultiAnalysisModuleSpecification(tpAnalysisList)}\if{html}{\out{</div>}}
 }
@@ -311,153 +323,6 @@ A list of analysis specification objects.
 Each element should be a list created by \code{createAnalysisSpecification}}
 }
 \if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TreatmentPatternsModule-createAnalysisSpecification"></a>}}
-\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createAnalysisSpecification}{}}}
-\subsection{Method \code{createAnalysisSpecification()}}{
-Creates a settings list describing a TreatmentPatterns analysis. This specification is used by createMultiAnalysisModuleSpecification
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createAnalysisSpecification(
-  analysisId,
-  targetCohorts,
-  eventCohorts,
-  exitCohorts = list(),
-  description = "",
-  includeTreatments = NULL,
-  indexDateOffset = NULL,
-  minEraDuration = 0,
-  splitEventCohorts = NULL,
-  splitTime = NULL,
-  eraCollapseSize = 30,
-  combinationWindow = 30,
-  minPostCombinationDuration = 30,
-  filterTreatments = "First",
-  maxPathLength = 5,
-  ageWindow = 5,
-  minCellCount = 1,
-  censorType = "minCellCount",
-  overlapMethod = "truncate",
-  concatTargets = TRUE,
-  startAnchor = "startDate",
-  windowStart = 0,
-  endAnchor = "endDate",
-  windowEnd = 0,
-  stratify = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{analysisId}}{(\code{numeric(1)})
-Unique identifier for the TreatmentPatterns analysis}
-
-\item{\code{targetCohorts}}{(\code{list()})\cr
-List of target cohorts in list-of-lists form:
-e.g. \code{list(list(1, "Hypertension"), list(2, "Diabetes"))}.Each inner list must contain \code{cohortId} (integer) and \code{cohortName} (string)}
-
-\item{\code{eventCohorts}}{(\code{list()})\cr
-Same structure as \code{targetCohorts}. These cohorts are treated as events/treatments}
-
-\item{\code{exitCohorts}}{(\code{list()})\cr
-Same structure; if provided these are treated as exit cohorts}
-
-\item{\code{description}}{(\code{character(1)})\cr
-Description for analysis}
-
-\item{\code{includeTreatments}}{(\code{character(1)}: \code{"startDate"})\cr
-\code{DEPRECATED}
-\describe{
-\item{\code{"startDate"}}{Include treatments after the target cohort start date and onwards.}
-\item{\code{"endDate"}}{Include treatments before target cohort end date and before.}
-}}
-
-\item{\code{indexDateOffset}}{(\code{integer(1)}: \code{0})\cr
-\code{DEPRECATED}
-Offset the index date of the \code{Target} cohort.}
-
-\item{\code{minEraDuration}}{(\code{integer(1)}: \code{0})\cr
-Minimum time an event era should last to be included in analysis}
-
-\item{\code{splitEventCohorts}}{(\code{character(n)}: \code{""})\cr
-Specify event cohort to split in acute (< X days) and therapy (>= X days)}
-
-\item{\code{splitTime}}{(\code{integer(1)}: \code{30})\cr
-Specify number of days (X) at which each of the split event cohorts should
-be split in acute and therapy}
-
-\item{\code{eraCollapseSize}}{(\code{integer(1)}: \code{30})\cr
-Window of time between which two eras of the same event cohort are collapsed
-into one era}
-
-\item{\code{combinationWindow}}{(\code{integer(1)}: \code{30})\cr
-Window of time two event cohorts need to overlap to be considered a
-combination treatment}
-
-\item{\code{minPostCombinationDuration}}{(\code{integer(1)}: \code{30})\cr
-Minimum time an event era before or after a generated combination treatment
-should last to be included in analysis}
-
-\item{\code{filterTreatments}}{(\code{character(1)}: \code{"First"} ["first", "Changes", "all"])\cr
-Select first occurrence of (‘First’); changes between (‘Changes’); or all
-event cohorts (‘All’).}
-
-\item{\code{maxPathLength}}{(\code{integer(1)}: \code{5})\cr
-Maximum number of steps included in treatment pathway}
-
-\item{\code{ageWindow}}{(\code{integer(n)}: \code{10})\cr
-Number of years to bin age groups into. It may also be a vector of integers.
-I.e. \code{c(0, 18, 150)} which will results in age group \code{0-18} which includes
-subjects \verb{< 19}. And age group \code{18-150} which includes subjects \verb{> 18}.}
-
-\item{\code{minCellCount}}{(\code{integer(1)}: \code{5})\cr
-Minimum count required per pathway. Censors data below \code{x} as \verb{<x}. This
-minimum value will carry over to the sankey diagram and sunburst plot.}
-
-\item{\code{censorType}}{(\code{character(1)})\cr
-\describe{
-\item{\code{"minCellCount"}}{Censors pathways <\code{minCellCount} to \code{minCellCount}.}
-\item{\code{"remove"}}{Censors pathways <\code{minCellCount} by removing them completely.}
-\item{\code{"mean"}}{Censors pathways <\code{minCellCount} to the mean of all frequencies below \code{minCellCount}}
-}}
-
-\item{\code{overlapMethod}}{(\code{character(1)}: \code{"truncate"}) Method to decide how to deal
-with overlap that is not significant enough for combination. \code{"keep"} will
-keep the dates as is. \code{"truncate"} truncates the first occurring event to
-the start date of the next event.}
-
-\item{\code{concatTargets}}{(\code{logical(1)}: \code{TRUE}) Should multiple target cohorts for the same person be concatenated or not?}
-
-\item{\code{startAnchor}}{(\code{character(1)}: \code{"startDate"}) Start date anchor. One of: \code{"startDate"}, \code{"endDate"}}
-
-\item{\code{windowStart}}{(\code{numeric(1)}: \code{0}) Offset for \code{startAnchor} in days.}
-
-\item{\code{endAnchor}}{(\code{character(1)}: \code{"endDate"}) End date anchor. One of: \code{"startDate"}, \code{"endDate"}}
-
-\item{\code{windowEnd}}{(\code{numeric(1)}: \code{0}) Offset for \code{endAnchor} in days.}
-
-\item{\code{stratify}}{(\code{logical(1)})\cr
-This will perform pairwise stratification between age, sex, and index year if set TRUE}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-\itemize{
-\item cohortName must not contain \code{-} or \code{+}. Cohort names are validated as
-(perl-compatible) regular expressions. If invalid, an informative error is
-raised.
-}
-}
-
-\subsection{Returns}{
-A \code{list} describing analysis settings. Keys include:
-\itemize{
-\item \code{cohorts}: list of cohort definitions (each item has \code{cohortId},
-\code{cohortName}, \code{type})
-\item all parameters passed to this function (same names)
-}
 }
 }
 \if{html}{\out{<hr>}}
