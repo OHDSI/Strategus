@@ -51,6 +51,7 @@ es_cm_covariate_balance,target_comparator_id,bigint,Yes,Yes,No,A foreign key ref
 es_cm_covariate_balance,outcome_id,bigint,Yes,Yes,No,The identifier for the outcome cohort.
 es_cm_covariate_balance,analysis_id,int,Yes,Yes,No,A foreign key referencing the cm_analysis table.
 es_cm_covariate_balance,covariate_id,bigint,Yes,Yes,No,A foreign key referencing the cm_covariate table.
+es_cm_covariate_balance,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
 es_cm_covariate_balance,std_diff_before,float,No,No,No,The standardized difference of the means between the target and comparator cohort before propensity score adjustment.
 es_cm_covariate_balance,std_diff_var_before,float,No,No,No,The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment.
 es_cm_covariate_balance,balanced_before,int,No,No,No,"Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"
@@ -60,6 +61,7 @@ es_cm_covariate_balance,balanced_after,int,No,No,No,"Is the covariate balanced a
 es_cm_shared_covariate_balance,target_comparator_id,bigint,Yes,Yes,No,A foreign key referencing the target_comparator table.
 es_cm_shared_covariate_balance,analysis_id,int,Yes,Yes,No,A foreign key referencing the cm_analysis table.
 es_cm_shared_covariate_balance,covariate_id,bigint,Yes,Yes,No,A foreign key referencing the cm_covariate table.
+es_cm_shared_covariate_balance,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
 es_cm_shared_covariate_balance,std_diff_before,float,No,No,No,The standardized difference of the means between the target and comparator cohort before propensity score adjustment.
 es_cm_shared_covariate_balance,std_diff_var_before,float,No,No,No,The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment.
 es_cm_shared_covariate_balance,balanced_before,int,No,No,No,"Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"
