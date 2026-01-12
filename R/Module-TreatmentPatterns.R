@@ -77,7 +77,7 @@ TreatmentPatternsModule <- R6::R6Class(
       resultAppend <- FALSE
 
       passedPathways <- integer(0)
-      if (executionSettings$incremental && file.exists(file.path(workFolder, "passed_pathway_runs.csv")) && dir.exists(resultsFolder)) {
+      if (isTRUE(executionSettings$incremental) && file.exists(file.path(workFolder, "passed_pathway_runs.csv")) && dir.exists(resultsFolder)) {
         passedDf <- readr::read_csv(
           file = file.path(workFolder, "passed_pathway_runs.csv"),
           show_col_types = FALSE,
@@ -190,6 +190,11 @@ TreatmentPatternsModule <- R6::R6Class(
         }
       }
 
+      if (isFALSE(resultAppend)){
+        unlink(resultsFolder, recursive = TRUE)
+        dir.create(resultsFolder, recursive = TRUE, showWarnings = FALSE)
+      }
+
       # writes the results to csv
       for (name in names(pathwayResult)) {
         data <- pathwayResult[[name]] %>% dplyr::collect()
@@ -198,6 +203,7 @@ TreatmentPatternsModule <- R6::R6Class(
         if(name == "analysisCohorts"){
           colnames(data) <- SqlRender::camelCaseToSnakeCase(colnames(data))
         }
+
         readr::write_csv(x = data, file = file.path(resultsFolder, paste0(self$tablePrefix, snakeCaseName, ".csv")), append = resultAppend)
       }
 
