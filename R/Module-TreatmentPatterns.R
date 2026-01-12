@@ -43,7 +43,6 @@ TreatmentPatternsModule <- R6::R6Class(
       super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
-
       jobContext <- private$jobContext
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -76,9 +75,9 @@ TreatmentPatternsModule <- R6::R6Class(
 
       # checks if there are failed pathways and runs only those; if none reruns all analyses
       resultAppend <- FALSE
-      passedPathways <- integer(0)
 
-      if (file.exists(file.path(workFolder, "passed_pathway_runs.csv")) && dir.exists(resultsFolder)) {
+      passedPathways <- integer(0)
+      if (executionSettings$incremental && file.exists(file.path(workFolder, "passed_pathway_runs.csv")) && dir.exists(resultsFolder)) {
         passedDf <- readr::read_csv(
           file = file.path(workFolder, "passed_pathway_runs.csv"),
           show_col_types = FALSE,
@@ -109,13 +108,8 @@ TreatmentPatternsModule <- R6::R6Class(
           cohorts <- super$.listToDataFrame(analysis$cohorts)
 
           targets <- cohorts[cohorts$type == "target", c("cohortName", "cohortId"), drop = FALSE]
-          colnames(targets) <- c("target_cohort_name", "target_cohort_id")
 
-          events <- cohorts[cohorts$type == "event", c("cohortName", "cohortId"), drop = FALSE]
-          colnames(events) <- c("event_cohort_name", "event_cohort_id")
-
-          cohortAnalysisTable <- merge(targets, events, by = NULL) %>% dplyr::mutate("analysis_id" = analysisId)
-
+          cohortAnalysisTable <- cohorts %>% dplyr::mutate("analysisId" = analysisId)
           tryCatch(
             {
               outputEnv <- TreatmentPatterns::computePathways(
@@ -157,28 +151,28 @@ TreatmentPatternsModule <- R6::R6Class(
                 pathwayResult <- Andromeda::andromeda(
                   attrition = result$attrition,
                   metadata = result$metadata,
-                  treatment_pathways = result$treatment_pathways,
-                  summary_event_duration = result$summary_event_duration,
-                  counts_age = result$counts_age,
-                  counts_sex = result$counts_sex,
-                  counts_year = result$counts_year,
-                  cdm_source_info = result$cdm_source_info,
+                  treatmentPathways = result$treatment_pathways,
+                  summaryEventDuration = result$summary_event_duration,
+                  countsAge = result$counts_age,
+                  countsSex = result$counts_sex,
+                  countsYear = result$counts_year,
+                  cdmSourceInfo = result$cdm_source_info,
                   analyses = result$analyses,
                   arguments = result$arguments,
-                  analysis_cohorts = cohortAnalysisTable
+                  analysisCohorts = cohortAnalysisTable
                 )
               } else {
                 Andromeda::appendToTable(pathwayResult$attrition, result$attrition)
                 Andromeda::appendToTable(pathwayResult$metadata, result$metadata)
-                Andromeda::appendToTable(pathwayResult$treatment_pathways, result$treatment_pathways)
-                Andromeda::appendToTable(pathwayResult$summary_event_duration, result$summary_event_duration)
-                Andromeda::appendToTable(pathwayResult$counts_age, result$counts_age)
-                Andromeda::appendToTable(pathwayResult$counts_sex, result$counts_sex)
-                Andromeda::appendToTable(pathwayResult$counts_year, result$counts_year)
-                Andromeda::appendToTable(pathwayResult$cdm_source_info, result$cdm_source_info)
+                Andromeda::appendToTable(pathwayResult$treatmentPathways, result$treatment_pathways)
+                Andromeda::appendToTable(pathwayResult$summaryEventDuration, result$summary_event_duration)
+                Andromeda::appendToTable(pathwayResult$countsAge, result$counts_age)
+                Andromeda::appendToTable(pathwayResult$countsSex, result$counts_sex)
+                Andromeda::appendToTable(pathwayResult$countsYear, result$counts_year)
+                Andromeda::appendToTable(pathwayResult$cdmSourceInfo, result$cdm_source_info)
                 Andromeda::appendToTable(pathwayResult$analyses, result$analyses)
                 Andromeda::appendToTable(pathwayResult$arguments, result$arguments)
-                Andromeda::appendToTable(pathwayResult$analysis_cohorts, cohortAnalysisTable)
+                Andromeda::appendToTable(pathwayResult$analysisCohorts, cohortAnalysisTable)
               }
 
               private$.errorHandler(file = file.path(workFolder, "passed_pathway_runs.csv"), analysisId = analysisId, targets = targets, message = "passed")
@@ -199,7 +193,12 @@ TreatmentPatternsModule <- R6::R6Class(
       # writes the results to csv
       for (name in names(pathwayResult)) {
         data <- pathwayResult[[name]] %>% dplyr::collect()
-        readr::write_csv(x = data, file = file.path(resultsFolder, paste0(self$tablePrefix, name, ".csv")), append = resultAppend)
+        snakeCaseName = SqlRender::camelCaseToSnakeCase(name)
+
+        if(name == "analysisCohorts"){
+          colnames(data) <- SqlRender::camelCaseToSnakeCase(colnames(data))
+        }
+        readr::write_csv(x = data, file = file.path(resultsFolder, paste0(self$tablePrefix, snakeCaseName, ".csv")), append = resultAppend)
       }
 
       # HACK: Append the database_id to all exported results
@@ -302,13 +301,6 @@ TreatmentPatternsModule <- R6::R6Class(
     #'  \item{cohortName `character(1)`}{Cohort names of the cohorts to be used in the cohort table.}
     #'  \item{type `character(1)` \["target", "event', "exit"\]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
     #' }
-    #' @param targetCohorts (`list()`)\cr
-    #' List of target cohorts in list-of-lists form:
-    #' e.g. `list(list(1, "Hypertension"), list(2, "Diabetes"))`.Each inner list must contain `cohortId` (integer) and `cohortName` (string)
-    #' @param eventCohorts (`list()`)\cr
-    #' Same structure as `targetCohorts`. These cohorts are treated as events/treatments
-    #' @param exitCohorts (`list()`)\cr
-    #' Same structure; if provided these are treated as exit cohorts
     #' @param description (`character(1)`)
     #' Description for analysis
     #' @param minEraDuration (`integer(1)`: `0`)\cr
@@ -366,10 +358,7 @@ TreatmentPatternsModule <- R6::R6Class(
     #' @param stratify (`logical(1)`)\cr
     #' This will perform pairwise stratification between age, sex, and index year if set TRUE
     createModuleSpecifications = function(analysisId = 1,
-                                          cohorts = NULL,
-                                          targetCohorts = NULL,
-                                          eventCohorts = NULL,
-                                          exitCohorts = NULL,
+                                          cohorts,
                                           description = "",
                                           includeTreatments = NULL,
                                           indexDateOffset = NULL,
@@ -399,30 +388,6 @@ TreatmentPatternsModule <- R6::R6Class(
         warning("`includeTreatments` is deprecated in TreatentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
       }
 
-      if (is.null(cohorts) && (is.null(targetCohorts) | is.null(eventCohorts))) {
-        stop(sprintf("specify cohort or targetCohorts and eventCohorts"))
-      }
-
-      # construct cohorts
-      if (is.null(cohorts)) {
-        targetCohorts <- as.data.frame(do.call(rbind, targetCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "target")
-        eventCohorts <- as.data.frame(do.call(rbind, eventCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "event")
-        exitCohorts <- if (length(exitCohorts) > 0) {
-          exitCohorts <- as.data.frame(do.call(rbind, exitCohorts), stringsAsFactors = FALSE) %>% dplyr::mutate(type = "exit")
-        }
-
-        if (!is.null(exitCohorts) && nrow(exitCohorts) > 0) {
-          cohorts <- dplyr::bind_rows(targetCohorts, eventCohorts, exitCohorts)
-        } else {
-          cohorts <- dplyr::bind_rows(targetCohorts, eventCohorts)
-        }
-
-        colnames(cohorts) <- c("cohortId", "cohortName", "type")
-        cohorts$cohortId <- as.integer(cohorts$cohortId)
-        cohorts$cohortName <- as.character(cohorts$cohortName)
-        cohorts$type <- as.character(cohorts$type)
-      }
-
       # validate user input
       for (cohort in cohorts$cohortName) {
         tryCatch(
@@ -449,7 +414,7 @@ TreatmentPatternsModule <- R6::R6Class(
       analysis[["cohorts"]] <- super$.dataFrameToList(cohorts)
 
       for (name in names(formals(self$createModuleSpecifications))) {
-        if (!(name %in% c("cohorts", "targetCohorts", "eventCohorts", "exitCohorts"))) {
+        if (!(name %in% c("cohorts"))) {
           analysis[[name]] <- get(name)
         }
       }

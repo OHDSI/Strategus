@@ -8,7 +8,6 @@ test_that("TreatmentPatterns Backwards Compatibility ", {
   on.exit(unlink(tempDir, recursive = TRUE))
 
   testSettings <- generateCohortTable()
-
   tp <- Strategus::TreatmentPatternsModule$new()
 
   modSpec <- tp$createModuleSpecifications(
@@ -121,55 +120,20 @@ test_that("TreatmentPatterns execute single analysis", {
 
 test_that("Bad Cohort Names", {
   skip_if(!require("TreatmentPatterns", quietly = TRUE, character.only = TRUE, warn.conflicts = FALSE))
-
-  tempDir <- file.path(tempdir(), "Strategus-TP")
-  on.exit(unlink(tempDir, recursive = TRUE))
-
-  testSettings <- generateCohortTable()
   tp <- Strategus::TreatmentPatternsModule$new()
+
+
+  testTable1 <- data.frame(
+    cohortId = c(8,1,3,0),
+    cohortName = c("Viral+Sinusitis", "+Acetaminophen", "Aspirin-", "Death"),
+    type = c("target", "event", "event", "exit")
+  )
 
   expect_error(
     modSpecs <- list(
       tp$createModuleSpecifications(
         analysisId = 8,
-        targetCohorts = list(
-          list(8, "Viral+Sinusitis")
-        ),
-        eventCohorts = list(
-          list(1, "Acetaminophen"),
-          list(3, "Aspirin"),
-          list(6, "Doxylamin")
-        ),
-        exitCohorts = list(
-          list(8, "death")
-        ),
-        startAnchor = "startDate",
-        windowStart = 0,
-        endAnchor = "endDate",
-        windowEnd = 0,
-        minEraDuration = 7,
-        splitEventCohorts = NULL,
-        splitTime = NULL,
-        eraCollapseSize = 14,
-        combinationWindow = 7,
-        minPostCombinationDuration = 7,
-        filterTreatments = "First",
-        maxPathLength = 5
-      ),
-      tp$createModuleSpecifications(
-        analysisId = 10,
-        targetCohorts = list(
-          list(8, "ViralSinusitis")
-        ),
-        eventCohorts = list(
-          list(1, "Acetaminophen"),
-          list(3, "Aspirin"),
-          list(6, "Doxy-lamin"),
-          list(7, "Penicil+linV")
-        ),
-        exitCohorts = list(
-          list(8, "death")
-        ),
+        cohorts = testTable1,
         startAnchor = "startDate",
         windowStart = 0,
         endAnchor = "endDate",
@@ -186,53 +150,20 @@ test_that("Bad Cohort Names", {
     ),
     "Invalid target cohort name 'Viral\\+Sinusitis': Invalid target cohort name; remove -/\\+"
   )
-
-  expect_error(
-    modSpecs <- list(
-      tp$createModuleSpecifications(
-        analysisId = 8,
-        targetCohorts = list(
-          list(8, "ViralSinusitis")
-        ),
-        eventCohorts = NULL,
-        exitCohorts = list(
-          list(8, "death")
-        ),
-        startAnchor = "startDate",
-        windowStart = 0,
-        endAnchor = "endDate",
-        windowEnd = 0,
-        minEraDuration = 7,
-        splitEventCohorts = NULL,
-        splitTime = NULL,
-        eraCollapseSize = 14,
-        combinationWindow = 7,
-        minPostCombinationDuration = 7,
-        filterTreatments = "First",
-        maxPathLength = 5
-      )
-    ),
-    "specify cohort or targetCohorts and eventCohorts"
-  )
 })
 
 test_that("Unique Analysis Ids", {
-  tp <- Strategus::TreatmentPatternsModule$new()
+  skip_if(!require("TreatmentPatterns", quietly = TRUE, character.only = TRUE, warn.conflicts = FALSE))
 
+  tempDir <- file.path(tempdir(), "Strategus-TP")
+  on.exit(unlink(tempDir, recursive = TRUE))
+
+  testSettings <- generateCohortTable()
+  tp <- Strategus::TreatmentPatternsModule$new()
 
   modSpecs <- list(
     tp$createModuleSpecifications(
-      targetCohorts = list(
-        list(8, "ViralSinusitis")
-      ),
-      eventCohorts = list(
-        list(1, "Acetaminophen"),
-        list(3, "Aspirin"),
-        list(6, "Doxylamin")
-      ),
-      exitCohorts = list(
-        list(8, "death")
-      ),
+      cohorts = testSettings$cohorts,
       startAnchor = "startDate",
       windowStart = 0,
       endAnchor = "endDate",
@@ -247,18 +178,7 @@ test_that("Unique Analysis Ids", {
       maxPathLength = 5
     ),
     tp$createModuleSpecifications(
-      targetCohorts = list(
-        list(8, "ViralSinusitis")
-      ),
-      eventCohorts = list(
-        list(1, "Acetaminophen"),
-        list(3, "Aspirin"),
-        list(6, "Doxylamin"),
-        list(7, "PenicillinV")
-      ),
-      exitCohorts = list(
-        list(8, "death")
-      ),
+      cohorts = testSettings$cohorts,
       startAnchor = "startDate",
       windowStart = 0,
       endAnchor = "endDate",
@@ -273,11 +193,11 @@ test_that("Unique Analysis Ids", {
       maxPathLength = 5
     )
   )
-
   expect_error(
     tp$createMultiAnalysisModuleSpecification(tpAnalysisList = modSpecs),
     "Each analysis need unique id"
   )
+
 })
 
 test_that("TreatmentPatterns: execute method with multiple analysis", {
@@ -292,14 +212,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
   modSpecs <- list(
     tp$createModuleSpecifications(
       analysisId = 8,
-      targetCohorts = list(
-        list(8, "ViralSinusitis")
-      ),
-      eventCohorts = list(
-        list(1, "Acetaminophen"),
-        list(3, "Aspirin"),
-        list(6, "Doxylamin")
-      ),
+      cohorts = testSettings$cohorts,
       startAnchor = "startDate",
       windowStart = 0,
       endAnchor = "endDate",
@@ -315,16 +228,7 @@ test_that("TreatmentPatterns: execute method with multiple analysis", {
     ),
     tp$createModuleSpecifications(
       analysisId = 10,
-      targetCohorts = list(
-        list(8, "ViralSinusitis")
-      ),
-      eventCohorts = list(
-        list(1, "Acetaminophen"),
-        list(7, "PenicillinV")
-      ),
-      exitCohorts = list(
-        list(8, "death")
-      ),
+      cohorts = testSettings$cohorts,
       includeTreatments = "startDate",
       indexDateOffset = 0,
       minEraDuration = 7,
@@ -386,14 +290,7 @@ test_that("TreatmentPatterns: pathway failed", {
   modSpecs <- list(
     tp$createModuleSpecifications(
       analysisId = 8,
-      targetCohorts = list(
-        list(8, "ViralSinusitis")
-      ),
-      eventCohorts = list(
-        list(1, "Acetaminophen"),
-        list(3, "Aspirin"),
-        list(6, "Doxylamin")
-      ),
+      cohorts = testSettings$cohorts,
       startAnchor = "startDate",
       windowStart = 0,
       endAnchor = "endDate",

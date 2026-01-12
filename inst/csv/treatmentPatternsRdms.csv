@@ -3,9 +3,9 @@ analyses,analysis_id,int,Yes,Yes,Analysis identifier
 analyses,description,varchar,Yes,No,Analysis description
 arguments,analysis_id,int,Yes,Yes,Analysis identifier
 arguments,arguments,varchar,No,No,Arguments as JSON
-arguments,database_id,varchar,Yes,No,Unique identifier for the database
+arguments,database_id,varchar,Yes,Yes,Unique identifier for the database
 attrition,analysis_id,int,Yes,Yes,Analysis identifier foreign key
-attrition,database_id,varchar,Yes,No,Unique identifier for the database
+attrition,database_id,varchar,Yes,Yes,Unique identifier for the database
 attrition,number_records,int,Yes,No,Number of records
 attrition,number_subjects,int,Yes,No,Number of subjects
 attrition,reason,varchar,Yes,Yes,Reason description
@@ -28,18 +28,18 @@ cdm_source_info,source_release_date,date,Yes,No,Source release date
 cdm_source_info,vocabulary_version,varchar,Yes,No,Vocabulary version
 counts_age,age,int,Yes,Yes,Age in years
 counts_age,analysis_id,int,Yes,Yes,Analysis identifier foreign key
-counts_age,database_id,varchar,Yes,No,Unique identifier for the database
+counts_age,database_id,varchar,Yes,Yes,Unique identifier for the database
 counts_age,n,varchar,Yes,No,Count per age. May be <x
 counts_age,target_cohort_id,int,No,Yes,Target cohort ID
 counts_age,target_cohort_name,varchar,No,No,Target cohort name
 counts_sex,analysis_id,int,Yes,Yes,Analysis identifier foreign key
-counts_sex,database_id,varchar,Yes,No,Unique identifier for the database
+counts_sex,database_id,varchar,Yes,Yes,Unique identifier for the database
 counts_sex,n,varchar,Yes,No,Count per sex. May be <x
 counts_sex,sex,varchar,Yes,Yes,Sex group
 counts_sex,target_cohort_id,int,No,Yes,Target cohort ID
 counts_sex,target_cohort_name,varchar,No,No,Target cohort name
 counts_year,analysis_id,int,Yes,Yes,Analysis identifier foreign key
-counts_year,database_id,varchar,Yes,No,Unique identifier for the database
+counts_year,database_id,varchar,Yes,Yes,Unique identifier for the database
 counts_year,n,varchar,Yes,No,Count per year. May be <x
 counts_year,target_cohort_id,int,No,Yes,Target cohort ID
 counts_year,target_cohort_name,varchar,No,No,Target cohort name
@@ -54,7 +54,7 @@ metadata,r_version,varchar,Yes,No,R version
 summary_event_duration,analysis_id,int,Yes,Yes,Analysis identifier foreign key
 summary_event_duration,duration_average,float,Yes,No,Average duration in days
 summary_event_duration,event_count,int,Yes,No,Count of (combination) event
-summary_event_duration,database_id,varchar,Yes,No,Unique identifier for the database
+summary_event_duration,database_id,varchar,Yes,Yes,Unique identifier for the database
 summary_event_duration,event_name,varchar,Yes,Yes,Name of (combination) event
 summary_event_duration,line,varchar,Yes,Yes,Position in pathway. I.e. 1 equals the first event in a pathway. 2 the second etc. Overall indicates across the entire pathway
 summary_event_duration,duration_max,int,Yes,No,Maximum duration in days
@@ -65,17 +65,17 @@ summary_event_duration,duration_q_2,int,Yes,No,Q2 duration in days
 summary_event_duration,duration_sd,float,Yes,No,Standard Deviation of duration in days
 summary_event_duration,target_cohort_id,int,No,Yes,Target cohort ID
 summary_event_duration,target_cohort_name,varchar,No,No,Target cohort name
-treatment_pathways,age,varchar,Yes,No,Age stratum
+treatment_pathways,age,varchar,Yes,Yes,Age stratum
 treatment_pathways,analysis_id,int,Yes,Yes,Analysis identifier foreign key
-treatment_pathways,database_id,varchar,Yes,No,Unique identifier for the database
+treatment_pathways,database_id,varchar,Yes,Yes,Unique identifier for the database
 treatment_pathways,freq,int,Yes,No,Count of pathway
-treatment_pathways,index_year,varchar,Yes,No,Target index year stratum
+treatment_pathways,index_year,varchar,Yes,Yes,Target index year stratum
 treatment_pathways,pathway,varchar,Yes,Yes,Pathway
-treatment_pathways,sex,varchar,Yes,No,Sex stratum
+treatment_pathways,sex,varchar,Yes,Yes,Sex stratum
 treatment_pathways,target_cohort_id,int,No,Yes,Target cohort ID
 treatment_pathways,target_cohort_name,varchar,No,No,Target cohort name
-analysis_cohorts,target_cohort_name,varchar,No,No,Target cohort name
-analysis_cohorts,target_cohort_id,int,Yes,Yes,Target cohort Id
-analysis_cohorts,event_cohort_name,varchar,No,No,Event cohort name
-analysis_cohorts,event_cohort_id,int,Yes,Yes,Event cohort Id
-analysis_cohorts,analysis_id,int,Yes,Yes,Analysis identifier foreign key
+analysis_cohorts,cohort_id,varchar,No,Yes,Cohort id
+analysis_cohorts,cohort_name,int,Yes,No,Cohort name
+analysis_cohorts,type,varchar,No,Yes,"Cohort type (target, event, exit)"
+analysis_cohorts,analysis_id,int,Yes,Yes,Analysis Id
+,,,,,
