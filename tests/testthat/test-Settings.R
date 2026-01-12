@@ -6,7 +6,7 @@ test_that("Test analysis specification creation", {
     sqlFolder = system.file("testdata/sql", package = "Strategus")
   )
   subsetOperations <- list(
-    createDemographicSubset(
+    createDemographicSubsetOperator(
       name = "Demographic Criteria",
       ageMin = 18,
       ageMax = 64
@@ -150,7 +150,7 @@ test_that("Test analysis specification creation", {
     covariateSettings = covarSettings
   )
 
-  createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(
+  createStudyPopulationArgs <- CohortMethod::createCreateStudyPopulationArgs(
     minDaysAtRisk = 1,
     riskWindowStart = 0,
     startAnchor = "cohort start",
@@ -173,7 +173,7 @@ test_that("Test analysis specification creation", {
     analysisId = 1,
     description = "No matching, simple outcome model",
     getDbCohortMethodDataArgs = getDbCmDataArgs,
-    createStudyPopArgs = createStudyPopArgs,
+    createStudyPopulationArgs = createStudyPopulationArgs,
     fitOutcomeModelArgs = fitOutcomeModelArgs
   )
 
@@ -181,7 +181,7 @@ test_that("Test analysis specification creation", {
     analysisId = 2,
     description = "Matching on ps and covariates, simple outcomeModel",
     getDbCohortMethodDataArgs = getDbCmDataArgs,
-    createStudyPopArgs = createStudyPopArgs,
+    createStudyPopulationArgs = createStudyPopulationArgs,
     createPsArgs = createPsArgs,
     matchOnPsArgs = matchOnPsArgs,
     computeSharedCovariateBalanceArgs = computeSharedCovBalArgs,
@@ -193,10 +193,19 @@ test_that("Test analysis specification creation", {
 
   analysesToExclude <- NULL
 
-  cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
+  cmAnalysesSpecifications <- CohortMethod::createCmAnalysesSpecifications(
     cmAnalysisList = cmAnalysisList,
     targetComparatorOutcomesList = targetComparatorOutcomesList,
-    analysesToExclude = analysesToExclude
+    analysesToExclude = analysesToExclude,
+    refitPsForEveryOutcome = FALSE,
+    refitPsForEveryStudyPopulation = FALSE,
+    cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds(
+      easeThreshold = 0.60 # setting this higher to get passes given Eunomia limitations on neg controls
+    )
+  )
+
+  cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
+    cmAnalysesSpecifications = cmAnalysesSpecifications$toList()
   )
 
   # EvidenceSythesis ------------------

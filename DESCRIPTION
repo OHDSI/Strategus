@@ -15,7 +15,7 @@ Description: Coordinate and execute large scale analytics using OHDSI Health
   modules.
 Depends:
 	R (>= 4.2.0),
-	CohortGenerator (>= 0.11.0),
+	CohortGenerator (>= 1.0.0),
 	DatabaseConnector (>= 6.2.3),
   R6
 Imports:
@@ -34,7 +34,7 @@ Suggests:
   CirceR,
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
-  CohortMethod,
+  CohortMethod (>= 6.0.0),
   Cyclops (>= 3.6.0),
   Eunomia,
   EvidenceSynthesis (>= 1.0.0),
@@ -52,13 +52,13 @@ Suggests:
 Remotes:
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod
+  ohdsi/CohortMethod@version_6
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 NeedsCompilation: no
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-US

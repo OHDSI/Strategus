@@ -82,7 +82,7 @@ cohortDefinitionSet <- cohortDefinitionSet[, names(CohortGenerator::createEmptyC
 cohortDefinitionSet <- appendTreatmentPatternsCohorts(cohortDefinitionSet)
 
 subsetOperations <- list(
-  createDemographicSubset(
+  createDemographicSubsetOperator(
     name = "Age 18 to 64",
     ageMin = 18,
     ageMax = 64
@@ -97,7 +97,7 @@ cohortDefinitionSet <- cohortDefinitionSet |>
   addCohortSubsetDefinition(subsetDef,
                             targetCohortIds = c(1,2))
 
-subsetOperations <- list(CohortGenerator::createLimitSubset(
+subsetOperations <- list(CohortGenerator::createLimitSubsetOperator(
   name = 'first event with 365 prior obs',
   priorTime = 365,
   limitTo = 'firstEver'
@@ -115,12 +115,12 @@ cohortDefinitionSet <- cohortDefinitionSet |>
       )
 
 subsetOperations <- list(
-  createDemographicSubset(
+  createDemographicSubsetOperator(
     name = "Age 18 to 64",
     ageMin = 18,
     ageMax = 64
   ),
-  CohortGenerator::createLimitSubset(
+  CohortGenerator::createLimitSubsetOperator(
   name = 'first event with 365 prior obs',
   priorTime = 365,
   limitTo = 'firstEver'
@@ -279,7 +279,7 @@ getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(
   covariateSettings = covarSettings
 )
 
-createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(
+createStudyPopulationArgs <- CohortMethod::createCreateStudyPopulationArgs(
   minDaysAtRisk = 1,
   riskWindowStart = 0,
   startAnchor = "cohort start",
@@ -302,7 +302,7 @@ cmAnalysis1 <- CohortMethod::createCmAnalysis(
   analysisId = 1,
   description = "No matching, simple outcome model",
   getDbCohortMethodDataArgs = getDbCmDataArgs,
-  createStudyPopArgs = createStudyPopArgs,
+  createStudyPopulationArgs = createStudyPopulationArgs,
   fitOutcomeModelArgs = fitOutcomeModelArgs
 )
 
@@ -310,7 +310,7 @@ cmAnalysis2 <- CohortMethod::createCmAnalysis(
   analysisId = 2,
   description = "Matching on ps and covariates, simple outcomeModel",
   getDbCohortMethodDataArgs = getDbCmDataArgs,
-  createStudyPopArgs = createStudyPopArgs,
+  createStudyPopulationArgs = createStudyPopulationArgs,
   createPsArgs = createPsArgs,
   matchOnPsArgs = matchOnPsArgs,
   computeSharedCovariateBalanceArgs = computeSharedCovBalArgs,
@@ -322,20 +322,19 @@ cmAnalysisList <- list(cmAnalysis1, cmAnalysis2)
 
 analysesToExclude <- NULL
 
-cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
+cmAnalysesSpecifications <- CohortMethod::createCmAnalysesSpecifications(
   cmAnalysisList = cmAnalysisList,
   targetComparatorOutcomesList = targetComparatorOutcomesList,
   analysesToExclude = analysesToExclude,
   refitPsForEveryOutcome = FALSE,
   refitPsForEveryStudyPopulation = FALSE,
   cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds(
-    mdrrThreshold = Inf,
-    easeThreshold = 0.60, # setting this higher to get passes given Eunomia limitations on neg controls
-    sdmThreshold = 0.1,
-    equipoiseThreshold = 0.2,
-    generalizabilitySdmThreshold = 1 # NOTE using default here
+    easeThreshold = 0.60 # setting this higher to get passes given Eunomia limitations on neg controls
   )
+)
 
+cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
+  cmAnalysesSpecifications = cmAnalysesSpecifications$toList()
 )
 
 # EvidenceSythesis ------------------
