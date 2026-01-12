@@ -74,7 +74,7 @@ treatment_pathways,pathway,varchar,Yes,Yes,Pathway
 treatment_pathways,sex,varchar,Yes,Yes,Sex stratum
 treatment_pathways,target_cohort_id,int,No,Yes,Target cohort ID
 treatment_pathways,target_cohort_name,varchar,No,No,Target cohort name
-analysis_cohorts,cohort_id,varchar,No,Yes,Cohort id
-analysis_cohorts,cohort_name,int,Yes,No,Cohort name
+analysis_cohorts,cohort_id,int,No,Yes,Cohort id
+analysis_cohorts,cohort_name,varchar,Yes,No,Cohort name
 analysis_cohorts,type,varchar,No,Yes,"Cohort type (target, event, exit)"
 analysis_cohorts,analysis_id,int,Yes,Yes,Analysis Id
