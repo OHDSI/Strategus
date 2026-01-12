@@ -78,4 +78,3 @@ analysis_cohorts,cohort_id,varchar,No,Yes,Cohort id
 analysis_cohorts,cohort_name,int,Yes,No,Cohort name
 analysis_cohorts,type,varchar,No,Yes,"Cohort type (target, event, exit)"
 analysis_cohorts,analysis_id,int,Yes,Yes,Analysis Id
-,,,,,
