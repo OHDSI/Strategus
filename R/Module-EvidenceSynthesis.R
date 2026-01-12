@@ -503,7 +503,6 @@ EvidenceSynthesisModule <- R6::R6Class(
             return(sdmFamilyWiseMinP >  esDiagnosticThresholds$sdmAlpha)
           }
         }
-
         diagnostics <- diagnostics |>
           inner_join(balanceDiagnostics, by = join_by("targetComparatorId", "outcomeId", "analysisId")) |>
           inner_join(sharedBalanceDiagnostics, by = join_by("targetComparatorId", "analysisId")) |>
@@ -514,7 +513,7 @@ EvidenceSynthesisModule <- R6::R6Class(
           )) |>
           mutate(sharedBalanceDiagnostic = case_when(
             is.na(.data$sharedMaxSdm) | is.null(esDiagnosticThresholds$sdmThreshold) ~ "NOT EVALUATED",
-            passBalance(sharedMaxSdm$maxSdm, .data$sharedSdmFamilyWiseMinP) ~ "PASS",
+            passBalance(.data$sharedMaxSdm, .data$sharedSdmFamilyWiseMinP) ~ "PASS",
             TRUE ~ "FAIL"
           )) |>
           mutate(unblind = ifelse(.data$unblind == 1 &
@@ -1085,40 +1084,6 @@ EvidenceSynthesisModule <- R6::R6Class(
       fileName <- file.path(resultsFolder, "es_cm_covariate.csv")
       private$.writeToCsv(covariates, fileName, append = TRUE)
     },
-    .metaAnalyzeSingleCovariate = function(group, shared = FALSE) {
-      group <- group |>
-        filter(!is.na(.data$stdDiffVarAfter))
-      if (nrow(group) == 0) {
-        return(NULL)
-      }
-      metaBefore <- meta::metagen(group$stdDiffBefore,
-                                  sqrt(group$stdDiffVarBefore),
-                                  control = list(iter.max = 1000))
-      metaAfter <- meta::metagen(group$stdDiffAfter,
-                                 sqrt(group$stdDiffVarAfter),
-                                 control = list(iter.max = 1000))
-      row <- tibble(
-        targetComparatorId = group$targetComparatorId[1],
-        analysisId = group$analysisId[1],
-        covariateId = group$covariateId[1],
-        stdDiffBefore = metaBefore$TE.random,
-        stdDiffVarBefore = metaBefore$seTE.random,
-        stdDiffAfter = metaAfter$TE.random,
-        stdDiffVarAfter = metaAfter$seTE.random
-      )
-      if (!shared) {
-        row$outcomeId <- group$outcomeId[1]
-      }
-      return(row)
-    },
-    .computeBalanceP = function(sdm, sdmVariance, threshold) {
-      zUpper <- (abs(sdm) - threshold) / sqrt(sdmVariance)
-      pUpper <- pnorm(zUpper, lower.tail = FALSE)
-      zLower <- (-abs(sdm) - threshold) / sqrt(sdmVariance)
-      pLower <- pnorm(zLower, lower.tail = TRUE)
-      p <- pUpper + pLower
-      return(p)
-    },
     .metaAnalyzeBalance = function(connection,
                                    databaseSchema,
                                    evidenceSynthesisSource,
@@ -1198,7 +1163,15 @@ EvidenceSynthesisModule <- R6::R6Class(
                    .data$covariateId) |>
           group_split()
       }
-      balance <- ParallelLogger::clusterApply(cluster, groups, private$.metaAnalyzeSingleCovariate, shared = shared)
+      balance <- NULL
+      # There appears to be considerable overhead for every function call by clusterApply. So batching jobs
+      # to have fewer calls.
+      batches <- split(
+        groups,
+        ceiling(seq_along(groups) / 100)
+      )
+      groups <- NULL
+      balance <- ParallelLogger::clusterApply(cluster, batches, .metaAnalyzeCovariateBatch, shared = shared)
       balance <- bind_rows(balance) |>
         mutate(evidenceSynthesisAnalysisId = !!evidenceSynthesisAnalysisId)
       threshold <- esDiagnosticThresholds$sdmThreshold
@@ -1208,8 +1181,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         balance$beforeP <- 1
         balance$afterP <- 1
       } else {
-        balance$beforeP <- private$.computeBalanceP(balance$stdDiffBefore, balance$stdDiffVarBefore, threshold)
-        balance$afterP <- private$.computeBalanceP(balance$stdDiffAfter, balance$stdDiffVarAfter, threshold)
+        balance$beforeP <- .computeBalanceP(balance$stdDiffBefore, balance$stdDiffVarBefore, threshold)
+        balance$afterP <- .computeBalanceP(balance$stdDiffAfter, balance$stdDiffVarAfter, threshold)
 
         alpha <- esDiagnosticThresholds$sdmAlpha
         if (is.null(alpha)) {
@@ -1225,14 +1198,14 @@ EvidenceSynthesisModule <- R6::R6Class(
           group_by(.data$targetComparatorId,
                    .data$analysisId) |>
           summarise(sharedMaxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
-                    sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * min(.data$afterP, na.rm = TRUE))
+                    sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
       } else {
         balanceDiagnostic <- balance |>
           group_by(.data$targetComparatorId,
                    .data$outcomeId,
                    .data$analysisId) |>
           summarise(maxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
-                    sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * min(.data$afterP, na.rm = TRUE))
+                    sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
       }
       balance <- balance |>
         select(-"beforeP", -"afterP")
@@ -1277,3 +1250,86 @@ EvidenceSynthesisModule <- R6::R6Class(
     }
   )
 )
+
+.metaAnalyzeCovariateBatch <- function(batch, shared = FALSE) {
+  balance <- lapply(batch, .metaAnalyzeSingleCovariate, shared = shared)
+  balance <- bind_rows(balance)
+  return(balance)
+}
+
+.metaAnalyzeSingleCovariate <- function(group, shared = FALSE) {
+  if (nrow(group) == 1) {
+    row <- group |>
+      select("targetComparatorId",
+             "analysisId",
+             "covariateId",
+             "stdDiffBefore",
+             "stdDiffBefore",
+             "stdDiffAfter",
+             "stdDiffVarAfter")
+  } else {
+
+    groupBefore <- group |>
+      filter(!is.na(.data$stdDiffVarBefore) & .data$stdDiffVarBefore != 0)
+    if (nrow(groupBefore) == 0) {
+      stdDiffBefore <- NA
+      stdDiffVarBefore <- NA
+    } else if (nrow(groupBefore == 1)) {
+      stdDiffBefore <- groupBefore$stdDiffBefore
+      stdDiffVarBefore <- groupBefore$stdDiffVarBefore
+    } else {
+      metaBefore <- metafor::rma(yi = groupBefore$stdDiffBefore,
+                                 vi = groupBefore$stdDiffVarBefore,
+                                 control = list(iter.max = 1000))
+      stdDiffBefore <- metaBefore$beta
+      stdDiffVarBefore <- metaBefore$se ^ 2
+    }
+
+    groupAfter <- group |>
+      filter(!is.na(.data$stdDiffVarAfter) & .data$stdDiffVarAfter != 0)
+    if (nrow(groupAfter) == 0) {
+      stdDiffAfter <- NA
+      stdDiffVarAfter <- NA
+    } else if (nrow(groupAfter == 1)) {
+      stdDiffAfter <- groupAfter$stdDiffAfter
+      stdDiffVarAfter <- groupAfter$stdDiffVarAfter
+    } else {
+      metaAfter <- metafor::rma(yi = groupAfter$stdDiffAfter,
+                                 vi = groupAfter$stdDiffVarAfter,
+                                 control = list(iter.max = 1000))
+      stdDiffAfter <- metaAfter$beta
+      stdDiffVarAfter <- metaAfter$se ^ 2
+    }
+    row <- tibble(
+      targetComparatorId = group$targetComparatorId[1],
+      analysisId = group$analysisId[1],
+      covariateId = group$covariateId[1],
+      stdDiffBefore = stdDiffBefore,
+      stdDiffVarBefore = stdDiffVarBefore,
+      stdDiffAfter = stdDiffAfter,
+      stdDiffVarAfter = stdDiffVarAfter
+    )
+  }
+  if (!shared) {
+    row$outcomeId <- group$outcomeId[1]
+  }
+  return(row)
+}
+
+.computeBalanceP <- function(sdm, sdmVariance, threshold) {
+  zUpper <- (abs(sdm) - threshold) / sqrt(sdmVariance)
+  pUpper <- pnorm(zUpper, lower.tail = FALSE)
+  zLower <- (-abs(sdm) - threshold) / sqrt(sdmVariance)
+  pLower <- pnorm(zLower, lower.tail = TRUE)
+  p <- pUpper + pLower
+  return(p)
+}
+
+.minOrNa <- function(x) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0) {
+    return(as.numeric(NA))
+  } else {
+    return(as.numeric(min(x)))
+  }
+}

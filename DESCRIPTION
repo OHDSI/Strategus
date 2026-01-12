@@ -39,6 +39,7 @@ Suggests:
   Eunomia,
   EvidenceSynthesis (>= 1.0.0),
   meta,
+  metafor,
   FeatureExtraction,
   fs,
   knitr,
