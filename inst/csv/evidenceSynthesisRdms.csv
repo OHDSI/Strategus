@@ -3,8 +3,7 @@ es_analysis,evidence_synthesis_analysis_id,int,Yes,Yes,No,A unique identifier fo
 es_analysis,evidence_synthesis_description,varchar(255),Yes,No,No,A description of the evidence synthesis analysis.
 es_analysis,source_method,varchar(100),Yes,No,No,The method used to produce the source estimates (e.g. 'CohortMethod').
 es_analysis,definition,varchar,Yes,No,No,A JSON string representing the settings of the evidence synthesis analysis.
-es_cm_diagnostics_summary,target_id,int,Yes,Yes,No,The identifier for the target cohort.
-es_cm_diagnostics_summary,comparator_id,int,Yes,Yes,No,The identifier for the comparator cohort.
+es_cm_diagnostics_summary,target_comparator_id,bigint,Yes,Yes,No,A foreign key referencing the target_comparator table.
 es_cm_diagnostics_summary,outcome_id,int,Yes,Yes,No,The identifier for the outcome cohort.
 es_cm_diagnostics_summary,analysis_id,int,Yes,Yes,No,A unique identifier for the cohort method analysis.
 es_cm_diagnostics_summary,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
@@ -12,13 +11,18 @@ es_cm_diagnostics_summary,mdrr,float,No,No,No,The minimum detectable relative ri
 es_cm_diagnostics_summary,i_2,float,No,No,No,The I2 statistics for heterogeneity.
 es_cm_diagnostics_summary,tau,float,No,No,No,The estimated tau (standard deviation of the random-effects distribution).
 es_cm_diagnostics_summary,ease,float,No,No,No,The expected absolute systematic error.
+es_cm_diagnostics_summary,max_sdm,float,No,No,No,The maximum absolute standardized difference of mean.
+es_cm_diagnostics_summary,sdm_family_wise_min_p,float,No,No,No,The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold.
+es_cm_diagnostics_summary,shared_max_sdm,float,No,No,No,The maximum absolute standardized difference of mean of the shared balance (shared across outcomes).
+es_cm_diagnostics_summary,shared_sdm_family_wise_min_p,float,No,No,No,The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold for the shared balance (across all outcomes).
 es_cm_diagnostics_summary,mdrr_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the MDRR diagnostic.
 es_cm_diagnostics_summary,i_2_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the I2 diagnostic.
-es_cm_diagnostics_summary,tau_diagnostic,varchar(13),Yes,No,No,PPASS/ NOT EVALUATED / FAIL classification of the tau diagnostic.
+es_cm_diagnostics_summary,tau_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the tau diagnostic.
 es_cm_diagnostics_summary,ease_diagnostic,varchar(13),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the EASE diagnostic.
+es_cm_diagnostics_summary,balance_diagnostic,varchar(20),Yes,No,No,PASS/ NOT EVALUATED / FAIL  classification of the balance diagnostic (max_sdm).
+es_cm_diagnostics_summary,shared_balance_diagnostic,varchar(20),Yes,No,No,PASS/ NOT EVALUATED / FAIL classification of the shared balance diagnostic (shared_max_sdm).
 es_cm_diagnostics_summary,unblind,int,Yes,No,No,"Is unblinding the result recommended? (1 = yes, 0 = no)"
-es_cm_result,target_id,int,Yes,Yes,No,The identifier for the target cohort.
-es_cm_result,comparator_id,int,Yes,Yes,No,The identifier for the comparator cohort.
+es_cm_result,target_comparator_id,bigint,Yes,Yes,No,A foreign key referencing the target_comparator table.
 es_cm_result,outcome_id,int,Yes,Yes,No,The identifier for the outcome cohort.
 es_cm_result,analysis_id,int,Yes,Yes,No,A unique identifier for the cohort method analysis.
 es_cm_result,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
@@ -43,6 +47,31 @@ es_cm_result,calibrated_p,float,No,No,No,The calibrated two-sided p-value.
 es_cm_result,calibrated_one_sided_p,float,No,No,No,The calibrated one-sided p-value considering the null hypothesis of RR <= 1.
 es_cm_result,calibrated_log_rr,float,No,No,No,The log of the calibrated relative risk.
 es_cm_result,calibrated_se_log_rr,float,No,No,No,The standard error of the log of the calibrated relative risk.
+es_cm_covariate_balance,target_comparator_id,bigint,Yes,Yes,No,A foreign key referencing the target_comparator table.
+es_cm_covariate_balance,outcome_id,bigint,Yes,Yes,No,The identifier for the outcome cohort.
+es_cm_covariate_balance,analysis_id,int,Yes,Yes,No,A foreign key referencing the cm_analysis table.
+es_cm_covariate_balance,covariate_id,bigint,Yes,Yes,No,A foreign key referencing the cm_covariate table.
+es_cm_covariate_balance,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_cm_covariate_balance,std_diff_before,float,No,No,No,The standardized difference of the means between the target and comparator cohort before propensity score adjustment.
+es_cm_covariate_balance,std_diff_var_before,float,No,No,No,The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment.
+es_cm_covariate_balance,balanced_before,int,No,No,No,"Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"
+es_cm_covariate_balance,std_diff_after,float,No,No,No,The standardized difference of the means between the target and comparator cohort after propensity score adjustment.
+es_cm_covariate_balance,std_diff_var_after,float,No,No,No,The variance of the standardized difference of the means between the target and comparator cohort after propensity score adjustment.
+es_cm_covariate_balance,balanced_after,int,No,No,No,"Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)"
+es_cm_shared_covariate_balance,target_comparator_id,bigint,Yes,Yes,No,A foreign key referencing the target_comparator table.
+es_cm_shared_covariate_balance,analysis_id,int,Yes,Yes,No,A foreign key referencing the cm_analysis table.
+es_cm_shared_covariate_balance,covariate_id,bigint,Yes,Yes,No,A foreign key referencing the cm_covariate table.
+es_cm_shared_covariate_balance,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_cm_shared_covariate_balance,std_diff_before,float,No,No,No,The standardized difference of the means between the target and comparator cohort before propensity score adjustment.
+es_cm_shared_covariate_balance,std_diff_var_before,float,No,No,No,The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment.
+es_cm_shared_covariate_balance,balanced_before,int,No,No,No,"Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"
+es_cm_shared_covariate_balance,std_diff_after,float,No,No,No,The standardized difference of the means between the target and comparator cohort after propensity score adjustment.
+es_cm_shared_covariate_balance,std_diff_var_after,float,No,No,No,The variance of the standardized difference of the means between the target and comparator cohort after propensity score adjustment.
+es_cm_shared_covariate_balance,balanced_after,int,No,No,No,"Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)"
+es_cm_covariate,covariate_id,bigint,Yes,Yes,No,A unique identified for a covariate.
+es_cm_covariate,covariate_name,varchar,Yes,No,No,"A name for a covariate, e.g. 'Age group: 20-25 years'."
+es_cm_covariate,analysis_id,int,Yes,Yes,No,Foreign key referencing the cm_analysis table.
+es_cm_covariate,covariate_analysis_id,int,Yes,No,No,Foreign key referencing the cm_covariate_analysis table.
 es_sccs_diagnostics_summary,exposures_outcome_set_id,int,Yes,Yes,No,A foreign key referencing the sccs_exposures_outcome_set table.
 es_sccs_diagnostics_summary,covariate_id,int,Yes,Yes,No,A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest.
 es_sccs_diagnostics_summary,analysis_id,int,Yes,Yes,No,A unique identifier for the cohort method analysis.
