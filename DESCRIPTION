@@ -58,7 +58,7 @@ VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 NeedsCompilation: no
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-US
