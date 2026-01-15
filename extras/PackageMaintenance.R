@@ -216,21 +216,42 @@ ciModuleSpecifications <- ciModuleSettingsCreator$createModuleSpecifications(
 
 # Treatment Patterns --------------------
 treatmentPatternsCohorts <- getTreatmentPatternsCohorts(cohortDefinitionSet)
+treatmentPatternsCohorts <- treatmentPatternsCohorts |>
+  dplyr::filter(cohortId < 1000) # Remove subgroup cohorts with invalid names
 tpModuleSettingsCreator <- TreatmentPatternsModule$new()
-tpModuleSpecifications <- tpModuleSettingsCreator$createModuleSpecifications(
-  cohorts = treatmentPatternsCohorts,
-  startAnchor = "startDate",
-  windowStart = 0,
-  endAnchor = "endDate",
-  windowEnd = 0,
-  minEraDuration = 7,
-  splitEventCohorts = NULL,
-  splitTime = NULL,
-  eraCollapseSize = 14,
-  combinationWindow = 7,
-  minPostCombinationDuration = 7,
-  filterTreatments = "First",
-  maxPathLength = 5
+tpModuleSpecifications <- tpModuleSettingsCreator$createMultiAnalysisModuleSpecification(
+  tpAnalysisList = list(
+    tpModuleSettingsCreator$createModuleSpecifications(
+      analysisId = 1,
+      cohorts = treatmentPatternsCohorts,
+      startAnchor = "startDate",
+      windowStart = 0,
+      endAnchor = "endDate",
+      windowEnd = 0,
+      minEraDuration = 7,
+      splitEventCohorts = NULL,
+      splitTime = NULL,
+      eraCollapseSize = 14,
+      combinationWindow = 7,
+      minPostCombinationDuration = 7,
+      filterTreatments = "First",
+      maxPathLength = 5
+    ),
+    tpModuleSettingsCreator$createModuleSpecifications(
+      analysisId = 2,
+      cohorts = treatmentPatternsCohorts,
+      startAnchor = "startDate",
+      windowStart = 0,
+      minEraDuration = 7,
+      splitEventCohorts = NULL,
+      splitTime = NULL,
+      eraCollapseSize = 14,
+      combinationWindow = 7,
+      minPostCombinationDuration = 7,
+      filterTreatments = "First",
+      maxPathLength = 5
+    )
+  )
 )
 
 # Cohort Method ----------------------

@@ -35,6 +35,16 @@ createResultDataModel <- function(analysisSpecifications,
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  # Set up logging
+  if (!dir.exists(dirname(resultsDataModelSettings$logFileName))) {
+    dir.create(dirname(resultsDataModelSettings$logFileName), recursive = T)
+  }
+  ParallelLogger::addDefaultFileLogger(
+    name = "STRATEGUS_LOGGER",
+    fileName = resultsDataModelSettings$logFileName
+  )
+  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
+
   # Used to keep track of the execution status
   executionStatus <- list()
 
@@ -98,6 +108,16 @@ uploadResults <- function(analysisSpecifications,
   checkmate::assertClass(resultsDataModelSettings, "ResultsDataModelSettings", add = errorMessages)
   checkmate::assertClass(resultsConnectionDetails, "ConnectionDetails", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
+
+  # Set up logging
+  if (!dir.exists(dirname(resultsDataModelSettings$logFileName))) {
+    dir.create(dirname(resultsDataModelSettings$logFileName), recursive = T)
+  }
+  ParallelLogger::addDefaultFileLogger(
+    name = "STRATEGUS_LOGGER",
+    fileName = resultsDataModelSettings$logFileName
+  )
+  on.exit(ParallelLogger::unregisterLogger("STRATEGUS_LOGGER"))
 
   # Used to keep track of the execution status
   executionStatus <- list()

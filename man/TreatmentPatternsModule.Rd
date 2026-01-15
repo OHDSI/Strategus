@@ -174,10 +174,7 @@ Creates the TreatmentPatternsnModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
   analysisId = 1,
-  cohorts = NULL,
-  targetCohorts = NULL,
-  eventCohorts = NULL,
-  exitCohorts = NULL,
+  cohorts,
   description = "",
   includeTreatments = NULL,
   indexDateOffset = NULL,
@@ -215,16 +212,6 @@ Data frame containing the following columns and data types:
 \item{cohortName \code{character(1)}}{Cohort names of the cohorts to be used in the cohort table.}
 \item{type \code{character(1)} ["target", "event', "exit"]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
 }}
-
-\item{\code{targetCohorts}}{(\code{list()})\cr
-List of target cohorts in list-of-lists form:
-e.g. \code{list(list(1, "Hypertension"), list(2, "Diabetes"))}.Each inner list must contain \code{cohortId} (integer) and \code{cohortName} (string)}
-
-\item{\code{eventCohorts}}{(\code{list()})\cr
-Same structure as \code{targetCohorts}. These cohorts are treated as events/treatments}
-
-\item{\code{exitCohorts}}{(\code{list()})\cr
-Same structure; if provided these are treated as exit cohorts}
 
 \item{\code{description}}{(\code{character(1)})
 Description for analysis}
