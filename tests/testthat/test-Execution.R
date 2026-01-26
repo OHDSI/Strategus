@@ -66,7 +66,7 @@ test_that("Execute study, upload results, excute results modules and upload resu
     resultsFolder = executionSettings$resultsFolder
   )
 
-  # Create cdm modules results data model -------------------------
+  # Create results data model -------------------------
   cdmModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
       package = "Strategus"
@@ -103,22 +103,6 @@ test_that("Execute study, upload results, excute results modules and upload resu
     connectionDetails = resultsConnectionDetails,
     analysisSpecifications = resultsModulesAnalysisSpecifications,
     executionSettings = resultsExecutionSettings
-  )
-
-  # Create the results data model ------
-  resultsDataModelSettings <- Strategus::createResultsDataModelSettings(
-    resultsDatabaseSchema = "main",
-    resultsFolder = resultsExecutionSettings$resultsFolder
-  )
-
-  # NOTE: This will throw a warning since the database metadata
-  # does not exist
-  expect_warning(
-    Strategus::createResultDataModel(
-      analysisSpecifications = resultsModulesAnalysisSpecifications,
-      resultsDataModelSettings = resultsDataModelSettings,
-      resultsConnectionDetails = resultsConnectionDetails
-    )
   )
 
   # Upload the results -------------

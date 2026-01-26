@@ -68,6 +68,22 @@ unlink("inst/doc/WorkingWithResults.tex")
 # Run pkgdown to verify there are no site build errors ---------
 pkgdown::build_site()
 
+# Create a list of all modules in this package -----------------
+packageCodeFiles <- list.files("./R")
+moduleList <- packageCodeFiles[startsWith(packageCodeFiles, "Module-")]
+moduleList <- substring(moduleList, first = nchar("Module-") + 1)
+moduleList <- sub("\\.[Rr]$", "", moduleList)
+moduleList <- paste0(moduleList, "Module")
+# Removing PLP Validation since its results data model is the same
+# as PLP
+moduleList <- moduleList[!moduleList %in% c("PatientLevelPredictionValidationModule")]
+CohortGenerator::writeCsv(
+  x = data.frame(module = moduleList),
+  file = "./inst/csv/hadesModuleList.csv",
+  warnOnFileNameCaseMismatch = FALSE
+)
+
+
 # Produce a study analysis specification for testing -----------
 library(Strategus)
 source("tests/testthat/helper-TreatmentPatterns.R") # Needed for creating settings
