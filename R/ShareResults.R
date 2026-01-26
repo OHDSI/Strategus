@@ -22,6 +22,8 @@ zipResults <- function(resultsFolder, zipFile) {
     recursive = TRUE,
     full.names = TRUE
   )
+  oldWd <- setwd(resultsFolder)
+  on.exit(setwd(oldWd))
   DatabaseConnector::createZipFile(
     zipFile = zipFile,
     files = files,

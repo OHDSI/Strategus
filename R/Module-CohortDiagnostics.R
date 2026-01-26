@@ -90,7 +90,7 @@ CohortDiagnosticsModule <- R6::R6Class(
 
       # TODO: This is something CD does differently.
       # Find the results zip file in the results sub folder
-      resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+      resultsFolder <- normalizePath(private$jobContext$moduleExecutionSettings$resultsSubFolder)
       zipFiles <- list.files(
         path = resultsFolder,
         pattern = "\\.zip$",
@@ -101,6 +101,8 @@ CohortDiagnosticsModule <- R6::R6Class(
         zipFileName <- zipFiles[1]
       } else {
         # Create a zip file from the results in the directory
+        oldWd <- setwd(resultsFolder)
+        on.exit(setwd(oldWd))
         DatabaseConnector::createZipFile(
           zipFile = "results.zip",
           files = list.files(resultsFolder, pattern = ".*\\.csv$"),
