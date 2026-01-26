@@ -15,7 +15,7 @@ Description: Coordinate and execute large scale analytics using OHDSI Health
   modules.
 Depends:
 	R (>= 4.2.0),
-	CohortGenerator (>= 0.11.0),
+	CohortGenerator (>= 1.0.0),
 	DatabaseConnector (>= 6.2.3),
   R6
 Imports:
