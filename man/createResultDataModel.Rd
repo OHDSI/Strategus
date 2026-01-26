@@ -21,7 +21,7 @@ is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
 }
 \description{
-Use this at the study design stage to create data models for modules
-This functions loads modules and executes any custom code to create
-the results data model in the specified schema in the results database.
+This functions create the results data model in the specified schema in the
+results database. The results data model is used to hold the study results
+and must be created before using [@seealso \code{\link[=uploadResults]{uploadResults()}}]
 }
