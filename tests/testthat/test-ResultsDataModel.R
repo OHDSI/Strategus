@@ -1,6 +1,6 @@
 test_that("Create results data model with subset of modules specified emits warning", {
   # Create a results DB and upload results
-  dbFilePath <- file.path(tempDir, "EunomiaTestStudy")
+  dbFilePath <- file.path(tempDir, "testrdm.sqlite")
   mydb <- dbConnect(RSQLite::SQLite(), dbFilePath)
   dbDisconnect(mydb)
 
