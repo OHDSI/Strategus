@@ -1275,7 +1275,7 @@ EvidenceSynthesisModule <- R6::R6Class(
     if (nrow(groupBefore) == 0) {
       group[filtBefore, "stdDiffBefore"] <- NA
       group[filtBefore, "stdDiffVarBefore"] <- NA
-    } else if (nrow(groupBefore == 1)) {
+    } else if (nrow(groupBefore) == 1) {
       group[filtBefore, "stdDiffBefore"] <- groupBefore$stdDiffBefore
       group[filtBefore, "stdDiffVarBefore"] <- groupBefore$stdDiffVarBefore
     } else {
@@ -1284,6 +1284,7 @@ EvidenceSynthesisModule <- R6::R6Class(
 							 control = list(iter.max = 1000))
 	  group[filtBefore, "stdDiffBefore"] <- metaBefore$beta
 	  group[filtBefore, "stdDiffVarBefore"] <- metaBefore$se ^ 2
+	  group[!filtBefore, c("stdDiffBefore", "stdDiffVarBefore")] <- c(NA, NA)
     }
 	
 	filtAfter <- (!is.na(group$stdDiffVarAfter) & group$stdDiffVarAfter != 0)
@@ -1292,7 +1293,7 @@ EvidenceSynthesisModule <- R6::R6Class(
     if (nrow(groupAfter) == 0) {
       group[filtAfter, "stdDiffAfter"] <- NA
       group[filtAfter, "stdDiffVarAfter"] <- NA
-    } else if (nrow(groupAfter == 1)) {
+    } else if (nrow(groupAfter) == 1) {
       group[filtAfter, "stdDiffAfter"] <- groupAfter$stdDiffAfter
       group[filtAfter, "stdDiffVarAfter"] <- groupAfter$stdDiffVarAfter
     } else {
@@ -1301,8 +1302,8 @@ EvidenceSynthesisModule <- R6::R6Class(
                                  control = list(iter.max = 1000))
       group[filtAfter, "stdDiffAfter"] <- metaAfter$beta
       group[filtAfter, "stdDiffVarAfter"] <- metaAfter$se ^ 2
+	  group[!filtAfter, c("stdDiffAfter", "stdDiffVarAfter")] <- c(NA, NA)
     }
-	
 	row <- tibble(
 	  targetComparatorId = group$targetComparatorId[1],
 	  analysisId = group$analysisId[1],
