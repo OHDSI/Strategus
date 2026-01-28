@@ -169,16 +169,20 @@ getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
   rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder), "resultsDataModelSpecification.csv")
 
   if (!file.exists(rdmsFile)) {
-    rdmsFile <- .getDatabaseMetaDataRdms()
+    rdmsSchemaDefintion <- .getDatabaseMetaDataRdms()
+    sql <- ResultModelManager::generateSqlSchema(
+      schemaDefinition = rdmsSchemaDefintion
+    )
+  } else {
+    # Create the SQL from the resultsDataModelSpecification.csv
+    sql <- ResultModelManager::generateSqlSchema(
+      csvFilepath = rdmsFile
+    )
   }
   rlang::inform("Creating results data model for database metadata")
   connection <- DatabaseConnector::connect(resultsConnectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
-  # Create the SQL from the resultsDataModelSpecification.csv
-  sql <- ResultModelManager::generateSqlSchema(
-    csvFilepath = rdmsFile
-  )
   sql <- SqlRender::render(
     sql = sql,
     database_schema = resultsDataModelSettings$resultsDatabaseSchema
