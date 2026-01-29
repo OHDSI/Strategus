@@ -1316,6 +1316,15 @@ EvidenceSynthesisModule <- R6::R6Class(
   return(row)
 }
 
+.computeBalanceP <- function(sdm, sdmVariance, threshold) {
+  zUpper <- (abs(sdm) - threshold) / sqrt(sdmVariance)
+  pUpper <- pnorm(zUpper, lower.tail = FALSE)
+  zLower <- (-abs(sdm) - threshold) / sqrt(sdmVariance)
+  pLower <- pnorm(zLower, lower.tail = TRUE)
+  p <- pUpper + pLower
+  return(p)
+}
+
 .minOrNa <- function(x) {
   x <- x[!is.na(x)]
   if (length(x) == 0) {
