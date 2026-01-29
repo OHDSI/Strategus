@@ -1268,65 +1268,52 @@ EvidenceSynthesisModule <- R6::R6Class(
              "stdDiffAfter",
              "stdDiffVarAfter")
   } else {
-	
-	filtBefore <- (!is.na(group$stdDiffVarBefore) & group$stdDiffVarBefore != 0)
+
     groupBefore <- group |>
-      filter(filtBefore)
+      filter(!is.na(.data$stdDiffVarBefore) & .data$stdDiffVarBefore != 0)
     if (nrow(groupBefore) == 0) {
-      group[filtBefore, "stdDiffBefore"] <- NA
-      group[filtBefore, "stdDiffVarBefore"] <- NA
+      stdDiffBefore <- NA
+      stdDiffVarBefore <- NA
     } else if (nrow(groupBefore) == 1) {
-      group[filtBefore, "stdDiffBefore"] <- groupBefore$stdDiffBefore
-      group[filtBefore, "stdDiffVarBefore"] <- groupBefore$stdDiffVarBefore
+      stdDiffBefore <- groupBefore$stdDiffBefore
+      stdDiffVarBefore <- groupBefore$stdDiffVarBefore
     } else {
-	  metaBefore <- metafor::rma(yi = groupBefore$stdDiffBefore,
-							 vi = groupBefore$stdDiffVarBefore,
-							 control = list(iter.max = 1000))
-	  group[filtBefore, "stdDiffBefore"] <- metaBefore$beta
-	  group[filtBefore, "stdDiffVarBefore"] <- metaBefore$se ^ 2
-	  group[!filtBefore, c("stdDiffBefore", "stdDiffVarBefore")] <- c(NA, NA)
+      metaBefore <- metafor::rma(yi = groupBefore$stdDiffBefore,
+                                 vi = groupBefore$stdDiffVarBefore,
+                                 control = list(iter.max = 1000))
+      stdDiffBefore <- metaBefore$beta
+      stdDiffVarBefore <- metaBefore$se ^ 2
     }
-	
-	filtAfter <- (!is.na(group$stdDiffVarAfter) & group$stdDiffVarAfter != 0)
+
     groupAfter <- group |>
-      filter(filtAfter)
+      filter(!is.na(.data$stdDiffVarAfter) & .data$stdDiffVarAfter != 0)
     if (nrow(groupAfter) == 0) {
-      group[filtAfter, "stdDiffAfter"] <- NA
-      group[filtAfter, "stdDiffVarAfter"] <- NA
+      stdDiffAfter <- NA
+      stdDiffVarAfter <- NA
     } else if (nrow(groupAfter) == 1) {
-      group[filtAfter, "stdDiffAfter"] <- groupAfter$stdDiffAfter
-      group[filtAfter, "stdDiffVarAfter"] <- groupAfter$stdDiffVarAfter
+      stdDiffAfter <- groupAfter$stdDiffAfter
+      stdDiffVarAfter <- groupAfter$stdDiffVarAfter
     } else {
       metaAfter <- metafor::rma(yi = groupAfter$stdDiffAfter,
                                  vi = groupAfter$stdDiffVarAfter,
                                  control = list(iter.max = 1000))
-      group[filtAfter, "stdDiffAfter"] <- metaAfter$beta
-      group[filtAfter, "stdDiffVarAfter"] <- metaAfter$se ^ 2
-	  group[!filtAfter, c("stdDiffAfter", "stdDiffVarAfter")] <- c(NA, NA)
+      stdDiffAfter <- metaAfter$beta
+      stdDiffVarAfter <- metaAfter$se ^ 2
     }
-	row <- tibble(
-	  targetComparatorId = group$targetComparatorId[1],
-	  analysisId = group$analysisId[1],
-	  covariateId = group$covariateId[1],
-	  stdDiffBefore = group$stdDiffBefore,
-	  stdDiffVarBefore = group$stdDiffVarBefore,
-	  stdDiffAfter = group$stdDiffAfter,
-	  stdDiffVarAfter = group$stdDiffVarAfter
-	)
+    row <- tibble(
+      targetComparatorId = group$targetComparatorId[1],
+      analysisId = group$analysisId[1],
+      covariateId = group$covariateId[1],
+      stdDiffBefore = stdDiffBefore,
+      stdDiffVarBefore = stdDiffVarBefore,
+      stdDiffAfter = stdDiffAfter,
+      stdDiffVarAfter = stdDiffVarAfter
+    )
   }
   if (!shared) {
     row$outcomeId <- group$outcomeId[1]
   }
   return(row)
-}
-
-.computeBalanceP <- function(sdm, sdmVariance, threshold) {
-  zUpper <- (abs(sdm) - threshold) / sqrt(sdmVariance)
-  pUpper <- pnorm(zUpper, lower.tail = FALSE)
-  zLower <- (-abs(sdm) - threshold) / sqrt(sdmVariance)
-  pLower <- pnorm(zLower, lower.tail = TRUE)
-  p <- pUpper + pLower
-  return(p)
 }
 
 .minOrNa <- function(x) {
