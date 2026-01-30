@@ -1281,7 +1281,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       metaBefore <- metafor::rma(yi = groupBefore$stdDiffBefore,
                                  vi = groupBefore$stdDiffVarBefore,
                                  control = list(iter.max = 1000))
-      stdDiffBefore <- metaBefore$beta
+      stdDiffBefore <- metaBefore$beta[1, 1]
       stdDiffVarBefore <- metaBefore$se ^ 2
     }
 
@@ -1297,7 +1297,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       metaAfter <- metafor::rma(yi = groupAfter$stdDiffAfter,
                                  vi = groupAfter$stdDiffVarAfter,
                                  control = list(iter.max = 1000))
-      stdDiffAfter <- metaAfter$beta
+      stdDiffAfter <- metaAfter$beta[1, 1]
       stdDiffVarAfter <- metaAfter$se ^ 2
     }
     row <- tibble(
