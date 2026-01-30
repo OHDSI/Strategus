@@ -1304,10 +1304,10 @@ EvidenceSynthesisModule <- R6::R6Class(
       targetComparatorId = group$targetComparatorId[1],
       analysisId = group$analysisId[1],
       covariateId = group$covariateId[1],
-      stdDiffBefore = stdDiffBefore[1],
-      stdDiffVarBefore = stdDiffVarBefore[1],
-      stdDiffAfter = stdDiffAfter[1],
-      stdDiffVarAfter = stdDiffVarAfter[1]
+      stdDiffBefore = stdDiffBefore,
+      stdDiffVarBefore = stdDiffVarBefore,
+      stdDiffAfter = stdDiffAfter,
+      stdDiffVarAfter = stdDiffVarAfter
     )
   }
   if (!shared) {
