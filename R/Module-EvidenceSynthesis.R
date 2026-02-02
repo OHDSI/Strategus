@@ -1274,14 +1274,21 @@ EvidenceSynthesisModule <- R6::R6Class(
     if (nrow(groupBefore) == 0) {
       stdDiffBefore <- NA
       stdDiffVarBefore <- NA
-    } else if (nrow(groupBefore == 1)) {
+    } else if (nrow(groupBefore) == 1) {
       stdDiffBefore <- groupBefore$stdDiffBefore
       stdDiffVarBefore <- groupBefore$stdDiffVarBefore
     } else {
-      metaBefore <- metafor::rma(yi = groupBefore$stdDiffBefore,
-                                 vi = groupBefore$stdDiffVarBefore,
-                                 control = list(iter.max = 1000))
-      stdDiffBefore <- metaBefore$beta
+      metaBefore <- tryCatch(
+        {
+          metafor::rma(yi = groupBefore$stdDiffBefore,
+                       vi = groupBefore$stdDiffVarBefore,
+                       control = list(iter.max = 2000))
+        }, error = function(e) {
+          warning(e$message)
+          return(list(beta = matrix(NA), se = NA))
+        }
+      )
+      stdDiffBefore <- metaBefore$beta[1, 1]
       stdDiffVarBefore <- metaBefore$se ^ 2
     }
 
@@ -1290,14 +1297,21 @@ EvidenceSynthesisModule <- R6::R6Class(
     if (nrow(groupAfter) == 0) {
       stdDiffAfter <- NA
       stdDiffVarAfter <- NA
-    } else if (nrow(groupAfter == 1)) {
+    } else if (nrow(groupAfter) == 1) {
       stdDiffAfter <- groupAfter$stdDiffAfter
       stdDiffVarAfter <- groupAfter$stdDiffVarAfter
     } else {
-      metaAfter <- metafor::rma(yi = groupAfter$stdDiffAfter,
-                                 vi = groupAfter$stdDiffVarAfter,
-                                 control = list(iter.max = 1000))
-      stdDiffAfter <- metaAfter$beta
+      metaAfter <- tryCatch(
+        {
+          metafor::rma(yi = groupAfter$stdDiffBefore,
+                       vi = groupAfter$stdDiffVarBefore,
+                       control = list(iter.max = 2000))
+        }, error = function(e) {
+          warning(e$message)
+          return(list(beta = matrix(NA), se = NA))
+        }
+      )
+      stdDiffAfter <- metaAfter$beta[1, 1]
       stdDiffVarAfter <- metaAfter$se ^ 2
     }
     row <- tibble(
