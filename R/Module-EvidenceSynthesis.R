@@ -504,8 +504,8 @@ EvidenceSynthesisModule <- R6::R6Class(
           }
         }
         diagnostics <- diagnostics |>
-          inner_join(balanceDiagnostics, by = join_by("targetComparatorId", "outcomeId", "analysisId")) |>
-          inner_join(sharedBalanceDiagnostics, by = join_by("targetComparatorId", "analysisId")) |>
+          left_join(balanceDiagnostics, by = join_by("targetComparatorId", "outcomeId", "analysisId")) |>
+          left_join(sharedBalanceDiagnostics, by = join_by("targetComparatorId", "analysisId")) |>
           mutate(balanceDiagnostic = case_when(
             is.na(.data$maxSdm) | is.null(esDiagnosticThresholds$sdmThreshold) ~ "NOT EVALUATED",
             passBalance(.data$maxSdm, .data$sdmFamilyWiseMinP) ~ "PASS",
@@ -1150,68 +1150,85 @@ EvidenceSynthesisModule <- R6::R6Class(
         as_tibble()
 
       if (shared) {
-        groups <- balance |>
-          group_by(.data$targetComparatorId,
-                   .data$analysisId,
-                   .data$covariateId) |>
-          group_split()
+        tableName <- "es_cm_shared_covariate_balance"
       } else {
-        groups <- balance |>
-          group_by(.data$targetComparatorId,
-                   .data$outcomeId,
-                   .data$analysisId,
-                   .data$covariateId) |>
-          group_split()
+        tableName <- "es_cm_covariate_balance"
       }
-      balance <- NULL
-      # There appears to be considerable overhead for every function call by clusterApply. So batching jobs
-      # to have fewer calls.
-      batches <- split(
-        groups,
-        ceiling(seq_along(groups) / 100)
-      )
-      groups <- NULL
-      balance <- ParallelLogger::clusterApply(cluster, batches, .metaAnalyzeCovariateBatch, shared = shared)
-      balance <- bind_rows(balance) |>
-        mutate(evidenceSynthesisAnalysisId = !!evidenceSynthesisAnalysisId)
-      threshold <- esDiagnosticThresholds$sdmThreshold
-      if (is.null(threshold)) {
-        balance$balancedBefore <-  1
-        balance$balancedAfter <-  1
-        balance$beforeP <- 1
-        balance$afterP <- 1
-      } else {
-        balance$beforeP <- .computeBalanceP(balance$stdDiffBefore, balance$stdDiffVarBefore, threshold)
-        balance$afterP <- .computeBalanceP(balance$stdDiffAfter, balance$stdDiffVarAfter, threshold)
 
-        alpha <- esDiagnosticThresholds$sdmAlpha
-        if (is.null(alpha)) {
-          balance$balancedBefore <-  if_else(abs(balance$stdDiffBefore) <= threshold, 1, 0)
-          balance$balancedAfter <-  if_else(abs(balance$stdDiffAfter) <= threshold, 1, 0)
+      if (nrow(balance) == 0) {
+        balance <- private$.createEmptyResult(tableName)
+        if (shared) {
+          balanceDiagnostic <- balance |>
+            mutate(sharedMaxSdm = NA,
+                   sharedSdmFamilyWiseMinP = NA)
         } else {
-          balance$balancedBefore <-  if_else(balance$beforeP > alpha / nrow(balance), 1, 0)
-          balance$balancedAfter <-  if_else(balance$afterP > alpha / nrow(balance), 1, 0)
+          balanceDiagnostic <- balance |>
+            mutate(maxSdm = NA,
+                   sdmFamilyWiseMinP = NA)
         }
-      }
-      if (shared) {
-        balanceDiagnostic <- balance |>
-          group_by(.data$targetComparatorId,
-                   .data$analysisId) |>
-          summarise(sharedMaxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
-                    sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
       } else {
-        balanceDiagnostic <- balance |>
-          group_by(.data$targetComparatorId,
-                   .data$outcomeId,
-                   .data$analysisId) |>
-          summarise(maxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
-                    sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
+        if (shared) {
+          groups <- balance |>
+            group_by(.data$targetComparatorId,
+                     .data$analysisId,
+                     .data$covariateId) |>
+            group_split()
+        } else {
+          groups <- balance |>
+            group_by(.data$targetComparatorId,
+                     .data$outcomeId,
+                     .data$analysisId,
+                     .data$covariateId) |>
+            group_split()
+        }
+        balance <- NULL
+        # There appears to be considerable overhead for every function call by clusterApply. So batching jobs
+        # to have fewer calls.
+        batches <- split(
+          groups,
+          ceiling(seq_along(groups) / 100)
+        )
+        groups <- NULL
+        balance <- ParallelLogger::clusterApply(cluster, batches, .metaAnalyzeCovariateBatch, shared = shared)
+        balance <- bind_rows(balance) |>
+          mutate(evidenceSynthesisAnalysisId = !!evidenceSynthesisAnalysisId)
+        threshold <- esDiagnosticThresholds$sdmThreshold
+        if (is.null(threshold)) {
+          balance$balancedBefore <-  1
+          balance$balancedAfter <-  1
+          balance$beforeP <- 1
+          balance$afterP <- 1
+        } else {
+          balance$beforeP <- .computeBalanceP(balance$stdDiffBefore, balance$stdDiffVarBefore, threshold)
+          balance$afterP <- .computeBalanceP(balance$stdDiffAfter, balance$stdDiffVarAfter, threshold)
+
+          alpha <- esDiagnosticThresholds$sdmAlpha
+          if (is.null(alpha)) {
+            balance$balancedBefore <-  if_else(abs(balance$stdDiffBefore) <= threshold, 1, 0)
+            balance$balancedAfter <-  if_else(abs(balance$stdDiffAfter) <= threshold, 1, 0)
+          } else {
+            balance$balancedBefore <-  if_else(balance$beforeP > alpha / nrow(balance), 1, 0)
+            balance$balancedAfter <-  if_else(balance$afterP > alpha / nrow(balance), 1, 0)
+          }
+        }
+        if (shared) {
+          balanceDiagnostic <- balance |>
+            group_by(.data$targetComparatorId,
+                     .data$analysisId) |>
+            summarise(sharedMaxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
+                      sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
+        } else {
+          balanceDiagnostic <- balance |>
+            group_by(.data$targetComparatorId,
+                     .data$outcomeId,
+                     .data$analysisId) |>
+            summarise(maxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
+                      sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
+        }
+        balance <- balance |>
+          select(-"beforeP", -"afterP")
       }
-      balance <- balance |>
-        select(-"beforeP", -"afterP")
-      fileName <- file.path(resultsFolder, if_else(shared,
-                                                   "es_cm_shared_covariate_balance.csv",
-                                                   "es_cm_covariate_balance.csv"))
+      fileName <- file.path(resultsFolder, paste(tableName, "csv", sep = "."))
       private$.writeToCsv(balance, fileName, append = TRUE)
       return(balanceDiagnostic)
     },
