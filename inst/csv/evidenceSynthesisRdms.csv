@@ -47,6 +47,10 @@ es_cm_result,calibrated_p,float,No,No,No,The calibrated two-sided p-value.
 es_cm_result,calibrated_one_sided_p,float,No,No,No,The calibrated one-sided p-value considering the null hypothesis of RR <= 1.
 es_cm_result,calibrated_log_rr,float,No,No,No,The log of the calibrated relative risk.
 es_cm_result,calibrated_se_log_rr,float,No,No,No,The standard error of the log of the calibrated relative risk.
+es_cm_result,pi_95_lb,float,No,No,No,The lower bound of the 95% prediction interval of the relative risk.
+es_cm_result,pi_95_ub,float,No,No,No,The upper  bound of the 95% prediction interval of the relative risk.
+es_cm_result,calibrated_pi_95_lb,float,No,No,No,The lower bound of the calibrated 95% prediction interval of the relative risk.
+es_cm_result,calibrated_pi_95_ub,float,No,No,No,The upper  bound of the calibrated 95% prediction interval of the relative risk.
 es_cm_covariate_balance,target_comparator_id,bigint,Yes,Yes,No,A foreign key referencing the target_comparator table.
 es_cm_covariate_balance,outcome_id,bigint,Yes,Yes,No,The identifier for the outcome cohort.
 es_cm_covariate_balance,analysis_id,int,Yes,Yes,No,A foreign key referencing the cm_analysis table.
@@ -112,3 +116,7 @@ es_sccs_result,calibrated_p,float,No,No,No,The calibrated two-sided p-value.
 es_sccs_result,calibrated_one_sided_p,float,No,No,No,The calibrated one-sided p-value considering the null hypothesis of RR <= 1.
 es_sccs_result,calibrated_log_rr,float,No,No,No,The log of the calibrated relative risk.
 es_sccs_result,calibrated_se_log_rr,float,No,No,No,The standard error of the log of the calibrated relative risk.
+es_sccs_result,pi_95_lb,float,No,No,No,The lower bound of the 95% prediction interval of the relative risk.
+es_sccs_result,pi_95_ub,float,No,No,No,The upper  bound of the 95% prediction interval of the relative risk.
+es_sccs_result,calibrated_pi_95_lb,float,No,No,No,The lower bound of the calibrated 95% prediction interval of the relative risk.
+es_sccs_result,calibrated_pi_95_ub,float,No,No,No,The upper  bound of the calibrated 95% prediction interval of the relative risk.

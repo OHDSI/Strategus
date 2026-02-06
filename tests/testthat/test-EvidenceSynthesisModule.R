@@ -399,6 +399,27 @@ test_that("Check MDRR values", {
   expect_true(all(!is.na(multiDbs$mdrr)))
 })
 
+test_that("Check prediction intervals", {
+  tables <- c("es_cm_result.csv", "es_sccs_result.csv")
+  for (table in tables) {
+    data <- readr::read_csv(file.path(testResultsFolder, "EvidenceSynthesisModule", table), show_col_types = FALSE) |>
+      SqlRender::snakeCaseToCamelCaseNames()
+    data <- data |>
+      filter(!is.na(pi95Lb) & !is.na(pi95Ub)) |>
+      mutate(seLogPi = (log(pi95Ub) - log(pi95Lb)) / 2 * qnorm(0.975),
+             seLogCalPi = (log(calibratedPi95Ub) - log(calibratedPi95Lb)) / 2 * qnorm(0.975))
+
+    expect_true(nrow(data) > 0)
+
+    # Prediction interval should be wider than meta-analysis:
+    expect_true(all(data$ci95Lb >= data$pi95Lb))
+    expect_true(all(data$ci95Ub <= data$pi95Ub))
+
+    # Calibrated PI should be wider than uncalibrated PI (but may be shifted, so using SE):
+    expect_true(all(data$seLogCalPi >= data$seLogPi))
+  }
+})
+
 test_that("Check covariate balance", {
   diagnosticsSummary <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_diagnostics_summary.csv"))
 

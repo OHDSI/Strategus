@@ -591,6 +591,22 @@ EvidenceSynthesisModule <- R6::R6Class(
         group$calibratedSeLogRr <- NA
         group$ease <- NA
       }
+      ncsPi <- group[!is.na(group$trueEffectSize) & group$trueEffectSize == 1 & !is.na(group$seLogPi), ]
+      if (nrow(ncs) >= 5) {
+        null <- EmpiricalCalibration::fitMcmcNull(logRr = (log(ncs$pi95Lb) + log(ncs$pi95Ub)) / 2.0, seLogRr = ncs$seLogPi)
+        model <- EmpiricalCalibration::convertNullToErrorModel(null)
+        calibratedPi <- EmpiricalCalibration::calibrateConfidenceInterval(
+          logRr = (log(group$pi95Lb) + log(group$pi95Ub)) / 2.0,
+          seLogRr = group$seLogPi,
+          model = model
+        )
+        group$calibratedPi95Lb <- exp(calibratedPi$logLb95Rr)
+        group$calibratedPi95Ub <- exp(calibratedPi$logUb95Rr)
+      } else {
+        group$calibratedPi95Lb <- NA
+        group$calibratedPi95Ub <- NA
+      }
+      group$seLogPi <- NULL
       return(group)
     },
     # row <- split(fullKeys, seq_len(nrow(fullKeys)))[[2]]
@@ -740,7 +756,10 @@ EvidenceSynthesisModule <- R6::R6Class(
               tau = NA,
               mdrr = computeMdrrFromSe(estimate$seLogRr),
               p = !!p,
-              oneSidedP = !!oneSidedP
+              oneSidedP = !!oneSidedP,
+              pi95Lb = .data$ci95Lb,
+              pi95Ub = .data$ci95Ub,
+              seLogPi = .data$seLogRr
             )
         } else if (is(analysisSettings, "RandomEffectsMetaAnalysis")) {
           m <- meta::metagen(
@@ -752,7 +771,8 @@ EvidenceSynthesisModule <- R6::R6Class(
             sm = "RR",
             level.comb = 1 - analysisSettings$alpha
           )
-          rfx <- summary(m)$random
+          s <- summary(m)
+          rfx <- s$random
           oneSidedP <- EmpiricalCalibration::computeTraditionalP(
             logRr = rfx$TE,
             seLogRr = rfx$seTE,
@@ -769,7 +789,10 @@ EvidenceSynthesisModule <- R6::R6Class(
             seLogRr = rfx$seTE,
             i2 = m$I2,
             tau = NA,
-            mdrr = computeMdrrFromSe(rfx$seTE)
+            mdrr = computeMdrrFromSe(rfx$seTE),
+            pi95Lb = exp(s$predict$lower),
+            pi95Ub = exp(s$predict$upper),
+            seLogPi = (s$predict$upper - s$predict$lower) / (2 * qnorm(0.975))
           )
         } else if (is(analysisSettings, "BayesianMetaAnalysis")) {
           args <- analysisSettings
@@ -803,7 +826,10 @@ EvidenceSynthesisModule <- R6::R6Class(
               seLogRr = .data$muSe,
               tau = .data$tau,
               i2 = NA,
-              mdrr = computeMdrrFromSe(estimate$seLogRr)
+              mdrr = computeMdrrFromSe(estimate$seLogRr),
+              pi95Lb = exp(.data$predictionInterval95Lb),
+              pi95Ub = exp(.data$predictionInterval95Ub),
+              seLogPi = (.data$predictionInterval95Ub - .data$predictionInterval95Lb) / (2 * qnorm(0.975))
             )
         }
       }
