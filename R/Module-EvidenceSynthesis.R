@@ -710,7 +710,10 @@ EvidenceSynthesisModule <- R6::R6Class(
           seLogRr = as.numeric(NA),
           i2 = as.numeric(NA),
           tau = as.numeric(NA),
-          mdrr = as.numeric(Inf)
+          mdrr = as.numeric(Inf),
+          pi95Lb = as.numeric(NA),
+          pi95Ub = as.numeric(NA),
+          seLogPi = as.numeric(NA)
         )
       } else if (nDatabases == 1) {
         estimate <- tibble(
@@ -723,7 +726,10 @@ EvidenceSynthesisModule <- R6::R6Class(
           seLogRr = subset$seLogRr,
           i2 = NA,
           tau = NA,
-          mdrr = subset$mdrr
+          mdrr = subset$mdrr,
+          pi95Lb = if (is(analysisSettings, "FixedEffectsMetaAnalysis")) subset$ci95Lb else as.numeric(NA),
+          pi95Ub = if (is(analysisSettings, "FixedEffectsMetaAnalysis")) subset$ci95Ub else as.numeric(NA),
+          seLogPi = if (is(analysisSettings, "FixedEffectsMetaAnalysis")) subset$seLogRr else as.numeric(NA)
         )
       } else {
         if (is(analysisSettings, "FixedEffectsMetaAnalysis")) {
