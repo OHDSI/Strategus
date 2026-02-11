@@ -592,8 +592,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         group$ease <- NA
       }
       ncsPi <- group[!is.na(group$trueEffectSize) & group$trueEffectSize == 1 & !is.na(group$seLogPi), ]
-      if (nrow(ncs) >= 5) {
-        null <- EmpiricalCalibration::fitMcmcNull(logRr = (log(ncs$pi95Lb) + log(ncs$pi95Ub)) / 2.0, seLogRr = ncs$seLogPi)
+      if (nrow(ncsPi) >= 5) {
+        null <- EmpiricalCalibration::fitMcmcNull(logRr = (log(ncsPi$pi95Lb) + log(ncsPi$pi95Ub)) / 2.0, seLogRr = ncsPi$seLogPi)
         model <- EmpiricalCalibration::convertNullToErrorModel(null)
         calibratedPi <- EmpiricalCalibration::calibrateConfidenceInterval(
           logRr = (log(group$pi95Lb) + log(group$pi95Ub)) / 2.0,
