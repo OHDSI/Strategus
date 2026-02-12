@@ -504,8 +504,8 @@ EvidenceSynthesisModule <- R6::R6Class(
           }
         }
         diagnostics <- diagnostics |>
-          left_join(balanceDiagnostics, by = join_by("targetComparatorId", "outcomeId", "analysisId")) |>
-          left_join(sharedBalanceDiagnostics, by = join_by("targetComparatorId", "analysisId")) |>
+          left_join(balanceDiagnostics, by = join_by("targetComparatorId", "outcomeId", "analysisId", "evidenceSynthesisAnalysisId")) |>
+          left_join(sharedBalanceDiagnostics, by = join_by("targetComparatorId", "analysisId", "evidenceSynthesisAnalysisId")) |>
           mutate(balanceDiagnostic = case_when(
             is.na(.data$maxSdm) | is.null(esDiagnosticThresholds$sdmThreshold) ~ "NOT EVALUATED",
             passBalance(.data$maxSdm, .data$sdmFamilyWiseMinP) ~ "PASS",
