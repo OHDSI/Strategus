@@ -35,6 +35,7 @@ Suggests:
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
   CohortMethod,
+  ComparatorSelectionExplorer,
   Cyclops (>= 3.6.0),
   Eunomia,
   EvidenceSynthesis (>= 1.0.0),
@@ -51,8 +52,10 @@ Suggests:
   withr
 Remotes:
   ohdsi/CohortDiagnostics,
+  ohdsi/CohortGenerator@develop,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod
+  ohdsi/CohortMethod,
+  ohdsi/ComparatorSelectionExplorer@develop
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
