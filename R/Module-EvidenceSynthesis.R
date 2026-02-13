@@ -1246,14 +1246,16 @@ EvidenceSynthesisModule <- R6::R6Class(
         if (shared) {
           balanceDiagnostic <- balance |>
             group_by(.data$targetComparatorId,
-                     .data$analysisId) |>
+                     .data$analysisId,
+                     .data$evidenceSynthesisAnalysisId) |>
             summarise(sharedMaxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
                       sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
         } else {
           balanceDiagnostic <- balance |>
             group_by(.data$targetComparatorId,
                      .data$outcomeId,
-                     .data$analysisId) |>
+                     .data$analysisId,
+                     .data$evidenceSynthesisAnalysisId) |>
             summarise(maxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
                       sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
         }
@@ -1313,7 +1315,7 @@ EvidenceSynthesisModule <- R6::R6Class(
              "analysisId",
              "covariateId",
              "stdDiffBefore",
-             "stdDiffBefore",
+             "stdDiffVarBefore",
              "stdDiffAfter",
              "stdDiffVarAfter")
   } else {
