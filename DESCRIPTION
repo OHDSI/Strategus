@@ -46,6 +46,7 @@ Suggests:
   rmarkdown,
   RSQLite,
   SelfControlledCaseSeries (>= 6.0.0),
+  SelfControlledCohort (>= 2.0.0),
   testthat (>= 3.0.0),
   TreatmentPatterns (>= 3.1.0),
   withr
