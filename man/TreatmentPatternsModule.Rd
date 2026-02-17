@@ -25,6 +25,7 @@ Characterization and description of patterns of events (cohorts). against the OM
 \item \href{#method-TreatmentPatternsModule-getResultsDataModelSpecification}{\code{TreatmentPatternsModule$getResultsDataModelSpecification()}}
 \item \href{#method-TreatmentPatternsModule-uploadResults}{\code{TreatmentPatternsModule$uploadResults()}}
 \item \href{#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}
+\item \href{#method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{\code{TreatmentPatternsModule$createMultiAnalysisModuleSpecification()}}
 \item \href{#method-TreatmentPatternsModule-validateModuleSpecifications}{\code{TreatmentPatternsModule$validateModuleSpecifications()}}
 \item \href{#method-TreatmentPatternsModule-clone}{\code{TreatmentPatternsModule$clone()}}
 }
@@ -172,7 +173,9 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Creates the TreatmentPatternsnModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
+  analysisId = 1,
   cohorts,
+  description = "",
   includeTreatments = NULL,
   indexDateOffset = NULL,
   minEraDuration = 0,
@@ -191,13 +194,17 @@ Creates the TreatmentPatternsnModule Specifications
   startAnchor = "startDate",
   windowStart = 0,
   endAnchor = "endDate",
-  windowEnd = 0
+  windowEnd = 0,
+  stratify = FALSE
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
+\item{\code{analysisId}}{(\code{numeric(1)})
+Unique identifier for the TreatmentPatterns analysis}
+
 \item{\code{cohorts}}{(\code{data.frame()})\cr
 Data frame containing the following columns and data types:
 \describe{
@@ -205,6 +212,9 @@ Data frame containing the following columns and data types:
 \item{cohortName \code{character(1)}}{Cohort names of the cohorts to be used in the cohort table.}
 \item{type \code{character(1)} ["target", "event', "exit"]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
 }}
+
+\item{\code{description}}{(\code{character(1)})
+Description for analysis}
 
 \item{\code{includeTreatments}}{(\code{character(1)}: \code{"startDate"})\cr
 \code{DEPRECATED}
@@ -276,6 +286,28 @@ the start date of the next event.}
 \item{\code{endAnchor}}{(\code{character(1)}: \code{"endDate"}) End date anchor. One of: \code{"startDate"}, \code{"endDate"}}
 
 \item{\code{windowEnd}}{(\code{numeric(1)}: \code{0}) Offset for \code{endAnchor} in days.}
+
+\item{\code{stratify}}{(\code{logical(1)})\cr
+This will perform pairwise stratification between age, sex, and index year if set TRUE}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification"></a>}}
+\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{}}}
+\subsection{Method \code{createMultiAnalysisModuleSpecification()}}{
+Runs multiple analyses using a list of analysis specification objects (as produced by\code{createModuleSpecifications}) into a single module specification
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createMultiAnalysisModuleSpecification(tpAnalysisList)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{tpAnalysisList}}{(\code{list()})\cr
+A list of analysis specification objects.
+Each element should be a list created by \code{createAnalysisSpecification}}
 }
 \if{html}{\out{</div>}}
 }
@@ -292,7 +324,7 @@ Validate the module specifications
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{moduleSpecifications}}{The CohortMethod module specifications}
+\item{\code{moduleSpecifications}}{The treatment patterns module specifications}
 }
 \if{html}{\out{</div>}}
 }

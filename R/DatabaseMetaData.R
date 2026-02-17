@@ -167,23 +167,27 @@ getCdmDatabaseMetaData <- function(cdmExecutionSettings, connectionDetails) {
 .createDatabaseMetadataResultsDataModel <- function(resultsConnectionDetails,
                                                     resultsDataModelSettings) {
   rdmsFile <- file.path(.getDatabaseMetaDataResultsFolder(resultsDataModelSettings$resultsFolder), "resultsDataModelSpecification.csv")
-  if (file.exists(rdmsFile)) {
-    rlang::inform("Creating results data model for database metadata")
-    connection <- DatabaseConnector::connect(resultsConnectionDetails)
-    on.exit(DatabaseConnector::disconnect(connection))
 
+  if (!file.exists(rdmsFile)) {
+    rdmsSchemaDefintion <- .getDatabaseMetaDataRdms()
+    sql <- ResultModelManager::generateSqlSchema(
+      schemaDefinition = rdmsSchemaDefintion
+    )
+  } else {
     # Create the SQL from the resultsDataModelSpecification.csv
     sql <- ResultModelManager::generateSqlSchema(
       csvFilepath = rdmsFile
     )
-    sql <- SqlRender::render(
-      sql = sql,
-      database_schema = resultsDataModelSettings$resultsDatabaseSchema
-    )
-    DatabaseConnector::executeSql(connection = connection, sql = sql)
-  } else {
-    warning("DatabaseMetaData not found - skipping table creation")
   }
+  rlang::inform("Creating results data model for database metadata")
+  connection <- DatabaseConnector::connect(resultsConnectionDetails)
+  on.exit(DatabaseConnector::disconnect(connection))
+
+  sql <- SqlRender::render(
+    sql = sql,
+    database_schema = resultsDataModelSettings$resultsDatabaseSchema
+  )
+  DatabaseConnector::executeSql(connection = connection, sql = sql)
 }
 
 .uploadDatabaseMetadata <- function(resultsConnectionDetails,

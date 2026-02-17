@@ -17,9 +17,9 @@
 #' Create Result Data Model
 #'
 #' @description
-#' Use this at the study design stage to create data models for modules
-#' This functions loads modules and executes any custom code to create
-#' the results data model in the specified schema in the results database.
+#' This function creates the results data model in the specified schema within
+#' the results database. The results data model is used to hold the study
+#' results and must be created before using [@seealso [uploadResults()]]
 #'
 #' @template AnalysisSpecifications
 #' @param resultsDataModelSettings The results data model settings as created using [@seealso [createResultsDataModelSettings()]]
@@ -45,19 +45,21 @@ createResultDataModel <- function(analysisSpecifications,
   )
 
   # Determine if the user has opted to subset to specific modules
-  # in the analysis specification. If so, validate that the
-  # modulesToExecute are present in the analysis specification
-  # before attempting to subset the analyses to run.
+  # in the analysis specification. If so, provide a warning since
+  # we will always create the results data model using all HADES modules
   if (length(resultsDataModelSettings$modulesToExecute) > 0) {
-    analysisSpecifications <- .subsetAnalysisSpecificationByModulesToExecute(
-      analysisSpecifications = analysisSpecifications,
-      modulesToExecute = resultsDataModelSettings$modulesToExecute
-    )
+    warning("Ignoring modulesToExecute parameter - all results tables are created by default.")
   }
 
-
-  for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
-    moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
+  allModules <- CohortGenerator::readCsv(
+    file = system.file(
+      file.path("csv", "hadesModuleList.csv"),
+      package = "Strategus",
+      mustWork = TRUE
+    )
+  )
+  for (i in 1:nrow(allModules)) {
+    moduleName <- allModules$module[i]
     moduleExecutionStatus <- .resultDataModelModuleExecution(
       moduleName = moduleName,
       functionName = "createResultsDataModel",
