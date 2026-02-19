@@ -53,7 +53,7 @@ Suggests:
 Remotes:
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod
+  ohdsi/CohortMethod,
   ohdsi/SelfControlledCohort@version-2.0.0
 License: Apache License 2.0
 VignetteBuilder: knitr
