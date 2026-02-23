@@ -12,7 +12,7 @@
 #' package evolves. This approach reduces tight coupling between Strategus and analysis modules,
 #' making the system more maintainable and allowing module developers to update their packages
 #' independently without requiring changes to the Strategus framework.
-SelfControlledCohort <- R6::R6Class(
+SelfControlledCohortModule <- R6::R6Class(
   classname = "SelfControlledCohort",
   inherit = StrategusModule,
   public = list(
@@ -107,7 +107,7 @@ SelfControlledCohort <- R6::R6Class(
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
     #' @template resultsDataModelSettings
-    #'
+    #' @param ... Additional parameters passed to the package's uploadResults function
     #' @details
     #' Delegates upload logic to the package's uploadResults function.
     #' The package handles the specifics of what data needs to be uploaded and how.
