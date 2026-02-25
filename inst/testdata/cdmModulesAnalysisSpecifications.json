@@ -253,9 +253,10 @@
               "attr_class": "dechallengeRechallengeSettings"
             }
           ],
-          "aggregateCovariateSettings": [
+          "riskFactorSettings": [
             {
               "targetIds": [1, 2, 1001, 2001],
+              "limitToFirstInNDays": [99999,99999,99999,99999],
               "minPriorObservation": 365,
               "outcomeIds": 3,
               "outcomeWashoutDays": 365,
@@ -305,107 +306,18 @@
                   "attr_fun": "getDbDefaultCovariateData"
                 }
               ],
-              "caseCovariateSettings": {
-                "temporal": false,
-                "temporalSequence": false,
-                "ConditionGroupEraDuring": true,
-                "DrugGroupEraDuring": true,
-                "ProcedureOccurrenceDuring": true,
-                "DeviceExposureDuring": true,
-                "MeasurementDuring": true,
-                "ObservationDuring": true,
-                "VisitConceptCountDuring": true,
-                "includedCovariateConceptIds": [],
-                "addDescendantsToInclude": false,
-                "excludedCovariateConceptIds": [],
-                "addDescendantsToExclude": false,
-                "includedCovariateIds": [],
-                "attr_class": "covariateSettings",
-                "attr_fun": "Characterization::getDbDuringCovariateData"
-              },
-              "casePreTargetDuration": 365,
-              "casePostOutcomeDuration": 365,
-              "extractNonCaseCovariates": true,
-              "attr_class": "aggregateCovariateSettings"
-            },
-            {
-              "targetIds": [1, 2, 1001, 2001],
-              "minPriorObservation": 365,
-              "outcomeIds": 3,
-              "outcomeWashoutDays": 365,
-              "riskWindowStart": 1,
-              "startAnchor": "cohort start",
-              "riskWindowEnd": 365,
-              "endAnchor": "cohort end",
-              "covariateSettings": [
-                {
-                  "temporal": false,
-                  "temporalSequence": false,
-                  "DemographicsGender": true,
-                  "DemographicsAge": true,
-                  "DemographicsAgeGroup": true,
-                  "DemographicsRace": true,
-                  "DemographicsEthnicity": true,
-                  "DemographicsIndexYear": true,
-                  "DemographicsIndexMonth": true,
-                  "DemographicsPriorObservationTime": true,
-                  "DemographicsPostObservationTime": true,
-                  "DemographicsTimeInCohort": true,
-                  "ConditionGroupEraLongTerm": true,
-                  "ConditionGroupEraShortTerm": true,
-                  "DrugGroupEraLongTerm": true,
-                  "DrugGroupEraShortTerm": true,
-                  "DrugGroupEraOverlapping": true,
-                  "ProcedureOccurrenceLongTerm": true,
-                  "ProcedureOccurrenceShortTerm": true,
-                  "DeviceExposureLongTerm": true,
-                  "DeviceExposureShortTerm": true,
-                  "MeasurementLongTerm": true,
-                  "MeasurementShortTerm": true,
-                  "ObservationLongTerm": true,
-                  "ObservationShortTerm": true,
-                  "VisitConceptCountLongTerm": true,
-                  "VisitConceptCountShortTerm": true,
-                  "longTermStartDays": -365,
-                  "mediumTermStartDays": -180,
-                  "shortTermStartDays": -30,
-                  "endDays": 0,
-                  "includedCovariateConceptIds": [],
-                  "addDescendantsToInclude": false,
-                  "excludedCovariateConceptIds": [],
-                  "addDescendantsToExclude": false,
-                  "includedCovariateIds": [],
-                  "attr_class": "covariateSettings",
-                  "attr_fun": "getDbDefaultCovariateData"
-                }
-              ],
-              "caseCovariateSettings": {
-                "temporal": false,
-                "temporalSequence": false,
-                "ConditionGroupEraDuring": true,
-                "DrugGroupEraDuring": true,
-                "ProcedureOccurrenceDuring": true,
-                "DeviceExposureDuring": true,
-                "MeasurementDuring": true,
-                "ObservationDuring": true,
-                "VisitConceptCountDuring": true,
-                "includedCovariateConceptIds": [],
-                "addDescendantsToInclude": false,
-                "excludedCovariateConceptIds": [],
-                "addDescendantsToExclude": false,
-                "includedCovariateIds": [],
-                "attr_class": "covariateSettings",
-                "attr_fun": "Characterization::getDbDuringCovariateData"
-              },
-              "casePreTargetDuration": 365,
-              "casePostOutcomeDuration": 365,
-              "extractNonCaseCovariates": true,
-              "attr_class": "aggregateCovariateSettings"
+              "minTargetSize": 0,
+              "minTwithOSize": 0,
+              "attr_class": "riskFactorSettings"
             }
           ],
           "attr_class": "characterizationSettings"
         },
-        "minCharacterizationMean": 0.01
+        "minCharacterizationMean": 0.01,
+        "minCovariateCount": 5,
+        "minSMD": 0.01,
+        "mode": "CohortIncidence",
+        "outputTable": "characterization_test_cohort"
       },
       "attr_class": ["ModuleSpecifications", "CharacterizationModuleSpecifications"]
     },

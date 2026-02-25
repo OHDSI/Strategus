@@ -30,7 +30,7 @@ Imports:
   rlang,
   SqlRender (>= 1.18.0)
 Suggests:
-  Characterization,
+  Characterization (>= 3.0.0),
   CirceR,
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
