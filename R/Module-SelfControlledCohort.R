@@ -13,7 +13,7 @@
 #' making the system more maintainable and allowing module developers to update their packages
 #' independently without requiring changes to the Strategus framework.
 SelfControlledCohortModule <- R6::R6Class(
-  classname = "SelfControlledCohort",
+  classname = "SelfControlledCohortModule",
   inherit = StrategusModule,
   public = list(
     #' @field tablePrefix The table prefix for results tables
