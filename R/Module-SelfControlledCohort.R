@@ -110,14 +110,19 @@ SelfControlledCohortModule <- R6::R6Class(
     #' The package handles the specifics of what data needs to be uploaded and how.
     uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings, ...) {
       super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
+      jobContext <- private$jobContext
+      exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
 
-      # Direct delegation to package function
-      SelfControlledCohort::uploadResults(
-        connectionDetails = resultsConnectionDetails,
-        resultsFolder = private$jobContext$moduleExecutionSettings$resultsSubFolder,
-        schema = resultsDataModelSettings$resultsDatabaseSchema,
-        ...
+      analysisSettings <- jobContext$settings$parameters$analysisSettings
+      resultsFolders <- SelfControlledCohort::getResultsFolders(analysisSettings, exportFolder)
+      lapply(resultsFolders, function(resultsFolder) {
+        SelfControlledCohort::uploadResults(connectionDetails = resultsConnectionDetails,
+                                            resultsFolder = resultsFolder,
+                                            schema = resultsDataModelSettings$resultsDatabaseSchema,
+                                            ...)
+        }
       )
+
     },
 
     #' @description Creates the SelfControlledCohort Module Specifications
