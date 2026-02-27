@@ -41,6 +41,7 @@ SelfControlledCohortModule <- R6::R6Class(
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
       jobContext <- private$jobContext
+      exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       # Delegate to the package's execute function
       # The package handles all logic including version checking, parameter validation,
       # and actual analysis execution. This wrapper doesn't need to know about those details.
@@ -48,10 +49,9 @@ SelfControlledCohortModule <- R6::R6Class(
         connectionDetails = connectionDetails,
         executionSettings = executionSettings,
         analysisSpecifications = jobContext$settings$parameters,
-        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
+        exportFolder = exportFolder
       )
-
-      exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
 
       # Handle results metadata - this is framework-level concern, not package concern
       resultsDataModel <- self$getResultsDataModelSpecification()
@@ -114,6 +114,7 @@ SelfControlledCohortModule <- R6::R6Class(
       # Direct delegation to package function
       SelfControlledCohort::uploadResults(
         connectionDetails = resultsConnectionDetails,
+        resultsFolder = private$jobContext$moduleExecutionSettings$resultsSubFolder,
         schema = resultsDataModelSettings$resultsDatabaseSchema,
         ...
       )
