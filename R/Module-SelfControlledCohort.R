@@ -40,19 +40,16 @@ SelfControlledCohortModule <- R6::R6Class(
       super$.validateCdmExecutionSettings(executionSettings)
       super$execute(connectionDetails, analysisSpecifications, executionSettings)
 
-      # Construct jobContext in the format expected by the package's execute() function
-      # This is the only coupling point - the jobContext structure. As long as we
-      # maintain this interface, the package can change its internal implementation freely.
-      jobContext <- list(
-        connectionDetails = connectionDetails,
-        executionSettings = private$jobContext$moduleExecutionSettings,
-        moduleExecutionSettings = analysisSpecifications
-      )
-
+      jobContext <- private$jobContext
       # Delegate to the package's execute function
       # The package handles all logic including version checking, parameter validation,
       # and actual analysis execution. This wrapper doesn't need to know about those details.
-      SelfControlledCohort::execute(jobContext)
+      SelfControlledCohort::execute(
+        connectionDetails = connectionDetails,
+        executionSettings = executionSettings,
+        analysisSpecifications = jobContext$settings$parameters,
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
+      )
 
       exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
 
