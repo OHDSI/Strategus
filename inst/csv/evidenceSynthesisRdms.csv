@@ -120,3 +120,41 @@ es_sccs_result,pi_95_lb,float,No,No,No,The lower bound of the 95% prediction int
 es_sccs_result,pi_95_ub,float,No,No,No,The upper  bound of the 95% prediction interval of the relative risk.
 es_sccs_result,calibrated_pi_95_lb,float,No,No,No,The lower bound of the calibrated 95% prediction interval of the relative risk.
 es_sccs_result,calibrated_pi_95_ub,float,No,No,No,The upper  bound of the calibrated 95% prediction interval of the relative risk.
+es_scc_diagnostics_summary,target_cohort_id,bigint,Yes,Yes,No,A foreign key referencing the target cohort.
+es_scc_diagnostics_summary,outcome_cohort_id,bigint,Yes,Yes,No,The identifier for the outcome cohort.
+es_scc_diagnostics_summary,analysis_id,int,Yes,Yes,No,A unique identifier for the self-controlled cohort analysis.
+es_scc_diagnostics_summary,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_scc_diagnostics_summary,mdrr,float,No,No,No,The minimum detectable relative risk.
+es_scc_diagnostics_summary,i_2,float,No,No,No,The I2 statistic for heterogeneity.
+es_scc_diagnostics_summary,tau,float,No,No,No,The estimated tau (standard deviation of the random-effects distribution).
+es_scc_diagnostics_summary,ease,float,No,No,No,The expected absolute systematic error.
+es_scc_diagnostics_summary,mdrr_diagnostic,varchar(13),Yes,No,No,PASS / NOT EVALUATED / FAIL classification of the MDRR diagnostic.
+es_scc_diagnostics_summary,i_2_diagnostic,varchar(13),Yes,No,No,PASS / NOT EVALUATED / FAIL classification of the I2 diagnostic.
+es_scc_diagnostics_summary,tau_diagnostic,varchar(13),Yes,No,No,PASS / NOT EVALUATED / FAIL classification of the tau diagnostic.
+es_scc_diagnostics_summary,ease_diagnostic,varchar(13),Yes,No,No,PASS / NOT EVALUATED / FAIL classification of the EASE diagnostic.
+es_scc_diagnostics_summary,unblind,int,Yes,No,No,"Is unblinding the result recommended? (1 = yes, 0 = no)"
+es_scc_result,target_cohort_id,bigint,Yes,Yes,No,A foreign key referencing the target cohort.
+es_scc_result,outcome_cohort_id,bigint,Yes,Yes,No,The identifier for the outcome cohort.
+es_scc_result,analysis_id,int,Yes,Yes,No,A unique identifier for the self-controlled cohort analysis.
+es_scc_result,evidence_synthesis_analysis_id,int,Yes,Yes,No,A foreign key referencing the es_analysis table.
+es_scc_result,rr,float,No,No,No,The estimated relative risk (i.e. the incidence rate ratio).
+es_scc_result,ci_95_lb,float,No,No,No,The lower bound of the 95% confidence interval of the relative risk.
+es_scc_result,ci_95_ub,float,No,No,No,The upper bound of the 95% confidence interval of the relative risk.
+es_scc_result,p,float,No,No,No,The two-sided p-value considering the null hypothesis of no effect.
+es_scc_result,one_sided_p,float,No,No,No,The one-sided p-value considering the null hypothesis of RR <= 1.
+es_scc_result,log_rr,float,No,No,No,The log of the relative risk.
+es_scc_result,se_log_rr,float,No,No,No,The standard error of the log of the relative risk.
+es_scc_result,num_persons,int,No,No,Yes,The number of persons in the analysis.
+es_scc_result,time_at_risk_exposed,bigint,No,No,No,Time at risk while exposed.
+es_scc_result,time_at_risk_unexposed,bigint,No,No,No,Time at risk while unexposed.
+es_scc_result,num_outcomes_exposed,int,No,No,Yes,The number of outcomes observed during exposed time.
+es_scc_result,num_outcomes_unexposed,int,No,No,Yes,The number of outcomes observed during unexposed time.
+es_scc_result,num_exposures,int,No,No,Yes,The number of exposures.
+es_scc_result,n_databases,int,Yes,No,No,The number of databases that contributed to the meta-analytic estimate.
+es_scc_result,calibrated_rr,float,No,No,No,The calibrated relative risk.
+es_scc_result,calibrated_ci_95_lb,float,No,No,No,The lower bound of the calibrated 95% confidence interval of the relative risk.
+es_scc_result,calibrated_ci_95_ub,float,No,No,No,The upper bound of the calibrated 95% confidence interval of the relative risk.
+es_scc_result,calibrated_p,float,No,No,No,The calibrated two-sided p-value.
+es_scc_result,calibrated_one_sided_p,float,No,No,No,The calibrated one-sided p-value considering the null hypothesis of RR <= 1.
+es_scc_result,calibrated_log_rr,float,No,No,No,The log of the calibrated relative risk.
+es_scc_result,calibrated_se_log_rr,float,No,No,No,The standard error of the log of the calibrated relative risk.
