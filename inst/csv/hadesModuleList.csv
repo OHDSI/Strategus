@@ -7,4 +7,5 @@ CohortMethodModule
 EvidenceSynthesisModule
 PatientLevelPredictionModule
 SelfControlledCaseSeriesModule
+SelfControlledCohortModule
 TreatmentPatternsModule
