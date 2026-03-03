@@ -24,6 +24,7 @@ Imports:
   digest,
   dplyr,
   methods,
+  stats,
   ParallelLogger (>= 3.1.0),
   purrr,
   ResultModelManager (>= 0.5.8),
@@ -34,10 +35,12 @@ Suggests:
   CirceR,
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
-  CohortMethod,
+  CohortMethod (>= 6.0.0),
   Cyclops (>= 3.6.0),
   Eunomia,
-  EvidenceSynthesis (>= 1.0.0),
+  EvidenceSynthesis (>= 1.1.0),
+  meta,
+  metafor,
   FeatureExtraction,
   fs,
   knitr,
@@ -52,7 +55,7 @@ Suggests:
 Remotes:
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod
+  ohdsi/CohortMethod@version_6
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus

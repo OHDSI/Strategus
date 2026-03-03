@@ -18,6 +18,7 @@
 "_PACKAGE"
 
 #' @importFrom rlang .data
+#' @importFrom stats pnorm
 #' @import dplyr
 #' @import CohortGenerator
 #' @import DatabaseConnector

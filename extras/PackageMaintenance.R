@@ -98,7 +98,7 @@ cohortDefinitionSet <- cohortDefinitionSet[, names(CohortGenerator::createEmptyC
 cohortDefinitionSet <- appendTreatmentPatternsCohorts(cohortDefinitionSet)
 
 subsetOperations <- list(
-  createDemographicSubset(
+  createDemographicSubsetOperator(
     name = "Age 18 to 64",
     ageMin = 18,
     ageMax = 64
@@ -113,7 +113,7 @@ cohortDefinitionSet <- cohortDefinitionSet |>
   addCohortSubsetDefinition(subsetDef,
                             targetCohortIds = c(1,2))
 
-subsetOperations <- list(CohortGenerator::createLimitSubset(
+subsetOperations <- list(CohortGenerator::createLimitSubsetOperator(
   name = 'first event with 365 prior obs',
   priorTime = 365,
   limitTo = 'firstEver'
@@ -131,12 +131,12 @@ cohortDefinitionSet <- cohortDefinitionSet |>
       )
 
 subsetOperations <- list(
-  createDemographicSubset(
+  createDemographicSubsetOperator(
     name = "Age 18 to 64",
     ageMin = 18,
     ageMax = 64
   ),
-  CohortGenerator::createLimitSubset(
+  CohortGenerator::createLimitSubsetOperator(
   name = 'first event with 365 prior obs',
   priorTime = 365,
   limitTo = 'firstEver'
@@ -232,21 +232,42 @@ ciModuleSpecifications <- ciModuleSettingsCreator$createModuleSpecifications(
 
 # Treatment Patterns --------------------
 treatmentPatternsCohorts <- getTreatmentPatternsCohorts(cohortDefinitionSet)
+treatmentPatternsCohorts <- treatmentPatternsCohorts |>
+  dplyr::filter(cohortId < 1000) # Remove subgroup cohorts with invalid names
 tpModuleSettingsCreator <- TreatmentPatternsModule$new()
-tpModuleSpecifications <- tpModuleSettingsCreator$createModuleSpecifications(
-  cohorts = treatmentPatternsCohorts,
-  startAnchor = "startDate",
-  windowStart = 0,
-  endAnchor = "endDate",
-  windowEnd = 0,
-  minEraDuration = 7,
-  splitEventCohorts = NULL,
-  splitTime = NULL,
-  eraCollapseSize = 14,
-  combinationWindow = 7,
-  minPostCombinationDuration = 7,
-  filterTreatments = "First",
-  maxPathLength = 5
+tpModuleSpecifications <- tpModuleSettingsCreator$createMultiAnalysisModuleSpecification(
+  tpAnalysisList = list(
+    tpModuleSettingsCreator$createModuleSpecifications(
+      analysisId = 1,
+      cohorts = treatmentPatternsCohorts,
+      startAnchor = "startDate",
+      windowStart = 0,
+      endAnchor = "endDate",
+      windowEnd = 0,
+      minEraDuration = 7,
+      splitEventCohorts = NULL,
+      splitTime = NULL,
+      eraCollapseSize = 14,
+      combinationWindow = 7,
+      minPostCombinationDuration = 7,
+      filterTreatments = "First",
+      maxPathLength = 5
+    ),
+    tpModuleSettingsCreator$createModuleSpecifications(
+      analysisId = 2,
+      cohorts = treatmentPatternsCohorts,
+      startAnchor = "startDate",
+      windowStart = 0,
+      minEraDuration = 7,
+      splitEventCohorts = NULL,
+      splitTime = NULL,
+      eraCollapseSize = 14,
+      combinationWindow = 7,
+      minPostCombinationDuration = 7,
+      filterTreatments = "First",
+      maxPathLength = 5
+    )
+  )
 )
 
 # Cohort Method ----------------------
@@ -295,7 +316,7 @@ getDbCmDataArgs <- CohortMethod::createGetDbCohortMethodDataArgs(
   covariateSettings = covarSettings
 )
 
-createStudyPopArgs <- CohortMethod::createCreateStudyPopulationArgs(
+createStudyPopulationArgs <- CohortMethod::createCreateStudyPopulationArgs(
   minDaysAtRisk = 1,
   riskWindowStart = 0,
   startAnchor = "cohort start",
@@ -318,7 +339,7 @@ cmAnalysis1 <- CohortMethod::createCmAnalysis(
   analysisId = 1,
   description = "No matching, simple outcome model",
   getDbCohortMethodDataArgs = getDbCmDataArgs,
-  createStudyPopArgs = createStudyPopArgs,
+  createStudyPopulationArgs = createStudyPopulationArgs,
   fitOutcomeModelArgs = fitOutcomeModelArgs
 )
 
@@ -326,7 +347,7 @@ cmAnalysis2 <- CohortMethod::createCmAnalysis(
   analysisId = 2,
   description = "Matching on ps and covariates, simple outcomeModel",
   getDbCohortMethodDataArgs = getDbCmDataArgs,
-  createStudyPopArgs = createStudyPopArgs,
+  createStudyPopulationArgs = createStudyPopulationArgs,
   createPsArgs = createPsArgs,
   matchOnPsArgs = matchOnPsArgs,
   computeSharedCovariateBalanceArgs = computeSharedCovBalArgs,
@@ -338,20 +359,19 @@ cmAnalysisList <- list(cmAnalysis1, cmAnalysis2)
 
 analysesToExclude <- NULL
 
-cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
+cmAnalysesSpecifications <- CohortMethod::createCmAnalysesSpecifications(
   cmAnalysisList = cmAnalysisList,
   targetComparatorOutcomesList = targetComparatorOutcomesList,
   analysesToExclude = analysesToExclude,
   refitPsForEveryOutcome = FALSE,
   refitPsForEveryStudyPopulation = FALSE,
   cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds(
-    mdrrThreshold = Inf,
-    easeThreshold = 0.60, # setting this higher to get passes given Eunomia limitations on neg controls
-    sdmThreshold = 0.1,
-    equipoiseThreshold = 0.2,
-    generalizabilitySdmThreshold = 1 # NOTE using default here
+    easeThreshold = 0.60 # setting this higher to get passes given Eunomia limitations on neg controls
   )
+)
 
+cmModuleSpecifications <- cmModuleSettingsCreator$createModuleSpecifications(
+  cmAnalysesSpecifications = cmAnalysesSpecifications$toList()
 )
 
 # EvidenceSythesis ------------------
