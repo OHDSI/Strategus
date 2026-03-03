@@ -58,9 +58,10 @@ Suggests:
   TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
+  ohdsi/Characterization@reduced_size,
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod@version_6
+  ohdsi/CohortMethod
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
