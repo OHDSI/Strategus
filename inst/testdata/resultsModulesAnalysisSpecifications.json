@@ -49,6 +49,8 @@
           "easeThreshold": 0.25,
           "i2Threshold": 0.4,
           "tauThreshold": 0.6931,
+          "sdmThreshold": null,
+          "sdmAlpha": null,
           "attr_class": "EsDiagnosticThresholds"
         }
       },

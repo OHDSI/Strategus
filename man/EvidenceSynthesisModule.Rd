@@ -353,7 +353,9 @@ Threshold used to determine if we pass or fail diagnostics.
   mdrrThreshold = 10,
   easeThreshold = 0.25,
   i2Threshold = 0.4,
-  tauThreshold = log(2)
+  tauThreshold = log(2),
+  sdmThreshold = NULL,
+  sdmAlpha = NULL
 )}\if{html}{\out{</div>}}
 }
 
@@ -371,6 +373,17 @@ heterogeneity in random-effects models)?}
 
 \item{\code{tauThreshold}}{What is the maximum allowed tau (measure of between-database
 heterogeneity in Bayesian random-effects models)?}
+
+\item{\code{sdmThreshold}}{What is the maximum allowed standardized difference of mean (SDM) in a meta-analysis
+of balance statistics? If any covariate has a meta-analysis SDM exceeding this
+threshold, the diagnostic will fail. If set to NULL, this diagnostic will be
+ignored.}
+
+\item{\code{sdmAlpha}}{What is the alpha for testing whether the absolute SDM exceeds
+\code{sdmThreshold}? If not provided, no significance testing will be
+performed and any absolute SDM greater than the threshold will be
+considered imbalance. Note that a Bonferroni adjustment will
+automatically be applied to adjust for the number of tests performed.}
 }
 \if{html}{\out{</div>}}
 }

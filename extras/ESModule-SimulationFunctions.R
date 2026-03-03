@@ -21,7 +21,63 @@
 library(dplyr)
 library(survival)
 
-simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRatio = 1, nSites = 10) {
+MIN_COVARIATE_PREVALENCE <- 0.05
+
+simulateBalance <- function(n,
+                            targetComparatorId,
+                            outcomeId = NULL,
+                            analysisId,
+                            databaseId,
+                            shared = FALSE) {
+  data(cohortMethodDataSimulationProfile, package = "CohortMethod")
+  covariateIds <- cohortMethodDataSimulationProfile$covariatePrevalence |>
+    filter(prevalence > MIN_COVARIATE_PREVALENCE) |>
+    pull(covariateId)
+  cohortMethodData <- CohortMethod::simulateCohortMethodData(cohortMethodDataSimulationProfile, n = n)
+  studyPop <- cohortMethodData$cohorts |>
+    collect() |>
+    mutate(iptw = 0.1)
+  computeCovariateBalanceArgs <- CohortMethod::createComputeCovariateBalanceArgs()
+  if (!shared) {
+    computeCovariateBalanceArgs$covariateFilter <- FeatureExtraction::getDefaultTable1Specifications()
+  }
+  cohortMethodData$covariates <- cohortMethodData$covariates |>
+    filter(covariateId %in% covariateIds)
+  balance <- CohortMethod::computeCovariateBalance(population = studyPop,
+                                                   cohortMethodData = cohortMethodData,
+                                                   computeCovariateBalanceArgs = computeCovariateBalanceArgs)
+  cmDiagnosticThresholds <- CohortMethod::createCmDiagnosticThresholds(sdmAlpha = 0.05)
+  balance <- CohortMethod:::tidyBalance(balance, 5, cmDiagnosticThresholds)
+  balance <- balance |>
+    mutate(targetComparatorId = !!targetComparatorId,
+           analysisId = !!analysisId,
+           outcomeId = !!outcomeId,
+           databaseId = !!databaseId)
+  return(balance)
+}
+
+getCovariates <- function(analysisId, databaseId) {
+  data(cohortMethodDataSimulationProfile, package = "CohortMethod")
+  covariateIds <- cohortMethodDataSimulationProfile$covariatePrevalence |>
+    filter(prevalence > MIN_COVARIATE_PREVALENCE) |>
+    pull(covariateId)
+  covariateRef <- cohortMethodDataSimulationProfile$covariateRef |>
+    filter(covariateId %in% covariateIds) |>
+    rename(covariateAnalysisId = "analysisId") |>
+    mutate(covariateName = gsub("^.*index: ", "", covariateName)) |>
+    mutate(analysisId = !!analysisId,
+           databaseId = !!databaseId) |>
+    select(-"conceptId")
+  return(covariateRef)
+}
+
+# analysisId = 1
+simulateTco <- function(targetComparatorId,
+                        outcomeId,
+                        analysisId,
+                        hazardRatio = 1,
+                        firstOutcome = TRUE,
+                        nSites = 10) {
   simulationSettings <- EvidenceSynthesis::createSimulationSettings(
     nSites = nSites,
     n = 2500,
@@ -30,8 +86,7 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
     randomEffectSd = if_else(hazardRatio == 1, 0, 0.5)
   )
   cmDiagnosticsSummary <- tibble(
-    targetId = targetId,
-    comparatorId = comparatorId,
+    targetComparatorId = targetComparatorId,
     outcomeId = outcomeId,
     analysisId = analysisId,
     databaseId = seq_len(nSites),
@@ -42,6 +97,9 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
   populations <- EvidenceSynthesis::simulatePopulations(simulationSettings)
   cmResult <- list()
   cmLikelihoodProfile <- list()
+  cmBalance <- list()
+  cmSharedBalance <- list()
+  cmCovariate <- list()
   # i = 1
   for (i in seq_along(populations)) {
     population <- populations[[i]]
@@ -59,13 +117,11 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
       }
     )
     normal <- EvidenceSynthesis::approximateLikelihood(cyclopsFit, "x", approximation = "normal")
-    # nonNormal <- EvidenceSynthesis::approximateLikelihood(cyclopsFit, "x", approximation = "adaptive grid")
     nonNormal <- EvidenceSynthesis::approximateLikelihood(cyclopsFit, "x", approximation = "grid with gradients")
     z <- normal$logRr / normal$seLogRr
     p <- 2 * pmin(pnorm(z), 1 - pnorm(z))
     cmResult[[i]] <- tibble(
-      targetId = targetId,
-      comparatorId = comparatorId,
+      targetComparatorId = targetComparatorId,
       outcomeId = outcomeId,
       analysisId = analysisId,
       databaseId = i,
@@ -82,22 +138,38 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
       logRr = normal$logRr,
       seLogRr = normal$seLogRr
     )
-    cmLikelihoodProfile[[i]] <- nonNormal %>%
+    cmLikelihoodProfile[[i]] <- nonNormal |>
       rename(
         logRr = "point",
         logLikelihood = "value",
         gradient = "derivative"
-      ) %>%
+      ) |>
       mutate(
-        targetId = targetId,
-        comparatorId = comparatorId,
+        targetComparatorId = targetComparatorId,
         outcomeId = outcomeId,
         analysisId = analysisId,
         databaseId = i
       )
+    cmBalance[[i]] <- simulateBalance(n = nrow(population),
+                                      targetComparatorId = targetComparatorId,
+                                      outcomeId = outcomeId,
+                                      analysisId = analysisId,
+                                      databaseId = i,
+                                      shared = FALSE)
+    if (firstOutcome) {
+      cmSharedBalance[[i]] <- simulateBalance(n = nrow(population),
+                                              targetComparatorId = targetComparatorId,
+                                              analysisId = analysisId,
+                                              databaseId = i,
+                                              shared = TRUE)
+      cmCovariate[[i]] <- getCovariates(analysisId = analysisId,
+                                        databaseId = i)
+    }
   }
   cmResult <- bind_rows(cmResult)
   cmLikelihoodProfile <- bind_rows(cmLikelihoodProfile)
+  cmBalance <- bind_rows(cmBalance)
+
   tablesExist <- DatabaseConnector::existsTable(
     connection = connection,
     databaseSchema = "main",
@@ -131,6 +203,38 @@ simulateTco <- function(targetId, comparatorId, outcomeId, analysisId, hazardRat
     dropTableIfExists = FALSE,
     camelCaseToSnakeCase = TRUE
   )
+  DatabaseConnector::insertTable(
+    connection = connection,
+    databaseSchema = "main",
+    tableName = "cm_covariate_balance",
+    data = cmBalance,
+    createTable = !tablesExist,
+    dropTableIfExists = FALSE,
+    camelCaseToSnakeCase = TRUE
+  )
+
+  if (firstOutcome) {
+    cmSharedBalance <- bind_rows(cmSharedBalance)
+    cmCovariate <- bind_rows(cmCovariate)
+    DatabaseConnector::insertTable(
+      connection = connection,
+      databaseSchema = "main",
+      tableName = "cm_shared_covariate_balance",
+      data = cmSharedBalance,
+      createTable = !tablesExist,
+      dropTableIfExists = FALSE,
+      camelCaseToSnakeCase = TRUE
+    )
+    DatabaseConnector::insertTable(
+      connection = connection,
+      databaseSchema = "main",
+      tableName = "cm_covariate",
+      data = cmCovariate,
+      createTable = !tablesExist,
+      dropTableIfExists = FALSE,
+      camelCaseToSnakeCase = TRUE
+    )
+  }
 }
 
 # exposureId = 1; incidenceRateRatio = 1
@@ -207,19 +311,24 @@ simulateEo <- function(exposureId, outcomeId, analysisId, incidenceRateRatio = 1
       llr = ifelse(nrow(estimate) == 0, NA, estimate$llr),
       databaseId = i
     )
-
-    sccsLikelihoodProfile[[i]] <- model$logLikelihoodProfiles[[1]] %>%
-      rename(
-        logRr = "point",
-        logLikelihood = "value",
-        gradient = "derivative"
-      ) %>%
-      mutate(
-        exposuresOutcomeSetId = outcomeId,
-        covariateId = covariateSettings$outputIds[1],
-        analysisId = analysisId,
-        databaseId = i
-      )
+    if (is.null(model$logLikelihoodProfiles) ||
+        length(model$logLikelihoodProfiles) == 0 ||
+        is.null(model$logLikelihoodProfiles[[1]])) {
+      sccsLikelihoodProfile[[i]] <- NULL
+    } else {
+      sccsLikelihoodProfile[[i]] <- model$logLikelihoodProfiles[[1]] |>
+        rename(
+          logRr = "point",
+          logLikelihood = "value",
+          gradient = "derivative"
+        ) |>
+        mutate(
+          exposuresOutcomeSetId = outcomeId,
+          covariateId = covariateSettings$outputIds[1],
+          analysisId = analysisId,
+          databaseId = i
+        )
+    }
   }
   sccsResult <- bind_rows(sccsResult)
   sccsLikelihoodProfile <- bind_rows(sccsLikelihoodProfile)
