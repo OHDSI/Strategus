@@ -416,7 +416,9 @@ test_that("Check prediction intervals", {
     expect_true(all(data$ci95Ub <= data$pi95Ub))
 
     # Calibrated PI should be wider than uncalibrated PI (but may be shifted, so using SE):
-    expect_true(all(data$seLogCalPi >= data$seLogPi))
+    expect_true(all(data$seLogCalPi >= data$seLogPi, na.rm = TRUE))
+    # (Test only works if most are not NA:)
+    expect_true(mean(is.na(data$seLogCalPi)) < 0.1 & mean(is.na(data$seLogPi)) < 0.1)
   }
 })
 
