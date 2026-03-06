@@ -261,9 +261,9 @@
               "outcomeIds": 3,
               "outcomeWashoutDays": 365,
               "riskWindowStart": 1,
-              "startAnchor": "cohort start",
+              "startAnchor": "cohort_start",
               "riskWindowEnd": 0,
-              "endAnchor": "cohort end",
+              "endAnchor": "cohort_end",
               "covariateSettings": [
                 {
                   "temporal": false,
@@ -311,7 +311,91 @@
               "attr_class": "riskFactorSettings"
             }
           ],
-          "attr_class": "characterizationSettings"
+          "caseSeriesSettings": [
+            {
+              "targetIds": [1, 2, 1001, 2001],
+              "limitToFirstInNDays": [99999,99999,99999,99999],
+              "minPriorObservation": 365,
+              "outcomeIds": 3,
+              "outcomeWashoutDays": 365,
+              "riskWindowStart": 1,
+              "startAnchor": "cohort_start",
+              "riskWindowEnd": 0,
+              "endAnchor": "cohort_end",
+              "caseCovariateSettings": [
+                {
+                  "temporal": false,
+                  "temporalSequence": false,
+                  "ConditionGroupEraDuring": true,
+                  "DrugGroupEraDuring": true,
+                  "ProcedureOccurrenceDuring": true,
+                  "DeviceExposureDuring": true,
+                  "MeasurementDuring": true,
+                  "ObservationDuring": true,
+                  "VisitConceptCountDuring": true,
+                  "includedCovariateConceptIds": [],
+                  "addDescendantsToInclude": false,
+                  "excludedCovariateConceptIds": [],
+                  "addDescendantsToExclude": false,
+                  "includedCovariateIds": [],
+                  "attr_class": "covariateSettings",
+                  "attr_fun": "Characterization::getDbDuringCovariateData"
+                }
+              ],
+              "attr_class": "caseSeriesSettings"
+            }
+          ],
+          "targetBaselineSettings": [
+            {
+              "targetIds": [1, 2, 1001, 2001, 3],
+              "limitToFirstInNDays": [99999,99999,99999,99999,99999],
+              "minPriorObservation": 365,
+              "covariateSettings": [
+                {
+                  "temporal": false,
+                  "temporalSequence": false,
+                  "DemographicsGender": true,
+                  "DemographicsAge": true,
+                  "DemographicsAgeGroup": true,
+                  "DemographicsRace": true,
+                  "DemographicsEthnicity": true,
+                  "DemographicsIndexYear": true,
+                  "DemographicsIndexMonth": true,
+                  "DemographicsPriorObservationTime": true,
+                  "DemographicsPostObservationTime": true,
+                  "DemographicsTimeInCohort": true,
+                  "ConditionGroupEraLongTerm": true,
+                  "ConditionGroupEraShortTerm": true,
+                  "DrugGroupEraLongTerm": true,
+                  "DrugGroupEraShortTerm": true,
+                  "DrugGroupEraOverlapping": true,
+                  "ProcedureOccurrenceLongTerm": true,
+                  "ProcedureOccurrenceShortTerm": true,
+                  "DeviceExposureLongTerm": true,
+                  "DeviceExposureShortTerm": true,
+                  "MeasurementLongTerm": true,
+                  "MeasurementShortTerm": true,
+                  "ObservationLongTerm": true,
+                  "ObservationShortTerm": true,
+                  "VisitConceptCountLongTerm": true,
+                  "VisitConceptCountShortTerm": true,
+                  "longTermStartDays": -365,
+                  "mediumTermStartDays": -180,
+                  "shortTermStartDays": -30,
+                  "endDays": 0,
+                  "includedCovariateConceptIds": [],
+                  "addDescendantsToInclude": false,
+                  "excludedCovariateConceptIds": [],
+                  "addDescendantsToExclude": false,
+                  "includedCovariateIds": [],
+                  "attr_class": "covariateSettings",
+                  "attr_fun": "getDbDefaultCovariateData"
+                }
+              ],
+              "attr_class": "targetBaselineSettings"
+            }
+          ],
+        "attr_class": "characterizationSettings"
         },
         "minCharacterizationMean": 0.01,
         "minCovariateCount": 5,
