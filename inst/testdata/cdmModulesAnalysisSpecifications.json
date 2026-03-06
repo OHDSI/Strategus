@@ -342,6 +342,8 @@
                   "attr_fun": "Characterization::getDbDuringCovariateData"
                 }
               ],
+              "casePreTargetDuration": 365,
+              "casePostOutcomeDuration": 365,
               "attr_class": "caseSeriesSettings"
             }
           ],
