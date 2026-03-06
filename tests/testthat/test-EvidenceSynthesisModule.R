@@ -131,6 +131,9 @@ test_that("Run module", {
   expect_true("es_analysis.csv" %in% resultsFiles)
   expect_true("es_cm_result.csv" %in% resultsFiles)
   expect_true("es_cm_diagnostics_summary.csv" %in% resultsFiles)
+  expect_true("es_cm_covariate_balance.csv" %in% resultsFiles)
+  expect_true("es_cm_shared_covariate_balance.csv" %in% resultsFiles)
+  expect_true("es_cm_covariate.csv" %in% resultsFiles)
   expect_true("es_sccs_result.csv" %in% resultsFiles)
   expect_true("es_sccs_diagnostics_summary.csv" %in% resultsFiles)
 })
@@ -176,16 +179,14 @@ test_that("Include only allowed CM estimates in meta-analysis", {
 
   # Determine if unblinded:
   sql <- "
-    SELECT cm_target_comparator_outcome.target_id,
-      cm_target_comparator_outcome.comparator_id,
+    SELECT cm_target_comparator_outcome.target_comparator_id,
       cm_target_comparator_outcome.outcome_id,
       analysis_id,
       database_id,
       unblind_for_evidence_synthesis AS include_1
     FROM main.cm_target_comparator_outcome
     LEFT JOIN main.cm_diagnostics_summary
-      ON cm_diagnostics_summary.target_id = cm_target_comparator_outcome.target_id
-        AND cm_diagnostics_summary.comparator_id = cm_target_comparator_outcome.comparator_id
+      ON cm_diagnostics_summary.target_comparator_id = cm_target_comparator_outcome.target_comparator_id
         AND cm_diagnostics_summary.outcome_id = cm_target_comparator_outcome.outcome_id;
   "
   criterion1 <- DatabaseConnector::querySql(connection, sql, snakeCaseToCamelCase = TRUE)
@@ -195,8 +196,7 @@ test_that("Include only allowed CM estimates in meta-analysis", {
   # Determine if valid estimate or LL profile:
   approximations <- bind_rows(lapply(esSettings$evidenceSynthesisAnalysisList, getApproximation))
   sql <- "
-    SELECT cm_result.target_id,
-      cm_result.comparator_id,
+    SELECT cm_result.target_comparator_id,
       cm_result.outcome_id,
       cm_result.analysis_id,
       cm_result.database_id,
@@ -205,20 +205,18 @@ test_that("Include only allowed CM estimates in meta-analysis", {
         ELSE 0
       END AS has_valid_estimate,
       CASE
-        WHEN profiles.target_id IS NOT NULL THEN 1
+        WHEN profiles.target_comparator_id IS NOT NULL THEN 1
         ELSE 0
       END AS has_ll_profile
     FROM main.cm_result
     LEFT JOIN (
-      SELECT DISTINCT target_id,
-        comparator_id,
+      SELECT DISTINCT target_comparator_id,
         outcome_id,
         analysis_id,
         database_id
       FROM main.cm_likelihood_profile
       ) profiles
-      ON cm_result.target_id = profiles.target_id
-        AND cm_result.comparator_id = profiles.comparator_id
+      ON cm_result.target_comparator_id = profiles.target_comparator_id
         AND cm_result.outcome_id = profiles.outcome_id
         AND cm_result.analysis_id = profiles.analysis_id
         AND cm_result.database_id = profiles.database_id
@@ -238,17 +236,17 @@ test_that("Include only allowed CM estimates in meta-analysis", {
   # Combine all criteria, and check if agree with results:
   allowed <- criterion1 %>%
     inner_join(criterion2,
-      by = join_by(targetId, comparatorId, outcomeId, analysisId, databaseId),
+      by = join_by(targetComparatorId, outcomeId, analysisId, databaseId),
       relationship = "one-to-many"
     ) %>%
     inner_join(criterion3, by = join_by(databaseId, evidenceSynthesisAnalysisId)) %>%
     mutate(include = include1 & include2 & include3) %>%
-    group_by(targetId, comparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId) %>%
+    group_by(targetComparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId) %>%
     summarize(nAllowed = sum(include), .groups = "drop")
 
   results <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_result.csv"))
   results <- results %>%
-    left_join(allowed, by = join_by(targetId, comparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId))
+    left_join(allowed, by = join_by(targetComparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId))
   expect_true(all(results$nDatabases == results$nAllowed))
 })
 
@@ -360,7 +358,7 @@ test_that("Check MDRR values", {
   results <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_result.csv"))
   diagnostics <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_diagnostics_summary.csv"))
   combined <- results %>%
-    inner_join(diagnostics, by = join_by(targetId, comparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId))
+    inner_join(diagnostics, by = join_by(targetComparatorId, outcomeId, analysisId, evidenceSynthesisAnalysisId))
   noDbs <- combined %>%
     filter(nDatabases == 0)
   expect_true(all(is.infinite(noDbs$mdrr)))
@@ -399,6 +397,80 @@ test_that("Check MDRR values", {
     filter(nDatabases > 1, !is.na(seLogRr))
 
   expect_true(all(!is.na(multiDbs$mdrr)))
+})
+
+test_that("Check prediction intervals", {
+  tables <- c("es_cm_result.csv", "es_sccs_result.csv")
+  for (table in tables) {
+    data <- readr::read_csv(file.path(testResultsFolder, "EvidenceSynthesisModule", table), show_col_types = FALSE) |>
+      SqlRender::snakeCaseToCamelCaseNames()
+    data <- data |>
+      filter(!is.na(pi95Lb) & !is.na(pi95Ub)) |>
+      mutate(seLogPi = (log(pi95Ub) - log(pi95Lb)) / 2 * qnorm(0.975),
+             seLogCalPi = (log(calibratedPi95Ub) - log(calibratedPi95Lb)) / 2 * qnorm(0.975))
+
+    expect_true(nrow(data) > 0)
+
+    # Prediction interval should be wider than meta-analysis:
+    expect_true(all(data$ci95Lb >= data$pi95Lb))
+    expect_true(all(data$ci95Ub <= data$pi95Ub))
+
+    # Calibrated PI should be wider than uncalibrated PI (but may be shifted, so using SE):
+    expect_true(all(data$seLogCalPi >= data$seLogPi, na.rm = TRUE))
+    # (Test only works if most are not NA:)
+    expect_true(mean(is.na(data$seLogCalPi)) < 0.1 & mean(is.na(data$seLogPi)) < 0.1)
+  }
+})
+
+test_that("Check covariate balance", {
+  diagnosticsSummary <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_diagnostics_summary.csv"))
+
+  # No threshold was set in main test run, so all balance diagnostics should be "NOT EVALUATED":
+  expect_true(all(diagnosticsSummary$balanceDiagnostic == "NOT EVALUATED"))
+  expect_true(all(diagnosticsSummary$sharedBalanceDiagnostic == "NOT EVALUATED"))
+
+  balance <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_covariate_balance.csv"))
+  expect_true(!all(is.na(balance$stdDiffAfter)))
+
+  sharedBalance <- CohortGenerator::readCsv(file.path(testResultsFolder, "EvidenceSynthesisModule", "es_cm_shared_covariate_balance.csv"))
+  expect_true(!all(is.na(sharedBalance$stdDiffAfter)))
+
+  # Rerun with threshold and alpha set:
+  testResultsFolder2 <- tempfile("results")
+  dir.create(testResultsFolder2)
+  on.exit(unlink(testResultsFolder2))
+  esModuleSettingsCreator <- EvidenceSynthesisModule$new()
+  evidenceSynthesisSourceCmNormal <- esModuleSettingsCreator$createEvidenceSynthesisSource(
+    sourceMethod = "CohortMethod",
+    likelihoodApproximation = "normal"
+  )
+  randomEffectsMetaAnalysisCm <- esModuleSettingsCreator$createRandomEffectsMetaAnalysis(
+    evidenceSynthesisAnalysisId = 1,
+    evidenceSynthesisSource = evidenceSynthesisSourceCmNormal
+  )
+  evidenceSynthesisModuleSpecs <- esModuleSettingsCreator$createModuleSpecifications(
+    evidenceSynthesisAnalysisList = list(randomEffectsMetaAnalysisCm),
+    esDiagnosticThresholds = esModuleSettingsCreator$createEsDiagnosticThresholds(
+      sdmThreshold = 0.1,
+      sdmAlpha = 0.05
+    )
+  )
+  esAnalysisSpecifications <- createEmptyAnalysisSpecifications() %>%
+    addModuleSpecifications(evidenceSynthesisModuleSpecs)
+  resultsExecutionSettings <- Strategus::createResultsExecutionSettings(
+    resultsDatabaseSchema = "main",
+    resultsFolder = testResultsFolder2,
+    workFolder = workFolder
+  )
+  Strategus::execute(
+    analysisSpecifications = esAnalysisSpecifications,
+    executionSettings = resultsExecutionSettings,
+    connectionDetails = esTestDataConnectionDetails
+  )
+
+  diagnosticsSummary <- CohortGenerator::readCsv(file.path(testResultsFolder2, "EvidenceSynthesisModule", "es_cm_diagnostics_summary.csv"))
+  expect_true(!all(diagnosticsSummary$balanceDiagnostic == "NOT EVALUATED"))
+  expect_true(!all(diagnosticsSummary$sharedBalanceDiagnostic == "NOT EVALUATED"))
 })
 
 test_that("Don't error when no negative controls present", {
