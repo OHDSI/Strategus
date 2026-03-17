@@ -262,7 +262,7 @@
               "outcomeWashoutDays": 365,
               "riskWindowStart": 1,
               "startAnchor": "cohort_start",
-              "riskWindowEnd": 0,
+              "riskWindowEnd": 365,
               "endAnchor": "cohort_end",
               "covariateSettings": [
                 {
@@ -320,7 +320,7 @@
               "outcomeWashoutDays": 365,
               "riskWindowStart": 1,
               "startAnchor": "cohort_start",
-              "riskWindowEnd": 0,
+              "riskWindowEnd": 365,
               "endAnchor": "cohort_end",
               "caseCovariateSettings": [
                 {
