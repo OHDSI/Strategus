@@ -192,7 +192,11 @@ cgModuleSpecifications <- cgModuleSettingsCreator$createModuleSpecifications()
 cModuleSettingsCreator <- CharacterizationModule$new()
 cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
   targetIds = c(1, 2, 1001, 2001),
-  outcomeIds = 3
+  outcomeIds = 3,
+  riskWindowStart = c(1),
+  startAnchor = c("cohort start"),
+  riskWindowEnd = c(365),
+  endAnchor = c("cohort end")
 )
 
 # Cohort Incidence -----------------

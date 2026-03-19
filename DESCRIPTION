@@ -36,7 +36,7 @@ Imports:
   rlang,
   SqlRender (>= 1.18.0)
 Suggests:
-  Characterization,
+  Characterization (>= 3.0.0),
   CirceR,
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
@@ -58,9 +58,10 @@ Suggests:
   TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
+  ohdsi/Characterization,
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod@version_6
+  ohdsi/CohortMethod
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
