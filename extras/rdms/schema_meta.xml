@@ -101,43 +101,19 @@
       <column name="value_as_concept_id" comments="The value as concept_id for features created from observation or measurement values"/>
       <column name="collisions" comments="The number of collisions found for the covariate_id"/>
     </table>
-    <table name="c_covariates" comments="CharacterizationModule: Binary covariates">
-      <column name="database_id" comments="The database identifier">
-        <foreignKey table="c_covariate_ref" column="database_id"/>
-        <foreignKey table="c_settings" column="database_id"/>
-        <foreignKey table="c_settings" column="setting_id"/>
-      </column>
-      <column name="setting_id" comments="The run identifier">
-        <foreignKey table="c_covariate_ref" column="setting_id"/>
-        <foreignKey table="c_settings" column="setting_id"/>
-        <foreignKey table="c_settings" column="database_id"/>
-      </column>
-      <column name="cohort_type" comments="The cohort type"/>
-      <column name="target_cohort_id" comments="The target cohort id"/>
-      <column name="outcome_cohort_id" comments="The outcome cohort id"/>
-      <column name="min_characterization_mean" comments="Minimum fraction for feature extraction"/>
-      <column name="covariate_id" comments="The covaraite id">
-        <foreignKey table="c_covariate_ref" column="covariate_id"/>
-      </column>
+    <table name="c_target_covariates" comments="CharacterizationModule: Holds the covariates that are used to characterize the target cohort.">
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="characterization_target_id" comments="The characteriation target id"/>
+      <column name="covariate_id" comments="The covaraite id"/>
       <column name="sum_value" comments="The sum value"/>
       <column name="average_value" comments="The average value"/>
     </table>
-    <table name="c_covariates_continuous" comments="CharacterizationModule: Continuous covariates">
-      <column name="database_id" comments="The database identifier">
-        <foreignKey table="c_covariate_ref" column="database_id"/>
-        <foreignKey table="c_settings" column="database_id"/>
-        <foreignKey table="database_meta_data" column="database_id"/>
-      </column>
-      <column name="setting_id" comments="The run identifier">
-        <foreignKey table="c_covariate_ref" column="setting_id"/>
-        <foreignKey table="c_settings" column="setting_id"/>
-      </column>
-      <column name="cohort_type" comments="The cohort type"/>
-      <column name="target_cohort_id" comments="The target cohort id"/>
-      <column name="outcome_cohort_id" comments="The outcome cohort id"/>
-      <column name="covariate_id" comments="The covariate identifier">
-        <foreignKey table="c_covariate_ref" column="covariate_id"/>
-      </column>
+    <table name="c_target_covariates_continuous" comments="CharacterizationModule: Holds the continuous covariates that are used to characterize the target cohort.">
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="characterization_target_id" comments="The characteriation target id"/>
+      <column name="covariate_id" comments="The covariate identifier"/>
       <column name="count_value" comments="The count value"/>
       <column name="min_value" comments="The min value"/>
       <column name="max_value" comments="The max value"/>
@@ -149,52 +125,132 @@
       <column name="p_75_value" comments="The 75th percentile"/>
       <column name="p_90_value" comments="The 90th percentile"/>
     </table>
-    <table name="c_settings" comments="CharacterizationModule: Settings">
-      <column name="setting_id" comments="The run identifier">
-        <foreignKey table="c_cohort_details" column="setting_id"/>
-      </column>
-      <column name="database_id" comments="The database identifier">
-        <foreignKey table="database_meta_data" column="database_id"/>
-        <foreignKey table="c_cohort_details" column="database_id"/>
-      </column>
-      <column name="covariate_setting_json" comments="The covariate settings JSON"/>
-      <column name="case_covariate_setting_json" comments="The during covariate settings JSON"/>
-      <column name="min_prior_observation" comments="Minimum time observed before index"/>
-      <column name="outcome_washout_days" comments="Patients with outcome during washout are excluded"/>
-      <column name="risk_window_start" comments="The risk window start"/>
-      <column name="risk_window_end" comments="The risk window end"/>
+    <table name="c_execution_settings" comments="CharacterizationModule: Holds the settings that are used to execute the characterization module.">
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="database_hash" comments="NA"/>
+      <column name="mode" comments="Whether Efficient/CohortIncidence/PatientLevelPrediction mode was used for risk factor non-cases"/>
+      <column name="min_characterization_mean" comments="The minimum fraction of patients who have a covariate for the covariate to be included in results"/>
+      <column name="min_covariate_count" comments="The minimum number of patients who have a covariate for the covariate to be included in results (useful if cohorts are small)"/>
+      <column name="min_smd" comments="The minimum standardized mean value a risk factor must have to be included in results"/>
+    </table>
+    <table name="c_target_settings" comments="CharacterizationModule: Holds the settings that are used to characterize the target cohorts.">
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="characterization_target_id" comments="The target cohort id after inclusion criteria used internally by characterization"/>
+      <column name="target_id" comments="The target cohort id"/>
+      <column name="limit_to_first_in_n_days" comments="Target exposures are only included if they occur &gt;= first_in_n_days days after the last exposure"/>
+      <column name="min_prior_observation" comments="Target exposures with &lt; min_prior_obs days observation before exposure are excluded"/>
+    </table>
+    <table name="c_case_settings" comments="CharacterizationModule: Holds the settings that are used to characterize the case cohorts.">
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="characterization_case_id" comments="The case cohort id that is unique per characterization_target_id, outcome_id, outcome_washout_days and time-at-risk settings"/>
+      <column name="characterization_target_id" comments="The target cohort id after inclusion criteria used internally by characterization"/>
+      <column name="outcome_id" comments="The outcome cohort id"/>
+      <column name="outcome_washout_days" comments="Outcome exposures with &lt; outcome_washout_days days after the last outcome exposure are excluded"/>
       <column name="start_anchor" comments="The start anchor"/>
       <column name="end_anchor" comments="The end anchor"/>
-      <column name="case_pre_target_duration" comments="How far to look back before index for case features"/>
-      <column name="case_post_outcome_duration" comments="How far to look forward after outcome for case features"/>
+      <column name="risk_window_start" comments="The risk window start"/>
+      <column name="risk_window_end" comments="The risk window end"/>
+      <column name="runtype" comments="Whether this case was used in risk-factor and/or case-series"/>
     </table>
-    <table name="c_cohort_details" comments="CharacterizationModule: Cohort details">
+    <table name="c_case_series_settings" comments="CharacterizationModule: Holds the settings that are used to characterize the case series cohorts.">
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="case_pre_target_duration" comments="The number of days before target index to create the before target period in case series"/>
+      <column name="case_post_outcome_duration" comments="The number of days after first outcome after target to create the after outcome period in case series"/>
+    </table>
+    <table name="c_attrition" comments="CharacterizationModule: Holds the attrition of the characterization cohorts.">
+      <column name="cohort_definition_id" comments="The characterization cohort id"/>
+      <column name="attr_reason" comments="Description of cohort or removal"/>
+      <column name="n" comments="The number of people remaining or removed"/>
       <column name="database_id" comments="The database identifier"/>
       <column name="setting_id" comments="The run identifier"/>
-      <column name="cohort_type" comments="The cohort type"/>
-      <column name="target_cohort_id" comments="The target cohort id">
-        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
-      </column>
-      <column name="outcome_cohort_id" comments="The outcome cohort id">
-        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
-      </column>
     </table>
-    <table name="c_cohort_counts" comments="CharacterizationModule: Cohort counts">
+    <table name="c_risk_factor_covariates" comments="CharacterizationModule: Holds the covariates that are used to characterize the risk factors.">
       <column name="database_id" comments="The database identifier"/>
-      <column name="cohort_type" comments="The cohort type"/>
-      <column name="target_cohort_id" comments="The target cohort id"/>
-      <column name="outcome_cohort_id" comments="The outcome cohort id"/>
-      <column name="risk_window_start" comments="The risk window start"/>
-      <column name="risk_window_end" comments="The risk window end"/>
-      <column name="start_anchor" comments="The start anchor"/>
-      <column name="end_anchor" comments="The end anchor"/>
-      <column name="min_prior_observation" comments="Minimum time observed before index"/>
-      <column name="outcome_washout_days" comments="Patients with outcome during washout are excluded"/>
-      <column name="row_count" comments="The number of rows in each cohort"/>
-      <column name="person_count" comments="The number of distinct people in each cohort"/>
-      <column name="min_exposure_time" comments="Minimum exposure time across cohort"/>
-      <column name="mean_exposure_time" comments="Mean exposure time across cohort"/>
-      <column name="max_exposure_time" comments="Max exposure time across cohort"/>
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="characterization_case_id" comments="The case cohort id that is unique per characterization_target_id, outcome_id, outcome_washout_days and time-at-risk settings"/>
+      <column name="covariate_id" comments="The covaraite id"/>
+      <column name="non_case_sum_value" comments="The sum value for the non-cases"/>
+      <column name="non_case_average_value" comments="The average value for the non-cases"/>
+      <column name="case_sum_value" comments="The sum value of the cases"/>
+      <column name="case_average_value" comments="The average value of the cases"/>
+      <column name="standardized_mean_difference" comments="The standardized mean difference for the covariate"/>
+    </table>
+    <table name="c_risk_factor_covariates_continuous" comments="CharacterizationModule: Holds the continuous covariates that are used to characterize the risk factors.">
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="characterization_case_id" comments="The case cohort id that is unique per characterization_target_id, outcome_id, outcome_washout_days and time-at-risk settings"/>
+      <column name="covariate_id" comments="The covariate identifier"/>
+      <column name="case_count_value" comments="The count value"/>
+      <column name="case_min_value" comments="The min value"/>
+      <column name="case_max_value" comments="The max value"/>
+      <column name="case_average_value" comments="The average value"/>
+      <column name="case_standard_deviation" comments="The standard devidation"/>
+      <column name="case_median_value" comments="The median value"/>
+      <column name="case_p_10_value" comments="The 10th percentile"/>
+      <column name="case_p_25_value" comments="The 25th percentile"/>
+      <column name="case_p_75_value" comments="The 75th percentile"/>
+      <column name="case_p_90_value" comments="The 90th percentile"/>
+      <column name="non_case_count_value" comments="The count value"/>
+      <column name="non_case_min_value" comments="The min value"/>
+      <column name="non_case_max_value" comments="The max value"/>
+      <column name="non_case_average_value" comments="The average value"/>
+      <column name="non_case_standard_deviation" comments="The standard devidation"/>
+      <column name="non_case_median_value" comments="The median value"/>
+      <column name="non_case_p_10_value" comments="The 10th percentile"/>
+      <column name="non_case_p_25_value" comments="The 25th percentile"/>
+      <column name="non_case_p_75_value" comments="The 75th percentile"/>
+      <column name="non_case_p_90_value" comments="The 90th percentile"/>
+      <column name="standardized_mean_difference" comments="The standardized mean difference for the covariate"/>
+    </table>
+    <table name="c_case_series_covariates" comments="CharacterizationModule: Holds the covariates that are used to characterize the case series cohorts.">
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="characterization_case_id" comments="The case cohort id that is unique per characterization_target_id, outcome_id, outcome_washout_days and time-at-risk settings"/>
+      <column name="covariate_id" comments="The covaraite id"/>
+      <column name="before_sum_value" comments="The sum value for the non-cases"/>
+      <column name="before_average_value" comments="The average value for the non-cases"/>
+      <column name="during_sum_value" comments="The sum value of the cases"/>
+      <column name="during_average_value" comments="The average value of the cases"/>
+      <column name="after_sum_value" comments="The sum value of the cases"/>
+      <column name="after_average_value" comments="The average value of the cases"/>
+    </table>
+    <table name="c_case_series_covariates_continuous" comments="CharacterizationModule: Holds the continuous covariates that are used to characterize the case series cohorts.">
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="characterization_case_id" comments="The case cohort id that is unique per characterization_target_id, outcome_id, outcome_washout_days and time-at-risk settings"/>
+      <column name="covariate_id" comments="The covariate identifier"/>
+      <column name="before_count_value" comments="The count value"/>
+      <column name="before_min_value" comments="The min value"/>
+      <column name="before_max_value" comments="The max value"/>
+      <column name="before_average_value" comments="The average value"/>
+      <column name="before_standard_deviation" comments="The standard devidation"/>
+      <column name="before_median_value" comments="The median value"/>
+      <column name="before_p_10_value" comments="The 10th percentile"/>
+      <column name="before_p_25_value" comments="The 25th percentile"/>
+      <column name="before_p_75_value" comments="The 75th percentile"/>
+      <column name="before_p_90_value" comments="The 90th percentile"/>
+      <column name="during_min_value" comments="The min value"/>
+      <column name="during_max_value" comments="The max value"/>
+      <column name="during_average_value" comments="The average value"/>
+      <column name="during_standard_deviation" comments="The standard devidation"/>
+      <column name="during_median_value" comments="The median value"/>
+      <column name="during_p_10_value" comments="The 10th percentile"/>
+      <column name="during_p_25_value" comments="The 25th percentile"/>
+      <column name="during_p_75_value" comments="The 75th percentile"/>
+      <column name="during_p_90_value" comments="The 90th percentile"/>
+      <column name="after_count_value" comments="The count value"/>
+      <column name="after_min_value" comments="The min value"/>
+      <column name="after_max_value" comments="The max value"/>
+      <column name="after_average_value" comments="The average value"/>
+      <column name="after_standard_deviation" comments="The standard devidation"/>
+      <column name="after_median_value" comments="The median value"/>
+      <column name="after_p_10_value" comments="The 10th percentile"/>
+      <column name="after_p_25_value" comments="The 25th percentile"/>
+      <column name="after_p_75_value" comments="The 75th percentile"/>
+      <column name="after_p_90_value" comments="The 90th percentile"/>
     </table>
     <table name="cd_cohort" comments="CohortDiagnosticsModule: Cohort details">
       <column name="cohort_id" comments="cohort id"/>
@@ -459,17 +515,18 @@
       <column name="sql_command" comments="The OHDSI-SQL command used to construct the cohort"/>
       <column name="subset_parent" comments="The parent cohort id if this cohort is a subset"/>
       <column name="is_subset" comments="This value is 1 when the cohort is a subset"/>
+      <column name="is_templated_cohort" comments="This value is 1 when the cohort is based on an sql template"/>
       <column name="subset_definition_id" comments="The cohort subset definition"/>
     </table>
     <table name="cg_cohort_generation" comments="CohortGeneratorModule: Cohort generation times">
-      <column name="cohort_id" comments="The uniqe identifier for the cohort definition"/>
-      <column name="cohort_name" comments="The name of the cohort generated"/>
+      <column name="cohort_definition_id" comments="The uniqe identifier for the cohort definition"/>
       <column name="generation_status" comments="The cohort generation status"/>
       <column name="start_time" comments="The start time of the generation process"/>
       <column name="end_time" comments="The end time of the generation process"/>
       <column name="database_id" comments="The database idenifier for this information">
         <foreignKey table="database_meta_data" column="database_id"/>
       </column>
+      <column name="checksum" comments="Checksum of the cohort"/>
     </table>
     <table name="cg_cohort_inclusion" comments="CohortGeneratorModule: Cohort inclusion information">
       <column name="cohort_definition_id" comments="The unique identifier for the cohort definition">
@@ -513,6 +570,24 @@
       <column name="lost_count" comments="The number lost due to censoring"/>
       <column name="database_id" comments="The database idenifier for this information"/>
     </table>
+    <table name="cg_cohort_attrition" comments="CohortGeneratorModule: Holds the attrition of Circe-based cohorts.">
+      <column name="database_id" comments="The database idenifier for this information"/>
+      <column name="cohort_definition_id" comments="The unique identifier for the cohort definition"/>
+      <column name="mode_id" comments="The mode id (for example 1=person-level and 0=event-level)"/>
+      <column name="cohort_entry" comments="Indicator that row represents cohort entry before applying inclusion rules"/>
+      <column name="rule_sequence" comments="The rule sequence for sequential attrition (-1 for cohort entry)"/>
+      <column name="person_count" comments="The number of persons after applying the sequential rules"/>
+    </table>
+    <table name="cg_cohort_subset_attrition" comments="CohortGeneratorModule: Holds the attrition of the subsetted cohorts.">
+      <column name="database_id" comments="The database idenifier for this information"/>
+      <column name="cohort_definition_id" comments="The unique identifier for the cohort definition"/>
+      <column name="subset_definition_id" comments="The identifier for the cohort subset definition"/>
+      <column name="subset_parent_id" comments="The parent cohort id for this subset attrition"/>
+      <column name="mode_id" comments="The mode id (0=events, 1=persons)"/>
+      <column name="cohort_entry" comments="Indicator that row represents cohort entry before applying subset operators"/>
+      <column name="operator_sequence" comments="The operator sequence for sequential subset attrition (-1 for cohort entry)"/>
+      <column name="count_value" comments="The count after applying the sequential operators"/>
+    </table>
     <table name="cg_cohort_count" comments="CohortGeneratorModule: Cohort counts">
       <column name="database_id" comments="The database idenifier for this information">
         <foreignKey table="database_meta_data" column="database_id"/>
@@ -533,12 +608,29 @@
       <column name="subset_definition_id" comments="The identifier for the cohort subset definition"/>
       <column name="json" comments="The JSON representation of the subset definition"/>
     </table>
+    <table name="cg_cohort_subset_operator" comments="CohortGeneratorModule: Holds the operators used to create cohort subsets.">
+      <column name="subset_definition_id" comments="The identifier for the cohort subset definition"/>
+      <column name="operator_name" comments="The name of the cohort subset operator"/>
+      <column name="operator_sequence" comments="The operator sequence within the subset definition"/>
+      <column name="operator_type" comments="The subset operator type (subsetType)"/>
+      <column name="definition_json" comments="The JSON representation of the subset operator"/>
+    </table>
     <table name="cg_cohort_definition_neg_ctrl" comments="CohortGeneratorModule: Negative control outcome cohort definitions">
       <column name="cohort_id" comments="The cohort identifier for the negative control outcome"/>
       <column name="outcome_concept_id" comments="The concept ID for the negative control outcome"/>
       <column name="cohort_name" comments="The concept name for the negative control outcome"/>
       <column name="occurrence_type" comments="The occurrenceType will detect either: the first time an outcomeConceptId occurs or all times the outcome_concept_id occurs for a person. Values accepted: 'all' or 'first'"/>
       <column name="detect_on_descendants" comments="When set to 1 detect_on_descendants used the vocabulary to find negative control outcomes using the outcome_concept_id and all descendants via the concept_ancestor table. When set to 0 only the exact outcome_concept_id was used to detect the outcome"/>
+    </table>
+    <table name="cg_cohort_template_definition" comments="CohortGeneratorModule: Holds the definitions of cohort templates.">
+      <column name="template_definition_id" comments="cohort template definition identifier"/>
+      <column name="json" comments="The template JSON expression including references and sql. Only needed to reconsturct a template"/>
+      <column name="template_sql" comments="The template sql expression"/>
+      <column name="template_name" comments="The template name"/>
+    </table>
+    <table name="cg_cohort_template_link" comments="CohortGeneratorModule: Holds the linkage between cohorts and the cohor templates.">
+      <column name="template_definition_id" comments="cohort template definition identifier"/>
+      <column name="cohort_definition_id" comments="The unique identifier for the cohort definition"/>
     </table>
     <table name="ci_incidence_summary" comments="CohortIncidenceModule: Incidence rate/proportion summary">
       <column name="ref_id" comments="The reference identifier for the analysis">
@@ -623,15 +715,13 @@
       <column name="description" comments="A description of the last restriction, e.g. &quot;Removing persons with the outcome prior&quot;."/>
       <column name="subjects" comments="The number of subjects in the cohort."/>
       <column name="exposure_id" comments="The identifier of the exposure cohort to which the attrition applies. Can be either the target or comparator cohort ID."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="analysis_id" comments="The identifier for the outcome cohort."/>
       <column name="outcome_id" comments="Foreign key referencing the cm_analysis table."/>
       <column name="database_id" comments="Foreign key referencing the database."/>
     </table>
     <table name="cm_follow_up_dist" comments="CohortMethodModule: Follow up distribution">
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="analysis_id" comments="Foreign key referencing the cm_analysis table."/>
       <column name="target_min_days" comments="The minimum number of observation days for a person."/>
@@ -664,12 +754,7 @@
     </table>
     <table name="cm_result" comments="CohortMethodModule: Study results for main effects">
       <column name="analysis_id" comments="Foreign key referencing the cm_analysis table."/>
-      <column name="target_id" comments="The identifier for the target cohort.">
-        <foreignKey table="cm_target_comparator_outcome" column="target_id"/>
-      </column>
-      <column name="comparator_id" comments="The identifier for the comparator cohort.">
-        <foreignKey table="cm_target_comparator_outcome" column="comparator_id"/>
-      </column>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort.">
         <foreignKey table="cm_target_comparator_outcome" column="outcome_id"/>
       </column>
@@ -699,8 +784,7 @@
     </table>
     <table name="cm_interaction_result" comments="CohortMethodModule: Study results for interaction effects">
       <column name="analysis_id" comments="Foreign key referencing the cm_analysis table."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="interaction_covariate_id" comments="Foreign key referencing the cm_covariate table."/>
       <column name="rr" comments="The estimated relative risk (e.g. the ratio of hazard ratios)."/>
@@ -743,8 +827,7 @@
         <foreignKey table="database_meta_data" column="database_id"/>
         <foreignKey table="cm_covariate" column="database_id"/>
       </column>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table.">
         <foreignKey table="cm_covariate" column="analysis_id"/>
@@ -756,10 +839,14 @@
       <column name="comparator_mean_before" comments="The mean value of the covariate in the comparator cohort before propensity score adjustment."/>
       <column name="mean_before" comments="The mean value of the covariate in the union of the target and comparator cohort before propensity score adjustment."/>
       <column name="std_diff_before" comments="The standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="std_diff_var_before" comments="The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="balanced_before" comments="Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"/>
       <column name="mean_after" comments="The mean value of the covariate in the union of the target and comparator cohort after propensity score adjustment."/>
       <column name="target_mean_after" comments="The mean value of the covariate in the target cohort after propensity score adjustment."/>
       <column name="comparator_mean_after" comments="The mean value of the covariate in the comparator cohort after propensity score adjustment."/>
       <column name="std_diff_after" comments="The standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="std_diff_var_after" comments="The variance of the standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="balanced_after" comments="Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)"/>
       <column name="target_std_diff" comments="The standardized difference of the means before and after propensity score adjustment in  the target cohort."/>
       <column name="comparator_std_diff" comments="The standardized difference of the means before and after propensity score adjustment in  the comparator cohort."/>
       <column name="target_comparator_std_diff" comments="The standardized difference of the means before and after propensity score adjustment in  the union of the target and comparator cohorts."/>
@@ -768,12 +855,7 @@
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table.">
         <foreignKey table="cm_analysis" column="analysis_id"/>
       </column>
-      <column name="target_id" comments="The identifier for the target cohort.">
-        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
-      </column>
-      <column name="comparator_id" comments="The identifier for the comparator cohort.">
-        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
-      </column>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort.">
         <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
       </column>
@@ -781,7 +863,9 @@
         <foreignKey table="database_meta_data" column="database_id"/>
       </column>
       <column name="max_sdm" comments="The maximum absolute standardized difference of mean."/>
+      <column name="sdm_family_wise_min_p" comments="The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold."/>
       <column name="shared_max_sdm" comments="The maximum absolute standardized difference of mean of the shared balance (shared across outcomes)."/>
+      <column name="shared_sdm_family_wise_min_p" comments="The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold for the shared balance (across all outcomes)."/>
       <column name="equipoise" comments="The fraction of the study population with a preference score between 0.3 and 0.7."/>
       <column name="mdrr" comments="The minimum detectable relative risk."/>
       <column name="attrition_fraction" comments="DEPRECATED: The fraction of the target population lost by between initial cohort and outcome model due to various restrictions."/>
@@ -801,8 +885,7 @@
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="outcome_of_interest" comments="Is the outcome of interest (1 = yes, 0 = no)"/>
       <column name="true_effect_size" comments="The true effect size for the target-comparator-outcome. For negatitive controls this equals 1."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
     </table>
     <table name="cm_kaplan_meier_dist" comments="CohortMethodModule: Kaplan Meier distribution">
       <column name="time_day" comments="Time in days since cohort start."/>
@@ -814,8 +897,7 @@
       <column name="comparator_survival_ub" comments="The upper bound of the 95% confidence interval of the survival fraction in the comparator cohort."/>
       <column name="target_at_risk" comments="The number of subjects still at risk in the target cohort."/>
       <column name="comparator_at_risk" comments="The number of subjects still at risk in the comparator cohort."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
       <column name="database_id" comments="Foreign key referencing the database."/>
@@ -823,24 +905,22 @@
     <table name="cm_likelihood_profile" comments="CohortMethodModule: Likelihood Profile">
       <column name="log_rr" comments="The log of the relative risk where the likelihood is sampled."/>
       <column name="log_likelihood" comments="The normalized log likelihood."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="gradient" comments="The gradient of the log likelihood."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
       <column name="database_id" comments="Foreign key referencing the database."/>
     </table>
     <table name="cm_preference_score_dist" comments="CohortMethodModule: Preference score distribution">
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="preference_score" comments="A preference score value."/>
       <column name="target_density" comments="The distribution density for the target cohort at the given preference score."/>
       <column name="comparator_density" comments="The distribution density for the comparator cohort at the given preference score."/>
     </table>
     <table name="cm_propensity_model" comments="CohortMethodModule: Propensity model">
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
       <column name="database_id" comments="Foreign key referencing the database."/>
       <column name="covariate_id" comments="Foreign key referencing the cm_covariate table. 0 is reserved for the intercept."/>
@@ -850,8 +930,7 @@
       <column name="database_id" comments="Foreign key referencing the database.">
         <foreignKey table="cm_covariate" column="database_id"/>
       </column>
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="analysis_id" comments="A foreign key referencing the cm_analysis table.">
         <foreignKey table="cm_covariate" column="analysis_id"/>
         <foreignKey table="cm_covariate_analysis" column="analysis_id"/>
@@ -863,13 +942,23 @@
       <column name="target_mean_before" comments="The mean value of the covariate in the target cohort before propensity score adjustment."/>
       <column name="comparator_mean_before" comments="The mean value of the covariate in the comparator cohort before propensity score adjustment."/>
       <column name="std_diff_before" comments="The standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="std_diff_var_before" comments="The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="balanced_before" comments="Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"/>
       <column name="mean_after" comments="The mean value of the covariate in the union of the target and comparator cohort after propensity score adjustment."/>
       <column name="target_mean_after" comments="The mean value of the covariate in the target cohort after propensity score adjustment."/>
       <column name="comparator_mean_after" comments="The mean value of the covariate in the comparator cohort after propensity score adjustment."/>
       <column name="std_diff_after" comments="The standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="std_diff_var_after" comments="The variance of the standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="balanced_after" comments="Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)"/>
       <column name="target_std_diff" comments="The standardized difference of the means before and after propensity score adjustment in  the target cohort."/>
       <column name="comparator_std_diff" comments="The standardized difference of the means before and after propensity score adjustment in  the comparator cohort."/>
       <column name="target_comparator_std_diff" comments="The standardized difference of the means before and after propensity score adjustment in  the union of the target and comparator cohorts."/>
+    </table>
+    <table name="cm_target_comparator" comments="CohortMethodModule: Defines the surrogate key for the target and comparator cohorts.">
+      <column name="target_comparator_id" comments="Primary key for identifying a target-comparator-(nesting cohort) combination"/>
+      <column name="target_id" comments="The identifier for the target cohort."/>
+      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="nesting_cohort_id" comments="The identifier for the nesting cohort. Null if not nested."/>
     </table>
     <table name="es_analysis" comments="EvidenceSynthesisModule: Analysis reference">
       <column name="evidence_synthesis_analysis_id" comments="A unique identifier for the evidence synthesis analysis."/>
@@ -878,8 +967,7 @@
       <column name="definition" comments="A JSON string representing the settings of the evidence synthesis analysis."/>
     </table>
     <table name="es_cm_diagnostics_summary" comments="EvidenceSynthesisModule: Cohort method diagnostics summary">
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="analysis_id" comments="A unique identifier for the cohort method analysis."/>
       <column name="evidence_synthesis_analysis_id" comments="A foreign key referencing the es_analysis table."/>
@@ -887,15 +975,20 @@
       <column name="i_2" comments="The I2 statistics for heterogeneity."/>
       <column name="tau" comments="The estimated tau (standard deviation of the random-effects distribution)."/>
       <column name="ease" comments="The expected absolute systematic error."/>
+      <column name="max_sdm" comments="The maximum absolute standardized difference of mean."/>
+      <column name="sdm_family_wise_min_p" comments="The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold."/>
+      <column name="shared_max_sdm" comments="The maximum absolute standardized difference of mean of the shared balance (shared across outcomes)."/>
+      <column name="shared_sdm_family_wise_min_p" comments="The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold for the shared balance (across all outcomes)."/>
       <column name="mdrr_diagnostic" comments="PASS/ NOT EVALUATED / FAIL classification of the MDRR diagnostic."/>
       <column name="i_2_diagnostic" comments="PASS/ NOT EVALUATED / FAIL classification of the I2 diagnostic."/>
-      <column name="tau_diagnostic" comments="PPASS/ NOT EVALUATED / FAIL classification of the tau diagnostic."/>
+      <column name="tau_diagnostic" comments="PASS/ NOT EVALUATED / FAIL classification of the tau diagnostic."/>
       <column name="ease_diagnostic" comments="PASS/ NOT EVALUATED / FAIL classification of the EASE diagnostic."/>
+      <column name="balance_diagnostic" comments="PASS/ NOT EVALUATED / FAIL  classification of the balance diagnostic (max_sdm)."/>
+      <column name="shared_balance_diagnostic" comments="PASS/ NOT EVALUATED / FAIL classification of the shared balance diagnostic (shared_max_sdm)."/>
       <column name="unblind" comments="Is unblinding the result recommended? (1 = yes, 0 = no)"/>
     </table>
     <table name="es_cm_result" comments="EvidenceSynthesisModule: Cohort method results">
-      <column name="target_id" comments="The identifier for the target cohort."/>
-      <column name="comparator_id" comments="The identifier for the comparator cohort."/>
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
       <column name="outcome_id" comments="The identifier for the outcome cohort."/>
       <column name="analysis_id" comments="A unique identifier for the cohort method analysis."/>
       <column name="evidence_synthesis_analysis_id" comments="A foreign key referencing the es_analysis table."/>
@@ -920,6 +1013,41 @@
       <column name="calibrated_one_sided_p" comments="The calibrated one-sided p-value considering the null hypothesis of RR &lt;= 1."/>
       <column name="calibrated_log_rr" comments="The log of the calibrated relative risk."/>
       <column name="calibrated_se_log_rr" comments="The standard error of the log of the calibrated relative risk."/>
+      <column name="pi_95_lb" comments="The lower bound of the 95% prediction interval of the relative risk."/>
+      <column name="pi_95_ub" comments="The upper  bound of the 95% prediction interval of the relative risk."/>
+      <column name="calibrated_pi_95_lb" comments="The lower bound of the calibrated 95% prediction interval of the relative risk."/>
+      <column name="calibrated_pi_95_ub" comments="The upper  bound of the calibrated 95% prediction interval of the relative risk."/>
+    </table>
+    <table name="es_cm_covariate_balance" comments="EvidenceSynthesisModule: Holds the covariate balance for the evidence synthesis module.">
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
+      <column name="outcome_id" comments="The identifier for the outcome cohort."/>
+      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
+      <column name="covariate_id" comments="A foreign key referencing the cm_covariate table."/>
+      <column name="evidence_synthesis_analysis_id" comments="A foreign key referencing the es_analysis table."/>
+      <column name="std_diff_before" comments="The standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="std_diff_var_before" comments="The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="balanced_before" comments="Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"/>
+      <column name="std_diff_after" comments="The standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="std_diff_var_after" comments="The variance of the standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="balanced_after" comments="Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)"/>
+    </table>
+    <table name="es_cm_shared_covariate_balance" comments="EvidenceSynthesisModule: Holds the shared covariate balance for the evidence synthesis module.">
+      <column name="target_comparator_id" comments="A foreign key referencing the target_comparator table."/>
+      <column name="analysis_id" comments="A foreign key referencing the cm_analysis table."/>
+      <column name="covariate_id" comments="A foreign key referencing the cm_covariate table."/>
+      <column name="evidence_synthesis_analysis_id" comments="A foreign key referencing the es_analysis table."/>
+      <column name="std_diff_before" comments="The standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="std_diff_var_before" comments="The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment."/>
+      <column name="balanced_before" comments="Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)"/>
+      <column name="std_diff_after" comments="The standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="std_diff_var_after" comments="The variance of the standardized difference of the means between the target and comparator cohort after propensity score adjustment."/>
+      <column name="balanced_after" comments="Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)"/>
+    </table>
+    <table name="es_cm_covariate" comments="EvidenceSynthesisModule: Holds the covariates for the evidence synthesis module.">
+      <column name="covariate_id" comments="A unique identified for a covariate."/>
+      <column name="covariate_name" comments="A name for a covariate, e.g. 'Age group: 20-25 years'."/>
+      <column name="analysis_id" comments="Foreign key referencing the cm_analysis table."/>
+      <column name="covariate_analysis_id" comments="Foreign key referencing the cm_covariate_analysis table."/>
     </table>
     <table name="es_sccs_diagnostics_summary" comments="EvidenceSynthesisModule: Self controlled case series diagnostics summary">
       <column name="exposures_outcome_set_id" comments="A foreign key referencing the sccs_exposures_outcome_set table."/>
@@ -964,6 +1092,10 @@
       <column name="calibrated_one_sided_p" comments="The calibrated one-sided p-value considering the null hypothesis of RR &lt;= 1."/>
       <column name="calibrated_log_rr" comments="The log of the calibrated relative risk."/>
       <column name="calibrated_se_log_rr" comments="The standard error of the log of the calibrated relative risk."/>
+      <column name="pi_95_lb" comments="The lower bound of the 95% prediction interval of the relative risk."/>
+      <column name="pi_95_ub" comments="The upper  bound of the 95% prediction interval of the relative risk."/>
+      <column name="calibrated_pi_95_lb" comments="The lower bound of the calibrated 95% prediction interval of the relative risk."/>
+      <column name="calibrated_pi_95_ub" comments="The upper  bound of the calibrated 95% prediction interval of the relative risk."/>
     </table>
     <table name="plp_cohorts" comments="PatientLevelPredictionModule: Cohort identifier reference">
       <column name="cohort_id" comments="a unique identifier for the cohort in the plp results database"/>
@@ -1017,6 +1149,10 @@
       <column name="model_type" comments="the type of model"/>
       <column name="model_settings_json" comments="the json with the settings"/>
     </table>
+    <table name="plp_hyperparameter_settings" comments="PatientLevelPredictionModule: Holds the hyperparameter settings for the patient-level prediction module.">
+      <column name="hyperparameter_setting_id" comments="a unique identifier for the hyperparameter settings"/>
+      <column name="hyperparameter_settings_json" comments="the json with the settings"/>
+    </table>
     <table name="plp_split_settings" comments="PatientLevelPredictionModule: Split settings">
       <column name="split_setting_id" comments="a unique identifier for the split settings"/>
       <column name="split_settings_json" comments="the json with the settings"/>
@@ -1054,6 +1190,7 @@
       <column name="split_setting_id" comments="the  identifier for the split setting"/>
       <column name="feature_engineering_setting_id" comments="the  identifier for the feature engineering setting"/>
       <column name="tidy_covariates_setting_id" comments="the  identifier for the tidy covariate setting"/>
+      <column name="hyperparameter_setting_id" comments="the  identifier for the hyperparameter setting"/>
     </table>
     <table name="plp_diagnostics" comments="PatientLevelPredictionModule: Diagnostics">
       <column name="diagnostic_id" comments="the unique identifier for the diagnostic results">
@@ -1519,6 +1656,7 @@
       <column name="cdm_source_abbreviation" comments="CDM Source Abbreviation"/>
       <column name="cdm_source_name" comments="CDM Source Name"/>
       <column name="cdm_version" comments="CDM version"/>
+      <column name="cdm_version_concept_id" comments="The Concept Id representing the version of the CDM."/>
       <column name="database_id" comments="Unique identifier for the database"/>
       <column name="source_description" comments="Source description"/>
       <column name="source_documentation_reference" comments="Source Documentation Reference"/>
@@ -1584,6 +1722,12 @@
       <column name="sex" comments="Sex stratum"/>
       <column name="target_cohort_id" comments="Target cohort ID"/>
       <column name="target_cohort_name" comments="Target cohort name"/>
+    </table>
+    <table name="tp_analysis_cohorts" comments="TreatmentPatternsModule: Holds the analysis cohorts for the treatment patterns module.">
+      <column name="cohort_id" comments="Cohort id"/>
+      <column name="cohort_name" comments="Cohort name"/>
+      <column name="type" comments="Cohort type (target, event, exit)"/>
+      <column name="analysis_id" comments="Analysis Id"/>
     </table>
   </tables>
 </schemaMeta>

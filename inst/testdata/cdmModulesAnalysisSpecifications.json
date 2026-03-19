@@ -59,9 +59,9 @@
         }
       ],
       "subsetDefs": [
-        "{\n  \"name\": \"age 18 to 64\",\n  \"definitionId\": 1,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
-        "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}",
-        "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"0.12.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName @operatorNames\"\n}"
+        "{\n  \"name\": \"age 18 to 64\",\n  \"definitionId\": 1,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    }\n  ],\n  \"packageVersion\": \"1.1.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}",
+        "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"1.1.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}",
+        "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"1.1.0\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}"
       ],
       "cohortSubsets": [
         {
@@ -204,8 +204,10 @@
           "ConditionOccurrence": true,
           "ConditionEraStart": true,
           "ConditionEraOverlap": true,
+          "ConditionEraGroupStart": true,
           "ConditionEraGroupOverlap": true,
           "DrugEraStart": true,
+          "DrugEraGroupStart": true,
           "DrugEraGroupOverlap": true,
           "ProcedureOccurrence": true,
           "DeviceExposure": true,
@@ -253,16 +255,11 @@
               "attr_class": "dechallengeRechallengeSettings"
             }
           ],
-          "aggregateCovariateSettings": [
+          "targetBaselineSettings": [
             {
               "targetIds": [1, 2, 1001, 2001],
+              "limitToFirstInNDays": 99999,
               "minPriorObservation": 365,
-              "outcomeIds": 3,
-              "outcomeWashoutDays": 365,
-              "riskWindowStart": 1,
-              "startAnchor": "cohort start",
-              "riskWindowEnd": 0,
-              "endAnchor": "cohort end",
               "covariateSettings": [
                 {
                   "temporal": false,
@@ -305,38 +302,20 @@
                   "attr_fun": "getDbDefaultCovariateData"
                 }
               ],
-              "caseCovariateSettings": {
-                "temporal": false,
-                "temporalSequence": false,
-                "ConditionGroupEraDuring": true,
-                "DrugGroupEraDuring": true,
-                "ProcedureOccurrenceDuring": true,
-                "DeviceExposureDuring": true,
-                "MeasurementDuring": true,
-                "ObservationDuring": true,
-                "VisitConceptCountDuring": true,
-                "includedCovariateConceptIds": [],
-                "addDescendantsToInclude": false,
-                "excludedCovariateConceptIds": [],
-                "addDescendantsToExclude": false,
-                "includedCovariateIds": [],
-                "attr_class": "covariateSettings",
-                "attr_fun": "Characterization::getDbDuringCovariateData"
-              },
-              "casePreTargetDuration": 365,
-              "casePostOutcomeDuration": 365,
-              "extractNonCaseCovariates": true,
-              "attr_class": "aggregateCovariateSettings"
-            },
+              "attr_class": "targetBaselineSettings"
+            }
+          ],
+          "riskFactorSettings": [
             {
               "targetIds": [1, 2, 1001, 2001],
+              "limitToFirstInNDays": 99999,
               "minPriorObservation": 365,
               "outcomeIds": 3,
               "outcomeWashoutDays": 365,
               "riskWindowStart": 1,
-              "startAnchor": "cohort start",
+              "startAnchor": "cohort_start",
               "riskWindowEnd": 365,
-              "endAnchor": "cohort end",
+              "endAnchor": "cohort_end",
               "covariateSettings": [
                 {
                   "temporal": false,
@@ -379,33 +358,54 @@
                   "attr_fun": "getDbDefaultCovariateData"
                 }
               ],
-              "caseCovariateSettings": {
-                "temporal": false,
-                "temporalSequence": false,
-                "ConditionGroupEraDuring": true,
-                "DrugGroupEraDuring": true,
-                "ProcedureOccurrenceDuring": true,
-                "DeviceExposureDuring": true,
-                "MeasurementDuring": true,
-                "ObservationDuring": true,
-                "VisitConceptCountDuring": true,
-                "includedCovariateConceptIds": [],
-                "addDescendantsToInclude": false,
-                "excludedCovariateConceptIds": [],
-                "addDescendantsToExclude": false,
-                "includedCovariateIds": [],
-                "attr_class": "covariateSettings",
-                "attr_fun": "Characterization::getDbDuringCovariateData"
-              },
+              "minTargetSize": 0,
+              "minTwithOSize": 0,
+              "attr_class": "riskFactorSettings"
+            }
+          ],
+          "caseSeriesSettings": [
+            {
+              "targetIds": [1, 2, 1001, 2001],
+              "limitToFirstInNDays": 99999,
+              "minPriorObservation": 365,
+              "outcomeIds": 3,
+              "outcomeWashoutDays": 365,
+              "riskWindowStart": 1,
+              "startAnchor": "cohort_start",
+              "riskWindowEnd": 365,
+              "endAnchor": "cohort_end",
+              "caseCovariateSettings": [
+                {
+                  "temporal": false,
+                  "temporalSequence": false,
+                  "ConditionGroupEraDuring": true,
+                  "DrugGroupEraDuring": true,
+                  "ProcedureOccurrenceDuring": true,
+                  "DeviceExposureDuring": true,
+                  "MeasurementDuring": true,
+                  "ObservationDuring": true,
+                  "VisitConceptCountDuring": true,
+                  "includedCovariateConceptIds": [],
+                  "addDescendantsToInclude": false,
+                  "excludedCovariateConceptIds": [],
+                  "addDescendantsToExclude": false,
+                  "includedCovariateIds": [],
+                  "attr_class": "covariateSettings",
+                  "attr_fun": "Characterization::getDbDuringCovariateData"
+                }
+              ],
               "casePreTargetDuration": 365,
               "casePostOutcomeDuration": 365,
-              "extractNonCaseCovariates": true,
-              "attr_class": "aggregateCovariateSettings"
+              "attr_class": "caseSeriesSettings"
             }
           ],
           "attr_class": "characterizationSettings"
         },
-        "minCharacterizationMean": 0.01
+        "minCharacterizationMean": 0.01,
+        "mode": "CohortIncidence",
+        "minSMD": 0.01,
+        "minCovariateCount": 5,
+        "outputTable": "characterization_cohorts"
       },
       "attr_class": ["ModuleSpecifications", "CharacterizationModuleSpecifications"]
     },
@@ -482,636 +482,787 @@
     {
       "module": "TreatmentPatternsModule",
       "settings": {
-        "cohorts": [
+        "tpAnalysisList": [
           {
-            "cohortId": 11,
-            "cohortName": "ViralSinusitis",
-            "type": "target"
+            "module": "TreatmentPatternsModule",
+            "settings": {
+              "cohorts": [
+                {
+                  "cohortId": 11,
+                  "cohortName": "ViralSinusitis",
+                  "type": "target"
+                },
+                {
+                  "cohortId": 1,
+                  "cohortName": "Celecoxib",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 2,
+                  "cohortName": "Diclofenac",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 3,
+                  "cohortName": "GI bleed",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 4,
+                  "cohortName": "Acetaminophen",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 5,
+                  "cohortName": "Amoxicillin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 6,
+                  "cohortName": "Aspirin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 7,
+                  "cohortName": "Clavulanate",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 9,
+                  "cohortName": "Doxylamine",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 10,
+                  "cohortName": "PenicillinV",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 8,
+                  "cohortName": "Death",
+                  "type": "exit"
+                }
+              ],
+              "analysisId": 1,
+              "description": "",
+              "minEraDuration": 7,
+              "eraCollapseSize": 14,
+              "combinationWindow": 7,
+              "minPostCombinationDuration": 7,
+              "filterTreatments": "First",
+              "maxPathLength": 5,
+              "ageWindow": 5,
+              "minCellCount": 1,
+              "censorType": "minCellCount",
+              "overlapMethod": "truncate",
+              "concatTargets": true,
+              "startAnchor": "startDate",
+              "windowStart": 0,
+              "endAnchor": "endDate",
+              "windowEnd": 0,
+              "stratify": false
+            },
+            "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
           },
           {
-            "cohortId": 1,
-            "cohortName": "Celecoxib",
-            "type": "event"
-          },
-          {
-            "cohortId": 2,
-            "cohortName": "Diclofenac",
-            "type": "event"
-          },
-          {
-            "cohortId": 3,
-            "cohortName": "GI bleed",
-            "type": "event"
-          },
-          {
-            "cohortId": 4,
-            "cohortName": "Acetaminophen",
-            "type": "event"
-          },
-          {
-            "cohortId": 5,
-            "cohortName": "Amoxicillin",
-            "type": "event"
-          },
-          {
-            "cohortId": 6,
-            "cohortName": "Aspirin",
-            "type": "event"
-          },
-          {
-            "cohortId": 7,
-            "cohortName": "Clavulanate",
-            "type": "event"
-          },
-          {
-            "cohortId": 9,
-            "cohortName": "Doxylamine",
-            "type": "event"
-          },
-          {
-            "cohortId": 10,
-            "cohortName": "PenicillinV",
-            "type": "event"
-          },
-          {
-            "cohortId": 1001,
-            "cohortName": "Celecoxib - age 18 to 64 Age 18 to 64",
-            "type": "event"
-          },
-          {
-            "cohortId": 2001,
-            "cohortName": "Diclofenac - age 18 to 64 Age 18 to 64",
-            "type": "event"
-          },
-          {
-            "cohortId": 1002,
-            "cohortName": "Celecoxib - first event with 365 prior obs first event with 365 prior obs",
-            "type": "event"
-          },
-          {
-            "cohortId": 2002,
-            "cohortName": "Diclofenac - first event with 365 prior obs first event with 365 prior obs",
-            "type": "event"
-          },
-          {
-            "cohortId": 1003,
-            "cohortName": "Celecoxib - age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
-            "type": "event"
-          },
-          {
-            "cohortId": 2003,
-            "cohortName": "Diclofenac - age 18 to 64 and first event with 365 prior obs Age 18 to 64, first event with 365 prior obs",
-            "type": "event"
-          },
-          {
-            "cohortId": 8,
-            "cohortName": "Death",
-            "type": "exit"
+            "module": "TreatmentPatternsModule",
+            "settings": {
+              "cohorts": [
+                {
+                  "cohortId": 11,
+                  "cohortName": "ViralSinusitis",
+                  "type": "target"
+                },
+                {
+                  "cohortId": 1,
+                  "cohortName": "Celecoxib",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 2,
+                  "cohortName": "Diclofenac",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 3,
+                  "cohortName": "GI bleed",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 4,
+                  "cohortName": "Acetaminophen",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 5,
+                  "cohortName": "Amoxicillin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 6,
+                  "cohortName": "Aspirin",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 7,
+                  "cohortName": "Clavulanate",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 9,
+                  "cohortName": "Doxylamine",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 10,
+                  "cohortName": "PenicillinV",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 8,
+                  "cohortName": "Death",
+                  "type": "exit"
+                }
+              ],
+              "analysisId": 2,
+              "description": "",
+              "minEraDuration": 7,
+              "eraCollapseSize": 14,
+              "combinationWindow": 7,
+              "minPostCombinationDuration": 7,
+              "filterTreatments": "First",
+              "maxPathLength": 5,
+              "ageWindow": 5,
+              "minCellCount": 1,
+              "censorType": "minCellCount",
+              "overlapMethod": "truncate",
+              "concatTargets": true,
+              "startAnchor": "startDate",
+              "windowStart": 0,
+              "endAnchor": "endDate",
+              "windowEnd": 0,
+              "stratify": false
+            },
+            "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
           }
-        ],
-        "minEraDuration": 7,
-        "eraCollapseSize": 14,
-        "combinationWindow": 7,
-        "minPostCombinationDuration": 7,
-        "filterTreatments": "First",
-        "maxPathLength": 5,
-        "ageWindow": 5,
-        "minCellCount": 1,
-        "censorType": "minCellCount",
-        "overlapMethod": "truncate",
-        "concatTargets": true,
-        "startAnchor": "startDate",
-        "windowStart": 0,
-        "endAnchor": "endDate",
-        "windowEnd": 0
+        ]
       },
       "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
     },
     {
       "module": "CohortMethodModule",
       "settings": {
-        "cmAnalysisList": [
-          {
-            "analysisId": 1,
-            "description": "No matching, simple outcome model",
-            "getDbCohortMethodDataArgs": {
-              "studyStartDate": "",
-              "studyEndDate": "",
-              "firstExposureOnly": true,
-              "removeDuplicateSubjects": "remove all",
-              "restrictToCommonPeriod": false,
-              "washoutPeriod": 183,
-              "maxCohortSize": 100000,
-              "covariateSettings": {
-                "temporal": false,
-                "temporalSequence": false,
-                "DemographicsGender": true,
-                "DemographicsAgeGroup": true,
-                "DemographicsRace": true,
-                "DemographicsEthnicity": true,
-                "DemographicsIndexYear": true,
-                "DemographicsIndexMonth": true,
-                "ConditionGroupEraLongTerm": true,
-                "ConditionGroupEraShortTerm": true,
-                "DrugGroupEraLongTerm": true,
-                "DrugGroupEraShortTerm": true,
-                "DrugGroupEraOverlapping": true,
-                "ProcedureOccurrenceLongTerm": true,
-                "ProcedureOccurrenceShortTerm": true,
-                "DeviceExposureLongTerm": true,
-                "DeviceExposureShortTerm": true,
-                "MeasurementLongTerm": true,
-                "MeasurementShortTerm": true,
-                "MeasurementRangeGroupLongTerm": true,
-                "MeasurementRangeGroupShortTerm": true,
-                "MeasurementValueAsConceptLongTerm": true,
-                "MeasurementValueAsConceptShortTerm": true,
-                "ObservationLongTerm": true,
-                "ObservationShortTerm": true,
-                "ObservationValueAsConceptLongTerm": true,
-                "ObservationValueAsConceptShortTerm": true,
-                "CharlsonIndex": true,
-                "Dcsi": true,
-                "Chads2": true,
-                "Chads2Vasc": true,
-                "includedCovariateConceptIds": [],
-                "includedCovariateIds": [],
-                "addDescendantsToInclude": false,
-                "excludedCovariateConceptIds": [],
-                "addDescendantsToExclude": true,
-                "shortTermStartDays": -30,
-                "mediumTermStartDays": -180,
-                "endDays": 0,
-                "longTermStartDays": -365,
-                "attr_class": "covariateSettings",
-                "attr_fun": "getDbDefaultCovariateData"
-              },
-              "attr_class": "args"
-            },
-            "createStudyPopArgs": {
-              "firstExposureOnly": false,
-              "restrictToCommonPeriod": false,
-              "washoutPeriod": 0,
-              "removeDuplicateSubjects": "keep all",
-              "removeSubjectsWithPriorOutcome": true,
-              "priorOutcomeLookback": 99999,
-              "minDaysAtRisk": 1,
-              "maxDaysAtRisk": 99999,
-              "riskWindowStart": 0,
-              "startAnchor": "cohort start",
-              "riskWindowEnd": 365,
-              "endAnchor": "cohort end",
-              "censorAtNewRiskWindow": false,
-              "attr_class": "args"
-            },
-            "fitOutcomeModelArgs": {
-              "modelType": "cox",
-              "stratified": false,
-              "useCovariates": false,
-              "inversePtWeighting": false,
-              "profileBounds": [-2.3026, 2.3026],
-              "prior": {
-                "priorType": "laplace",
-                "variance": 1,
-                "exclude": null,
-                "graph": null,
-                "neighborhood": null,
-                "useCrossValidation": true,
-                "forceIntercept": false,
-                "attr_class": "cyclopsPrior"
-              },
-              "control": {
-                "maxIterations": 1000,
-                "tolerance": 2e-07,
-                "convergenceType": "gradient",
-                "autoSearch": true,
-                "fold": 10,
-                "lowerLimit": 0.01,
-                "upperLimit": 20,
-                "gridSteps": 10,
-                "minCVData": 100,
-                "cvRepetitions": 10,
-                "noiseLevel": "quiet",
-                "threads": 1,
-                "seed": 1,
-                "resetCoefficients": true,
-                "startingVariance": 0.01,
-                "useKKTSwindle": false,
-                "tuneSwindle": 10,
-                "selectorType": "auto",
-                "initialBound": 2,
-                "maxBoundCount": 5,
-                "algorithm": "ccd",
-                "doItAll": true,
-                "syncCV": false,
-                "attr_class": "cyclopsControl"
-              },
-              "attr_class": "args"
-            },
-            "attr_class": "cmAnalysis"
+        "cmAnalysesSpecifications": {
+          "cmDiagnosticThresholds": {
+            "generalizabilitySdmThreshold": 999,
+            "equipoiseThreshold": 0.2,
+            "sdmAlpha": null,
+            "sdmThreshold": 0.1,
+            "easeThreshold": 0.6,
+            "mdrrThreshold": 10
           },
-          {
-            "analysisId": 2,
-            "description": "Matching on ps and covariates, simple outcomeModel",
-            "getDbCohortMethodDataArgs": {
-              "studyStartDate": "",
-              "studyEndDate": "",
-              "firstExposureOnly": true,
-              "removeDuplicateSubjects": "remove all",
-              "restrictToCommonPeriod": false,
-              "washoutPeriod": 183,
-              "maxCohortSize": 100000,
-              "covariateSettings": {
-                "temporal": false,
-                "temporalSequence": false,
-                "DemographicsGender": true,
-                "DemographicsAgeGroup": true,
-                "DemographicsRace": true,
-                "DemographicsEthnicity": true,
-                "DemographicsIndexYear": true,
-                "DemographicsIndexMonth": true,
-                "ConditionGroupEraLongTerm": true,
-                "ConditionGroupEraShortTerm": true,
-                "DrugGroupEraLongTerm": true,
-                "DrugGroupEraShortTerm": true,
-                "DrugGroupEraOverlapping": true,
-                "ProcedureOccurrenceLongTerm": true,
-                "ProcedureOccurrenceShortTerm": true,
-                "DeviceExposureLongTerm": true,
-                "DeviceExposureShortTerm": true,
-                "MeasurementLongTerm": true,
-                "MeasurementShortTerm": true,
-                "MeasurementRangeGroupLongTerm": true,
-                "MeasurementRangeGroupShortTerm": true,
-                "MeasurementValueAsConceptLongTerm": true,
-                "MeasurementValueAsConceptShortTerm": true,
-                "ObservationLongTerm": true,
-                "ObservationShortTerm": true,
-                "ObservationValueAsConceptLongTerm": true,
-                "ObservationValueAsConceptShortTerm": true,
-                "CharlsonIndex": true,
-                "Dcsi": true,
-                "Chads2": true,
-                "Chads2Vasc": true,
-                "includedCovariateConceptIds": [],
-                "includedCovariateIds": [],
-                "addDescendantsToInclude": false,
-                "excludedCovariateConceptIds": [],
-                "addDescendantsToExclude": true,
-                "shortTermStartDays": -30,
-                "mediumTermStartDays": -180,
-                "endDays": 0,
-                "longTermStartDays": -365,
-                "attr_class": "covariateSettings",
-                "attr_fun": "getDbDefaultCovariateData"
-              },
-              "attr_class": "args"
-            },
-            "createStudyPopArgs": {
-              "firstExposureOnly": false,
-              "restrictToCommonPeriod": false,
-              "washoutPeriod": 0,
-              "removeDuplicateSubjects": "keep all",
-              "removeSubjectsWithPriorOutcome": true,
-              "priorOutcomeLookback": 99999,
-              "minDaysAtRisk": 1,
-              "maxDaysAtRisk": 99999,
-              "riskWindowStart": 0,
-              "startAnchor": "cohort start",
-              "riskWindowEnd": 365,
-              "endAnchor": "cohort end",
-              "censorAtNewRiskWindow": false,
-              "attr_class": "args"
-            },
-            "createPsArgs": {
-              "maxCohortSizeForFitting": 250000,
-              "errorOnHighCorrelation": true,
-              "stopOnError": false,
-              "prior": {
-                "priorType": "laplace",
-                "variance": 1,
-                "exclude": 0,
-                "graph": null,
-                "neighborhood": null,
-                "useCrossValidation": true,
-                "forceIntercept": false,
-                "attr_class": "cyclopsPrior"
-              },
-              "control": {
-                "maxIterations": 1000,
-                "tolerance": 1e-06,
-                "convergenceType": "gradient",
-                "autoSearch": true,
-                "fold": 10,
-                "lowerLimit": 0.01,
-                "upperLimit": 20,
-                "gridSteps": 10,
-                "minCVData": 100,
-                "cvRepetitions": 1,
-                "noiseLevel": "silent",
-                "threads": 1,
-                "seed": null,
-                "resetCoefficients": false,
-                "startingVariance": -1,
-                "useKKTSwindle": false,
-                "tuneSwindle": 10,
-                "selectorType": "auto",
-                "initialBound": 2,
-                "maxBoundCount": 5,
-                "algorithm": "ccd",
-                "doItAll": true,
-                "syncCV": false,
-                "attr_class": "cyclopsControl"
-              },
-              "estimator": "att",
-              "attr_class": "args"
-            },
-            "matchOnPsArgs": {
-              "caliper": 0.2,
-              "caliperScale": "standardized logit",
-              "maxRatio": 1,
-              "allowReverseMatch": false,
-              "attr_class": "args"
-            },
-            "computeSharedCovariateBalanceArgs": {
-              "maxCohortSize": 250000,
-              "attr_class": "args"
-            },
-            "computeCovariateBalanceArgs": {
-              "maxCohortSize": 250000,
-              "covariateFilter": {
-                "label": ["Age group", "Gender: female", "Race", "Ethnicity", "Medical history: General", "Medical history: Cardiovascular disease", "Medical history: Neoplasms", "Medication use", "Charlson comorbidity index", "CHADS2Vasc", "DCSI"],
-                "analysisId": [3, 1, 4, 5, 210, 210, 210, 410, 901, 904, 902],
-                "covariateIds": [null, "8532001", null, null, "4006969210,438409210,4212540210,255573210,201606210,4182210210,440383210,201820210,318800210,192671210,439727210,432867210,316866210,4104000210,433736210,80180210,255848210,140168210,4030518210,80809210,435783210,4279309210,81893210,81902210,197494210,4134440210", "313217210,381591210,317576210,321588210,316139210,4185932210,321052210,440417210,444247210", "4044013210,432571210,40481902210,443392210,4112853210,4180790210,443388210,197508210,200962210", "21601782410,21602796410,21604686410,21604389410,21603932410,21601387410,21602028410,21600960410,21601664410,21601744410,21601461410,21600046410,21603248410,21600712410,21603890410,21601853410,21604254410,21604489410,21604752410", "1901", "1904", "1902"],
-                "attr_class": ["spec_tbl_df", "tbl_df", "tbl", "data.frame"],
-                "attr_row.names": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-                "attr_spec": {
-                  "cols": {
-                    "label": [],
-                    "analysisId": [],
-                    "covariateIds": []
-                  },
-                  "default": [],
-                  "delim": ","
+          "refitPsForEveryStudyPopulation": false,
+          "refitPsForEveryOutcome": false,
+          "analysesToExclude": null,
+          "targetComparatorOutcomesList": [
+            {
+              "includedCovariateConceptIds": null,
+              "excludedCovariateConceptIds": [1118084, 1124300],
+              "nestingCohortId": null,
+              "outcomes": [
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10037
                 },
-                "attr_problems": {}
-              },
-              "attr_class": "args"
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10038
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10039
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10040
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10041
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10042
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10043
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10044
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10046
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10047
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10048
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10049
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": null,
+                  "trueEffectSize": null,
+                  "outcomeOfInterest": true,
+                  "outcomeId": 3
+                }
+              ],
+              "comparatorId": 2002,
+              "targetId": 1002
             },
-            "fitOutcomeModelArgs": {
-              "modelType": "cox",
-              "stratified": false,
-              "useCovariates": false,
-              "inversePtWeighting": false,
-              "profileBounds": [-2.3026, 2.3026],
-              "prior": {
-                "priorType": "laplace",
-                "variance": 1,
-                "exclude": null,
-                "graph": null,
-                "neighborhood": null,
-                "useCrossValidation": true,
-                "forceIntercept": false,
-                "attr_class": "cyclopsPrior"
+            {
+              "includedCovariateConceptIds": null,
+              "excludedCovariateConceptIds": [1118084, 1124300],
+              "nestingCohortId": null,
+              "outcomes": [
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10037
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10038
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10039
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10040
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10041
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10042
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10043
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10044
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10046
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10047
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10048
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": 5,
+                  "trueEffectSize": 1,
+                  "outcomeOfInterest": false,
+                  "outcomeId": 10049
+                },
+                {
+                  "endAnchor": null,
+                  "riskWindowEnd": null,
+                  "startAnchor": null,
+                  "riskWindowStart": null,
+                  "priorOutcomeLookback": null,
+                  "trueEffectSize": null,
+                  "outcomeOfInterest": true,
+                  "outcomeId": 3
+                }
+              ],
+              "comparatorId": 2003,
+              "targetId": 1003
+            }
+          ],
+          "cmAnalysisList": [
+            {
+              "fitOutcomeModelArgs": {
+                "control": {
+                  "maxIterations": 1000,
+                  "tolerance": 2e-07,
+                  "convergenceType": "gradient",
+                  "autoSearch": true,
+                  "fold": 10,
+                  "lowerLimit": 0.01,
+                  "upperLimit": 20,
+                  "gridSteps": 10,
+                  "minCVData": 100,
+                  "cvRepetitions": 10,
+                  "noiseLevel": "quiet",
+                  "threads": 1,
+                  "seed": 1,
+                  "resetCoefficients": true,
+                  "startingVariance": 0.01,
+                  "useKKTSwindle": false,
+                  "tuneSwindle": 10,
+                  "selectorType": "auto",
+                  "initialBound": 2,
+                  "maxBoundCount": 5,
+                  "algorithm": "ccd",
+                  "doItAll": true,
+                  "syncCV": false
+                },
+                "prior": {
+                  "priorType": "laplace",
+                  "variance": 1,
+                  "exclude": null,
+                  "graph": null,
+                  "neighborhood": null,
+                  "useCrossValidation": true,
+                  "forceIntercept": false
+                },
+                "profileBounds": [-2.3026, 2.3026],
+                "profileGrid": null,
+                "includeCovariateIds": null,
+                "excludeCovariateIds": null,
+                "interactionCovariateIds": null,
+                "bootstrapReplicates": 200,
+                "bootstrapCi": false,
+                "inversePtWeighting": false,
+                "useCovariates": false,
+                "stratified": false,
+                "modelType": "cox"
               },
-              "control": {
-                "maxIterations": 1000,
-                "tolerance": 2e-07,
-                "convergenceType": "gradient",
-                "autoSearch": true,
-                "fold": 10,
-                "lowerLimit": 0.01,
-                "upperLimit": 20,
-                "gridSteps": 10,
-                "minCVData": 100,
-                "cvRepetitions": 10,
-                "noiseLevel": "quiet",
-                "threads": 1,
-                "seed": 1,
-                "resetCoefficients": true,
-                "startingVariance": 0.01,
-                "useKKTSwindle": false,
-                "tuneSwindle": 10,
-                "selectorType": "auto",
-                "initialBound": 2,
-                "maxBoundCount": 5,
-                "algorithm": "ccd",
-                "doItAll": true,
-                "syncCV": false,
-                "attr_class": "cyclopsControl"
+              "computeCovariateBalanceArgs": null,
+              "computeSharedCovariateBalanceArgs": null,
+              "stratifyByPsArgs": null,
+              "matchOnPsArgs": null,
+              "truncateIptwArgs": null,
+              "trimByPsArgs": null,
+              "createPsArgs": null,
+              "createStudyPopulationArgs": {
+                "censorAtNewRiskWindow": false,
+                "endAnchor": "cohort end",
+                "riskWindowEnd": 365,
+                "startAnchor": "cohort start",
+                "riskWindowStart": 0,
+                "maxDaysAtRisk": 99999,
+                "minDaysAtRisk": 1,
+                "priorOutcomeLookback": 99999,
+                "removeSubjectsWithPriorOutcome": true
               },
-              "attr_class": "args"
+              "getDbCohortMethodDataArgs": {
+                "covariateSettings": {
+                  "temporal": false,
+                  "temporalSequence": false,
+                  "DemographicsGender": true,
+                  "DemographicsAgeGroup": true,
+                  "DemographicsRace": true,
+                  "DemographicsEthnicity": true,
+                  "DemographicsIndexYear": true,
+                  "DemographicsIndexMonth": true,
+                  "ConditionGroupEraLongTerm": true,
+                  "ConditionGroupEraShortTerm": true,
+                  "DrugGroupEraLongTerm": true,
+                  "DrugGroupEraShortTerm": true,
+                  "DrugGroupEraOverlapping": true,
+                  "ProcedureOccurrenceLongTerm": true,
+                  "ProcedureOccurrenceShortTerm": true,
+                  "DeviceExposureLongTerm": true,
+                  "DeviceExposureShortTerm": true,
+                  "MeasurementLongTerm": true,
+                  "MeasurementShortTerm": true,
+                  "MeasurementRangeGroupLongTerm": true,
+                  "MeasurementRangeGroupShortTerm": true,
+                  "MeasurementValueAsConceptLongTerm": true,
+                  "MeasurementValueAsConceptShortTerm": true,
+                  "ObservationLongTerm": true,
+                  "ObservationShortTerm": true,
+                  "ObservationValueAsConceptLongTerm": true,
+                  "ObservationValueAsConceptShortTerm": true,
+                  "CharlsonIndex": true,
+                  "Dcsi": true,
+                  "Chads2": true,
+                  "Chads2Vasc": true,
+                  "includedCovariateConceptIds": [],
+                  "includedCovariateIds": [],
+                  "addDescendantsToInclude": false,
+                  "excludedCovariateConceptIds": [],
+                  "addDescendantsToExclude": true,
+                  "shortTermStartDays": -30,
+                  "mediumTermStartDays": -180,
+                  "endDays": 0,
+                  "longTermStartDays": -365,
+                  "attr_class": "covariateSettings",
+                  "attr_fun": "getDbDefaultCovariateData"
+                },
+                "maxCohortSize": 100000,
+                "nestingCohortId": null,
+                "washoutPeriod": 183,
+                "genderConceptIds": null,
+                "maxAge": null,
+                "minAge": null,
+                "restrictToCommonPeriod": true,
+                "removeDuplicateSubjects": "remove all",
+                "firstExposureOnly": true,
+                "studyEndDate": "",
+                "studyStartDate": ""
+              },
+              "description": "No matching, simple outcome model",
+              "analysisId": 1
             },
-            "attr_class": "cmAnalysis"
-          }
-        ],
-        "targetComparatorOutcomesList": [
-          {
-            "targetId": 1002,
-            "comparatorId": 2002,
-            "outcomes": [
-              {
-                "outcomeId": 10037,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
+            {
+              "fitOutcomeModelArgs": {
+                "control": {
+                  "maxIterations": 1000,
+                  "tolerance": 2e-07,
+                  "convergenceType": "gradient",
+                  "autoSearch": true,
+                  "fold": 10,
+                  "lowerLimit": 0.01,
+                  "upperLimit": 20,
+                  "gridSteps": 10,
+                  "minCVData": 100,
+                  "cvRepetitions": 10,
+                  "noiseLevel": "quiet",
+                  "threads": 1,
+                  "seed": 1,
+                  "resetCoefficients": true,
+                  "startingVariance": 0.01,
+                  "useKKTSwindle": false,
+                  "tuneSwindle": 10,
+                  "selectorType": "auto",
+                  "initialBound": 2,
+                  "maxBoundCount": 5,
+                  "algorithm": "ccd",
+                  "doItAll": true,
+                  "syncCV": false
+                },
+                "prior": {
+                  "priorType": "laplace",
+                  "variance": 1,
+                  "exclude": null,
+                  "graph": null,
+                  "neighborhood": null,
+                  "useCrossValidation": true,
+                  "forceIntercept": false
+                },
+                "profileBounds": [-2.3026, 2.3026],
+                "profileGrid": null,
+                "includeCovariateIds": null,
+                "excludeCovariateIds": null,
+                "interactionCovariateIds": null,
+                "bootstrapReplicates": 200,
+                "bootstrapCi": false,
+                "inversePtWeighting": false,
+                "useCovariates": false,
+                "stratified": false,
+                "modelType": "cox"
               },
-              {
-                "outcomeId": 10038,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
+              "computeCovariateBalanceArgs": {
+                "alpha": 0.05,
+                "threshold": 0.1,
+                "covariateFilter": {
+                  "label": ["Age group", "Gender: female", "Race", "Ethnicity", "Medical history: General", "Medical history: Cardiovascular disease", "Medical history: Neoplasms", "Medication use", "Charlson comorbidity index", "CHADS2Vasc", "DCSI"],
+                  "analysisId": [3, 1, 4, 5, 210, 210, 210, 410, 901, 904, 902],
+                  "covariateIds": [null, "8532001", null, null, "4006969210,438409210,4212540210,255573210,201606210,4182210210,440383210,201820210,318800210,192671210,439727210,432867210,316866210,4104000210,433736210,80180210,255848210,140168210,4030518210,80809210,435783210,4279309210,81893210,81902210,197494210,4134440210", "313217210,381591210,317576210,321588210,316139210,4185932210,321052210,440417210,444247210", "4044013210,432571210,40481902210,443392210,4112853210,4180790210,443388210,197508210,200962210", "21601782410,21602796410,21604686410,21604389410,21603932410,21601387410,21602028410,21600960410,21601664410,21601744410,21601461410,21600046410,21603248410,21600712410,21603890410,21601853410,21604254410,21604489410,21604752410", "1901", "1904", "1902"],
+                  "attr_row.names": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                },
+                "maxCohortSize": 250000,
+                "subgroupCovariateId": null
               },
-              {
-                "outcomeId": 10039,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
+              "computeSharedCovariateBalanceArgs": {
+                "alpha": 0.05,
+                "threshold": 0.1,
+                "covariateFilter": null,
+                "maxCohortSize": 250000,
+                "subgroupCovariateId": null
               },
-              {
-                "outcomeId": 10040,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
+              "stratifyByPsArgs": null,
+              "matchOnPsArgs": {
+                "matchCovariateIds": null,
+                "matchColumns": null,
+                "allowReverseMatch": false,
+                "maxRatio": 1,
+                "caliperScale": "standardized logit",
+                "caliper": 0.2
               },
-              {
-                "outcomeId": 10041,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
+              "truncateIptwArgs": null,
+              "trimByPsArgs": null,
+              "createPsArgs": {
+                "estimator": "att",
+                "control": {
+                  "maxIterations": 1000,
+                  "tolerance": 1e-06,
+                  "convergenceType": "gradient",
+                  "autoSearch": true,
+                  "fold": 10,
+                  "lowerLimit": 0.01,
+                  "upperLimit": 20,
+                  "gridSteps": 10,
+                  "minCVData": 100,
+                  "cvRepetitions": 1,
+                  "noiseLevel": "silent",
+                  "threads": 1,
+                  "seed": null,
+                  "resetCoefficients": false,
+                  "startingVariance": -1,
+                  "useKKTSwindle": false,
+                  "tuneSwindle": 10,
+                  "selectorType": "auto",
+                  "initialBound": 2,
+                  "maxBoundCount": 5,
+                  "algorithm": "ccd",
+                  "doItAll": true,
+                  "syncCV": false
+                },
+                "prior": {
+                  "priorType": "laplace",
+                  "variance": 1,
+                  "exclude": 0,
+                  "graph": null,
+                  "neighborhood": null,
+                  "useCrossValidation": true,
+                  "forceIntercept": false
+                },
+                "stopOnError": false,
+                "errorOnHighCorrelation": true,
+                "maxCohortSizeForFitting": 250000,
+                "includeCovariateIds": null,
+                "excludeCovariateIds": null
               },
-              {
-                "outcomeId": 10042,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
+              "createStudyPopulationArgs": {
+                "censorAtNewRiskWindow": false,
+                "endAnchor": "cohort end",
+                "riskWindowEnd": 365,
+                "startAnchor": "cohort start",
+                "riskWindowStart": 0,
+                "maxDaysAtRisk": 99999,
+                "minDaysAtRisk": 1,
+                "priorOutcomeLookback": 99999,
+                "removeSubjectsWithPriorOutcome": true
               },
-              {
-                "outcomeId": 10043,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
+              "getDbCohortMethodDataArgs": {
+                "covariateSettings": {
+                  "temporal": false,
+                  "temporalSequence": false,
+                  "DemographicsGender": true,
+                  "DemographicsAgeGroup": true,
+                  "DemographicsRace": true,
+                  "DemographicsEthnicity": true,
+                  "DemographicsIndexYear": true,
+                  "DemographicsIndexMonth": true,
+                  "ConditionGroupEraLongTerm": true,
+                  "ConditionGroupEraShortTerm": true,
+                  "DrugGroupEraLongTerm": true,
+                  "DrugGroupEraShortTerm": true,
+                  "DrugGroupEraOverlapping": true,
+                  "ProcedureOccurrenceLongTerm": true,
+                  "ProcedureOccurrenceShortTerm": true,
+                  "DeviceExposureLongTerm": true,
+                  "DeviceExposureShortTerm": true,
+                  "MeasurementLongTerm": true,
+                  "MeasurementShortTerm": true,
+                  "MeasurementRangeGroupLongTerm": true,
+                  "MeasurementRangeGroupShortTerm": true,
+                  "MeasurementValueAsConceptLongTerm": true,
+                  "MeasurementValueAsConceptShortTerm": true,
+                  "ObservationLongTerm": true,
+                  "ObservationShortTerm": true,
+                  "ObservationValueAsConceptLongTerm": true,
+                  "ObservationValueAsConceptShortTerm": true,
+                  "CharlsonIndex": true,
+                  "Dcsi": true,
+                  "Chads2": true,
+                  "Chads2Vasc": true,
+                  "includedCovariateConceptIds": [],
+                  "includedCovariateIds": [],
+                  "addDescendantsToInclude": false,
+                  "excludedCovariateConceptIds": [],
+                  "addDescendantsToExclude": true,
+                  "shortTermStartDays": -30,
+                  "mediumTermStartDays": -180,
+                  "endDays": 0,
+                  "longTermStartDays": -365,
+                  "attr_class": "covariateSettings",
+                  "attr_fun": "getDbDefaultCovariateData"
+                },
+                "maxCohortSize": 100000,
+                "nestingCohortId": null,
+                "washoutPeriod": 183,
+                "genderConceptIds": null,
+                "maxAge": null,
+                "minAge": null,
+                "restrictToCommonPeriod": true,
+                "removeDuplicateSubjects": "remove all",
+                "firstExposureOnly": true,
+                "studyEndDate": "",
+                "studyStartDate": ""
               },
-              {
-                "outcomeId": 10044,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10046,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10047,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10048,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10049,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 3,
-                "outcomeOfInterest": true,
-                "trueEffectSize": null,
-                "attr_class": "outcome"
-              }
-            ],
-            "excludedCovariateConceptIds": [1118084, 1124300],
-            "attr_class": "targetComparatorOutcomes"
-          },
-          {
-            "targetId": 1003,
-            "comparatorId": 2003,
-            "outcomes": [
-              {
-                "outcomeId": 10037,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10038,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10039,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10040,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10041,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10042,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10043,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10044,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10046,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10047,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10048,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 10049,
-                "outcomeOfInterest": false,
-                "trueEffectSize": 1,
-                "priorOutcomeLookback": 5,
-                "attr_class": "outcome"
-              },
-              {
-                "outcomeId": 3,
-                "outcomeOfInterest": true,
-                "trueEffectSize": null,
-                "attr_class": "outcome"
-              }
-            ],
-            "excludedCovariateConceptIds": [1118084, 1124300],
-            "attr_class": "targetComparatorOutcomes"
-          }
-        ],
-        "refitPsForEveryOutcome": false,
-        "refitPsForEveryStudyPopulation": false,
-        "cmDiagnosticThresholds": {
-          "mdrrThreshold": "Inf",
-          "easeThreshold": 0.6,
-          "sdmThreshold": 0.1,
-          "equipoiseThreshold": 0.2,
-          "generalizabilitySdmThreshold": 1,
-          "attr_class": "CmDiagnosticThresholds"
+              "description": "Matching on ps and covariates, simple outcomeModel",
+              "analysisId": 2
+            }
+          ]
         }
       },
       "attr_class": ["ModuleSpecifications", "CohortMethodModuleSpecifications"]
@@ -1639,38 +1790,54 @@
                 "includeCovariateIds": null,
                 "upperLimit": 20,
                 "lowerLimit": 0.01,
-                "priorCoefs": null,
-                "attr_settings": {
-                  "priorfunction": "Cyclops::createPrior",
-                  "selectorType": "byPid",
-                  "crossValidationInPrior": true,
-                  "modelType": "logistic",
-                  "addIntercept": true,
-                  "useControl": true,
-                  "seed": 93739120,
-                  "name": "Lasso Logistic Regression",
-                  "threads": -1,
-                  "tolerance": 2e-06,
-                  "cvRepetitions": 1,
-                  "maxIterations": 3000
-                },
-                "attr_modelType": "binary",
-                "attr_saveType": "RtoJson"
+                "priorCoefs": null
+              },
+              "settings": {
+                "modelName": "lassoLogisticRegression",
+                "modelType": "binary",
+                "cyclopsModelType": "logistic",
+                "priorfunction": "Cyclops::createPrior",
+                "selectorType": "byPid",
+                "crossValidationInPrior": true,
+                "addIntercept": true,
+                "useControl": true,
+                "seed": 80051380,
+                "threads": -1,
+                "tolerance": 2e-06,
+                "cvRepetitions": 1,
+                "maxIterations": 3000,
+                "saveType": "RtoJson",
+                "predict": "predictCyclops"
               },
               "attr_class": "modelSettings"
             },
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 95791,
+              "seed": 33343,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"
             },
+            "hyperparameterSettings": {
+              "search": "grid",
+              "tuningMetric": {
+                "fun": {
+                  "serialized_code": ["58", "0a", "00", "00", "00", "03", "00", "04", "04", "03", "00", "03", "05", "00", "00", "00", "00", "05", "55", "54", "46", "2d", "38", "00", "00", "04", "03", "00", "00", "00", "04", "00", "00", "00", "00", "00", "00", "00", "f9", "00", "00", "00", "00", "00", "00", "00", "02", "00", "04", "00", "09", "00", "00", "00", "16", "50", "61", "74", "69", "65", "6e", "74", "4c", "65", "76", "65", "6c", "50", "72", "65", "64", "69", "63", "74", "69", "6f", "6e", "00", "04", "00", "09", "00", "00", "00", "05", "36", "2e", "36", "2e", "30", "00", "00", "00", "fe", "00", "00", "00", "13", "00", "00", "00", "1d", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "66", "75", "6e", "41", "72", "67", "73", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "00", "13", "00", "00", "00", "00", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "6c", "69", "73", "74", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "6e", "61", "6d", "65", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "41", "55", "43", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "41", "55", "43", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "66", "75", "6e", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "04", "03", "00", "00", "02", "ff", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "70", "72", "65", "64", "69", "63", "74", "69", "6f", "6e", "00", "00", "00", "fb", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "12", "63", "6f", "6e", "66", "69", "64", "65", "6e", "63", "65", "49", "6e", "74", "65", "72", "76", "61", "6c", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "7b", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0e", "63", "68", "65", "63", "6b", "44", "61", "74", "61", "66", "72", "61", "6d", "65", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "63", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "76", "61", "6c", "75", "65", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0c", "6f", "75", "74", "63", "6f", "6d", "65", "43", "6f", "75", "6e", "74", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "3c", "2d", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "74", "72", "75", "74", "68", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "69", "66", "65", "6c", "73", "65", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "3e", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "24", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0c", "6f", "75", "74", "63", "6f", "6d", "65", "43", "6f", "75", "6e", "74", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "5b", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "09", "69", "73", "2e", "66", "69", "6e", "69", "74", "65", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "69", "66", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "3c", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "6c", "65", "6e", "67", "74", "68", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "75", "6e", "69", "71", "75", "65", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "40", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "3a", "3a", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0e", "50", "61", "72", "61", "6c", "6c", "65", "6c", "4c", "6f", "67", "67", "65", "72", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6c", "6f", "67", "57", "61", "72", "6e", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "33", "43", "61", "6e", "6e", "6f", "74", "20", "63", "6f", "6d", "70", "75", "74", "65", "20", "41", "55", "43", "3a", "20", "6f", "75", "74", "63", "6f", "6d", "65", "43", "6f", "75", "6e", "74", "20", "68", "61", "73", "20", "6f", "6e", "6c", "79", "20", "6f", "6e", "65", "20", "63", "6c", "61", "73", "73", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "08", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "72", "65", "74", "75", "72", "6e", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "64", "61", "74", "61", "2e", "66", "72", "61", "6d", "65", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "61", "75", "63", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "61", "75", "63", "5f", "6c", "62", "39", "35", "63", "69", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "61", "75", "63", "5f", "75", "62", "39", "35", "63", "69", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "1b", "ff", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "25", "69", "6e", "25", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "72", "61", "77", "56", "61", "6c", "75", "65", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "63", "6f", "6c", "6e", "61", "6d", "65", "73", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0a", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "72", "61", "77", "56", "61", "6c", "75", "65", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "73", "63", "6f", "72", "65", "73", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "72", "61", "77", "56", "61", "6c", "75", "65", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "22", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "76", "61", "6c", "75", "65", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "08", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "1b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "09", "61", "75", "63", "57", "69", "74", "68", "43", "69", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "22", "ff", "00", "00", "04", "02", "00", "00", "0d", "ff", "00", "00", "00", "06", "00", "00", "0e", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0f", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "11", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "1b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0c", "61", "75", "63", "57", "69", "74", "68", "6f", "75", "74", "43", "69", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "22", "ff", "00", "00", "04", "02", "00", "00", "0d", "ff", "00", "00", "00", "06", "00", "00", "0e", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0f", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "11", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "63", "6f", "6d", "70", "75", "74", "65", "41", "75", "63", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "09", "6d", "65", "74", "72", "69", "63", "46", "75", "6e", "00", "00", "04", "03", "00", "00", "01", "ff", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "00", "fb", "00", "00", "00", "fe", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "72", "65", "73", "75", "6c", "74", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "64", "6f", "2e", "63", "61", "6c", "6c", "00", "00", "00", "02", "00", "00", "06", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "04", "ff", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "07", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "03", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "7c", "7c", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "2b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "21", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "69", "73", "2e", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "21", "3d", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "16", "ff", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "2c", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "13", "ff", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "73", "74", "6f", "70", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "35", "4d", "65", "74", "72", "69", "63", "20", "66", "75", "6e", "63", "74", "69", "6f", "6e", "20", "6d", "75", "73", "74", "20", "72", "65", "74", "75", "72", "6e", "20", "6f", "6e", "65", "20", "66", "69", "6e", "69", "74", "65", "20", "6e", "75", "6d", "65", "72", "69", "63", "20", "76", "61", "6c", "75", "65", "2e", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "63", "61", "6c", "6c", "2e", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "6d", "61", "78", "69", "6d", "69", "7a", "65", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "00", "fb", "00", "00", "00", "fe", "00", "00", "00", "15", "00", "00", "00", "0f", "00", "00", "00", "0d", "00", "00", "00", "46", "00", "00", "00", "0c", "00", "00", "00", "17", "00", "00", "00", "01", "00", "00", "00", "1d", "00", "00", "00", "03", "00", "00", "00", "1d", "00", "00", "00", "04", "00", "00", "00", "26", "00", "00", "00", "02", "00", "00", "00", "16", "00", "00", "00", "05", "00", "00", "00", "04", "00", "00", "00", "1a", "00", "00", "00", "09", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "0a", "00", "00", "00", "3b", "00", "00", "00", "0b", "00", "00", "00", "5a", "00", "00", "00", "08", "00", "00", "00", "25", "00", "00", "00", "1a", "00", "00", "00", "0c", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "0d", "00", "00", "00", "10", "00", "00", "00", "0e", "00", "00", "00", "34", "00", "00", "00", "0f", "00", "00", "00", "5b", "00", "00", "00", "08", "00", "00", "00", "5a", "00", "00", "00", "07", "00", "00", "00", "33", "00", "00", "00", "1a", "00", "00", "00", "10", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "11", "00", "00", "00", "3b", "00", "00", "00", "12", "00", "00", "00", "5b", "00", "00", "00", "07", "00", "00", "00", "03", "00", "00", "00", "13", "00", "00", "00", "41", "00", "00", "00", "17", "00", "00", "00", "14", "00", "00", "00", "22", "00", "00", "00", "16", "00", "00", "00", "25", "00", "00", "00", "1f", "00", "00", "00", "17", "00", "00", "00", "26", "00", "00", "00", "15", "00", "00", "00", "02", "00", "00", "00", "42", "00", "00", "00", "11", "00", "00", "00", "04", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "01", "00", "00", "00", "19", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "00", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "01", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2a", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "06", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "03", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "04", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "00", "00", "00", "07", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "03", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "04", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "05", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2b", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2b", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "07", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2c", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "08", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2d", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "09", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2e", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0a", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "16", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0b", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2c", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0c", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "13", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0d", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2f", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "35", "4d", "65", "74", "72", "69", "63", "20", "66", "75", "6e", "63", "74", "69", "6f", "6e", "20", "6d", "75", "73", "74", "20", "72", "65", "74", "75", "72", "6e", "20", "6f", "6e", "65", "20", "66", "69", "6e", "69", "74", "65", "20", "6e", "75", "6d", "65", "72", "69", "63", "20", "76", "61", "6c", "75", "65", "2e", "00", "00", "00", "02", "00", "00", "30", "ff", "00", "00", "00", "00", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "01", "00", "00", "2a", "ff", "00", "00", "00", "f3", "00", "00", "00", "01", "00", "00", "00", "15", "00", "00", "00", "0d", "00", "00", "00", "04", "00", "00", "00", "0c", "00", "00", "00", "14", "00", "00", "00", "00", "00", "00", "00", "01", "00", "00", "00", "03", "00", "00", "00", "01", "00", "00", "06", "ff", "00", "00", "00", "f3", "00", "00", "00", "01", "00", "00", "00", "0d", "00", "00", "03", "0d", "00", "00", "00", "04", "80", "00", "00", "00", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "63", "6c", "61", "73", "73", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "10", "65", "78", "70", "72", "65", "73", "73", "69", "6f", "6e", "73", "49", "6e", "64", "65", "78", "00", "00", "00", "fe", "00", "00", "00", "15", "00", "00", "00", "0d", "00", "00", "00", "13", "00", "00", "00", "0c", "00", "00", "00", "1a", "00", "00", "00", "01", "00", "00", "00", "1a", "00", "00", "00", "02", "00", "00", "00", "14", "00", "00", "00", "04", "00", "00", "00", "21", "00", "00", "00", "1f", "00", "00", "00", "04", "00", "00", "00", "27", "00", "00", "00", "03", "00", "00", "00", "21", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "00", "00", "00", "00", "01", "00", "00", "00", "07", "00", "00", "00", "f3", "00", "00", "00", "02", "00", "00", "00", "01", "00", "00", "0b", "ff", "00", "00", "00", "01", "00", "00", "04", "ff", "00", "00", "00", "f3", "00", "00", "00", "03", "00", "00", "00", "01", "00", "00", "07", "ff", "00", "00", "00", "01", "00", "00", "03", "ff", "00", "00", "00", "0d", "00", "00", "03", "0d", "00", "00", "00", "13", "80", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "04", "02", "00", "00", "32", "ff", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "10", "65", "78", "70", "72", "65", "73", "73", "69", "6f", "6e", "73", "49", "6e", "64", "65", "78", "00", "00", "00", "fe", "00", "00", "00", "01", "00", "00", "29", "ff", "00", "00", "00", "f3", "00", "00", "00", "00", "00", "00", "00", "f3", "00", "00", "00", "05", "00", "00", "00", "f3", "00", "00", "00", "06", "00", "00", "00", "01", "00", "00", "2d", "ff", "00", "00", "00", "f3", "00", "00", "00", "08", "00", "00", "00", "f3", "00", "00", "00", "07", "00", "00", "00", "01", "00", "00", "16", "ff", "00", "00", "00", "f3", "00", "00", "00", "0a", "00", "00", "00", "0e", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "f3", "00", "00", "00", "09", "00", "00", "00", "01", "00", "00", "13", "ff", "00", "00", "00", "f3", "00", "00", "00", "0c", "00", "00", "00", "f3", "00", "00", "00", "0b", "00", "00", "00", "f3", "00", "00", "00", "04", "00", "00", "00", "01", "00", "00", "2f", "ff", "00", "00", "00", "f3", "00", "00", "00", "0d", "00", "00", "00", "10", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "35", "4d", "65", "74", "72", "69", "63", "20", "66", "75", "6e", "63", "74", "69", "6f", "6e", "20", "6d", "75", "73", "74", "20", "72", "65", "74", "75", "72", "6e", "20", "6f", "6e", "65", "20", "66", "69", "6e", "69", "74", "65", "20", "6e", "75", "6d", "65", "72", "69", "63", "20", "76", "61", "6c", "75", "65", "2e", "00", "00", "00", "01", "00", "00", "30", "ff", "00", "00", "00", "0d", "00", "00", "03", "0d", "00", "00", "00", "46", "80", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0b", "00", "00", "00", "0b", "00", "00", "00", "08", "00", "00", "00", "08", "00", "00", "00", "08", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0e", "00", "00", "00", "0e", "00", "00", "00", "0f", "00", "00", "00", "0f", "00", "00", "00", "08", "00", "00", "00", "08", "00", "00", "00", "07", "00", "00", "00", "07", "00", "00", "00", "07", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "12", "00", "00", "00", "12", "00", "00", "00", "07", "00", "00", "00", "07", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "05", "00", "00", "00", "05", "00", "00", "00", "05", "00", "00", "04", "02", "00", "00", "32", "ff", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "10", "65", "78", "70", "72", "65", "73", "73", "69", "6f", "6e", "73", "49", "6e", "64", "65", "78", "00", "00", "00", "fe"]
+                },
+                "maximize": true,
+                "name": "AUC",
+                "funArgs": []
+              },
+              "sampleSize": null,
+              "randomSeed": null,
+              "generator": null,
+              "attr_class": "hyperparameterSettings"
+            },
             "executeSettings": {
               "runSplitData": true,
               "runSampleData": false,
-              "runfeatureEngineering": false,
+              "runFeatureEngineering": false,
               "runPreprocessData": true,
               "runModelDevelopment": true,
               "runCovariateSummary": true,
@@ -1781,38 +1948,54 @@
                 "includeCovariateIds": null,
                 "upperLimit": 20,
                 "lowerLimit": 0.01,
-                "priorCoefs": null,
-                "attr_settings": {
-                  "priorfunction": "Cyclops::createPrior",
-                  "selectorType": "byPid",
-                  "crossValidationInPrior": true,
-                  "modelType": "logistic",
-                  "addIntercept": true,
-                  "useControl": true,
-                  "seed": 46144016,
-                  "name": "Lasso Logistic Regression",
-                  "threads": -1,
-                  "tolerance": 2e-06,
-                  "cvRepetitions": 1,
-                  "maxIterations": 3000
-                },
-                "attr_modelType": "binary",
-                "attr_saveType": "RtoJson"
+                "priorCoefs": null
+              },
+              "settings": {
+                "modelName": "lassoLogisticRegression",
+                "modelType": "binary",
+                "cyclopsModelType": "logistic",
+                "priorfunction": "Cyclops::createPrior",
+                "selectorType": "byPid",
+                "crossValidationInPrior": true,
+                "addIntercept": true,
+                "useControl": true,
+                "seed": 9028959,
+                "threads": -1,
+                "tolerance": 2e-06,
+                "cvRepetitions": 1,
+                "maxIterations": 3000,
+                "saveType": "RtoJson",
+                "predict": "predictCyclops"
               },
               "attr_class": "modelSettings"
             },
             "splitSettings": {
               "test": 0.25,
               "train": 0.75,
-              "seed": 47715,
+              "seed": 24197,
               "nfold": 3,
               "attr_class": "splitSettings",
               "attr_fun": "randomSplitter"
             },
+            "hyperparameterSettings": {
+              "search": "grid",
+              "tuningMetric": {
+                "fun": {
+                  "serialized_code": ["58", "0a", "00", "00", "00", "03", "00", "04", "04", "03", "00", "03", "05", "00", "00", "00", "00", "05", "55", "54", "46", "2d", "38", "00", "00", "04", "03", "00", "00", "00", "04", "00", "00", "00", "00", "00", "00", "00", "f9", "00", "00", "00", "00", "00", "00", "00", "02", "00", "04", "00", "09", "00", "00", "00", "16", "50", "61", "74", "69", "65", "6e", "74", "4c", "65", "76", "65", "6c", "50", "72", "65", "64", "69", "63", "74", "69", "6f", "6e", "00", "04", "00", "09", "00", "00", "00", "05", "36", "2e", "36", "2e", "30", "00", "00", "00", "fe", "00", "00", "00", "13", "00", "00", "00", "1d", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "66", "75", "6e", "41", "72", "67", "73", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "00", "13", "00", "00", "00", "00", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "6c", "69", "73", "74", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "6e", "61", "6d", "65", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "41", "55", "43", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "41", "55", "43", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "66", "75", "6e", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "04", "03", "00", "00", "02", "ff", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "70", "72", "65", "64", "69", "63", "74", "69", "6f", "6e", "00", "00", "00", "fb", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "12", "63", "6f", "6e", "66", "69", "64", "65", "6e", "63", "65", "49", "6e", "74", "65", "72", "76", "61", "6c", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "7b", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0e", "63", "68", "65", "63", "6b", "44", "61", "74", "61", "66", "72", "61", "6d", "65", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "63", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "76", "61", "6c", "75", "65", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0c", "6f", "75", "74", "63", "6f", "6d", "65", "43", "6f", "75", "6e", "74", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "3c", "2d", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "74", "72", "75", "74", "68", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "69", "66", "65", "6c", "73", "65", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "3e", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "24", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0c", "6f", "75", "74", "63", "6f", "6d", "65", "43", "6f", "75", "6e", "74", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "5b", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "09", "69", "73", "2e", "66", "69", "6e", "69", "74", "65", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "69", "66", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "3c", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "6c", "65", "6e", "67", "74", "68", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "75", "6e", "69", "71", "75", "65", "00", "00", "00", "02", "00", "00", "0d", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "40", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "3a", "3a", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0e", "50", "61", "72", "61", "6c", "6c", "65", "6c", "4c", "6f", "67", "67", "65", "72", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6c", "6f", "67", "57", "61", "72", "6e", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "33", "43", "61", "6e", "6e", "6f", "74", "20", "63", "6f", "6d", "70", "75", "74", "65", "20", "41", "55", "43", "3a", "20", "6f", "75", "74", "63", "6f", "6d", "65", "43", "6f", "75", "6e", "74", "20", "68", "61", "73", "20", "6f", "6e", "6c", "79", "20", "6f", "6e", "65", "20", "63", "6c", "61", "73", "73", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "08", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "72", "65", "74", "75", "72", "6e", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "64", "61", "74", "61", "2e", "66", "72", "61", "6d", "65", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "03", "61", "75", "63", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "61", "75", "63", "5f", "6c", "62", "39", "35", "63", "69", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "61", "75", "63", "5f", "75", "62", "39", "35", "63", "69", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "1b", "ff", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "7f", "f0", "00", "00", "00", "00", "07", "a2", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "25", "69", "6e", "25", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "72", "61", "77", "56", "61", "6c", "75", "65", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "63", "6f", "6c", "6e", "61", "6d", "65", "73", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0a", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "72", "61", "77", "56", "61", "6c", "75", "65", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "73", "63", "6f", "72", "65", "73", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "72", "61", "77", "56", "61", "6c", "75", "65", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "22", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "76", "61", "6c", "75", "65", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "08", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "1b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "09", "61", "75", "63", "57", "69", "74", "68", "43", "69", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "22", "ff", "00", "00", "04", "02", "00", "00", "0d", "ff", "00", "00", "00", "06", "00", "00", "0e", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0f", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "11", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "1b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0c", "61", "75", "63", "57", "69", "74", "68", "6f", "75", "74", "43", "69", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "22", "ff", "00", "00", "04", "02", "00", "00", "0d", "ff", "00", "00", "00", "06", "00", "00", "0e", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0f", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "10", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "02", "00", "00", "11", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "63", "6f", "6d", "70", "75", "74", "65", "41", "75", "63", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "09", "6d", "65", "74", "72", "69", "63", "46", "75", "6e", "00", "00", "04", "03", "00", "00", "01", "ff", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "00", "fb", "00", "00", "00", "fe", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "06", "72", "65", "73", "75", "6c", "74", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "07", "64", "6f", "2e", "63", "61", "6c", "6c", "00", "00", "00", "02", "00", "00", "06", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "04", "ff", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "07", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "03", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "7c", "7c", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "2b", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "01", "21", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "0a", "69", "73", "2e", "6e", "75", "6d", "65", "72", "69", "63", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "02", "21", "3d", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "16", "ff", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "2c", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "13", "ff", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "04", "73", "74", "6f", "70", "00", "00", "00", "02", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "35", "4d", "65", "74", "72", "69", "63", "20", "66", "75", "6e", "63", "74", "69", "6f", "6e", "20", "6d", "75", "73", "74", "20", "72", "65", "74", "75", "72", "6e", "20", "6f", "6e", "65", "20", "66", "69", "6e", "69", "74", "65", "20", "6e", "75", "6d", "65", "72", "69", "63", "20", "76", "61", "6c", "75", "65", "2e", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "63", "61", "6c", "6c", "2e", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "29", "ff", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "08", "6d", "61", "78", "69", "6d", "69", "7a", "65", "00", "00", "04", "05", "00", "00", "00", "f1", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "00", "fe", "00", "00", "04", "02", "00", "00", "07", "ff", "00", "00", "00", "fb", "00", "00", "00", "fe", "00", "00", "00", "15", "00", "00", "00", "0f", "00", "00", "00", "0d", "00", "00", "00", "46", "00", "00", "00", "0c", "00", "00", "00", "17", "00", "00", "00", "01", "00", "00", "00", "1d", "00", "00", "00", "03", "00", "00", "00", "1d", "00", "00", "00", "04", "00", "00", "00", "26", "00", "00", "00", "02", "00", "00", "00", "16", "00", "00", "00", "05", "00", "00", "00", "04", "00", "00", "00", "1a", "00", "00", "00", "09", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "0a", "00", "00", "00", "3b", "00", "00", "00", "0b", "00", "00", "00", "5a", "00", "00", "00", "08", "00", "00", "00", "25", "00", "00", "00", "1a", "00", "00", "00", "0c", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "0d", "00", "00", "00", "10", "00", "00", "00", "0e", "00", "00", "00", "34", "00", "00", "00", "0f", "00", "00", "00", "5b", "00", "00", "00", "08", "00", "00", "00", "5a", "00", "00", "00", "07", "00", "00", "00", "33", "00", "00", "00", "1a", "00", "00", "00", "10", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "11", "00", "00", "00", "3b", "00", "00", "00", "12", "00", "00", "00", "5b", "00", "00", "00", "07", "00", "00", "00", "03", "00", "00", "00", "13", "00", "00", "00", "41", "00", "00", "00", "17", "00", "00", "00", "14", "00", "00", "00", "22", "00", "00", "00", "16", "00", "00", "00", "25", "00", "00", "00", "1f", "00", "00", "00", "17", "00", "00", "00", "26", "00", "00", "00", "15", "00", "00", "00", "02", "00", "00", "00", "42", "00", "00", "00", "11", "00", "00", "00", "04", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "01", "00", "00", "00", "19", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "00", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "0c", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "01", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2a", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "06", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "0b", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "03", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "04", "ff", "00", "00", "00", "02", "00", "00", "07", "ff", "00", "00", "00", "00", "00", "00", "07", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "03", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "04", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "14", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "05", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2b", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2b", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "07", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2c", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "08", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2d", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "09", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2e", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0a", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "16", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0b", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2c", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0c", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "13", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "09", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "f4", "00", "00", "00", "0d", "00", "00", "00", "06", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "2f", "ff", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "35", "4d", "65", "74", "72", "69", "63", "20", "66", "75", "6e", "63", "74", "69", "6f", "6e", "20", "6d", "75", "73", "74", "20", "72", "65", "74", "75", "72", "6e", "20", "6f", "6e", "65", "20", "66", "69", "6e", "69", "74", "65", "20", "6e", "75", "6d", "65", "72", "69", "63", "20", "76", "61", "6c", "75", "65", "2e", "00", "00", "00", "02", "00", "00", "30", "ff", "00", "00", "00", "00", "00", "00", "00", "0a", "00", "00", "00", "01", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "02", "00", "00", "00", "fe", "00", "00", "00", "00", "00", "00", "29", "ff", "00", "00", "00", "00", "00", "00", "00", "fe", "00", "00", "00", "01", "00", "00", "2a", "ff", "00", "00", "00", "f3", "00", "00", "00", "01", "00", "00", "00", "15", "00", "00", "00", "0d", "00", "00", "00", "04", "00", "00", "00", "0c", "00", "00", "00", "14", "00", "00", "00", "00", "00", "00", "00", "01", "00", "00", "00", "03", "00", "00", "00", "01", "00", "00", "06", "ff", "00", "00", "00", "f3", "00", "00", "00", "01", "00", "00", "00", "0d", "00", "00", "03", "0d", "00", "00", "00", "04", "80", "00", "00", "00", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "00", "01", "00", "00", "04", "02", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "05", "63", "6c", "61", "73", "73", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "10", "65", "78", "70", "72", "65", "73", "73", "69", "6f", "6e", "73", "49", "6e", "64", "65", "78", "00", "00", "00", "fe", "00", "00", "00", "15", "00", "00", "00", "0d", "00", "00", "00", "13", "00", "00", "00", "0c", "00", "00", "00", "1a", "00", "00", "00", "01", "00", "00", "00", "1a", "00", "00", "00", "02", "00", "00", "00", "14", "00", "00", "00", "04", "00", "00", "00", "21", "00", "00", "00", "1f", "00", "00", "00", "04", "00", "00", "00", "27", "00", "00", "00", "03", "00", "00", "00", "21", "00", "00", "00", "14", "00", "00", "00", "05", "00", "00", "00", "21", "00", "00", "00", "27", "00", "00", "00", "00", "00", "00", "00", "01", "00", "00", "00", "07", "00", "00", "00", "f3", "00", "00", "00", "02", "00", "00", "00", "01", "00", "00", "0b", "ff", "00", "00", "00", "01", "00", "00", "04", "ff", "00", "00", "00", "f3", "00", "00", "00", "03", "00", "00", "00", "01", "00", "00", "07", "ff", "00", "00", "00", "01", "00", "00", "03", "ff", "00", "00", "00", "0d", "00", "00", "03", "0d", "00", "00", "00", "13", "80", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "03", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "04", "02", "00", "00", "32", "ff", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "10", "65", "78", "70", "72", "65", "73", "73", "69", "6f", "6e", "73", "49", "6e", "64", "65", "78", "00", "00", "00", "fe", "00", "00", "00", "01", "00", "00", "29", "ff", "00", "00", "00", "f3", "00", "00", "00", "00", "00", "00", "00", "f3", "00", "00", "00", "05", "00", "00", "00", "f3", "00", "00", "00", "06", "00", "00", "00", "01", "00", "00", "2d", "ff", "00", "00", "00", "f3", "00", "00", "00", "08", "00", "00", "00", "f3", "00", "00", "00", "07", "00", "00", "00", "01", "00", "00", "16", "ff", "00", "00", "00", "f3", "00", "00", "00", "0a", "00", "00", "00", "0e", "00", "00", "00", "0e", "00", "00", "00", "01", "3f", "f0", "00", "00", "00", "00", "00", "00", "00", "00", "00", "f3", "00", "00", "00", "09", "00", "00", "00", "01", "00", "00", "13", "ff", "00", "00", "00", "f3", "00", "00", "00", "0c", "00", "00", "00", "f3", "00", "00", "00", "0b", "00", "00", "00", "f3", "00", "00", "00", "04", "00", "00", "00", "01", "00", "00", "2f", "ff", "00", "00", "00", "f3", "00", "00", "00", "0d", "00", "00", "00", "10", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "35", "4d", "65", "74", "72", "69", "63", "20", "66", "75", "6e", "63", "74", "69", "6f", "6e", "20", "6d", "75", "73", "74", "20", "72", "65", "74", "75", "72", "6e", "20", "6f", "6e", "65", "20", "66", "69", "6e", "69", "74", "65", "20", "6e", "75", "6d", "65", "72", "69", "63", "20", "76", "61", "6c", "75", "65", "2e", "00", "00", "00", "01", "00", "00", "30", "ff", "00", "00", "00", "0d", "00", "00", "03", "0d", "00", "00", "00", "46", "80", "00", "00", "00", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "02", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "06", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0a", "00", "00", "00", "0b", "00", "00", "00", "0b", "00", "00", "00", "08", "00", "00", "00", "08", "00", "00", "00", "08", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0d", "00", "00", "00", "0e", "00", "00", "00", "0e", "00", "00", "00", "0f", "00", "00", "00", "0f", "00", "00", "00", "08", "00", "00", "00", "08", "00", "00", "00", "07", "00", "00", "00", "07", "00", "00", "00", "07", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "11", "00", "00", "00", "12", "00", "00", "00", "12", "00", "00", "00", "07", "00", "00", "00", "07", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "15", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "13", "00", "00", "00", "05", "00", "00", "00", "05", "00", "00", "00", "05", "00", "00", "04", "02", "00", "00", "32", "ff", "00", "00", "00", "10", "00", "00", "00", "01", "00", "04", "00", "09", "00", "00", "00", "10", "65", "78", "70", "72", "65", "73", "73", "69", "6f", "6e", "73", "49", "6e", "64", "65", "78", "00", "00", "00", "fe"]
+                },
+                "maximize": true,
+                "name": "AUC",
+                "funArgs": []
+              },
+              "sampleSize": null,
+              "randomSeed": null,
+              "generator": null,
+              "attr_class": "hyperparameterSettings"
+            },
             "executeSettings": {
               "runSplitData": true,
               "runSampleData": false,
-              "runfeatureEngineering": false,
+              "runFeatureEngineering": false,
               "runPreprocessData": true,
               "runModelDevelopment": true,
               "runCovariateSummary": true,
@@ -1820,7 +2003,8 @@
             },
             "attr_class": "modelDesign"
           }
-        ]
+        ],
+        "skipDiagnostics": false
       },
       "attr_class": ["ModuleSpecifications", "PatientLevelPredictionModuleSpecifications"]
     }

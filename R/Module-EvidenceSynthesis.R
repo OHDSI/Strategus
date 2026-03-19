@@ -239,24 +239,42 @@ EvidenceSynthesisModule <- R6::R6Class(
     #'                              heterogeneity in random-effects models)?
     #' @param tauThreshold          What is the maximum allowed tau (measure of between-database
     #'                              heterogeneity in Bayesian random-effects models)?
+    #' @param sdmThreshold          What is the maximum allowed standardized difference of mean (SDM) in a meta-analysis
+    #'                              of balance statistics? If any covariate has a meta-analysis SDM exceeding this
+    #'                              threshold, the diagnostic will fail. If set to NULL, this diagnostic will be
+    #'                              ignored.
+    #' @param sdmAlpha              What is the alpha for testing whether the absolute SDM exceeds
+    #'                              `sdmThreshold`? If not provided, no significance testing will be
+    #'                              performed and any absolute SDM greater than the threshold will be
+    #'                              considered imbalance. Note that a Bonferroni adjustment will
+    #'                              automatically be applied to adjust for the number of tests performed.
     #'
     #' @return
     #' An object of type `EsDiagnosticThresholds`.
     createEsDiagnosticThresholds = function(mdrrThreshold = 10,
                                             easeThreshold = 0.25,
                                             i2Threshold = 0.4,
-                                            tauThreshold = log(2)) {
+                                            tauThreshold = log(2),
+                                            sdmThreshold = NULL,
+                                            sdmAlpha = NULL) {
       errorMessages <- checkmate::makeAssertCollection()
       checkmate::assertNumeric(mdrrThreshold, len = 1, lower = 0, add = errorMessages)
       checkmate::assertNumeric(easeThreshold, len = 1, lower = 0, add = errorMessages)
       checkmate::assertNumeric(i2Threshold, len = 1, lower = 0, add = errorMessages)
       checkmate::assertNumeric(tauThreshold, len = 1, lower = 0, add = errorMessages)
+      checkmate::assertNumeric(sdmThreshold, len = 1, lower = 0, null.ok = TRUE, add = errorMessages)
+      checkmate::assertNumeric(sdmAlpha, len = 1, lower = 0, upper = 1, null.ok = TRUE, add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
+      if (is.null(sdmThreshold) && !is.null(sdmAlpha)) {
+        stop("Must specify sdmThreshold when specifying sdmAlpha")
+      }
       thresholds <- list(
         mdrrThreshold = mdrrThreshold,
         easeThreshold = easeThreshold,
         i2Threshold = i2Threshold,
-        tauThreshold = tauThreshold
+        tauThreshold = tauThreshold,
+        sdmThreshold = sdmThreshold,
+        sdmAlpha = sdmAlpha
       )
       class(thresholds) <- "EsDiagnosticThresholds"
       return(thresholds)
@@ -319,6 +337,9 @@ EvidenceSynthesisModule <- R6::R6Class(
       outputTables <- c(
         "es_cm_result",
         "es_cm_diagnostics_summary",
+        "es_cm_covariate_balance",
+        "es_cm_shared_covariate_balance",
+        "es_cm_covariate",
         "es_sccs_result",
         "es_sccs_diagnostics_summary"
       )
@@ -375,7 +396,8 @@ EvidenceSynthesisModule <- R6::R6Class(
       ParallelLogger::clusterRequire(cluster, "dplyr")
       on.exit(ParallelLogger::stopCluster(cluster))
 
-      message(sprintf("Performing analysis %s (%s)", analysisSettings$evidenceSynthesisAnalysisId, analysisSettings$evidenceSynthesisDescription))
+      message(sprintf("Executing analysis %s (%s)", analysisSettings$evidenceSynthesisAnalysisId, analysisSettings$evidenceSynthesisDescription))
+      message("- Performing effect estimate meta-analysis")
       estimates <- ParallelLogger::clusterApply(
         cluster = cluster,
         x = split(fullKeys, seq_len(nrow(fullKeys))),
@@ -386,12 +408,43 @@ EvidenceSynthesisModule <- R6::R6Class(
       )
       estimates <- bind_rows(estimates)
 
+      if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
+        message("- Performing shared balance meta-analysis")
+        private$.dedupeCovariates(
+          connection = connection,
+          databaseSchema = databaseSchema,
+          evidenceSynthesisSource = analysisSettings$evidenceSynthesisSource,
+          resultsFolder = resultsFolder
+        )
+        sharedBalanceDiagnostics <- private$.metaAnalyzeBalance(
+          connection = connection,
+          databaseSchema = databaseSchema,
+          evidenceSynthesisSource = analysisSettings$evidenceSynthesisSource,
+          evidenceSynthesisAnalysisId = analysisSettings$evidenceSynthesisAnalysisId,
+          esDiagnosticThresholds = esDiagnosticThresholds,
+          cluster = cluster,
+          resultsFolder = resultsFolder,
+          shared = TRUE
+        )
+        message("- Performing balance meta-analysis")
+        balanceDiagnostics <- private$.metaAnalyzeBalance(
+          connection = connection,
+          databaseSchema = databaseSchema,
+          evidenceSynthesisSource = analysisSettings$evidenceSynthesisSource,
+          evidenceSynthesisAnalysisId = analysisSettings$evidenceSynthesisAnalysisId,
+          esDiagnosticThresholds = esDiagnosticThresholds,
+          cluster = cluster,
+          resultsFolder = resultsFolder,
+          shared = FALSE
+        )
+      }
+
       message("- Calibrating estimates")
       estimates <- estimates |>
         inner_join(perDbEstimates$trueEffectSizes, by = intersect(names(estimates), names(perDbEstimates$trueEffectSizes)))
       if (analysisSettings$controlType == "outcome") {
         if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
-          controlKey <- c("targetId", "comparatorId", "analysisId")
+          controlKey <- c("targetComparatorId", "analysisId")
         } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
           controlKey <- c("exposureId", "nestingCohortId", "covariateId", "analysisId")
         }
@@ -442,6 +495,33 @@ EvidenceSynthesisModule <- R6::R6Class(
           .data$i2Diagnostic != "FAIL" &
           .data$tauDiagnostic != "FAIL", 1, 0))
       if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
+        passBalance <- function(maxSdm, sdmFamilyWiseMinP) {
+          if (is.null(esDiagnosticThresholds$sdmThreshold)) {
+            return(FALSE)
+          }
+          if (is.null(esDiagnosticThresholds$sdmAlpha)) {
+            return(maxSdm < esDiagnosticThresholds$sdmThreshold)
+          } else {
+            return(sdmFamilyWiseMinP > esDiagnosticThresholds$sdmAlpha)
+          }
+        }
+        diagnostics <- diagnostics |>
+          left_join(balanceDiagnostics, by = join_by("targetComparatorId", "outcomeId", "analysisId", "evidenceSynthesisAnalysisId")) |>
+          left_join(sharedBalanceDiagnostics, by = join_by("targetComparatorId", "analysisId", "evidenceSynthesisAnalysisId")) |>
+          mutate(balanceDiagnostic = case_when(
+            is.na(.data$maxSdm) | is.null(esDiagnosticThresholds$sdmThreshold) ~ "NOT EVALUATED",
+            passBalance(.data$maxSdm, .data$sdmFamilyWiseMinP) ~ "PASS",
+            TRUE ~ "FAIL"
+          )) |>
+          mutate(sharedBalanceDiagnostic = case_when(
+            is.na(.data$sharedMaxSdm) | is.null(esDiagnosticThresholds$sdmThreshold) ~ "NOT EVALUATED",
+            passBalance(.data$sharedMaxSdm, .data$sharedSdmFamilyWiseMinP) ~ "PASS",
+            TRUE ~ "FAIL"
+          )) |>
+          mutate(unblind = ifelse(.data$unblind == 1 &
+            .data$balanceDiagnostic != "FAIL" &
+            .data$sharedBalanceDiagnostic != "FAIL", 1, 0))
+
         fileName <- file.path(resultsFolder, "es_cm_diagnostics_summary.csv")
       } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
         fileName <- file.path(resultsFolder, "es_sccs_diagnostics_summary.csv")
@@ -513,6 +593,22 @@ EvidenceSynthesisModule <- R6::R6Class(
         group$calibratedSeLogRr <- NA
         group$ease <- NA
       }
+      ncsPi <- group[!is.na(group$trueEffectSize) & group$trueEffectSize == 1 & !is.na(group$seLogPi), ]
+      if (nrow(ncsPi) >= 5) {
+        null <- EmpiricalCalibration::fitMcmcNull(logRr = (log(ncsPi$pi95Lb) + log(ncsPi$pi95Ub)) / 2.0, seLogRr = ncsPi$seLogPi)
+        model <- EmpiricalCalibration::convertNullToErrorModel(null)
+        calibratedPi <- EmpiricalCalibration::calibrateConfidenceInterval(
+          logRr = (log(group$pi95Lb) + log(group$pi95Ub)) / 2.0,
+          seLogRr = group$seLogPi,
+          model = model
+        )
+        group$calibratedPi95Lb <- exp(calibratedPi$logLb95Rr)
+        group$calibratedPi95Ub <- exp(calibratedPi$logUb95Rr)
+      } else {
+        group$calibratedPi95Lb <- NA
+        group$calibratedPi95Ub <- NA
+      }
+      group$seLogPi <- NULL
       return(group)
     },
     # row <- split(fullKeys, seq_len(nrow(fullKeys)))[[2]]
@@ -616,7 +712,10 @@ EvidenceSynthesisModule <- R6::R6Class(
           seLogRr = as.numeric(NA),
           i2 = as.numeric(NA),
           tau = as.numeric(NA),
-          mdrr = as.numeric(Inf)
+          mdrr = as.numeric(Inf),
+          pi95Lb = as.numeric(NA),
+          pi95Ub = as.numeric(NA),
+          seLogPi = as.numeric(NA)
         )
       } else if (nDatabases == 1) {
         estimate <- tibble(
@@ -629,7 +728,10 @@ EvidenceSynthesisModule <- R6::R6Class(
           seLogRr = subset$seLogRr,
           i2 = NA,
           tau = NA,
-          mdrr = subset$mdrr
+          mdrr = subset$mdrr,
+          pi95Lb = if (is(analysisSettings, "FixedEffectsMetaAnalysis")) subset$ci95Lb else as.numeric(NA),
+          pi95Ub = if (is(analysisSettings, "FixedEffectsMetaAnalysis")) subset$ci95Ub else as.numeric(NA),
+          seLogPi = if (is(analysisSettings, "FixedEffectsMetaAnalysis")) subset$seLogRr else as.numeric(NA)
         )
       } else {
         if (is(analysisSettings, "FixedEffectsMetaAnalysis")) {
@@ -662,7 +764,10 @@ EvidenceSynthesisModule <- R6::R6Class(
               tau = NA,
               mdrr = computeMdrrFromSe(estimate$seLogRr),
               p = !!p,
-              oneSidedP = !!oneSidedP
+              oneSidedP = !!oneSidedP,
+              pi95Lb = .data$ci95Lb,
+              pi95Ub = .data$ci95Ub,
+              seLogPi = .data$seLogRr
             )
         } else if (is(analysisSettings, "RandomEffectsMetaAnalysis")) {
           m <- meta::metagen(
@@ -674,7 +779,8 @@ EvidenceSynthesisModule <- R6::R6Class(
             sm = "RR",
             level.comb = 1 - analysisSettings$alpha
           )
-          rfx <- summary(m)$random
+          s <- summary(m)
+          rfx <- s$random
           oneSidedP <- EmpiricalCalibration::computeTraditionalP(
             logRr = rfx$TE,
             seLogRr = rfx$seTE,
@@ -691,7 +797,10 @@ EvidenceSynthesisModule <- R6::R6Class(
             seLogRr = rfx$seTE,
             i2 = m$I2,
             tau = NA,
-            mdrr = computeMdrrFromSe(rfx$seTE)
+            mdrr = computeMdrrFromSe(rfx$seTE),
+            pi95Lb = exp(s$predict$lower),
+            pi95Ub = exp(s$predict$upper),
+            seLogPi = (s$predict$upper - s$predict$lower) / (2 * qnorm(0.975))
           )
         } else if (is(analysisSettings, "BayesianMetaAnalysis")) {
           args <- analysisSettings
@@ -725,7 +834,10 @@ EvidenceSynthesisModule <- R6::R6Class(
               seLogRr = .data$muSe,
               tau = .data$tau,
               i2 = NA,
-              mdrr = computeMdrrFromSe(estimate$seLogRr)
+              mdrr = computeMdrrFromSe(estimate$seLogRr),
+              pi95Lb = exp(.data$predictionInterval95Lb),
+              pi95Ub = exp(.data$predictionInterval95Ub),
+              seLogPi = (.data$predictionInterval95Ub - .data$predictionInterval95Lb) / (2 * qnorm(0.975))
             )
         }
       }
@@ -735,7 +847,7 @@ EvidenceSynthesisModule <- R6::R6Class(
     },
     .getPerDatabaseEstimates = function(connection, databaseSchema, evidenceSynthesisSource) {
       if (evidenceSynthesisSource$sourceMethod == "CohortMethod") {
-        key <- c("targetId", "comparatorId", "outcomeId")
+        key <- c("targetComparatorId", "outcomeId")
         databaseIds <- evidenceSynthesisSource$databaseIds
         analysisIds <- evidenceSynthesisSource$analysisIds
         sql <- "SELECT cm_result.*,
@@ -743,12 +855,10 @@ EvidenceSynthesisModule <- R6::R6Class(
         unblind_for_evidence_synthesis AS unblind
       FROM @database_schema.cm_result
       INNER JOIN @database_schema.cm_target_comparator_outcome
-        ON cm_result.target_id = cm_target_comparator_outcome.target_id
-          AND cm_result.comparator_id = cm_target_comparator_outcome.comparator_id
+        ON cm_result.target_comparator_id = cm_target_comparator_outcome.target_comparator_id
           AND cm_result.outcome_id = cm_target_comparator_outcome.outcome_id
       LEFT JOIN @database_schema.cm_diagnostics_summary
-      ON cm_result.target_id = cm_diagnostics_summary.target_id
-        AND cm_result.comparator_id = cm_diagnostics_summary.comparator_id
+      ON cm_result.target_comparator_id = cm_diagnostics_summary.target_comparator_id
         AND cm_result.outcome_id = cm_diagnostics_summary.outcome_id
         AND cm_result.analysis_id = cm_diagnostics_summary.analysis_id
         AND cm_result.database_id = cm_diagnostics_summary.database_id
@@ -776,8 +886,7 @@ EvidenceSynthesisModule <- R6::R6Class(
           llApproximations <- estimates |>
             filter(.data$unblind == 1) |>
             select(
-              "targetId",
-              "comparatorId",
+              "targetComparatorId",
               "outcomeId",
               "analysisId",
               "databaseId",
@@ -785,8 +894,7 @@ EvidenceSynthesisModule <- R6::R6Class(
               "seLogRr"
             )
         } else if (evidenceSynthesisSource$likelihoodApproximation %in% c("adaptive grid", "grid with gradients")) {
-          sql <- "SELECT target_id,
-            comparator_id,
+          sql <- "SELECT target_comparator_id,
             outcome_id,
             analysis_id,
             database_id,
@@ -811,13 +919,12 @@ EvidenceSynthesisModule <- R6::R6Class(
               estimates |>
                 filter(.data$unblind == 1) |>
                 select(
-                  "targetId",
-                  "comparatorId",
+                  "targetComparatorId",
                   "outcomeId",
                   "analysisId",
                   "databaseId",
                 ),
-              by = c("targetId", "comparatorId", "outcomeId", "analysisId", "databaseId")
+              by = c("targetComparatorId", "outcomeId", "analysisId", "databaseId")
             )
         } else {
           stop(sprintf("Unknown likelihood approximation '%s'.", evidenceSynthesisSource$likelihoodApproximation))
@@ -974,6 +1081,209 @@ EvidenceSynthesisModule <- R6::R6Class(
         trueEffectSizes = trueEffectSizes
       ))
     },
+    .dedupeCovariates = function(connection, databaseSchema, evidenceSynthesisSource, resultsFolder) {
+      databaseIds <- evidenceSynthesisSource$databaseIds
+      analysisIds <- evidenceSynthesisSource$analysisIds
+      sql <- "SELECT covariate_id,
+          covariate_name,
+          analysis_id,
+          covariate_analysis_id
+        FROM (
+          SELECT covariate_id,
+            covariate_name,
+            analysis_id,
+            covariate_analysis_id,
+            ROW_NUMBER() OVER (PARTITION BY covariate_id ORDER BY database_id) AS rn
+          FROM @database_schema.cm_covariate
+          WHERE database_id IN (
+            SELECT DISTINCT database_id
+            FROM @database_schema.cm_diagnostics_summary
+            WHERE unblind_for_evidence_synthesis = 1
+            {@analysis_ids != ''} ? {      AND analysis_id IN (@analysis_ids)}
+          )
+          {@database_ids != ''} ? {  AND cm_covariate.database_id IN (@database_ids)}
+          {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} cm_covariate.analysis_id IN (@analysis_ids)}
+        ) tmp
+        WHERE rn = 1;
+      "
+      covariates <- DatabaseConnector::renderTranslateQuerySql(
+        connection = connection,
+        sql = sql,
+        database_schema = databaseSchema,
+        database_ids = if (is.null(databaseIds)) "" else private$.quoteSql(databaseIds),
+        analysis_ids = if (is.null(analysisIds)) "" else analysisIds,
+        snakeCaseToCamelCase = TRUE
+      ) |>
+        as_tibble()
+      fileName <- file.path(resultsFolder, "es_cm_covariate.csv")
+      private$.writeToCsv(covariates, fileName, append = TRUE)
+    },
+    .metaAnalyzeBalance = function(connection,
+                                   databaseSchema,
+                                   evidenceSynthesisSource,
+                                   evidenceSynthesisAnalysisId,
+                                   esDiagnosticThresholds,
+                                   cluster,
+                                   resultsFolder,
+                                   shared) {
+      databaseIds <- evidenceSynthesisSource$databaseIds
+      analysisIds <- evidenceSynthesisSource$analysisIds
+      if (shared) {
+        sql <- "SELECT cm_shared_covariate_balance.database_id,
+          cm_shared_covariate_balance.target_comparator_id,
+          cm_shared_covariate_balance.analysis_id,
+          covariate_id,
+          std_diff_before,
+          std_diff_var_before,
+          std_diff_after,
+          std_diff_var_after
+        FROM @database_schema.cm_shared_covariate_balance
+        INNER JOIN (
+          SELECT DISTINCT target_comparator_id,
+            analysis_id,
+            database_id
+          FROM @database_schema.cm_diagnostics_summary
+          WHERE unblind_for_evidence_synthesis = 1
+        ) tmp
+        ON cm_shared_covariate_balance.target_comparator_id = tmp.target_comparator_id
+            AND cm_shared_covariate_balance.analysis_id = tmp.analysis_id
+            AND cm_shared_covariate_balance.database_id = tmp.database_id
+        {@database_ids != ''| @analysis_ids != ''} ? {WHERE}
+        {@database_ids != ''} ? {  cm_shared_covariate_balance.database_id IN (@database_ids)}
+        {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} cm_shared_covariate_balance.analysis_id IN (@analysis_ids)};
+      "
+      } else {
+        sql <- "SELECT cm_covariate_balance.database_id,
+          cm_covariate_balance.target_comparator_id,
+          cm_covariate_balance.outcome_id,
+          cm_covariate_balance.analysis_id,
+          covariate_id,
+          std_diff_before,
+          std_diff_var_before,
+          std_diff_after,
+          std_diff_var_after
+        FROM @database_schema.cm_covariate_balance
+        INNER JOIN @database_schema.cm_diagnostics_summary
+        ON cm_covariate_balance.target_comparator_id = cm_diagnostics_summary.target_comparator_id
+            AND cm_covariate_balance.outcome_id = cm_diagnostics_summary.outcome_id
+            AND cm_covariate_balance.analysis_id = cm_diagnostics_summary.analysis_id
+            AND cm_covariate_balance.database_id = cm_diagnostics_summary.database_id
+        WHERE unblind_for_evidence_synthesis = 1
+        {@database_ids != ''} ? {  AND cm_covariate_balance.database_id IN (@database_ids)}
+        {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} cm_covariate_balance.analysis_id IN (@analysis_ids)};
+      "
+      }
+      balance <- DatabaseConnector::renderTranslateQuerySql(
+        connection = connection,
+        sql = sql,
+        database_schema = databaseSchema,
+        database_ids = if (is.null(databaseIds)) "" else private$.quoteSql(databaseIds),
+        analysis_ids = if (is.null(analysisIds)) "" else analysisIds,
+        snakeCaseToCamelCase = TRUE
+      ) |>
+        as_tibble()
+
+      if (shared) {
+        tableName <- "es_cm_shared_covariate_balance"
+      } else {
+        tableName <- "es_cm_covariate_balance"
+      }
+
+      if (nrow(balance) == 0) {
+        balance <- private$.createEmptyResult(tableName)
+        if (shared) {
+          balanceDiagnostic <- balance |>
+            mutate(
+              sharedMaxSdm = NA,
+              sharedSdmFamilyWiseMinP = NA
+            )
+        } else {
+          balanceDiagnostic <- balance |>
+            mutate(
+              maxSdm = NA,
+              sdmFamilyWiseMinP = NA
+            )
+        }
+      } else {
+        if (shared) {
+          groups <- balance |>
+            group_by(
+              .data$targetComparatorId,
+              .data$analysisId,
+              .data$covariateId
+            ) |>
+            group_split()
+        } else {
+          groups <- balance |>
+            group_by(
+              .data$targetComparatorId,
+              .data$outcomeId,
+              .data$analysisId,
+              .data$covariateId
+            ) |>
+            group_split()
+        }
+        balance <- NULL
+        # There appears to be considerable overhead for every function call by clusterApply. So batching jobs
+        # to have fewer calls.
+        batches <- split(
+          groups,
+          ceiling(seq_along(groups) / 100)
+        )
+        groups <- NULL
+        balance <- ParallelLogger::clusterApply(cluster, batches, .metaAnalyzeCovariateBatch, shared = shared)
+        balance <- bind_rows(balance) |>
+          mutate(evidenceSynthesisAnalysisId = !!evidenceSynthesisAnalysisId)
+        threshold <- esDiagnosticThresholds$sdmThreshold
+        if (is.null(threshold)) {
+          balance$balancedBefore <- 1
+          balance$balancedAfter <- 1
+          balance$beforeP <- 1
+          balance$afterP <- 1
+        } else {
+          balance$beforeP <- .computeBalanceP(balance$stdDiffBefore, balance$stdDiffVarBefore, threshold)
+          balance$afterP <- .computeBalanceP(balance$stdDiffAfter, balance$stdDiffVarAfter, threshold)
+
+          alpha <- esDiagnosticThresholds$sdmAlpha
+          if (is.null(alpha)) {
+            balance$balancedBefore <- if_else(abs(balance$stdDiffBefore) <= threshold, 1, 0)
+            balance$balancedAfter <- if_else(abs(balance$stdDiffAfter) <= threshold, 1, 0)
+          } else {
+            balance$balancedBefore <- if_else(balance$beforeP > alpha / nrow(balance), 1, 0)
+            balance$balancedAfter <- if_else(balance$afterP > alpha / nrow(balance), 1, 0)
+          }
+        }
+        if (shared) {
+          balanceDiagnostic <- balance |>
+            group_by(
+              .data$targetComparatorId,
+              .data$analysisId,
+              .data$evidenceSynthesisAnalysisId
+            ) |>
+            summarise(
+              sharedMaxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
+              sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP)
+            )
+        } else {
+          balanceDiagnostic <- balance |>
+            group_by(
+              .data$targetComparatorId,
+              .data$outcomeId,
+              .data$analysisId,
+              .data$evidenceSynthesisAnalysisId
+            ) |>
+            summarise(
+              maxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
+              sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP)
+            )
+        }
+        balance <- balance |>
+          select(-"beforeP", -"afterP")
+      }
+      fileName <- file.path(resultsFolder, paste(tableName, "csv", sep = "."))
+      private$.writeToCsv(balance, fileName, append = TRUE)
+      return(balanceDiagnostic)
+    },
     .writeToCsv = function(data, fileName, append) {
       tableName <- gsub(".csv$", "", basename(fileName))
       names <- colnames(private$.createEmptyResult(tableName))
@@ -1009,3 +1319,107 @@ EvidenceSynthesisModule <- R6::R6Class(
     }
   )
 )
+
+.metaAnalyzeCovariateBatch <- function(batch, shared = FALSE) {
+  balance <- lapply(batch, .metaAnalyzeSingleCovariate, shared = shared)
+  balance <- bind_rows(balance)
+  return(balance)
+}
+
+.metaAnalyzeSingleCovariate <- function(group, shared = FALSE) {
+  if (nrow(group) == 1) {
+    row <- group |>
+      select(
+        "targetComparatorId",
+        "analysisId",
+        "covariateId",
+        "stdDiffBefore",
+        "stdDiffVarBefore",
+        "stdDiffAfter",
+        "stdDiffVarAfter"
+      )
+  } else {
+    groupBefore <- group |>
+      filter(!is.na(.data$stdDiffVarBefore) & .data$stdDiffVarBefore != 0)
+    if (nrow(groupBefore) == 0) {
+      stdDiffBefore <- NA
+      stdDiffVarBefore <- NA
+    } else if (nrow(groupBefore) == 1) {
+      stdDiffBefore <- groupBefore$stdDiffBefore
+      stdDiffVarBefore <- groupBefore$stdDiffVarBefore
+    } else {
+      metaBefore <- tryCatch(
+        {
+          metafor::rma(
+            yi = groupBefore$stdDiffBefore,
+            vi = groupBefore$stdDiffVarBefore,
+            control = list(iter.max = 2000)
+          )
+        },
+        error = function(e) {
+          warning(e$message)
+          return(list(beta = matrix(NA), se = NA))
+        }
+      )
+      stdDiffBefore <- metaBefore$beta[1, 1]
+      stdDiffVarBefore <- metaBefore$se^2
+    }
+
+    groupAfter <- group |>
+      filter(!is.na(.data$stdDiffVarAfter) & .data$stdDiffVarAfter != 0)
+    if (nrow(groupAfter) == 0) {
+      stdDiffAfter <- NA
+      stdDiffVarAfter <- NA
+    } else if (nrow(groupAfter) == 1) {
+      stdDiffAfter <- groupAfter$stdDiffAfter
+      stdDiffVarAfter <- groupAfter$stdDiffVarAfter
+    } else {
+      metaAfter <- tryCatch(
+        {
+          metafor::rma(
+            yi = groupAfter$stdDiffBefore,
+            vi = groupAfter$stdDiffVarBefore,
+            control = list(iter.max = 2000)
+          )
+        },
+        error = function(e) {
+          warning(e$message)
+          return(list(beta = matrix(NA), se = NA))
+        }
+      )
+      stdDiffAfter <- metaAfter$beta[1, 1]
+      stdDiffVarAfter <- metaAfter$se^2
+    }
+    row <- tibble(
+      targetComparatorId = group$targetComparatorId[1],
+      analysisId = group$analysisId[1],
+      covariateId = group$covariateId[1],
+      stdDiffBefore = stdDiffBefore,
+      stdDiffVarBefore = stdDiffVarBefore,
+      stdDiffAfter = stdDiffAfter,
+      stdDiffVarAfter = stdDiffVarAfter
+    )
+  }
+  if (!shared) {
+    row$outcomeId <- group$outcomeId[1]
+  }
+  return(row)
+}
+
+.computeBalanceP <- function(sdm, sdmVariance, threshold) {
+  zUpper <- (abs(sdm) - threshold) / sqrt(sdmVariance)
+  pUpper <- pnorm(zUpper, lower.tail = FALSE)
+  zLower <- (-abs(sdm) - threshold) / sqrt(sdmVariance)
+  pLower <- pnorm(zLower, lower.tail = TRUE)
+  p <- pUpper + pLower
+  return(p)
+}
+
+.minOrNa <- function(x) {
+  x <- x[!is.na(x)]
+  if (length(x) == 0) {
+    return(as.numeric(NA))
+  } else {
+    return(as.numeric(min(x)))
+  }
+}

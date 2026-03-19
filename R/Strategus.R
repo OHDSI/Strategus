@@ -1,4 +1,4 @@
-# Copyright 2025 Observational Health Data Sciences and Informatics
+# Copyright 2026 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -18,6 +18,7 @@
 "_PACKAGE"
 
 #' @importFrom rlang .data
+#' @importFrom stats pnorm
 #' @import dplyr
 #' @import CohortGenerator
 #' @import DatabaseConnector

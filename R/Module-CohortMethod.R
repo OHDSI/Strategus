@@ -36,6 +36,12 @@ CohortMethodModule <- R6::R6Class(
         multiThreadingSettings$fitOutcomeModelThreads <- fitOutcomeModelThreads
       }
 
+      # Add a check to ensure that the module specifications conform to the new
+      # CM v6 approach
+      if (is.null(jobContext$settings$cmAnalysesSpecifications)) {
+        stop("The CohortMethodModule specification is missing the required `cmAnalysesSpecifications` setting. Please recreate the CohortMethodModule specification and update the analysis specification.")
+      }
+
       args <- jobContext$settings
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
@@ -44,9 +50,11 @@ CohortMethodModule <- R6::R6Class(
       args$exposureTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outcomeDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
       args$outcomeTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
+      args$nestingCohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
+      args$nestingCohortTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
       args$outputFolder <- jobContext$moduleExecutionSettings$workSubFolder
       args$multiThreadingSettings <- multiThreadingSettings
-      args$cmDiagnosticThresholds <- NULL
+      args$cmAnalysesSpecifications <- CohortMethod::convertUntypedListToCmAnalysesSpecifications(jobContext$settings$cmAnalysesSpecifications)
       do.call(CohortMethod::runCmAnalyses, args)
 
       exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
@@ -55,8 +63,7 @@ CohortMethodModule <- R6::R6Class(
         exportFolder = exportFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        maxCores = jobContext$moduleExecutionSettings$maxCores,
-        cmDiagnosticThresholds = jobContext$settings$cmDiagnosticThresholds
+        maxCores = jobContext$moduleExecutionSettings$maxCores
       )
       # TODO: Removing this to make the upload easier
       # unlink(file.path(exportFolder, sprintf("Results_%s.zip", jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId)))
@@ -105,7 +112,7 @@ CohortMethodModule <- R6::R6Class(
 
       # TODO: This is something CM does differently.
       # Find the results zip file in the results sub folder
-      resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+      resultsFolder <- normalizePath(private$jobContext$moduleExecutionSettings$resultsSubFolder)
       zipFiles <- list.files(
         path = resultsFolder,
         pattern = "\\.zip$",
@@ -116,6 +123,8 @@ CohortMethodModule <- R6::R6Class(
         zipFileName <- zipFiles[1]
       } else {
         # Create a zip file from the results in the directory
+        oldWd <- setwd(resultsFolder)
+        on.exit(setwd(oldWd))
         DatabaseConnector::createZipFile(
           zipFile = "results.zip",
           files = list.files(resultsFolder, pattern = ".*\\.csv$"),
@@ -158,28 +167,41 @@ CohortMethodModule <- R6::R6Class(
     #' we can remove certain items from the full matrix. This argument should be a data frame with at least
     #' one of the following columns:
     #'
-    #' @param cmAnalysisList                 A list of objects of type `cmAnalysis` as created using
-    #'                                       the `[CohortMethod::createCmAnalysis] function.
-    #' @param targetComparatorOutcomesList   A list of objects of type `targetComparatorOutcomes` as
-    #'                                       created using the [CohortMethod::createTargetComparatorOutcomes]
-    #'                                       function.
-    #' @param analysesToExclude              Analyses to exclude. See the Analyses to Exclude section for details.
-    #' @param refitPsForEveryOutcome         Should the propensity model be fitted for every outcome (i.e.
-    #'                                       after people who already had the outcome are removed)? If
-    #'                                       false, a single propensity model will be fitted, and people
-    #'                                       who had the outcome previously will be removed afterwards.
-    #' @param refitPsForEveryStudyPopulation Should the propensity model be fitted for every study population
-    #'                                       definition? If false, a single propensity model will be fitted,
-    #'                                       and the study population criteria will be applied afterwards.
-    #' @param cmDiagnosticThresholds An object of type `CmDiagnosticThresholds` as created using
-    #'                                 [CohortMethod::createCmDiagnosticThresholds()].
-    #'
-    createModuleSpecifications = function(cmAnalysisList,
-                                          targetComparatorOutcomesList,
+    #' @param cmAnalysesSpecifications An R6 class created by CohortMethod::createCmAnalysesSpecifications
+    #' @param cmAnalysisList Deprecated with CohortMethod v6 - please use the `cmAnalysesSpecifications` parameter instead.
+    #' @param targetComparatorOutcomesList Deprecated with CohortMethod v6 - please use the `cmAnalysesSpecifications` parameter instead.
+    #' @param analysesToExclude Deprecated with CohortMethod v6 - please use the `cmAnalysesSpecifications` parameter instead.
+    #' @param refitPsForEveryOutcome Deprecated with CohortMethod v6 - please use the `cmAnalysesSpecifications` parameter instead.
+    #' @param refitPsForEveryStudyPopulation Deprecated with CohortMethod v6 - please use the `cmAnalysesSpecifications` parameter instead.
+    #' @param cmDiagnosticThresholds Deprecated with CohortMethod v6 - please use the `cmAnalysesSpecifications` parameter instead.
+    createModuleSpecifications = function(cmAnalysesSpecifications,
+                                          cmAnalysisList = NULL,
+                                          targetComparatorOutcomesList = NULL,
                                           analysesToExclude = NULL,
-                                          refitPsForEveryOutcome = FALSE,
-                                          refitPsForEveryStudyPopulation = TRUE,
-                                          cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds()) {
+                                          refitPsForEveryOutcome = NULL,
+                                          refitPsForEveryStudyPopulation = NULL,
+                                          cmDiagnosticThresholds = NULL) {
+      paramDeprecatedMessage <- "`%s` is now part of the `cmAnalysesSpecifications` in CohortMethod v6. Please upgrade to CohortMethod v6 and use the `cmAnalysesSpecifications` parameter when specifying the input to this module."
+      if (!is.null(cmAnalysisList)) {
+        stop(sprintf(paramDeprecatedMessage, "cmAnalysisList"))
+      }
+
+      if (!is.null(targetComparatorOutcomesList)) {
+        stop(sprintf(paramDeprecatedMessage, "targetComparatorOutcomesList"))
+      }
+
+      if (!is.null(refitPsForEveryOutcome)) {
+        stop(sprintf(paramDeprecatedMessage, "refitPsForEveryOutcome"))
+      }
+
+      if (!is.null(refitPsForEveryStudyPopulation)) {
+        stop(sprintf(paramDeprecatedMessage, "refitPsForEveryStudyPopulation"))
+      }
+
+      if (!is.null(cmDiagnosticThresholds)) {
+        stop(sprintf(paramDeprecatedMessage, "cmDiagnosticThresholds"))
+      }
+
       analysis <- list()
       for (name in names(formals(self$createModuleSpecifications))) {
         analysis[[name]] <- get(name)

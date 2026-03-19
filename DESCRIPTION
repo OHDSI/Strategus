@@ -1,12 +1,17 @@
 Package: Strategus
 Type: Package
 Title: Coordinate and Execute OHDSI HADES Modules
-Version: 1.4.1
-Date: 2025-09-08
+Version: 1.5.0
+Date: 2026-03-19
 Authors@R: c(
-	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre")),
+	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8630-5347")),
 	person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
 	person("Jamie", "Gilbert", role = c("aut")),
+	person("Jenna", "Reps", role = c("ctb")),
+	person("Christopher", "Knoll", role = c("ctb")),
+  person("Egill", "Fridgeirsson", role = c("ctb")),
+  person("Maarten", "van Kessel", role = c("ctb"), comment = c(ORCID = "0009-0006-8832-6030")),
+	person("Sivamsh", "Indukuri", role = c("ctb")),
 	person("Observational Health Data Science and Informatics", role = c("cph"))
   )
 Maintainer: Anthony Sena <sena@ohdsi.org>
@@ -15,7 +20,7 @@ Description: Coordinate and execute large scale analytics using OHDSI Health
   modules.
 Depends:
 	R (>= 4.2.0),
-	CohortGenerator (>= 0.11.0),
+	CohortGenerator (>= 1.0.0),
 	DatabaseConnector (>= 6.2.3),
   R6
 Imports:
@@ -24,20 +29,23 @@ Imports:
   digest,
   dplyr,
   methods,
+  stats,
   ParallelLogger (>= 3.1.0),
   purrr,
   ResultModelManager (>= 0.5.8),
   rlang,
   SqlRender (>= 1.18.0)
 Suggests:
-  Characterization,
+  Characterization (>= 3.0.0),
   CirceR,
   CohortDiagnostics (>= 3.4.0),
   CohortIncidence,
-  CohortMethod,
+  CohortMethod (>= 6.0.0),
   Cyclops (>= 3.6.0),
   Eunomia,
-  EvidenceSynthesis (>= 1.0.0),
+  EvidenceSynthesis (>= 1.1.0),
+  meta,
+  metafor,
   FeatureExtraction,
   fs,
   knitr,
@@ -50,6 +58,7 @@ Suggests:
   TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
+  ohdsi/Characterization,
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
   ohdsi/CohortMethod
@@ -58,7 +67,7 @@ VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 NeedsCompilation: no
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-US

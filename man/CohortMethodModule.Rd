@@ -159,38 +159,32 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 Creates the CohortMethod Module Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CohortMethodModule$createModuleSpecifications(
-  cmAnalysisList,
-  targetComparatorOutcomesList,
+  cmAnalysesSpecifications,
+  cmAnalysisList = NULL,
+  targetComparatorOutcomesList = NULL,
   analysesToExclude = NULL,
-  refitPsForEveryOutcome = FALSE,
-  refitPsForEveryStudyPopulation = TRUE,
-  cmDiagnosticThresholds = CohortMethod::createCmDiagnosticThresholds()
+  refitPsForEveryOutcome = NULL,
+  refitPsForEveryStudyPopulation = NULL,
+  cmDiagnosticThresholds = NULL
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{cmAnalysisList}}{A list of objects of type \code{cmAnalysis} as created using
-the `\link[CohortMethod:createCmAnalysis]{CohortMethod::createCmAnalysis} function.}
+\item{\code{cmAnalysesSpecifications}}{An R6 class created by CohortMethod::createCmAnalysesSpecifications}
 
-\item{\code{targetComparatorOutcomesList}}{A list of objects of type \code{targetComparatorOutcomes} as
-created using the \link[CohortMethod:createTargetComparatorOutcomes]{CohortMethod::createTargetComparatorOutcomes}
-function.}
+\item{\code{cmAnalysisList}}{Deprecated with CohortMethod v6 - please use the \code{cmAnalysesSpecifications} parameter instead.}
 
-\item{\code{analysesToExclude}}{Analyses to exclude. See the Analyses to Exclude section for details.}
+\item{\code{targetComparatorOutcomesList}}{Deprecated with CohortMethod v6 - please use the \code{cmAnalysesSpecifications} parameter instead.}
 
-\item{\code{refitPsForEveryOutcome}}{Should the propensity model be fitted for every outcome (i.e.
-after people who already had the outcome are removed)? If
-false, a single propensity model will be fitted, and people
-who had the outcome previously will be removed afterwards.}
+\item{\code{analysesToExclude}}{Deprecated with CohortMethod v6 - please use the \code{cmAnalysesSpecifications} parameter instead.}
 
-\item{\code{refitPsForEveryStudyPopulation}}{Should the propensity model be fitted for every study population
-definition? If false, a single propensity model will be fitted,
-and the study population criteria will be applied afterwards.}
+\item{\code{refitPsForEveryOutcome}}{Deprecated with CohortMethod v6 - please use the \code{cmAnalysesSpecifications} parameter instead.}
 
-\item{\code{cmDiagnosticThresholds}}{An object of type \code{CmDiagnosticThresholds} as created using
-\code{\link[CohortMethod:createCmDiagnosticThresholds]{CohortMethod::createCmDiagnosticThresholds()}}.}
+\item{\code{refitPsForEveryStudyPopulation}}{Deprecated with CohortMethod v6 - please use the \code{cmAnalysesSpecifications} parameter instead.}
+
+\item{\code{cmDiagnosticThresholds}}{Deprecated with CohortMethod v6 - please use the \code{cmAnalysesSpecifications} parameter instead.}
 }
 \if{html}{\out{</div>}}
 }

@@ -50,8 +50,7 @@ CohortGeneratorModule <- R6::R6Class(
         outputFolder = resultsFolder,
         databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
         minCellCount = jobContext$moduleExecutionSettings$minCellCount,
-        incremental = jobContext$moduleExecutionSettings$incremental,
-        incrementalFolder = jobContext$moduleExecutionSettings$workSubFolder
+        incremental = jobContext$moduleExecutionSettings$incremental
       )
 
       private$.message(paste("Results available at:", resultsFolder))
@@ -119,8 +118,22 @@ CohortGeneratorModule <- R6::R6Class(
       if (!CohortGenerator::isCohortDefinitionSet(cohortDefinitionSet)) {
         stop("cohortDefinitionSet is not properly defined")
       }
+      sharedResource <- list()
+      templateDefinitions <- CohortGenerator::getTemplateDefinitions(cohortDefinitionSet)
+      if (length(templateDefinitions) > 0) {
+        # Don't save templates as regular cohorts, this is handled entirely in the template definitions
+        cohortDefinitionSet <- cohortDefinitionSet |>
+          dplyr::filter(!.data$isTemplatedCohort)
+
+        templateDefs <- lapply(templateDefinitions, function(x) {
+          x$toList()
+        })
+        names(templateDefs) <- NULL
+        sharedResource$templateDefs <- templateDefs
+      }
 
       subsetDefinitions <- CohortGenerator::getSubsetDefinitions(cohortDefinitionSet)
+
       if (length(subsetDefinitions) > 0) {
         # Filter the cohort definition set to the "parent" cohorts.
         parentCohortDefinitionSet <- cohortDefinitionSet[!cohortDefinitionSet$isSubset, ]
@@ -128,16 +141,16 @@ CohortGeneratorModule <- R6::R6Class(
         parentCohortDefinitionSet <- cohortDefinitionSet
       }
 
-      sharedResource <- list()
+
       cohortDefinitionSetFiltered <- private$.listafy(parentCohortDefinitionSet)
-      sharedResource["cohortDefinitions"] <- list(cohortDefinitionSetFiltered)
+      sharedResource$cohortDefinitions <- cohortDefinitionSetFiltered
 
       if (length(subsetDefinitions)) {
         # Subset definitions
         subsetDefinitionsJson <- lapply(subsetDefinitions, function(x) {
           x$toJSON()
         })
-        sharedResource["subsetDefs"] <- list(subsetDefinitionsJson)
+        sharedResource$subsetDefs <- subsetDefinitionsJson
 
         # Filter to the subsets
         subsetCohortDefinitionSet <- cohortDefinitionSet[cohortDefinitionSet$isSubset, ]
@@ -150,7 +163,7 @@ CohortGeneratorModule <- R6::R6Class(
           )
           subsetIdMapping[[i]] <- idMapping
         }
-        sharedResource["cohortSubsets"] <- list(subsetIdMapping)
+        sharedResource$cohortSubsets <- subsetIdMapping
       }
 
       sharedResource <- super$createSharedResourcesSpecifications(

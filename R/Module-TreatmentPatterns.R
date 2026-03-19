@@ -1,4 +1,4 @@
-# Copyright 2025 Observational Health Data Sciences and Informatics
+# Copyright 2026 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -48,51 +48,169 @@ TreatmentPatternsModule <- R6::R6Class(
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       spec <- jobContext$settings
-      cohorts <- super$.listToDataFrame(spec$cohorts)
+      analysisList <- spec$tpAnalysisList
 
-      outputEnv <- TreatmentPatterns::computePathways(
-        cohorts = cohorts,
-        cohortTableName = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-        connectionDetails = connectionDetails,
-        cdmSchema = executionSettings$cdmDatabaseSchema,
-        resultSchema = executionSettings$workDatabaseSchema,
-        tempEmulationSchema = executionSettings$tempEmulationSchema,
-        startAnchor = spec$startAnchor,
-        windowStart = spec$windowStart,
-        endAnchor = spec$endAnchor,
-        windowEnd = spec$windowEnd,
-        minEraDuration = spec$minEraDuration,
-        splitEventCohorts = spec$splitEventCohorts,
-        splitTime = spec$splitTime,
-        eraCollapseSize = spec$eraCollapseSize,
-        combinationWindow = spec$combinationWindow,
-        minPostCombinationDuration = spec$minPostCombinationDuration,
-        filterTreatments = spec$filterTreatments,
-        maxPathLength = spec$maxPathLength,
-        overlapMethod = spec$overlapMethod,
-        concatTargets = spec$concatTargets
-      )
+      if (is.null(analysisList)) {
+        settings <- list()
+        for (setting in names(spec)) {
+          settings[[setting]] <- spec[[setting]]
+        }
 
-      TreatmentPatterns::export(
-        andromeda = outputEnv,
-        outputPath = resultsFolder,
-        ageWindow = spec$ageWindow,
-        minCellCount = executionSettings$minCellCount,
-        censorType = spec$censorType,
-        archiveName = NULL
-      )
+        # new parameters(cross compatibility)
+        if (is.null(spec$analysisId)) {
+          settings[["analysisId"]] <- 1
+        }
+        if (is.null(spec$description)) {
+          settings[["description"]] <- ""
+        }
+        if (is.null(spec$stratify)) {
+          settings[["stratify"]] <- FALSE
+        }
+        analysisList <- list(settings)
+      }
 
-      on.exit(
-        Andromeda::saveAndromeda(
-          andromeda = outputEnv,
-          fileName = file.path(workFolder, "outputEnv")
+      errorMessages <- character()
+      env <- environment()
+
+
+      # checks if there are failed pathways and runs only those; if none reruns all analyses
+      resultAppend <- FALSE
+
+      passedPathways <- integer(0)
+      if (isTRUE(executionSettings$incremental) && file.exists(file.path(workFolder, "passed_pathway_runs.csv")) && dir.exists(resultsFolder)) {
+        passedDf <- readr::read_csv(
+          file = file.path(workFolder, "passed_pathway_runs.csv"),
+          show_col_types = FALSE,
+          col_types = readr::cols_only(analysis_id = readr::col_integer())
         )
-      )
+
+        passedPathways <- as.integer(passedDf$analysis_id)
+
+        file.remove(file.path(workFolder, "failed_pathway_runs.csv"))
+
+        resultAppend <- TRUE
+      }
+
+      pathwayResult <- NULL
+
+      for (idx in seq_along(analysisList)) {
+        if (!is.null(analysisList[[idx]]$settings)) {
+          analysis <- analysisList[[idx]]$settings
+        } else {
+          analysis <- analysisList[[idx]]
+        }
+
+        analysisId <- analysis$analysisId
+
+        if (length(passedPathways) > 0 && analysisId %in% passedPathways) {
+          private$.message(paste("Analysis", analysisId, "pathway already constructed"))
+        } else {
+          cohorts <- super$.listToDataFrame(analysis$cohorts)
+
+          targets <- cohorts[cohorts$type == "target", c("cohortName", "cohortId"), drop = FALSE]
+
+          cohortAnalysisTable <- cohorts %>% dplyr::mutate("analysisId" = analysisId)
+          tryCatch(
+            {
+              outputEnv <- TreatmentPatterns::computePathways(
+                analysisId = analysisId,
+                description = analysis$description,
+                cohorts = cohorts,
+                cohortTableName = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+                connectionDetails = connectionDetails,
+                cdmSchema = executionSettings$cdmDatabaseSchema,
+                resultSchema = executionSettings$workDatabaseSchema,
+                tempEmulationSchema = executionSettings$tempEmulationSchema,
+                startAnchor = analysis$startAnchor,
+                windowStart = analysis$windowStart,
+                endAnchor = analysis$endAnchor,
+                windowEnd = analysis$windowEnd,
+                minEraDuration = analysis$minEraDuration,
+                splitEventCohorts = analysis$splitEventCohorts,
+                splitTime = analysis$splitTime,
+                eraCollapseSize = analysis$eraCollapseSize,
+                combinationWindow = analysis$combinationWindow,
+                minPostCombinationDuration = analysis$minPostCombinationDuration,
+                filterTreatments = analysis$filterTreatments,
+                maxPathLength = analysis$maxPathLength,
+                overlapMethod = analysis$overlapMethod,
+                concatTargets = analysis$concatTargets
+              )
+
+              result <- TreatmentPatterns::export(
+                andromeda = outputEnv,
+                outputPath = NULL,
+                ageWindow = analysis$ageWindow,
+                minCellCount = executionSettings$minCellCount,
+                censorType = analysis$censorType,
+                stratify = analysis$stratify,
+                archiveName = NULL
+              )
+
+              if (is.null(pathwayResult)) {
+                pathwayResult <- Andromeda::andromeda(
+                  attrition = result$attrition,
+                  metadata = result$metadata,
+                  treatmentPathways = result$treatment_pathways,
+                  summaryEventDuration = result$summary_event_duration,
+                  countsAge = result$counts_age,
+                  countsSex = result$counts_sex,
+                  countsYear = result$counts_year,
+                  cdmSourceInfo = result$cdm_source_info,
+                  analyses = result$analyses,
+                  arguments = result$arguments,
+                  analysisCohorts = cohortAnalysisTable
+                )
+              } else {
+                Andromeda::appendToTable(pathwayResult$attrition, result$attrition)
+                Andromeda::appendToTable(pathwayResult$metadata, result$metadata)
+                Andromeda::appendToTable(pathwayResult$treatmentPathways, result$treatment_pathways)
+                Andromeda::appendToTable(pathwayResult$summaryEventDuration, result$summary_event_duration)
+                Andromeda::appendToTable(pathwayResult$countsAge, result$counts_age)
+                Andromeda::appendToTable(pathwayResult$countsSex, result$counts_sex)
+                Andromeda::appendToTable(pathwayResult$countsYear, result$counts_year)
+                Andromeda::appendToTable(pathwayResult$cdmSourceInfo, result$cdm_source_info)
+                Andromeda::appendToTable(pathwayResult$analyses, result$analyses)
+                Andromeda::appendToTable(pathwayResult$arguments, result$arguments)
+                Andromeda::appendToTable(pathwayResult$analysisCohorts, cohortAnalysisTable)
+              }
+
+              private$.errorHandler(file = file.path(workFolder, "passed_pathway_runs.csv"), analysisId = analysisId, targets = targets, message = "passed")
+            },
+            error = function(err) {
+              msg <- sprintf("Analysis '%s' pathway construction failed: %s", analysisId, conditionMessage(err))
+              private$.message(msg)
+
+              current <- get("errorMessages", envir = env)
+              assign("errorMessages", c(current, msg), envir = env)
+
+              private$.errorHandler(file = file.path(workFolder, "failed_pathway_runs.csv"), analysisId = analysisId, targets = targets, message = msg)
+            }
+          )
+        }
+      }
+
+      if (isFALSE(resultAppend)) {
+        unlink(resultsFolder, recursive = TRUE)
+        dir.create(resultsFolder, recursive = TRUE, showWarnings = FALSE)
+      }
+
+      # writes the results to csv
+      for (name in names(pathwayResult)) {
+        data <- pathwayResult[[name]] %>% dplyr::collect()
+        snakeCaseName <- SqlRender::camelCaseToSnakeCase(name)
+
+        if (name == "analysisCohorts") {
+          colnames(data) <- SqlRender::camelCaseToSnakeCase(colnames(data))
+        }
+
+        readr::write_csv(x = data, file = file.path(resultsFolder, paste0(self$tablePrefix, snakeCaseName, ".csv")), append = resultAppend)
+      }
 
       # HACK: Append the database_id to all exported results
       csvFiles <- list.files(resultsFolder, pattern = "\\.csv$", full.names = TRUE)
       for (file in csvFiles) {
-        if (tools::file_path_sans_ext(basename(file)) != "analyses") {
+        if (!(tools::file_path_sans_ext(basename(file)) %in% c(paste0(self$tablePrefix, "analyses"), paste0(self$tablePrefix, "analysis_cohorts")))) {
           data <- CohortGenerator::readCsv(
             file = file
           )
@@ -105,11 +223,6 @@ TreatmentPatternsModule <- R6::R6Class(
         }
       }
 
-      # Rename all exported files to include the module prefix to the file name
-      for (file in csvFiles) {
-        newFileName <- file.path(resultsFolder, paste0(self$tablePrefix, basename(file)))
-        file.rename(file, newFileName)
-      }
 
       # Export the resultsDataModelSpecification.csv
       resultsDataModelSpecification <- self$getResultsDataModelSpecification()
@@ -121,6 +234,16 @@ TreatmentPatternsModule <- R6::R6Class(
         warnOnFileNameCaseMismatch = FALSE,
         warnOnUploadRuleViolations = FALSE
       )
+
+      if (length(errorMessages) > 0) {
+        msg <- sprintf(
+          "Module failed: %d analysis(es) failed. See logs and per-analysis artifacts in '%s' (failed_pathway_runs.csv). Errors: '%s'",
+          length(errorMessages),
+          workFolder,
+          paste(errorMessages, collapse = "; ")
+        )
+        stop(msg)
+      }
 
       private$.message(paste("Results available at:", resultsFolder))
     },
@@ -175,6 +298,8 @@ TreatmentPatternsModule <- R6::R6Class(
     },
     #' @description Creates the TreatmentPatternsnModule Specifications
     #'
+    #' @param analysisId (`numeric(1)`)
+    #' Unique identifier for the TreatmentPatterns analysis
     #' @param cohorts (`data.frame()`)\cr
     #' Data frame containing the following columns and data types:
     #' \describe{
@@ -182,6 +307,8 @@ TreatmentPatternsModule <- R6::R6Class(
     #'  \item{cohortName `character(1)`}{Cohort names of the cohorts to be used in the cohort table.}
     #'  \item{type `character(1)` \["target", "event', "exit"\]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
     #' }
+    #' @param description (`character(1)`)
+    #' Description for analysis
     #' @param minEraDuration (`integer(1)`: `0`)\cr
     #' Minimum time an event era should last to be included in analysis
     #' @param splitEventCohorts (`character(n)`: `""`)\cr
@@ -234,7 +361,11 @@ TreatmentPatternsModule <- R6::R6Class(
     #'  \item{`"startDate"`}{Include treatments after the target cohort start date and onwards.}
     #'  \item{`"endDate"`}{Include treatments before target cohort end date and before.}
     #' }
-    createModuleSpecifications = function(cohorts,
+    #' @param stratify (`logical(1)`)\cr
+    #' This will perform pairwise stratification between age, sex, and index year if set TRUE
+    createModuleSpecifications = function(analysisId = 1,
+                                          cohorts,
+                                          description = "",
                                           includeTreatments = NULL,
                                           indexDateOffset = NULL,
                                           minEraDuration = 0,
@@ -253,7 +384,8 @@ TreatmentPatternsModule <- R6::R6Class(
                                           startAnchor = "startDate",
                                           windowStart = 0,
                                           endAnchor = "endDate",
-                                          windowEnd = 0) {
+                                          windowEnd = 0,
+                                          stratify = FALSE) {
       if (!is.null(indexDateOffset)) {
         warning("`indexDateOffset` is deprecated in TreatmentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
       }
@@ -262,21 +394,65 @@ TreatmentPatternsModule <- R6::R6Class(
         warning("`includeTreatments` is deprecated in TreatentPatterns 3.1.0, please use: `startAnchor`, `windowStart`, `endAnchor`, `windowEnd` instead.")
       }
 
+      # validate user input
+      for (cohort in cohorts$cohortName) {
+        tryCatch(
+          {
+            # Attempt to compile the regex by running grepl on an empty string
+            grepl(cohort, "", perl = TRUE)
+            if (grepl("[-+]", cohort, perl = TRUE)) {
+              stop(sprintf("Invalid target cohort name; remove -/+"))
+            }
+          },
+          error = function(e) {
+            stop(
+              sprintf(
+                "Invalid target cohort name '%s': %s",
+                cohort, e$message
+              ),
+              call. = FALSE
+            )
+          }
+        )
+      }
+
       analysis <- list()
+      analysis[["cohorts"]] <- super$.dataFrameToList(cohorts)
+
       for (name in names(formals(self$createModuleSpecifications))) {
-        if (name == "cohorts") {
-          analysis[[name]] <- super$.dataFrameToList(get(name))
-        } else {
+        if (!(name %in% c("cohorts"))) {
           analysis[[name]] <- get(name)
         }
       }
 
-      super$createModuleSpecifications(analysis)
-    },
+      specification <- super$createModuleSpecifications(analysis)
 
+      return(specification)
+    },
+    #' @description
+    #' Runs multiple analyses using a list of analysis specification objects (as produced by\code{createModuleSpecifications}) into a single module specification
+    #'
+    #' @param tpAnalysisList (`list()`)\cr
+    #' A list of analysis specification objects.
+    #' Each element should be a list created by \code{createAnalysisSpecification}
+    createMultiAnalysisModuleSpecification = function(tpAnalysisList) {
+      analysisIds <- list()
+      for (analysis in tpAnalysisList) {
+        analysisIds[[length(analysisIds) + 1]] <- analysis$settings$analysisId
+      }
+
+      if (anyDuplicated(analysisIds)) {
+        stop("Each analysis need unique id")
+      }
+
+      specification <- super$createModuleSpecifications(
+        moduleSpecifications = list(tpAnalysisList = tpAnalysisList)
+      )
+      return(specification)
+    },
     #' @description Validate the module specifications
     #'
-    #' @param moduleSpecifications The CohortMethod module specifications
+    #' @param moduleSpecifications The treatment patterns module specifications
     validateModuleSpecifications = function(moduleSpecifications) {
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
@@ -289,6 +465,24 @@ TreatmentPatternsModule <- R6::R6Class(
         file.path("csv", "treatmentPatternsRdms.csv"),
         package = "Strategus"
       ))
+    },
+    .errorHandler = function(file, analysisId, targets, message) {
+      if (file.exists(file)) {
+        append <- TRUE
+      } else {
+        append <- FALSE
+      }
+
+      error <- data.frame(
+        analysis_id = analysisId,
+        target_names = paste(targets$target_cohort_name, collapse = ";"),
+        target_ids = paste(targets$target_cohort_id, collapse = ";"),
+        error = message,
+        timestamp = Sys.time(),
+        stringsAsFactors = FALSE
+      )
+
+      readr::write_csv(x = error, file = file, append = append)
     }
   )
 )

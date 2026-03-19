@@ -12,16 +12,15 @@ connection <- DatabaseConnector::connect(dbms = "sqlite", server = databaseFile)
 
 # Simulate CohortMethod data ---------------------------------------------------
 
-targetId <- 1
-comparatorId <- 2
+targetComparatorId <- 1
+firstOutcome <- TRUE
 # outcomeId <- 1
 for (outcomeId in 1:26) {
   message(sprintf("Simulating outcome %d", outcomeId))
   outcomeOfInterest <- outcomeId == 1
   trueEffectSize <- if_else(outcomeOfInterest, 2, 1)
   cmTargetComparatorOutcome <- tibble(
-    targetId = targetId,
-    comparatorId = comparatorId,
+    targetComparatorId = targetComparatorId,
     outcomeId = outcomeId,
     trueEffectSize = trueEffectSize,
     outcomeOfInterest = outcomeOfInterest
@@ -36,8 +35,13 @@ for (outcomeId in 1:26) {
     camelCaseToSnakeCase = TRUE
   )
   for (analysisId in 1:4) {
-    simulateTco(targetId, comparatorId, outcomeId, analysisId, hazardRatio = trueEffectSize)
+    simulateTco(targetComparatorId = targetComparatorId,
+                outcomeId = outcomeId,
+                analysisId = analysisId,
+                hazardRatio = trueEffectSize,
+                firstOutcome = firstOutcome)
   }
+  firstOutcome <- FALSE
 }
 
 # Simulate SCCS data -----------------------------------------------------------
