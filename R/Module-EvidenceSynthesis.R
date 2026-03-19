@@ -410,10 +410,12 @@ EvidenceSynthesisModule <- R6::R6Class(
 
       if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
         message("- Performing shared balance meta-analysis")
-        private$.dedupeCovariates(connection = connection,
-                                  databaseSchema = databaseSchema,
-                                  evidenceSynthesisSource = analysisSettings$evidenceSynthesisSource,
-                                  resultsFolder = resultsFolder)
+        private$.dedupeCovariates(
+          connection = connection,
+          databaseSchema = databaseSchema,
+          evidenceSynthesisSource = analysisSettings$evidenceSynthesisSource,
+          resultsFolder = resultsFolder
+        )
         sharedBalanceDiagnostics <- private$.metaAnalyzeBalance(
           connection = connection,
           databaseSchema = databaseSchema,
@@ -489,9 +491,9 @@ EvidenceSynthesisModule <- R6::R6Class(
           TRUE ~ "FAIL"
         )) |>
         mutate(unblind = ifelse(.data$mdrrDiagnostic != "FAIL" &
-                                  .data$easeDiagnostic != "FAIL" &
-                                  .data$i2Diagnostic != "FAIL" &
-                                  .data$tauDiagnostic != "FAIL", 1, 0))
+          .data$easeDiagnostic != "FAIL" &
+          .data$i2Diagnostic != "FAIL" &
+          .data$tauDiagnostic != "FAIL", 1, 0))
       if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
         passBalance <- function(maxSdm, sdmFamilyWiseMinP) {
           if (is.null(esDiagnosticThresholds$sdmThreshold)) {
@@ -500,7 +502,7 @@ EvidenceSynthesisModule <- R6::R6Class(
           if (is.null(esDiagnosticThresholds$sdmAlpha)) {
             return(maxSdm < esDiagnosticThresholds$sdmThreshold)
           } else {
-            return(sdmFamilyWiseMinP >  esDiagnosticThresholds$sdmAlpha)
+            return(sdmFamilyWiseMinP > esDiagnosticThresholds$sdmAlpha)
           }
         }
         diagnostics <- diagnostics |>
@@ -517,8 +519,8 @@ EvidenceSynthesisModule <- R6::R6Class(
             TRUE ~ "FAIL"
           )) |>
           mutate(unblind = ifelse(.data$unblind == 1 &
-                                    .data$balanceDiagnostic != "FAIL" &
-                                    .data$sharedBalanceDiagnostic != "FAIL", 1, 0))
+            .data$balanceDiagnostic != "FAIL" &
+            .data$sharedBalanceDiagnostic != "FAIL", 1, 0))
 
         fileName <- file.path(resultsFolder, "es_cm_diagnostics_summary.csv")
       } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
@@ -938,8 +940,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         )
         trueEffectSizes <- trueEffectSizes |>
           mutate(trueEffectSize = ifelse(!is.na(.data$trueEffectSize) & .data$trueEffectSize == 0,
-                                         NA,
-                                         .data$trueEffectSize
+            NA,
+            .data$trueEffectSize
           ))
       } else if (evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
         key <- c("exposureId", "nestingCohortId", "outcomeId", "exposuresOutcomeSetId", "covariateId")
@@ -1066,8 +1068,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         )
         trueEffectSizes <- trueEffectSizes |>
           mutate(trueEffectSize = ifelse(!is.na(.data$trueEffectSize) & .data$trueEffectSize == 0,
-                                         NA,
-                                         .data$trueEffectSize
+            NA,
+            .data$trueEffectSize
           ))
       } else {
         stop(sprintf("Evidence synthesis for source method '%s' hasn't been implemented yet.", evidenceSynthesisSource$sourceMethod))
@@ -1191,26 +1193,34 @@ EvidenceSynthesisModule <- R6::R6Class(
         balance <- private$.createEmptyResult(tableName)
         if (shared) {
           balanceDiagnostic <- balance |>
-            mutate(sharedMaxSdm = NA,
-                   sharedSdmFamilyWiseMinP = NA)
+            mutate(
+              sharedMaxSdm = NA,
+              sharedSdmFamilyWiseMinP = NA
+            )
         } else {
           balanceDiagnostic <- balance |>
-            mutate(maxSdm = NA,
-                   sdmFamilyWiseMinP = NA)
+            mutate(
+              maxSdm = NA,
+              sdmFamilyWiseMinP = NA
+            )
         }
       } else {
         if (shared) {
           groups <- balance |>
-            group_by(.data$targetComparatorId,
-                     .data$analysisId,
-                     .data$covariateId) |>
+            group_by(
+              .data$targetComparatorId,
+              .data$analysisId,
+              .data$covariateId
+            ) |>
             group_split()
         } else {
           groups <- balance |>
-            group_by(.data$targetComparatorId,
-                     .data$outcomeId,
-                     .data$analysisId,
-                     .data$covariateId) |>
+            group_by(
+              .data$targetComparatorId,
+              .data$outcomeId,
+              .data$analysisId,
+              .data$covariateId
+            ) |>
             group_split()
         }
         balance <- NULL
@@ -1226,8 +1236,8 @@ EvidenceSynthesisModule <- R6::R6Class(
           mutate(evidenceSynthesisAnalysisId = !!evidenceSynthesisAnalysisId)
         threshold <- esDiagnosticThresholds$sdmThreshold
         if (is.null(threshold)) {
-          balance$balancedBefore <-  1
-          balance$balancedAfter <-  1
+          balance$balancedBefore <- 1
+          balance$balancedAfter <- 1
           balance$beforeP <- 1
           balance$afterP <- 1
         } else {
@@ -1236,28 +1246,36 @@ EvidenceSynthesisModule <- R6::R6Class(
 
           alpha <- esDiagnosticThresholds$sdmAlpha
           if (is.null(alpha)) {
-            balance$balancedBefore <-  if_else(abs(balance$stdDiffBefore) <= threshold, 1, 0)
-            balance$balancedAfter <-  if_else(abs(balance$stdDiffAfter) <= threshold, 1, 0)
+            balance$balancedBefore <- if_else(abs(balance$stdDiffBefore) <= threshold, 1, 0)
+            balance$balancedAfter <- if_else(abs(balance$stdDiffAfter) <= threshold, 1, 0)
           } else {
-            balance$balancedBefore <-  if_else(balance$beforeP > alpha / nrow(balance), 1, 0)
-            balance$balancedAfter <-  if_else(balance$afterP > alpha / nrow(balance), 1, 0)
+            balance$balancedBefore <- if_else(balance$beforeP > alpha / nrow(balance), 1, 0)
+            balance$balancedAfter <- if_else(balance$afterP > alpha / nrow(balance), 1, 0)
           }
         }
         if (shared) {
           balanceDiagnostic <- balance |>
-            group_by(.data$targetComparatorId,
-                     .data$analysisId,
-                     .data$evidenceSynthesisAnalysisId) |>
-            summarise(sharedMaxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
-                      sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
+            group_by(
+              .data$targetComparatorId,
+              .data$analysisId,
+              .data$evidenceSynthesisAnalysisId
+            ) |>
+            summarise(
+              sharedMaxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
+              sharedSdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP)
+            )
         } else {
           balanceDiagnostic <- balance |>
-            group_by(.data$targetComparatorId,
-                     .data$outcomeId,
-                     .data$analysisId,
-                     .data$evidenceSynthesisAnalysisId) |>
-            summarise(maxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
-                      sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP))
+            group_by(
+              .data$targetComparatorId,
+              .data$outcomeId,
+              .data$analysisId,
+              .data$evidenceSynthesisAnalysisId
+            ) |>
+            summarise(
+              maxSdm = max(abs(.data$stdDiffAfter), na.rm = TRUE),
+              sdmFamilyWiseMinP = sum(!is.na(.data$stdDiffVarAfter)) * .minOrNa(.data$afterP)
+            )
         }
         balance <- balance |>
           select(-"beforeP", -"afterP")
@@ -1311,15 +1329,16 @@ EvidenceSynthesisModule <- R6::R6Class(
 .metaAnalyzeSingleCovariate <- function(group, shared = FALSE) {
   if (nrow(group) == 1) {
     row <- group |>
-      select("targetComparatorId",
-             "analysisId",
-             "covariateId",
-             "stdDiffBefore",
-             "stdDiffVarBefore",
-             "stdDiffAfter",
-             "stdDiffVarAfter")
+      select(
+        "targetComparatorId",
+        "analysisId",
+        "covariateId",
+        "stdDiffBefore",
+        "stdDiffVarBefore",
+        "stdDiffAfter",
+        "stdDiffVarAfter"
+      )
   } else {
-
     groupBefore <- group |>
       filter(!is.na(.data$stdDiffVarBefore) & .data$stdDiffVarBefore != 0)
     if (nrow(groupBefore) == 0) {
@@ -1331,16 +1350,19 @@ EvidenceSynthesisModule <- R6::R6Class(
     } else {
       metaBefore <- tryCatch(
         {
-          metafor::rma(yi = groupBefore$stdDiffBefore,
-                       vi = groupBefore$stdDiffVarBefore,
-                       control = list(iter.max = 2000))
-        }, error = function(e) {
+          metafor::rma(
+            yi = groupBefore$stdDiffBefore,
+            vi = groupBefore$stdDiffVarBefore,
+            control = list(iter.max = 2000)
+          )
+        },
+        error = function(e) {
           warning(e$message)
           return(list(beta = matrix(NA), se = NA))
         }
       )
       stdDiffBefore <- metaBefore$beta[1, 1]
-      stdDiffVarBefore <- metaBefore$se ^ 2
+      stdDiffVarBefore <- metaBefore$se^2
     }
 
     groupAfter <- group |>
@@ -1354,16 +1376,19 @@ EvidenceSynthesisModule <- R6::R6Class(
     } else {
       metaAfter <- tryCatch(
         {
-          metafor::rma(yi = groupAfter$stdDiffBefore,
-                       vi = groupAfter$stdDiffVarBefore,
-                       control = list(iter.max = 2000))
-        }, error = function(e) {
+          metafor::rma(
+            yi = groupAfter$stdDiffBefore,
+            vi = groupAfter$stdDiffVarBefore,
+            control = list(iter.max = 2000)
+          )
+        },
+        error = function(e) {
           warning(e$message)
           return(list(beta = matrix(NA), se = NA))
         }
       )
       stdDiffAfter <- metaAfter$beta[1, 1]
-      stdDiffVarAfter <- metaAfter$se ^ 2
+      stdDiffVarAfter <- metaAfter$se^2
     }
     row <- tibble(
       targetComparatorId = group$targetComparatorId[1],

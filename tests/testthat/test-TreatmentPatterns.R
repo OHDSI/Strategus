@@ -124,7 +124,7 @@ test_that("Bad Cohort Names", {
 
 
   testTable1 <- data.frame(
-    cohortId = c(8,1,3,0),
+    cohortId = c(8, 1, 3, 0),
     cohortName = c("Viral+Sinusitis", "+Acetaminophen", "Aspirin-", "Death"),
     type = c("target", "event", "event", "exit")
   )
@@ -197,7 +197,6 @@ test_that("Unique Analysis Ids", {
     tp$createMultiAnalysisModuleSpecification(tpAnalysisList = modSpecs),
     "Each analysis need unique id"
   )
-
 })
 
 # test_that("TreatmentPatterns: execute method with multiple analysis", {

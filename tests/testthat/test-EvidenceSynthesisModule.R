@@ -406,8 +406,10 @@ test_that("Check prediction intervals", {
       SqlRender::snakeCaseToCamelCaseNames()
     data <- data |>
       filter(!is.na(pi95Lb) & !is.na(pi95Ub)) |>
-      mutate(seLogPi = (log(pi95Ub) - log(pi95Lb)) / 2 * qnorm(0.975),
-             seLogCalPi = (log(calibratedPi95Ub) - log(calibratedPi95Lb)) / 2 * qnorm(0.975))
+      mutate(
+        seLogPi = (log(pi95Ub) - log(pi95Lb)) / 2 * qnorm(0.975),
+        seLogCalPi = (log(calibratedPi95Ub) - log(calibratedPi95Lb)) / 2 * qnorm(0.975)
+      )
 
     expect_true(nrow(data) > 0)
 

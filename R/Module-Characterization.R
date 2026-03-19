@@ -162,7 +162,7 @@ CharacterizationModule <- R6::R6Class(
                                           endAnchor = c("cohort end", "cohort end"),
                                           dechallengeStopInterval = 30,
                                           dechallengeEvaluationWindow = 30,
-                                          mode = 'CohortIncidence',
+                                          mode = "CohortIncidence",
                                           minSMD = 0.01,
                                           minCharacterizationMean = 0.01,
                                           minCovariateCount = 5,
@@ -212,10 +212,9 @@ CharacterizationModule <- R6::R6Class(
                                           includeTargetBaseline = TRUE,
                                           includeRiskFactors = TRUE,
                                           includeCaseSeries = TRUE,
-                                          outputTable = 'characterization_cohorts'
-                                          ) {
+                                          outputTable = "characterization_cohorts") {
       # input checks
-      if(includeTimeToEvent | includeDechallengeRechallenge | includeRiskFactors | includeCaseSeries){
+      if (includeTimeToEvent | includeDechallengeRechallenge | includeRiskFactors | includeCaseSeries) {
         if (!inherits(outcomeIds, "numeric")) {
           stop("outcomeIds must be a numeric or a numeric vector")
         }
@@ -366,7 +365,7 @@ CharacterizationModule <- R6::R6Class(
         moduleSpecifications = list(
           analysis = analysis,
           minCharacterizationMean = minCharacterizationMean,
-          mode = mode ,
+          mode = mode,
           minSMD = minSMD,
           minCovariateCount = minCovariateCount,
           outputTable = outputTable
