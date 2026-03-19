@@ -131,16 +131,6 @@
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                             <tr>
-                                                <td title="c_cohort_details.outcome_cohort_id references cg_cohort_definition.cohort_definition_id"><a href='c_cohort_details.html'>c_cohort_details</a><span class='relatedKey'>.outcome_cohort_id</span></td>
-                                                <td class="constraint detail">Defined in XML</td>
-                                                <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td title="c_cohort_details.target_cohort_id references cg_cohort_definition.cohort_definition_id"><a href='c_cohort_details.html'>c_cohort_details</a><span class='relatedKey'>.target_cohort_id</span></td>
-                                                <td class="constraint detail">Defined in XML</td>
-                                                <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
-                                            <tr>
                                                 <td title="c_dechallenge_rechallenge.outcome_cohort_definition_id references cg_cohort_definition.cohort_definition_id"><a href='c_dechallenge_rechallenge.html'>c_dechallenge_rechallenge</a><span class='relatedKey'>.outcome_cohort_definition_id</span></td>
                                                 <td class="constraint detail">Defined in XML</td>
                                                 <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
@@ -171,17 +161,7 @@
                                                 <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
                                             </tr>
                                             <tr>
-                                                <td title="cm_diagnostics_summary.comparator_id references cg_cohort_definition.cohort_definition_id"><a href='cm_diagnostics_summary.html'>cm_diagnostics_summary</a><span class='relatedKey'>.comparator_id</span></td>
-                                                <td class="constraint detail">Defined in XML</td>
-                                                <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
-                                            <tr>
                                                 <td title="cm_diagnostics_summary.outcome_id references cg_cohort_definition.cohort_definition_id"><a href='cm_diagnostics_summary.html'>cm_diagnostics_summary</a><span class='relatedKey'>.outcome_id</span></td>
-                                                <td class="constraint detail">Defined in XML</td>
-                                                <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td title="cm_diagnostics_summary.target_id references cg_cohort_definition.cohort_definition_id"><a href='cm_diagnostics_summary.html'>cm_diagnostics_summary</a><span class='relatedKey'>.target_id</span></td>
                                                 <td class="constraint detail">Defined in XML</td>
                                                 <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
                                             </tr>
@@ -273,6 +253,23 @@
                                         </table>
                                     </td>
                                     <td><p>This value is 1 when the cohort is a subset</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_templated_cohort">is_templated_cohort</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>This value is 1 when the cohort is based on an sql template</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="json">json</span></td>

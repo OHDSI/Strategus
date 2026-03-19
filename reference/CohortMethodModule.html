@@ -9,7 +9,7 @@ the OMOP Common Data Model"><link rel="stylesheet" type="text/css" href="extra.c
 
     <a class="navbar-brand me-2" href="../index.html">Strategus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@ the OMOP Common Data Model"><link rel="stylesheet" type="text/css" href="extra.c
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>New-user cohort studies with the <a href="https://ohdsi.github.io/CohortMethod/" class="external-link">HADES CohortMethod Package</a></h1>
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/v1.4.1/R/Module-CohortMethod.R" class="external-link"><code>R/Module-CohortMethod.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/main/R/Module-CohortMethod.R" class="external-link"><code>R/Module-CohortMethod.R</code></a></small>
       <div class="d-none name"><code>CohortMethodModule.Rd</code></div>
     </div>
 
@@ -208,48 +208,44 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 <p>Creates the CohortMethod Module Specifications</p><div class="section">
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CohortMethodModule</span><span class="op">$</span><span class="fu">createModuleSpecifications</span><span class="op">(</span></span>
-<span>  <span class="va">cmAnalysisList</span>,</span>
-<span>  <span class="va">targetComparatorOutcomesList</span>,</span>
+<span>  <span class="va">cmAnalysesSpecifications</span>,</span>
+<span>  cmAnalysisList <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  targetComparatorOutcomesList <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  analysesToExclude <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  refitPsForEveryOutcome <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  refitPsForEveryStudyPopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  cmDiagnosticThresholds <span class="op">=</span> <span class="fu">CohortMethod</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortMethod/reference/createCmDiagnosticThresholds.html" class="external-link">createCmDiagnosticThresholds</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  refitPsForEveryOutcome <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  refitPsForEveryStudyPopulation <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cmDiagnosticThresholds <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-4">Arguments<a class="anchor" aria-label="anchor" href="#arguments-4"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>cmAnalysisList</code></dt>
-<dd><p>A list of objects of type <code>cmAnalysis</code> as created using
-the `<a href="https://ohdsi.github.io/CohortMethod/reference/createCmAnalysis.html" class="external-link">CohortMethod::createCmAnalysis</a> function.</p></dd>
+<p></p><div class="arguments"><dl><dt><code>cmAnalysesSpecifications</code></dt>
+<dd><p>An R6 class created by CohortMethod::createCmAnalysesSpecifications</p></dd>
+
+
+<dt><code>cmAnalysisList</code></dt>
+<dd><p>Deprecated with CohortMethod v6 - please use the <code>cmAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>targetComparatorOutcomesList</code></dt>
-<dd><p>A list of objects of type <code>targetComparatorOutcomes</code> as
-created using the <a href="https://ohdsi.github.io/CohortMethod/reference/createTargetComparatorOutcomes.html" class="external-link">CohortMethod::createTargetComparatorOutcomes</a>
-function.</p></dd>
+<dd><p>Deprecated with CohortMethod v6 - please use the <code>cmAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>analysesToExclude</code></dt>
-<dd><p>Analyses to exclude. See the Analyses to Exclude section for details.</p></dd>
+<dd><p>Deprecated with CohortMethod v6 - please use the <code>cmAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>refitPsForEveryOutcome</code></dt>
-<dd><p>Should the propensity model be fitted for every outcome (i.e.
-after people who already had the outcome are removed)? If
-false, a single propensity model will be fitted, and people
-who had the outcome previously will be removed afterwards.</p></dd>
+<dd><p>Deprecated with CohortMethod v6 - please use the <code>cmAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>refitPsForEveryStudyPopulation</code></dt>
-<dd><p>Should the propensity model be fitted for every study population
-definition? If false, a single propensity model will be fitted,
-and the study population criteria will be applied afterwards.</p></dd>
+<dd><p>Deprecated with CohortMethod v6 - please use the <code>cmAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 <dt><code>cmDiagnosticThresholds</code></dt>
-<dd><p>An object of type <code>CmDiagnosticThresholds</code> as created using
-<code><a href="https://ohdsi.github.io/CohortMethod/reference/createCmDiagnosticThresholds.html" class="external-link">CohortMethod::createCmDiagnosticThresholds()</a></code>.</p></dd>
+<dd><p>Deprecated with CohortMethod v6 - please use the <code>cmAnalysesSpecifications</code> parameter instead.</p></dd>
 
 
 </dl><p></p></div>
@@ -324,7 +320,7 @@ one of the following columns:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

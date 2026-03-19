@@ -78,7 +78,7 @@
                         <div class="col-md-12">
                             <div class="callout callout-info">
                                 <h4>SchemaSpy Analysis of strategus.results</h4>
-                                <p>Generated on Tue Sep 09 00:23 UTC 2025</p>
+                                <p>Generated on Thu Mar 19 16:04 UTC 2026</p>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                                 <span class="info-box-icon bg-aqua"><i class="fa fa-table"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">TABLES</span>
-                                    <span class="info-box-number">136</span>
+                                    <span class="info-box-number">153</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -127,7 +127,7 @@
                                 <span class="info-box-icon bg-green"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">COLUMNS</span>
-                                    <span class="info-box-number">1105</span>
+                                    <span class="info-box-number">1251</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -177,7 +177,7 @@
                             <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <p>Database Type: PostgreSQL - 17.6 (Debian 17.6-1.pgdg13+1)</p>
+                            <p>Database Type: PostgreSQL - 18.3 (Debian 18.3-1.pgdg13+1)</p>
                         </div><!-- /.box-body -->
                     </div>
                     <div class="box box-primary">
@@ -215,13 +215,13 @@
                                 </thead>
                                 <tbody>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/c_covariates_continuous.html">c_covariates_continuous</a></td>
+                                        <td class="detail"><a href="tables/es_cm_covariate.html">es_cm_covariate</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">6</td>
-                                        <td class="detail" align="right">16</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Continuous covariates</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Holds the covariates for the evidence synthesis module.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/sccs_covariate.html">sccs_covariate</a></td>
@@ -353,7 +353,7 @@
                                         <td class="detail"><a href="tables/tp_cdm_source_info.html">tp_cdm_source_info</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: CDM source information</p></td>
@@ -371,7 +371,7 @@
                                         <td class="detail"><a href="tables/cm_kaplan_meier_dist.html">cm_kaplan_meier_dist</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">14</td>
+                                        <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Kaplan Meier distribution</p></td>
@@ -476,6 +476,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Relationships</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/cg_cohort_template_link.html">cg_cohort_template_link</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Holds the linkage between cohorts and the cohor templates.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_dechallenge_rechallenge.html">c_dechallenge_rechallenge</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">3</td>
@@ -486,9 +495,9 @@
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_definition.html">cg_cohort_definition</a></td>
-                                        <td class="detail" align="right">17</td>
+                                        <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">9</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort definitions</p></td>
@@ -510,15 +519,6 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Diagnostic summary</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/c_cohort_counts.html">c_cohort_counts</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">15</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Cohort counts</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/tp_analyses.html">tp_analyses</a></td>
@@ -674,19 +674,10 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Covariate reference</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/c_settings.html">c_settings</a></td>
-                                        <td class="detail" align="right">6</td>
-                                        <td class="detail" align="right">3</td>
-                                        <td class="detail" align="right">12</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Settings</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_target_comparator_outcome.html">cm_target_comparator_outcome</a></td>
-                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Target comparator outcome reference</p></td>
@@ -757,11 +748,20 @@
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_result.html">cm_result</a></td>
                                         <td class="detail" align="right">1</td>
-                                        <td class="detail" align="right">3</td>
-                                        <td class="detail" align="right">27</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">26</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Study results for main effects</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_target_covariates.html">c_target_covariates</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the covariates that are used to characterize the target cohort.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_sccs_diagnostics_summary.html">es_sccs_diagnostics_summary</a></td>
@@ -782,6 +782,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort details</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/cg_cohort_subset_operator.html">cg_cohort_subset_operator</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Holds the operators used to create cohort subsets.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_inc_stats.html">cd_cohort_inc_stats</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
@@ -794,7 +803,7 @@
                                         <td class="detail"><a href="tables/plp_model_designs.html">plp_model_designs</a></td>
                                         <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">2</td>
-                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Model designs</p></td>
@@ -809,6 +818,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Likelihood profile</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_target_settings.html">c_target_settings</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the settings that are used to characterize the target cohorts.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_inclusion.html">cd_cohort_inclusion</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
@@ -816,6 +834,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Cohort inclusion info</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_case_series_settings.html">c_case_series_settings</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the settings that are used to characterize the case series cohorts.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_vocabulary.html">cd_vocabulary</a></td>
@@ -830,7 +857,7 @@
                                         <td class="detail"><a href="tables/es_cm_result.html">es_cm_result</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">26</td>
+                                        <td class="detail" align="right">29</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Cohort method results</p></td>
@@ -845,10 +872,28 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Target cohort definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/cm_attrition.html">cm_attrition</a></td>
+                                        <td class="detail"><a href="tables/c_risk_factor_covariates.html">c_risk_factor_covariates</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">9</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the covariates that are used to characterize the risk factors.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_case_series_covariates_continuous.html">c_case_series_covariates_continuous</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">33</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the continuous covariates that are used to characterize the case series cohorts.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/cm_attrition.html">cm_attrition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Attrition table</p></td>
@@ -875,10 +920,19 @@
                                         <td class="detail"><a href="tables/cm_covariate_balance.html">cm_covariate_balance</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">4</td>
-                                        <td class="detail" align="right">17</td>
+                                        <td class="detail" align="right">20</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Covariate balance</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_attrition.html">c_attrition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the attrition of the characterization cohorts.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_subset_definition.html">cd_subset_definition</a></td>
@@ -899,19 +953,19 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortIncidenceModule: Subgroup definitions</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/c_cohort_details.html">c_cohort_details</a></td>
-                                        <td class="detail" align="right">3</td>
-                                        <td class="detail" align="right">2</td>
-                                        <td class="detail" align="right">5</td>
+                                        <td class="detail"><a href="tables/tp_analysis_cohorts.html">tp_analysis_cohorts</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Cohort details</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: Holds the analysis cohorts for the treatment patterns module.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_preference_score_dist.html">cm_preference_score_dist</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Preference score distribution</p></td>
@@ -927,8 +981,8 @@
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/database_meta_data.html">database_meta_data</a></td>
-                                        <td class="detail" align="right">17</td>
-                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">15</td>
+                                        <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">13</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
@@ -965,7 +1019,7 @@
                                         <td class="detail"><a href="tables/es_sccs_result.html">es_sccs_result</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">27</td>
+                                        <td class="detail" align="right">31</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Self controlled case series results</p></td>
@@ -987,6 +1041,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: Metadata</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/es_cm_shared_covariate_balance.html">es_cm_shared_covariate_balance</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Holds the shared covariate balance for the evidence synthesis module.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_inc_result.html">cg_cohort_inc_result</a></td>
@@ -1027,8 +1090,8 @@
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_diagnostics_summary.html">cm_diagnostics_summary</a></td>
                                         <td class="detail" align="right">1</td>
-                                        <td class="detail" align="right">5</td>
-                                        <td class="detail" align="right">21</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">22</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Diagnostics summary</p></td>
@@ -1041,6 +1104,33 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Attrition information</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_risk_factor_covariates_continuous.html">c_risk_factor_covariates_continuous</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">25</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the continuous covariates that are used to characterize the risk factors.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/cg_cohort_subset_attrition.html">cg_cohort_subset_attrition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Holds the attrition of the subsetted cohorts.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_target_covariates_continuous.html">c_target_covariates_continuous</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">14</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the continuous covariates that are used to characterize the target cohort.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/tp_counts_age.html">tp_counts_age</a></td>
@@ -1070,10 +1160,19 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Time to event</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/cg_cohort_template_definition.html">cg_cohort_template_definition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Holds the definitions of cohort templates.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_propensity_model.html">cm_propensity_model</a></td>
                                         <td class="detail" align="right">1</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">5</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Propensity model</p></td>
@@ -1082,7 +1181,7 @@
                                         <td class="detail"><a href="tables/cm_shared_covariate_balance.html">cm_shared_covariate_balance</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">4</td>
-                                        <td class="detail" align="right">16</td>
+                                        <td class="detail" align="right">19</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Shared covariate balance</p></td>
@@ -1142,6 +1241,24 @@
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Models</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_case_series_covariates.html">c_case_series_covariates</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the covariates that are used to characterize the case series cohorts.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_case_settings.html">c_case_settings</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the settings that are used to characterize the case cohorts.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_domain.html">cd_domain</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
@@ -1176,6 +1293,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Sample settings</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_execution_settings.html">c_execution_settings</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the settings that are used to execute the characterization module.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/sccs_censor_model.html">sccs_censor_model</a></td>
@@ -1241,10 +1367,28 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Continuous covariate values</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/cg_cohort_attrition.html">cg_cohort_attrition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Holds the attrition of Circe-based cohorts.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/plp_hyperparameter_settings.html">plp_hyperparameter_settings</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Holds the hyperparameter settings for the patient-level prediction module.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_interaction_result.html">cm_interaction_result</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">25</td>
+                                        <td class="detail" align="right">24</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Study results for interaction effects</p></td>
@@ -1266,6 +1410,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Evaluation statistics</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/es_cm_covariate_balance.html">es_cm_covariate_balance</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Holds the covariate balance for the evidence synthesis module.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/sccs_analysis.html">sccs_analysis</a></td>
@@ -1305,7 +1458,7 @@
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_covariate_ref.html">c_covariate_ref</a></td>
-                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">8</td>
                                         <td class="detail" align="right">0</td>
@@ -1325,7 +1478,7 @@
                                         <td class="detail"><a href="tables/es_cm_diagnostics_summary.html">es_cm_diagnostics_summary</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">14</td>
+                                        <td class="detail" align="right">19</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>EvidenceSynthesisModule: Cohort method diagnostics summary</p></td>
@@ -1361,7 +1514,7 @@
                                         <td class="detail"><a href="tables/cm_follow_up_dist.html">cm_follow_up_dist</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">23</td>
+                                        <td class="detail" align="right">22</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Follow up distribution</p></td>
@@ -1385,13 +1538,13 @@
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: List of analysis arguments</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/c_covariates.html">c_covariates</a></td>
+                                        <td class="detail"><a href="tables/cm_target_comparator.html">cm_target_comparator</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">7</td>
-                                        <td class="detail" align="right">9</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Binary covariates</p></td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Defines the surrogate key for the target and comparator cohorts.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_included_source_concept.html">cd_included_source_concept</a></td>

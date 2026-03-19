@@ -139,23 +139,6 @@
                                     <td><p>A foreign key referencing the cm_analysis table.</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="comparator_id">comparator_id</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td><p>The identifier for the comparator cohort.</p></td>
-                                </tr>
-                                <tr>
                                     <td><span id="database_id">database_id</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
@@ -171,6 +154,23 @@
                                         </table>
                                     </td>
                                     <td><p>Foreign key referencing the database.</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="gradient">gradient</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>The gradient of the log likelihood.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="log_likelihood">log_likelihood</span></td>
@@ -224,7 +224,7 @@
                                     <td><p>The identifier for the outcome cohort.</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="target_id">target_id</span></td>
+                                    <td><span id="target_comparator_id">target_comparator_id</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
                                     <td title=''></td>
@@ -238,7 +238,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>The identifier for the target cohort.</p></td>
+                                    <td><p>A foreign key referencing the target_comparator table.</p></td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -139,7 +139,7 @@
                                     <td><p>A unique identifier for the cohort method analysis.</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="comparator_id">comparator_id</span></td>
+                                    <td><span id="balance_diagnostic">balance_diagnostic</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
                                     <td title=''></td>
@@ -153,7 +153,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>The identifier for the comparator cohort.</p></td>
+                                    <td><p>PASS/ NOT EVALUATED / FAIL  classification of the balance diagnostic (max_sdm).</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="ease">ease</span></td>
@@ -241,6 +241,23 @@
                                     <td><p>PASS/ NOT EVALUATED / FAIL classification of the I2 diagnostic.</p></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="max_sdm">max_sdm</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>The maximum absolute standardized difference of mean.</p></td>
+                                </tr>
+                                <tr>
                                     <td><span id="mdrr">mdrr</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
@@ -292,7 +309,7 @@
                                     <td><p>The identifier for the outcome cohort.</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="target_id">target_id</span></td>
+                                    <td><span id="sdm_family_wise_min_p">sdm_family_wise_min_p</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
                                     <td title=''></td>
@@ -306,7 +323,75 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>The identifier for the target cohort.</p></td>
+                                    <td><p>The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold.</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="shared_balance_diagnostic">shared_balance_diagnostic</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>PASS/ NOT EVALUATED / FAIL classification of the shared balance diagnostic (shared_max_sdm).</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="shared_max_sdm">shared_max_sdm</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>The maximum absolute standardized difference of mean of the shared balance (shared across outcomes).</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="shared_sdm_family_wise_min_p">shared_sdm_family_wise_min_p</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>The minimum family-wise P-value for the test whether the absolute SDM exceeds the diagnostic threshold for the shared balance (across all outcomes).</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="target_comparator_id">target_comparator_id</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>A foreign key referencing the target_comparator table.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="tau">tau</span></td>
@@ -340,7 +425,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>PPASS/ NOT EVALUATED / FAIL classification of the tau diagnostic.</p></td>
+                                    <td><p>PASS/ NOT EVALUATED / FAIL classification of the tau diagnostic.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="unblind">unblind</span></td>

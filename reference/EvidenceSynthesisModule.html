@@ -11,7 +11,7 @@ for performing meta-analysis and forest plots"><link rel="stylesheet" type="text
 
     <a class="navbar-brand me-2" href="../index.html">Strategus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@ for performing meta-analysis and forest plots"><link rel="stylesheet" type="text
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Meta-analysis with the <a href="https://ohdsi.github.io/EvidenceSynthesis/" class="external-link">HADES EvidenceSynthesis Package</a></h1>
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/v1.4.1/R/Module-EvidenceSynthesis.R" class="external-link"><code>R/Module-EvidenceSynthesis.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/main/R/Module-EvidenceSynthesis.R" class="external-link"><code>R/Module-EvidenceSynthesis.R</code></a></small>
       <div class="d-none name"><code>EvidenceSynthesisModule.Rd</code></div>
     </div>
 
@@ -459,7 +459,9 @@ Create EvidenceSynthesis diagnostics thresholds</p></dd>
 <span>  mdrrThreshold <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  easeThreshold <span class="op">=</span> <span class="fl">0.25</span>,</span>
 <span>  i2Threshold <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>  tauThreshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span>  tauThreshold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>  sdmThreshold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sdmAlpha <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -483,6 +485,21 @@ heterogeneity in random-effects models)?</p></dd>
 <dt><code>tauThreshold</code></dt>
 <dd><p>What is the maximum allowed tau (measure of between-database
 heterogeneity in Bayesian random-effects models)?</p></dd>
+
+
+<dt><code>sdmThreshold</code></dt>
+<dd><p>What is the maximum allowed standardized difference of mean (SDM) in a meta-analysis
+of balance statistics? If any covariate has a meta-analysis SDM exceeding this
+threshold, the diagnostic will fail. If set to NULL, this diagnostic will be
+ignored.</p></dd>
+
+
+<dt><code>sdmAlpha</code></dt>
+<dd><p>What is the alpha for testing whether the absolute SDM exceeds
+<code>sdmThreshold</code>? If not provided, no significance testing will be
+performed and any absolute SDM greater than the threshold will be
+considered imbalance. Note that a Bonferroni adjustment will
+automatically be applied to adjust for the number of tests performed.</p></dd>
 
 
 </dl><p></p></div>
@@ -547,7 +564,7 @@ or <a href="../../Strategus/html/EvidenceSynthesisModule.html#method-createBayes
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

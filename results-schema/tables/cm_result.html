@@ -314,28 +314,6 @@
                                     <td><p>The number of days observed in the comparator cohort.</p></td>
                                 </tr>
                                 <tr>
-                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="comparator_id">comparator_id</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                            <tr>
-                                                <td title="cm_result.comparator_id references cm_target_comparator_outcome.comparator_id"><a href='cm_target_comparator_outcome.html'>cm_target_comparator_outcome</a><span class='relatedKey'>.comparator_id</span></td>
-                                                <td class="constraint detail">Defined in XML</td>
-                                                <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td><p>The identifier for the comparator cohort.</p></td>
-                                </tr>
-                                <tr>
                                     <td><span id="comparator_outcomes">comparator_outcomes</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
@@ -511,6 +489,23 @@
                                     <td><p>The standard error of the log of the relative risk.</p></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="target_comparator_id">target_comparator_id</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>A foreign key referencing the target_comparator table.</p></td>
+                                </tr>
+                                <tr>
                                     <td><span id="target_days">target_days</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
@@ -543,28 +538,6 @@
                                         </table>
                                     </td>
                                     <td><p>The target estimator, for example &ldquo;att&rdquo;, &ldquo;ate&rdquo;, &ldquo;atu&rdquo; or &ldquo;ato&rdquo;.</p></td>
-                                </tr>
-                                <tr>
-                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="target_id">target_id</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                            <tr>
-                                                <td title="cm_result.target_id references cm_target_comparator_outcome.target_id"><a href='cm_target_comparator_outcome.html'>cm_target_comparator_outcome</a><span class='relatedKey'>.target_id</span></td>
-                                                <td class="constraint detail">Defined in XML</td>
-                                                <td class="constraint detail"><span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                    <td><p>The identifier for the target cohort.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="target_outcomes">target_outcomes</span></td>

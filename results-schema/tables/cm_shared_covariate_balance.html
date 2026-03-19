@@ -149,7 +149,7 @@
                                     <td><p>A foreign key referencing the cm_analysis table.</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="comparator_id">comparator_id</span></td>
+                                    <td><span id="balanced_after">balanced_after</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
                                     <td title=''></td>
@@ -163,7 +163,24 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>The identifier for the comparator cohort.</p></td>
+                                    <td><p>Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="balanced_before">balanced_before</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="comparator_mean_after">comparator_mean_after</span></td>
@@ -329,6 +346,57 @@
                                     <td><p>The standardized difference of the means between the target and comparator cohort before propensity score adjustment.</p></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="std_diff_var_after">std_diff_var_after</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>The variance of the standardized difference of the means between the target and comparator cohort after propensity score adjustment.</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="std_diff_var_before">std_diff_var_before</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>The variance of the standardized difference of the means between the target and comparator cohort before propensity score adjustment.</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="target_comparator_id">target_comparator_id</span></td>
+                                    <td>Unknown</td>
+                                    <td>0</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>A foreign key referencing the target_comparator table.</p></td>
+                                </tr>
+                                <tr>
                                     <td><span id="target_comparator_std_diff">target_comparator_std_diff</span></td>
                                     <td>Unknown</td>
                                     <td>0</td>
@@ -344,23 +412,6 @@
                                         </table>
                                     </td>
                                     <td><p>The standardized difference of the means before and after propensity score adjustment in  the union of the target and comparator cohorts.</p></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="target_id">target_id</span></td>
-                                    <td>Unknown</td>
-                                    <td>0</td>
-                                    <td title=''></td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td><p>The identifier for the target cohort.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="target_mean_after">target_mean_after</span></td>

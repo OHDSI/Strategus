@@ -9,7 +9,7 @@ the OMOP Common Data Model"><link rel="stylesheet" type="text/css" href="extra.c
 
     <a class="navbar-brand me-2" href="../index.html">Strategus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@ the OMOP Common Data Model"><link rel="stylesheet" type="text/css" href="extra.c
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Characterize cohorts with the <a href="https://ohdsi.github.io/Characterization/" class="external-link">HADES Characterization Package</a></h1>
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/v1.4.1/R/Module-Characterization.R" class="external-link"><code>R/Module-Characterization.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/main/R/Module-Characterization.R" class="external-link"><code>R/Module-Characterization.R</code></a></small>
       <div class="d-none name"><code>CharacterizationModule.Rd</code></div>
     </div>
 
@@ -228,16 +228,20 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 <h4 id="usage-5">Usage<a class="anchor" aria-label="anchor" href="#usage-5"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">CharacterizationModule</span><span class="op">$</span><span class="fu">createModuleSpecifications</span><span class="op">(</span></span>
 <span>  <span class="va">targetIds</span>,</span>
+<span>  limitToFirstInNDays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">99999</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">targetIds</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  minPriorObservation <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  <span class="va">outcomeIds</span>,</span>
 <span>  outcomeWashoutDays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">365</span><span class="op">)</span>,</span>
-<span>  minPriorObservation <span class="op">=</span> <span class="fl">365</span>,</span>
-<span>  dechallengeStopInterval <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>  dechallengeEvaluationWindow <span class="op">=</span> <span class="fl">30</span>,</span>
 <span>  riskWindowStart <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  startAnchor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cohort start"</span>, <span class="st">"cohort start"</span><span class="op">)</span>,</span>
 <span>  riskWindowEnd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">365</span><span class="op">)</span>,</span>
 <span>  endAnchor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cohort end"</span>, <span class="st">"cohort end"</span><span class="op">)</span>,</span>
+<span>  dechallengeStopInterval <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  dechallengeEvaluationWindow <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"CohortIncidence"</span>,</span>
+<span>  minSMD <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  minCharacterizationMean <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  minCovariateCount <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  covariateSettings <span class="op">=</span> <span class="fu">FeatureExtraction</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/FeatureExtraction/man/createCovariateSettings.html" class="external-link">createCovariateSettings</a></span><span class="op">(</span>useDemographicsGender <span class="op">=</span></span>
 <span>    <span class="cn">T</span>, useDemographicsAge <span class="op">=</span> <span class="cn">T</span>, useDemographicsAgeGroup <span class="op">=</span> <span class="cn">T</span>, useDemographicsRace <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>    useDemographicsEthnicity <span class="op">=</span> <span class="cn">T</span>, useDemographicsIndexYear <span class="op">=</span> <span class="cn">T</span>, useDemographicsIndexMonth</span>
@@ -261,7 +265,10 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 <span>  casePostOutcomeDuration <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  includeTimeToEvent <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  includeDechallengeRechallenge <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  includeAggregateCovariate <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  includeTargetBaseline <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  includeRiskFactors <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  includeCaseSeries <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  outputTable <span class="op">=</span> <span class="st">"characterization_cohorts"</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
@@ -271,24 +278,20 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 <dd><p>A vector of cohort IDs to use as the target(s) for the characterization</p></dd>
 
 
-<dt><code>outcomeIds</code></dt>
-<dd><p>A vector of cohort IDs to use as the outcome(s) for the characterization</p></dd>
-
-
-<dt><code>outcomeWashoutDays</code></dt>
-<dd><p>A vector of integers specifying the washout days for each outcome (same length as the outcomeIds)</p></dd>
+<dt><code>limitToFirstInNDays</code></dt>
+<dd><p>A vector of number of days of minimum between target exposures for each target (same length as the targetIds) - use 99999 to restrict to first exposure per person in target cohort</p></dd>
 
 
 <dt><code>minPriorObservation</code></dt>
 <dd><p>The number of days of minimum observation a patient in the target populations must have</p></dd>
 
 
-<dt><code>dechallengeStopInterval</code></dt>
-<dd><p>description</p></dd>
+<dt><code>outcomeIds</code></dt>
+<dd><p>A vector of cohort IDs to use as the outcome(s) for the characterization</p></dd>
 
 
-<dt><code>dechallengeEvaluationWindow</code></dt>
-<dd><p>description</p></dd>
+<dt><code>outcomeWashoutDays</code></dt>
+<dd><p>A vector of integers specifying the washout days for each outcome (same length as the outcomeIds)</p></dd>
 
 
 <dt><code>riskWindowStart</code></dt>
@@ -307,8 +310,28 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 <dd><p>The TAR ends relative to this either cohort start or cohort end (can be a vector for multiple TARS)</p></dd>
 
 
+<dt><code>dechallengeStopInterval</code></dt>
+<dd><p>description</p></dd>
+
+
+<dt><code>dechallengeEvaluationWindow</code></dt>
+<dd><p>description</p></dd>
+
+
+<dt><code>mode</code></dt>
+<dd><p>Pick one of 'CohortIncidence'/'Efficient'/'PatientLevelPrediction' to specify how the non-cases are defined</p></dd>
+
+
+<dt><code>minSMD</code></dt>
+<dd><p>The minimum standardized mean difference for the risk factors analysis</p></dd>
+
+
 <dt><code>minCharacterizationMean</code></dt>
 <dd><p>The minimum fraction patients in the target have a covariate for it to be included</p></dd>
+
+
+<dt><code>minCovariateCount</code></dt>
+<dd><p>The minimum number of patients in the analysis to have a covariate for it to be included</p></dd>
 
 
 <dt><code>covariateSettings</code></dt>
@@ -335,8 +358,20 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 <dd><p>Lets you skip running a dechallenge-rechallenge analyses when set to FALSE</p></dd>
 
 
-<dt><code>includeAggregateCovariate</code></dt>
-<dd><p>Lets you skip running the aggregate covariate analyses when set to FALSE</p></dd>
+<dt><code>includeTargetBaseline</code></dt>
+<dd><p>Lets you skip running the target baseline analyses when set to FALSE</p></dd>
+
+
+<dt><code>includeRiskFactors</code></dt>
+<dd><p>Lets you skip running the risk factor analyses when set to FALSE</p></dd>
+
+
+<dt><code>includeCaseSeries</code></dt>
+<dd><p>Lets you skip running the case series analyses when set to FALSE</p></dd>
+
+
+<dt><code>outputTable</code></dt>
+<dd><p>The table used by characterization to create the cohorts used in characterization (included targets, cases, non-cases, etc.). The spec hash and database hash are added to this name to make it unique per run.</p></dd>
 
 
 </dl><p></p></div>
@@ -371,7 +406,7 @@ by <code><a href="createEmptyAnalysisSpecificiations.html">createEmptyAnalysisSp
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">Strategus</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,9 +64,9 @@
                         <h4 data-toc-skip class="author">Anthony G.
 Sena</h4>
             
-            <h4 data-toc-skip class="date">2025-09-09</h4>
+            <h4 data-toc-skip class="date">2026-03-19</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/v1.4.1/vignettes/ExecuteStrategus.Rmd" class="external-link"><code>vignettes/ExecuteStrategus.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/OHDSI/Strategus/blob/main/vignettes/ExecuteStrategus.Rmd" class="external-link"><code>vignettes/ExecuteStrategus.Rmd</code></a></small>
       <div class="d-none name"><code>ExecuteStrategus.Rmd</code></div>
     </div>
 
@@ -103,8 +103,8 @@ be specific to your OMOP CDM. Please see the <a href="https://ohdsi.github.io/Da
 package documentation for more details.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Strategus">Strategus</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/OHDSI/Eunomia" class="external-link">Eunomia</a></span><span class="op">)</span></span>
-<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Eunomia/man/getEunomiaConnectionDetails.html" class="external-link">getEunomiaConnectionDetails</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/Eunomia/" class="external-link">Eunomia</a></span><span class="op">)</span></span>
+<span><span class="va">connectionDetails</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ohdsi.github.io/Eunomia/reference/getEunomiaConnectionDetails.html" class="external-link">getEunomiaConnectionDetails</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="creating-an-execution-settings-object">Creating an execution settings object<a class="anchor" aria-label="anchor" href="#creating-an-execution-settings-object"></a>
@@ -117,7 +117,7 @@ settings:</p>
 <span><span class="va">executionSettings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/createCdmExecutionSettings.html">createCdmExecutionSettings</a></span><span class="op">(</span></span>
 <span>  workDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
 <span>  cdmDatabaseSchema <span class="op">=</span> <span class="st">"main"</span>,</span>
-<span>  cohortTableNames <span class="op">=</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortTableNames.html" class="external-link">getCohortTableNames</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  cohortTableNames <span class="op">=</span> <span class="fu">CohortGenerator</span><span class="fu">::</span><span class="fu"><a href="https://ohdsi.github.io/CohortGenerator/reference/getCohortTableNames.html" class="external-link">getCohortTableNames</a></span><span class="op">(</span><span class="st">"strategus_test"</span><span class="op">)</span>,</span>
 <span>  workFolder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outputFolder</span>, <span class="st">"work_folder"</span><span class="op">)</span>,</span>
 <span>  resultsFolder <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">outputFolder</span>, <span class="st">"results_folder"</span><span class="op">)</span>,</span>
 <span>  minCellCount <span class="op">=</span> <span class="fl">5</span></span>
@@ -174,7 +174,7 @@ Results</a> article.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
