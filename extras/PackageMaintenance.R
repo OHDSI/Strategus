@@ -1,4 +1,4 @@
-# Copyright 2025 Observational Health Data Sciences and Informatics
+# Copyright 2026 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -66,7 +66,7 @@ rmarkdown::render("vignettes/WorkingWithResults.Rmd",
 unlink("inst/doc/WorkingWithResults.tex")
 
 # Run pkgdown to verify there are no site build errors ---------
-pkgdown::build_site()
+pkgdown::check_pkgdown()
 
 # Create a list of all modules in this package -----------------
 packageCodeFiles <- list.files("./R")

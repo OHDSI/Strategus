@@ -125,7 +125,9 @@ CohortGeneratorModule <- R6::R6Class(
         cohortDefinitionSet <- cohortDefinitionSet |>
           dplyr::filter(!.data$isTemplatedCohort)
 
-        templateDefs <- lapply(templateDefinitions, function(x) { x$toList() })
+        templateDefs <- lapply(templateDefinitions, function(x) {
+          x$toList()
+        })
         names(templateDefs) <- NULL
         sharedResource$templateDefs <- templateDefs
       }

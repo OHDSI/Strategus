@@ -79,8 +79,7 @@ StrategusModule <- R6::R6Class(
     },
     #' @description Get the results data model specification for the module
     #' @template tablePrefix
-    getResultsDataModelSpecification = function(tablePrefix = "") {
-    },
+    getResultsDataModelSpecification = function(tablePrefix = "") {},
     #' @description Upload the results for the module
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications

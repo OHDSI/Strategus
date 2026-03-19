@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Anthony Sena \email{sena@ohdsi.org}
+\strong{Maintainer}: Anthony Sena \email{sena@ohdsi.org} (\href{https://orcid.org/0000-0001-8630-5347}{ORCID})
 
 Authors:
 \itemize{
@@ -28,6 +28,11 @@ Authors:
 
 Other contributors:
 \itemize{
+  \item Jenna Reps [contributor]
+  \item Christopher Knoll [contributor]
+  \item Egill Fridgeirsson [contributor]
+  \item Maarten van Kessel (\href{https://orcid.org/0009-0006-8832-6030}{ORCID}) [contributor]
+  \item Sivamsh Indukuri [contributor]
   \item Observational Health Data Science and Informatics [copyright holder]
 }
 

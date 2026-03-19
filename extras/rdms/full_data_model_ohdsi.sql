@@ -25,11 +25,17 @@ CREATE TABLE @database_schema.@table_prefix@database_meta_data (
 {DEFAULT @c_dechallenge_rechallenge = c_dechallenge_rechallenge}
 {DEFAULT @c_analysis_ref = c_analysis_ref}
 {DEFAULT @c_covariate_ref = c_covariate_ref}
-{DEFAULT @c_covariates = c_covariates}
-{DEFAULT @c_covariates_continuous = c_covariates_continuous}
-{DEFAULT @c_settings = c_settings}
-{DEFAULT @c_cohort_details = c_cohort_details}
-{DEFAULT @c_cohort_counts = c_cohort_counts}
+{DEFAULT @c_target_covariates = c_target_covariates}
+{DEFAULT @c_target_covariates_continuous = c_target_covariates_continuous}
+{DEFAULT @c_execution_settings = c_execution_settings}
+{DEFAULT @c_target_settings = c_target_settings}
+{DEFAULT @c_case_settings = c_case_settings}
+{DEFAULT @c_case_series_settings = c_case_series_settings}
+{DEFAULT @c_attrition = c_attrition}
+{DEFAULT @c_risk_factor_covariates = c_risk_factor_covariates}
+{DEFAULT @c_risk_factor_covariates_continuous = c_risk_factor_covariates_continuous}
+{DEFAULT @c_case_series_covariates = c_case_series_covariates}
+{DEFAULT @c_case_series_covariates_continuous = c_case_series_covariates_continuous}
   
 CREATE TABLE @database_schema.@table_prefix@c_time_to_event (
   	 database_id VARCHAR(100) NOT NULL,
@@ -51,17 +57,17 @@ CREATE TABLE @database_schema.@table_prefix@c_rechallenge_fail_case_series (
 	 outcome_cohort_definition_id BIGINT NOT NULL,
 	 person_key INT NOT NULL,
 	 subject_id BIGINT,
-	 dechallenge_exposure_number INT,
+	 dechallenge_exposure_number INT NOT NULL,
 	 dechallenge_exposure_start_date_offset INT,
 	 dechallenge_exposure_end_date_offset INT,
-	 dechallenge_outcome_number INT,
+	 dechallenge_outcome_number INT NOT NULL,
 	 dechallenge_outcome_start_date_offset INT,
-	 rechallenge_exposure_number INT,
+	 rechallenge_exposure_number INT NOT NULL,
 	 rechallenge_exposure_start_date_offset INT,
 	 rechallenge_exposure_end_date_offset INT,
-	 rechallenge_outcome_number INT,
+	 rechallenge_outcome_number INT NOT NULL,
 	 rechallenge_outcome_start_date_offset INT,
-	PRIMARY KEY(database_id,dechallenge_stop_interval,dechallenge_evaluation_window,target_cohort_definition_id,outcome_cohort_definition_id,person_key)
+	PRIMARY KEY(database_id,dechallenge_stop_interval,dechallenge_evaluation_window,target_cohort_definition_id,outcome_cohort_definition_id,person_key,dechallenge_exposure_number,dechallenge_outcome_number,rechallenge_exposure_number,rechallenge_outcome_number)
 );
  
 CREATE TABLE @database_schema.@table_prefix@c_dechallenge_rechallenge (
@@ -90,7 +96,7 @@ CREATE TABLE @database_schema.@table_prefix@c_dechallenge_rechallenge (
  
 CREATE TABLE @database_schema.@table_prefix@c_analysis_ref (
   	 database_id VARCHAR(100) NOT NULL,
-	 setting_id VARCHAR(30) NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
 	 analysis_id INT NOT NULL,
 	 analysis_name VARCHAR,
 	 domain_id VARCHAR,
@@ -103,7 +109,7 @@ CREATE TABLE @database_schema.@table_prefix@c_analysis_ref (
  
 CREATE TABLE @database_schema.@table_prefix@c_covariate_ref (
   	 database_id VARCHAR(100) NOT NULL,
-	 setting_id VARCHAR(30) NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
 	 covariate_id BIGINT NOT NULL,
 	 covariate_name VARCHAR,
 	 analysis_id INT,
@@ -113,25 +119,20 @@ CREATE TABLE @database_schema.@table_prefix@c_covariate_ref (
 	PRIMARY KEY(database_id,setting_id,covariate_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@c_covariates (
+CREATE TABLE @database_schema.@table_prefix@c_target_covariates (
   	 database_id VARCHAR(100) NOT NULL,
-	 setting_id VARCHAR(30) NOT NULL,
-	 cohort_type VARCHAR(12) NOT NULL,
-	 target_cohort_id INT NOT NULL,
-	 outcome_cohort_id INT NOT NULL,
-	 min_characterization_mean FLOAT NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
+	 characterization_target_id INT NOT NULL,
 	 covariate_id BIGINT NOT NULL,
 	 sum_value INT,
 	 average_value FLOAT,
-	PRIMARY KEY(database_id,setting_id,cohort_type,target_cohort_id,outcome_cohort_id,min_characterization_mean,covariate_id)
+	PRIMARY KEY(database_id,setting_id,characterization_target_id,covariate_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@c_covariates_continuous (
+CREATE TABLE @database_schema.@table_prefix@c_target_covariates_continuous (
   	 database_id VARCHAR(100) NOT NULL,
-	 setting_id VARCHAR(30) NOT NULL,
-	 cohort_type VARCHAR(12) NOT NULL,
-	 target_cohort_id INT NOT NULL,
-	 outcome_cohort_id INT NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
+	 characterization_target_id INT NOT NULL,
 	 covariate_id BIGINT NOT NULL,
 	 count_value INT,
 	 min_value FLOAT,
@@ -143,50 +144,152 @@ CREATE TABLE @database_schema.@table_prefix@c_covariates_continuous (
 	 p_25_value FLOAT,
 	 p_75_value FLOAT,
 	 p_90_value FLOAT,
-	PRIMARY KEY(database_id,setting_id,cohort_type,target_cohort_id,outcome_cohort_id,covariate_id)
+	PRIMARY KEY(database_id,setting_id,characterization_target_id,covariate_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@c_settings (
-  	 setting_id VARCHAR(30) NOT NULL,
+CREATE TABLE @database_schema.@table_prefix@c_execution_settings (
+  	 setting_id VARCHAR(50) NOT NULL,
 	 database_id VARCHAR(100) NOT NULL,
-	 covariate_setting_json VARCHAR,
-	 case_covariate_setting_json VARCHAR,
-	 min_prior_observation INT,
-	 outcome_washout_days INT,
-	 risk_window_start INT,
-	 risk_window_end INT,
-	 start_anchor VARCHAR(15),
-	 end_anchor VARCHAR(15),
-	 case_pre_target_duration INT,
-	 case_post_outcome_duration INT,
+	 database_hash VARCHAR(50),
+	 mode VARCHAR(25),
+	 min_characterization_mean FLOAT,
+	 min_covariate_count INT,
+	 min_smd FLOAT,
 	PRIMARY KEY(setting_id,database_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@c_cohort_details (
-  	 database_id VARCHAR(100) NOT NULL,
-	 setting_id VARCHAR(30) NOT NULL,
-	 cohort_type VARCHAR(12) NOT NULL,
-	 target_cohort_id INT NOT NULL,
-	 outcome_cohort_id INT NOT NULL,
-	PRIMARY KEY(database_id,setting_id,cohort_type,target_cohort_id,outcome_cohort_id)
+CREATE TABLE @database_schema.@table_prefix@c_target_settings (
+  	 setting_id VARCHAR(50) NOT NULL,
+	 database_id VARCHAR(100) NOT NULL,
+	 characterization_target_id BIGINT NOT NULL,
+	 target_id BIGINT,
+	 limit_to_first_in_n_days INT,
+	 min_prior_observation INT,
+	PRIMARY KEY(setting_id,database_id,characterization_target_id)
 );
  
-CREATE TABLE @database_schema.@table_prefix@c_cohort_counts (
-  	 database_id VARCHAR(100),
-	 cohort_type VARCHAR(12),
-	 target_cohort_id INT,
-	 outcome_cohort_id INT,
-	 risk_window_start INT,
-	 risk_window_end INT,
+CREATE TABLE @database_schema.@table_prefix@c_case_settings (
+  	 setting_id VARCHAR(50) NOT NULL,
+	 database_id VARCHAR(100) NOT NULL,
+	 characterization_case_id BIGINT NOT NULL,
+	 characterization_target_id BIGINT,
+	 outcome_id BIGINT,
+	 outcome_washout_days INT,
 	 start_anchor VARCHAR(15),
 	 end_anchor VARCHAR(15),
-	 min_prior_observation INT,
-	 outcome_washout_days INT,
-	 row_count INT,
-	 person_count INT,
-	 min_exposure_time BIGINT,
-	 mean_exposure_time BIGINT,
-	 max_exposure_time BIGINT
+	 risk_window_start INT,
+	 risk_window_end INT,
+	 runtype VARCHAR(50),
+	PRIMARY KEY(setting_id,database_id,characterization_case_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@c_case_series_settings (
+  	 setting_id VARCHAR(50) NOT NULL,
+	 case_pre_target_duration INT,
+	 case_post_outcome_duration INT,
+	PRIMARY KEY(setting_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@c_attrition (
+  	 cohort_definition_id BIGINT NOT NULL,
+	 attr_reason VARCHAR(100) NOT NULL,
+	 n BIGINT,
+	 database_id VARCHAR(100) NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
+	PRIMARY KEY(cohort_definition_id,attr_reason,database_id,setting_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@c_risk_factor_covariates (
+  	 database_id VARCHAR(100) NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
+	 characterization_case_id BIGINT NOT NULL,
+	 covariate_id BIGINT NOT NULL,
+	 non_case_sum_value INT,
+	 non_case_average_value FLOAT,
+	 case_sum_value INT,
+	 case_average_value FLOAT,
+	 standardized_mean_difference FLOAT,
+	PRIMARY KEY(database_id,setting_id,characterization_case_id,covariate_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@c_risk_factor_covariates_continuous (
+  	 database_id VARCHAR(100) NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
+	 characterization_case_id BIGINT NOT NULL,
+	 covariate_id BIGINT NOT NULL,
+	 case_count_value INT,
+	 case_min_value FLOAT,
+	 case_max_value FLOAT,
+	 case_average_value FLOAT,
+	 case_standard_deviation FLOAT,
+	 case_median_value FLOAT,
+	 case_p_10_value FLOAT,
+	 case_p_25_value FLOAT,
+	 case_p_75_value FLOAT,
+	 case_p_90_value FLOAT,
+	 non_case_count_value INT,
+	 non_case_min_value FLOAT,
+	 non_case_max_value FLOAT,
+	 non_case_average_value FLOAT,
+	 non_case_standard_deviation FLOAT,
+	 non_case_median_value FLOAT,
+	 non_case_p_10_value FLOAT,
+	 non_case_p_25_value FLOAT,
+	 non_case_p_75_value FLOAT,
+	 non_case_p_90_value FLOAT,
+	 standardized_mean_difference FLOAT,
+	PRIMARY KEY(database_id,setting_id,characterization_case_id,covariate_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@c_case_series_covariates (
+  	 database_id VARCHAR(100) NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
+	 characterization_case_id BIGINT NOT NULL,
+	 covariate_id BIGINT NOT NULL,
+	 before_sum_value INT,
+	 before_average_value FLOAT,
+	 during_sum_value INT,
+	 during_average_value FLOAT,
+	 after_sum_value INT,
+	 after_average_value FLOAT,
+	PRIMARY KEY(database_id,setting_id,characterization_case_id,covariate_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@c_case_series_covariates_continuous (
+  	 database_id VARCHAR(100) NOT NULL,
+	 setting_id VARCHAR(50) NOT NULL,
+	 characterization_case_id BIGINT NOT NULL,
+	 covariate_id BIGINT NOT NULL,
+	 before_count_value INT,
+	 before_min_value FLOAT,
+	 before_max_value FLOAT,
+	 before_average_value FLOAT,
+	 before_standard_deviation FLOAT,
+	 before_median_value FLOAT,
+	 before_p_10_value FLOAT,
+	 before_p_25_value FLOAT,
+	 before_p_75_value FLOAT,
+	 before_p_90_value FLOAT,
+	 during_min_value FLOAT,
+	 during_max_value FLOAT,
+	 during_average_value FLOAT,
+	 during_standard_deviation FLOAT,
+	 during_median_value FLOAT,
+	 during_p_10_value FLOAT,
+	 during_p_25_value FLOAT,
+	 during_p_75_value FLOAT,
+	 during_p_90_value FLOAT,
+	 after_count_value INT,
+	 after_min_value FLOAT,
+	 after_max_value FLOAT,
+	 after_average_value FLOAT,
+	 after_standard_deviation FLOAT,
+	 after_median_value FLOAT,
+	 after_p_10_value FLOAT,
+	 after_p_25_value FLOAT,
+	 after_p_75_value FLOAT,
+	 after_p_90_value FLOAT,
+	PRIMARY KEY(database_id,setting_id,characterization_case_id,covariate_id)
 );
 -- CohortDiagnosticsModule Tables
 {DEFAULT @table_prefix = ''}
@@ -234,8 +337,8 @@ CREATE TABLE @database_schema.@table_prefix@cd_cohort (
  
 CREATE TABLE @database_schema.@table_prefix@cd_subset_definition (
   	 subset_definition_id BIGINT NOT NULL,
-	 json VARCHAR NOT NULL,
-	PRIMARY KEY(subset_definition_id,json)
+	 json VARCHAR,
+	PRIMARY KEY(subset_definition_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cd_cohort_count (
@@ -352,13 +455,12 @@ CREATE TABLE @database_schema.@table_prefix@cd_domain (
 CREATE TABLE @database_schema.@table_prefix@cd_incidence_rate (
   	 cohort_count FLOAT,
 	 person_years FLOAT,
-	 gender VARCHAR NOT NULL,
-	 age_group VARCHAR NOT NULL,
-	 calendar_year VARCHAR(4) NOT NULL,
+	 gender VARCHAR,
+	 age_group VARCHAR,
+	 calendar_year VARCHAR(4),
 	 incidence_rate FLOAT,
-	 cohort_id BIGINT NOT NULL,
-	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(gender,age_group,calendar_year,cohort_id,database_id)
+	 cohort_id BIGINT,
+	 database_id VARCHAR
 );
  
 CREATE TABLE @database_schema.@table_prefix@cd_included_source_concept (
@@ -474,14 +576,14 @@ CREATE TABLE @database_schema.@table_prefix@cd_temporal_time_ref (
 );
  
 CREATE TABLE @database_schema.@table_prefix@cd_time_series (
-  	 cohort_id BIGINT NOT NULL,
-	 database_id VARCHAR NOT NULL,
-	 period_begin DATE NOT NULL,
-	 period_end DATE NOT NULL,
-	 series_type VARCHAR NOT NULL,
-	 calendar_interval VARCHAR NOT NULL,
-	 gender VARCHAR NOT NULL,
-	 age_group VARCHAR NOT NULL,
+  	 cohort_id BIGINT,
+	 database_id VARCHAR,
+	 period_begin DATE,
+	 period_end DATE,
+	 series_type VARCHAR,
+	 calendar_interval VARCHAR,
+	 gender VARCHAR,
+	 age_group VARCHAR,
 	 records BIGINT,
 	 subjects BIGINT,
 	 person_days BIGINT,
@@ -491,8 +593,7 @@ CREATE TABLE @database_schema.@table_prefix@cd_time_series (
 	 subjects_start_in BIGINT,
 	 records_end BIGINT,
 	 subjects_end BIGINT,
-	 subjects_end_in BIGINT,
-	PRIMARY KEY(cohort_id,database_id,period_begin,period_end,series_type,calendar_interval,gender,age_group)
+	 subjects_end_in BIGINT
 );
  
 CREATE TABLE @database_schema.@table_prefix@cd_visit_context (
@@ -520,10 +621,15 @@ CREATE TABLE @database_schema.@table_prefix@cd_vocabulary (
 {DEFAULT @cg_cohort_inc_stats = cg_cohort_inc_stats}
 {DEFAULT @cg_cohort_summary_stats = cg_cohort_summary_stats}
 {DEFAULT @cg_cohort_censor_stats = cg_cohort_censor_stats}
+{DEFAULT @cg_cohort_attrition = cg_cohort_attrition}
+{DEFAULT @cg_cohort_subset_attrition = cg_cohort_subset_attrition}
 {DEFAULT @cg_cohort_count = cg_cohort_count}
 {DEFAULT @cg_cohort_count_neg_ctrl = cg_cohort_count_neg_ctrl}
 {DEFAULT @cg_cohort_subset_definition = cg_cohort_subset_definition}
+{DEFAULT @cg_cohort_subset_operator = cg_cohort_subset_operator}
 {DEFAULT @cg_cohort_definition_neg_ctrl = cg_cohort_definition_neg_ctrl}
+{DEFAULT @cg_cohort_template_definition = cg_cohort_template_definition}
+{DEFAULT @cg_cohort_template_link = cg_cohort_template_link}
   
 CREATE TABLE @database_schema.@table_prefix@cg_cohort_definition (
   	 cohort_definition_id BIGINT NOT NULL,
@@ -533,18 +639,19 @@ CREATE TABLE @database_schema.@table_prefix@cg_cohort_definition (
 	 sql_command TEXT,
 	 subset_parent BIGINT,
 	 is_subset INT,
+	 is_templated_cohort INT,
 	 subset_definition_id BIGINT,
 	PRIMARY KEY(cohort_definition_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cg_cohort_generation (
-  	 cohort_id BIGINT NOT NULL,
-	 cohort_name VARCHAR,
+  	 cohort_definition_id BIGINT NOT NULL,
 	 generation_status VARCHAR,
 	 start_time TIMESTAMP,
 	 end_time TIMESTAMP,
 	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(cohort_id,database_id)
+	 checksum VARCHAR,
+	PRIMARY KEY(cohort_definition_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cg_cohort_inclusion (
@@ -591,6 +698,28 @@ CREATE TABLE @database_schema.@table_prefix@cg_cohort_censor_stats (
 	PRIMARY KEY(cohort_definition_id,lost_count,database_id)
 );
  
+CREATE TABLE @database_schema.@table_prefix@cg_cohort_attrition (
+  	 database_id VARCHAR NOT NULL,
+	 cohort_definition_id BIGINT NOT NULL,
+	 mode_id INT NOT NULL,
+	 cohort_entry INT NOT NULL,
+	 rule_sequence INT NOT NULL,
+	 person_count BIGINT,
+	PRIMARY KEY(database_id,cohort_definition_id,mode_id,cohort_entry,rule_sequence)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@cg_cohort_subset_attrition (
+  	 database_id VARCHAR NOT NULL,
+	 cohort_definition_id BIGINT NOT NULL,
+	 subset_definition_id BIGINT NOT NULL,
+	 subset_parent_id BIGINT NOT NULL,
+	 mode_id INT NOT NULL,
+	 cohort_entry INT NOT NULL,
+	 operator_sequence INT NOT NULL,
+	 count_value BIGINT,
+	PRIMARY KEY(database_id,cohort_definition_id,subset_definition_id,subset_parent_id,mode_id,cohort_entry,operator_sequence)
+);
+ 
 CREATE TABLE @database_schema.@table_prefix@cg_cohort_count (
   	 database_id VARCHAR NOT NULL,
 	 cohort_id BIGINT NOT NULL,
@@ -613,6 +742,15 @@ CREATE TABLE @database_schema.@table_prefix@cg_cohort_subset_definition (
 	PRIMARY KEY(subset_definition_id)
 );
  
+CREATE TABLE @database_schema.@table_prefix@cg_cohort_subset_operator (
+  	 subset_definition_id BIGINT NOT NULL,
+	 operator_name VARCHAR NOT NULL,
+	 operator_sequence INT NOT NULL,
+	 operator_type VARCHAR NOT NULL,
+	 definition_json TEXT,
+	PRIMARY KEY(subset_definition_id,operator_name,operator_sequence,operator_type)
+);
+ 
 CREATE TABLE @database_schema.@table_prefix@cg_cohort_definition_neg_ctrl (
   	 cohort_id BIGINT NOT NULL,
 	 outcome_concept_id BIGINT,
@@ -620,6 +758,20 @@ CREATE TABLE @database_schema.@table_prefix@cg_cohort_definition_neg_ctrl (
 	 occurrence_type VARCHAR,
 	 detect_on_descendants INT,
 	PRIMARY KEY(cohort_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@cg_cohort_template_definition (
+  	 template_definition_id VARCHAR NOT NULL,
+	 json TEXT,
+	 template_sql TEXT,
+	 template_name TEXT,
+	PRIMARY KEY(template_definition_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@cg_cohort_template_link (
+  	 template_definition_id VARCHAR NOT NULL,
+	 cohort_definition_id BIGINT NOT NULL,
+	PRIMARY KEY(template_definition_id,cohort_definition_id)
 );
 -- CohortIncidenceModule Tables
 {DEFAULT @table_prefix = ''}
@@ -721,23 +873,22 @@ CREATE TABLE @database_schema.@table_prefix@ci_target_outcome_ref (
 {DEFAULT @cm_preference_score_dist = cm_preference_score_dist}
 {DEFAULT @cm_propensity_model = cm_propensity_model}
 {DEFAULT @cm_shared_covariate_balance = cm_shared_covariate_balance}
+{DEFAULT @cm_target_comparator = cm_target_comparator}
   
 CREATE TABLE @database_schema.@table_prefix@cm_attrition (
   	 sequence_number INT NOT NULL,
 	 description VARCHAR,
 	 subjects INT,
 	 exposure_id BIGINT NOT NULL,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(sequence_number,exposure_id,target_id,comparator_id,analysis_id,outcome_id,database_id)
+	PRIMARY KEY(sequence_number,exposure_id,target_comparator_id,analysis_id,outcome_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_follow_up_dist (
-  	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+  	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 target_min_days FLOAT,
@@ -759,7 +910,7 @@ CREATE TABLE @database_schema.@table_prefix@cm_follow_up_dist (
 	 comparator_min_date DATE,
 	 comparator_max_date DATE,
 	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(target_id,comparator_id,outcome_id,analysis_id,database_id)
+	PRIMARY KEY(target_comparator_id,outcome_id,analysis_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_analysis (
@@ -771,8 +922,7 @@ CREATE TABLE @database_schema.@table_prefix@cm_analysis (
  
 CREATE TABLE @database_schema.@table_prefix@cm_result (
   	 analysis_id INT NOT NULL,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 rr FLOAT,
 	 ci_95_lb FLOAT,
@@ -797,15 +947,14 @@ CREATE TABLE @database_schema.@table_prefix@cm_result (
 	 calibrated_se_log_rr FLOAT,
 	 target_estimator VARCHAR,
 	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(analysis_id,target_id,comparator_id,outcome_id,database_id)
+	PRIMARY KEY(analysis_id,target_comparator_id,outcome_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_interaction_result (
   	 analysis_id INT NOT NULL,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
-	 interaction_covariate_id INT NOT NULL,
+	 interaction_covariate_id BIGINT NOT NULL,
 	 rr FLOAT,
 	 ci_95_lb FLOAT,
 	 ci_95_ub FLOAT,
@@ -826,7 +975,7 @@ CREATE TABLE @database_schema.@table_prefix@cm_interaction_result (
 	 calibrated_se_log_rr FLOAT,
 	 target_estimator VARCHAR,
 	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(analysis_id,target_id,comparator_id,outcome_id,interaction_covariate_id,database_id)
+	PRIMARY KEY(analysis_id,target_comparator_id,outcome_id,interaction_covariate_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_covariate (
@@ -847,8 +996,7 @@ CREATE TABLE @database_schema.@table_prefix@cm_covariate_analysis (
  
 CREATE TABLE @database_schema.@table_prefix@cm_covariate_balance (
   	 database_id VARCHAR NOT NULL,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 covariate_id BIGINT NOT NULL,
@@ -856,24 +1004,29 @@ CREATE TABLE @database_schema.@table_prefix@cm_covariate_balance (
 	 comparator_mean_before FLOAT,
 	 mean_before FLOAT,
 	 std_diff_before FLOAT,
+	 std_diff_var_before FLOAT,
+	 balanced_before INT,
 	 mean_after FLOAT,
 	 target_mean_after FLOAT,
 	 comparator_mean_after FLOAT,
 	 std_diff_after FLOAT,
+	 std_diff_var_after FLOAT,
+	 balanced_after INT,
 	 target_std_diff FLOAT,
 	 comparator_std_diff FLOAT,
 	 target_comparator_std_diff FLOAT,
-	PRIMARY KEY(database_id,target_id,comparator_id,outcome_id,analysis_id,covariate_id)
+	PRIMARY KEY(database_id,target_comparator_id,outcome_id,analysis_id,covariate_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_diagnostics_summary (
   	 analysis_id INT NOT NULL,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 database_id VARCHAR NOT NULL,
 	 max_sdm FLOAT,
+	 sdm_family_wise_min_p FLOAT,
 	 shared_max_sdm FLOAT,
+	 shared_sdm_family_wise_min_p FLOAT,
 	 equipoise FLOAT,
 	 mdrr FLOAT,
 	 attrition_fraction FLOAT,
@@ -888,16 +1041,15 @@ CREATE TABLE @database_schema.@table_prefix@cm_diagnostics_summary (
 	 ease_diagnostic VARCHAR(20),
 	 unblind INT,
 	 unblind_for_evidence_synthesis INT,
-	PRIMARY KEY(analysis_id,target_id,comparator_id,outcome_id,database_id)
+	PRIMARY KEY(analysis_id,target_comparator_id,outcome_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_target_comparator_outcome (
   	 outcome_id BIGINT NOT NULL,
 	 outcome_of_interest INT,
 	 true_effect_size FLOAT,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
-	PRIMARY KEY(outcome_id,target_id,comparator_id)
+	 target_comparator_id BIGINT NOT NULL,
+	PRIMARY KEY(outcome_id,target_comparator_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_kaplan_meier_dist (
@@ -910,70 +1062,81 @@ CREATE TABLE @database_schema.@table_prefix@cm_kaplan_meier_dist (
 	 comparator_survival_ub FLOAT,
 	 target_at_risk INT,
 	 comparator_at_risk INT,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(time_day,target_id,comparator_id,outcome_id,analysis_id,database_id)
+	PRIMARY KEY(time_day,target_comparator_id,outcome_id,analysis_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_likelihood_profile (
   	 log_rr FLOAT NOT NULL,
 	 log_likelihood FLOAT,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 gradient FLOAT,
+	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
-	PRIMARY KEY(log_rr,target_id,comparator_id,outcome_id,analysis_id,database_id)
+	PRIMARY KEY(log_rr,target_comparator_id,outcome_id,analysis_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_preference_score_dist (
   	 analysis_id INT NOT NULL,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 database_id VARCHAR NOT NULL,
 	 preference_score FLOAT NOT NULL,
 	 target_density FLOAT,
 	 comparator_density FLOAT,
-	PRIMARY KEY(analysis_id,target_id,comparator_id,database_id,preference_score)
+	PRIMARY KEY(analysis_id,target_comparator_id,database_id,preference_score)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_propensity_model (
-  	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+  	 target_comparator_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 database_id VARCHAR NOT NULL,
 	 covariate_id BIGINT NOT NULL,
 	 coefficient FLOAT,
-	PRIMARY KEY(target_id,comparator_id,analysis_id,database_id,covariate_id)
+	PRIMARY KEY(target_comparator_id,analysis_id,database_id,covariate_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@cm_shared_covariate_balance (
   	 database_id VARCHAR NOT NULL,
-	 target_id BIGINT NOT NULL,
-	 comparator_id BIGINT NOT NULL,
+	 target_comparator_id BIGINT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 covariate_id BIGINT NOT NULL,
 	 mean_before FLOAT,
 	 target_mean_before FLOAT,
 	 comparator_mean_before FLOAT,
 	 std_diff_before FLOAT,
+	 std_diff_var_before FLOAT,
+	 balanced_before INT,
 	 mean_after FLOAT,
 	 target_mean_after FLOAT,
 	 comparator_mean_after FLOAT,
 	 std_diff_after FLOAT,
+	 std_diff_var_after FLOAT,
+	 balanced_after INT,
 	 target_std_diff FLOAT,
 	 comparator_std_diff FLOAT,
 	 target_comparator_std_diff FLOAT,
-	PRIMARY KEY(database_id,target_id,comparator_id,analysis_id,covariate_id)
+	PRIMARY KEY(database_id,target_comparator_id,analysis_id,covariate_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@cm_target_comparator (
+  	 target_comparator_id BIGINT NOT NULL,
+	 target_id BIGINT,
+	 comparator_id BIGINT,
+	 nesting_cohort_id BIGINT,
+	PRIMARY KEY(target_comparator_id)
 );
 -- EvidenceSynthesisModule Tables
 {DEFAULT @table_prefix = ''}
 {DEFAULT @es_analysis = es_analysis}
 {DEFAULT @es_cm_diagnostics_summary = es_cm_diagnostics_summary}
 {DEFAULT @es_cm_result = es_cm_result}
+{DEFAULT @es_cm_covariate_balance = es_cm_covariate_balance}
+{DEFAULT @es_cm_shared_covariate_balance = es_cm_shared_covariate_balance}
+{DEFAULT @es_cm_covariate = es_cm_covariate}
 {DEFAULT @es_sccs_diagnostics_summary = es_sccs_diagnostics_summary}
 {DEFAULT @es_sccs_result = es_sccs_result}
   
@@ -986,8 +1149,7 @@ CREATE TABLE @database_schema.@table_prefix@es_analysis (
 );
  
 CREATE TABLE @database_schema.@table_prefix@es_cm_diagnostics_summary (
-  	 target_id INT NOT NULL,
-	 comparator_id INT NOT NULL,
+  	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 evidence_synthesis_analysis_id INT NOT NULL,
@@ -995,17 +1157,22 @@ CREATE TABLE @database_schema.@table_prefix@es_cm_diagnostics_summary (
 	 i_2 FLOAT,
 	 tau FLOAT,
 	 ease FLOAT,
+	 max_sdm FLOAT,
+	 sdm_family_wise_min_p FLOAT,
+	 shared_max_sdm FLOAT,
+	 shared_sdm_family_wise_min_p FLOAT,
 	 mdrr_diagnostic VARCHAR(13),
 	 i_2_diagnostic VARCHAR(13),
 	 tau_diagnostic VARCHAR(13),
 	 ease_diagnostic VARCHAR(13),
+	 balance_diagnostic VARCHAR(20),
+	 shared_balance_diagnostic VARCHAR(20),
 	 unblind INT,
-	PRIMARY KEY(target_id,comparator_id,outcome_id,analysis_id,evidence_synthesis_analysis_id)
+	PRIMARY KEY(target_comparator_id,outcome_id,analysis_id,evidence_synthesis_analysis_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@es_cm_result (
-  	 target_id INT NOT NULL,
-	 comparator_id INT NOT NULL,
+  	 target_comparator_id BIGINT NOT NULL,
 	 outcome_id INT NOT NULL,
 	 analysis_id INT NOT NULL,
 	 evidence_synthesis_analysis_id INT NOT NULL,
@@ -1030,7 +1197,48 @@ CREATE TABLE @database_schema.@table_prefix@es_cm_result (
 	 calibrated_one_sided_p FLOAT,
 	 calibrated_log_rr FLOAT,
 	 calibrated_se_log_rr FLOAT,
-	PRIMARY KEY(target_id,comparator_id,outcome_id,analysis_id,evidence_synthesis_analysis_id)
+	 pi_95_lb FLOAT,
+	 pi_95_ub FLOAT,
+	 calibrated_pi_95_lb FLOAT,
+	 calibrated_pi_95_ub FLOAT,
+	PRIMARY KEY(target_comparator_id,outcome_id,analysis_id,evidence_synthesis_analysis_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@es_cm_covariate_balance (
+  	 target_comparator_id BIGINT NOT NULL,
+	 outcome_id BIGINT NOT NULL,
+	 analysis_id INT NOT NULL,
+	 covariate_id BIGINT NOT NULL,
+	 evidence_synthesis_analysis_id INT NOT NULL,
+	 std_diff_before FLOAT,
+	 std_diff_var_before FLOAT,
+	 balanced_before INT,
+	 std_diff_after FLOAT,
+	 std_diff_var_after FLOAT,
+	 balanced_after INT,
+	PRIMARY KEY(target_comparator_id,outcome_id,analysis_id,covariate_id,evidence_synthesis_analysis_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@es_cm_shared_covariate_balance (
+  	 target_comparator_id BIGINT NOT NULL,
+	 analysis_id INT NOT NULL,
+	 covariate_id BIGINT NOT NULL,
+	 evidence_synthesis_analysis_id INT NOT NULL,
+	 std_diff_before FLOAT,
+	 std_diff_var_before FLOAT,
+	 balanced_before INT,
+	 std_diff_after FLOAT,
+	 std_diff_var_after FLOAT,
+	 balanced_after INT,
+	PRIMARY KEY(target_comparator_id,analysis_id,covariate_id,evidence_synthesis_analysis_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@es_cm_covariate (
+  	 covariate_id BIGINT NOT NULL,
+	 covariate_name VARCHAR,
+	 analysis_id INT NOT NULL,
+	 covariate_analysis_id INT,
+	PRIMARY KEY(covariate_id,analysis_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@es_sccs_diagnostics_summary (
@@ -1078,6 +1286,10 @@ CREATE TABLE @database_schema.@table_prefix@es_sccs_result (
 	 calibrated_one_sided_p FLOAT,
 	 calibrated_log_rr FLOAT,
 	 calibrated_se_log_rr FLOAT,
+	 pi_95_lb FLOAT,
+	 pi_95_ub FLOAT,
+	 calibrated_pi_95_lb FLOAT,
+	 calibrated_pi_95_ub FLOAT,
 	PRIMARY KEY(analysis_id,exposures_outcome_set_id,covariate_id,evidence_synthesis_analysis_id)
 );
 -- PatientLevelPredictionModule Tables
@@ -1090,6 +1302,7 @@ CREATE TABLE @database_schema.@table_prefix@es_sccs_result (
 {DEFAULT @plp_population_settings = plp_population_settings}
 {DEFAULT @plp_covariate_settings = plp_covariate_settings}
 {DEFAULT @plp_model_settings = plp_model_settings}
+{DEFAULT @plp_hyperparameter_settings = plp_hyperparameter_settings}
 {DEFAULT @plp_split_settings = plp_split_settings}
 {DEFAULT @plp_plp_data_settings = plp_plp_data_settings}
 {DEFAULT @plp_feature_engineering_settings = plp_feature_engineering_settings}
@@ -1178,6 +1391,12 @@ CREATE TABLE @database_schema.@table_prefix@plp_model_settings (
 	PRIMARY KEY(model_setting_id)
 );
  
+CREATE TABLE @database_schema.@table_prefix@plp_hyperparameter_settings (
+  	 hyperparameter_setting_id INT NOT NULL,
+	 hyperparameter_settings_json TEXT,
+	PRIMARY KEY(hyperparameter_setting_id)
+);
+ 
 CREATE TABLE @database_schema.@table_prefix@plp_split_settings (
   	 split_setting_id INT NOT NULL,
 	 split_settings_json TEXT,
@@ -1221,6 +1440,7 @@ CREATE TABLE @database_schema.@table_prefix@plp_model_designs (
 	 split_setting_id INT,
 	 feature_engineering_setting_id INT,
 	 tidy_covariates_setting_id INT,
+	 hyperparameter_setting_id INT,
 	PRIMARY KEY(model_design_id)
 );
  
@@ -1674,107 +1894,127 @@ CREATE TABLE @database_schema.@table_prefix@sccs_event_dep_observation (
 {DEFAULT @tp_metadata = tp_metadata}
 {DEFAULT @tp_summary_event_duration = tp_summary_event_duration}
 {DEFAULT @tp_treatment_pathways = tp_treatment_pathways}
+{DEFAULT @tp_analysis_cohorts = tp_analysis_cohorts}
   
 CREATE TABLE @database_schema.@table_prefix@tp_analyses (
-  	 analysis_id INT,
-	 description VARCHAR
+  	 analysis_id INT NOT NULL,
+	 description VARCHAR,
+	PRIMARY KEY(analysis_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_arguments (
-  	 analysis_id INT,
+  	 analysis_id INT NOT NULL,
 	 arguments VARCHAR,
-	 database_id INTEGER
+	 database_id VARCHAR NOT NULL,
+	PRIMARY KEY(analysis_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_attrition (
-  	 analysis_id INT,
-	 database_id INTEGER,
+  	 analysis_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
 	 number_records INT,
 	 number_subjects INT,
-	 reason VARCHAR,
+	 reason VARCHAR NOT NULL,
 	 reason_id INT,
-	 target_cohort_id INTEGER,
+	 target_cohort_id INT NOT NULL,
 	 target_cohort_name VARCHAR,
-	 time_stamp BIGINT
+	 time_stamp BIGINT,
+	PRIMARY KEY(analysis_id,database_id,reason,target_cohort_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_cdm_source_info (
-  	 analysis_id INT,
+  	 analysis_id INT NOT NULL,
 	 cdm_etl_reference VARCHAR,
 	 cdm_holder VARCHAR,
 	 cdm_release_date DATE,
 	 cdm_source_abbreviation VARCHAR,
 	 cdm_source_name VARCHAR,
 	 cdm_version VARCHAR,
-	 database_id INTEGER,
+	 cdm_version_concept_id INT,
+	 database_id VARCHAR NOT NULL,
 	 source_description VARCHAR,
 	 source_documentation_reference VARCHAR,
 	 source_release_date DATE,
-	 vocabulary_version VARCHAR
+	 vocabulary_version VARCHAR,
+	PRIMARY KEY(analysis_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_counts_age (
-  	 age INT,
-	 analysis_id INT,
-	 database_id INTEGER,
+  	 age INT NOT NULL,
+	 analysis_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
 	 n VARCHAR,
-	 target_cohort_id INTEGER,
-	 target_cohort_name VARCHAR
+	 target_cohort_id INT NOT NULL,
+	 target_cohort_name VARCHAR,
+	PRIMARY KEY(age,analysis_id,database_id,target_cohort_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_counts_sex (
-  	 analysis_id INT,
-	 database_id INTEGER,
+  	 analysis_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
 	 n VARCHAR,
-	 sex VARCHAR,
-	 target_cohort_id INTEGER,
-	 target_cohort_name VARCHAR
+	 sex VARCHAR NOT NULL,
+	 target_cohort_id INT NOT NULL,
+	 target_cohort_name VARCHAR,
+	PRIMARY KEY(analysis_id,database_id,sex,target_cohort_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_counts_year (
-  	 analysis_id INT,
-	 database_id INTEGER,
+  	 analysis_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
 	 n VARCHAR,
-	 target_cohort_id INTEGER,
+	 target_cohort_id INT NOT NULL,
 	 target_cohort_name VARCHAR,
-	 index_year INTEGER
+	 index_year INT NOT NULL,
+	PRIMARY KEY(analysis_id,database_id,target_cohort_id,index_year)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_metadata (
-  	 analysis_id INT,
-	 database_id INTEGER,
+  	 analysis_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
 	 execution_end BIGINT,
 	 execution_start BIGINT,
 	 package_version VARCHAR,
 	 platform VARCHAR,
-	 r_version VARCHAR
+	 r_version VARCHAR,
+	PRIMARY KEY(analysis_id,database_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_summary_event_duration (
-  	 analysis_id INT,
+  	 analysis_id INT NOT NULL,
 	 duration_average FLOAT,
 	 event_count INT,
-	 database_id INTEGER,
-	 event_name VARCHAR,
-	 line VARCHAR,
+	 database_id VARCHAR NOT NULL,
+	 event_name VARCHAR NOT NULL,
+	 line VARCHAR NOT NULL,
 	 duration_max INT,
 	 duration_median INT,
 	 duration_min INT,
 	 duration_q_1 INT,
 	 duration_q_2 INT,
 	 duration_sd FLOAT,
-	 target_cohort_id INTEGER,
-	 target_cohort_name VARCHAR
+	 target_cohort_id INT NOT NULL,
+	 target_cohort_name VARCHAR,
+	PRIMARY KEY(analysis_id,database_id,event_name,line,target_cohort_id)
 );
  
 CREATE TABLE @database_schema.@table_prefix@tp_treatment_pathways (
-  	 age VARCHAR,
-	 analysis_id INT,
-	 database_id INTEGER,
+  	 age VARCHAR NOT NULL,
+	 analysis_id INT NOT NULL,
+	 database_id VARCHAR NOT NULL,
 	 freq INT,
-	 index_year VARCHAR,
-	 pathway VARCHAR,
-	 sex VARCHAR,
-	 target_cohort_id INTEGER,
-	 target_cohort_name VARCHAR
+	 index_year VARCHAR NOT NULL,
+	 pathway VARCHAR NOT NULL,
+	 sex VARCHAR NOT NULL,
+	 target_cohort_id INT NOT NULL,
+	 target_cohort_name VARCHAR,
+	PRIMARY KEY(age,analysis_id,database_id,index_year,pathway,sex,target_cohort_id)
+);
+ 
+CREATE TABLE @database_schema.@table_prefix@tp_analysis_cohorts (
+  	 cohort_id INT NOT NULL,
+	 cohort_name VARCHAR,
+	 type VARCHAR NOT NULL,
+	 analysis_id INT NOT NULL,
+	PRIMARY KEY(cohort_id,type,analysis_id)
 );
