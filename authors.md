@@ -26,7 +26,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/OHDSI/Strategus/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/OHDSI/Strategus/blob/v1.5.0/DESCRIPTION)
 
 Sena A, Schuemie M, Gilbert J (2026). *Strategus: Coordinate and Execute
 OHDSI HADES Modules*. R package version 1.5.0,
