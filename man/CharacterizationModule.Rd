@@ -174,16 +174,20 @@ Creates the CharacterizationModule Specifications
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createModuleSpecifications(
   targetIds,
+  limitToFirstInNDays = rep(99999, length(targetIds)),
+  minPriorObservation = 365,
   outcomeIds,
   outcomeWashoutDays = c(365),
-  minPriorObservation = 365,
-  dechallengeStopInterval = 30,
-  dechallengeEvaluationWindow = 30,
   riskWindowStart = c(1, 1),
   startAnchor = c("cohort start", "cohort start"),
   riskWindowEnd = c(0, 365),
   endAnchor = c("cohort end", "cohort end"),
+  dechallengeStopInterval = 30,
+  dechallengeEvaluationWindow = 30,
+  mode = "CohortIncidence",
+  minSMD = 0.01,
   minCharacterizationMean = 0.01,
+  minCovariateCount = 5,
   covariateSettings = FeatureExtraction::createCovariateSettings(useDemographicsGender =
     T, useDemographicsAge = T, useDemographicsAgeGroup = T, useDemographicsRace = T,
     useDemographicsEthnicity = T, useDemographicsIndexYear = T, useDemographicsIndexMonth
@@ -207,7 +211,10 @@ Creates the CharacterizationModule Specifications
   casePostOutcomeDuration = 365,
   includeTimeToEvent = TRUE,
   includeDechallengeRechallenge = TRUE,
-  includeAggregateCovariate = TRUE
+  includeTargetBaseline = TRUE,
+  includeRiskFactors = TRUE,
+  includeCaseSeries = TRUE,
+  outputTable = "characterization_cohorts"
 )}\if{html}{\out{</div>}}
 }
 
@@ -216,15 +223,13 @@ Creates the CharacterizationModule Specifications
 \describe{
 \item{\code{targetIds}}{A vector of cohort IDs to use as the target(s) for the characterization}
 
-\item{\code{outcomeIds}}{A vector of cohort IDs to use as the outcome(s) for the characterization}
-
-\item{\code{outcomeWashoutDays}}{A vector of integers specifying the washout days for each outcome (same length as the outcomeIds)}
+\item{\code{limitToFirstInNDays}}{A vector of number of days of minimum between target exposures for each target (same length as the targetIds) - use 99999 to restrict to first exposure per person in target cohort}
 
 \item{\code{minPriorObservation}}{The number of days of minimum observation a patient in the target populations must have}
 
-\item{\code{dechallengeStopInterval}}{description}
+\item{\code{outcomeIds}}{A vector of cohort IDs to use as the outcome(s) for the characterization}
 
-\item{\code{dechallengeEvaluationWindow}}{description}
+\item{\code{outcomeWashoutDays}}{A vector of integers specifying the washout days for each outcome (same length as the outcomeIds)}
 
 \item{\code{riskWindowStart}}{The number of days after start anchor to start the time-at-risk (can be a vector for multiple TARS)}
 
@@ -234,7 +239,17 @@ Creates the CharacterizationModule Specifications
 
 \item{\code{endAnchor}}{The TAR ends relative to this either cohort start or cohort end (can be a vector for multiple TARS)}
 
+\item{\code{dechallengeStopInterval}}{description}
+
+\item{\code{dechallengeEvaluationWindow}}{description}
+
+\item{\code{mode}}{Pick one of 'CohortIncidence'/'Efficient'/'PatientLevelPrediction' to specify how the non-cases are defined}
+
+\item{\code{minSMD}}{The minimum standardized mean difference for the risk factors analysis}
+
 \item{\code{minCharacterizationMean}}{The minimum fraction patients in the target have a covariate for it to be included}
+
+\item{\code{minCovariateCount}}{The minimum number of patients in the analysis to have a covariate for it to be included}
 
 \item{\code{covariateSettings}}{Covariates for the database, cohort and risk factor characterization}
 
@@ -248,7 +263,13 @@ Creates the CharacterizationModule Specifications
 
 \item{\code{includeDechallengeRechallenge}}{Lets you skip running a dechallenge-rechallenge analyses when set to FALSE}
 
-\item{\code{includeAggregateCovariate}}{Lets you skip running the aggregate covariate analyses when set to FALSE}
+\item{\code{includeTargetBaseline}}{Lets you skip running the target baseline analyses when set to FALSE}
+
+\item{\code{includeRiskFactors}}{Lets you skip running the risk factor analyses when set to FALSE}
+
+\item{\code{includeCaseSeries}}{Lets you skip running the case series analyses when set to FALSE}
+
+\item{\code{outputTable}}{The table used by characterization to create the cohorts used in characterization (included targets, cases, non-cases, etc.). The spec hash and database hash are added to this name to make it unique per run.}
 }
 \if{html}{\out{</div>}}
 }

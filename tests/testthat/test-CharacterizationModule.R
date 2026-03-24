@@ -18,7 +18,9 @@ test_that("Verify createModuleSpecification input validation works properly", {
     cModule$createModuleSpecifications(
       targetIds = 1,
       outcomeIds = 2,
-      includeAggregateCovariate = FALSE,
+      includeTargetBaseline = FALSE,
+      includeRiskFactors = FALSE,
+      includeCaseSeries = FALSE,
       includeDechallengeRechallenge = FALSE,
       includeTimeToEvent = FALSE
     )
@@ -43,7 +45,22 @@ test_that("Verify createModuleSpecification input validation works properly", {
   specs <- cModule$createModuleSpecifications(
     targetIds = 1,
     outcomeIds = 2,
-    includeAggregateCovariate = FALSE
+    includeTargetBaseline = FALSE
   )
-  expect_true(is.null(specs$settings$analysis$aggregateCovariateSettings))
+  expect_true(is.null(specs$settings$analysis$targetBaselineSettings))
+
+
+  specs <- cModule$createModuleSpecifications(
+    targetIds = 1,
+    outcomeIds = 2,
+    includeRiskFactors = FALSE
+  )
+  expect_true(is.null(specs$settings$analysis$riskFactorSettings))
+
+  specs <- cModule$createModuleSpecifications(
+    targetIds = 1,
+    outcomeIds = 2,
+    includeCaseSeries = FALSE
+  )
+  expect_true(is.null(specs$settings$analysis$caseSeriesSettings))
 })

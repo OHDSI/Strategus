@@ -1,4 +1,4 @@
-# Copyright 2025 Observational Health Data Sciences and Informatics
+# Copyright 2026 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -190,7 +190,7 @@ TreatmentPatternsModule <- R6::R6Class(
         }
       }
 
-      if (isFALSE(resultAppend)){
+      if (isFALSE(resultAppend)) {
         unlink(resultsFolder, recursive = TRUE)
         dir.create(resultsFolder, recursive = TRUE, showWarnings = FALSE)
       }
@@ -198,9 +198,9 @@ TreatmentPatternsModule <- R6::R6Class(
       # writes the results to csv
       for (name in names(pathwayResult)) {
         data <- pathwayResult[[name]] %>% dplyr::collect()
-        snakeCaseName = SqlRender::camelCaseToSnakeCase(name)
+        snakeCaseName <- SqlRender::camelCaseToSnakeCase(name)
 
-        if(name == "analysisCohorts"){
+        if (name == "analysisCohorts") {
           colnames(data) <- SqlRender::camelCaseToSnakeCase(colnames(data))
         }
 

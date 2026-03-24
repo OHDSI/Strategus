@@ -25,7 +25,7 @@ test_that("Create results data model with subset of modules specified emits warn
   # Create results data model -------------------------
   cdmModulesAnalysisSpecifications <- ParallelLogger::loadSettingsFromJson(
     fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
-                           package = "Strategus"
+      package = "Strategus"
     )
   )
 
@@ -37,4 +37,3 @@ test_that("Create results data model with subset of modules specified emits warn
     )
   )
 })
-

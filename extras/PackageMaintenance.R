@@ -1,4 +1,4 @@
-# Copyright 2025 Observational Health Data Sciences and Informatics
+# Copyright 2026 Observational Health Data Sciences and Informatics
 #
 # This file is part of Strategus
 #
@@ -66,7 +66,7 @@ rmarkdown::render("vignettes/WorkingWithResults.Rmd",
 unlink("inst/doc/WorkingWithResults.tex")
 
 # Run pkgdown to verify there are no site build errors ---------
-pkgdown::build_site()
+pkgdown::check_pkgdown()
 
 # Create a list of all modules in this package -----------------
 packageCodeFiles <- list.files("./R")
@@ -192,7 +192,11 @@ cgModuleSpecifications <- cgModuleSettingsCreator$createModuleSpecifications()
 cModuleSettingsCreator <- CharacterizationModule$new()
 cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
   targetIds = c(1, 2, 1001, 2001),
-  outcomeIds = 3
+  outcomeIds = 3,
+  riskWindowStart = c(1),
+  startAnchor = c("cohort start"),
+  riskWindowEnd = c(365),
+  endAnchor = c("cohort end")
 )
 
 # Cohort Incidence -----------------
