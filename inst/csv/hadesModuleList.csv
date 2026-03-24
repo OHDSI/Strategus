@@ -6,5 +6,6 @@ CohortIncidenceModule
 CohortMethodModule
 EvidenceSynthesisModule
 PatientLevelPredictionModule
+PheValuatorModule
 SelfControlledCaseSeriesModule
 TreatmentPatternsModule

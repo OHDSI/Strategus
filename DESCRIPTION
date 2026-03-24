@@ -50,6 +50,7 @@ Suggests:
   fs,
   knitr,
   PatientLevelPrediction (>= 6.5.0),
+  PheValuator,
   readr,
   rmarkdown,
   RSQLite,
@@ -61,7 +62,8 @@ Remotes:
   ohdsi/Characterization,
   ohdsi/CohortDiagnostics,
   ohdsi/CohortIncidence,
-  ohdsi/CohortMethod
+  ohdsi/CohortMethod,
+  ohdsi/PheValuator
 License: Apache License 2.0
 VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus

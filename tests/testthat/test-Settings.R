@@ -379,6 +379,19 @@ test_that("Test analysis specification creation", {
     sccsAnalysesSpecifications = sccsAnalysisSpecifications$toList()
   )
 
+  # PheValuator ---------------------------------
+  pvModuleSettingsCreator <- PheValuatorModule$new()
+  pvModuleSpecifications <- pvModuleSettingsCreator$createModuleSpecifications(
+    phenotype = "Type 2 Diabetes",
+    pheValuatorAnalysisList = list(
+      list(
+        analysisId = 1,
+        description = "Test PheValuator analysis",
+        createEvaluationCohortArgs = list(xSpecCohortId = 1),
+        testPhenotypeAlgorithmArgs = list(phenotypeCohortId = 3, cutPoints = c("EV"))
+      )
+    )
+  )
 
   # Create analysis specifications ---------------
   analysisSpecifications <- createEmptyAnalysisSpecifications() |>
@@ -391,10 +404,11 @@ test_that("Test analysis specification creation", {
     addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
     addEvidenceSynthesisModuleSpecifications(evidenceSynthesisAnalysisSpecifications) |>
     addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-    addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
+    addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
+    addPheValuatorModuleSpecifications(pvModuleSpecifications)
 
   expect_equal(length(analysisSpecifications$sharedResources), 2)
-  expect_equal(length(analysisSpecifications$moduleSpecifications), 8)
+  expect_equal(length(analysisSpecifications$moduleSpecifications), 9)
 })
 
 test_that("Calling misspelled createEmptyAnalysisSpecificiations throws warning", {
