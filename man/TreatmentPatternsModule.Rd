@@ -27,6 +27,7 @@ Characterization and description of patterns of events (cohorts). against the OM
 \item \href{#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}
 \item \href{#method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{\code{TreatmentPatternsModule$createMultiAnalysisModuleSpecification()}}
 \item \href{#method-TreatmentPatternsModule-validateModuleSpecifications}{\code{TreatmentPatternsModule$validateModuleSpecifications()}}
+\item \href{#method-TreatmentPatternsModule-partitionModuleSpecifications}{\code{TreatmentPatternsModule$partitionModuleSpecifications()}}
 \item \href{#method-TreatmentPatternsModule-clone}{\code{TreatmentPatternsModule$clone()}}
 }
 }
@@ -66,6 +67,9 @@ Execute Treatment Patterns
 \describe{
 \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
@@ -154,6 +158,9 @@ is an object of class \code{connectionDetails} as created by the
 \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
@@ -325,6 +332,35 @@ Validate the module specifications
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{moduleSpecifications}}{The treatment patterns module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-TreatmentPatternsModule-partitionModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-partitionModuleSpecifications}{}}}
+\subsection{Method \code{partitionModuleSpecifications()}}{
+Partitions the module specifications into smaller jobs
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$partitionModuleSpecifications(
+  analysisSpecifications,
+  specificationFolder
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{specificationFolder}}{A directory where the partitioned jsons will be saved to}
 }
 \if{html}{\out{</div>}}
 }

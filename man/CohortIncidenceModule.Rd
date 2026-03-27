@@ -26,6 +26,7 @@ Computes incidence rates for cohorts against the OMOP Common Data Model
 \item \href{#method-CohortIncidenceModule-uploadResults}{\code{CohortIncidenceModule$uploadResults()}}
 \item \href{#method-CohortIncidenceModule-createModuleSpecifications}{\code{CohortIncidenceModule$createModuleSpecifications()}}
 \item \href{#method-CohortIncidenceModule-validateModuleSpecifications}{\code{CohortIncidenceModule$validateModuleSpecifications()}}
+\item \href{#method-CohortIncidenceModule-partitionModuleSpecifications}{\code{CohortIncidenceModule$partitionModuleSpecifications()}}
 \item \href{#method-CohortIncidenceModule-clone}{\code{CohortIncidenceModule$clone()}}
 }
 }
@@ -65,6 +66,9 @@ Execute the CohortIncidence package
 \describe{
 \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
@@ -160,6 +164,9 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
 \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
 }
 \if{html}{\out{</div>}}
@@ -196,6 +203,35 @@ Validate the module specifications
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{moduleSpecifications}}{The CohortIncidence module specifications}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-CohortIncidenceModule-partitionModuleSpecifications"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortIncidenceModule-partitionModuleSpecifications}{}}}
+\subsection{Method \code{partitionModuleSpecifications()}}{
+Partitions the module specifications into smaller jobs
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{CohortIncidenceModule$partitionModuleSpecifications(
+  analysisSpecifications,
+  specificationFolder
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+
+\item{\code{specificationFolder}}{A directory where the partitioned jsons will be saved to}
 }
 \if{html}{\out{</div>}}
 }
