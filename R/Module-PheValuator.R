@@ -65,7 +65,44 @@ PheValuatorModule <- R6::R6Class(
         cohortDefinitionSet <- data.frame()
       }
 
-      pheValuatorAnalysisList <- spec$pheValuatorAnalysisList
+      # Resolve covariate settings based on phenotype type.
+      covariateSettingsType <- spec$covariateSettingsType %||% "chronic"
+      covariateSettings <- if (covariateSettingsType == "acute") {
+        PheValuator::createDefaultCovariateSettings(
+            addDescendantsToExclude = TRUE,
+            startDayWindow1 = 0,
+            endDayWindow1 = 10,
+            startDayWindow2 = 11,
+            endDayWindow2 = 20,
+            startDayWindow3 = 21,
+            endDayWindow3 = 30
+        )
+      } else {
+        PheValuator::createDefaultCovariateSettings(
+            addDescendantsToExclude = TRUE,
+            startDayWindow1 = 0,
+            endDayWindow1 = 30,
+            startDayWindow2 = 31,
+            endDayWindow2 = 60,
+            startDayWindow3 = 61,
+            endDayWindow3 = 365 
+        )
+      }
+
+      # Restore the 'pheValuatorAnalysis' class on each list element, which is
+      # lost during JSON serialization of the analysis specification.
+      # Also inject the resolved covariateSettings into any createEvaluationCohortArgs
+      # that did not supply their own covariateSettings.
+      pheValuatorAnalysisList <- lapply(spec$pheValuatorAnalysisList, function(a) {
+        if (!inherits(a, "pheValuatorAnalysis")) {
+          class(a) <- "pheValuatorAnalysis"
+        }
+        if (!is.null(a$createEvaluationCohortArgs) &&
+            is.null(a$createEvaluationCohortArgs$covariateSettings)) {
+          a$createEvaluationCohortArgs$covariateSettings <- covariateSettings
+        }
+        a
+      })
 
       # Run PheValuator analyses
       referenceTable <- PheValuator::runPheValuatorAnalyses(
@@ -174,13 +211,27 @@ PheValuatorModule <- R6::R6Class(
     #'   will be used.
     #' @param pheValuatorAnalysisList A list of PheValuator analysis objects
     #'   created using \code{PheValuator::createPheValuatorAnalysis()}
+    #' @param covariateSettingsType One of \code{"chronic"} or \code{"acute"}.
+    #'   Controls which default covariate windows are passed to
+    #'   \code{PheValuator::createDefaultCovariateSettings()}.
+    #'   \itemize{
+    #'     \item \code{"chronic"} (default): three time windows
+    #'       (0 to 9999, -365 to -1, -730 to -366) suitable for conditions
+    #'       that persist over long periods.
+    #'     \item \code{"acute"}: a single short forward-looking window
+    #'       (0 to 30) suitable for episodic / event-based conditions.
+    #'   }
     createModuleSpecifications = function(phenotype,
                                           analysisName = "Main",
                                           cohortDefinitionSet = NULL,
-                                          pheValuatorAnalysisList) {
+                                          pheValuatorAnalysisList,
+                                          covariateSettingsType = c("chronic", "acute")) {
+      covariateSettingsType <- match.arg(covariateSettingsType)
+      # TODO: use shared settings for cohortdefinitionset 
       analysis <- list()
       analysis$phenotype <- phenotype
       analysis$analysisName <- analysisName
+      analysis$covariateSettingsType <- covariateSettingsType
       if (!is.null(cohortDefinitionSet) && nrow(cohortDefinitionSet) > 0) {
         analysis$cohortDefinitionSet <- super$.dataFrameToList(cohortDefinitionSet)
       } else {
@@ -202,6 +253,11 @@ PheValuatorModule <- R6::R6Class(
       # Validate required fields
       checkmate::assertCharacter(moduleSpecifications$settings$phenotype, min.chars = 1)
       checkmate::assertList(moduleSpecifications$settings$pheValuatorAnalysisList, min.len = 1)
+      checkmate::assertChoice(
+        moduleSpecifications$settings$covariateSettingsType,
+        choices = c("chronic", "acute"),
+        null.ok = TRUE
+      )
     }
   ),
   private = list(
