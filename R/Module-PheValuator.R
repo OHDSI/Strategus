@@ -55,88 +55,16 @@ PheValuatorModule <- R6::R6Class(
         dir.create(outputFolder, recursive = TRUE)
       }
 
-      # Extract settings
-      phenotype <- spec$phenotype
-      analysisName <- spec$analysisName %||% "Main"
-      cohortDefinitionSet <- NULL
-      if (!is.null(spec$cohortDefinitionSet)) {
-        cohortDefinitionSet <- super$.listToDataFrame(spec$cohortDefinitionSet)
-      } else {
-        cohortDefinitionSet <- data.frame()
-      }
-
-      # Resolve covariate settings based on phenotype type.
-      covariateSettingsType <- spec$covariateSettingsType %||% "chronic"
-      covariateSettings <- if (covariateSettingsType == "acute") {
-        PheValuator::createDefaultCovariateSettings(
-            addDescendantsToExclude = TRUE,
-            startDayWindow1 = 0,
-            endDayWindow1 = 10,
-            startDayWindow2 = 11,
-            endDayWindow2 = 20,
-            startDayWindow3 = 21,
-            endDayWindow3 = 30
+      # Loop over each analysis in pheValuatorAnalysisList and execute
+      for (analysisSpec in spec$pheValuatorAnalysisList) {
+        private$.executeAnalysis(
+          analysisSpec = analysisSpec,
+          connectionDetails = connectionDetails,
+          executionSettings = executionSettings,
+          jobContext = jobContext,
+          outputFolder = outputFolder,
+          resultsFolder = resultsFolder
         )
-      } else {
-        PheValuator::createDefaultCovariateSettings(
-            addDescendantsToExclude = TRUE,
-            startDayWindow1 = 0,
-            endDayWindow1 = 30,
-            startDayWindow2 = 31,
-            endDayWindow2 = 60,
-            startDayWindow3 = 61,
-            endDayWindow3 = 365 
-        )
-      }
-
-      # Restore the 'pheValuatorAnalysis' class on each list element, which is
-      # lost during JSON serialization of the analysis specification.
-      # Also inject the resolved covariateSettings into any createEvaluationCohortArgs
-      # that did not supply their own covariateSettings.
-      pheValuatorAnalysisList <- lapply(spec$pheValuatorAnalysisList, function(a) {
-        if (!inherits(a, "pheValuatorAnalysis")) {
-          class(a) <- "pheValuatorAnalysis"
-        }
-        if (!is.null(a$createEvaluationCohortArgs) &&
-            is.null(a$createEvaluationCohortArgs$covariateSettings)) {
-          a$createEvaluationCohortArgs$covariateSettings <- covariateSettings
-        }
-        a
-      })
-
-      # Run PheValuator analyses
-      referenceTable <- PheValuator::runPheValuatorAnalyses(
-        phenotype = phenotype,
-        cohortDefinitionSet = cohortDefinitionSet,
-        analysisName = analysisName,
-        connectionDetails = connectionDetails,
-        tempEmulationSchema = executionSettings$tempEmulationSchema,
-        cdmDatabaseSchema = executionSettings$cdmDatabaseSchema,
-        cohortDatabaseSchema = executionSettings$workDatabaseSchema,
-        cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
-        workDatabaseSchema = executionSettings$workDatabaseSchema,
-        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        outputFolder = outputFolder,
-        pheValuatorAnalysisList = pheValuatorAnalysisList
-      )
-
-      # Export results
-      if (!dir.exists(resultsFolder)) {
-        dir.create(resultsFolder, recursive = TRUE)
-      }
-
-      # Copy the CSV files produced by PheValuator to the results folder
-      exportFolder <- file.path(outputFolder, "exportFolder")
-      if (dir.exists(exportFolder)) {
-        csvFiles <- list.files(exportFolder, pattern = "\\.csv$", full.names = TRUE)
-        for (csvFile in csvFiles) {
-          targetFileName <- basename(csvFile)
-          # Ensure table prefix is applied
-          if (!startsWith(targetFileName, self$tablePrefix)) {
-            targetFileName <- paste0(self$tablePrefix, targetFileName)
-          }
-          file.copy(csvFile, file.path(resultsFolder, targetFileName), overwrite = TRUE)
-        }
       }
 
       # Export the resultsDataModelSpecification.csv
@@ -203,41 +131,30 @@ PheValuatorModule <- R6::R6Class(
 
     #' @description Creates the PheValuator Module Specifications
     #'
-    #' @param phenotype The name of the phenotype being evaluated
-    #' @param analysisName The name of the analysis (default: "Main")
-    #' @param cohortDefinitionSet A data.frame of cohort definitions with columns
-    #'   cohortId, cohortName, json, sql. Should include all cohort definitions
-    #'   needed to replicate the PheValuator analysis. If NULL, an empty data.frame
-    #'   will be used.
-    #' @param pheValuatorAnalysisList A list of PheValuator analysis objects
-    #'   created using \code{PheValuator::createPheValuatorAnalysis()}
-    #' @param covariateSettingsType One of \code{"chronic"} or \code{"acute"}.
-    #'   Controls which default covariate windows are passed to
-    #'   \code{PheValuator::createDefaultCovariateSettings()}.
-    #'   \itemize{
-    #'     \item \code{"chronic"} (default): three time windows
-    #'       (0 to 9999, -365 to -1, -730 to -366) suitable for conditions
-    #'       that persist over long periods.
-    #'     \item \code{"acute"}: a single short forward-looking window
-    #'       (0 to 30) suitable for episodic / event-based conditions.
+    #' @param pheValuatorAnalysisList A list of analysis specification objects.
+    #'   Each element is a list with two named fields:
+    #'   \describe{
+    #'     \item{\code{phenotype}}{A short file-system-safe name for the phenotype
+    #'       (e.g. \code{"bladderCancer"}).}
+    #'     \item{\code{cohortsToEvaluate}}{A list of evaluation parameters:
+    #'       \describe{
+    #'         \item{\code{phenotypeCohortId}}{Cohort ID(s) of the phenotype to evaluate.}
+    #'         \item{\code{washoutPeriod}}{Minimum prior observation days (should match cohort definition).}
+    #'         \item{\code{xSpecCohortId}}{Cohort ID for the extremely-specific (xSpec) cohort.}
+    #'         \item{\code{daysFromxSpec}}{Days from xSpec cohort start to index visit.}
+    #'         \item{\code{xSensCohortId}}{Cohort ID for the extremely-sensitive (xSens) cohort.}
+    #'         \item{\code{prevalenceCohortId}}{Cohort ID used to estimate prevalence.}
+    #'         \item{\code{excludedCovariateConceptIds}}{Integer vector of concept IDs to exclude from covariates.}
+    #'         \item{\code{covariateSettingsType}}{One of \code{"chronic"} or \code{"acute"} (default \code{"chronic"}).}
+    #'       }
+    #'     }
     #'   }
-    createModuleSpecifications = function(phenotype,
-                                          analysisName = "Main",
-                                          cohortDefinitionSet = NULL,
-                                          pheValuatorAnalysisList,
-                                          covariateSettingsType = c("chronic", "acute")) {
-      covariateSettingsType <- match.arg(covariateSettingsType)
-      # TODO: use shared settings for cohortdefinitionset 
-      analysis <- list()
-      analysis$phenotype <- phenotype
-      analysis$analysisName <- analysisName
-      analysis$covariateSettingsType <- covariateSettingsType
-      if (!is.null(cohortDefinitionSet) && nrow(cohortDefinitionSet) > 0) {
-        analysis$cohortDefinitionSet <- super$.dataFrameToList(cohortDefinitionSet)
-      } else {
-        analysis$cohortDefinitionSet <- NULL
-      }
-      analysis$pheValuatorAnalysisList <- pheValuatorAnalysisList
+    createModuleSpecifications = function(pheValuatorAnalysisList) {
+      checkmate::assertList(pheValuatorAnalysisList, min.len = 1)
+
+      analysis <- list(
+        pheValuatorAnalysisList = pheValuatorAnalysisList
+      )
 
       specification <- super$createModuleSpecifications(analysis)
       return(specification)
@@ -250,14 +167,15 @@ PheValuatorModule <- R6::R6Class(
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
-      # Validate required fields
-      checkmate::assertCharacter(moduleSpecifications$settings$phenotype, min.chars = 1)
       checkmate::assertList(moduleSpecifications$settings$pheValuatorAnalysisList, min.len = 1)
-      checkmate::assertChoice(
-        moduleSpecifications$settings$covariateSettingsType,
-        choices = c("chronic", "acute"),
-        null.ok = TRUE
-      )
+      for (a in moduleSpecifications$settings$pheValuatorAnalysisList) {
+        checkmate::assertString(a$phenotype, min.chars = 1)
+        checkmate::assertList(a$cohortsToEvaluate)
+        checkmate::assertChoice(
+          a$cohortsToEvaluate$covariateSettingsType %||% "chronic",
+          choices = c("chronic", "acute")
+        )
+      }
     }
   ),
   private = list(
@@ -266,6 +184,102 @@ PheValuatorModule <- R6::R6Class(
         file.path("csv", "pheValuatorRdms.csv"),
         package = "Strategus"
       ))
+    },
+
+    # Execute a single analysis spec entry
+    .executeAnalysis = function(analysisSpec,
+                                connectionDetails,
+                                executionSettings,
+                                jobContext,
+                                outputFolder,
+                                resultsFolder) {
+      cts <- analysisSpec$cohortsToEvaluate
+      phenotype <- analysisSpec$phenotype
+
+      # Resolve covariate settings from covariateSettingsType
+      covariateSettingsType <- cts$covariateSettingsType %||% "chronic"
+      covariateSettings <- if (covariateSettingsType == "acute") {
+        PheValuator::createDefaultCovariateSettings(
+          excludedCovariateConceptIds = cts$excludedCovariateConceptIds %||% c(),
+          addDescendantsToExclude    = TRUE,
+          startDayWindow1 = 0,  endDayWindow1 = 10,
+          startDayWindow2 = 11, endDayWindow2 = 20,
+          startDayWindow3 = 21, endDayWindow3 = 30
+        )
+      } else {
+        PheValuator::createDefaultCovariateSettings(
+          excludedCovariateConceptIds = cts$excludedCovariateConceptIds %||% c(),
+          addDescendantsToExclude    = TRUE,
+          startDayWindow1 = 0,   endDayWindow1 = 30,
+          startDayWindow2 = 31,  endDayWindow2 = 60,
+          startDayWindow3 = 61,  endDayWindow3 = 365
+        )
+      }
+
+      # Build one pheValuatorAnalysis per phenotypeCohortId
+      phenotypeCohortIds <- as.integer(cts$phenotypeCohortId)
+      washoutPeriods <- rep_len(as.integer(cts$washoutPeriod), length(phenotypeCohortIds))
+
+      pheValuatorAnalysisList <- mapply(
+        function(cohortId, washout, idx) {
+          createEvaluationCohortArgs <- PheValuator::createCreateEvaluationCohortArgs(
+            xSpecCohortId      = as.integer(cts$xSpecCohortId),
+            daysFromxSpec      = as.integer(cts$daysFromxSpec %||% 0),
+            xSensCohortId      = as.integer(cts$xSensCohortId),
+            prevalenceCohortId = as.integer(cts$prevalenceCohortId),
+            covariateSettings  = covariateSettings
+          )
+          testPhenotypeAlgorithmArgs <- PheValuator::createTestPhenotypeAlgorithmArgs(
+            phenotypeCohortId = cohortId,
+            washoutPeriod     = washout,
+            cutPoints         = c("EV")
+          )
+          PheValuator::createPheValuatorAnalysis(
+            analysisId                 = idx,
+            description                = paste0(phenotype, "_cohort", cohortId),
+            createEvaluationCohortArgs = createEvaluationCohortArgs,
+            testPhenotypeAlgorithmArgs = testPhenotypeAlgorithmArgs
+          )
+        },
+        phenotypeCohortIds,
+        washoutPeriods,
+        seq_along(phenotypeCohortIds),
+        SIMPLIFY = FALSE
+      )
+
+      # Per-phenotype output sub-folder
+      phenotypeOutputFolder <- file.path(outputFolder, phenotype)
+      if (!dir.exists(phenotypeOutputFolder)) {
+        dir.create(phenotypeOutputFolder, recursive = TRUE)
+      }
+
+      PheValuator::runPheValuatorAnalyses(
+        phenotype          = phenotype,
+        cohortDefinitionSet = data.frame(),
+        analysisName       = "Main",
+        connectionDetails  = connectionDetails,
+        tempEmulationSchema = executionSettings$tempEmulationSchema,
+        cdmDatabaseSchema  = executionSettings$cdmDatabaseSchema,
+        cohortDatabaseSchema = executionSettings$workDatabaseSchema,
+        cohortTable        = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        workDatabaseSchema = executionSettings$workDatabaseSchema,
+        databaseId         = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
+        outputFolder       = phenotypeOutputFolder,
+        pheValuatorAnalysisList = pheValuatorAnalysisList
+      )
+
+      # Copy CSV results to results folder
+      exportFolder <- file.path(phenotypeOutputFolder, "exportFolder")
+      if (dir.exists(exportFolder)) {
+        csvFiles <- list.files(exportFolder, pattern = "\\.csv$", full.names = TRUE)
+        for (csvFile in csvFiles) {
+          targetFileName <- basename(csvFile)
+          if (!startsWith(targetFileName, self$tablePrefix)) {
+            targetFileName <- paste0(self$tablePrefix, targetFileName)
+          }
+          file.copy(csvFile, file.path(resultsFolder, targetFileName), overwrite = TRUE)
+        }
+      }
     }
   )
 )
