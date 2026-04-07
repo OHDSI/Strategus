@@ -202,17 +202,23 @@ PheValuatorModule <- R6::R6Class(
         PheValuator::createDefaultCovariateSettings(
           excludedCovariateConceptIds = cts$excludedCovariateConceptIds %||% c(),
           addDescendantsToExclude    = TRUE,
-          startDayWindow1 = 0,  endDayWindow1 = 10,
-          startDayWindow2 = 11, endDayWindow2 = 20,
-          startDayWindow3 = 21, endDayWindow3 = 30
+          startDayWindow1 = 0,  
+          endDayWindow1 = 10,
+          startDayWindow2 = 11, 
+          endDayWindow2 = 20,
+          startDayWindow3 = 21, 
+          endDayWindow3 = 30
         )
       } else {
         PheValuator::createDefaultCovariateSettings(
           excludedCovariateConceptIds = cts$excludedCovariateConceptIds %||% c(),
           addDescendantsToExclude    = TRUE,
-          startDayWindow1 = 0,   endDayWindow1 = 30,
-          startDayWindow2 = 31,  endDayWindow2 = 60,
-          startDayWindow3 = 61,  endDayWindow3 = 365
+          startDayWindow1 = 0,   
+          endDayWindow1 = 30,
+          startDayWindow2 = 31,  
+          endDayWindow2 = 60,
+          startDayWindow3 = 61,  
+          endDayWindow3 = 365
         )
       }
 
