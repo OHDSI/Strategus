@@ -27,7 +27,7 @@ Imports:
   checkmate,
   cli,
   digest,
-  dplyr,
+  dplyr (>= 1.1.4),
   methods,
   stats,
   ParallelLogger (>= 3.1.0),
