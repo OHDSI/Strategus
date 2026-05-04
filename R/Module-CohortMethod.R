@@ -43,7 +43,7 @@ CohortMethodModule <- R6::R6Class(
       }
 
       args <- jobContext$settings
-      args$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
+      args$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId |> as.character()
       args$connectionDetails <- connectionDetails
       args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
       args$tempEmulationSchema <- jobContext$moduleExecutionSettings$tempEmulationSchema
