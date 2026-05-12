@@ -44,22 +44,26 @@ SelfControlledCaseSeriesModule <- R6::R6Class(
         stop("The SelfControlledCaseSeriesModule specification is missing the required `sccsAnalysesSpecifications` setting. Please recreate the SelfControlledCaseSeriesModule specification and update the analysis specification.")
       }
 
-      args <- jobContext$settings
-      args$databaseId <- jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId |> as.character()
-      args$connectionDetails <- connectionDetails
-      args$cdmDatabaseSchema <- jobContext$moduleExecutionSettings$cdmDatabaseSchema
-      args$tempEmulationSchema <- jobContext$moduleExecutionSettings$tempEmulationSchema
-      args$exposureDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
-      args$exposureTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
-      args$outcomeDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
-      args$outcomeTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
-      args$nestingCohortDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
-      args$nestingCohortTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
-      args$customCovariateDatabaseSchema <- jobContext$moduleExecutionSettings$workDatabaseSchema
-      args$customCovariateTable <- jobContext$moduleExecutionSettings$cohortTableNames$cohortTable
-      args$outputFolder <- jobContext$moduleExecutionSettings$workSubFolder
-      args$sccsMultiThreadingSettings <- sccsMultiThreadingSettings
-      args$sccsAnalysesSpecifications <- SelfControlledCaseSeries::convertUntypedListToSccsAnalysesSpecifications(jobContext$settings$sccsAnalysesSpecifications)
+      # Build args list explicitly with only the parameters that runSccsAnalyses expects.
+      # This avoids passing deprecated NULL parameters (e.g., sccsAnalysisList, exposuresOutcomeList)
+      # that might cause issues in the SCCS package.
+      args <- list(
+        connectionDetails = connectionDetails,
+        cdmDatabaseSchema = jobContext$moduleExecutionSettings$cdmDatabaseSchema,
+        tempEmulationSchema = jobContext$moduleExecutionSettings$tempEmulationSchema,
+        exposureDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        exposureTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        outcomeDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        outcomeTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        nestingCohortDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        nestingCohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        customCovariateDatabaseSchema = jobContext$moduleExecutionSettings$workDatabaseSchema,
+        customCovariateTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        outputFolder = jobContext$moduleExecutionSettings$workSubFolder,
+        sccsMultiThreadingSettings = sccsMultiThreadingSettings,
+        sccsAnalysesSpecifications = SelfControlledCaseSeries::convertUntypedListToSccsAnalysesSpecifications(jobContext$settings$sccsAnalysesSpecifications),
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId |> as.character()
+      )
       do.call(SelfControlledCaseSeries::runSccsAnalyses, args)
 
       exportFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
