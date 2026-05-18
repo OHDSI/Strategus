@@ -274,7 +274,7 @@ PheValuatorModule <- R6::R6Class(
         pheValuatorAnalysisList = pheValuatorAnalysisList
       )
 
-      # Copy CSV results to results folder
+      # Copy CSV results to results folder, appending to existing files
       exportFolder <- file.path(phenotypeOutputFolder, "exportFolder")
       if (dir.exists(exportFolder)) {
         csvFiles <- list.files(exportFolder, pattern = "\\.csv$", full.names = TRUE)
@@ -283,7 +283,31 @@ PheValuatorModule <- R6::R6Class(
           if (!startsWith(targetFileName, self$tablePrefix)) {
             targetFileName <- paste0(self$tablePrefix, targetFileName)
           }
-          file.copy(csvFile, file.path(resultsFolder, targetFileName), overwrite = TRUE)
+          
+          targetFilePath <- file.path(resultsFolder, targetFileName)
+          newData <- CohortGenerator::readCsv(
+            file = csvFile,
+            warnOnCaseMismatch = FALSE
+          )
+          
+          # If the file already exists, append to it; otherwise create it
+          if (file.exists(targetFilePath)) {
+            existingData <- CohortGenerator::readCsv(
+              file = targetFilePath,
+              warnOnCaseMismatch = FALSE
+            )
+            combinedData <- dplyr::bind_rows(existingData, newData)
+          } else {
+            combinedData <- newData
+          }
+          
+          CohortGenerator::writeCsv(
+            x = combinedData,
+            file = targetFilePath,
+            warnOnCaseMismatch = FALSE,
+            warnOnFileNameCaseMismatch = FALSE,
+            warnOnUploadRuleViolations = FALSE
+          )
         }
       }
     }
