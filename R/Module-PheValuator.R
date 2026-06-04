@@ -171,10 +171,6 @@ PheValuatorModule <- R6::R6Class(
       for (a in moduleSpecifications$settings$pheValuatorAnalysisList) {
         checkmate::assertString(a$phenotype, min.chars = 1)
         checkmate::assertList(a$cohortsToEvaluate)
-        checkmate::assertChoice(
-          a$cohortsToEvaluate$covariateSettingsType %||% "chronic",
-          choices = c("chronic", "acute")
-        )
       }
     }
   ),
@@ -196,31 +192,19 @@ PheValuatorModule <- R6::R6Class(
       cts <- analysisSpec$cohortsToEvaluate
       phenotype <- analysisSpec$phenotype
 
-      # Resolve covariate settings from covariateSettingsType
-      covariateSettingsType <- cts$covariateSettingsType %||% "chronic"
-      covariateSettings <- if (covariateSettingsType == "acute") {
-        PheValuator::createDefaultCovariateSettings(
-          excludedCovariateConceptIds = cts$excludedCovariateConceptIds %||% c(),
-          addDescendantsToExclude    = TRUE,
-          startDayWindow1 = 0,  
-          endDayWindow1 = 10,
-          startDayWindow2 = 11, 
-          endDayWindow2 = 20,
-          startDayWindow3 = 21, 
-          endDayWindow3 = 30
-        )
-      } else {
-        PheValuator::createDefaultCovariateSettings(
-          excludedCovariateConceptIds = cts$excludedCovariateConceptIds %||% c(),
-          addDescendantsToExclude    = TRUE,
-          startDayWindow1 = 0,   
-          endDayWindow1 = 30,
-          startDayWindow2 = 31,  
-          endDayWindow2 = 60,
-          startDayWindow3 = 61,  
-          endDayWindow3 = 365
-        )
+      if (length(cts$phenotypeCohortId) != length(cts$washoutPeriod)) {
+        stop("Length of phenotypeCohortId and washoutPeriod must be the same.")
       }
+
+      # Evaluate xSens and xSpec by default 
+      cts$phenotypeCohortId <-
+        c(cts$phenotypeCohortId,
+          cts$xSpecCohortId,
+          cts$xSensCohortId)
+      
+      analysisSpec$washoutPeriod <-
+        c(analsysisSpec$washoutPeriod, 0, 0)
+
 
       # Build one pheValuatorAnalysis per phenotypeCohortId
       phenotypeCohortIds <- as.integer(cts$phenotypeCohortId)
@@ -233,7 +217,7 @@ PheValuatorModule <- R6::R6Class(
             daysFromxSpec      = as.integer(cts$daysFromxSpec %||% 0),
             xSensCohortId      = as.integer(cts$xSensCohortId),
             prevalenceCohortId = as.integer(cts$prevalenceCohortId),
-            covariateSettings  = covariateSettings
+            covariateSettings  = cts$covariateSettings
           )
           testPhenotypeAlgorithmArgs <- PheValuator::createTestPhenotypeAlgorithmArgs(
             phenotypeCohortId = cohortId,
