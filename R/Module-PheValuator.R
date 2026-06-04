@@ -202,8 +202,8 @@ PheValuatorModule <- R6::R6Class(
           cts$xSpecCohortId,
           cts$xSensCohortId)
       
-      analysisSpec$washoutPeriod <-
-        c(analsysisSpec$washoutPeriod, 0, 0)
+      cts$washoutPeriod <-
+        c(cts$washoutPeriod, 0, 0)
 
 
       # Build one pheValuatorAnalysis per phenotypeCohortId
