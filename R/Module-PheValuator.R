@@ -39,9 +39,17 @@ PheValuatorModule <- R6::R6Class(
     #' @template connectionDetails
     #' @template analysisSpecifications
     #' @template executionSettings
-    execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+    execute = function(
+      connectionDetails,
+      analysisSpecifications,
+      executionSettings
+    ) {
       super$.validateCdmExecutionSettings(executionSettings)
-      super$execute(connectionDetails, analysisSpecifications, executionSettings)
+      super$execute(
+        connectionDetails,
+        analysisSpecifications,
+        executionSettings
+      )
 
       jobContext <- private$jobContext
       workFolder <- jobContext$moduleExecutionSettings$workSubFolder
@@ -84,9 +92,20 @@ PheValuatorModule <- R6::R6Class(
     #' @template resultsConnectionDetails
     #' @template resultsDatabaseSchema
     #' @template tablePrefix
-    createResultsDataModel = function(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix = self$tablePrefix) {
-      super$createResultsDataModel(resultsConnectionDetails, resultsDatabaseSchema, tablePrefix)
-      if (resultsConnectionDetails$dbms == "sqlite" & resultsDatabaseSchema != "main") {
+    createResultsDataModel = function(
+      resultsConnectionDetails,
+      resultsDatabaseSchema,
+      tablePrefix = self$tablePrefix
+    ) {
+      super$createResultsDataModel(
+        resultsConnectionDetails,
+        resultsDatabaseSchema,
+        tablePrefix
+      )
+      if (
+        resultsConnectionDetails$dbms == "sqlite" &
+          resultsDatabaseSchema != "main"
+      ) {
         stop("Invalid schema for sqlite, use databaseSchema = 'main'")
       }
 
@@ -94,9 +113,18 @@ PheValuatorModule <- R6::R6Class(
       on.exit(DatabaseConnector::disconnect(connection))
 
       # Create the results model
-      sql <- ResultModelManager::generateSqlSchema(schemaDefinition = self$getResultsDataModelSpecification())
-      sql <- SqlRender::render(sql = sql, warnOnMissingParameters = TRUE, database_schema = resultsDatabaseSchema)
-      sql <- SqlRender::translate(sql = sql, targetDialect = resultsConnectionDetails$dbms)
+      sql <- ResultModelManager::generateSqlSchema(
+        schemaDefinition = self$getResultsDataModelSpecification()
+      )
+      sql <- SqlRender::render(
+        sql = sql,
+        warnOnMissingParameters = TRUE,
+        database_schema = resultsDatabaseSchema
+      )
+      sql <- SqlRender::translate(
+        sql = sql,
+        targetDialect = resultsConnectionDetails$dbms
+      )
       DatabaseConnector::executeSql(connection, sql)
     },
 
@@ -107,7 +135,11 @@ PheValuatorModule <- R6::R6Class(
         file = private$.getResultsDataModelSpecificationFileLocation(),
         warnOnCaseMismatch = FALSE
       )
-      resultsDataModelSpecification$tableName <- paste0(tablePrefix, self$tablePrefix, resultsDataModelSpecification$tableName)
+      resultsDataModelSpecification$tableName <- paste0(
+        tablePrefix,
+        self$tablePrefix,
+        resultsDataModelSpecification$tableName
+      )
       return(resultsDataModelSpecification)
     },
 
@@ -115,8 +147,16 @@ PheValuatorModule <- R6::R6Class(
     #' @template resultsConnectionDetails
     #' @template analysisSpecifications
     #' @template resultsDataModelSettings
-    uploadResults = function(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings) {
-      super$uploadResults(resultsConnectionDetails, analysisSpecifications, resultsDataModelSettings)
+    uploadResults = function(
+      resultsConnectionDetails,
+      analysisSpecifications,
+      resultsDataModelSettings
+    ) {
+      super$uploadResults(
+        resultsConnectionDetails,
+        analysisSpecifications,
+        resultsDataModelSettings
+      )
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
       resultsModelSpec <- self$getResultsDataModelSpecification()
 
@@ -167,7 +207,10 @@ PheValuatorModule <- R6::R6Class(
       super$validateModuleSpecifications(
         moduleSpecifications = moduleSpecifications
       )
-      checkmate::assertList(moduleSpecifications$settings$pheValuatorAnalysisList, min.len = 1)
+      checkmate::assertList(
+        moduleSpecifications$settings$pheValuatorAnalysisList,
+        min.len = 1
+      )
       for (a in moduleSpecifications$settings$pheValuatorAnalysisList) {
         checkmate::assertString(a$phenotype, min.chars = 1)
         checkmate::assertList(a$cohortsToEvaluate)
@@ -183,12 +226,14 @@ PheValuatorModule <- R6::R6Class(
     },
 
     # Execute a single analysis spec entry
-    .executeAnalysis = function(analysisSpec,
-                                connectionDetails,
-                                executionSettings,
-                                jobContext,
-                                outputFolder,
-                                resultsFolder) {
+    .executeAnalysis = function(
+      analysisSpec,
+      connectionDetails,
+      executionSettings,
+      jobContext,
+      outputFolder,
+      resultsFolder
+    ) {
       cts <- analysisSpec$cohortsToEvaluate
       phenotype <- analysisSpec$phenotype
 
@@ -196,37 +241,39 @@ PheValuatorModule <- R6::R6Class(
         stop("Length of phenotypeCohortId and washoutPeriod must be the same.")
       }
 
-      # Evaluate xSens and xSpec by default 
+      # Evaluate xSens and xSpec by default
       cts$phenotypeCohortId <-
-        c(cts$phenotypeCohortId,
-          cts$xSpecCohortId,
-          cts$xSensCohortId)
-      
+        c(cts$phenotypeCohortId, cts$xSpecCohortId, cts$xSensCohortId)
+
       cts$washoutPeriod <-
         c(cts$washoutPeriod, 0, 0)
 
-
       # Build one pheValuatorAnalysis per phenotypeCohortId
       phenotypeCohortIds <- as.integer(cts$phenotypeCohortId)
-      washoutPeriods <- rep_len(as.integer(cts$washoutPeriod), length(phenotypeCohortIds))
+      washoutPeriods <- rep_len(
+        as.integer(cts$washoutPeriod),
+        length(phenotypeCohortIds)
+      )
 
       pheValuatorAnalysisList <- mapply(
         function(cohortId, washout, idx) {
           createEvaluationCohortArgs <- PheValuator::createCreateEvaluationCohortArgs(
-            xSpecCohortId      = as.integer(cts$xSpecCohortId),
-            daysFromxSpec      = as.integer(cts$daysFromxSpec %||% 0),
-            xSensCohortId      = as.integer(cts$xSensCohortId),
+            xSpecCohortId = as.integer(cts$xSpecCohortId),
+            daysFromxSpec = as.integer(cts$daysFromxSpec %||% 0),
+            xSensCohortId = as.integer(cts$xSensCohortId),
             prevalenceCohortId = as.integer(cts$prevalenceCohortId),
-            covariateSettings  = cts$covariateSettings
+            covariateSettings = cts$covariateSettings,
+            lowerAgeLimit = as.integer(cts$lowerAgeLimit),
+            upperAgeLimit = as.integer(cts$upperAgeLimit)
           )
           testPhenotypeAlgorithmArgs <- PheValuator::createTestPhenotypeAlgorithmArgs(
             phenotypeCohortId = cohortId,
-            washoutPeriod     = washout,
-            cutPoints         = c("EV")
+            washoutPeriod = washout,
+            cutPoints = c("EV")
           )
           PheValuator::createPheValuatorAnalysis(
-            analysisId                 = idx,
-            description                = paste0(phenotype, "_cohort", cohortId),
+            analysisId = idx,
+            description = paste0(phenotype, "_cohort", cohortId),
             createEvaluationCohortArgs = createEvaluationCohortArgs,
             testPhenotypeAlgorithmArgs = testPhenotypeAlgorithmArgs
           )
@@ -244,36 +291,40 @@ PheValuatorModule <- R6::R6Class(
       }
 
       PheValuator::runPheValuatorAnalyses(
-        phenotype          = phenotype,
+        phenotype = phenotype,
         cohortDefinitionSet = data.frame(),
-        analysisName       = "Main",
-        connectionDetails  = connectionDetails,
+        analysisName = "Main",
+        connectionDetails = connectionDetails,
         tempEmulationSchema = executionSettings$tempEmulationSchema,
-        cdmDatabaseSchema  = executionSettings$cdmDatabaseSchema,
+        cdmDatabaseSchema = executionSettings$cdmDatabaseSchema,
         cohortDatabaseSchema = executionSettings$workDatabaseSchema,
-        cohortTable        = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         workDatabaseSchema = executionSettings$workDatabaseSchema,
-        databaseId         = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        outputFolder       = phenotypeOutputFolder,
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
+        outputFolder = phenotypeOutputFolder,
         pheValuatorAnalysisList = pheValuatorAnalysisList
       )
 
       # Copy CSV results to results folder, appending to existing files
       exportFolder <- file.path(phenotypeOutputFolder, "exportFolder")
       if (dir.exists(exportFolder)) {
-        csvFiles <- list.files(exportFolder, pattern = "\\.csv$", full.names = TRUE)
+        csvFiles <- list.files(
+          exportFolder,
+          pattern = "\\.csv$",
+          full.names = TRUE
+        )
         for (csvFile in csvFiles) {
           targetFileName <- basename(csvFile)
           if (!startsWith(targetFileName, self$tablePrefix)) {
             targetFileName <- paste0(self$tablePrefix, targetFileName)
           }
-          
+
           targetFilePath <- file.path(resultsFolder, targetFileName)
           newData <- CohortGenerator::readCsv(
             file = csvFile,
             warnOnCaseMismatch = FALSE
           )
-          
+
           # If the file already exists, append to it; otherwise create it
           if (file.exists(targetFilePath)) {
             existingData <- CohortGenerator::readCsv(
@@ -284,7 +335,7 @@ PheValuatorModule <- R6::R6Class(
           } else {
             combinedData <- newData
           }
-          
+
           CohortGenerator::writeCsv(
             x = combinedData,
             file = targetFilePath,
