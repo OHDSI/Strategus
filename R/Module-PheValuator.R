@@ -217,7 +217,9 @@ PheValuatorModule <- R6::R6Class(
             daysFromxSpec      = as.integer(cts$daysFromxSpec %||% 0),
             xSensCohortId      = as.integer(cts$xSensCohortId),
             prevalenceCohortId = as.integer(cts$prevalenceCohortId),
-            covariateSettings  = cts$covariateSettings
+            covariateSettings  = cts$covariateSettings,
+            lowerAgeLimit = as.integer(cts$lowerAgeLimit),
+            upperAgeLimit = as.integer(cts$upperAgeLimit)
           )
           testPhenotypeAlgorithmArgs <- PheValuator::createTestPhenotypeAlgorithmArgs(
             phenotypeCohortId = cohortId,
