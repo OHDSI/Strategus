@@ -149,10 +149,14 @@ PheValuatorModule <- R6::R6Class(
     #'       }
     #'     }
     #'   }
-    createModuleSpecifications = function(pheValuatorAnalysisList) {
+    createModuleSpecifications = function(analysisName = "Main", 
+                                          cohortDefinitionSet = data.frame(),
+                                          pheValuatorAnalysisList) {
       checkmate::assertList(pheValuatorAnalysisList, min.len = 1)
 
       analysis <- list(
+        analysisName = analysisName,
+        cohortDefinitionSet = cohortDefinitionSet,
         pheValuatorAnalysisList = pheValuatorAnalysisList
       )
 

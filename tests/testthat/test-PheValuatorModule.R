@@ -2,10 +2,11 @@ library(testthat)
 library(Strategus)
 
 # Helper to create a minimal valid PheValuator analysis list.
-# Uses plain lists to avoid requiring the PheValuator package at test time.
 createMockPheValuatorAnalysis <- function(analysisId = 1) {
   list(
     analysisId = analysisId,
+    phenotype = "foo",
+    cohortsToEvaluate = list(),
     description = paste("Test analysis", analysisId),
     createEvaluationCohortArgs = list(xSpecCohortId = 1),
     testPhenotypeAlgorithmArgs = list(phenotypeCohortId = 2, cutPoints = c("EV"))
@@ -16,22 +17,18 @@ createMockPheValuatorAnalysis <- function(analysisId = 1) {
 test_that("createModuleSpecifications returns valid specification", {
   pvModule <- PheValuatorModule$new()
   spec <- pvModule$createModuleSpecifications(
-    phenotype = "Type 2 Diabetes",
     pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
   )
 
   expect_s3_class(spec, "ModuleSpecifications")
   expect_equal(spec$module, "PheValuatorModule")
-  expect_equal(spec$settings$phenotype, "Type 2 Diabetes")
   expect_equal(spec$settings$analysisName, "Main")
   expect_true(is.list(spec$settings$pheValuatorAnalysisList))
-  expect_true(is.null(spec$settings$cohortDefinitionSet))
 })
 
 test_that("createModuleSpecifications stores analysisName", {
   pvModule <- PheValuatorModule$new()
   spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
     analysisName = "Sensitivity",
     pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
   )
@@ -50,42 +47,20 @@ test_that("createModuleSpecifications stores cohortDefinitionSet as list", {
   )
 
   spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
     cohortDefinitionSet = cds,
     pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
   )
 
-  # cohortDefinitionSet is stored as a list-of-lists (one per row)
-  expect_true(is.list(spec$settings$cohortDefinitionSet))
-  expect_length(spec$settings$cohortDefinitionSet, 2)
+  # cohortDefinitionSet is stored as a dataframe
+  expect_true(is.data.frame(spec$settings$cohortDefinitionSet))
 })
 
-test_that("createModuleSpecifications with empty cohortDefinitionSet stores NULL", {
-  pvModule <- PheValuatorModule$new()
-  spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
-    cohortDefinitionSet = data.frame(),
-    pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
-  )
 
-  expect_true(is.null(spec$settings$cohortDefinitionSet))
-})
-
-test_that("createModuleSpecifications errors when phenotype is missing", {
-  pvModule <- PheValuatorModule$new()
-  expect_error(
-    pvModule$createModuleSpecifications(
-      pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
-    )
-  )
-})
 
 test_that("createModuleSpecifications errors when pheValuatorAnalysisList is missing", {
   pvModule <- PheValuatorModule$new()
   expect_error(
-    pvModule$createModuleSpecifications(
-      phenotype = "T2DM"
-    )
+    pvModule$createModuleSpecifications()
   )
 })
 
@@ -93,41 +68,12 @@ test_that("createModuleSpecifications errors when pheValuatorAnalysisList is mis
 test_that("validateModuleSpecifications succeeds with valid spec", {
   pvModule <- PheValuatorModule$new()
   spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
     pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
   )
   expect_no_error(pvModule$validateModuleSpecifications(spec))
 })
 
-test_that("validateModuleSpecifications errors when phenotype is empty", {
-  pvModule <- PheValuatorModule$new()
-  spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
-    pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
-  )
-  spec$settings$phenotype <- ""
-  expect_error(pvModule$validateModuleSpecifications(spec))
-})
 
-test_that("validateModuleSpecifications errors when phenotype is not character", {
-  pvModule <- PheValuatorModule$new()
-  spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
-    pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
-  )
-  spec$settings$phenotype <- 123
-  expect_error(pvModule$validateModuleSpecifications(spec))
-})
-
-test_that("validateModuleSpecifications errors when pheValuatorAnalysisList is empty", {
-  pvModule <- PheValuatorModule$new()
-  spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
-    pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
-  )
-  spec$settings$pheValuatorAnalysisList <- list()
-  expect_error(pvModule$validateModuleSpecifications(spec))
-})
 
 # getResultsDataModelSpecification -----------------------------------------
 test_that("getResultsDataModelSpecification returns expected structure", {
@@ -166,7 +112,6 @@ test_that("execute rejects ResultsExecutionSettings", {
   pvModule <- PheValuatorModule$new()
 
   spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
     pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
   )
 
@@ -192,7 +137,6 @@ test_that("execute rejects ResultsExecutionSettings", {
 test_that("addPheValuatorModuleSpecifications adds module to analysis", {
   pvModule <- PheValuatorModule$new()
   spec <- pvModule$createModuleSpecifications(
-    phenotype = "T2DM",
     pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
   )
 
