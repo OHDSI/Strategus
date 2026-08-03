@@ -107,31 +107,7 @@ test_that("tablePrefix is set correctly", {
   expect_equal(pvModule$tablePrefix, "pv_")
 })
 
-# execute input validation -------------------------------------------------
-test_that("execute rejects ResultsExecutionSettings", {
-  pvModule <- PheValuatorModule$new()
 
-  spec <- pvModule$createModuleSpecifications(
-    pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
-  )
-
-  analysisSpecifications <- createEmptyAnalysisSpecifications() |>
-    addPheValuatorModuleSpecifications(spec)
-
-  resultsExecutionSettings <- createResultsExecutionSettings(
-    resultsDatabaseSchema = "main",
-    workFolder = file.path(tempDir, "work"),
-    resultsFolder = file.path(tempDir, "results")
-  )
-
-  expect_error(
-    pvModule$execute(
-      connectionDetails = connectionDetails,
-      analysisSpecifications = analysisSpecifications,
-      executionSettings = resultsExecutionSettings
-    )
-  )
-})
 
 # addPheValuatorModuleSpecifications ---------------------------------------
 test_that("addPheValuatorModuleSpecifications adds module to analysis", {

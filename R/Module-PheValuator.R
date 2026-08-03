@@ -131,6 +131,9 @@ PheValuatorModule <- R6::R6Class(
 
     #' @description Creates the PheValuator Module Specifications
     #'
+    #' @param analysisName A short name for the analysis (default: \code{"Main"}).
+    #' @param cohortDefinitionSet A data frame of cohort definitions
+    #'   (default: empty data frame).
     #' @param pheValuatorAnalysisList A list of analysis specification objects.
     #'   Each element is a list with two named fields:
     #'   \describe{
