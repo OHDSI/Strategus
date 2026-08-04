@@ -132,15 +132,55 @@ CharacterizationModule <- R6::R6Class(
     },
     #' @description Creates the CharacterizationModule Specifications
     #' @param characterizationSettings The settings defined using Characterization::createCharacterizationSettings
+    #' @param targetIds Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param limitToFirstInNDays Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param minPriorObservation Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param outcomeIds Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param outcomeWashoutDays Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param riskWindowStart Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param startAnchor Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param riskWindowEnd Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param endAnchor Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param dechallengeStopInterval Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param dechallengeEvaluationWindow Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param covariateSettings Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param caseCovariateSettings Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param casePreTargetDuration Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param casePostOutcomeDuration Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param includeTimeToEvent Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param includeDechallengeRechallenge Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param includeTargetBaseline Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param includeRiskFactors Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param includeCaseSeries Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
     #' @param mode Pick one of 'CohortIncidence'/'Efficient'/'PatientLevelPrediction' to specify how the non-cases are defined
     #' @param minSMD The minimum standardized mean difference for the risk factors analysis
     #' @param minCharacterizationMean The minimum fraction patients in the target have a covariate for it to be included
     #' @param minCovariateCount The minimum number of patients in the analysis to have a covariate for it to be included
-    #' @param minTargetSize The minimum number of people in a target to be included in target baseline, risk factor and case series
-    #' @param minCaseSize The minimum number of people as cases to be included in risk factor and case series
+    #' @param minTargetSize Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
+    #' @param minCaseSize Deprecated. Use Characterization v4 settings objects via `characterizationSettings`.
     #' @param outputTable The table used by characterization to create the cohorts used in characterization (included targets, cases, non-cases, etc.). The spec hash and database hash are added to this name to make it unique per run.
     createModuleSpecifications = function(
       characterizationSettings = NULL,
+      targetIds = NULL,
+      limitToFirstInNDays = NULL,
+      minPriorObservation = NULL,
+      outcomeIds = NULL,
+      outcomeWashoutDays = NULL,
+      riskWindowStart = NULL,
+      startAnchor = NULL,
+      riskWindowEnd = NULL,
+      endAnchor = NULL,
+      dechallengeStopInterval = NULL,
+      dechallengeEvaluationWindow = NULL,
+      covariateSettings = NULL,
+      caseCovariateSettings = NULL,
+      casePreTargetDuration = NULL,
+      casePostOutcomeDuration = NULL,
+      includeTimeToEvent = NULL,
+      includeDechallengeRechallenge = NULL,
+      includeTargetBaseline = NULL,
+      includeRiskFactors = NULL,
+      includeCaseSeries = NULL,
       mode = "CohortIncidence",
       minSMD = 0,
       minCharacterizationMean = 0,
@@ -150,7 +190,41 @@ CharacterizationModule <- R6::R6Class(
       outputTable = "characterization_cohorts"
       ) {
 
-      # TODO input checks
+      legacyArguments <- list(
+        targetIds = targetIds,
+        limitToFirstInNDays = limitToFirstInNDays,
+        minPriorObservation = minPriorObservation,
+        outcomeIds = outcomeIds,
+        outcomeWashoutDays = outcomeWashoutDays,
+        riskWindowStart = riskWindowStart,
+        startAnchor = startAnchor,
+        riskWindowEnd = riskWindowEnd,
+        endAnchor = endAnchor,
+        dechallengeStopInterval = dechallengeStopInterval,
+        dechallengeEvaluationWindow = dechallengeEvaluationWindow,
+        covariateSettings = covariateSettings,
+        caseCovariateSettings = caseCovariateSettings,
+        casePreTargetDuration = casePreTargetDuration,
+        casePostOutcomeDuration = casePostOutcomeDuration,
+        includeTimeToEvent = includeTimeToEvent,
+        includeDechallengeRechallenge = includeDechallengeRechallenge,
+        includeTargetBaseline = includeTargetBaseline,
+        includeRiskFactors = includeRiskFactors,
+        includeCaseSeries = includeCaseSeries
+      )
+
+      legacyArgumentsProvided <- names(legacyArguments)[!vapply(legacyArguments, is.null, logical(1))]
+      if (length(legacyArgumentsProvided) > 0) {
+        stop(paste0(
+          "Characterization v4 is required. The legacy Characterization v3 arguments are no longer supported: ",
+          paste(legacyArgumentsProvided, collapse = ", "),
+          ". Create `characterizationSettings` using Characterization v4 constructors and pass that object instead. Run ??Characterization::createCharacterizationSettings for more details"
+        ))
+      }
+
+      if (is.null(characterizationSettings)) {
+        stop("Characterization v4 is required. Create `characterizationSettings` using Characterization v4 constructors and pass that object instead.")
+      }
 
       specifications <- super$createModuleSpecifications(
         moduleSpecifications = list(

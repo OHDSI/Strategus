@@ -22,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Anthony Sena \email{sena@ohdsi.org} (\href{https://orcid.org/0000-0001-8630-5347}{ORCID})
   \item Martijn Schuemie \email{schuemie@ohdsi.org}
   \item Jamie Gilbert
 }

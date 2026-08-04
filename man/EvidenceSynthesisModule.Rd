@@ -9,290 +9,282 @@ across multiple data sites in a distributed study. This includes functions
 for performing meta-analysis and forest plots
 }
 \section{Super class}{
-\code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{EvidenceSynthesisModule}
+\code{\link[Strategus:StrategusModule]{StrategusModule}} -> \code{EvidenceSynthesisModule}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-EvidenceSynthesisModule-new}{\code{EvidenceSynthesisModule$new()}}
-\item \href{#method-EvidenceSynthesisModule-execute}{\code{EvidenceSynthesisModule$execute()}}
-\item \href{#method-EvidenceSynthesisModule-createResultsDataModel}{\code{EvidenceSynthesisModule$createResultsDataModel()}}
-\item \href{#method-EvidenceSynthesisModule-getResultsDataModelSpecification}{\code{EvidenceSynthesisModule$getResultsDataModelSpecification()}}
-\item \href{#method-EvidenceSynthesisModule-uploadResults}{\code{EvidenceSynthesisModule$uploadResults()}}
-\item \href{#method-EvidenceSynthesisModule-validateModuleSpecifications}{\code{EvidenceSynthesisModule$validateModuleSpecifications()}}
-\item \href{#method-EvidenceSynthesisModule-createEvidenceSynthesisSource}{\code{EvidenceSynthesisModule$createEvidenceSynthesisSource()}}
-\item \href{#method-EvidenceSynthesisModule-createRandomEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createRandomEffectsMetaAnalysis()}}
-\item \href{#method-EvidenceSynthesisModule-createFixedEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis()}}
-\item \href{#method-EvidenceSynthesisModule-createBayesianMetaAnalysis}{\code{EvidenceSynthesisModule$createBayesianMetaAnalysis()}}
-\item \href{#method-EvidenceSynthesisModule-createEsDiagnosticThresholds}{\code{EvidenceSynthesisModule$createEsDiagnosticThresholds()}}
-\item \href{#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}}
-\item \href{#method-EvidenceSynthesisModule-clone}{\code{EvidenceSynthesisModule$clone()}}
+  \itemize{
+    \item \href{#method-EvidenceSynthesisModule-initialize}{\code{EvidenceSynthesisModule$new()}}
+    \item \href{#method-EvidenceSynthesisModule-execute}{\code{EvidenceSynthesisModule$execute()}}
+    \item \href{#method-EvidenceSynthesisModule-createResultsDataModel}{\code{EvidenceSynthesisModule$createResultsDataModel()}}
+    \item \href{#method-EvidenceSynthesisModule-getResultsDataModelSpecification}{\code{EvidenceSynthesisModule$getResultsDataModelSpecification()}}
+    \item \href{#method-EvidenceSynthesisModule-uploadResults}{\code{EvidenceSynthesisModule$uploadResults()}}
+    \item \href{#method-EvidenceSynthesisModule-validateModuleSpecifications}{\code{EvidenceSynthesisModule$validateModuleSpecifications()}}
+    \item \href{#method-EvidenceSynthesisModule-createEvidenceSynthesisSource}{\code{EvidenceSynthesisModule$createEvidenceSynthesisSource()}}
+    \item \href{#method-EvidenceSynthesisModule-createRandomEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createRandomEffectsMetaAnalysis()}}
+    \item \href{#method-EvidenceSynthesisModule-createFixedEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis()}}
+    \item \href{#method-EvidenceSynthesisModule-createBayesianMetaAnalysis}{\code{EvidenceSynthesisModule$createBayesianMetaAnalysis()}}
+    \item \href{#method-EvidenceSynthesisModule-createEsDiagnosticThresholds}{\code{EvidenceSynthesisModule$createEsDiagnosticThresholds()}}
+    \item \href{#method-EvidenceSynthesisModule-createModuleSpecifications}{\code{EvidenceSynthesisModule$createModuleSpecifications()}}
+    \item \href{#method-EvidenceSynthesisModule-clone}{\code{EvidenceSynthesisModule$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-EvidenceSynthesisModule-new"></a>}}
-\if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-EvidenceSynthesisModule-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-initialize}{}}}
+\subsection{\code{EvidenceSynthesisModule$new()}}{
+  Initialize the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$new()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-execute}{}}}
-\subsection{Method \code{execute()}}{
-Executes the EvidenceSynthesis package
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$execute(
+\subsection{\code{EvidenceSynthesisModule$execute()}}{
+  Executes the EvidenceSynthesis package
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$execute(
   connectionDetails,
   analysisSpecifications,
   executionSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+      \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-createResultsDataModel"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createResultsDataModel}{}}}
-\subsection{Method \code{createResultsDataModel()}}{
-Create the results data model for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createResultsDataModel(
+\subsection{\code{EvidenceSynthesisModule$createResultsDataModel()}}{
+  Create the results data model for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsDatabaseSchema,
   tablePrefix = ""
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-getResultsDataModelSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-getResultsDataModelSpecification}{}}}
-\subsection{Method \code{getResultsDataModelSpecification()}}{
-Get the results data model specification for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+\subsection{\code{EvidenceSynthesisModule$getResultsDataModelSpecification()}}{
+  Get the results data model specification for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$getResultsDataModelSpecification(tablePrefix = "")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-uploadResults"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-uploadResults}{}}}
-\subsection{Method \code{uploadResults()}}{
-Upload the results for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$uploadResults(
+\subsection{\code{EvidenceSynthesisModule$uploadResults()}}{
+  Upload the results for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
   resultsDataModelSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
 
-\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-validateModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-validateModuleSpecifications}{}}}
-\subsection{Method \code{validateModuleSpecifications()}}{
-Validate the module specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$validateModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+\subsection{\code{EvidenceSynthesisModule$validateModuleSpecifications()}}{
+  Validate the module specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$validateModuleSpecifications(moduleSpecifications)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{moduleSpecifications}}{The EvidenceSynthesis module specifications
+Create an evidence synthesis source}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{moduleSpecifications}}{The EvidenceSynthesis module specifications
-Create an evidence synthesis source}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-createEvidenceSynthesisSource"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createEvidenceSynthesisSource}{}}}
-\subsection{Method \code{createEvidenceSynthesisSource()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createEvidenceSynthesisSource(
+\subsection{\code{EvidenceSynthesisModule$createEvidenceSynthesisSource()}}{
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$createEvidenceSynthesisSource(
   sourceMethod = "CohortMethod",
   databaseIds = NULL,
   analysisIds = NULL,
   likelihoodApproximation = "grid with gradients"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{sourceMethod}}{The source method generating the estimates to synthesize. Can be "CohortMethod" or
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{sourceMethod}}{The source method generating the estimates to synthesize. Can be "CohortMethod" or
 "SelfControlledCaseSeries"}
-
-\item{\code{databaseIds}}{The database  IDs to include. Use \code{databaseIds = NULL} to include all database IDs.}
-
-\item{\code{analysisIds}}{The source method analysis IDs to include. Use \code{analysisIds = NULL} to include all
+      \item{\code{databaseIds}}{The database  IDs to include. Use \code{databaseIds = NULL} to include all database IDs.}
+      \item{\code{analysisIds}}{The source method analysis IDs to include. Use \code{analysisIds = NULL} to include all
 analysis IDs.}
-
-\item{\code{likelihoodApproximation}}{The type of likelihood approximation. Can be "adaptive grid", "normal", or "grid
+      \item{\code{likelihoodApproximation}}{The type of likelihood approximation. Can be "adaptive grid", "normal", or "grid
 with gradients".}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-An object of type \code{EvidenceSynthesisSource}.
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    An object of type \code{EvidenceSynthesisSource}.
 Create parameters for a random-effects meta-analysis
+  }
 }
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-createRandomEffectsMetaAnalysis"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createRandomEffectsMetaAnalysis}{}}}
-\subsection{Method \code{createRandomEffectsMetaAnalysis()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createRandomEffectsMetaAnalysis(
+\subsection{\code{EvidenceSynthesisModule$createRandomEffectsMetaAnalysis()}}{
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$createRandomEffectsMetaAnalysis(
   alpha = 0.05,
   evidenceSynthesisAnalysisId = 1,
   evidenceSynthesisDescription = "Random-effects",
   evidenceSynthesisSource = NULL,
   controlType = "outcome"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{alpha}}{The alpha (expected type I error) used for the confidence intervals.}
-
-\item{\code{evidenceSynthesisAnalysisId}}{description}
-
-\item{\code{evidenceSynthesisDescription}}{description}
-
-\item{\code{evidenceSynthesisSource}}{description}
-
-\item{\code{controlType}}{description
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{alpha}}{The alpha (expected type I error) used for the confidence intervals.}
+      \item{\code{evidenceSynthesisAnalysisId}}{description}
+      \item{\code{evidenceSynthesisDescription}}{description}
+      \item{\code{evidenceSynthesisSource}}{description}
+      \item{\code{controlType}}{description
 Create a parameter object for the function computeFixedEffectMetaAnalysis}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Use DerSimonian-Laird meta-analysis
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    Use DerSimonian-Laird meta-analysis
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-createFixedEffectsMetaAnalysis"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createFixedEffectsMetaAnalysis}{}}}
-\subsection{Method \code{createFixedEffectsMetaAnalysis()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis(
+\subsection{\code{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis()}}{
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis(
   alpha = 0.05,
   evidenceSynthesisAnalysisId = 1,
   evidenceSynthesisDescription = "Fixed-effects",
   evidenceSynthesisSource = NULL,
   controlType = "outcome"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{alpha}}{The alpha (expected type I error) used for the confidence intervals.}
-
-\item{\code{evidenceSynthesisAnalysisId}}{description}
-
-\item{\code{evidenceSynthesisDescription}}{description}
-
-\item{\code{evidenceSynthesisSource}}{description}
-
-\item{\code{controlType}}{description
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{alpha}}{The alpha (expected type I error) used for the confidence intervals.}
+      \item{\code{evidenceSynthesisAnalysisId}}{description}
+      \item{\code{evidenceSynthesisDescription}}{description}
+      \item{\code{evidenceSynthesisSource}}{description}
+      \item{\code{controlType}}{description
 Create a parameter object for the function computeBayesianMetaAnalysis}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Create an object defining the parameter values.
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    Create an object defining the parameter values.
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-createBayesianMetaAnalysis"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createBayesianMetaAnalysis}{}}}
-\subsection{Method \code{createBayesianMetaAnalysis()}}{
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createBayesianMetaAnalysis(
+\subsection{\code{EvidenceSynthesisModule$createBayesianMetaAnalysis()}}{
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$createBayesianMetaAnalysis(
   chainLength = 1100000,
   burnIn = 1e+05,
   subSampleFrequency = 100,
@@ -305,132 +297,121 @@ Create an object defining the parameter values.
   evidenceSynthesisDescription = "Bayesian random-effects",
   evidenceSynthesisSource = NULL,
   controlType = "outcome"
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{chainLength}}{Number of MCMC iterations.}
-
-\item{\code{burnIn}}{Number of MCMC iterations to consider as burn in.}
-
-\item{\code{subSampleFrequency}}{Subsample frequency for the MCMC.}
-
-\item{\code{priorSd}}{A two-dimensional vector with the standard deviation of the prior for mu and tau, respectively.}
-
-\item{\code{alpha}}{The alpha (expected type I error) used for the credible intervals.}
-
-\item{\code{robust}}{Whether or not to use a t-distribution model; default: FALSE.}
-
-\item{\code{df}}{Degrees of freedom for the t-model, only used if robust is TRUE.}
-
-\item{\code{seed}}{The seed for the random number generator.}
-
-\item{\code{evidenceSynthesisAnalysisId}}{description}
-
-\item{\code{evidenceSynthesisDescription}}{description}
-
-\item{\code{evidenceSynthesisSource}}{description}
-
-\item{\code{controlType}}{description
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{chainLength}}{Number of MCMC iterations.}
+      \item{\code{burnIn}}{Number of MCMC iterations to consider as burn in.}
+      \item{\code{subSampleFrequency}}{Subsample frequency for the MCMC.}
+      \item{\code{priorSd}}{A two-dimensional vector with the standard deviation of the prior for mu and tau, respectively.}
+      \item{\code{alpha}}{The alpha (expected type I error) used for the credible intervals.}
+      \item{\code{robust}}{Whether or not to use a t-distribution model; default: FALSE.}
+      \item{\code{df}}{Degrees of freedom for the t-model, only used if robust is TRUE.}
+      \item{\code{seed}}{The seed for the random number generator.}
+      \item{\code{evidenceSynthesisAnalysisId}}{description}
+      \item{\code{evidenceSynthesisDescription}}{description}
+      \item{\code{evidenceSynthesisSource}}{description}
+      \item{\code{controlType}}{description
 Create EvidenceSynthesis diagnostics thresholds}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Details}{
-Create an object defining the parameter values.
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Details}{
+    Create an object defining the parameter values.
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-createEsDiagnosticThresholds"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createEsDiagnosticThresholds}{}}}
-\subsection{Method \code{createEsDiagnosticThresholds()}}{
-Threshold used to determine if we pass or fail diagnostics.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createEsDiagnosticThresholds(
+\subsection{\code{EvidenceSynthesisModule$createEsDiagnosticThresholds()}}{
+  Threshold used to determine if we pass or fail diagnostics.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$createEsDiagnosticThresholds(
   mdrrThreshold = 10,
   easeThreshold = 0.25,
   i2Threshold = 0.4,
   tauThreshold = log(2),
   sdmThreshold = NULL,
   sdmAlpha = NULL
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{mdrrThreshold}}{What is the maximum allowed minimum detectable relative risk
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{mdrrThreshold}}{What is the maximum allowed minimum detectable relative risk
 (MDRR)?}
-
-\item{\code{easeThreshold}}{What is the maximum allowed expected absolute systematic error
+      \item{\code{easeThreshold}}{What is the maximum allowed expected absolute systematic error
 (EASE).}
-
-\item{\code{i2Threshold}}{What is the maximum allowed I^2 (measure of between-database
+      \item{\code{i2Threshold}}{What is the maximum allowed I^2 (measure of between-database
 heterogeneity in random-effects models)?}
-
-\item{\code{tauThreshold}}{What is the maximum allowed tau (measure of between-database
+      \item{\code{tauThreshold}}{What is the maximum allowed tau (measure of between-database
 heterogeneity in Bayesian random-effects models)?}
-
-\item{\code{sdmThreshold}}{What is the maximum allowed standardized difference of mean (SDM) in a meta-analysis
+      \item{\code{sdmThreshold}}{What is the maximum allowed standardized difference of mean (SDM) in a meta-analysis
 of balance statistics? If any covariate has a meta-analysis SDM exceeding this
 threshold, the diagnostic will fail. If set to NULL, this diagnostic will be
 ignored.}
-
-\item{\code{sdmAlpha}}{What is the alpha for testing whether the absolute SDM exceeds
+      \item{\code{sdmAlpha}}{What is the alpha for testing whether the absolute SDM exceeds
 \code{sdmThreshold}? If not provided, no significance testing will be
 performed and any absolute SDM greater than the threshold will be
 considered imbalance. Note that a Bonferroni adjustment will
 automatically be applied to adjust for the number of tests performed.}
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    An object of type \code{EsDiagnosticThresholds}.
+  }
 }
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-An object of type \code{EsDiagnosticThresholds}.
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-createModuleSpecifications}{}}}
-\subsection{Method \code{createModuleSpecifications()}}{
-Creates the module Specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$createModuleSpecifications(
+\subsection{\code{EvidenceSynthesisModule$createModuleSpecifications()}}{
+  Creates the module Specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$createModuleSpecifications(
   evidenceSynthesisAnalysisList,
   esDiagnosticThresholds = self$createEsDiagnosticThresholds()
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{evidenceSynthesisAnalysisList}}{A list of objects of type \code{EvidenceSynthesisAnalysis} as generated
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{evidenceSynthesisAnalysisList}}{A list of objects of type \code{EvidenceSynthesisAnalysis} as generated
 by either the \href{../../Strategus/html/EvidenceSynthesisModule.html#method-createFixedEffectsMetaAnalysis}{\code{EvidenceSynthesisModule$createFixedEffectsMetaAnalysis()}}
 or \href{../../Strategus/html/EvidenceSynthesisModule.html#method-createBayesianMetaAnalysis}{\code{EvidenceSynthesisModule$createBayesianMetaAnalysis()}} function.}
-
-\item{\code{esDiagnosticThresholds}}{An object of type\code{EsDiagnosticThresholds} as generated by the
+      \item{\code{esDiagnosticThresholds}}{An object of type\code{EsDiagnosticThresholds} as generated by the
 \href{../../Strategus/html/EvidenceSynthesisModule.html#method-createEsDiagnosticThresholds}{\code{EvidenceSynthesisModule$createEsDiagnosticThresholds()}} function.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-EvidenceSynthesisModule-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-EvidenceSynthesisModule-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{EvidenceSynthesisModule$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{EvidenceSynthesisModule$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{EvidenceSynthesisModule$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }
