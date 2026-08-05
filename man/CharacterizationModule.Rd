@@ -8,287 +8,252 @@ Computes cohort characterization information against
 the OMOP Common Data Model
 }
 \section{Super class}{
-\code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CharacterizationModule}
+\code{\link[Strategus:StrategusModule]{StrategusModule}} -> \code{CharacterizationModule}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{tablePrefix}}{The table prefix to append to the results tables}
-}
-\if{html}{\out{</div>}}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{tablePrefix}}{The table prefix to append to the results tables}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-CharacterizationModule-new}{\code{CharacterizationModule$new()}}
-\item \href{#method-CharacterizationModule-execute}{\code{CharacterizationModule$execute()}}
-\item \href{#method-CharacterizationModule-createResultsDataModel}{\code{CharacterizationModule$createResultsDataModel()}}
-\item \href{#method-CharacterizationModule-getResultsDataModelSpecification}{\code{CharacterizationModule$getResultsDataModelSpecification()}}
-\item \href{#method-CharacterizationModule-uploadResults}{\code{CharacterizationModule$uploadResults()}}
-\item \href{#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}}
-\item \href{#method-CharacterizationModule-clone}{\code{CharacterizationModule$clone()}}
+  \itemize{
+    \item \href{#method-CharacterizationModule-initialize}{\code{CharacterizationModule$new()}}
+    \item \href{#method-CharacterizationModule-execute}{\code{CharacterizationModule$execute()}}
+    \item \href{#method-CharacterizationModule-createResultsDataModel}{\code{CharacterizationModule$createResultsDataModel()}}
+    \item \href{#method-CharacterizationModule-getResultsDataModelSpecification}{\code{CharacterizationModule$getResultsDataModelSpecification()}}
+    \item \href{#method-CharacterizationModule-uploadResults}{\code{CharacterizationModule$uploadResults()}}
+    \item \href{#method-CharacterizationModule-createModuleSpecifications}{\code{CharacterizationModule$createModuleSpecifications()}}
+    \item \href{#method-CharacterizationModule-clone}{\code{CharacterizationModule$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateModuleSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateModuleSpecifications'><code>Strategus::StrategusModule$validateModuleSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateModuleSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateModuleSpecifications'><code>StrategusModule$validateModuleSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CharacterizationModule-new"></a>}}
-\if{latex}{\out{\hypertarget{method-CharacterizationModule-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-CharacterizationModule-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-CharacterizationModule-initialize}{}}}
+\subsection{\code{CharacterizationModule$new()}}{
+  Initialize the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CharacterizationModule$new()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CharacterizationModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-CharacterizationModule-execute}{}}}
-\subsection{Method \code{execute()}}{
-Execute characterization
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$execute(
+\subsection{\code{CharacterizationModule$execute()}}{
+  Execute characterization
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CharacterizationModule$execute(
   connectionDetails,
   analysisSpecifications,
   executionSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+      \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CharacterizationModule-createResultsDataModel"></a>}}
 \if{latex}{\out{\hypertarget{method-CharacterizationModule-createResultsDataModel}{}}}
-\subsection{Method \code{createResultsDataModel()}}{
-Create the results data model for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createResultsDataModel(
+\subsection{\code{CharacterizationModule$createResultsDataModel()}}{
+  Create the results data model for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CharacterizationModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsDatabaseSchema,
   tablePrefix = self$tablePrefix
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CharacterizationModule-getResultsDataModelSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-CharacterizationModule-getResultsDataModelSpecification}{}}}
-\subsection{Method \code{getResultsDataModelSpecification()}}{
-Get the results data model specification for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+\subsection{\code{CharacterizationModule$getResultsDataModelSpecification()}}{
+  Get the results data model specification for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CharacterizationModule$getResultsDataModelSpecification(tablePrefix = "")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CharacterizationModule-uploadResults"></a>}}
 \if{latex}{\out{\hypertarget{method-CharacterizationModule-uploadResults}{}}}
-\subsection{Method \code{uploadResults()}}{
-Upload the results for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$uploadResults(
+\subsection{\code{CharacterizationModule$uploadResults()}}{
+  Upload the results for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CharacterizationModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
   resultsDataModelSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
 
-\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CharacterizationModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-CharacterizationModule-createModuleSpecifications}{}}}
-\subsection{Method \code{createModuleSpecifications()}}{
-Creates the CharacterizationModule Specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$createModuleSpecifications(
-  targetIds,
-  limitToFirstInNDays = rep(99999, length(targetIds)),
-  minPriorObservation = 365,
-  outcomeIds,
-  outcomeWashoutDays = c(365),
-  riskWindowStart = c(1, 1),
-  startAnchor = c("cohort start", "cohort start"),
-  riskWindowEnd = c(0, 365),
-  endAnchor = c("cohort end", "cohort end"),
-  dechallengeStopInterval = 30,
-  dechallengeEvaluationWindow = 30,
+\subsection{\code{CharacterizationModule$createModuleSpecifications()}}{
+  Creates the CharacterizationModule Specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CharacterizationModule$createModuleSpecifications(
+  characterizationSettings = NULL,
+  targetIds = NULL,
+  limitToFirstInNDays = NULL,
+  minPriorObservation = NULL,
+  outcomeIds = NULL,
+  outcomeWashoutDays = NULL,
+  riskWindowStart = NULL,
+  startAnchor = NULL,
+  riskWindowEnd = NULL,
+  endAnchor = NULL,
+  dechallengeStopInterval = NULL,
+  dechallengeEvaluationWindow = NULL,
+  covariateSettings = NULL,
+  caseCovariateSettings = NULL,
+  casePreTargetDuration = NULL,
+  casePostOutcomeDuration = NULL,
+  includeTimeToEvent = NULL,
+  includeDechallengeRechallenge = NULL,
+  includeTargetBaseline = NULL,
+  includeRiskFactors = NULL,
+  includeCaseSeries = NULL,
   mode = "CohortIncidence",
-  minSMD = 0.01,
-  minCharacterizationMean = 0.01,
-  minCovariateCount = 5,
-  covariateSettings = FeatureExtraction::createCovariateSettings(useDemographicsGender =
-    T, useDemographicsAge = T, useDemographicsAgeGroup = T, useDemographicsRace = T,
-    useDemographicsEthnicity = T, useDemographicsIndexYear = T, useDemographicsIndexMonth
-    = T, useDemographicsTimeInCohort = T, useDemographicsPriorObservationTime = T,
-    useDemographicsPostObservationTime = T, useConditionGroupEraLongTerm = T,
-    useDrugGroupEraOverlapping = T, useDrugGroupEraLongTerm = T,
-    useProcedureOccurrenceLongTerm = T, useMeasurementLongTerm = T, 
-    
-    useObservationLongTerm = T, useDeviceExposureLongTerm = T,
-    useVisitConceptCountLongTerm = T, useConditionGroupEraShortTerm = T,
-    useDrugGroupEraShortTerm = T, useProcedureOccurrenceShortTerm = T,
-    useMeasurementShortTerm = T, useObservationShortTerm = T, useDeviceExposureShortTerm
-    = T, useVisitConceptCountShortTerm = T, endDays = 0, longTermStartDays = -365,
-    shortTermStartDays = -30),
-  caseCovariateSettings =
-    Characterization::createDuringCovariateSettings(useConditionGroupEraDuring = T,
-    useDrugGroupEraDuring = T, useProcedureOccurrenceDuring = T, useDeviceExposureDuring
-    = T, useMeasurementDuring = T, useObservationDuring = T, useVisitConceptCountDuring =
-    T),
-  casePreTargetDuration = 365,
-  casePostOutcomeDuration = 365,
-  includeTimeToEvent = TRUE,
-  includeDechallengeRechallenge = TRUE,
-  includeTargetBaseline = TRUE,
-  includeRiskFactors = TRUE,
-  includeCaseSeries = TRUE,
+  minSMD = 0,
+  minCharacterizationMean = 0,
+  minCovariateCount = 0,
+  minTargetSize = 0,
+  minCaseSize = 0,
   outputTable = "characterization_cohorts"
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{characterizationSettings}}{The settings defined using Characterization::createCharacterizationSettings}
+      \item{\code{targetIds}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{limitToFirstInNDays}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{minPriorObservation}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{outcomeIds}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{outcomeWashoutDays}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{riskWindowStart}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{startAnchor}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{riskWindowEnd}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{endAnchor}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{dechallengeStopInterval}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{dechallengeEvaluationWindow}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{covariateSettings}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{caseCovariateSettings}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{casePreTargetDuration}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{casePostOutcomeDuration}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{includeTimeToEvent}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{includeDechallengeRechallenge}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{includeTargetBaseline}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{includeRiskFactors}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{includeCaseSeries}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{mode}}{Pick one of 'CohortIncidence'/'Efficient'/'PatientLevelPrediction' to specify how the non-cases are defined}
+      \item{\code{minSMD}}{The minimum standardized mean difference for the risk factors analysis}
+      \item{\code{minCharacterizationMean}}{The minimum fraction patients in the target have a covariate for it to be included}
+      \item{\code{minCovariateCount}}{The minimum number of patients in the analysis to have a covariate for it to be included}
+      \item{\code{minTargetSize}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{minCaseSize}}{Deprecated. Use Characterization v4 settings objects via \code{characterizationSettings}.}
+      \item{\code{outputTable}}{The table used by characterization to create the cohorts used in characterization (included targets, cases, non-cases, etc.). The spec hash and database hash are added to this name to make it unique per run.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{targetIds}}{A vector of cohort IDs to use as the target(s) for the characterization}
-
-\item{\code{limitToFirstInNDays}}{A vector of number of days of minimum between target exposures for each target (same length as the targetIds) - use 99999 to restrict to first exposure per person in target cohort}
-
-\item{\code{minPriorObservation}}{The number of days of minimum observation a patient in the target populations must have}
-
-\item{\code{outcomeIds}}{A vector of cohort IDs to use as the outcome(s) for the characterization}
-
-\item{\code{outcomeWashoutDays}}{A vector of integers specifying the washout days for each outcome (same length as the outcomeIds)}
-
-\item{\code{riskWindowStart}}{The number of days after start anchor to start the time-at-risk (can be a vector for multiple TARS)}
-
-\item{\code{startAnchor}}{The TAR starts relative to this either cohort start or cohort end (can be a vector for multiple TARS)}
-
-\item{\code{riskWindowEnd}}{The number of days after end anchor to end the time-at-risk (can be a vector for multiple TARS)}
-
-\item{\code{endAnchor}}{The TAR ends relative to this either cohort start or cohort end (can be a vector for multiple TARS)}
-
-\item{\code{dechallengeStopInterval}}{description}
-
-\item{\code{dechallengeEvaluationWindow}}{description}
-
-\item{\code{mode}}{Pick one of 'CohortIncidence'/'Efficient'/'PatientLevelPrediction' to specify how the non-cases are defined}
-
-\item{\code{minSMD}}{The minimum standardized mean difference for the risk factors analysis}
-
-\item{\code{minCharacterizationMean}}{The minimum fraction patients in the target have a covariate for it to be included}
-
-\item{\code{minCovariateCount}}{The minimum number of patients in the analysis to have a covariate for it to be included}
-
-\item{\code{covariateSettings}}{Covariates for the database, cohort and risk factor characterization}
-
-\item{\code{caseCovariateSettings}}{Covariates for the case-series characterization}
-
-\item{\code{casePreTargetDuration}}{The number of days before target start to use for case-series}
-
-\item{\code{casePostOutcomeDuration}}{The number of days after outcome start to use for case-series}
-
-\item{\code{includeTimeToEvent}}{Lets you skip running a time to event analyses when set to FALSE}
-
-\item{\code{includeDechallengeRechallenge}}{Lets you skip running a dechallenge-rechallenge analyses when set to FALSE}
-
-\item{\code{includeTargetBaseline}}{Lets you skip running the target baseline analyses when set to FALSE}
-
-\item{\code{includeRiskFactors}}{Lets you skip running the risk factor analyses when set to FALSE}
-
-\item{\code{includeCaseSeries}}{Lets you skip running the case series analyses when set to FALSE}
-
-\item{\code{outputTable}}{The table used by characterization to create the cohorts used in characterization (included targets, cases, non-cases, etc.). The spec hash and database hash are added to this name to make it unique per run.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CharacterizationModule-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-CharacterizationModule-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CharacterizationModule$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{CharacterizationModule$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CharacterizationModule$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

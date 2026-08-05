@@ -8,234 +8,231 @@ Module for performing Self-Controlled Case Series (SCCS) analyses
 against the OMOP Common Data Model.
 }
 \section{Super class}{
-\code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{SelfControlledCaseSeriesModule}
+\code{\link[Strategus:StrategusModule]{StrategusModule}} -> \code{SelfControlledCaseSeriesModule}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{tablePrefix}}{The table prefix for results tables}
-}
-\if{html}{\out{</div>}}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{tablePrefix}}{The table prefix for results tables}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-SelfControlledCaseSeriesModule-new}{\code{SelfControlledCaseSeriesModule$new()}}
-\item \href{#method-SelfControlledCaseSeriesModule-execute}{\code{SelfControlledCaseSeriesModule$execute()}}
-\item \href{#method-SelfControlledCaseSeriesModule-createResultsDataModel}{\code{SelfControlledCaseSeriesModule$createResultsDataModel()}}
-\item \href{#method-SelfControlledCaseSeriesModule-getResultsDataModelSpecification}{\code{SelfControlledCaseSeriesModule$getResultsDataModelSpecification()}}
-\item \href{#method-SelfControlledCaseSeriesModule-uploadResults}{\code{SelfControlledCaseSeriesModule$uploadResults()}}
-\item \href{#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}}
-\item \href{#method-SelfControlledCaseSeriesModule-validateModuleSpecifications}{\code{SelfControlledCaseSeriesModule$validateModuleSpecifications()}}
-\item \href{#method-SelfControlledCaseSeriesModule-clone}{\code{SelfControlledCaseSeriesModule$clone()}}
+  \itemize{
+    \item \href{#method-SelfControlledCaseSeriesModule-initialize}{\code{SelfControlledCaseSeriesModule$new()}}
+    \item \href{#method-SelfControlledCaseSeriesModule-execute}{\code{SelfControlledCaseSeriesModule$execute()}}
+    \item \href{#method-SelfControlledCaseSeriesModule-createResultsDataModel}{\code{SelfControlledCaseSeriesModule$createResultsDataModel()}}
+    \item \href{#method-SelfControlledCaseSeriesModule-getResultsDataModelSpecification}{\code{SelfControlledCaseSeriesModule$getResultsDataModelSpecification()}}
+    \item \href{#method-SelfControlledCaseSeriesModule-uploadResults}{\code{SelfControlledCaseSeriesModule$uploadResults()}}
+    \item \href{#method-SelfControlledCaseSeriesModule-createModuleSpecifications}{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}}
+    \item \href{#method-SelfControlledCaseSeriesModule-validateModuleSpecifications}{\code{SelfControlledCaseSeriesModule$validateModuleSpecifications()}}
+    \item \href{#method-SelfControlledCaseSeriesModule-clone}{\code{SelfControlledCaseSeriesModule$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-new"></a>}}
-\if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-initialize}{}}}
+\subsection{\code{SelfControlledCaseSeriesModule$new()}}{
+  Initialize the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$new()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-execute}{}}}
-\subsection{Method \code{execute()}}{
-Executes the SelfControlledCaseSeries package
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$execute(
+\subsection{\code{SelfControlledCaseSeriesModule$execute()}}{
+  Executes the SelfControlledCaseSeries package
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$execute(
   connectionDetails,
   analysisSpecifications,
   executionSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+      \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-createResultsDataModel"></a>}}
 \if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-createResultsDataModel}{}}}
-\subsection{Method \code{createResultsDataModel()}}{
-Create the results data model for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$createResultsDataModel(
+\subsection{\code{SelfControlledCaseSeriesModule$createResultsDataModel()}}{
+  Create the results data model for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsDatabaseSchema,
   tablePrefix = ""
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-getResultsDataModelSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-getResultsDataModelSpecification}{}}}
-\subsection{Method \code{getResultsDataModelSpecification()}}{
-Get the results data model specification for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$getResultsDataModelSpecification(
+\subsection{\code{SelfControlledCaseSeriesModule$getResultsDataModelSpecification()}}{
+  Get the results data model specification for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$getResultsDataModelSpecification(
   tablePrefix = ""
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-uploadResults"></a>}}
 \if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-uploadResults}{}}}
-\subsection{Method \code{uploadResults()}}{
-Upload the results for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$uploadResults(
+\subsection{\code{SelfControlledCaseSeriesModule$uploadResults()}}{
+  Upload the results for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
   resultsDataModelSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
 
-\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-createModuleSpecifications}{}}}
-\subsection{Method \code{createModuleSpecifications()}}{
-Creates the SelfControlledCaseSeries Module Specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$createModuleSpecifications(
+\subsection{\code{SelfControlledCaseSeriesModule$createModuleSpecifications()}}{
+  Creates the SelfControlledCaseSeries Module Specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$createModuleSpecifications(
   sccsAnalysesSpecifications,
   sccsAnalysisList = NULL,
   exposuresOutcomeList = NULL,
   analysesToExclude = NULL,
   combineDataFetchAcrossOutcomes = NULL,
   sccsDiagnosticThresholds = NULL
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{sccsAnalysesSpecifications}}{An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications}
+      \item{\code{sccsAnalysisList}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+      \item{\code{exposuresOutcomeList}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+      \item{\code{analysesToExclude}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+      \item{\code{combineDataFetchAcrossOutcomes}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+      \item{\code{sccsDiagnosticThresholds}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{sccsAnalysesSpecifications}}{An R6 class created by SelfControlledCaseSeries::createSccsAnalysesSpecifications}
-
-\item{\code{sccsAnalysisList}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
-
-\item{\code{exposuresOutcomeList}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
-
-\item{\code{analysesToExclude}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
-
-\item{\code{combineDataFetchAcrossOutcomes}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
-
-\item{\code{sccsDiagnosticThresholds}}{Deprecated with SelfControlledCaseSeries v6 - please use the \code{sccsAnalysesSpecifications} parameter instead.}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-validateModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-validateModuleSpecifications}{}}}
-\subsection{Method \code{validateModuleSpecifications()}}{
-Validate the module specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$validateModuleSpecifications(
+\subsection{\code{SelfControlledCaseSeriesModule$validateModuleSpecifications()}}{
+  Validate the module specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$validateModuleSpecifications(
   moduleSpecifications
-)}\if{html}{\out{</div>}}
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{moduleSpecifications}}{The SelfControlledCaseSeries module specifications}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{moduleSpecifications}}{The SelfControlledCaseSeries module specifications}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-SelfControlledCaseSeriesModule-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-SelfControlledCaseSeriesModule-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SelfControlledCaseSeriesModule$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{SelfControlledCaseSeriesModule$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{SelfControlledCaseSeriesModule$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

@@ -8,171 +8,168 @@ Development and evaluation of phenotype algorithms
 against the OMOP Common Data Model.
 }
 \section{Super class}{
-\code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{CohortDiagnosticsModule}
+\code{\link[Strategus:StrategusModule]{StrategusModule}} -> \code{CohortDiagnosticsModule}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{tablePrefix}}{The table prefix to append to results tables}
-}
-\if{html}{\out{</div>}}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{tablePrefix}}{The table prefix to append to results tables}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-CohortDiagnosticsModule-new}{\code{CohortDiagnosticsModule$new()}}
-\item \href{#method-CohortDiagnosticsModule-execute}{\code{CohortDiagnosticsModule$execute()}}
-\item \href{#method-CohortDiagnosticsModule-createResultsDataModel}{\code{CohortDiagnosticsModule$createResultsDataModel()}}
-\item \href{#method-CohortDiagnosticsModule-getResultsDataModelSpecification}{\code{CohortDiagnosticsModule$getResultsDataModelSpecification()}}
-\item \href{#method-CohortDiagnosticsModule-uploadResults}{\code{CohortDiagnosticsModule$uploadResults()}}
-\item \href{#method-CohortDiagnosticsModule-createModuleSpecifications}{\code{CohortDiagnosticsModule$createModuleSpecifications()}}
-\item \href{#method-CohortDiagnosticsModule-validateModuleSpecifications}{\code{CohortDiagnosticsModule$validateModuleSpecifications()}}
-\item \href{#method-CohortDiagnosticsModule-clone}{\code{CohortDiagnosticsModule$clone()}}
+  \itemize{
+    \item \href{#method-CohortDiagnosticsModule-initialize}{\code{CohortDiagnosticsModule$new()}}
+    \item \href{#method-CohortDiagnosticsModule-execute}{\code{CohortDiagnosticsModule$execute()}}
+    \item \href{#method-CohortDiagnosticsModule-createResultsDataModel}{\code{CohortDiagnosticsModule$createResultsDataModel()}}
+    \item \href{#method-CohortDiagnosticsModule-getResultsDataModelSpecification}{\code{CohortDiagnosticsModule$getResultsDataModelSpecification()}}
+    \item \href{#method-CohortDiagnosticsModule-uploadResults}{\code{CohortDiagnosticsModule$uploadResults()}}
+    \item \href{#method-CohortDiagnosticsModule-createModuleSpecifications}{\code{CohortDiagnosticsModule$createModuleSpecifications()}}
+    \item \href{#method-CohortDiagnosticsModule-validateModuleSpecifications}{\code{CohortDiagnosticsModule$validateModuleSpecifications()}}
+    \item \href{#method-CohortDiagnosticsModule-clone}{\code{CohortDiagnosticsModule$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-CohortDiagnosticsModule-new"></a>}}
-\if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-CohortDiagnosticsModule-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-initialize}{}}}
+\subsection{\code{CohortDiagnosticsModule$new()}}{
+  Initialize the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$new()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDiagnosticsModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-execute}{}}}
-\subsection{Method \code{execute()}}{
-Executes the CohortDiagnostics package
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$execute(
+\subsection{\code{CohortDiagnosticsModule$execute()}}{
+  Executes the CohortDiagnostics package
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$execute(
   connectionDetails,
   analysisSpecifications,
   executionSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+      \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDiagnosticsModule-createResultsDataModel"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-createResultsDataModel}{}}}
-\subsection{Method \code{createResultsDataModel()}}{
-Create the results data model for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$createResultsDataModel(
+\subsection{\code{CohortDiagnosticsModule$createResultsDataModel()}}{
+  Create the results data model for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsDatabaseSchema,
   tablePrefix = self$tablePrefix
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDiagnosticsModule-getResultsDataModelSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-getResultsDataModelSpecification}{}}}
-\subsection{Method \code{getResultsDataModelSpecification()}}{
-Get the results data model specification for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+\subsection{\code{CohortDiagnosticsModule$getResultsDataModelSpecification()}}{
+  Get the results data model specification for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$getResultsDataModelSpecification(tablePrefix = "")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDiagnosticsModule-uploadResults"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-uploadResults}{}}}
-\subsection{Method \code{uploadResults()}}{
-Upload the results for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$uploadResults(
+\subsection{\code{CohortDiagnosticsModule$uploadResults()}}{
+  Upload the results for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
   resultsDataModelSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
 
-\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDiagnosticsModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-createModuleSpecifications}{}}}
-\subsection{Method \code{createModuleSpecifications()}}{
-Creates the CohortDiagnostics Module Specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$createModuleSpecifications(
+\subsection{\code{CohortDiagnosticsModule$createModuleSpecifications()}}{
+  Creates the CohortDiagnostics Module Specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$createModuleSpecifications(
   cohortIds = NULL,
   runInclusionStatistics = TRUE,
   runIncludedSourceConcepts = TRUE,
@@ -186,81 +183,74 @@ Creates the CohortDiagnostics Module Specifications
   temporalCovariateSettings = private$.getDefaultCovariateSettings(),
   minCharacterizationMean = 0.01,
   irWashoutPeriod = 0
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{cohortIds}}{A list of cohort IDs to use when running the CohortDiagnostics.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{cohortIds}}{A list of cohort IDs to use when running the CohortDiagnostics.
 Default is NULL which will use all cohorts present in the cohort definition set
 in the analysis specification}
-
-\item{\code{runInclusionStatistics}}{Generate and export statistic on the cohort inclusion rules?}
-
-\item{\code{runIncludedSourceConcepts}}{Generate and export the source concepts included in the cohorts?}
-
-\item{\code{runOrphanConcepts}}{Generate and export potential orphan concepts?}
-
-\item{\code{runTimeSeries}}{Generate and export the time series diagnostics?}
-
-\item{\code{runVisitContext}}{Generate and export index-date visit context?}
-
-\item{\code{runBreakdownIndexEvents}}{Generate and export the breakdown of index events?}
-
-\item{\code{runIncidenceRate}}{Generate and export the cohort incidence  rates?}
-
-\item{\code{runCohortRelationship}}{Generate and export the cohort relationship? Cohort relationship checks the temporal
+      \item{\code{runInclusionStatistics}}{Generate and export statistic on the cohort inclusion rules?}
+      \item{\code{runIncludedSourceConcepts}}{Generate and export the source concepts included in the cohorts?}
+      \item{\code{runOrphanConcepts}}{Generate and export potential orphan concepts?}
+      \item{\code{runTimeSeries}}{Generate and export the time series diagnostics?}
+      \item{\code{runVisitContext}}{Generate and export index-date visit context?}
+      \item{\code{runBreakdownIndexEvents}}{Generate and export the breakdown of index events?}
+      \item{\code{runIncidenceRate}}{Generate and export the cohort incidence  rates?}
+      \item{\code{runCohortRelationship}}{Generate and export the cohort relationship? Cohort relationship checks the temporal
 relationship between two or more cohorts.}
-
-\item{\code{runTemporalCohortCharacterization}}{Generate and export the temporal cohort characterization?
+      \item{\code{runTemporalCohortCharacterization}}{Generate and export the temporal cohort characterization?
 Only records with values greater than 0.001 are returned.}
-
-\item{\code{temporalCovariateSettings}}{Either an object of type \code{covariateSettings} as created using one of
+      \item{\code{temporalCovariateSettings}}{Either an object of type \code{covariateSettings} as created using one of
 the createTemporalCovariateSettings function in the FeatureExtraction package, or a list
 of such objects.}
-
-\item{\code{minCharacterizationMean}}{The minimum mean value for characterization output. Values below this will be cut off from output. This
+      \item{\code{minCharacterizationMean}}{The minimum mean value for characterization output. Values below this will be cut off from output. This
 will help reduce the file size of the characterization output, but will remove information
 on covariates that have very low values. The default is 0.001 (i.e. 0.1 percent)}
+      \item{\code{irWashoutPeriod}}{Number of days washout to include in calculation of incidence rates - default is 0}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
 
-\item{\code{irWashoutPeriod}}{Number of days washout to include in calculation of incidence rates - default is 0}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDiagnosticsModule-validateModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-validateModuleSpecifications}{}}}
-\subsection{Method \code{validateModuleSpecifications()}}{
-Validate the module specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$validateModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+\subsection{\code{CohortDiagnosticsModule$validateModuleSpecifications()}}{
+  Validate the module specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$validateModuleSpecifications(moduleSpecifications)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{moduleSpecifications}}{The CohortIncidence module specifications}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{moduleSpecifications}}{The CohortIncidence module specifications}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-CohortDiagnosticsModule-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-CohortDiagnosticsModule-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{CohortDiagnosticsModule$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{CohortDiagnosticsModule$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{CohortDiagnosticsModule$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

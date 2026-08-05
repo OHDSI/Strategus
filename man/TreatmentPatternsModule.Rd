@@ -7,172 +7,169 @@
 Characterization and description of patterns of events (cohorts). against the OMOP Common Data Model.
 }
 \section{Super class}{
-\code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{TreatmentPatternsModule}
+\code{\link[Strategus:StrategusModule]{StrategusModule}} -> \code{TreatmentPatternsModule}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{tablePrefix}}{The table prefix to append to the results tables}
-}
-\if{html}{\out{</div>}}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{tablePrefix}}{The table prefix to append to the results tables}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-TreatmentPatternsModule-new}{\code{TreatmentPatternsModule$new()}}
-\item \href{#method-TreatmentPatternsModule-execute}{\code{TreatmentPatternsModule$execute()}}
-\item \href{#method-TreatmentPatternsModule-createResultsDataModel}{\code{TreatmentPatternsModule$createResultsDataModel()}}
-\item \href{#method-TreatmentPatternsModule-getResultsDataModelSpecification}{\code{TreatmentPatternsModule$getResultsDataModelSpecification()}}
-\item \href{#method-TreatmentPatternsModule-uploadResults}{\code{TreatmentPatternsModule$uploadResults()}}
-\item \href{#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}
-\item \href{#method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{\code{TreatmentPatternsModule$createMultiAnalysisModuleSpecification()}}
-\item \href{#method-TreatmentPatternsModule-validateModuleSpecifications}{\code{TreatmentPatternsModule$validateModuleSpecifications()}}
-\item \href{#method-TreatmentPatternsModule-clone}{\code{TreatmentPatternsModule$clone()}}
+  \itemize{
+    \item \href{#method-TreatmentPatternsModule-initialize}{\code{TreatmentPatternsModule$new()}}
+    \item \href{#method-TreatmentPatternsModule-execute}{\code{TreatmentPatternsModule$execute()}}
+    \item \href{#method-TreatmentPatternsModule-createResultsDataModel}{\code{TreatmentPatternsModule$createResultsDataModel()}}
+    \item \href{#method-TreatmentPatternsModule-getResultsDataModelSpecification}{\code{TreatmentPatternsModule$getResultsDataModelSpecification()}}
+    \item \href{#method-TreatmentPatternsModule-uploadResults}{\code{TreatmentPatternsModule$uploadResults()}}
+    \item \href{#method-TreatmentPatternsModule-createModuleSpecifications}{\code{TreatmentPatternsModule$createModuleSpecifications()}}
+    \item \href{#method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{\code{TreatmentPatternsModule$createMultiAnalysisModuleSpecification()}}
+    \item \href{#method-TreatmentPatternsModule-validateModuleSpecifications}{\code{TreatmentPatternsModule$validateModuleSpecifications()}}
+    \item \href{#method-TreatmentPatternsModule-clone}{\code{TreatmentPatternsModule$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-TreatmentPatternsModule-new"></a>}}
-\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-TreatmentPatternsModule-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-initialize}{}}}
+\subsection{\code{TreatmentPatternsModule$new()}}{
+  Initialize the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$new()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-execute}{}}}
-\subsection{Method \code{execute()}}{
-Execute Treatment Patterns
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$execute(
+\subsection{\code{TreatmentPatternsModule$execute()}}{
+  Execute Treatment Patterns
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$execute(
   connectionDetails,
   analysisSpecifications,
   executionSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+      \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-createResultsDataModel"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createResultsDataModel}{}}}
-\subsection{Method \code{createResultsDataModel()}}{
-Create the results data model for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createResultsDataModel(
+\subsection{\code{TreatmentPatternsModule$createResultsDataModel()}}{
+  Create the results data model for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsDatabaseSchema,
   tablePrefix = self$tablePrefix
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-getResultsDataModelSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-getResultsDataModelSpecification}{}}}
-\subsection{Method \code{getResultsDataModelSpecification()}}{
-Get the results data model specification for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+\subsection{\code{TreatmentPatternsModule$getResultsDataModelSpecification()}}{
+  Get the results data model specification for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$getResultsDataModelSpecification(tablePrefix = "")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-uploadResults"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-uploadResults}{}}}
-\subsection{Method \code{uploadResults()}}{
-Upload the results for TreatmentPatterns
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$uploadResults(
+\subsection{\code{TreatmentPatternsModule$uploadResults()}}{
+  Upload the results for TreatmentPatterns
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
   resultsDataModelSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
 
-\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createModuleSpecifications}{}}}
-\subsection{Method \code{createModuleSpecifications()}}{
-Creates the TreatmentPatternsnModule Specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createModuleSpecifications(
+\subsection{\code{TreatmentPatternsModule$createModuleSpecifications()}}{
+  Creates the TreatmentPatternsnModule Specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$createModuleSpecifications(
   analysisId = 1,
   cohorts,
   description = "",
@@ -196,154 +193,139 @@ Creates the TreatmentPatternsnModule Specifications
   endAnchor = "endDate",
   windowEnd = 0,
   stratify = FALSE
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{analysisId}}{(\code{numeric(1)})
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{analysisId}}{(\code{numeric(1)})
 Unique identifier for the TreatmentPatterns analysis}
-
-\item{\code{cohorts}}{(\code{data.frame()})\cr
+      \item{\code{cohorts}}{(\code{data.frame()})\cr
 Data frame containing the following columns and data types:
 \describe{
 \item{cohortId \code{numeric(1)}}{Cohort ID's of the cohorts to be used in the cohort table.}
 \item{cohortName \code{character(1)}}{Cohort names of the cohorts to be used in the cohort table.}
 \item{type \code{character(1)} ["target", "event', "exit"]}{Cohort type, describing if the cohort is a target, event, or exit cohort}
 }}
-
-\item{\code{description}}{(\code{character(1)})
+      \item{\code{description}}{(\code{character(1)})
 Description for analysis}
-
-\item{\code{includeTreatments}}{(\code{character(1)}: \code{"startDate"})\cr
+      \item{\code{includeTreatments}}{(\code{character(1)}: \code{"startDate"})\cr
 \code{DEPRECATED}
 \describe{
 \item{\code{"startDate"}}{Include treatments after the target cohort start date and onwards.}
 \item{\code{"endDate"}}{Include treatments before target cohort end date and before.}
 }}
-
-\item{\code{indexDateOffset}}{(\code{integer(1)}: \code{0})\cr
+      \item{\code{indexDateOffset}}{(\code{integer(1)}: \code{0})\cr
 \code{DEPRECATED}
 Offset the index date of the \code{Target} cohort.}
-
-\item{\code{minEraDuration}}{(\code{integer(1)}: \code{0})\cr
+      \item{\code{minEraDuration}}{(\code{integer(1)}: \code{0})\cr
 Minimum time an event era should last to be included in analysis}
-
-\item{\code{splitEventCohorts}}{(\code{character(n)}: \code{""})\cr
+      \item{\code{splitEventCohorts}}{(\code{character(n)}: \code{""})\cr
 Specify event cohort to split in acute (< X days) and therapy (>= X days)}
-
-\item{\code{splitTime}}{(\code{integer(1)}: \code{30})\cr
+      \item{\code{splitTime}}{(\code{integer(1)}: \code{30})\cr
 Specify number of days (X) at which each of the split event cohorts should
 be split in acute and therapy}
-
-\item{\code{eraCollapseSize}}{(\code{integer(1)}: \code{30})\cr
+      \item{\code{eraCollapseSize}}{(\code{integer(1)}: \code{30})\cr
 Window of time between which two eras of the same event cohort are collapsed
 into one era}
-
-\item{\code{combinationWindow}}{(\code{integer(1)}: \code{30})\cr
+      \item{\code{combinationWindow}}{(\code{integer(1)}: \code{30})\cr
 Window of time two event cohorts need to overlap to be considered a
 combination treatment}
-
-\item{\code{minPostCombinationDuration}}{(\code{integer(1)}: \code{30})\cr
+      \item{\code{minPostCombinationDuration}}{(\code{integer(1)}: \code{30})\cr
 Minimum time an event era before or after a generated combination treatment
 should last to be included in analysis}
-
-\item{\code{filterTreatments}}{(\code{character(1)}: \code{"First"} ["first", "Changes", "all"])\cr
+      \item{\code{filterTreatments}}{(\code{character(1)}: \code{"First"} ["first", "Changes", "all"])\cr
 Select first occurrence of (‘First’); changes between (‘Changes’); or all
 event cohorts (‘All’).}
-
-\item{\code{maxPathLength}}{(\code{integer(1)}: \code{5})\cr
+      \item{\code{maxPathLength}}{(\code{integer(1)}: \code{5})\cr
 Maximum number of steps included in treatment pathway}
-
-\item{\code{ageWindow}}{(\code{integer(n)}: \code{10})\cr
+      \item{\code{ageWindow}}{(\code{integer(n)}: \code{10})\cr
 Number of years to bin age groups into. It may also be a vector of integers.
 I.e. \code{c(0, 18, 150)} which will results in age group \code{0-18} which includes
 subjects \verb{< 19}. And age group \code{18-150} which includes subjects \verb{> 18}.}
-
-\item{\code{minCellCount}}{(\code{integer(1)}: \code{5})\cr
+      \item{\code{minCellCount}}{(\code{integer(1)}: \code{5})\cr
 Minimum count required per pathway. Censors data below \code{x} as \verb{<x}. This
 minimum value will carry over to the sankey diagram and sunburst plot.}
-
-\item{\code{censorType}}{(\code{character(1)})\cr
+      \item{\code{censorType}}{(\code{character(1)})\cr
 \describe{
 \item{\code{"minCellCount"}}{Censors pathways <\code{minCellCount} to \code{minCellCount}.}
 \item{\code{"remove"}}{Censors pathways <\code{minCellCount} by removing them completely.}
 \item{\code{"mean"}}{Censors pathways <\code{minCellCount} to the mean of all frequencies below \code{minCellCount}}
 }}
-
-\item{\code{overlapMethod}}{(\code{character(1)}: \code{"truncate"}) Method to decide how to deal
+      \item{\code{overlapMethod}}{(\code{character(1)}: \code{"truncate"}) Method to decide how to deal
 with overlap that is not significant enough for combination. \code{"keep"} will
 keep the dates as is. \code{"truncate"} truncates the first occurring event to
 the start date of the next event.}
-
-\item{\code{concatTargets}}{(\code{logical(1)}: \code{TRUE}) Should multiple target cohorts for the same person be concatenated or not?}
-
-\item{\code{startAnchor}}{(\code{character(1)}: \code{"startDate"}) Start date anchor. One of: \code{"startDate"}, \code{"endDate"}}
-
-\item{\code{windowStart}}{(\code{numeric(1)}: \code{0}) Offset for \code{startAnchor} in days.}
-
-\item{\code{endAnchor}}{(\code{character(1)}: \code{"endDate"}) End date anchor. One of: \code{"startDate"}, \code{"endDate"}}
-
-\item{\code{windowEnd}}{(\code{numeric(1)}: \code{0}) Offset for \code{endAnchor} in days.}
-
-\item{\code{stratify}}{(\code{logical(1)})\cr
+      \item{\code{concatTargets}}{(\code{logical(1)}: \code{TRUE}) Should multiple target cohorts for the same person be concatenated or not?}
+      \item{\code{startAnchor}}{(\code{character(1)}: \code{"startDate"}) Start date anchor. One of: \code{"startDate"}, \code{"endDate"}}
+      \item{\code{windowStart}}{(\code{numeric(1)}: \code{0}) Offset for \code{startAnchor} in days.}
+      \item{\code{endAnchor}}{(\code{character(1)}: \code{"endDate"}) End date anchor. One of: \code{"startDate"}, \code{"endDate"}}
+      \item{\code{windowEnd}}{(\code{numeric(1)}: \code{0}) Offset for \code{endAnchor} in days.}
+      \item{\code{stratify}}{(\code{logical(1)})\cr
 This will perform pairwise stratification between age, sex, and index year if set TRUE}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createMultiAnalysisModuleSpecification}{}}}
-\subsection{Method \code{createMultiAnalysisModuleSpecification()}}{
-Runs multiple analyses using a list of analysis specification objects (as produced by\code{createModuleSpecifications}) into a single module specification
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$createMultiAnalysisModuleSpecification(tpAnalysisList)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{tpAnalysisList}}{(\code{list()})\cr
+\subsection{\code{TreatmentPatternsModule$createMultiAnalysisModuleSpecification()}}{
+  Runs multiple analyses using a list of analysis specification objects (as produced by\code{createModuleSpecifications}) into a single module specification
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$createMultiAnalysisModuleSpecification(tpAnalysisList)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{tpAnalysisList}}{(\code{list()})\cr
 A list of analysis specification objects.
 Each element should be a list created by \code{createAnalysisSpecification}}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-validateModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-validateModuleSpecifications}{}}}
-\subsection{Method \code{validateModuleSpecifications()}}{
-Validate the module specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$validateModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+\subsection{\code{TreatmentPatternsModule$validateModuleSpecifications()}}{
+  Validate the module specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$validateModuleSpecifications(moduleSpecifications)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{moduleSpecifications}}{The treatment patterns module specifications}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{moduleSpecifications}}{The treatment patterns module specifications}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-TreatmentPatternsModule-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{TreatmentPatternsModule$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{TreatmentPatternsModule$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{TreatmentPatternsModule$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }
