@@ -190,13 +190,32 @@ cgModuleSpecifications <- cgModuleSettingsCreator$createModuleSpecifications()
 
 # Characterization -------------------------------
 cModuleSettingsCreator <- CharacterizationModule$new()
+studyPopulationSettings <- Characterization::createStudyPopulationSettings(
+  targetIds = c(1, 2, 1001, 2001)
+)
+characterizationSettings <- Characterization::createCharacterizationSettings(
+  timeToEventSettings = Characterization::createTimeToEventSettings(
+    studyPopulationSettings = studyPopulationSettings,
+    outcomeIds = c(3)
+  ),
+  dechallengeRechallengeSettings = Characterization::createDechallengeRechallengeSettings(
+    studyPopulationSettings = studyPopulationSettings,
+    outcomeIds = c(3)
+  ),
+  targetBaselineSettings = Characterization::createTargetBaselineSettings(
+    studyPopulationSettings = studyPopulationSettings
+  ),
+  caseSeriesSettings = Characterization::createCaseSeriesSettings(
+    studyPopulationSettings = studyPopulationSettings,
+    outcomeIds = c(3),
+    riskWindowStart = c(1),
+    startAnchor = c("cohort start"),
+    riskWindowEnd = c(365),
+    endAnchor = c("cohort end")
+  )
+)
 cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-  targetIds = c(1, 2, 1001, 2001),
-  outcomeIds = 3,
-  riskWindowStart = c(1),
-  startAnchor = c("cohort start"),
-  riskWindowEnd = c(365),
-  endAnchor = c("cohort end")
+  characterizationSettings = characterizationSettings
 )
 
 # Cohort Incidence -----------------

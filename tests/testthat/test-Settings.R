@@ -32,9 +32,16 @@ test_that("Test analysis specification creation", {
   # Test Module Settings ----------------------
   # Characterization -------------------------------
   cModuleSettingsCreator <- CharacterizationModule$new()
+  characterizationStudyPopulationSettings <- Characterization::createStudyPopulationSettings(
+    targetIds = c(1,2)
+  )
+  characterizationSettings <- Characterization::createCharacterizationSettings(
+    targetBaselineSettings = Characterization::createTargetBaselineSettings(
+      studyPopulationSettings = characterizationStudyPopulationSettings
+    )
+  )
   cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-    targetIds = c(1, 2),
-    outcomeIds = 3
+    characterizationSettings = characterizationSettings
   )
 
   # Cohort Diagnostics -----------------
@@ -65,8 +72,14 @@ test_that("Test analysis specification creation", {
   # Characterization -------------------------------
   cModuleSettingsCreator <- CharacterizationModule$new()
   cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-    targetIds = c(1, 2),
-    outcomeIds = 3
+    characterizationSettings = Characterization::createCharacterizationSettings(
+      timeToEventSettings = list(
+        Characterization::createTimeToEventSettings(
+          studyPopulationSettings = Characterization::createStudyPopulationSettings(targetIds = 1),
+          outcomeIds = 3
+        )
+      )
+    )
   )
 
   # Cohort Incidence -----------------
