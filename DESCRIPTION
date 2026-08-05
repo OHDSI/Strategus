@@ -39,7 +39,7 @@ Suggests:
   Characterization (>= 3.0.0),
   CirceR,
   CohortDiagnostics (>= 3.4.0),
-  CohortIncidence,
+  CohortIncidence (>= 4.2.0),
   CohortMethod (>= 6.0.0),
   Cyclops (>= 3.6.0),
   Eunomia,
