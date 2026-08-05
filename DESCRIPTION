@@ -1,7 +1,7 @@
 Package: Strategus
 Type: Package
 Title: Coordinate and Execute OHDSI HADES Modules
-Version: 1.5.0
+Version: 1.6.0
 Date: 2026-03-19
 Authors@R: c(
 	person("Anthony", "Sena", email = "sena@ohdsi.org", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8630-5347")),
@@ -36,10 +36,10 @@ Imports:
   rlang,
   SqlRender (>= 1.18.0)
 Suggests:
-  Characterization (>= 3.0.0),
+  Characterization (>= 4.0.0),
   CirceR,
   CohortDiagnostics (>= 3.4.0),
-  CohortIncidence,
+  CohortIncidence (>= 4.2.0),
   CohortMethod (>= 6.0.0),
   Cyclops (>= 3.6.0),
   Eunomia,
@@ -67,8 +67,8 @@ VignetteBuilder: knitr
 URL: https://ohdsi.github.io/Strategus, https://github.com/OHDSI/Strategus
 BugReports: https://github.com/OHDSI/Strategus/issues
 NeedsCompilation: no
-RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Language: en-US
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
