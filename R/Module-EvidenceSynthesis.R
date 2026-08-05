@@ -109,12 +109,12 @@ EvidenceSynthesisModule <- R6::R6Class(
     #' Create an evidence synthesis source
     #'
     #' @param sourceMethod            The source method generating the estimates to synthesize. Can be "CohortMethod" or
-    #'                                "SelfControlledCaseSeries"
+    #'                                "SelfControlledCaseSeries", or "SelfControlledCohort"
     #' @param databaseIds             The database  IDs to include. Use `databaseIds = NULL` to include all database IDs.
     #' @param analysisIds             The source method analysis IDs to include. Use `analysisIds = NULL` to include all
     #'                                analysis IDs.
     #' @param likelihoodApproximation The type of likelihood approximation. Can be "adaptive grid", "normal", or "grid
-    #'                                with gradients".
+    #'                                with gradients". Note: "SelfControlledCohort" only supports "normal".
     #'
     #' @return
     #' An object of type `EvidenceSynthesisSource`.
@@ -123,7 +123,7 @@ EvidenceSynthesisModule <- R6::R6Class(
                                              analysisIds = NULL,
                                              likelihoodApproximation = "grid with gradients") {
       errorMessages <- checkmate::makeAssertCollection()
-      checkmate::assertChoice(sourceMethod, c("CohortMethod", "SelfControlledCaseSeries"), add = errorMessages)
+      checkmate::assertChoice(sourceMethod, c("CohortMethod", "SelfControlledCaseSeries", "SelfControlledCohort"), add = errorMessages)
       if (is.character(databaseIds)) {
         checkmate::assertCharacter(databaseIds, null.ok = TRUE, add = errorMessages)
       } else {
@@ -132,6 +132,9 @@ EvidenceSynthesisModule <- R6::R6Class(
       checkmate::assertIntegerish(analysisIds, null.ok = TRUE, add = errorMessages)
       checkmate::assertChoice(likelihoodApproximation, c("adaptive grid", "normal", "grid with gradients"), add = errorMessages)
       checkmate::reportAssertions(collection = errorMessages)
+      if (sourceMethod == "SelfControlledCohort" && likelihoodApproximation != "normal") {
+        stop("SelfControlledCohort only supports likelihoodApproximation = 'normal'.")
+      }
 
       analysis <- list()
       for (name in names(formals(self$createEvidenceSynthesisSource))) {
@@ -341,7 +344,9 @@ EvidenceSynthesisModule <- R6::R6Class(
         "es_cm_shared_covariate_balance",
         "es_cm_covariate",
         "es_sccs_result",
-        "es_sccs_diagnostics_summary"
+        "es_sccs_diagnostics_summary",
+        "es_scc_result",
+        "es_scc_diagnostics_summary"
       )
       invisible(lapply(outputTables, function(x) {
         private$.ensureEmptyAndExists(x, resultsFolder)
@@ -447,12 +452,16 @@ EvidenceSynthesisModule <- R6::R6Class(
           controlKey <- c("targetComparatorId", "analysisId")
         } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
           controlKey <- c("exposureId", "nestingCohortId", "covariateId", "analysisId")
+        } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCohort") {
+          controlKey <- c("targetCohortId", "analysisId")
         }
       } else if (analysisSettings$controlType == "exposure") {
         if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
           controlKey <- c("outcomeId", "analysisId")
         } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
           controlKey <- c("outcomeId", "analysisId")
+        } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCohort") {
+          controlKey <- c("outcomeCohortId", "analysisId")
         }
       } else {
         stop(sprintf("Unknown control type '%s'", analysisSettings$controlType))
@@ -491,9 +500,9 @@ EvidenceSynthesisModule <- R6::R6Class(
           TRUE ~ "FAIL"
         )) |>
         mutate(unblind = ifelse(.data$mdrrDiagnostic != "FAIL" &
-          .data$easeDiagnostic != "FAIL" &
-          .data$i2Diagnostic != "FAIL" &
-          .data$tauDiagnostic != "FAIL", 1, 0))
+                                  .data$easeDiagnostic != "FAIL" &
+                                  .data$i2Diagnostic != "FAIL" &
+                                  .data$tauDiagnostic != "FAIL", 1, 0))
       if (analysisSettings$evidenceSynthesisSource$sourceMethod == "CohortMethod") {
         passBalance <- function(maxSdm, sdmFamilyWiseMinP) {
           if (is.null(esDiagnosticThresholds$sdmThreshold)) {
@@ -525,6 +534,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         fileName <- file.path(resultsFolder, "es_cm_diagnostics_summary.csv")
       } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
         fileName <- file.path(resultsFolder, "es_sccs_diagnostics_summary.csv")
+      } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCohort") {
+        fileName <- file.path(resultsFolder, "es_scc_diagnostics_summary.csv")
       } else {
         stop(sprintf("Saving diagnostics summary not implemented for source method '%s'", analysisSettings$evidenceSynthesisSource$sourceMethod))
       }
@@ -539,6 +550,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         fileName <- file.path(resultsFolder, "es_cm_result.csv")
       } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
         fileName <- file.path(resultsFolder, "es_sccs_result.csv")
+      } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCohort") {
+        fileName <- file.path(resultsFolder, "es_scc_result.csv")
       } else {
         stop(sprintf("Saving results not implemented for source method '%s'", analysisSettings$evidenceSynthesisSource$sourceMethod))
       }
@@ -696,6 +709,15 @@ EvidenceSynthesisModule <- R6::R6Class(
           covariateDays = sumMinCellCount(subset$covariateDays, minCellCount),
           covariateEras = sumMinCellCount(subset$covariateEras, minCellCount),
           covariateOutcomes = sumMinCellCount(subset$covariateOutcomes, minCellCount)
+        )
+      } else if (analysisSettings$evidenceSynthesisSource$sourceMethod == "SelfControlledCohort") {
+        counts <- tibble(
+          numPersons = sumMinCellCount(subset$numPersons, minCellCount),
+          timeAtRiskExposed = sumMinCellCount(subset$timeAtRiskExposed, 0),
+          timeAtRiskUnexposed = sumMinCellCount(subset$timeAtRiskUnexposed, 0),
+          numOutcomesExposed = sumMinCellCount(subset$numOutcomesExposed, minCellCount),
+          numOutcomesUnexposed = sumMinCellCount(subset$numOutcomesUnexposed, minCellCount),
+          numExposures = sumMinCellCount(subset$numExposures, minCellCount)
         )
       } else {
         stop(sprintf("Aggregating counts not implemented for source method '%s'", analysisSettings$evidenceSynthesisSource$sourceMethod))
@@ -940,8 +962,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         )
         trueEffectSizes <- trueEffectSizes |>
           mutate(trueEffectSize = ifelse(!is.na(.data$trueEffectSize) & .data$trueEffectSize == 0,
-            NA,
-            .data$trueEffectSize
+                                         NA,
+                                         .data$trueEffectSize
           ))
       } else if (evidenceSynthesisSource$sourceMethod == "SelfControlledCaseSeries") {
         key <- c("exposureId", "nestingCohortId", "outcomeId", "exposuresOutcomeSetId", "covariateId")
@@ -1068,8 +1090,84 @@ EvidenceSynthesisModule <- R6::R6Class(
         )
         trueEffectSizes <- trueEffectSizes |>
           mutate(trueEffectSize = ifelse(!is.na(.data$trueEffectSize) & .data$trueEffectSize == 0,
-            NA,
-            .data$trueEffectSize
+                                         NA,
+                                         .data$trueEffectSize
+          ))
+      } else if (evidenceSynthesisSource$sourceMethod == "SelfControlledCohort") {
+        key <- c("targetCohortId", "outcomeCohortId")
+        databaseIds <- evidenceSynthesisSource$databaseIds
+        analysisIds <- evidenceSynthesisSource$analysisIds
+        if (evidenceSynthesisSource$likelihoodApproximation != "normal") {
+          stop("SelfControlledCohort only supports 'normal' likelihood approximation for evidence synthesis.")
+        }
+        sql <- "SELECT scc_result.*,
+        diag.unblind_for_evidence_synthesis AS unblind
+      FROM @database_schema.scc_result
+      LEFT JOIN (
+        SELECT database_id,
+          analysis_id,
+          target_cohort_id,
+          outcome_cohort_id,
+          pass AS unblind_for_evidence_synthesis
+        FROM @database_schema.scc_diagnostics_summary
+        WHERE diagnostic_name = 'UNBLIND'
+      ) diag
+        ON scc_result.database_id = diag.database_id
+          AND scc_result.analysis_id = diag.analysis_id
+          AND scc_result.target_cohort_id = diag.target_cohort_id
+          AND scc_result.outcome_cohort_id = diag.outcome_cohort_id
+      {@database_ids != ''| @analysis_ids != ''} ? {WHERE}
+      {@database_ids != ''} ? {  scc_result.database_id IN (@database_ids)}
+      {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} scc_result.analysis_id IN (@analysis_ids)};
+      "
+        estimates <- DatabaseConnector::renderTranslateQuerySql(
+          connection = connection,
+          sql = sql,
+          database_schema = databaseSchema,
+          database_ids = if (is.null(databaseIds)) "" else private$.quoteSql(databaseIds),
+          analysis_ids = if (is.null(analysisIds)) "" else analysisIds,
+          snakeCaseToCamelCase = TRUE
+        ) |>
+          as_tibble()
+
+        # Temp hack: detect NA values that have been converted to 0 in the DB:
+        idx <- estimates$seLogRr == 0
+        estimates$logRr[idx] <- NA
+        estimates$seLogRr[idx] <- NA
+        estimates$pValue[idx] <- NA
+
+        # Rename columns to match the expected names used downstream
+        estimates <- estimates |>
+          rename(
+            ci95Lb = .data$lb95,
+            ci95Ub = .data$ub95,
+            p = .data$pValue
+          )
+
+        llApproximations <- estimates |>
+          filter(!is.na(.data$unblind) & .data$unblind == 1) |>
+          select(
+            "targetCohortId",
+            "outcomeCohortId",
+            "analysisId",
+            "databaseId",
+            "logRr",
+            "seLogRr"
+          )
+
+        sql <- "SELECT *
+      FROM @database_schema.scc_outcome_exposure;
+    "
+        trueEffectSizes <- DatabaseConnector::renderTranslateQuerySql(
+          connection = connection,
+          sql = sql,
+          database_schema = databaseSchema,
+          snakeCaseToCamelCase = TRUE
+        )
+        trueEffectSizes <- trueEffectSizes |>
+          mutate(trueEffectSize = ifelse(!is.na(.data$trueEffectSize) & .data$trueEffectSize == 0,
+                                         NA,
+                                         .data$trueEffectSize
           ))
       } else {
         stop(sprintf("Evidence synthesis for source method '%s' hasn't been implemented yet.", evidenceSynthesisSource$sourceMethod))

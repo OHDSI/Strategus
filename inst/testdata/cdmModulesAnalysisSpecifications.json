@@ -580,6 +580,16 @@
                   "type": "event"
                 },
                 {
+                  "cohortId": 9,
+                  "cohortName": "Doxylamine",
+                  "type": "event"
+                },
+                {
+                  "cohortId": 10,
+                  "cohortName": "PenicillinV",
+                  "type": "event"
+                },
+                {
                   "cohortId": 8,
                   "cohortName": "Death",
                   "type": "exit"
