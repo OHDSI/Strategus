@@ -131,7 +131,7 @@ PatientLevelPredictionModule <- R6::R6Class(
         csvFolder = resultsFolder,
         connectionDetails = resultsConnectionDetails,
         databaseSchemaSettings = databaseSchemaSettings,
-        modelSaveLocation = file.path(resultsFolder, "dbmodels"),
+        modelSaveLocation = file.path(resultsFolder, "models"),
         csvTableAppend = ""
       )
     },
