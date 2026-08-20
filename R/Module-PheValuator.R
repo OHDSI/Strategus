@@ -61,7 +61,13 @@ PheValuatorModule <- R6::R6Class(
       }
 
       # Loop over each analysis in pheValuatorAnalysisList and execute
-      for (analysisSpec in spec$pheValuatorAnalysisList) {
+      nAnalyses <- length(spec$pheValuatorAnalysisList)
+      for (i in seq_along(spec$pheValuatorAnalysisList)) {
+        analysisSpec <- spec$pheValuatorAnalysisList[[i]]
+        private$.message(sprintf(
+          "Running PheValuator analysis %d of %d: '%s'",
+          i, nAnalyses, analysisSpec$phenotype
+        ))
         private$.executeAnalysis(
           analysisSpec = analysisSpec,
           cohortDefinitionSet = cohortDefinitionSet,
@@ -72,6 +78,10 @@ PheValuatorModule <- R6::R6Class(
           outputFolder = outputFolder,
           resultsFolder = resultsFolder
         )
+        private$.message(sprintf(
+          "Completed PheValuator analysis %d of %d: '%s'",
+          i, nAnalyses, analysisSpec$phenotype
+        ))
       }
 
       # Export the resultsDataModelSpecification.csv
@@ -139,10 +149,6 @@ PheValuatorModule <- R6::R6Class(
     #' @description Creates the PheValuator Module Specifications
     #'
     #' @param analysisName A short name for the analysis (default: \code{"Main"}).
-    #' @param cohortDefinitionSet Optional fallback data frame of cohort definitions
-    #'   used for PheValuator export/provenance when cohort definitions are not
-    #'   provided through Strategus shared resources. In normal Strategus use,
-    #'   provide cohort definitions in the analysis specification Shared Resources.
     #' @param pheValuatorAnalysisList A list of analysis specification objects.
     #'   Each element is a list with two named fields:
     #'   \describe{
@@ -161,14 +167,12 @@ PheValuatorModule <- R6::R6Class(
     #'       }
     #'     }
     #'   }
-    createModuleSpecifications = function(analysisName = "Main", 
-                                          cohortDefinitionSet = data.frame(),
+    createModuleSpecifications = function(analysisName = "Main",
                                           pheValuatorAnalysisList) {
       checkmate::assertList(pheValuatorAnalysisList, min.len = 1)
 
       analysis <- list(
         analysisName = analysisName,
-        cohortDefinitionSet = cohortDefinitionSet,
         pheValuatorAnalysisList = pheValuatorAnalysisList
       )
 
@@ -202,10 +206,7 @@ PheValuatorModule <- R6::R6Class(
       if (length(private$jobContext$sharedResources) > 0) {
         return(super$.createCohortDefinitionSetFromJobContext())
       }
-      if (!is.null(spec$cohortDefinitionSet) && nrow(spec$cohortDefinitionSet) > 0) {
-        return(spec$cohortDefinitionSet)
-      }
-      stop("PheValuator requires cohort definitions in Strategus Shared Resources. As a fallback, provide cohortDefinitionSet in the PheValuator module specification.")
+      stop("PheValuator requires cohort definitions provided via Strategus Shared Resources.")
     },
 
     .getReferencedCohorts = function(pheValuatorAnalysisList) {
