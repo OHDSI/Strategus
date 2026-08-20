@@ -57,6 +57,62 @@ test_that("createModuleSpecifications stores cohortDefinitionSet as list", {
 
 
 
+test_that("PheValuator referenced cohort validation includes all cohort roles", {
+  pvModule <- PheValuatorModule$new()
+  private <- pvModule$.__enclos_env__$private
+  analysisList <- list(list(
+    phenotype = "foo",
+    cohortsToEvaluate = list(
+      phenotypeCohortId = c(1, 5),
+      washoutPeriod = c(0, 0),
+      xSpecCohortId = 2,
+      xSensCohortId = 3,
+      prevalenceCohortId = 4
+    )
+  ))
+  cds <- data.frame(
+    cohortId = c(1, 2, 3, 4, 5),
+    cohortName = paste0("cohort", c(1, 2, 3, 4, 5)),
+    json = "{}",
+    sql = "SELECT 1",
+    stringsAsFactors = FALSE
+  )
+
+  expect_no_error(private$.validateReferencedCohorts(analysisList, cds))
+  subsetCds <- private$.subsetCohortDefinitionSet(cds, analysisList)
+  expect_setequal(subsetCds$cohortId, c(1, 2, 3, 4, 5))
+
+  formattedCds <- private$.formatCohortDefinitionSetForPheValuator(subsetCds)
+  expect_equal(colnames(formattedCds)[1:4], c("cohortId", "cohortName", "json", "sql"))
+})
+
+test_that("PheValuator referenced cohort validation reports missing cohort roles", {
+  pvModule <- PheValuatorModule$new()
+  private <- pvModule$.__enclos_env__$private
+  analysisList <- list(list(
+    phenotype = "foo",
+    cohortsToEvaluate = list(
+      phenotypeCohortId = 1,
+      washoutPeriod = 0,
+      xSpecCohortId = 2,
+      xSensCohortId = 3,
+      prevalenceCohortId = 4
+    )
+  ))
+  cds <- data.frame(
+    cohortId = c(1, 2),
+    cohortName = c("phenotype", "xSpec"),
+    json = "{}",
+    sql = "SELECT 1",
+    stringsAsFactors = FALSE
+  )
+
+  expect_error(
+    private$.validateReferencedCohorts(analysisList, cds),
+    "xSensCohortId.*3.*prevalenceCohortId.*4"
+  )
+})
+
 test_that("createModuleSpecifications errors when pheValuatorAnalysisList is missing", {
   pvModule <- PheValuatorModule$new()
   expect_error(

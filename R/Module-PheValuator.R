@@ -48,6 +48,11 @@ PheValuatorModule <- R6::R6Class(
       resultsFolder <- jobContext$moduleExecutionSettings$resultsSubFolder
 
       spec <- jobContext$settings
+      cohortDefinitionSet <- private$.getCohortDefinitionSet(spec)
+      private$.validateReferencedCohorts(
+        pheValuatorAnalysisList = spec$pheValuatorAnalysisList,
+        cohortDefinitionSet = cohortDefinitionSet
+      )
 
       # Build the output folder for PheValuator
       outputFolder <- file.path(workFolder, "PheValuatorOutput")
@@ -59,6 +64,8 @@ PheValuatorModule <- R6::R6Class(
       for (analysisSpec in spec$pheValuatorAnalysisList) {
         private$.executeAnalysis(
           analysisSpec = analysisSpec,
+          cohortDefinitionSet = cohortDefinitionSet,
+          analysisName = spec$analysisName,
           connectionDetails = connectionDetails,
           executionSettings = executionSettings,
           jobContext = jobContext,
@@ -132,8 +139,10 @@ PheValuatorModule <- R6::R6Class(
     #' @description Creates the PheValuator Module Specifications
     #'
     #' @param analysisName A short name for the analysis (default: \code{"Main"}).
-    #' @param cohortDefinitionSet A data frame of cohort definitions
-    #'   (default: empty data frame).
+    #' @param cohortDefinitionSet Optional fallback data frame of cohort definitions
+    #'   used for PheValuator export/provenance when cohort definitions are not
+    #'   provided through Strategus shared resources. In normal Strategus use,
+    #'   provide cohort definitions in the analysis specification Shared Resources.
     #' @param pheValuatorAnalysisList A list of analysis specification objects.
     #'   Each element is a list with two named fields:
     #'   \describe{
@@ -189,8 +198,89 @@ PheValuatorModule <- R6::R6Class(
       ))
     },
 
+    .getCohortDefinitionSet = function(spec) {
+      if (length(private$jobContext$sharedResources) > 0) {
+        return(super$.createCohortDefinitionSetFromJobContext())
+      }
+      if (!is.null(spec$cohortDefinitionSet) && nrow(spec$cohortDefinitionSet) > 0) {
+        return(spec$cohortDefinitionSet)
+      }
+      stop("PheValuator requires cohort definitions in Strategus Shared Resources. As a fallback, provide cohortDefinitionSet in the PheValuator module specification.")
+    },
+
+    .getReferencedCohorts = function(pheValuatorAnalysisList) {
+      referencedCohorts <- lapply(seq_along(pheValuatorAnalysisList), function(i) {
+        cohortsToEvaluate <- pheValuatorAnalysisList[[i]]$cohortsToEvaluate
+        cohortFields <- c("phenotypeCohortId", "xSpecCohortId", "xSensCohortId", "prevalenceCohortId")
+        do.call(rbind, lapply(cohortFields, function(fieldName) {
+          cohortIds <- cohortsToEvaluate[[fieldName]]
+          if (is.null(cohortIds) || length(cohortIds) == 0) {
+            return(NULL)
+          }
+          data.frame(
+            analysisIndex = i,
+            fieldName = fieldName,
+            cohortId = as.integer(cohortIds),
+            stringsAsFactors = FALSE
+          )
+        }))
+      })
+      referencedCohorts <- dplyr::bind_rows(referencedCohorts)
+      if (nrow(referencedCohorts) == 0) {
+        return(data.frame(
+          analysisIndex = integer(),
+          fieldName = character(),
+          cohortId = integer(),
+          stringsAsFactors = FALSE
+        ))
+      }
+      referencedCohorts <- referencedCohorts[!is.na(referencedCohorts$cohortId), , drop = FALSE]
+      return(referencedCohorts)
+    },
+
+    .validateReferencedCohorts = function(pheValuatorAnalysisList, cohortDefinitionSet) {
+      referencedCohorts <- private$.getReferencedCohorts(pheValuatorAnalysisList)
+      if (nrow(referencedCohorts) == 0) {
+        return(invisible(TRUE))
+      }
+
+      definedCohortIds <- as.integer(cohortDefinitionSet$cohortId)
+      missingCohorts <- referencedCohorts[!(referencedCohorts$cohortId %in% definedCohortIds), , drop = FALSE]
+      if (nrow(missingCohorts) > 0) {
+        missingCohorts <- unique(missingCohorts)
+        missingDescriptions <- apply(missingCohorts, 1, function(row) {
+          paste0("analysis ", row[["analysisIndex"]], " field ", row[["fieldName"]], " cohortId ", row[["cohortId"]])
+        })
+        stop(
+          paste0(
+            "PheValuator cohort definitions are missing from Strategus Shared Resources/cohortDefinitionSet: ",
+            paste(missingDescriptions, collapse = "; ")
+          )
+        )
+      }
+      invisible(TRUE)
+    },
+
+    .subsetCohortDefinitionSet = function(cohortDefinitionSet, pheValuatorAnalysisList) {
+      referencedCohorts <- private$.getReferencedCohorts(pheValuatorAnalysisList)
+      referencedCohortIds <- unique(referencedCohorts$cohortId)
+      cohortDefinitionSet[as.integer(cohortDefinitionSet$cohortId) %in% referencedCohortIds, , drop = FALSE]
+    },
+
+    .formatCohortDefinitionSetForPheValuator = function(cohortDefinitionSet) {
+      requiredColumns <- c("cohortId", "cohortName", "json", "sql")
+      missingColumns <- setdiff(requiredColumns, colnames(cohortDefinitionSet))
+      if (length(missingColumns) > 0) {
+        stop("cohortDefinitionSet is missing required columns: ", paste(missingColumns, collapse = ", "))
+      }
+      extraColumns <- setdiff(colnames(cohortDefinitionSet), requiredColumns)
+      cohortDefinitionSet[, c(requiredColumns, extraColumns), drop = FALSE]
+    },
+
     # Execute a single analysis spec entry
     .executeAnalysis = function(analysisSpec,
+                                cohortDefinitionSet,
+                                analysisName,
                                 connectionDetails,
                                 executionSettings,
                                 jobContext,
@@ -254,8 +344,13 @@ PheValuatorModule <- R6::R6Class(
 
       PheValuator::runPheValuatorAnalyses(
         phenotype          = phenotype,
-        cohortDefinitionSet = data.frame(),
-        analysisName       = "Main",
+        cohortDefinitionSet = private$.formatCohortDefinitionSetForPheValuator(
+          private$.subsetCohortDefinitionSet(
+            cohortDefinitionSet = cohortDefinitionSet,
+            pheValuatorAnalysisList = list(analysisSpec)
+          )
+        ),
+        analysisName       = analysisName,
         connectionDetails  = connectionDetails,
         tempEmulationSchema = executionSettings$tempEmulationSchema,
         cdmDatabaseSchema  = executionSettings$cdmDatabaseSchema,
