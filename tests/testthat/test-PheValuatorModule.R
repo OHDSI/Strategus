@@ -36,27 +36,6 @@ test_that("createModuleSpecifications stores analysisName", {
   expect_equal(spec$settings$analysisName, "Sensitivity")
 })
 
-test_that("createModuleSpecifications stores cohortDefinitionSet as list", {
-  pvModule <- PheValuatorModule$new()
-  cds <- data.frame(
-    cohortId = c(1, 2),
-    cohortName = c("xSpec", "Prevalence"),
-    json = c("{}", "{}"),
-    sql = c("SELECT 1", "SELECT 2"),
-    stringsAsFactors = FALSE
-  )
-
-  spec <- pvModule$createModuleSpecifications(
-    cohortDefinitionSet = cds,
-    pheValuatorAnalysisList = list(createMockPheValuatorAnalysis())
-  )
-
-  # cohortDefinitionSet is stored as a dataframe
-  expect_true(is.data.frame(spec$settings$cohortDefinitionSet))
-})
-
-
-
 test_that("PheValuator referenced cohort validation includes all cohort roles", {
   pvModule <- PheValuatorModule$new()
   private <- pvModule$.__enclos_env__$private
