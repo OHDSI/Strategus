@@ -65,7 +65,7 @@ PheValuatorModule <- R6::R6Class(
       for (i in seq_along(spec$pheValuatorAnalysisList)) {
         analysisSpec <- spec$pheValuatorAnalysisList[[i]]
         private$.message(sprintf(
-          "Running PheValuator analysis %d of %d: '%s'",
+          "[Strategus] Running PheValuator analysis %d of %d: '%s'",
           i, nAnalyses, analysisSpec$phenotype
         ))
         private$.executeAnalysis(
@@ -79,7 +79,7 @@ PheValuatorModule <- R6::R6Class(
           resultsFolder = resultsFolder
         )
         private$.message(sprintf(
-          "Completed PheValuator analysis %d of %d: '%s'",
+          "[Strategus] Completed PheValuator analysis %d of %d: '%s'",
           i, nAnalyses, analysisSpec$phenotype
         ))
       }
@@ -94,7 +94,7 @@ PheValuatorModule <- R6::R6Class(
         warnOnUploadRuleViolations = FALSE
       )
 
-      private$.message(paste("Results available at:", resultsFolder))
+      private$.message(paste("[Strategus] Results available at:", resultsFolder))
     },
 
     #' @description Create the results data model for the module
