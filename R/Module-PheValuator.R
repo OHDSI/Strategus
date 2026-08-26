@@ -60,6 +60,16 @@ PheValuatorModule <- R6::R6Class(
         dir.create(outputFolder, recursive = TRUE)
       }
 
+      # Clear any previous results CSVs so a re-run doesn't append to stale data.
+      # resultsDataModelSpecification.csv is excluded as it is regenerated below.
+      existingResultsCsvs <- list.files(resultsFolder, pattern = "\.csv$", full.names = TRUE)
+      existingResultsCsvs <- existingResultsCsvs[
+        !grepl("resultsDataModelSpecification\.csv$", existingResultsCsvs)
+      ]
+      if (length(existingResultsCsvs) > 0) {
+        file.remove(existingResultsCsvs)
+      }
+
       # Loop over each analysis in pheValuatorAnalysisList and execute
       nAnalyses <- length(spec$pheValuatorAnalysisList)
       for (i in seq_along(spec$pheValuatorAnalysisList)) {
