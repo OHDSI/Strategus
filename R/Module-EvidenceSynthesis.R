@@ -1101,7 +1101,8 @@ EvidenceSynthesisModule <- R6::R6Class(
           stop("SelfControlledCohort only supports 'normal' likelihood approximation for evidence synthesis.")
         }
         sql <- "SELECT scc_result.*,
-        diag.unblind_for_evidence_synthesis AS unblind
+        diag.unblind_for_evidence_synthesis AS unblind,
+        mdrr.diagnostic_value AS mdrr
       FROM @database_schema.scc_result
       LEFT JOIN (
         SELECT database_id,
@@ -1116,6 +1117,19 @@ EvidenceSynthesisModule <- R6::R6Class(
           AND scc_result.analysis_id = diag.analysis_id
           AND scc_result.target_cohort_id = diag.target_cohort_id
           AND scc_result.outcome_cohort_id = diag.outcome_cohort_id
+      LEFT JOIN (
+        SELECT database_id,
+          analysis_id,
+          target_cohort_id,
+          outcome_cohort_id,
+          diagnostic_value
+        FROM @database_schema.scc_diagnostics_summary
+        WHERE diagnostic_name = 'MDRR'
+      ) mdrr
+        ON scc_result.database_id = mdrr.database_id
+          AND scc_result.analysis_id = mdrr.analysis_id
+          AND scc_result.target_cohort_id = mdrr.target_cohort_id
+          AND scc_result.outcome_cohort_id = mdrr.outcome_cohort_id
       {@database_ids != ''| @analysis_ids != ''} ? {WHERE}
       {@database_ids != ''} ? {  scc_result.database_id IN (@database_ids)}
       {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} scc_result.analysis_id IN (@analysis_ids)};
@@ -1129,6 +1143,11 @@ EvidenceSynthesisModule <- R6::R6Class(
           snakeCaseToCamelCase = TRUE
         ) |>
           as_tibble()
+
+        # Note that scc_result stores the effect estimate as `rr` (not `log_rr`),
+        # so the log estimate is derived here for use by the meta-analysis.
+        estimates <- estimates |>
+          mutate(logRr = ifelse(.data$rr > 0, log(.data$rr), NA))
 
         # Temp hack: detect NA values that have been converted to 0 in the DB:
         idx <- estimates$seLogRr == 0
