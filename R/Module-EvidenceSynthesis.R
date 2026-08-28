@@ -607,6 +607,12 @@ EvidenceSynthesisModule <- R6::R6Class(
         group$ease <- NA
       }
       ncsPi <- group[!is.na(group$trueEffectSize) & group$trueEffectSize == 1 & !is.na(group$seLogPi), ]
+
+      if (nrow(ncsPi) == 0) {
+        message <- "No non-zero negative control effect estimates found - were controls configured correctly?"
+        warning(message)
+      } 
+
       if (nrow(ncsPi) >= 5) {
         null <- EmpiricalCalibration::fitMcmcNull(logRr = (log(ncsPi$pi95Lb) + log(ncsPi$pi95Ub)) / 2.0, seLogRr = ncsPi$seLogPi)
         model <- EmpiricalCalibration::convertNullToErrorModel(null)
@@ -993,7 +999,8 @@ EvidenceSynthesisModule <- R6::R6Class(
         AND sccs_result.database_id = sccs_diagnostics_summary.database_id
       {@database_ids != ''| @analysis_ids != ''} ? {WHERE}
       {@database_ids != ''} ? {  sccs_result.database_id IN (@database_ids)}
-      {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} sccs_result.analysis_id IN (@analysis_ids)};
+      {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} sccs_result.analysis_id IN (@analysis_ids)}
+      ;
       "
         estimates <- DatabaseConnector::renderTranslateQuerySql(
           connection = connection,
@@ -1132,7 +1139,8 @@ EvidenceSynthesisModule <- R6::R6Class(
           AND scc_result.outcome_cohort_id = mdrr.outcome_cohort_id
       {@database_ids != ''| @analysis_ids != ''} ? {WHERE}
       {@database_ids != ''} ? {  scc_result.database_id IN (@database_ids)}
-      {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} scc_result.analysis_id IN (@analysis_ids)};
+      {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} scc_result.analysis_id IN (@analysis_ids)}
+      ;
       "
         estimates <- DatabaseConnector::renderTranslateQuerySql(
           connection = connection,
@@ -1188,6 +1196,8 @@ EvidenceSynthesisModule <- R6::R6Class(
                                          NA,
                                          .data$trueEffectSize
           ))
+
+          browser()
       } else {
         stop(sprintf("Evidence synthesis for source method '%s' hasn't been implemented yet.", evidenceSynthesisSource$sourceMethod))
       }
