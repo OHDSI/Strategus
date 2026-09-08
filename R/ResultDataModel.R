@@ -61,13 +61,8 @@ createResultDataModel <- function(analysisSpecifications,
     warning("Ignoring modulesToExecute parameter - all results tables are created by default.")
   }
 
-  allModules <- CohortGenerator::readCsv(
-    file = system.file(
-      file.path("csv", "hadesModuleList.csv"),
-      package = "Strategus",
-      mustWork = TRUE
-    )
-  )
+  allModules <- .getHadesModuleRegistry()
+  allModules <- allModules[allModules$createResultsDataModel, , drop = FALSE]
   for (i in 1:nrow(allModules)) {
     moduleName <- allModules$module[i]
     moduleExecutionStatus <- .resultDataModelModuleExecution(
@@ -179,11 +174,51 @@ uploadResults <- function(analysisSpecifications,
       resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema
     )
   } else {
+    taskInformation <- .createTaskInformation(analysisSpecifications, moduleName)
+    operationInformation <- .createOperationInformation(
+      operation = "UPLOAD",
+      taskInformation = taskInformation,
+      resultsDataModelSettings = resultsDataModelSettings,
+      resultsConnectionDetails = resultsConnectionDetails
+    )
+    recordPath <- .operationStatusPath(
+      resultsFolder = resultsDataModelSettings$resultsFolder,
+      moduleName = moduleName,
+      operation = "UPLOAD"
+    )
+    uploadState <- .interpretOperationStatus(recordPath, operationInformation)
+    if (isTRUE(resultsDataModelSettings$skipCompletedUploads) && uploadState$state == "COMPLETED") {
+      return(
+        .createModuleExecutionStatus(
+          moduleName = moduleName,
+          status = "SKIPPED",
+          errorMessage = "Matching completed upload status found",
+          executionTime = "SKIPPED"
+        )
+      )
+    }
+    startTime <- Sys.time()
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = "RUNNING",
+      startTime = startTime
+    )
     executionResult <- .safeExecution(
       fn = moduleFn,
       resultsConnectionDetails = resultsConnectionDetails,
       analysisSpecifications = analysisSpecifications,
       resultsDataModelSettings = resultsDataModelSettings
+    )
+    endTime <- Sys.time()
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = if (executionResult$status == "SUCCESS") "COMPLETED" else "FAILED",
+      startTime = startTime,
+      endTime = endTime,
+      elapsedSeconds = as.numeric(difftime(endTime, startTime, units = "secs")),
+      error = executionResult$error
     )
   }
   if (executionResult$status == "FAILED") {
