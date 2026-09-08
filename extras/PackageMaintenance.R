@@ -74,11 +74,18 @@ moduleList <- packageCodeFiles[startsWith(packageCodeFiles, "Module-")]
 moduleList <- substring(moduleList, first = nchar("Module-") + 1)
 moduleList <- sub("\\.[Rr]$", "", moduleList)
 moduleList <- paste0(moduleList, "Module")
-# Removing PLP Validation since its results data model is the same
-# as PLP
-moduleList <- moduleList[!moduleList %in% c("PatientLevelPredictionValidationModule")]
+moduleRegistry <- data.frame(
+  module = moduleList,
+  package = sub("Module$", "", moduleList),
+  createResultsDataModel = TRUE
+)
+# PLP Validation is implemented by PatientLevelPrediction and shares its
+# results data model, so it is registered but excluded from RDM creation.
+plpValidationIndex <- moduleRegistry$module == "PatientLevelPredictionValidationModule"
+moduleRegistry$package[plpValidationIndex] <- "PatientLevelPrediction"
+moduleRegistry$createResultsDataModel[plpValidationIndex] <- FALSE
 CohortGenerator::writeCsv(
-  x = data.frame(module = moduleList),
+  x = moduleRegistry,
   file = "./inst/csv/hadesModuleList.csv",
   warnOnFileNameCaseMismatch = FALSE
 )

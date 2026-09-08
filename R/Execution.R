@@ -139,7 +139,7 @@ execute <- function(analysisSpecifications,
       )
       # The absence of an error in moduleExecutionStatus$error
       # represents a success
-      cohortGenerationSuccessful <- ifelse(moduleExecutionStatus[[1]]$status == "SUCCESS", TRUE, FALSE)
+      cohortGenerationSuccessful <- moduleExecutionStatus[[1]]$status %in% c("SUCCESS", "SKIPPED")
       executionStatus <- append(
         executionStatus,
         moduleExecutionStatus
@@ -208,12 +208,59 @@ execute <- function(analysisSpecifications,
 
 .executeModule <- function(moduleName, connectionDetails, analysisSpecifications, executionSettings, skipExecution = FALSE) {
   if (isFALSE(skipExecution)) {
+    taskInformation <- .createTaskInformation(
+      analysisSpecifications = analysisSpecifications,
+      moduleName = moduleName
+    )
+    recordPath <- .operationStatusPath(
+      resultsFolder = executionSettings$resultsFolder,
+      moduleName = moduleName,
+      operation = "EXECUTION"
+    )
+    operationInformation <- .createOperationInformation(
+      operation = "EXECUTION",
+      taskInformation = taskInformation
+    )
+    executionState <- .interpretOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation
+    )
+    if (isTRUE(executionSettings$skipCompletedTasks) && executionState$state == "COMPLETED") {
+      return(
+        .createModuleExecutionStatus(
+          moduleName = moduleName,
+          status = "SKIPPED",
+          errorMessage = "Matching completed execution record found",
+          executionTime = "SKIPPED"
+        )
+      )
+    }
+
     moduleObject <- get(moduleName)$new()
+    startTime <- Sys.time()
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = "RUNNING",
+      startTime = startTime
+    )
     executionResult <- .safeExecution(
       fn = moduleObject$execute,
       connectionDetails = connectionDetails,
       analysisSpecifications = analysisSpecifications,
       executionSettings = executionSettings
+    )
+    endTime <- Sys.time()
+    elapsedSeconds <- as.numeric(difftime(endTime, startTime, units = "secs"))
+    recordState <- if (executionResult$status == "SUCCESS") "COMPLETED" else "FAILED"
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = recordState,
+      startTime = startTime,
+      endTime = endTime,
+      elapsedSeconds = elapsedSeconds,
+      error = executionResult$error
     )
     if (executionResult$status == "FAILED") {
       .printErrorMessage(executionResult$error$message)
