@@ -8,11 +8,9 @@ createExecutionStatusTestSpecifications <- function() {
 
 test_that("HADES module registry covers modules and capabilities", {
   registry <- Strategus:::.getHadesModuleRegistry()
-  moduleFiles <- list.files(
-    testthat::test_path("..", "..", "R"),
-    pattern = "^Module-.*\\.R$"
-  )
-  expectedModules <- paste0(sub("\\.R$", "", sub("^Module-", "", moduleFiles)), "Module")
+  exportedObjects <- getNamespaceExports("Strategus")
+  expectedModules <- exportedObjects[grepl("Module$", exportedObjects)]
+  expectedModules <- setdiff(expectedModules, "StrategusModule")
 
   expect_named(registry, c("module", "package", "createResultsDataModel"))
   expect_false(anyDuplicated(tolower(registry$module)) > 0)
