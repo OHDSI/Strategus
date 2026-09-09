@@ -1118,7 +1118,7 @@ EvidenceSynthesisModule <- R6::R6Class(
           outcome_cohort_id,
           pass AS unblind_for_evidence_synthesis
         FROM @database_schema.scc_diagnostics_summary
-        WHERE diagnostic_name = 'UNBLIND'
+        WHERE diagnostic_name = 'UNBLIND_FOR_CALIBRATION'
       ) diag
         ON scc_result.database_id = diag.database_id
           AND scc_result.analysis_id = diag.analysis_id
@@ -1196,8 +1196,6 @@ EvidenceSynthesisModule <- R6::R6Class(
                                          NA,
                                          .data$trueEffectSize
           ))
-
-          browser()
       } else {
         stop(sprintf("Evidence synthesis for source method '%s' hasn't been implemented yet.", evidenceSynthesisSource$sourceMethod))
       }
