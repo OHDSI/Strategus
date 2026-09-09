@@ -798,38 +798,56 @@ EvidenceSynthesisModule <- R6::R6Class(
               seLogPi = .data$seLogRr
             )
         } else if (is(analysisSettings, "RandomEffectsMetaAnalysis")) {
-          m <- meta::metagen(
-            TE = llApproximations$logRr,
-            seTE = llApproximations$seLogRr,
-            studlab = rep("", nrow(llApproximations)),
-            byvar = NULL,
-            control = list(maxiter = 1000),
-            sm = "RR",
-            level.comb = 1 - analysisSettings$alpha
-          )
-          s <- summary(m)
-          rfx <- s$random
-          oneSidedP <- EmpiricalCalibration::computeTraditionalP(
-            logRr = rfx$TE,
-            seLogRr = rfx$seTE,
-            twoSided = FALSE,
-            upper = TRUE
-          )
-          estimate <- tibble(
-            rr = exp(rfx$TE),
-            ci95Lb = exp(rfx$lower),
-            ci95Ub = exp(rfx$upper),
-            p = rfx$p,
-            oneSidedP = !!oneSidedP,
-            logRr = rfx$TE,
-            seLogRr = rfx$seTE,
-            i2 = m$I2,
-            tau = NA,
-            mdrr = computeMdrrFromSe(rfx$seTE),
-            pi95Lb = exp(s$predict$lower),
-            pi95Ub = exp(s$predict$upper),
-            seLogPi = (s$predict$upper - s$predict$lower) / (2 * qnorm(0.975))
-          )
+            estimate <- tryCatch(
+                {
+                    m <- meta::metagen(
+                        TE = llApproximations$logRr,
+                        seTE = llApproximations$seLogRr,
+                        studlab = rep("", nrow(llApproximations)),
+                        byvar = NULL,
+                        control = list(maxiter = 1000),
+                        sm = "RR",
+                        level.comb = 1 - analysisSettings$alpha
+                    )
+                    rfx <- summary(m)$random
+                    oneSidedP <- EmpiricalCalibration::computeTraditionalP(
+                        logRr = rfx$TE,
+                        seLogRr = rfx$seTE,
+                        twoSided = FALSE,
+                        upper = TRUE
+                    )
+                    tibble(
+                        rr = exp(rfx$TE),
+                        ci95Lb = exp(rfx$lower),
+                        ci95Ub = exp(rfx$upper),
+                        p = rfx$p,
+                        oneSidedP = !!oneSidedP,
+                        logRr = rfx$TE,
+                        seLogRr = rfx$seTE,
+                        i2 = m$I2,
+                        tau = NA,
+                        mdrr = computeMdrrFromSe(rfx$seTE)
+                    )
+                },
+                error = function(e) {
+                    warning(sprintf(
+                        "Random-effects meta-analysis failed to converge: %s. Returning NA estimates.",
+                        e$message
+                    ))
+                    tibble(
+                        rr = as.numeric(NA),
+                        ci95Lb = as.numeric(NA),
+                        ci95Ub = as.numeric(NA),
+                        p = as.numeric(NA),
+                        oneSidedP = as.numeric(NA),
+                        logRr = as.numeric(NA),
+                        seLogRr = as.numeric(NA),
+                        i2 = as.numeric(NA),
+                        tau = as.numeric(NA),
+                        mdrr = as.numeric(NA)
+                    )
+                }
+            )
         } else if (is(analysisSettings, "BayesianMetaAnalysis")) {
           args <- analysisSettings
           args$evidenceSynthesisAnalysisId <- NULL
@@ -1140,6 +1158,7 @@ EvidenceSynthesisModule <- R6::R6Class(
       {@database_ids != ''| @analysis_ids != ''} ? {WHERE}
       {@database_ids != ''} ? {  scc_result.database_id IN (@database_ids)}
       {@analysis_ids != ''} ? {  {@database_ids != ''} ? {AND} scc_result.analysis_id IN (@analysis_ids)}
+      ORDER BY scc_result.target_cohort_id
       ;
       "
         estimates <- DatabaseConnector::renderTranslateQuerySql(
@@ -1196,8 +1215,6 @@ EvidenceSynthesisModule <- R6::R6Class(
                                          NA,
                                          .data$trueEffectSize
           ))
-
-          browser()
       } else {
         stop(sprintf("Evidence synthesis for source method '%s' hasn't been implemented yet.", evidenceSynthesisSource$sourceMethod))
       }
