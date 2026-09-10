@@ -6,7 +6,7 @@ algorithm_performance_results,sensitivity_95_ci,varchar(255),no,no,"Sensitivity 
 algorithm_performance_results,ppv_95_ci,varchar(255),no,no,"Positive predictive value with 95% confidence interval"
 algorithm_performance_results,specificity_95_ci,varchar(255),no,no,"Specificity with 95% confidence interval"
 algorithm_performance_results,npv_95_ci,varchar(255),no,no,"Negative predictive value with 95% confidence interval"
-algorithm_performance_results,f1_score,varchar(50),no,no,F1 score
+algorithm_performance_results,f_1_score,varchar(50),no,no,F1 score
 algorithm_performance_results,total_subjects,bigint,no,no,Total subjects in the evaluation cohort
 algorithm_performance_results,raw_cases,bigint,no,no,Raw number of cases in the evaluation cohort
 algorithm_performance_results,estimated_cases,bigint,no,no,Estimated number of true cases
@@ -25,17 +25,17 @@ algorithm_performance_results,splay_prior,int,no,no,Days prior splay
 algorithm_performance_results,splay_post,int,no,no,Days post splay
 algorithm_performance_results,cut_point,varchar(255),yes,yes,The prediction threshold cut point used for evaluation
 algorithm_performance_results,sensitivity,varchar(50),no,no,Sensitivity
-algorithm_performance_results,sensitivity_ci95_lb,varchar(50),no,no,Sensitivity 95% CI lower bound
-algorithm_performance_results,sensitivity_ci95_ub,varchar(50),no,no,Sensitivity 95% CI upper bound
+algorithm_performance_results,sensitivity_ci_95_lb,varchar(50),no,no,Sensitivity 95% CI lower bound
+algorithm_performance_results,sensitivity_ci_95_ub,varchar(50),no,no,Sensitivity 95% CI upper bound
 algorithm_performance_results,ppv,varchar(50),no,no,Positive predictive value
-algorithm_performance_results,ppv_ci95_lb,varchar(50),no,no,PPV 95% CI lower bound
-algorithm_performance_results,ppv_ci95_ub,varchar(50),no,no,PPV 95% CI upper bound
+algorithm_performance_results,ppv_ci_95_lb,varchar(50),no,no,PPV 95% CI lower bound
+algorithm_performance_results,ppv_ci_95_ub,varchar(50),no,no,PPV 95% CI upper bound
 algorithm_performance_results,specificity,varchar(50),no,no,Specificity
-algorithm_performance_results,specificity_ci95_lb,varchar(50),no,no,Specificity 95% CI lower bound
-algorithm_performance_results,specificity_ci95_ub,varchar(50),no,no,Specificity 95% CI upper bound
+algorithm_performance_results,specificity_ci_95_lb,varchar(50),no,no,Specificity 95% CI lower bound
+algorithm_performance_results,specificity_ci_95_ub,varchar(50),no,no,Specificity 95% CI upper bound
 algorithm_performance_results,npv,varchar(50),no,no,Negative predictive value
-algorithm_performance_results,npv_ci95_lb,varchar(50),no,no,NPV 95% CI lower bound
-algorithm_performance_results,npv_ci95_ub,varchar(50),no,no,NPV 95% CI upper bound
+algorithm_performance_results,npv_ci_95_lb,varchar(50),no,no,NPV 95% CI lower bound
+algorithm_performance_results,npv_ci_95_ub,varchar(50),no,no,NPV 95% CI upper bound
 algorithm_performance_results,analysis_name,varchar(255),no,no,Name of the PheValuator analysis
 algorithm_performance_results,run_date_time,varchar(255),no,no,Date and time of the PheValuator run
 algorithm_performance_results,analysis_id_results,int,no,no,Analysis identifier from PheValuator
