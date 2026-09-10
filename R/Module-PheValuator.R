@@ -62,9 +62,9 @@ PheValuatorModule <- R6::R6Class(
 
       # Clear any previous results CSVs so a re-run doesn't append to stale data.
       # resultsDataModelSpecification.csv is excluded as it is regenerated below.
-      existingResultsCsvs <- list.files(resultsFolder, pattern = "\.csv$", full.names = TRUE)
+      existingResultsCsvs <- list.files(resultsFolder, pattern = "\\.csv$", full.names = TRUE)
       existingResultsCsvs <- existingResultsCsvs[
-        !grepl("resultsDataModelSpecification\.csv$", existingResultsCsvs)
+        !grepl("resultsDataModelSpecification\\.csv$", existingResultsCsvs)
       ]
       if (length(existingResultsCsvs) > 0) {
         file.remove(existingResultsCsvs)
