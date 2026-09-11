@@ -398,10 +398,12 @@ test_that("Test analysis specification creation", {
     analysisName = "T2DM",
     pheValuatorAnalysisList = list(
       list(
-        analysisId = 1,
-        description = "Test PheValuator analysis",
-        createEvaluationCohortArgs = list(xSpecCohortId = 1),
-        testPhenotypeAlgorithmArgs = list(phenotypeCohortId = 3, cutPoints = c("EV"))
+        phenotype = "T2DM",
+        cohortsToEvaluate = list(
+          xSpecCohortId = 1,
+          phenotypeCohortId = 3,
+          washoutPeriod = 0
+        )
       )
     )
   )
