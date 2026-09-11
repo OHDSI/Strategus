@@ -23,3 +23,9 @@ docs
 
 extras/rdms/public
 extras/rdms/*.class
+
+# agent
+.github/copilot-instructions.md 
+
+air.toml
+.vscode/
