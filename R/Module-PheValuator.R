@@ -279,7 +279,7 @@ PheValuatorModule <- R6::R6Class(
     },
 
     .formatCohortDefinitionSetForPheValuator = function(cohortDefinitionSet) {
-      requiredColumns <- c("cohortId", "cohortName", "json", "sql")
+      requiredColumns <- c("cohortId", "cohortName", "sql", "json")
       missingColumns <- setdiff(requiredColumns, colnames(cohortDefinitionSet))
       if (length(missingColumns) > 0) {
         stop("cohortDefinitionSet is missing required columns: ", paste(missingColumns, collapse = ", "))
