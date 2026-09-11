@@ -62,7 +62,7 @@ test_that("PheValuator referenced cohort validation includes all cohort roles", 
   expect_setequal(subsetCds$cohortId, c(1, 2, 3, 4, 5))
 
   formattedCds <- private$.formatCohortDefinitionSetForPheValuator(subsetCds)
-  expect_equal(colnames(formattedCds)[1:4], c("cohortId", "cohortName", "json", "sql"))
+  expect_equal(colnames(formattedCds)[1:4], c("cohortId", "cohortName", "sql", "json"))
 })
 
 test_that("PheValuator referenced cohort validation reports missing cohort roles", {
