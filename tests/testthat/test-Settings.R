@@ -395,7 +395,7 @@ test_that("Test analysis specification creation", {
   # PheValuator ---------------------------------
   pvModuleSettingsCreator <- PheValuatorModule$new()
   pvModuleSpecifications <- pvModuleSettingsCreator$createModuleSpecifications(
-    phenotype = "Type 2 Diabetes",
+    analysisName = "T2DM",
     pheValuatorAnalysisList = list(
       list(
         analysisId = 1,
