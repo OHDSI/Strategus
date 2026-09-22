@@ -49,6 +49,23 @@ execute <- function(analysisSpecifications,
   # Used to keep track of the execution status
   executionStatus <- list()
 
+  # Apply any user-requested module subset before reporting the execution plan.
+  if (length(executionSettings$modulesToExecute) > 0) {
+    analysisSpecifications <- .subsetAnalysisSpecificationByModulesToExecute(
+      analysisSpecifications = analysisSpecifications,
+      modulesToExecute = executionSettings$modulesToExecute
+    )
+  }
+
+  if (isTRUE(executionSettings$skipCompletedTasks)) {
+    .printOperationPlan(
+      getExecutionStatus(
+        analysisSpecifications = analysisSpecifications,
+        resultsFolder = executionSettings$resultsFolder
+      )
+    )
+  }
+
   # Validate the execution settings
   if (is(executionSettings, "CdmExecutionSettings")) {
     message("Collecting OMOP CDM Metadata")
@@ -111,17 +128,6 @@ execute <- function(analysisSpecifications,
     }
   }
 
-
-  # Determine if the user has opted to subset to specific modules
-  # in the analysis specification. If so, validate that the
-  # modulesToExecute are present in the analysis specification
-  # before attempting to subset the analyses to run.
-  if (length(executionSettings$modulesToExecute) > 0) {
-    analysisSpecifications <- .subsetAnalysisSpecificationByModulesToExecute(
-      analysisSpecifications = analysisSpecifications,
-      modulesToExecute = executionSettings$modulesToExecute
-    )
-  }
 
   # Execute the cohort generator module first if it exists
   # If cohort generation fails for any reason, update the

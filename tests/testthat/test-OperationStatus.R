@@ -120,6 +120,53 @@ test_that("getExecutionStatus validates and filters module names case-insensitiv
   )
 })
 
+test_that("operation plan reports modules to run and completed modules to skip", {
+  operationStatus <- list(
+    operation = "EXECUTION",
+    modules = data.frame(
+      moduleName = c("CompletedModule", "FailedModule", "NewModule"),
+      state = c("COMPLETED", "FAILED", "NOT_STARTED")
+    )
+  )
+
+  output <- capture.output(
+    Strategus:::.printOperationPlan(operationStatus),
+    type = "message"
+  )
+
+  expect_match(paste(output, collapse = "\n"), "EXECUTION PLAN")
+  expect_match(
+    paste(output, collapse = "\n"),
+    "Executing modules that did not complete or failed: FailedModule, NewModule",
+    fixed = TRUE
+  )
+  expect_match(
+    paste(output, collapse = "\n"),
+    "Skipping modules that completed successfully: CompletedModule",
+    fixed = TRUE
+  )
+})
+
+test_that("upload plan uses upload language when all modules completed", {
+  operationStatus <- list(
+    operation = "UPLOAD",
+    modules = data.frame(moduleName = "CompletedModule", state = "COMPLETED")
+  )
+
+  output <- capture.output(
+    Strategus:::.printOperationPlan(operationStatus),
+    type = "message"
+  )
+
+  expect_match(paste(output, collapse = "\n"), "UPLOAD PLAN")
+  expect_false(any(grepl("Uploading modules", output, fixed = TRUE)))
+  expect_match(
+    paste(output, collapse = "\n"),
+    "Skipping modules that completed successfully: CompletedModule",
+    fixed = TRUE
+  )
+})
+
 test_that("execution settings default completed-task reuse to false", {
   settings <- createResultsExecutionSettings(
     resultsDatabaseSchema = "results",

@@ -119,12 +119,6 @@ uploadResults <- function(analysisSpecifications,
   # Used to keep track of the execution status
   executionStatus <- list()
 
-  # The DatabaseMetaData is a special case...
-  .uploadDatabaseMetadata(
-    resultsConnectionDetails = resultsConnectionDetails,
-    resultsDataModelSettings = resultsDataModelSettings
-  )
-
   # Determine if the user has opted to subset to specific modules
   # in the analysis specification. If so, validate that the
   # modulesToExecute are present in the analysis specification
@@ -135,6 +129,22 @@ uploadResults <- function(analysisSpecifications,
       modulesToExecute = resultsDataModelSettings$modulesToExecute
     )
   }
+
+  if (isTRUE(resultsDataModelSettings$skipCompletedUploads)) {
+    .printOperationPlan(
+      getUploadStatus(
+        analysisSpecifications = analysisSpecifications,
+        resultsDataModelSettings = resultsDataModelSettings,
+        resultsConnectionDetails = resultsConnectionDetails
+      )
+    )
+  }
+
+  # The DatabaseMetaData is a special case...
+  .uploadDatabaseMetadata(
+    resultsConnectionDetails = resultsConnectionDetails,
+    resultsDataModelSettings = resultsDataModelSettings
+  )
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module

@@ -295,6 +295,33 @@
   result
 }
 
+.printOperationPlan <- function(operationStatus) {
+  completedModules <- operationStatus$modules$moduleName[
+    operationStatus$modules$state == "COMPLETED"
+  ]
+  modulesToRun <- operationStatus$modules$moduleName[
+    operationStatus$modules$state != "COMPLETED"
+  ]
+  operationVerb <- if (operationStatus$operation == "EXECUTION") "Executing" else "Uploading"
+
+  cli::cli_h1(paste(operationStatus$operation, "PLAN"))
+  if (length(modulesToRun)) {
+    cli::cli_alert_info(paste0(
+      operationVerb,
+      " modules that did not complete or failed: ",
+      paste(modulesToRun, collapse = ", ")
+    ))
+  }
+  if (length(completedModules)) {
+    cli::cli_alert_info(paste0(
+      "Skipping modules that completed successfully: ",
+      paste(completedModules, collapse = ", ")
+    ))
+  }
+
+  invisible(operationStatus)
+}
+
 #' Inspect execution status
 #'
 #' Inspects module execution status without executing the analysis or connecting
