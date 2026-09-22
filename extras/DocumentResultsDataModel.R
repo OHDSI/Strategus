@@ -45,18 +45,12 @@ fullResultsDataModel <- fullResultsDataModel %>%
 sql <- "-- Strategus Tables\n"
 sql <- paste0(sql, ResultModelManager::generateSqlSchema(schemaDefinition = rdms))
 
-# Iterate over all of the modules in the project
-# and produce the full results data model specification
-# for each module
-moduleFileList <- list.files("./R", pattern = "^Module-.*\\.R$")
-fileNameCleaned <- sub("^Module-", "", moduleFileList)  # Remove "Module-"
-fileNameCleaned <- sub("\\.R$", "", fileNameCleaned)  # Remove ".R"
-moduleList <- paste0(fileNameCleaned, "Module")
-
-# Remove the PLP Validation module since its results model
-# is captured by the PLP module
-modulesToExcludeFromDocumentation <- c("PatientLevelPredictionValidationModule")
-moduleList <- moduleList[!moduleList %in% modulesToExcludeFromDocumentation]
+# Use the same registry as runtime results-data-model creation.
+moduleRegistry <- CohortGenerator::readCsv(
+  file = "./inst/csv/hadesModuleList.csv",
+  warnOnCaseMismatch = FALSE
+)
+moduleList <- moduleRegistry$module[moduleRegistry$createResultsDataModel]
 
 for(module in moduleList) {
   m <- get(module)$new()

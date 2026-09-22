@@ -8,7 +8,8 @@ createResultsDataModelSettings(
   resultsDatabaseSchema,
   resultsFolder,
   logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
-  modulesToExecute = c()
+  modulesToExecute = c(),
+  skipCompletedUploads = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,10 @@ createResultsDataModelSettings(
 
 \item{modulesToExecute}{(Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
 all modules in the analysis specification are executed.}
+
+\item{skipCompletedUploads}{When \code{TRUE}, module uploads with a matching completed
+\code{upload_status.json} record are skipped. Upload status
+is persisted regardless of this value.}
 }
 \value{
 An object of type \code{ResultsDataModelSettings}
