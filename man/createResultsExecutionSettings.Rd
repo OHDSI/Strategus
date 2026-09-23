@@ -11,7 +11,8 @@ createResultsExecutionSettings(
   logFileName = file.path(resultsFolder, "strategus-log.txt"),
   minCellCount = 5,
   maxCores = parallel::detectCores(),
-  modulesToExecute = c()
+  modulesToExecute = c(),
+  skipCompletedTasks = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ use all available cores on the machine.}
 
 \item{modulesToExecute}{(Optional) A vector with the list of modules to execute. When an empty vector/NULL is supplied (default),
 all modules in the analysis specification are executed.}
+
+\item{skipCompletedTasks}{When \code{TRUE}, modules with a matching completed \code{execution_status.json} record in the
+results folder are skipped. Execution status is persisted regardless of this value.}
 }
 \value{
 An object of type \code{ExecutionSettings}.

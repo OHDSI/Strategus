@@ -326,6 +326,8 @@ createEmptyAnalysisSpecificiations <- function() {
 #' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
 #'                                   use all available cores on the machine.
 #' @template modulesToExecute
+#' @param skipCompletedTasks         When `TRUE`, modules with a matching completed `execution_status.json` record in the
+#'                                   results folder are skipped. Execution status is persisted regardless of this value.
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -341,7 +343,8 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
                                        minCellCount = 5,
                                        incremental = TRUE,
                                        maxCores = parallel::detectCores(),
-                                       modulesToExecute = c()) {
+                                       modulesToExecute = c(),
+                                       skipCompletedTasks = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(workDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(cdmDatabaseSchema, len = 1, add = errorMessages)
@@ -353,6 +356,7 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
   checkmate::assertLogical(incremental, add = errorMessages)
   checkmate::assertInt(maxCores, add = errorMessages)
   checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
+  checkmate::assertFlag(skipCompletedTasks, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -379,6 +383,8 @@ createCdmExecutionSettings <- function(workDatabaseSchema,
 #' @param maxCores                   The maximum number of processing cores to use for execution. The default is to
 #'                                   use all available cores on the machine.
 #' @template modulesToExecute
+#' @param skipCompletedTasks         When `TRUE`, modules with a matching completed `execution_status.json` record in the
+#'                                   results folder are skipped. Execution status is persisted regardless of this value.
 #'
 #' @return
 #' An object of type `ExecutionSettings`.
@@ -390,7 +396,8 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
                                            logFileName = file.path(resultsFolder, "strategus-log.txt"),
                                            minCellCount = 5,
                                            maxCores = parallel::detectCores(),
-                                           modulesToExecute = c()) {
+                                           modulesToExecute = c(),
+                                           skipCompletedTasks = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(workFolder, len = 1, add = errorMessages)
@@ -399,6 +406,7 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
   checkmate::assertInt(minCellCount, add = errorMessages)
   checkmate::assertInt(maxCores, add = errorMessages)
   checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
+  checkmate::assertFlag(skipCompletedTasks, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
@@ -424,6 +432,9 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 #' @template resultsFolder
 #' @param logFileName     Log location for data model operations
 #' @template modulesToExecute
+#' @param skipCompletedUploads When `TRUE`, module uploads with a matching completed
+#'                             `upload_status.json` record are skipped. Upload status
+#'                             is persisted regardless of this value.
 #'
 #' @return
 #' An object of type `ResultsDataModelSettings`
@@ -432,12 +443,14 @@ createResultsExecutionSettings <- function(resultsDatabaseSchema,
 createResultsDataModelSettings <- function(resultsDatabaseSchema,
                                            resultsFolder,
                                            logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
-                                           modulesToExecute = c()) {
+                                           modulesToExecute = c(),
+                                           skipCompletedUploads = FALSE) {
   errorMessages <- checkmate::makeAssertCollection()
   checkmate::assertCharacter(resultsDatabaseSchema, len = 1, add = errorMessages)
   checkmate::assertCharacter(resultsFolder, len = 1, add = errorMessages)
   checkmate::assertCharacter(logFileName, len = 1, add = errorMessages)
   checkmate::assertVector(modulesToExecute, null.ok = TRUE, add = errorMessages)
+  checkmate::assertFlag(skipCompletedUploads, add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
   # Normalize paths to convert relative paths to absolute paths
