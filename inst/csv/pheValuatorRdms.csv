@@ -23,7 +23,7 @@ algorithm_performance_results,false_negatives,bigint,no,no,Number of false negat
 algorithm_performance_results,washout_period,int,no,no,Washout period in days
 algorithm_performance_results,splay_prior,int,no,no,Days prior splay
 algorithm_performance_results,splay_post,int,no,no,Days post splay
-algorithm_performance_results,cut_point,varchar(255),yes,yes,The prediction threshold cut point used for evaluation
+algorithm_performance_results,cut_point,varchar(255),no,yes,The prediction threshold cut point used for evaluation
 algorithm_performance_results,sensitivity,varchar(50),no,no,Sensitivity
 algorithm_performance_results,sensitivity_ci_95_lb,varchar(50),no,no,Sensitivity 95% CI lower bound
 algorithm_performance_results,sensitivity_ci_95_ub,varchar(50),no,no,Sensitivity 95% CI upper bound
