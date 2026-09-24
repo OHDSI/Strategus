@@ -51,6 +51,18 @@ StrategusModule <- R6::R6Class(
       self$moduleName <- class(self)[[1]]
       self$moduleClassName <- paste0(self$moduleName, "Specifications")
     },
+    #' @description Get the package identity associated with the module.
+    #' @return A list containing the module package name, version, and an
+    #'   renv-compatible DESCRIPTION hash.
+    getPackageInformation = function() {
+      packageName <- .getModulePackageName(self$moduleName)
+      identity <- .getPackageIdentity(packageName)
+      list(
+        modulePackage = identity$package,
+        modulePackageVersion = identity$version,
+        modulePackageHash = identity$hash
+      )
+    },
     #' @description Executes the module
     #' @template connectionDetails
     #' @template analysisSpecifications

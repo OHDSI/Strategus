@@ -1,4 +1,6 @@
 {
+  "strategusVersion": "1.6.0",
+  "strategusPackageHash": "66b434aff5916869f23a562fc0aecf1b",
   "sharedResources": [],
   "moduleSpecifications": [
     {
@@ -54,6 +56,9 @@
           "attr_class": "EsDiagnosticThresholds"
         }
       },
+      "modulePackage": "EvidenceSynthesis",
+      "modulePackageVersion": "1.1.0",
+      "modulePackageHash": "a9d824d751ca77b67673414f37e2eb81",
       "attr_class": ["ModuleSpecifications", "EvidenceSynthesisModuleSpecifications"]
     }
   ],

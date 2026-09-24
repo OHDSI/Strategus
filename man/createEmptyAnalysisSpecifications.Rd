@@ -7,7 +7,8 @@
 createEmptyAnalysisSpecifications()
 }
 \value{
-An object of type \code{AnalysisSpecifications}.
+An object of type \code{AnalysisSpecifications}. The object records the installed
+Strategus version and an renv-compatible hash of the package DESCRIPTION.
 }
 \description{
 Create an empty analysis specifications object.
