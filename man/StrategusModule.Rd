@@ -33,6 +33,7 @@ specification.}
 \subsection{Public methods}{
   \itemize{
     \item \href{#method-StrategusModule-initialize}{\code{StrategusModule$new()}}
+    \item \href{#method-StrategusModule-getPackageInformation}{\code{StrategusModule$getPackageInformation()}}
     \item \href{#method-StrategusModule-execute}{\code{StrategusModule$execute()}}
     \item \href{#method-StrategusModule-createResultsDataModel}{\code{StrategusModule$createResultsDataModel()}}
     \item \href{#method-StrategusModule-getResultsDataModelSpecification}{\code{StrategusModule$getResultsDataModelSpecification()}}
@@ -53,6 +54,22 @@ specification.}
     \if{html}{\out{<div class="r">}}
     \preformatted{StrategusModule$new()}
     \if{html}{\out{</div>}}
+  }
+}
+
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-StrategusModule-getPackageInformation"></a>}}
+\if{latex}{\out{\hypertarget{method-StrategusModule-getPackageInformation}{}}}
+\subsection{\code{StrategusModule$getPackageInformation()}}{
+  Get the package identity associated with the module.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{StrategusModule$getPackageInformation()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A list containing the module package name, version, and an
+renv-compatible DESCRIPTION hash.
   }
 }
 

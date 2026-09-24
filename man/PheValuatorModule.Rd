@@ -7,186 +7,179 @@
 Evaluates phenotype algorithms using the PheValuator method against the OMOP Common Data Model.
 }
 \section{Super class}{
-\code{\link[Strategus:StrategusModule]{Strategus::StrategusModule}} -> \code{PheValuatorModule}
+\code{\link[Strategus:StrategusModule]{StrategusModule}} -> \code{PheValuatorModule}
 }
 \section{Public fields}{
-\if{html}{\out{<div class="r6-fields">}}
-\describe{
-\item{\code{tablePrefix}}{The table prefix to append to the results tables}
-}
-\if{html}{\out{</div>}}
+  \if{html}{\out{<div class="r6-fields">}}
+  \describe{
+    \item{\code{tablePrefix}}{The table prefix to append to the results tables}
+  }
+  \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-PheValuatorModule-new}{\code{PheValuatorModule$new()}}
-\item \href{#method-PheValuatorModule-execute}{\code{PheValuatorModule$execute()}}
-\item \href{#method-PheValuatorModule-createResultsDataModel}{\code{PheValuatorModule$createResultsDataModel()}}
-\item \href{#method-PheValuatorModule-getResultsDataModelSpecification}{\code{PheValuatorModule$getResultsDataModelSpecification()}}
-\item \href{#method-PheValuatorModule-uploadResults}{\code{PheValuatorModule$uploadResults()}}
-\item \href{#method-PheValuatorModule-createModuleSpecifications}{\code{PheValuatorModule$createModuleSpecifications()}}
-\item \href{#method-PheValuatorModule-validateModuleSpecifications}{\code{PheValuatorModule$validateModuleSpecifications()}}
-\item \href{#method-PheValuatorModule-clone}{\code{PheValuatorModule$clone()}}
+  \itemize{
+    \item \href{#method-PheValuatorModule-initialize}{\code{PheValuatorModule$new()}}
+    \item \href{#method-PheValuatorModule-execute}{\code{PheValuatorModule$execute()}}
+    \item \href{#method-PheValuatorModule-createResultsDataModel}{\code{PheValuatorModule$createResultsDataModel()}}
+    \item \href{#method-PheValuatorModule-getResultsDataModelSpecification}{\code{PheValuatorModule$getResultsDataModelSpecification()}}
+    \item \href{#method-PheValuatorModule-uploadResults}{\code{PheValuatorModule$uploadResults()}}
+    \item \href{#method-PheValuatorModule-createModuleSpecifications}{\code{PheValuatorModule$createModuleSpecifications()}}
+    \item \href{#method-PheValuatorModule-validateModuleSpecifications}{\code{PheValuatorModule$validateModuleSpecifications()}}
+    \item \href{#method-PheValuatorModule-clone}{\code{PheValuatorModule$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>Strategus::StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>Strategus::StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="getPackageInformation"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-getPackageInformation'><code>StrategusModule$getPackageInformation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-PheValuatorModule-new"></a>}}
-\if{latex}{\out{\hypertarget{method-PheValuatorModule-new}{}}}
-\subsection{Method \code{new()}}{
-Initialize the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<a id="method-PheValuatorModule-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-PheValuatorModule-initialize}{}}}
+\subsection{\code{PheValuatorModule$new()}}{
+  Initialize the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$new()}
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PheValuatorModule-execute"></a>}}
 \if{latex}{\out{\hypertarget{method-PheValuatorModule-execute}{}}}
-\subsection{Method \code{execute()}}{
-Execute PheValuator
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$execute(
+\subsection{\code{PheValuatorModule$execute()}}{
+  Execute PheValuator
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$execute(
   connectionDetails,
   analysisSpecifications,
   executionSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{connectionDetails}}{An object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
+      \item{\code{executionSettings}}{An object of type \code{ExecutionSettings} as created
 by \code{\link[=createCdmExecutionSettings]{createCdmExecutionSettings()}} or \code{\link[=createResultsExecutionSettings]{createResultsExecutionSettings()}}.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PheValuatorModule-createResultsDataModel"></a>}}
 \if{latex}{\out{\hypertarget{method-PheValuatorModule-createResultsDataModel}{}}}
-\subsection{Method \code{createResultsDataModel()}}{
-Create the results data model for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$createResultsDataModel(
+\subsection{\code{PheValuatorModule$createResultsDataModel()}}{
+  Create the results data model for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$createResultsDataModel(
   resultsConnectionDetails,
   resultsDatabaseSchema,
   tablePrefix = self$tablePrefix
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{resultsDatabaseSchema}}{The schema in the results database that holds the results data model.}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PheValuatorModule-getResultsDataModelSpecification"></a>}}
 \if{latex}{\out{\hypertarget{method-PheValuatorModule-getResultsDataModelSpecification}{}}}
-\subsection{Method \code{getResultsDataModelSpecification()}}{
-Get the results data model specification for the module
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$getResultsDataModelSpecification(tablePrefix = "")}\if{html}{\out{</div>}}
+\subsection{\code{PheValuatorModule$getResultsDataModelSpecification()}}{
+  Get the results data model specification for the module
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$getResultsDataModelSpecification(tablePrefix = "")}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+      \item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-
-\item{\code{tablePrefix}}{A prefix to apply to the database table names (optional).}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PheValuatorModule-uploadResults"></a>}}
 \if{latex}{\out{\hypertarget{method-PheValuatorModule-uploadResults}{}}}
-\subsection{Method \code{uploadResults()}}{
-Upload the results for PheValuator
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$uploadResults(
+\subsection{\code{PheValuatorModule$uploadResults()}}{
+  Upload the results for PheValuator
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$uploadResults(
   resultsConnectionDetails,
   analysisSpecifications,
   resultsDataModelSettings
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{resultsConnectionDetails}}{The connection details to the results database which
+      \item{\code{resultsConnectionDetails}}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
 \code{\link[DatabaseConnector:createConnectionDetails]{DatabaseConnector::createConnectionDetails()}} function.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-
-\item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
+      \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+    }
+    \if{html}{\out{</div>}}
+  }
+}
 
-\item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PheValuatorModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-PheValuatorModule-createModuleSpecifications}{}}}
-\subsection{Method \code{createModuleSpecifications()}}{
-Creates the PheValuator Module Specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$createModuleSpecifications(
+\subsection{\code{PheValuatorModule$createModuleSpecifications()}}{
+  Creates the PheValuator Module Specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$createModuleSpecifications(
   analysisName = "Main",
-  cohortDefinitionSet = data.frame(),
   pheValuatorAnalysisList
-)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{analysisName}}{A short name for the analysis (default: \code{"Main"}).}
-
-\item{\code{cohortDefinitionSet}}{A data frame of cohort definitions
-(default: empty data frame).}
-
-\item{\code{pheValuatorAnalysisList}}{A list of analysis specification objects.
+)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{analysisName}}{A short name for the analysis (default: \code{"Main"}).}
+      \item{\code{pheValuatorAnalysisList}}{A list of analysis specification objects.
 Each element is a list with two named fields:
 \describe{
 \item{\code{phenotype}}{A short file-system-safe name for the phenotype
@@ -204,42 +197,47 @@ Each element is a list with two named fields:
 }
 }
 }}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
-\if{html}{\out{</div>}}
-}
-}
+
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PheValuatorModule-validateModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-PheValuatorModule-validateModuleSpecifications}{}}}
-\subsection{Method \code{validateModuleSpecifications()}}{
-Validate the module specifications
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$validateModuleSpecifications(moduleSpecifications)}\if{html}{\out{</div>}}
+\subsection{\code{PheValuatorModule$validateModuleSpecifications()}}{
+  Validate the module specifications
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$validateModuleSpecifications(moduleSpecifications)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{moduleSpecifications}}{The PheValuator module specifications}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{moduleSpecifications}}{The PheValuator module specifications}
-}
-\if{html}{\out{</div>}}
-}
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-PheValuatorModule-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-PheValuatorModule-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{PheValuatorModule$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{PheValuatorModule$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{PheValuatorModule$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

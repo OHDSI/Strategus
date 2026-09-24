@@ -32,6 +32,7 @@ Computes incidence rates for cohorts against the OMOP Common Data Model
 \if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
   <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="createSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-createSharedResourcesSpecifications'><code>StrategusModule$createSharedResourcesSpecifications()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="getPackageInformation"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-getPackageInformation'><code>StrategusModule$getPackageInformation()</code></a></span></li>
   <li><span class="pkg-link" data-pkg="Strategus" data-topic="StrategusModule" data-id="validateSharedResourcesSpecifications"><a href='../../Strategus/html/StrategusModule.html#method-StrategusModule-validateSharedResourcesSpecifications'><code>StrategusModule$validateSharedResourcesSpecifications()</code></a></span></li>
 </ul>
 </details>}}

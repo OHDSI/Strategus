@@ -12,37 +12,6 @@
 .OPERATION_CHECKSUM_ALGORITHM <- "md5"
 .SUPPORTED_OPERATIONS <- c("EXECUTION", "UPLOAD")
 
-.getHadesModuleRegistry <- function() {
-  CohortGenerator::readCsv(
-    file = system.file(
-      file.path("csv", "hadesModuleList.csv"),
-      package = "Strategus",
-      mustWork = TRUE
-    ),
-    warnOnCaseMismatch = FALSE
-  )
-}
-
-.getModulePackageName <- function(moduleName) {
-  moduleRegistry <- .getHadesModuleRegistry()
-  index <- match(tolower(moduleName), tolower(moduleRegistry$module))
-  if (is.na(index)) {
-    stop("No underlying package is registered for module: ", moduleName, call. = FALSE)
-  }
-  moduleRegistry$package[[index]]
-}
-
-.getInstalledPackageVersion <- function(packageName) {
-  if (!requireNamespace(packageName, quietly = TRUE)) {
-    stop("Package '", packageName, "' must be installed to compute task status.", call. = FALSE)
-  }
-  as.character(utils::packageVersion(packageName))
-}
-
-.getStrategusVersion <- function() {
-  as.character(utils::packageVersion("Strategus"))
-}
-
 .stabilizeOperationIdentity <- function(value) {
   if (is.data.frame(value)) {
     value[] <- lapply(value, .stabilizeOperationIdentity)

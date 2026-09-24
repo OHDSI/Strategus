@@ -55,6 +55,12 @@ addModuleSpecifications <- function(analysisSpecifications, moduleSpecifications
   checkmate::assertClass(moduleSpecifications, "ModuleSpecifications", add = errorMessages)
   checkmate::reportAssertions(collection = errorMessages)
 
+  moduleName <- moduleSpecifications$module
+  checkmate::assertString(moduleName, min.chars = 1)
+  moduleObject <- get(moduleName)$new()
+  packageInformation <- moduleObject$getPackageInformation()
+  moduleSpecifications[names(packageInformation)] <- packageInformation
+
   analysisSpecifications$moduleSpecifications[[length(analysisSpecifications$moduleSpecifications) + 1]] <- moduleSpecifications
   return(analysisSpecifications)
 }
@@ -282,11 +288,15 @@ addAndValidateModuleSpecifications <- function(moduleName, analysisSpecification
 #' Create an empty analysis specifications object.
 #'
 #' @return
-#' An object of type `AnalysisSpecifications`.
+#' An object of type `AnalysisSpecifications`. The object records the installed
+#' Strategus version and an renv-compatible hash of the package DESCRIPTION.
 #'
 #' @export
 createEmptyAnalysisSpecifications <- function() {
+  strategusIdentity <- .getPackageIdentity("Strategus")
   analysisSpecifications <- list(
+    strategusVersion = strategusIdentity$version,
+    strategusPackageHash = strategusIdentity$hash,
     sharedResources = list(),
     moduleSpecifications = list()
   )

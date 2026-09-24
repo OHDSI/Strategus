@@ -1,4 +1,6 @@
 {
+  "strategusVersion": "1.6.0",
+  "strategusPackageHash": "411775e4cd3cc540388eccbab4771188",
   "sharedResources": [
     {
       "cohortDefinitions": [
@@ -58,11 +60,7 @@
           "cohortDefinition": "{\r\n  \"ConceptSets\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"[MVK] Viral Sinusitis diagnosis\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Clinical Finding\",\r\n              \"CONCEPT_CODE\": \"444814009\",\r\n              \"CONCEPT_ID\": 40481087,\r\n              \"CONCEPT_NAME\": \"Viral sinusitis\",\r\n              \"DOMAIN_ID\": \"Condition\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"SNOMED\"\r\n            }\r\n          }\r\n        ]\r\n      }\r\n    },\r\n    {\r\n      \"id\": 1,\r\n      \"name\": \"[MVK] Viral Sinusistis drugs\",\r\n      \"expression\": {\r\n        \"items\": [\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"161\",\r\n              \"CONCEPT_ID\": 1125315,\r\n              \"CONCEPT_NAME\": \"acetaminophen\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"723\",\r\n              \"CONCEPT_ID\": 1713332,\r\n              \"CONCEPT_NAME\": \"amoxicillin\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"1191\",\r\n              \"CONCEPT_ID\": 1112807,\r\n              \"CONCEPT_NAME\": \"aspirin\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"48203\",\r\n              \"CONCEPT_ID\": 1759842,\r\n              \"CONCEPT_NAME\": \"clavulanate\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"7984\",\r\n              \"CONCEPT_ID\": 1729720,\r\n              \"CONCEPT_NAME\": \"penicillin V\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3642\",\r\n              \"CONCEPT_ID\": 738818,\r\n              \"CONCEPT_NAME\": \"doxylamine\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3642\",\r\n              \"CONCEPT_ID\": 738818,\r\n              \"CONCEPT_NAME\": \"doxylamine\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"3289\",\r\n              \"CONCEPT_ID\": 1119510,\r\n              \"CONCEPT_NAME\": \"dextromethorphan\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"5640\",\r\n              \"CONCEPT_ID\": 1177480,\r\n              \"CONCEPT_NAME\": \"ibuprofen\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"140587\",\r\n              \"CONCEPT_ID\": 1118084,\r\n              \"CONCEPT_NAME\": \"celecoxib\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Ingredient\",\r\n              \"CONCEPT_CODE\": \"7258\",\r\n              \"CONCEPT_ID\": 1115008,\r\n              \"CONCEPT_NAME\": \"naproxen\",\r\n              \"DOMAIN_ID\": \"Drug\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"RxNorm\"\r\n            }\r\n          },\r\n          {\r\n            \"concept\": {\r\n              \"CONCEPT_CLASS_ID\": \"Event\",\r\n              \"CONCEPT_CODE\": \"419620001\",\r\n              \"CONCEPT_ID\": 4306655,\r\n              \"CONCEPT_NAME\": \"Death\",\r\n              \"DOMAIN_ID\": \"Observation\",\r\n              \"INVALID_REASON\": \"V\",\r\n              \"INVALID_REASON_CAPTION\": \"Valid\",\r\n              \"STANDARD_CONCEPT\": \"S\",\r\n              \"STANDARD_CONCEPT_CAPTION\": \"Standard\",\r\n              \"VOCABULARY_ID\": \"SNOMED\",\r\n              \"VALID_START_DATE\": \"2006-01-31\",\r\n              \"VALID_END_DATE\": \"2099-12-31\"\r\n            }\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ],\r\n  \"PrimaryCriteria\": {\r\n    \"CriteriaList\": [\r\n      {\r\n        \"DrugEra\": {\r\n          \"CodesetId\": 1\r\n        }\r\n      }\r\n    ],\r\n    \"ObservationWindow\": {\r\n      \"PriorDays\": 365,\r\n      \"PostDays\": 1095\r\n    },\r\n    \"PrimaryCriteriaLimit\": {\r\n      \"Type\": \"First\"\r\n    }\r\n  },\r\n  \"QualifiedLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"ExpressionLimit\": {\r\n    \"Type\": \"First\"\r\n  },\r\n  \"InclusionRules\": [\r\n    {\r\n      \"name\": \"Viral Sinusitis diagnosis\",\r\n      \"expression\": {\r\n        \"Type\": \"ALL\",\r\n        \"CriteriaList\": [\r\n          {\r\n            \"Criteria\": {\r\n              \"ConditionOccurrence\": {\r\n                \"CodesetId\": 0\r\n              }\r\n            },\r\n            \"StartWindow\": {\r\n              \"Start\": {\r\n                \"Coeff\": -1\r\n              },\r\n              \"End\": {\r\n                \"Coeff\": 1\r\n              },\r\n              \"UseEventEnd\": false\r\n            },\r\n            \"IgnoreObservationPeriod\": true,\r\n            \"Occurrence\": {\r\n              \"Type\": 2,\r\n              \"Count\": 1\r\n            }\r\n          }\r\n        ],\r\n        \"DemographicCriteriaList\": [],\r\n        \"Groups\": []\r\n      }\r\n    },\r\n    {\r\n      \"name\": \"Index year\",\r\n      \"expression\": {\r\n        \"Type\": \"ALL\",\r\n        \"CriteriaList\": [],\r\n        \"DemographicCriteriaList\": [\r\n          {\r\n            \"OccurrenceStartDate\": {\r\n              \"Value\": \"1949-12-31\",\r\n              \"Op\": \"gt\"\r\n            }\r\n          }\r\n        ],\r\n        \"Groups\": []\r\n      }\r\n    }\r\n  ],\r\n  \"CensoringCriteria\": [],\r\n  \"CollapseSettings\": {\r\n    \"CollapseType\": \"ERA\",\r\n    \"EraPad\": 0\r\n  },\r\n  \"CensorWindow\": {},\r\n  \"cdmVersionRange\": \">=5.0.0\"\r\n}"
         }
       ],
-      "subsetDefs": [
-        "{\n  \"name\": \"age 18 to 64\",\n  \"definitionId\": 1,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    }\n  ],\n  \"packageVersion\": \"1.1.1\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}",
-        "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"1.1.1\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}",
-        "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"1.1.1\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}"
-      ],
+      "subsetDefs": ["{\n  \"name\": \"age 18 to 64\",\n  \"definitionId\": 1,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    }\n  ],\n  \"packageVersion\": \"1.1.1\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}", "{\n  \"name\": \"first event with 365 prior obs\",\n  \"definitionId\": 2,\n  \"subsetOperators\": [\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"1.1.1\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}", "{\n  \"name\": \"age 18 to 64 and first event with 365 prior obs\",\n  \"definitionId\": 3,\n  \"subsetOperators\": [\n    {\n      \"name\": \"Age 18 to 64\",\n      \"subsetType\": \"DemographicSubsetOperator\",\n      \"ageMin\": 18,\n      \"ageMax\": 64\n    },\n    {\n      \"name\": \"first event with 365 prior obs\",\n      \"subsetType\": \"LimitSubsetOperator\",\n      \"priorTime\": 365,\n      \"followUpTime\": 0,\n      \"minimumCohortDuration\": 0,\n      \"limitTo\": \"firstEver\"\n    }\n  ],\n  \"packageVersion\": \"1.1.1\",\n  \"identifierExpression\": \"targetId * 1000 + definitionId\",\n  \"operatorNameConcatString\": \", \",\n  \"subsetCohortNameTemplate\": \"@baseCohortName - @subsetDefinitionName\"\n}"],
       "cohortSubsets": [
         {
           "cohortId": 1001,
@@ -173,6 +171,9 @@
       "settings": {
         "generateStats": true
       },
+      "modulePackage": "CohortGenerator",
+      "modulePackageVersion": "1.1.1",
+      "modulePackageHash": "4072b9d73a8b7fabc2b742be8cdd48e1",
       "attr_class": ["ModuleSpecifications", "CohortGeneratorModuleSpecifications"]
     },
     {
@@ -233,6 +234,9 @@
         "minCharacterizationMean": 0.01,
         "irWashoutPeriod": 0
       },
+      "modulePackage": "CohortDiagnostics",
+      "modulePackageVersion": "3.4.2",
+      "modulePackageHash": "08c500e637eee83c9a6b4f8cafc243e9",
       "attr_class": ["ModuleSpecifications", "CohortDiagnosticsModuleSpecifications"]
     },
     {
@@ -368,6 +372,9 @@
         "minCaseSize": 0,
         "outputTable": "characterization_cohorts"
       },
+      "modulePackage": "Characterization",
+      "modulePackageVersion": "4.0.0",
+      "modulePackageHash": "df33ed846f58fcef39f8b73f6e180da8",
       "attr_class": ["ModuleSpecifications", "CharacterizationModuleSpecifications"]
     },
     {
@@ -438,6 +445,9 @@
           }
         }
       },
+      "modulePackage": "CohortIncidence",
+      "modulePackageVersion": "4.2.0",
+      "modulePackageHash": "f96dad9558b82512a7024c0d6cdfbe76",
       "attr_class": ["ModuleSpecifications", "CohortIncidenceModuleSpecifications"]
     },
     {
@@ -608,6 +618,9 @@
           }
         ]
       },
+      "modulePackage": "TreatmentPatterns",
+      "modulePackageVersion": "3.1.2",
+      "modulePackageHash": "ffd24816eb3dc10cb14a890c929ed52e",
       "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
     },
     {
@@ -1226,6 +1239,9 @@
           ]
         }
       },
+      "modulePackage": "CohortMethod",
+      "modulePackageVersion": "6.0.3",
+      "modulePackageHash": "2d869c5a63b669f0e5a2c3b21ea2f168",
       "attr_class": ["ModuleSpecifications", "CohortMethodModuleSpecifications"]
     },
     {
@@ -1642,6 +1658,9 @@
           ]
         }
       },
+      "modulePackage": "SelfControlledCaseSeries",
+      "modulePackageVersion": "6.1.5",
+      "modulePackageHash": "24a693717485b005a56e69fc965975ad",
       "attr_class": ["ModuleSpecifications", "SelfControlledCaseSeriesModuleSpecifications"]
     },
     {
@@ -1967,6 +1986,9 @@
         ],
         "skipDiagnostics": false
       },
+      "modulePackage": "PatientLevelPrediction",
+      "modulePackageVersion": "6.6.0",
+      "modulePackageHash": "5bb6b8068e7be4f67f47379afec57f8c",
       "attr_class": ["ModuleSpecifications", "PatientLevelPredictionModuleSpecifications"]
     }
   ],
