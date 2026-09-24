@@ -36,6 +36,10 @@ test_that("PatientLevelPredictionModule results data model is in correct format"
   testResultsDataModelFormat("PatientLevelPredictionModule")
 })
 
+test_that("PheValuatorModule results data model is in correct format", {
+  testResultsDataModelFormat("PheValuatorModule")
+})
+
 test_that("SelfControlledCaseSeriesModule results data model is in correct format", {
   testResultsDataModelFormat("SelfControlledCaseSeriesModule")
 })

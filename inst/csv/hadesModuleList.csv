@@ -9,3 +9,4 @@ PatientLevelPredictionModule,PatientLevelPrediction,TRUE
 PatientLevelPredictionValidationModule,PatientLevelPrediction,FALSE
 SelfControlledCaseSeriesModule,SelfControlledCaseSeries,TRUE
 TreatmentPatternsModule,TreatmentPatterns,TRUE
+PheValuatorModule,PheValuator,TRUE

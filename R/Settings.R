@@ -249,6 +249,25 @@ addPatientLevelPredictionValidationModuleSpecifications <- function(analysisSpec
   )
 }
 
+#' Add PheValuator Module specifications to analysis specifications
+#'
+#' @template analysisSpecifications
+#' @param moduleSpecifications Created by the \href{../reference/PheValuatorModule.html#method-PheValuatorModule-createModuleSpecifications}{\code{PheValuatorModule$createModuleSpecifications()}} function.
+#'
+#' @return
+#' Returns the `analysisSpecifications` object with the module specifications added.
+#'
+#' @export
+addPheValuatorModuleSpecifications <- function(analysisSpecifications, moduleSpecifications) {
+  return(
+    addAndValidateModuleSpecifications(
+      moduleName = "PheValuatorModule",
+      analysisSpecifications = analysisSpecifications,
+      moduleSpecifications = moduleSpecifications
+    )
+  )
+}
+
 
 addAndValidateModuleSpecifications <- function(moduleName, analysisSpecifications, moduleSpecifications) {
   moduleObj <- get(moduleName)$new()
