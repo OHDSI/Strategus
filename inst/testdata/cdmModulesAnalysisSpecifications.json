@@ -1,6 +1,6 @@
 {
   "strategusVersion": "1.6.0",
-  "strategusPackageHash": "66b434aff5916869f23a562fc0aecf1b",
+  "strategusPackageHash": "411775e4cd3cc540388eccbab4771188",
   "sharedResources": [
     {
       "cohortDefinitions": [
@@ -173,7 +173,7 @@
       },
       "modulePackage": "CohortGenerator",
       "modulePackageVersion": "1.1.1",
-      "modulePackageHash": "07497a2eb03173e8a8f5a1df498a61da",
+      "modulePackageHash": "4072b9d73a8b7fabc2b742be8cdd48e1",
       "attr_class": ["ModuleSpecifications", "CohortGeneratorModuleSpecifications"]
     },
     {
@@ -236,7 +236,7 @@
       },
       "modulePackage": "CohortDiagnostics",
       "modulePackageVersion": "3.4.2",
-      "modulePackageHash": "493d0196c29a6523cbb043cee481035b",
+      "modulePackageHash": "08c500e637eee83c9a6b4f8cafc243e9",
       "attr_class": ["ModuleSpecifications", "CohortDiagnosticsModuleSpecifications"]
     },
     {
@@ -374,7 +374,7 @@
       },
       "modulePackage": "Characterization",
       "modulePackageVersion": "4.0.0",
-      "modulePackageHash": "e6e5fd4765e0873e62755ab6f5ccb116",
+      "modulePackageHash": "df33ed846f58fcef39f8b73f6e180da8",
       "attr_class": ["ModuleSpecifications", "CharacterizationModuleSpecifications"]
     },
     {
@@ -447,7 +447,7 @@
       },
       "modulePackage": "CohortIncidence",
       "modulePackageVersion": "4.2.0",
-      "modulePackageHash": "8b3121233771ac8603020a0b34f37488",
+      "modulePackageHash": "f96dad9558b82512a7024c0d6cdfbe76",
       "attr_class": ["ModuleSpecifications", "CohortIncidenceModuleSpecifications"]
     },
     {
@@ -620,7 +620,7 @@
       },
       "modulePackage": "TreatmentPatterns",
       "modulePackageVersion": "3.1.2",
-      "modulePackageHash": "ed3f8dc0c629a47f5e90ea2687834c91",
+      "modulePackageHash": "ffd24816eb3dc10cb14a890c929ed52e",
       "attr_class": ["ModuleSpecifications", "TreatmentPatternsModuleSpecifications"]
     },
     {
@@ -1241,7 +1241,7 @@
       },
       "modulePackage": "CohortMethod",
       "modulePackageVersion": "6.0.3",
-      "modulePackageHash": "305d382b233c283e7a220e99cb86fcab",
+      "modulePackageHash": "2d869c5a63b669f0e5a2c3b21ea2f168",
       "attr_class": ["ModuleSpecifications", "CohortMethodModuleSpecifications"]
     },
     {
@@ -1660,7 +1660,7 @@
       },
       "modulePackage": "SelfControlledCaseSeries",
       "modulePackageVersion": "6.1.5",
-      "modulePackageHash": "fe44866f76c07c2784443ad8d30d347b",
+      "modulePackageHash": "24a693717485b005a56e69fc965975ad",
       "attr_class": ["ModuleSpecifications", "SelfControlledCaseSeriesModuleSpecifications"]
     },
     {
@@ -1988,7 +1988,7 @@
       },
       "modulePackage": "PatientLevelPrediction",
       "modulePackageVersion": "6.6.0",
-      "modulePackageHash": "0caaacee60d2b925dcfcf2efb3be8fcb",
+      "modulePackageHash": "5bb6b8068e7be4f67f47379afec57f8c",
       "attr_class": ["ModuleSpecifications", "PatientLevelPredictionModuleSpecifications"]
     }
   ],

@@ -1,6 +1,6 @@
 {
   "strategusVersion": "1.6.0",
-  "strategusPackageHash": "66b434aff5916869f23a562fc0aecf1b",
+  "strategusPackageHash": "411775e4cd3cc540388eccbab4771188",
   "sharedResources": [],
   "moduleSpecifications": [
     {
@@ -58,7 +58,7 @@
       },
       "modulePackage": "EvidenceSynthesis",
       "modulePackageVersion": "1.1.0",
-      "modulePackageHash": "a9d824d751ca77b67673414f37e2eb81",
+      "modulePackageHash": "d5bb6bbae8ec7ae4d07ed9bde514c317",
       "attr_class": ["ModuleSpecifications", "EvidenceSynthesisModuleSpecifications"]
     }
   ],

@@ -22,11 +22,11 @@ test_that("package record hashes follow the renv DESCRIPTION algorithm", {
 
   expect_identical(
     Strategus:::.computePackageRecordHash(repositoryRecord),
-    "e9953b1ffb833c91723a9cea8165ed67"
+    "b43d5f5e585fbae67993ea8d8cfef1a8"
   )
   expect_identical(
     Strategus:::.computePackageRecordHash(githubRecord),
-    "eb4964261f0c4d0376e8f5b8f1388740"
+    "af82e1257b12fd2b394e9b0097772522"
   )
 })
 

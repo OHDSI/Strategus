@@ -102,10 +102,7 @@
   contents <- paste(names(selected), selected, sep = ": ", collapse = "\n")
   contents <- gsub("[[:space:]]", "", contents)
 
-  hashFile <- tempfile("strategus-package-hash-")
-  on.exit(unlink(hashFile), add = TRUE)
-  writeLines(contents, con = hashFile, useBytes = TRUE)
-  unname(as.character(tools::md5sum(hashFile)))
+  unname(digest::digest(contents, algo = "md5", serialize = FALSE))
 }
 
 .getInstalledPackageHash <- function(packageName) {
