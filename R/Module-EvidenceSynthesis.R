@@ -1173,11 +1173,14 @@ EvidenceSynthesisModule <- R6::R6Class(
 
         # Note that scc_result stores the effect estimate as `rr` (not `log_rr`),
         # so the log estimate is derived here for use by the meta-analysis.
+        # Non-finite estimates (rr = 0 / Inf / NA from sparse pairs with zero
+        # exposed or unexposed outcomes) cannot be log-meta-analyzed, so they are
+        # set to NA and dropped from the likelihood approximations below.
         estimates <- estimates |>
-          mutate(logRr = ifelse(.data$rr > 0, log(.data$rr), NA))
+          mutate(logRr = ifelse(is.finite(.data$rr) & .data$rr > 0, log(.data$rr), NA))
 
         # Temp hack: detect NA values that have been converted to 0 in the DB:
-        idx <- estimates$seLogRr == 0
+        idx <- is.na(estimates$seLogRr) | !is.finite(estimates$seLogRr) | estimates$seLogRr == 0
         estimates$logRr[idx] <- NA
         estimates$seLogRr[idx] <- NA
         estimates$pValue[idx] <- NA
