@@ -14,7 +14,7 @@ createResultDataModel(
 \item{analysisSpecifications}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
 
-\item{resultsDataModelSettings}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+\item{resultsDataModelSettings}{The results data model settings as created using \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}.}
 
 \item{resultsConnectionDetails}{The connection details to the results database which
 is an object of class \code{connectionDetails} as created by the
@@ -23,5 +23,5 @@ is an object of class \code{connectionDetails} as created by the
 \description{
 This function creates the results data model in the specified schema within
 the results database. The results data model is used to hold the study
-results and must be created before using [@seealso \code{\link[=uploadResults]{uploadResults()}}]
+results and must be created before using \code{\link[=uploadResults]{uploadResults()}}.
 }

@@ -33,7 +33,7 @@ test_that("Test analysis specification creation", {
   # Characterization -------------------------------
   cModuleSettingsCreator <- CharacterizationModule$new()
   characterizationStudyPopulationSettings <- Characterization::createStudyPopulationSettings(
-    targetIds = c(1,2)
+    targetIds = c(1, 2)
   )
   characterizationSettings <- Characterization::createCharacterizationSettings(
     targetBaselineSettings = Characterization::createTargetBaselineSettings(

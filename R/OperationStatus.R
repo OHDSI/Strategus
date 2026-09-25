@@ -102,8 +102,7 @@
 
 .operationStatusPath <- function(resultsFolder, moduleName, operation) {
   checkmate::assertChoice(operation, .SUPPORTED_OPERATIONS)
-  fileName <- switch(
-    operation,
+  fileName <- switch(operation,
     EXECUTION = "execution_status.json",
     UPLOAD = "upload_status.json"
   )
@@ -170,13 +169,13 @@
   }
   characterFields <- setdiff(requiredNames, "schemaVersion")
   if (!inherits(record, "OperationStatusRecord") || !all(requiredNames %in% names(record)) ||
-      length(schemaVersion) != 1 || is.na(schemaVersion) ||
-      schemaVersion != .OPERATION_STATUS_SCHEMA_VERSION ||
-      !all(vapply(record[characterFields], isScalarCharacter, logical(1))) ||
-      record$checksumAlgorithm != .OPERATION_CHECKSUM_ALGORITHM ||
-      record$operation != operationInformation$operation ||
-      tolower(record$moduleName) != tolower(operationInformation$moduleName) ||
-      !record$state %in% c("RUNNING", "COMPLETED", "FAILED")) {
+    length(schemaVersion) != 1 || is.na(schemaVersion) ||
+    schemaVersion != .OPERATION_STATUS_SCHEMA_VERSION ||
+    !all(vapply(record[characterFields], isScalarCharacter, logical(1))) ||
+    record$checksumAlgorithm != .OPERATION_CHECKSUM_ALGORITHM ||
+    record$operation != operationInformation$operation ||
+    tolower(record$moduleName) != tolower(operationInformation$moduleName) ||
+    !record$state %in% c("RUNNING", "COMPLETED", "FAILED")) {
     return(list(state = "INVALID", record = record, checksumMatches = NA))
   }
   checksumMatches <- identical(record$operationChecksum, operationInformation$operationChecksum)

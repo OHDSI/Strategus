@@ -109,7 +109,6 @@ test_that("validateModuleSpecifications succeeds with valid spec", {
 })
 
 
-
 # getResultsDataModelSpecification -----------------------------------------
 test_that("getResultsDataModelSpecification returns expected structure", {
   pvModule <- PheValuatorModule$new()
@@ -141,7 +140,6 @@ test_that("tablePrefix is set correctly", {
   pvModule <- PheValuatorModule$new()
   expect_equal(pvModule$tablePrefix, "pv_")
 })
-
 
 
 # addPheValuatorModuleSpecifications ---------------------------------------

@@ -211,14 +211,12 @@ PheValuatorModule <- R6::R6Class(
         package = "Strategus"
       ))
     },
-
     .getCohortDefinitionSet = function(spec) {
       if (length(private$jobContext$sharedResources) > 0) {
         return(super$.createCohortDefinitionSetFromJobContext())
       }
       stop("PheValuator requires cohort definitions provided via Strategus Shared Resources.")
     },
-
     .getReferencedCohorts = function(pheValuatorAnalysisList) {
       referencedCohorts <- lapply(seq_along(pheValuatorAnalysisList), function(i) {
         cohortsToEvaluate <- pheValuatorAnalysisList[[i]]$cohortsToEvaluate
@@ -248,7 +246,6 @@ PheValuatorModule <- R6::R6Class(
       referencedCohorts <- referencedCohorts[!is.na(referencedCohorts$cohortId), , drop = FALSE]
       return(referencedCohorts)
     },
-
     .validateReferencedCohorts = function(pheValuatorAnalysisList, cohortDefinitionSet) {
       referencedCohorts <- private$.getReferencedCohorts(pheValuatorAnalysisList)
       if (nrow(referencedCohorts) == 0) {
@@ -271,13 +268,11 @@ PheValuatorModule <- R6::R6Class(
       }
       invisible(TRUE)
     },
-
     .subsetCohortDefinitionSet = function(cohortDefinitionSet, pheValuatorAnalysisList) {
       referencedCohorts <- private$.getReferencedCohorts(pheValuatorAnalysisList)
       referencedCohortIds <- unique(referencedCohorts$cohortId)
       cohortDefinitionSet[as.integer(cohortDefinitionSet$cohortId) %in% referencedCohortIds, , drop = FALSE]
     },
-
     .formatCohortDefinitionSetForPheValuator = function(cohortDefinitionSet) {
       requiredColumns <- c("cohortId", "cohortName", "sql", "json")
       missingColumns <- setdiff(requiredColumns, colnames(cohortDefinitionSet))
@@ -304,12 +299,14 @@ PheValuatorModule <- R6::R6Class(
         stop("Length of phenotypeCohortId and washoutPeriod must be the same.")
       }
 
-      # Evaluate xSens and xSpec by default 
+      # Evaluate xSens and xSpec by default
       cts$phenotypeCohortId <-
-        c(cts$phenotypeCohortId,
+        c(
+          cts$phenotypeCohortId,
           cts$xSpecCohortId,
-          cts$xSensCohortId)
-      
+          cts$xSensCohortId
+        )
+
       cts$washoutPeriod <-
         c(cts$washoutPeriod, 0, 0)
 
@@ -321,11 +318,11 @@ PheValuatorModule <- R6::R6Class(
       pheValuatorAnalysisList <- mapply(
         function(cohortId, washout, idx) {
           createEvaluationCohortArgs <- PheValuator::createCreateEvaluationCohortArgs(
-            xSpecCohortId      = as.integer(cts$xSpecCohortId),
-            daysFromxSpec      = as.integer(cts$daysFromxSpec %||% 0),
-            xSensCohortId      = as.integer(cts$xSensCohortId),
+            xSpecCohortId = as.integer(cts$xSpecCohortId),
+            daysFromxSpec = as.integer(cts$daysFromxSpec %||% 0),
+            xSensCohortId = as.integer(cts$xSensCohortId),
             prevalenceCohortId = as.integer(cts$prevalenceCohortId),
-            covariateSettings  = cts$covariateSettings,
+            covariateSettings = cts$covariateSettings,
             lowerAgeLimit = as.integer(cts$lowerAgeLimit),
             upperAgeLimit = as.integer(cts$upperAgeLimit)
           )
@@ -354,22 +351,22 @@ PheValuatorModule <- R6::R6Class(
       }
 
       PheValuator::runPheValuatorAnalyses(
-        phenotype          = phenotype,
+        phenotype = phenotype,
         cohortDefinitionSet = private$.formatCohortDefinitionSetForPheValuator(
           private$.subsetCohortDefinitionSet(
             cohortDefinitionSet = cohortDefinitionSet,
             pheValuatorAnalysisList = list(analysisSpec)
           )
         ),
-        analysisName       = analysisName,
-        connectionDetails  = connectionDetails,
+        analysisName = analysisName,
+        connectionDetails = connectionDetails,
         tempEmulationSchema = executionSettings$tempEmulationSchema,
-        cdmDatabaseSchema  = executionSettings$cdmDatabaseSchema,
+        cdmDatabaseSchema = executionSettings$cdmDatabaseSchema,
         cohortDatabaseSchema = executionSettings$workDatabaseSchema,
-        cohortTable        = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
+        cohortTable = jobContext$moduleExecutionSettings$cohortTableNames$cohortTable,
         workDatabaseSchema = executionSettings$workDatabaseSchema,
-        databaseId         = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
-        outputFolder       = phenotypeOutputFolder,
+        databaseId = jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId,
+        outputFolder = phenotypeOutputFolder,
         pheValuatorAnalysisList = pheValuatorAnalysisList
       )
 
@@ -382,13 +379,13 @@ PheValuatorModule <- R6::R6Class(
           if (!startsWith(targetFileName, self$tablePrefix)) {
             targetFileName <- paste0(self$tablePrefix, targetFileName)
           }
-          
+
           targetFilePath <- file.path(resultsFolder, targetFileName)
           newData <- CohortGenerator::readCsv(
             file = csvFile,
             warnOnCaseMismatch = FALSE
           )
-          
+
           # If the file already exists, append to it; otherwise create it
           if (file.exists(targetFilePath)) {
             existingData <- CohortGenerator::readCsv(
@@ -399,7 +396,7 @@ PheValuatorModule <- R6::R6Class(
           } else {
             combinedData <- newData
           }
-          
+
           CohortGenerator::writeCsv(
             x = combinedData,
             file = targetFilePath,
