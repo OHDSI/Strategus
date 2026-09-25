@@ -1990,6 +1990,66 @@
       "modulePackageVersion": "6.6.0",
       "modulePackageHash": "5bb6b8068e7be4f67f47379afec57f8c",
       "attr_class": ["ModuleSpecifications", "PatientLevelPredictionModuleSpecifications"]
+    },
+    {
+      "module": "PheValuatorModule",
+      "settings": {
+        "analysisName": "GI bleed phenotype evaluation",
+        "pheValuatorAnalysisList": [
+          {
+            "phenotype": "giBleed",
+            "cohortsToEvaluate": {
+              "phenotypeCohortId": 3,
+              "washoutPeriod": 365,
+              "xSpecCohortId": 1,
+              "daysFromxSpec": 0,
+              "xSensCohortId": 2,
+              "prevalenceCohortId": 3,
+              "covariateSettings": [
+                {
+                  "temporal": false,
+                  "temporalSequence": false,
+                  "DemographicsGender": true,
+                  "DemographicsAgeGroup": true,
+                  "DemographicsRace": true,
+                  "DemographicsEthnicity": true,
+                  "ConditionGroupEraLongTerm": true,
+                  "DrugGroupEraLongTerm": true,
+                  "ProcedureOccurrenceLongTerm": true,
+                  "DeviceExposureLongTerm": true,
+                  "MeasurementLongTerm": true,
+                  "MeasurementValueLongTerm": true,
+                  "MeasurementRangeGroupLongTerm": true,
+                  "ObservationLongTerm": true,
+                  "DistinctConditionCountLongTerm": true,
+                  "DistinctIngredientCountLongTerm": true,
+                  "DistinctProcedureCountLongTerm": true,
+                  "DistinctMeasurementCountLongTerm": true,
+                  "VisitCountLongTerm": true,
+                  "VisitConceptCountLongTerm": true,
+                  "longTermStartDays": 0,
+                  "mediumTermStartDays": 0,
+                  "shortTermStartDays": 0,
+                  "endDays": 9999,
+                  "includedCovariateConceptIds": [],
+                  "addDescendantsToInclude": false,
+                  "excludedCovariateConceptIds": [],
+                  "addDescendantsToExclude": false,
+                  "includedCovariateIds": [],
+                  "attr_class": "covariateSettings",
+                  "attr_fun": "getDbDefaultCovariateData"
+                }
+              ],
+              "lowerAgeLimit": 0,
+              "upperAgeLimit": 120
+            }
+          }
+        ]
+      },
+      "modulePackage": "PheValuator",
+      "modulePackageVersion": "2.2.17",
+      "modulePackageHash": "eeefc806a2977a6bb5a313515113e4ca",
+      "attr_class": ["ModuleSpecifications", "PheValuatorModuleSpecifications"]
     }
   ],
   "attr_class": "AnalysisSpecifications"
