@@ -19,10 +19,10 @@
 #' @description
 #' This function creates the results data model in the specified schema within
 #' the results database. The results data model is used to hold the study
-#' results and must be created before using [@seealso [uploadResults()]]
+#' results and must be created before using [uploadResults()].
 #'
 #' @template AnalysisSpecifications
-#' @param resultsDataModelSettings The results data model settings as created using [@seealso [createResultsDataModelSettings()]]
+#' @param resultsDataModelSettings The results data model settings as created using [createResultsDataModelSettings()].
 #' @template resultsConnectionDetails
 #'
 #' @export
@@ -61,13 +61,8 @@ createResultDataModel <- function(analysisSpecifications,
     warning("Ignoring modulesToExecute parameter - all results tables are created by default.")
   }
 
-  allModules <- CohortGenerator::readCsv(
-    file = system.file(
-      file.path("csv", "hadesModuleList.csv"),
-      package = "Strategus",
-      mustWork = TRUE
-    )
-  )
+  allModules <- .getHadesModuleRegistry()
+  allModules <- allModules[allModules$createResultsDataModel, , drop = FALSE]
   for (i in 1:nrow(allModules)) {
     moduleName <- allModules$module[i]
     moduleExecutionStatus <- .resultDataModelModuleExecution(
@@ -124,12 +119,6 @@ uploadResults <- function(analysisSpecifications,
   # Used to keep track of the execution status
   executionStatus <- list()
 
-  # The DatabaseMetaData is a special case...
-  .uploadDatabaseMetadata(
-    resultsConnectionDetails = resultsConnectionDetails,
-    resultsDataModelSettings = resultsDataModelSettings
-  )
-
   # Determine if the user has opted to subset to specific modules
   # in the analysis specification. If so, validate that the
   # modulesToExecute are present in the analysis specification
@@ -140,6 +129,22 @@ uploadResults <- function(analysisSpecifications,
       modulesToExecute = resultsDataModelSettings$modulesToExecute
     )
   }
+
+  if (isTRUE(resultsDataModelSettings$skipCompletedUploads)) {
+    .printOperationPlan(
+      getUploadStatus(
+        analysisSpecifications = analysisSpecifications,
+        resultsDataModelSettings = resultsDataModelSettings,
+        resultsConnectionDetails = resultsConnectionDetails
+      )
+    )
+  }
+
+  # The DatabaseMetaData is a special case...
+  .uploadDatabaseMetadata(
+    resultsConnectionDetails = resultsConnectionDetails,
+    resultsDataModelSettings = resultsDataModelSettings
+  )
 
   for (i in 1:length(analysisSpecifications$moduleSpecifications)) {
     moduleName <- analysisSpecifications$moduleSpecifications[[i]]$module
@@ -179,11 +184,51 @@ uploadResults <- function(analysisSpecifications,
       resultsDatabaseSchema = resultsDataModelSettings$resultsDatabaseSchema
     )
   } else {
+    taskInformation <- .createTaskInformation(analysisSpecifications, moduleName)
+    operationInformation <- .createOperationInformation(
+      operation = "UPLOAD",
+      taskInformation = taskInformation,
+      resultsDataModelSettings = resultsDataModelSettings,
+      resultsConnectionDetails = resultsConnectionDetails
+    )
+    recordPath <- .operationStatusPath(
+      resultsFolder = resultsDataModelSettings$resultsFolder,
+      moduleName = moduleName,
+      operation = "UPLOAD"
+    )
+    uploadState <- .interpretOperationStatus(recordPath, operationInformation)
+    if (isTRUE(resultsDataModelSettings$skipCompletedUploads) && uploadState$state == "COMPLETED") {
+      return(
+        .createModuleExecutionStatus(
+          moduleName = moduleName,
+          status = "SKIPPED",
+          errorMessage = "Matching completed upload status found",
+          executionTime = "SKIPPED"
+        )
+      )
+    }
+    startTime <- Sys.time()
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = "RUNNING",
+      startTime = startTime
+    )
     executionResult <- .safeExecution(
       fn = moduleFn,
       resultsConnectionDetails = resultsConnectionDetails,
       analysisSpecifications = analysisSpecifications,
       resultsDataModelSettings = resultsDataModelSettings
+    )
+    endTime <- Sys.time()
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = if (executionResult$status == "SUCCESS") "COMPLETED" else "FAILED",
+      startTime = startTime,
+      endTime = endTime,
+      elapsedSeconds = as.numeric(difftime(endTime, startTime, units = "secs")),
+      error = executionResult$error
     )
   }
   if (executionResult$status == "FAILED") {

@@ -296,7 +296,7 @@ TreatmentPatternsModule <- R6::R6Class(
         specifications = resultsModelSpec
       )
     },
-    #' @description Creates the TreatmentPatternsnModule Specifications
+    #' @description Creates the TreatmentPatternsModule Specifications
     #'
     #' @param analysisId (`numeric(1)`)
     #' Unique identifier for the TreatmentPatterns analysis
@@ -326,8 +326,8 @@ TreatmentPatternsModule <- R6::R6Class(
     #' Minimum time an event era before or after a generated combination treatment
     #' should last to be included in analysis
     #' @param filterTreatments (`character(1)`: `"First"` \["first", "Changes", "all"\])\cr
-    #' Select first occurrence of (‘First’); changes between (‘Changes’); or all
-    #' event cohorts (‘All’).
+    #' Select first occurrence of (`First`); changes between (`Changes`); or all
+    #' event cohorts (`All`).
     #' @param maxPathLength (`integer(1)`: `5`)\cr
     #' Maximum number of steps included in treatment pathway
     #' @param ageWindow (`integer(n)`: `10`)\cr

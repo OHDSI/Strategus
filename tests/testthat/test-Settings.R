@@ -32,9 +32,16 @@ test_that("Test analysis specification creation", {
   # Test Module Settings ----------------------
   # Characterization -------------------------------
   cModuleSettingsCreator <- CharacterizationModule$new()
+  characterizationStudyPopulationSettings <- Characterization::createStudyPopulationSettings(
+    targetIds = c(1, 2)
+  )
+  characterizationSettings <- Characterization::createCharacterizationSettings(
+    targetBaselineSettings = Characterization::createTargetBaselineSettings(
+      studyPopulationSettings = characterizationStudyPopulationSettings
+    )
+  )
   cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-    targetIds = c(1, 2),
-    outcomeIds = 3
+    characterizationSettings = characterizationSettings
   )
 
   # Cohort Diagnostics -----------------
@@ -65,8 +72,14 @@ test_that("Test analysis specification creation", {
   # Characterization -------------------------------
   cModuleSettingsCreator <- CharacterizationModule$new()
   cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-    targetIds = c(1, 2),
-    outcomeIds = 3
+    characterizationSettings = Characterization::createCharacterizationSettings(
+      timeToEventSettings = list(
+        Characterization::createTimeToEventSettings(
+          studyPopulationSettings = Characterization::createStudyPopulationSettings(targetIds = 1),
+          outcomeIds = 3
+        )
+      )
+    )
   )
 
   # Cohort Incidence -----------------
@@ -379,6 +392,21 @@ test_that("Test analysis specification creation", {
     sccsAnalysesSpecifications = sccsAnalysisSpecifications$toList()
   )
 
+  # PheValuator ---------------------------------
+  pvModuleSettingsCreator <- PheValuatorModule$new()
+  pvModuleSpecifications <- pvModuleSettingsCreator$createModuleSpecifications(
+    analysisName = "T2DM",
+    pheValuatorAnalysisList = list(
+      list(
+        phenotype = "T2DM",
+        cohortsToEvaluate = list(
+          xSpecCohortId = 1,
+          phenotypeCohortId = 3,
+          washoutPeriod = 0
+        )
+      )
+    )
+  )
 
   # Create analysis specifications ---------------
   analysisSpecifications <- createEmptyAnalysisSpecifications() |>
@@ -391,10 +419,11 @@ test_that("Test analysis specification creation", {
     addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
     addEvidenceSynthesisModuleSpecifications(evidenceSynthesisAnalysisSpecifications) |>
     addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-    addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
+    addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
+    addPheValuatorModuleSpecifications(pvModuleSpecifications)
 
   expect_equal(length(analysisSpecifications$sharedResources), 2)
-  expect_equal(length(analysisSpecifications$moduleSpecifications), 8)
+  expect_equal(length(analysisSpecifications$moduleSpecifications), 9)
 })
 
 test_that("Calling misspelled createEmptyAnalysisSpecificiations throws warning", {

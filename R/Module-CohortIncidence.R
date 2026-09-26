@@ -173,7 +173,7 @@ CohortIncidenceModule <- R6::R6Class(
         moduleSpecifications = moduleSpecifications
       )
       irDesign <- CohortIncidence::IncidenceDesign$new(moduleSpecifications$settings$irDesign)
-      designJson <- rJava::J("org.ohdsi.analysis.cohortincidence.design.CohortIncidence")$fromJson(as.character(irDesign$asJSON()))
+      designJson <- rJava::J("org.ohdsi.cohortincidence.design.CohortIncidence")$fromJson(as.character(irDesign$asJSON()))
 
       invisible(designJson)
     }

@@ -74,11 +74,18 @@ moduleList <- packageCodeFiles[startsWith(packageCodeFiles, "Module-")]
 moduleList <- substring(moduleList, first = nchar("Module-") + 1)
 moduleList <- sub("\\.[Rr]$", "", moduleList)
 moduleList <- paste0(moduleList, "Module")
-# Removing PLP Validation since its results data model is the same
-# as PLP
-moduleList <- moduleList[!moduleList %in% c("PatientLevelPredictionValidationModule")]
+moduleRegistry <- data.frame(
+  module = moduleList,
+  package = sub("Module$", "", moduleList),
+  createResultsDataModel = TRUE
+)
+# PLP Validation is implemented by PatientLevelPrediction and shares its
+# results data model, so it is registered but excluded from RDM creation.
+plpValidationIndex <- moduleRegistry$module == "PatientLevelPredictionValidationModule"
+moduleRegistry$package[plpValidationIndex] <- "PatientLevelPrediction"
+moduleRegistry$createResultsDataModel[plpValidationIndex] <- FALSE
 CohortGenerator::writeCsv(
-  x = data.frame(module = moduleList),
+  x = moduleRegistry,
   file = "./inst/csv/hadesModuleList.csv",
   warnOnFileNameCaseMismatch = FALSE
 )
@@ -190,13 +197,32 @@ cgModuleSpecifications <- cgModuleSettingsCreator$createModuleSpecifications()
 
 # Characterization -------------------------------
 cModuleSettingsCreator <- CharacterizationModule$new()
+studyPopulationSettings <- Characterization::createStudyPopulationSettings(
+  targetIds = c(1, 2, 1001, 2001)
+)
+characterizationSettings <- Characterization::createCharacterizationSettings(
+  timeToEventSettings = Characterization::createTimeToEventSettings(
+    studyPopulationSettings = studyPopulationSettings,
+    outcomeIds = c(3)
+  ),
+  dechallengeRechallengeSettings = Characterization::createDechallengeRechallengeSettings(
+    studyPopulationSettings = studyPopulationSettings,
+    outcomeIds = c(3)
+  ),
+  targetBaselineSettings = Characterization::createTargetBaselineSettings(
+    studyPopulationSettings = studyPopulationSettings
+  ),
+  caseSeriesSettings = Characterization::createCaseSeriesSettings(
+    studyPopulationSettings = studyPopulationSettings,
+    outcomeIds = c(3),
+    riskWindowStart = c(1),
+    startAnchor = c("cohort start"),
+    riskWindowEnd = c(365),
+    endAnchor = c("cohort end")
+  )
+)
 cModuleSpecifications <- cModuleSettingsCreator$createModuleSpecifications(
-  targetIds = c(1, 2, 1001, 2001),
-  outcomeIds = 3,
-  riskWindowStart = c(1),
-  startAnchor = c("cohort start"),
-  riskWindowEnd = c(365),
-  endAnchor = c("cohort end")
+  characterizationSettings = characterizationSettings
 )
 
 # Cohort Incidence -----------------
@@ -548,6 +574,28 @@ sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications
   sccsAnalysesSpecifications = sccsAnalysesSpecifications$toList()
 )
 
+# PheValuator -----------------
+pvModuleSettingsCreator <- PheValuatorModule$new()
+pvModuleSpecifications <- pvModuleSettingsCreator$createModuleSpecifications(
+  analysisName = "GI bleed phenotype evaluation",
+  pheValuatorAnalysisList = list(
+    list(
+      phenotype = "giBleed",
+      cohortsToEvaluate = list(
+        phenotypeCohortId = 3L,
+        washoutPeriod = 365L,
+        xSpecCohortId = 1L,
+        daysFromxSpec = 0L,
+        xSensCohortId = 2L,
+        prevalenceCohortId = 3L,
+        covariateSettings = PheValuator::createDefaultCovariateSettings(),
+        lowerAgeLimit = 0L,
+        upperAgeLimit = 120L
+      )
+    )
+  )
+)
+
 
 # Create analysis specifications CDM modules ---------------
 cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
@@ -560,7 +608,8 @@ cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addTreatmentPatternsModuleSpecifications(tpModuleSpecifications) |>
   addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
   addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
+  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
+  addPheValuatorModuleSpecifications(pvModuleSpecifications)
 
 ParallelLogger::saveSettingsToJson(
   object = cdmModulesAnalysisSpecifications,

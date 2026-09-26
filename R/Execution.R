@@ -49,6 +49,23 @@ execute <- function(analysisSpecifications,
   # Used to keep track of the execution status
   executionStatus <- list()
 
+  # Apply any user-requested module subset before reporting the execution plan.
+  if (length(executionSettings$modulesToExecute) > 0) {
+    analysisSpecifications <- .subsetAnalysisSpecificationByModulesToExecute(
+      analysisSpecifications = analysisSpecifications,
+      modulesToExecute = executionSettings$modulesToExecute
+    )
+  }
+
+  if (isTRUE(executionSettings$skipCompletedTasks)) {
+    .printOperationPlan(
+      getExecutionStatus(
+        analysisSpecifications = analysisSpecifications,
+        resultsFolder = executionSettings$resultsFolder
+      )
+    )
+  }
+
   # Validate the execution settings
   if (is(executionSettings, "CdmExecutionSettings")) {
     message("Collecting OMOP CDM Metadata")
@@ -112,17 +129,6 @@ execute <- function(analysisSpecifications,
   }
 
 
-  # Determine if the user has opted to subset to specific modules
-  # in the analysis specification. If so, validate that the
-  # modulesToExecute are present in the analysis specification
-  # before attempting to subset the analyses to run.
-  if (length(executionSettings$modulesToExecute) > 0) {
-    analysisSpecifications <- .subsetAnalysisSpecificationByModulesToExecute(
-      analysisSpecifications = analysisSpecifications,
-      modulesToExecute = executionSettings$modulesToExecute
-    )
-  }
-
   # Execute the cohort generator module first if it exists
   # If cohort generation fails for any reason, update the
   # cohortGenerationSuccessful flag to FALSE so that subsequent
@@ -139,7 +145,7 @@ execute <- function(analysisSpecifications,
       )
       # The absence of an error in moduleExecutionStatus$error
       # represents a success
-      cohortGenerationSuccessful <- ifelse(moduleExecutionStatus[[1]]$status == "SUCCESS", TRUE, FALSE)
+      cohortGenerationSuccessful <- moduleExecutionStatus[[1]]$status %in% c("SUCCESS", "SKIPPED")
       executionStatus <- append(
         executionStatus,
         moduleExecutionStatus
@@ -208,12 +214,59 @@ execute <- function(analysisSpecifications,
 
 .executeModule <- function(moduleName, connectionDetails, analysisSpecifications, executionSettings, skipExecution = FALSE) {
   if (isFALSE(skipExecution)) {
+    taskInformation <- .createTaskInformation(
+      analysisSpecifications = analysisSpecifications,
+      moduleName = moduleName
+    )
+    recordPath <- .operationStatusPath(
+      resultsFolder = executionSettings$resultsFolder,
+      moduleName = moduleName,
+      operation = "EXECUTION"
+    )
+    operationInformation <- .createOperationInformation(
+      operation = "EXECUTION",
+      taskInformation = taskInformation
+    )
+    executionState <- .interpretOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation
+    )
+    if (isTRUE(executionSettings$skipCompletedTasks) && executionState$state == "COMPLETED") {
+      return(
+        .createModuleExecutionStatus(
+          moduleName = moduleName,
+          status = "SKIPPED",
+          errorMessage = "Matching completed execution record found",
+          executionTime = "SKIPPED"
+        )
+      )
+    }
+
     moduleObject <- get(moduleName)$new()
+    startTime <- Sys.time()
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = "RUNNING",
+      startTime = startTime
+    )
     executionResult <- .safeExecution(
       fn = moduleObject$execute,
       connectionDetails = connectionDetails,
       analysisSpecifications = analysisSpecifications,
       executionSettings = executionSettings
+    )
+    endTime <- Sys.time()
+    elapsedSeconds <- as.numeric(difftime(endTime, startTime, units = "secs"))
+    recordState <- if (executionResult$status == "SUCCESS") "COMPLETED" else "FAILED"
+    .writeOperationStatus(
+      recordPath = recordPath,
+      operationInformation = operationInformation,
+      state = recordState,
+      startTime = startTime,
+      endTime = endTime,
+      elapsedSeconds = elapsedSeconds,
+      error = executionResult$error
     )
     if (executionResult$status == "FAILED") {
       .printErrorMessage(executionResult$error$message)
