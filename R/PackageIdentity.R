@@ -14,8 +14,7 @@
       file.path("csv", "hadesModuleList.csv"),
       package = "Strategus",
       mustWork = TRUE
-    ),
-    warnOnCaseMismatch = FALSE
+    )
   )
 }
 

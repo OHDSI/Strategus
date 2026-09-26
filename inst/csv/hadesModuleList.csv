@@ -1,4 +1,4 @@
-module,package,createResultsDataModel
+module,package,create_results_data_model
 CharacterizationModule,Characterization,TRUE
 CohortDiagnosticsModule,CohortDiagnostics,TRUE
 CohortGeneratorModule,CohortGenerator,TRUE
@@ -7,6 +7,6 @@ CohortMethodModule,CohortMethod,TRUE
 EvidenceSynthesisModule,EvidenceSynthesis,TRUE
 PatientLevelPredictionModule,PatientLevelPrediction,TRUE
 PatientLevelPredictionValidationModule,PatientLevelPrediction,FALSE
+PheValuatorModule,PheValuator,TRUE
 SelfControlledCaseSeriesModule,SelfControlledCaseSeries,TRUE
 TreatmentPatternsModule,TreatmentPatterns,TRUE
-PheValuatorModule,PheValuator,TRUE

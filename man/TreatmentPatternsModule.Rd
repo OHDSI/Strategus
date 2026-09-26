@@ -157,7 +157,7 @@ is an object of class \code{connectionDetails} as created by the
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
       \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}.}
     }
     \if{html}{\out{</div>}}
   }
@@ -167,7 +167,7 @@ by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecifici
 \if{html}{\out{<a id="method-TreatmentPatternsModule-createModuleSpecifications"></a>}}
 \if{latex}{\out{\hypertarget{method-TreatmentPatternsModule-createModuleSpecifications}{}}}
 \subsection{\code{TreatmentPatternsModule$createModuleSpecifications()}}{
-  Creates the TreatmentPatternsnModule Specifications
+  Creates the TreatmentPatternsModule Specifications
   \subsection{Usage}{
     \if{html}{\out{<div class="r">}}
     \preformatted{TreatmentPatternsModule$createModuleSpecifications(
@@ -237,8 +237,8 @@ combination treatment}
 Minimum time an event era before or after a generated combination treatment
 should last to be included in analysis}
       \item{\code{filterTreatments}}{(\code{character(1)}: \code{"First"} ["first", "Changes", "all"])\cr
-Select first occurrence of (‘First’); changes between (‘Changes’); or all
-event cohorts (‘All’).}
+Select first occurrence of (\code{First}); changes between (\code{Changes}); or all
+event cohorts (\code{All}).}
       \item{\code{maxPathLength}}{(\code{integer(1)}: \code{5})\cr
 Maximum number of steps included in treatment pathway}
       \item{\code{ageWindow}}{(\code{integer(n)}: \code{10})\cr

@@ -25,7 +25,7 @@
       <column name="database_id" comments="The database identifier">
         <foreignKey table="database_meta_data" column="database_id"/>
       </column>
-      <column name="target_cohort_definition_id" comments="The cohort definition id for the target cohort"/>
+      <column name="characterization_target_id" comments="The characterization cohort definition id for the target cohort"/>
       <column name="outcome_cohort_definition_id" comments="The cohort definition id for the outcome cohort"/>
       <column name="outcome_type" comments="Is the outvome a first occurrence or repeat"/>
       <column name="target_outcome_type" comments="When does the outcome occur relative to target"/>
@@ -37,7 +37,8 @@
       <column name="database_id" comments="The database identifier"/>
       <column name="dechallenge_stop_interval" comments="The time period that É"/>
       <column name="dechallenge_evaluation_window" comments="The time period that É"/>
-      <column name="target_cohort_definition_id" comments="The cohort definition id for the target cohort"/>
+      <column name="characterization_target_id" comments="The cohort definition id for the target cohort"/>
+      <column name="included" comments="Whether this was included in the study population settings eras"/>
       <column name="outcome_cohort_definition_id" comments="The cohort definition id for the outcome cohort"/>
       <column name="person_key" comments="The dense rank for the patient (an identifier that is not the same as the database)"/>
       <column name="subject_id" comments="The person identifier for the failed case series (optional)"/>
@@ -58,9 +59,7 @@
       </column>
       <column name="dechallenge_stop_interval" comments="The dechallenge stop interval"/>
       <column name="dechallenge_evaluation_window" comments="The dechallenge evaluation window"/>
-      <column name="target_cohort_definition_id" comments="The cohort definition id for the target cohort">
-        <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
-      </column>
+      <column name="characterization_target_id" comments="The characterization cohort definition id for the target cohort"/>
       <column name="outcome_cohort_definition_id" comments="The cohort definition id for the outcome cohort">
         <foreignKey table="cg_cohort_definition" column="cohort_definition_id"/>
       </column>
@@ -128,11 +127,13 @@
     <table name="c_execution_settings" comments="CharacterizationModule: Holds the settings that are used to execute the characterization module.">
       <column name="setting_id" comments="The run identifier"/>
       <column name="database_id" comments="The database identifier"/>
-      <column name="database_hash" comments="NA"/>
+      <column name="database_hash" comments="The hash of the database identifier"/>
       <column name="mode" comments="Whether Efficient/CohortIncidence/PatientLevelPrediction mode was used for risk factor non-cases"/>
       <column name="min_characterization_mean" comments="The minimum fraction of patients who have a covariate for the covariate to be included in results"/>
       <column name="min_covariate_count" comments="The minimum number of patients who have a covariate for the covariate to be included in results (useful if cohorts are small)"/>
       <column name="min_smd" comments="The minimum standardized mean value a risk factor must have to be included in results"/>
+      <column name="min_target_size" comments="The minimum target cohort size to be included in target baseline, risk factor and case series results"/>
+      <column name="min_case_size" comments="The minimum case cohort size to be included in risk factor and case series results"/>
     </table>
     <table name="c_target_settings" comments="CharacterizationModule: Holds the settings that are used to characterize the target cohorts.">
       <column name="setting_id" comments="The run identifier"/>
@@ -141,6 +142,18 @@
       <column name="target_id" comments="The target cohort id"/>
       <column name="limit_to_first_in_n_days" comments="Target exposures are only included if they occur &gt;= first_in_n_days days after the last exposure"/>
       <column name="min_prior_observation" comments="Target exposures with &lt; min_prior_obs days observation before exposure are excluded"/>
+      <column name="nesting_cohort_id" comments="The nesting id for the popualtion of interest"/>
+      <column name="min_age" comments="The min age to be includedfor the popualtion of interest"/>
+      <column name="max_age" comments="The max age to be includedfor the popualtion of interest"/>
+      <column name="study_start" comments="The earliest date to be included for the popualtion of interest"/>
+      <column name="study_end" comments="The latest date to be included for the popualtion of interest"/>
+      <column name="gender_concept_ids" comments="The gender conept ids to be included for the popualtion of interest"/>
+      <column name="time_to_event_settings" comments="Whether used in time to event"/>
+      <column name="dechallenge_rechallenge_settings" comments="Whether used in dechal-rechal"/>
+      <column name="target_baseline_settings" comments="Whether used in target baseline"/>
+      <column name="risk_factor_settings" comments="Whether used in risk factor"/>
+      <column name="case_series_settings" comments="Whether used in case series"/>
+      <column name="cohort_incidence_settings" comments="Whether used in cohort incidence"/>
     </table>
     <table name="c_case_settings" comments="CharacterizationModule: Holds the settings that are used to characterize the case cohorts.">
       <column name="setting_id" comments="The run identifier"/>
@@ -153,19 +166,13 @@
       <column name="end_anchor" comments="The end anchor"/>
       <column name="risk_window_start" comments="The risk window start"/>
       <column name="risk_window_end" comments="The risk window end"/>
-      <column name="runtype" comments="Whether this case was used in risk-factor and/or case-series"/>
+      <column name="risk_factor_settings" comments="Whether this case was used in risk-factor"/>
+      <column name="case_series_settings" comments="Whether this case was used in case-series"/>
     </table>
     <table name="c_case_series_settings" comments="CharacterizationModule: Holds the settings that are used to characterize the case series cohorts.">
       <column name="setting_id" comments="The run identifier"/>
       <column name="case_pre_target_duration" comments="The number of days before target index to create the before target period in case series"/>
       <column name="case_post_outcome_duration" comments="The number of days after first outcome after target to create the after outcome period in case series"/>
-    </table>
-    <table name="c_attrition" comments="CharacterizationModule: Holds the attrition of the characterization cohorts.">
-      <column name="cohort_definition_id" comments="The characterization cohort id"/>
-      <column name="attr_reason" comments="Description of cohort or removal"/>
-      <column name="n" comments="The number of people remaining or removed"/>
-      <column name="database_id" comments="The database identifier"/>
-      <column name="setting_id" comments="The run identifier"/>
     </table>
     <table name="c_risk_factor_covariates" comments="CharacterizationModule: Holds the covariates that are used to characterize the risk factors.">
       <column name="database_id" comments="The database identifier"/>
@@ -251,6 +258,119 @@
       <column name="after_p_25_value" comments="The 25th percentile"/>
       <column name="after_p_75_value" comments="The 75th percentile"/>
       <column name="after_p_90_value" comments="The 90th percentile"/>
+    </table>
+    <table name="c_target_counts" comments="CharacterizationModule: Holds event and person counts for each characterization target cohort.">
+      <column name="characterization_target_id" comments="The characterization cohort definition id"/>
+      <column name="n_events" comments="The number of events"/>
+      <column name="n_people" comments="The number of people"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_case_counts" comments="CharacterizationModule: Holds event and person counts for the case and non-case populations used in characterization analyses.">
+      <column name="characterization_case_id" comments="The characterization case id"/>
+      <column name="cohort_type" comments="Whether the count is a case or non-case"/>
+      <column name="n_events" comments="The number of events"/>
+      <column name="n_people" comments="The number of people"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_target_attrition" comments="CharacterizationModule: Holds attrition counts for each characterization target population.">
+      <column name="characterization_target_id" comments="The characterization cohort id"/>
+      <column name="attr_order" comments="The attrition order"/>
+      <column name="attr_reason" comments="Description of removal rule"/>
+      <column name="n_events" comments="The number of events remaining"/>
+      <column name="n_people" comments="The number of people remaining"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_case_attrition" comments="CharacterizationModule: Holds attrition counts for each characterization case population.">
+      <column name="characterization_case_id" comments="The characterization case id"/>
+      <column name="attr_order" comments="The attrition order"/>
+      <column name="attr_reason" comments="Description of removal rule"/>
+      <column name="n_events" comments="The number of events remaining"/>
+      <column name="n_people" comments="The number of people remaining"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_time_to_event_settings" comments="CharacterizationModule: Identifies the target and outcome cohort combinations included in each time-to-event analysis.">
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="characterization_target_id" comments="The characterization cohort id"/>
+      <column name="outcome_id" comments="The outcome cohort id"/>
+    </table>
+    <table name="c_dechallenge_rechallenge_settings" comments="CharacterizationModule: Identifies the target and outcome cohort combinations included in each dechallenge-rechallenge analysis.">
+      <column name="setting_id" comments="The run identifier"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="characterization_target_id" comments="The characterization cohort id"/>
+      <column name="outcome_id" comments="The outcome cohort id"/>
+    </table>
+    <table name="c_incidence_summary" comments="CharacterizationModule: Holds incidence counts and incidence estimates for each target outcome time-at-risk and demographic stratum.">
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="database_id" comments="The database identifier"/>
+      <column name="source_name" comments="The source name for the database"/>
+      <column name="characterization_target_id" comments="Target cohort identifier"/>
+      <column name="tar_id" comments="Time-at-risk identifier"/>
+      <column name="subgroup_id" comments="Subgroup identifier"/>
+      <column name="outcome_id" comments="Outcome cohort identifier"/>
+      <column name="age_group_id" comments="Age group identifier"/>
+      <column name="gender_id" comments="Gender identifier"/>
+      <column name="gender_name" comments="Gender name"/>
+      <column name="start_year" comments="Start year"/>
+      <column name="persons_at_risk_pe" comments="Persons at risk pre-exclude (counts before excluding time at risk)"/>
+      <column name="persons_at_risk" comments="Persons at risk"/>
+      <column name="person_days_pe" comments="Person days pre-exclude (counts before excluding time at risk)"/>
+      <column name="person_days" comments="Person days"/>
+      <column name="person_outcomes_pe" comments="Person outcomes pre-exclude (counts before excluding time at risk)"/>
+      <column name="person_outcomes" comments="Person outcomes"/>
+      <column name="outcomes_pe" comments="Outcomes pre-exclude (counts before excluding time at risk)"/>
+      <column name="outcomes" comments="Outcomes"/>
+      <column name="incidence_proportion_p_100p" comments="Incidence proportion (person_outcomes / persons_at_risk) per 100 people"/>
+      <column name="incidence_rate_p_100py" comments="Incidence rate (outcomes / time_at_risk) per 100 person years"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_target_def" comments="CharacterizationModule: Holds target cohort definitions used in incidence analyses.">
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="characterization_target_id" comments="Target cohort identifier"/>
+      <column name="target_name" comments="Target cohort name"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_outcome_def" comments="CharacterizationModule: Holds outcome cohort definitions and outcome-specific settings used in incidence analyses.">
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="outcome_id" comments="Outcome identifier"/>
+      <column name="outcome_cohort_definition_id" comments="Outcome cohort identifier"/>
+      <column name="outcome_name" comments="Outcome name"/>
+      <column name="clean_window" comments="Clean window"/>
+      <column name="excluded_cohort_definition_id" comments="Excluded cohort identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_tar_def" comments="CharacterizationModule: Holds time-at-risk definitions used in incidence analyses.">
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="tar_id" comments="Time-at-risk identifier"/>
+      <column name="tar_start_with" comments="Time-at-risk start anchor"/>
+      <column name="tar_start_offset" comments="Time-at-risk start offset in days"/>
+      <column name="tar_end_with" comments="Time-at-risk end anchor"/>
+      <column name="tar_end_offset" comments="Time-at-risk end offset in days"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_age_group_def" comments="CharacterizationModule: Holds age-group definitions used to stratify incidence analyses.">
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="age_group_id" comments="Age group identifier"/>
+      <column name="age_group_name" comments="Age group name"/>
+      <column name="min_age" comments="Minimum age"/>
+      <column name="max_age" comments="Maximum age"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_subgroup_def" comments="CharacterizationModule: Holds subgroup definitions used to stratify incidence analyses.">
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="subgroup_id" comments="The subgroup identifier"/>
+      <column name="subgroup_name" comments="The subgroup name"/>
+      <column name="setting_id" comments="The run identifier"/>
+    </table>
+    <table name="c_target_outcome_ref" comments="CharacterizationModule: Maps target cohorts to the outcome cohorts evaluated in incidence analyses.">
+      <column name="ref_id" comments="The reference identifier for the analysis"/>
+      <column name="characterization_target_id" comments="The target cohort identifier"/>
+      <column name="outcome_cohort_id" comments="The outcome cohort identifier"/>
+      <column name="setting_id" comments="The run identifier"/>
     </table>
     <table name="cd_cohort" comments="CohortDiagnosticsModule: Cohort details">
       <column name="cohort_id" comments="cohort id"/>
@@ -1214,6 +1334,7 @@
       <column name="days_to_event" comments="the time between index to the day of interest"/>
       <column name="outcome_at_time" comments="the number of outcomes on the day of interest"/>
       <column name="observed_at_start_of_day" comments="the number of people observed up to the day of interest"/>
+      <column name="probast_id" comments="the corresponding probast id"/>
       <column name="input_type" comments="the setting id the results are for"/>
     </table>
     <table name="plp_diagnostic_participants" comments="PatientLevelPredictionModule: Diagnostic participants">
@@ -1380,6 +1501,58 @@
       <column name="p_50_predicted_probability" comments="The median predicted risk"/>
       <column name="p_75_predicted_probability" comments="the 75% quantile of predicted risk"/>
       <column name="max_predicted_probability" comments="the max predicted risk"/>
+    </table>
+    <table name="pv_algorithm_performance_results" comments="PheValuatorModule: Holds estimated performance metrics and supporting counts for each evaluated phenotype algorithm.">
+      <column name="phenotype" comments="Name of the phenotype evaluated"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="cohort_id" comments="The cohort definition ID of the phenotype algorithm evaluated"/>
+      <column name="sensitivity_95_ci" comments="Sensitivity with 95% confidence interval"/>
+      <column name="ppv_95_ci" comments="Positive predictive value with 95% confidence interval"/>
+      <column name="specificity_95_ci" comments="Specificity with 95% confidence interval"/>
+      <column name="npv_95_ci" comments="Negative predictive value with 95% confidence interval"/>
+      <column name="f_1_score" comments="F1 score"/>
+      <column name="total_subjects" comments="Total subjects in the evaluation cohort"/>
+      <column name="raw_cases" comments="Raw number of cases in the evaluation cohort"/>
+      <column name="estimated_cases" comments="Estimated number of true cases"/>
+      <column name="raw_tar" comments="Raw time at risk in person-years"/>
+      <column name="estimated_tar" comments="Estimated time at risk in person-years"/>
+      <column name="raw_prevalence" comments="Raw prevalence percentage"/>
+      <column name="estimated_prevalence" comments="Estimated prevalence percentage"/>
+      <column name="raw_prevalence_rate" comments="Raw prevalence rate per 100 person-years"/>
+      <column name="estimated_prevalence_rate" comments="Estimated prevalence rate per 100 person-years"/>
+      <column name="true_positives" comments="Number of true positives"/>
+      <column name="true_negatives" comments="Number of true negatives"/>
+      <column name="false_positives" comments="Number of false positives"/>
+      <column name="false_negatives" comments="Number of false negatives"/>
+      <column name="washout_period" comments="Washout period in days"/>
+      <column name="splay_prior" comments="Days prior splay"/>
+      <column name="splay_post" comments="Days post splay"/>
+      <column name="cut_point" comments="The prediction threshold cut point used for evaluation"/>
+      <column name="sensitivity" comments="Sensitivity"/>
+      <column name="sensitivity_ci_95_lb" comments="Sensitivity 95% CI lower bound"/>
+      <column name="sensitivity_ci_95_ub" comments="Sensitivity 95% CI upper bound"/>
+      <column name="ppv" comments="Positive predictive value"/>
+      <column name="ppv_ci_95_lb" comments="PPV 95% CI lower bound"/>
+      <column name="ppv_ci_95_ub" comments="PPV 95% CI upper bound"/>
+      <column name="specificity" comments="Specificity"/>
+      <column name="specificity_ci_95_lb" comments="Specificity 95% CI lower bound"/>
+      <column name="specificity_ci_95_ub" comments="Specificity 95% CI upper bound"/>
+      <column name="npv" comments="Negative predictive value"/>
+      <column name="npv_ci_95_lb" comments="NPV 95% CI lower bound"/>
+      <column name="npv_ci_95_ub" comments="NPV 95% CI upper bound"/>
+      <column name="analysis_name" comments="Name of the PheValuator analysis"/>
+      <column name="run_date_time" comments="Date and time of the PheValuator run"/>
+      <column name="analysis_id_results" comments="Analysis identifier from PheValuator"/>
+      <column name="description" comments="Description of the PheValuator analysis"/>
+    </table>
+    <table name="pv_cohort_definition_set" comments="PheValuatorModule: Holds the cohort definitions and SQL for phenotype algorithms evaluated by PheValuator.">
+      <column name="phenotype" comments="Name of the phenotype"/>
+      <column name="analysis_name" comments="Name of the analysis"/>
+      <column name="database_id" comments="Unique identifier for the database"/>
+      <column name="run_date_time" comments="Date and time of the run"/>
+      <column name="cohort_id" comments="The cohort definition ID"/>
+      <column name="cohort_name" comments="The cohort name"/>
+      <column name="sql" comments="The SQL for the cohort definition"/>
     </table>
     <table name="sccs_analysis" comments="SelfControlledCaseSeriesModule: Analysis reference">
       <column name="analysis_id" comments="A unique identifier for an analysis."/>

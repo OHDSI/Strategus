@@ -574,6 +574,28 @@ sccsModuleSpecifications <- sccsModuleSettingsCreator$createModuleSpecifications
   sccsAnalysesSpecifications = sccsAnalysesSpecifications$toList()
 )
 
+# PheValuator -----------------
+pvModuleSettingsCreator <- PheValuatorModule$new()
+pvModuleSpecifications <- pvModuleSettingsCreator$createModuleSpecifications(
+  analysisName = "GI bleed phenotype evaluation",
+  pheValuatorAnalysisList = list(
+    list(
+      phenotype = "giBleed",
+      cohortsToEvaluate = list(
+        phenotypeCohortId = 3L,
+        washoutPeriod = 365L,
+        xSpecCohortId = 1L,
+        daysFromxSpec = 0L,
+        xSensCohortId = 2L,
+        prevalenceCohortId = 3L,
+        covariateSettings = PheValuator::createDefaultCovariateSettings(),
+        lowerAgeLimit = 0L,
+        upperAgeLimit = 120L
+      )
+    )
+  )
+)
+
 
 # Create analysis specifications CDM modules ---------------
 cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
@@ -586,7 +608,8 @@ cdmModulesAnalysisSpecifications <- createEmptyAnalysisSpecifications() |>
   addTreatmentPatternsModuleSpecifications(tpModuleSpecifications) |>
   addCohortMethodeModuleSpecifications(cmModuleSpecifications) |>
   addSelfControlledCaseSeriesModuleSpecifications(sccsModuleSpecifications) |>
-  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications)
+  addPatientLevelPredictionModuleSpecifications(plpModuleSpecifications) |>
+  addPheValuatorModuleSpecifications(pvModuleSpecifications)
 
 ParallelLogger::saveSettingsToJson(
   object = cdmModulesAnalysisSpecifications,

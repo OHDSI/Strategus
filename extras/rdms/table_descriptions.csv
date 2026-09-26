@@ -1,20 +1,32 @@
 table_defined_by,table_name,description
 CharacterizationModule,c_analysis_ref,Analysis reference
-CharacterizationModule,c_attrition,Holds the attrition of the characterization cohorts.
+CharacterizationModule,c_age_group_def,Holds age-group definitions used to stratify incidence analyses.
+CharacterizationModule,c_case_attrition,Holds attrition counts for each characterization case population.
+CharacterizationModule,c_case_counts,Holds event and person counts for the case and non-case populations used in characterization analyses.
 CharacterizationModule,c_case_series_covariates,Holds the covariates that are used to characterize the case series cohorts.
 CharacterizationModule,c_case_series_covariates_continuous,Holds the continuous covariates that are used to characterize the case series cohorts.
 CharacterizationModule,c_case_series_settings,Holds the settings that are used to characterize the case series cohorts.
 CharacterizationModule,c_case_settings,Holds the settings that are used to characterize the case cohorts.
 CharacterizationModule,c_covariate_ref,Covariate reference
 CharacterizationModule,c_dechallenge_rechallenge,Dechallenge rechallenge
+CharacterizationModule,c_dechallenge_rechallenge_settings,Identifies the target and outcome cohort combinations included in each dechallenge-rechallenge analysis.
 CharacterizationModule,c_execution_settings,Holds the settings that are used to execute the characterization module.
+CharacterizationModule,c_incidence_summary,Holds incidence counts and incidence estimates for each target outcome time-at-risk and demographic stratum.
+CharacterizationModule,c_outcome_def,Holds outcome cohort definitions and outcome-specific settings used in incidence analyses.
 CharacterizationModule,c_rechallenge_fail_case_series,Rechallenge fail case series
 CharacterizationModule,c_risk_factor_covariates,Holds the covariates that are used to characterize the risk factors.
 CharacterizationModule,c_risk_factor_covariates_continuous,Holds the continuous covariates that are used to characterize the risk factors.
+CharacterizationModule,c_subgroup_def,Holds subgroup definitions used to stratify incidence analyses.
+CharacterizationModule,c_tar_def,Holds time-at-risk definitions used in incidence analyses.
+CharacterizationModule,c_target_attrition,Holds attrition counts for each characterization target population.
+CharacterizationModule,c_target_counts,Holds event and person counts for each characterization target cohort.
 CharacterizationModule,c_target_covariates,Holds the covariates that are used to characterize the target cohort.
 CharacterizationModule,c_target_covariates_continuous,Holds the continuous covariates that are used to characterize the target cohort.
+CharacterizationModule,c_target_def,Holds target cohort definitions used in incidence analyses.
+CharacterizationModule,c_target_outcome_ref,Maps target cohorts to the outcome cohorts evaluated in incidence analyses.
 CharacterizationModule,c_target_settings,Holds the settings that are used to characterize the target cohorts.
 CharacterizationModule,c_time_to_event,Time to event
+CharacterizationModule,c_time_to_event_settings,Identifies the target and outcome cohort combinations included in each time-to-event analysis.
 CohortDiagnosticsModule,cd_cohort,Cohort details
 CohortDiagnosticsModule,cd_cohort_count,Cohort counts
 CohortDiagnosticsModule,cd_cohort_inc_result,Cohort inclusion results
@@ -122,6 +134,8 @@ PatientLevelPredictionModule,plp_split_settings,Split settings
 PatientLevelPredictionModule,plp_tars,Time-at-risk settings
 PatientLevelPredictionModule,plp_threshold_summary,Threshold summary
 PatientLevelPredictionModule,plp_tidy_covariates_settings,Tidy covariate settings
+PheValuatorModule,pv_algorithm_performance_results,Holds estimated performance metrics and supporting counts for each evaluated phenotype algorithm.
+PheValuatorModule,pv_cohort_definition_set,Holds the cohort definitions and SQL for phenotype algorithms evaluated by PheValuator.
 SelfControlledCaseSeriesModule,sccs_age_spanning,Age spanning diagnostic
 SelfControlledCaseSeriesModule,sccs_analysis,Analysis reference
 SelfControlledCaseSeriesModule,sccs_attrition,Attrition table

@@ -1,3 +1,15 @@
+Strategus 1.6.0
+===============
+
+New Features
+
+- Add a PheValuator module (#294)
+- Add resumable module execution and upload status reporting (#298)
+- Record Strategus and module package identity in analysis specifications (#301)
+- Update the Characterization module to support Characterization v4 (#296)
+- Update the CohortIncidence module to support CohortIncidence v4.2.0 (#297)
+
+
 Strategus 1.5.0
 ===============
 

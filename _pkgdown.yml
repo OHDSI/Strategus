@@ -28,6 +28,7 @@ reference:
       - addModuleSpecifications
       - addPatientLevelPredictionModuleSpecifications
       - addPatientLevelPredictionValidationModuleSpecifications
+      - addPheValuatorModuleSpecifications
       - addSelfControlledCaseSeriesModuleSpecifications
       - addTreatmentPatternsModuleSpecifications
       - addSharedResources
@@ -43,6 +44,7 @@ reference:
       - createCdmExecutionSettings
       - createResultsExecutionSettings
       - getCdmDatabaseMetaData
+      - getExecutionStatus
 
   - title: "HADES Modules"
   - subtitle: "OMOP CDM HADES Modules"
@@ -57,6 +59,7 @@ reference:
       - CohortMethodModule
       - PatientLevelPredictionModule
       - PatientLevelPredictionValidationModule
+      - PheValuatorModule
       - SelfControlledCaseSeriesModule
       - TreatmentPatternsModule
   - subtitle: "Results HADES Modules"
@@ -74,6 +77,7 @@ reference:
     contents:
       - createResultDataModel
       - createResultsDataModelSettings
+      - getUploadStatus
       - uploadResults
 
   - title: "Sharing results"

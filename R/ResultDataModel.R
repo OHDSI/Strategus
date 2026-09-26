@@ -19,10 +19,10 @@
 #' @description
 #' This function creates the results data model in the specified schema within
 #' the results database. The results data model is used to hold the study
-#' results and must be created before using [@seealso [uploadResults()]]
+#' results and must be created before using [uploadResults()].
 #'
 #' @template AnalysisSpecifications
-#' @param resultsDataModelSettings The results data model settings as created using [@seealso [createResultsDataModelSettings()]]
+#' @param resultsDataModelSettings The results data model settings as created using [createResultsDataModelSettings()].
 #' @template resultsConnectionDetails
 #'
 #' @export

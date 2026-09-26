@@ -137,7 +137,7 @@ is an object of class \code{connectionDetails} as created by the
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
       \item{\code{analysisSpecifications}}{An object of type \code{AnalysisSpecifications} as created
 by \code{\link[=createEmptyAnalysisSpecificiations]{createEmptyAnalysisSpecificiations()}}.}
-      \item{\code{resultsDataModelSettings}}{The results data model settings as created using [@seealso \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}]}
+      \item{\code{resultsDataModelSettings}}{The results data model settings as created using \code{\link[=createResultsDataModelSettings]{createResultsDataModelSettings()}}.}
     }
     \if{html}{\out{</div>}}
   }
