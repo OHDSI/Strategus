@@ -5,7 +5,7 @@ models built using the PatientLevelPrediction package.
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `PatientLevelPredictionValidationModule`
 
 ## Public fields
@@ -18,7 +18,7 @@ models built using the PatientLevelPrediction package.
 
 ### Public methods
 
-- [`PatientLevelPredictionValidationModule$new()`](#method-PatientLevelPredictionValidationModule-new)
+- [`PatientLevelPredictionValidationModule$new()`](#method-PatientLevelPredictionValidationModule-initialize)
 
 - [`PatientLevelPredictionValidationModule$execute()`](#method-PatientLevelPredictionValidationModule-execute)
 
@@ -34,13 +34,14 @@ models built using the PatientLevelPrediction package.
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$getResultsDataModelSpecification()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getResultsDataModelSpecification)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$getResultsDataModelSpecification()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getResultsDataModelSpecification)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `PatientLevelPredictionValidationModule$new()`
 
 Initialize the module
 
@@ -50,7 +51,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `PatientLevelPredictionValidationModule$execute()`
 
 Executes the PatientLevelPrediction package to validate a PLP model
 
@@ -89,7 +90,7 @@ Executes the PatientLevelPrediction package to validate a PLP model
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `PatientLevelPredictionValidationModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -127,7 +128,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `PatientLevelPredictionValidationModule$uploadResults()`
 
 Upload the results for the module
 
@@ -167,12 +168,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `PatientLevelPredictionValidationModule$createModuleSpecifications()`
 
 Creates the PatientLevelPredictionValidation Module Specifications
 
@@ -205,7 +206,7 @@ Creates the PatientLevelPredictionValidation Module Specifications
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `PatientLevelPredictionValidationModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -223,7 +224,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `PatientLevelPredictionValidationModule$clone()`
 
 The objects of this class are cloneable with this method.
 

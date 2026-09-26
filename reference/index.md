@@ -31,6 +31,8 @@ settings which are added to the analysis specification.
 - [`addPatientLevelPredictionValidationModuleSpecifications()`](https://ohdsi.github.io/Strategus/reference/addPatientLevelPredictionValidationModuleSpecifications.md)
   : Add Patient Level Prediction Validation Module module specifications
   to analysis specifications
+- [`addPheValuatorModuleSpecifications()`](https://ohdsi.github.io/Strategus/reference/addPheValuatorModuleSpecifications.md)
+  : Add PheValuator Module specifications to analysis specifications
 - [`addSelfControlledCaseSeriesModuleSpecifications()`](https://ohdsi.github.io/Strategus/reference/addSelfControlledCaseSeriesModuleSpecifications.md)
   : Add Self Controlled Case Series Module module specifications to
   analysis specifications
@@ -57,6 +59,8 @@ study as defined by the contents of the analysis specification.
   : Create Results execution settings
 - [`getCdmDatabaseMetaData()`](https://ohdsi.github.io/Strategus/reference/getCdmDatabaseMetaData.md)
   : Gets the metadata for your OMOP CDM Database
+- [`getExecutionStatus()`](https://ohdsi.github.io/Strategus/reference/getExecutionStatus.md)
+  : Inspect execution status
 
 ## HADES Modules
 
@@ -108,6 +112,12 @@ their analyses.
   PatientLevelPrediction
   Package](https://ohdsi.github.io/PatientLevelPrediction/)
 
+- [`PheValuatorModule`](https://ohdsi.github.io/Strategus/reference/PheValuatorModule.md)
+  :
+
+  Evaluate phenotype algorithms with the [HADES PheValuator
+  Package](https://ohdsi.github.io/PheValuator/)
+
 - [`SelfControlledCaseSeriesModule`](https://ohdsi.github.io/Strategus/reference/SelfControlledCaseSeriesModule.md)
   :
 
@@ -142,6 +152,8 @@ tables and to upload results produced by the HADES modules.
   : Create Result Data Model
 - [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)
   : Create Results Data Model Settings
+- [`getUploadStatus()`](https://ohdsi.github.io/Strategus/reference/getUploadStatus.md)
+  : Inspect upload status
 - [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
   : Upload results
 

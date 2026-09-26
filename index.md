@@ -40,6 +40,7 @@ in Strategus require Java.
 2.  In R, use the following commands to download and install Strategus:
 
 ``` r
+
 install.packages("remotes")
 remotes::install_github("ohdsi/Strategus")
 ```

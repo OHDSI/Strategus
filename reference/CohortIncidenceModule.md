@@ -4,7 +4,7 @@ Computes incidence rates for cohorts against the OMOP Common Data Model
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `CohortIncidenceModule`
 
 ## Public fields
@@ -17,7 +17,7 @@ Computes incidence rates for cohorts against the OMOP Common Data Model
 
 ### Public methods
 
-- [`CohortIncidenceModule$new()`](#method-CohortIncidenceModule-new)
+- [`CohortIncidenceModule$new()`](#method-CohortIncidenceModule-initialize)
 
 - [`CohortIncidenceModule$execute()`](#method-CohortIncidenceModule-execute)
 
@@ -35,12 +35,13 @@ Computes incidence rates for cohorts against the OMOP Common Data Model
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `CohortIncidenceModule$new()`
 
 Initialize the module
 
@@ -50,7 +51,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `CohortIncidenceModule$execute()`
 
 Execute the CohortIncidence package
 
@@ -89,7 +90,7 @@ Execute the CohortIncidence package
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `CohortIncidenceModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -131,7 +132,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `CohortIncidenceModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -151,7 +152,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `CohortIncidenceModule$uploadResults()`
 
 Upload the results for the module
 
@@ -191,12 +192,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `CohortIncidenceModule$createModuleSpecifications()`
 
 Creates the CohortIncidence Module Specifications
 
@@ -212,7 +213,7 @@ Creates the CohortIncidence Module Specifications
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `CohortIncidenceModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -228,7 +229,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `CohortIncidenceModule$clone()`
 
 The objects of this class are cloneable with this method.
 

@@ -16,7 +16,8 @@ createCdmExecutionSettings(
   minCellCount = 5,
   incremental = TRUE,
   maxCores = parallel::detectCores(),
-  modulesToExecute = c()
+  modulesToExecute = c(),
+  skipCompletedTasks = FALSE
 )
 ```
 
@@ -86,6 +87,12 @@ createCdmExecutionSettings(
   (Optional) A vector with the list of modules to execute. When an empty
   vector/NULL is supplied (default), all modules in the analysis
   specification are executed.
+
+- skipCompletedTasks:
+
+  When `TRUE`, modules with a matching completed `execution_status.json`
+  record in the results folder are skipped. Execution status is
+  persisted regardless of this value.
 
 ## Value
 

@@ -21,8 +21,8 @@ uploadResults(
 
 - resultsDataModelSettings:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 - resultsConnectionDetails:
 

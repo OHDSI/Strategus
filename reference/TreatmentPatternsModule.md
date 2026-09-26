@@ -5,7 +5,7 @@ against the OMOP Common Data Model.
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `TreatmentPatternsModule`
 
 ## Public fields
@@ -18,7 +18,7 @@ against the OMOP Common Data Model.
 
 ### Public methods
 
-- [`TreatmentPatternsModule$new()`](#method-TreatmentPatternsModule-new)
+- [`TreatmentPatternsModule$new()`](#method-TreatmentPatternsModule-initialize)
 
 - [`TreatmentPatternsModule$execute()`](#method-TreatmentPatternsModule-execute)
 
@@ -38,12 +38,13 @@ against the OMOP Common Data Model.
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `TreatmentPatternsModule$new()`
 
 Initialize the module
 
@@ -53,7 +54,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `TreatmentPatternsModule$execute()`
 
 Execute Treatment Patterns
 
@@ -92,7 +93,7 @@ Execute Treatment Patterns
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `TreatmentPatternsModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -134,7 +135,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `TreatmentPatternsModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -154,7 +155,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `TreatmentPatternsModule$uploadResults()`
 
 Upload the results for TreatmentPatterns
 
@@ -194,14 +195,14 @@ Upload the results for TreatmentPatterns
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `TreatmentPatternsModule$createModuleSpecifications()`
 
-Creates the TreatmentPatternsnModule Specifications
+Creates the TreatmentPatternsModule Specifications
 
 #### Usage
 
@@ -315,8 +316,8 @@ Creates the TreatmentPatternsnModule Specifications
 - `filterTreatments`:
 
   (`character(1)`: `"First"` \["first", "Changes", "all"\])  
-  Select first occurrence of (‘First’); changes between (‘Changes’); or
-  all event cohorts (‘All’).
+  Select first occurrence of (`First`); changes between (`Changes`); or
+  all event cohorts (`All`).
 
 - `maxPathLength`:
 
@@ -393,7 +394,7 @@ Creates the TreatmentPatternsnModule Specifications
 
 ------------------------------------------------------------------------
 
-### Method `createMultiAnalysisModuleSpecification()`
+### `TreatmentPatternsModule$createMultiAnalysisModuleSpecification()`
 
 Runs multiple analyses using a list of analysis specification objects
 (as produced by`createModuleSpecifications`) into a single module
@@ -413,7 +414,7 @@ specification
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `TreatmentPatternsModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -429,7 +430,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `TreatmentPatternsModule$clone()`
 
 The objects of this class are cloneable with this method.
 

@@ -16,6 +16,7 @@
 <url><loc>https://ohdsi.github.io/Strategus/reference/EvidenceSynthesisModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/PatientLevelPredictionModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/PatientLevelPredictionValidationModule.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/PheValuatorModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/SelfControlledCaseSeriesModule.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/Strategus-package.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/StrategusModule.html</loc></url>
@@ -29,6 +30,7 @@
 <url><loc>https://ohdsi.github.io/Strategus/reference/addModuleSpecifications.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/addPatientLevelPredictionModuleSpecifications.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/addPatientLevelPredictionValidationModuleSpecifications.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/addPheValuatorModuleSpecifications.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/addSelfControlledCaseSeriesModuleSpecifications.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/addSharedResources.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/addTreatmentPatternsModuleSpecifications.html</loc></url>
@@ -40,6 +42,8 @@
 <url><loc>https://ohdsi.github.io/Strategus/reference/createResultsExecutionSettings.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/execute.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/getCdmDatabaseMetaData.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/getExecutionStatus.html</loc></url>
+<url><loc>https://ohdsi.github.io/Strategus/reference/getUploadStatus.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/index.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/uploadResults.html</loc></url>
 <url><loc>https://ohdsi.github.io/Strategus/reference/zipResults.html</loc></url>

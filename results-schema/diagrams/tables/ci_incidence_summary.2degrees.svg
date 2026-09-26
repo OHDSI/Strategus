@@ -14,22 +14,22 @@
 <g id="node1" class="node">
 <title>c_dechallenge_rechallenge</title>
 <g id="a_node1"><a xlink:href="../../tables/c_dechallenge_rechallenge.html" xlink:title="c_dechallenge_rechallenge" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="331,-909.2 331,-970.2 550,-970.2 550,-909.2 331,-909.2"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="331.5,-946.7 331.5,-969.7 550.5,-969.7 550.5,-946.7 331.5,-946.7"/>
-<polygon fill="none" stroke="#000000" points="331.5,-946.7 331.5,-969.7 550.5,-969.7 550.5,-946.7 331.5,-946.7"/>
-<text text-anchor="start" x="336.5" y="-955.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">c_dechallenge_rechallenge</text>
-<text text-anchor="start" x="516.0219" y="-954.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="331.5,-927.7 331.5,-946.7 550.5,-946.7 550.5,-927.7 331.5,-927.7"/>
-<text text-anchor="start" x="334.5" y="-933.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="331.5,-908.7 331.5,-927.7 426.5,-927.7 426.5,-908.7 331.5,-908.7"/>
-<polygon fill="none" stroke="#000000" points="331.5,-908.7 331.5,-927.7 426.5,-927.7 426.5,-908.7 331.5,-908.7"/>
-<text text-anchor="start" x="334.5" y="-914.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 3</text>
-<polygon fill="#ffffff" stroke="transparent" points="426.5,-908.7 426.5,-927.7 501.5,-927.7 501.5,-908.7 426.5,-908.7"/>
-<polygon fill="none" stroke="#000000" points="426.5,-908.7 426.5,-927.7 501.5,-927.7 501.5,-908.7 426.5,-908.7"/>
-<text text-anchor="start" x="466.1105" y="-914.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="501.5,-908.7 501.5,-927.7 550.5,-927.7 550.5,-908.7 501.5,-908.7"/>
-<polygon fill="none" stroke="#000000" points="501.5,-908.7 501.5,-927.7 550.5,-927.7 550.5,-908.7 501.5,-908.7"/>
-<text text-anchor="start" x="541.3862" y="-914.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="331,-1073.2 331,-1134.2 550,-1134.2 550,-1073.2 331,-1073.2"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="331.5,-1110.7 331.5,-1133.7 550.5,-1133.7 550.5,-1110.7 331.5,-1110.7"/>
+<polygon fill="none" stroke="#000000" points="331.5,-1110.7 331.5,-1133.7 550.5,-1133.7 550.5,-1110.7 331.5,-1110.7"/>
+<text text-anchor="start" x="336.5" y="-1119.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">c_dechallenge_rechallenge</text>
+<text text-anchor="start" x="516.0219" y="-1118.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="331.5,-1091.7 331.5,-1110.7 550.5,-1110.7 550.5,-1091.7 331.5,-1091.7"/>
+<text text-anchor="start" x="334.5" y="-1097.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="331.5,-1072.7 331.5,-1091.7 426.5,-1091.7 426.5,-1072.7 331.5,-1072.7"/>
+<polygon fill="none" stroke="#000000" points="331.5,-1072.7 331.5,-1091.7 426.5,-1091.7 426.5,-1072.7 331.5,-1072.7"/>
+<text text-anchor="start" x="334.5" y="-1078.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
+<polygon fill="#ffffff" stroke="transparent" points="426.5,-1072.7 426.5,-1091.7 501.5,-1091.7 501.5,-1072.7 426.5,-1072.7"/>
+<polygon fill="none" stroke="#000000" points="426.5,-1072.7 426.5,-1091.7 501.5,-1091.7 501.5,-1072.7 426.5,-1072.7"/>
+<text text-anchor="start" x="466.1105" y="-1078.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="501.5,-1072.7 501.5,-1091.7 550.5,-1091.7 550.5,-1072.7 501.5,-1072.7"/>
+<polygon fill="none" stroke="#000000" points="501.5,-1072.7 501.5,-1091.7 550.5,-1091.7 550.5,-1072.7 501.5,-1072.7"/>
+<text text-anchor="start" x="541.3862" y="-1078.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
 </a>
 </g>
 </g>
@@ -62,49 +62,42 @@
 <!-- c_dechallenge_rechallenge&#45;&gt;database_meta_data -->
 <g id="edge1" class="edge">
 <title>c_dechallenge_rechallenge:w&#45;&gt;database_meta_data:e</title>
-<path fill="none" stroke="#000000" d="M317.3647,-939.6432C304.6352,-946.1132 301.8852,-962.4584 294,-980.7 261.5313,-1055.8126 335.3298,-1346.7 253.5,-1346.7"/>
-<polygon fill="#000000" stroke="#000000" points="323.668,-938.3308 332.2339,-940.2244 327.584,-937.5154 331.5,-936.7 331.5,-936.7 331.5,-936.7 327.584,-937.5154 330.7661,-933.1756 323.668,-938.3308 323.668,-938.3308"/>
-<ellipse fill="none" stroke="#000000" cx="320.5352" cy="-938.9831" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M317.1111,-1103.9015C304.9465,-1110.6121 302.5893,-1127.002 294,-1144.7 274.0104,-1185.8877 299.2822,-1346.7 253.5,-1346.7"/>
+<polygon fill="#000000" stroke="#000000" points="323.691,-1102.4375 332.2819,-1104.2141 327.5955,-1101.5688 331.5,-1100.7 331.5,-1100.7 331.5,-1100.7 327.5955,-1101.5688 330.7181,-1097.1859 323.691,-1102.4375 323.691,-1102.4375"/>
+<ellipse fill="none" stroke="#000000" cx="320.5673" cy="-1103.1325" rx="3.2" ry="3.2"/>
 </g>
 <!-- cg_cohort_definition -->
 <g id="node3" class="node">
 <title>cg_cohort_definition</title>
 <g id="a_node3"><a xlink:href="../../tables/cg_cohort_definition.html" xlink:title="cg_cohort_definition" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="43,-888.2 43,-971.2 218,-971.2 218,-888.2 43,-888.2"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="43.5,-947.7 43.5,-970.7 218.5,-970.7 218.5,-947.7 43.5,-947.7"/>
-<polygon fill="none" stroke="#000000" points="43.5,-947.7 43.5,-970.7 218.5,-970.7 218.5,-947.7 43.5,-947.7"/>
-<text text-anchor="start" x="48.5" y="-956.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_definition</text>
-<text text-anchor="start" x="184.0219" y="-955.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="43.5,-925.7 43.5,-947.7 218.5,-947.7 218.5,-925.7 43.5,-925.7"/>
-<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="48.5" y="-942.7"/>
-<text text-anchor="start" x="72.5" y="-932.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">cohort_definition_id</text>
-<polygon fill="none" stroke="#000000" points="43.5,-906.7 43.5,-925.7 218.5,-925.7 218.5,-906.7 43.5,-906.7"/>
-<text text-anchor="start" x="46.5" y="-912.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="43.5,-887.7 43.5,-906.7 104.5,-906.7 104.5,-887.7 43.5,-887.7"/>
-<polygon fill="none" stroke="#000000" points="43.5,-887.7 43.5,-906.7 104.5,-906.7 104.5,-887.7 43.5,-887.7"/>
-<text text-anchor="start" x="46.5" y="-893.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
-<polygon fill="#ffffff" stroke="transparent" points="104.5,-887.7 104.5,-906.7 166.5,-906.7 166.5,-887.7 104.5,-887.7"/>
-<polygon fill="none" stroke="#000000" points="104.5,-887.7 104.5,-906.7 166.5,-906.7 166.5,-887.7 104.5,-887.7"/>
-<text text-anchor="start" x="131.1105" y="-893.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="166.5,-887.7 166.5,-906.7 218.5,-906.7 218.5,-887.7 166.5,-887.7"/>
-<polygon fill="none" stroke="#000000" points="166.5,-887.7 166.5,-906.7 218.5,-906.7 218.5,-887.7 166.5,-887.7"/>
-<text text-anchor="start" x="193.7904" y="-893.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">13 &gt;</text>
+<polygon fill="#ffffff" stroke="transparent" points="43,-847.2 43,-930.2 218,-930.2 218,-847.2 43,-847.2"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="43.5,-906.7 43.5,-929.7 218.5,-929.7 218.5,-906.7 43.5,-906.7"/>
+<polygon fill="none" stroke="#000000" points="43.5,-906.7 43.5,-929.7 218.5,-929.7 218.5,-906.7 43.5,-906.7"/>
+<text text-anchor="start" x="48.5" y="-915.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_definition</text>
+<text text-anchor="start" x="184.0219" y="-914.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="43.5,-884.7 43.5,-906.7 218.5,-906.7 218.5,-884.7 43.5,-884.7"/>
+<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="48.5" y="-901.7"/>
+<text text-anchor="start" x="72.5" y="-891.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">cohort_definition_id</text>
+<polygon fill="none" stroke="#000000" points="43.5,-865.7 43.5,-884.7 218.5,-884.7 218.5,-865.7 43.5,-865.7"/>
+<text text-anchor="start" x="46.5" y="-871.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="43.5,-846.7 43.5,-865.7 104.5,-865.7 104.5,-846.7 43.5,-846.7"/>
+<polygon fill="none" stroke="#000000" points="43.5,-846.7 43.5,-865.7 104.5,-865.7 104.5,-846.7 43.5,-846.7"/>
+<text text-anchor="start" x="46.5" y="-852.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="104.5,-846.7 104.5,-865.7 166.5,-865.7 166.5,-846.7 104.5,-846.7"/>
+<polygon fill="none" stroke="#000000" points="104.5,-846.7 104.5,-865.7 166.5,-865.7 166.5,-846.7 104.5,-846.7"/>
+<text text-anchor="start" x="131.1105" y="-852.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="166.5,-846.7 166.5,-865.7 218.5,-865.7 218.5,-846.7 166.5,-846.7"/>
+<polygon fill="none" stroke="#000000" points="166.5,-846.7 166.5,-865.7 218.5,-865.7 218.5,-846.7 166.5,-846.7"/>
+<text text-anchor="start" x="193.7904" y="-852.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">12 &gt;</text>
 </a>
 </g>
 </g>
 <!-- c_dechallenge_rechallenge&#45;&gt;cg_cohort_definition -->
 <g id="edge2" class="edge">
 <title>c_dechallenge_rechallenge:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M317.0309,-935.0296C278.2748,-930.7643 263.5234,-931.3211 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="323.5528,-935.7825 331.0871,-940.2762 327.5264,-936.2412 331.5,-936.7 331.5,-936.7 331.5,-936.7 327.5264,-936.2412 331.9129,-933.1238 323.5528,-935.7825 323.5528,-935.7825"/>
-<ellipse fill="none" stroke="#000000" cx="320.3739" cy="-935.4155" rx="3.2" ry="3.2"/>
-</g>
-<!-- c_dechallenge_rechallenge&#45;&gt;cg_cohort_definition -->
-<g id="edge3" class="edge">
-<title>c_dechallenge_rechallenge:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M317.0309,-938.6488C278.2748,-943.625 263.5234,-942.9754 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="323.5716,-937.7679 331.9806,-940.2678 327.5358,-937.234 331.5,-936.7 331.5,-936.7 331.5,-936.7 327.5358,-937.234 331.0194,-933.1322 323.5716,-937.7679 323.5716,-937.7679"/>
-<ellipse fill="none" stroke="#000000" cx="320.4002" cy="-938.1951" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M317.1389,-1099.1678C236.6062,-1080.4083 317.253,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="323.5451,-1099.8512 331.118,-1104.2797 327.5226,-1100.2756 331.5,-1100.7 331.5,-1100.7 331.5,-1100.7 327.5226,-1100.2756 331.882,-1097.1203 323.5451,-1099.8512 323.5451,-1099.8512"/>
+<ellipse fill="none" stroke="#000000" cx="320.3632" cy="-1099.5117" rx="3.2" ry="3.2"/>
 </g>
 <!-- c_time_to_event -->
 <g id="node4" class="node">
@@ -130,7 +123,7 @@
 </g>
 </g>
 <!-- c_time_to_event&#45;&gt;database_meta_data -->
-<g id="edge4" class="edge">
+<g id="edge3" class="edge">
 <title>c_time_to_event:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M352.8081,-1674.157C326.1324,-1671.9306 312.1814,-1662.3733 294,-1636.7 256.3938,-1583.5976 318.5699,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="359.5055,-1674.4045 367.367,-1678.2975 363.5027,-1674.5522 367.5,-1674.7 367.5,-1674.7 367.5,-1674.7 363.5027,-1674.5522 367.633,-1671.1025 359.5055,-1674.4045 359.5055,-1674.4045"/>
@@ -160,7 +153,7 @@
 </g>
 </g>
 <!-- cd_cohort_count&#45;&gt;database_meta_data -->
-<g id="edge5" class="edge">
+<g id="edge4" class="edge">
 <title>cd_cohort_count:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M352.0154,-1592.1123C325.8072,-1589.7243 312.59,-1579.6597 294,-1554.7 237.7433,-1479.1675 347.6805,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="358.5066,-1592.3756 366.354,-1596.297 362.5033,-1592.5378 366.5,-1592.7 366.5,-1592.7 366.5,-1592.7 362.5033,-1592.5378 366.646,-1589.103 358.5066,-1592.3756 358.5066,-1592.3756"/>
@@ -170,38 +163,38 @@
 <g id="node6" class="node">
 <title>cg_cohort_count</title>
 <g id="a_node6"><a xlink:href="../../tables/cg_cohort_count.html" xlink:title="cg_cohort_count" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="366.5,-1073.2 366.5,-1134.2 514.5,-1134.2 514.5,-1073.2 366.5,-1073.2"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="366.5,-1110.7 366.5,-1133.7 514.5,-1133.7 514.5,-1110.7 366.5,-1110.7"/>
-<polygon fill="none" stroke="#000000" points="366.5,-1110.7 366.5,-1133.7 514.5,-1133.7 514.5,-1110.7 366.5,-1110.7"/>
-<text text-anchor="start" x="371.5" y="-1119.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_count</text>
-<text text-anchor="start" x="480.0219" y="-1118.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="366.5,-1091.7 366.5,-1110.7 514.5,-1110.7 514.5,-1091.7 366.5,-1091.7"/>
-<text text-anchor="start" x="369.5" y="-1097.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="366.5,-1072.7 366.5,-1091.7 425.5,-1091.7 425.5,-1072.7 366.5,-1072.7"/>
-<polygon fill="none" stroke="#000000" points="366.5,-1072.7 366.5,-1091.7 425.5,-1091.7 425.5,-1072.7 366.5,-1072.7"/>
-<text text-anchor="start" x="369.5" y="-1078.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
-<polygon fill="#ffffff" stroke="transparent" points="425.5,-1072.7 425.5,-1091.7 482.5,-1091.7 482.5,-1072.7 425.5,-1072.7"/>
-<polygon fill="none" stroke="#000000" points="425.5,-1072.7 425.5,-1091.7 482.5,-1091.7 482.5,-1072.7 425.5,-1072.7"/>
-<text text-anchor="start" x="447.1105" y="-1078.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="482.5,-1072.7 482.5,-1091.7 514.5,-1091.7 514.5,-1072.7 482.5,-1072.7"/>
-<polygon fill="none" stroke="#000000" points="482.5,-1072.7 482.5,-1091.7 514.5,-1091.7 514.5,-1072.7 482.5,-1072.7"/>
-<text text-anchor="start" x="505.3862" y="-1078.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="366.5,-991.2 366.5,-1052.2 514.5,-1052.2 514.5,-991.2 366.5,-991.2"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="366.5,-1028.7 366.5,-1051.7 514.5,-1051.7 514.5,-1028.7 366.5,-1028.7"/>
+<polygon fill="none" stroke="#000000" points="366.5,-1028.7 366.5,-1051.7 514.5,-1051.7 514.5,-1028.7 366.5,-1028.7"/>
+<text text-anchor="start" x="371.5" y="-1037.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_count</text>
+<text text-anchor="start" x="480.0219" y="-1036.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="366.5,-1009.7 366.5,-1028.7 514.5,-1028.7 514.5,-1009.7 366.5,-1009.7"/>
+<text text-anchor="start" x="369.5" y="-1015.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="366.5,-990.7 366.5,-1009.7 425.5,-1009.7 425.5,-990.7 366.5,-990.7"/>
+<polygon fill="none" stroke="#000000" points="366.5,-990.7 366.5,-1009.7 425.5,-1009.7 425.5,-990.7 366.5,-990.7"/>
+<text text-anchor="start" x="369.5" y="-996.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
+<polygon fill="#ffffff" stroke="transparent" points="425.5,-990.7 425.5,-1009.7 482.5,-1009.7 482.5,-990.7 425.5,-990.7"/>
+<polygon fill="none" stroke="#000000" points="425.5,-990.7 425.5,-1009.7 482.5,-1009.7 482.5,-990.7 425.5,-990.7"/>
+<text text-anchor="start" x="447.1105" y="-996.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="482.5,-990.7 482.5,-1009.7 514.5,-1009.7 514.5,-990.7 482.5,-990.7"/>
+<polygon fill="none" stroke="#000000" points="482.5,-990.7 482.5,-1009.7 514.5,-1009.7 514.5,-990.7 482.5,-990.7"/>
+<text text-anchor="start" x="505.3862" y="-996.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
 </a>
 </g>
 </g>
 <!-- cg_cohort_count&#45;&gt;database_meta_data -->
-<g id="edge7" class="edge">
+<g id="edge6" class="edge">
 <title>cg_cohort_count:w&#45;&gt;database_meta_data:e</title>
-<path fill="none" stroke="#000000" d="M351.9619,-1101.4923C324.9374,-1104.7461 312.5985,-1118.1799 294,-1144.7 241.426,-1219.6668 345.0645,-1346.7 253.5,-1346.7"/>
-<polygon fill="#000000" stroke="#000000" points="358.5119,-1101.1354 366.6959,-1104.2947 362.5059,-1100.9177 366.5,-1100.7 366.5,-1100.7 366.5,-1100.7 362.5059,-1100.9177 366.3041,-1097.1053 358.5119,-1101.1354 358.5119,-1101.1354"/>
-<ellipse fill="none" stroke="#000000" cx="355.3166" cy="-1101.3095" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M351.9173,-1019.4619C324.7257,-1022.602 311.8457,-1035.6677 294,-1062.7 258.878,-1115.9021 317.2496,-1346.7 253.5,-1346.7"/>
+<polygon fill="#000000" stroke="#000000" points="358.5109,-1019.1175 366.6879,-1022.2951 362.5054,-1018.9087 366.5,-1018.7 366.5,-1018.7 366.5,-1018.7 362.5054,-1018.9087 366.3121,-1015.1049 358.5109,-1019.1175 358.5109,-1019.1175"/>
+<ellipse fill="none" stroke="#000000" cx="355.3153" cy="-1019.2844" rx="3.2" ry="3.2"/>
 </g>
 <!-- cg_cohort_count&#45;&gt;cg_cohort_definition -->
-<g id="edge6" class="edge">
+<g id="edge5" class="edge">
 <title>cg_cohort_count:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M351.9227,-1099.8428C326.879,-1096.5712 316.5221,-1083.9722 294,-1062.7 246.5392,-1017.8731 283.7838,-936.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="358.5138,-1100.2304 366.2887,-1104.2938 362.5069,-1100.4652 366.5,-1100.7 366.5,-1100.7 366.5,-1100.7 362.5069,-1100.4652 366.7113,-1097.1062 358.5138,-1100.2304 358.5138,-1100.2304"/>
-<ellipse fill="none" stroke="#000000" cx="355.3193" cy="-1100.0425" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M352.0472,-1017.6982C327.4378,-1013.9214 318.4045,-999.7834 294,-980.7 254.196,-949.5748 269.0286,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="358.5192,-1018.1467 366.251,-1022.2914 362.5096,-1018.4234 366.5,-1018.7 366.5,-1018.7 366.5,-1018.7 362.5096,-1018.4234 366.749,-1015.1086 358.5192,-1018.1467 358.5192,-1018.1467"/>
+<ellipse fill="none" stroke="#000000" cx="355.3268" cy="-1017.9254" rx="3.2" ry="3.2"/>
 </g>
 <!-- cg_cohort_generation -->
 <g id="node7" class="node">
@@ -227,7 +220,7 @@
 </g>
 </g>
 <!-- cg_cohort_generation&#45;&gt;database_meta_data -->
-<g id="edge8" class="edge">
+<g id="edge7" class="edge">
 <title>cg_cohort_generation:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M334.0093,-1509.2281C315.8323,-1505.0214 308.2598,-1491.9946 294,-1472.7 259.0392,-1425.3952 312.3218,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="340.541,-1509.8915 348.1362,-1514.2816 344.5205,-1510.2958 348.5,-1510.7 348.5,-1510.7 348.5,-1510.7 344.5205,-1510.2958 348.8638,-1507.1184 340.541,-1509.8915 340.541,-1509.8915"/>
@@ -257,7 +250,7 @@
 </g>
 </g>
 <!-- cg_cohort_inc_result&#45;&gt;database_meta_data -->
-<g id="edge9" class="edge">
+<g id="edge8" class="edge">
 <title>cg_cohort_inc_result:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M338.9559,-1427.0617C320.0133,-1422.2126 313.7266,-1407.234 294,-1390.7 273.6302,-1373.6269 280.0786,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="345.5503,-1427.8044 353.097,-1432.2774 349.5251,-1428.2522 353.5,-1428.7 353.5,-1428.7 353.5,-1428.7 349.5251,-1428.2522 353.903,-1425.1226 345.5503,-1427.8044 345.5503,-1427.8044"/>
@@ -267,68 +260,68 @@
 <g id="node9" class="node">
 <title>cg_cohort_inclusion</title>
 <g id="a_node9"><a xlink:href="../../tables/cg_cohort_inclusion.html" xlink:title="cg_cohort_inclusion" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="355.5,-663.2 355.5,-724.2 525.5,-724.2 525.5,-663.2 355.5,-663.2"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="355.5,-700.7 355.5,-723.7 525.5,-723.7 525.5,-700.7 355.5,-700.7"/>
-<polygon fill="none" stroke="#000000" points="355.5,-700.7 355.5,-723.7 525.5,-723.7 525.5,-700.7 355.5,-700.7"/>
-<text text-anchor="start" x="360.5" y="-709.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_inclusion</text>
-<text text-anchor="start" x="491.0219" y="-708.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="355.5,-681.7 355.5,-700.7 525.5,-700.7 525.5,-681.7 355.5,-681.7"/>
-<text text-anchor="start" x="358.5" y="-687.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="355.5,-662.7 355.5,-681.7 425.5,-681.7 425.5,-662.7 355.5,-662.7"/>
-<polygon fill="none" stroke="#000000" points="355.5,-662.7 355.5,-681.7 425.5,-681.7 425.5,-662.7 355.5,-662.7"/>
-<text text-anchor="start" x="358.5" y="-668.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 1</text>
-<polygon fill="#ffffff" stroke="transparent" points="425.5,-662.7 425.5,-681.7 488.5,-681.7 488.5,-662.7 425.5,-662.7"/>
-<polygon fill="none" stroke="#000000" points="425.5,-662.7 425.5,-681.7 488.5,-681.7 488.5,-662.7 425.5,-662.7"/>
-<text text-anchor="start" x="453.1105" y="-668.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="488.5,-662.7 488.5,-681.7 525.5,-681.7 525.5,-662.7 488.5,-662.7"/>
-<polygon fill="none" stroke="#000000" points="488.5,-662.7 488.5,-681.7 525.5,-681.7 525.5,-662.7 488.5,-662.7"/>
-<text text-anchor="start" x="516.3862" y="-668.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="355.5,-581.2 355.5,-642.2 525.5,-642.2 525.5,-581.2 355.5,-581.2"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="355.5,-618.7 355.5,-641.7 525.5,-641.7 525.5,-618.7 355.5,-618.7"/>
+<polygon fill="none" stroke="#000000" points="355.5,-618.7 355.5,-641.7 525.5,-641.7 525.5,-618.7 355.5,-618.7"/>
+<text text-anchor="start" x="360.5" y="-627.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_inclusion</text>
+<text text-anchor="start" x="491.0219" y="-626.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="355.5,-599.7 355.5,-618.7 525.5,-618.7 525.5,-599.7 355.5,-599.7"/>
+<text text-anchor="start" x="358.5" y="-605.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="355.5,-580.7 355.5,-599.7 425.5,-599.7 425.5,-580.7 355.5,-580.7"/>
+<polygon fill="none" stroke="#000000" points="355.5,-580.7 355.5,-599.7 425.5,-599.7 425.5,-580.7 355.5,-580.7"/>
+<text text-anchor="start" x="358.5" y="-586.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 1</text>
+<polygon fill="#ffffff" stroke="transparent" points="425.5,-580.7 425.5,-599.7 488.5,-599.7 488.5,-580.7 425.5,-580.7"/>
+<polygon fill="none" stroke="#000000" points="425.5,-580.7 425.5,-599.7 488.5,-599.7 488.5,-580.7 425.5,-580.7"/>
+<text text-anchor="start" x="453.1105" y="-586.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="488.5,-580.7 488.5,-599.7 525.5,-599.7 525.5,-580.7 488.5,-580.7"/>
+<polygon fill="none" stroke="#000000" points="488.5,-580.7 488.5,-599.7 525.5,-599.7 525.5,-580.7 488.5,-580.7"/>
+<text text-anchor="start" x="516.3862" y="-586.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
 </a>
 </g>
 </g>
 <!-- cg_cohort_inclusion&#45;&gt;cg_cohort_definition -->
-<g id="edge10" class="edge">
+<g id="edge9" class="edge">
 <title>cg_cohort_inclusion:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M340.8976,-692.0635C319.0966,-696.6353 311.0858,-712.3979 294,-734.7 235.7123,-810.7827 314.3438,-936.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="347.5346,-691.4438 355.8347,-694.2844 351.5173,-691.0719 355.5,-690.7 355.5,-690.7 355.5,-690.7 351.5173,-691.0719 355.1653,-687.1156 347.5346,-691.4438 347.5346,-691.4438"/>
-<ellipse fill="none" stroke="#000000" cx="344.3485" cy="-691.7413" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M341.1549,-609.9635C318.9666,-614.3359 310.5266,-629.8183 294,-652.7 227.7829,-744.3802 331.5928,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="347.5309,-609.402 355.8159,-612.2861 351.5154,-609.051 355.5,-608.7 355.5,-608.7 355.5,-608.7 351.5154,-609.051 355.1841,-605.1139 347.5309,-609.402 347.5309,-609.402"/>
+<ellipse fill="none" stroke="#000000" cx="344.3432" cy="-609.6828" rx="3.2" ry="3.2"/>
 </g>
 <!-- cg_cohort_summary_stats -->
 <g id="node10" class="node">
 <title>cg_cohort_summary_stats</title>
 <g id="a_node10"><a xlink:href="../../tables/cg_cohort_summary_stats.html" xlink:title="cg_cohort_summary_stats" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="334.5,-991.2 334.5,-1052.2 546.5,-1052.2 546.5,-991.2 334.5,-991.2"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="334.5,-1028.7 334.5,-1051.7 546.5,-1051.7 546.5,-1028.7 334.5,-1028.7"/>
-<polygon fill="none" stroke="#000000" points="334.5,-1028.7 334.5,-1051.7 546.5,-1051.7 546.5,-1028.7 334.5,-1028.7"/>
-<text text-anchor="start" x="339.5" y="-1037.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_summary_stats</text>
-<text text-anchor="start" x="512.0219" y="-1036.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="334.5,-1009.7 334.5,-1028.7 546.5,-1028.7 546.5,-1009.7 334.5,-1009.7"/>
-<text text-anchor="start" x="337.5" y="-1015.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="334.5,-990.7 334.5,-1009.7 425.5,-1009.7 425.5,-990.7 334.5,-990.7"/>
-<polygon fill="none" stroke="#000000" points="334.5,-990.7 334.5,-1009.7 425.5,-1009.7 425.5,-990.7 334.5,-990.7"/>
-<text text-anchor="start" x="337.5" y="-996.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
-<polygon fill="#ffffff" stroke="transparent" points="425.5,-990.7 425.5,-1009.7 498.5,-1009.7 498.5,-990.7 425.5,-990.7"/>
-<polygon fill="none" stroke="#000000" points="425.5,-990.7 425.5,-1009.7 498.5,-1009.7 498.5,-990.7 425.5,-990.7"/>
-<text text-anchor="start" x="463.1105" y="-996.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="498.5,-990.7 498.5,-1009.7 546.5,-1009.7 546.5,-990.7 498.5,-990.7"/>
-<polygon fill="none" stroke="#000000" points="498.5,-990.7 498.5,-1009.7 546.5,-1009.7 546.5,-990.7 498.5,-990.7"/>
-<text text-anchor="start" x="537.3862" y="-996.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="334.5,-909.2 334.5,-970.2 546.5,-970.2 546.5,-909.2 334.5,-909.2"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="334.5,-946.7 334.5,-969.7 546.5,-969.7 546.5,-946.7 334.5,-946.7"/>
+<polygon fill="none" stroke="#000000" points="334.5,-946.7 334.5,-969.7 546.5,-969.7 546.5,-946.7 334.5,-946.7"/>
+<text text-anchor="start" x="339.5" y="-955.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_summary_stats</text>
+<text text-anchor="start" x="512.0219" y="-954.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="334.5,-927.7 334.5,-946.7 546.5,-946.7 546.5,-927.7 334.5,-927.7"/>
+<text text-anchor="start" x="337.5" y="-933.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="334.5,-908.7 334.5,-927.7 425.5,-927.7 425.5,-908.7 334.5,-908.7"/>
+<polygon fill="none" stroke="#000000" points="334.5,-908.7 334.5,-927.7 425.5,-927.7 425.5,-908.7 334.5,-908.7"/>
+<text text-anchor="start" x="337.5" y="-914.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
+<polygon fill="#ffffff" stroke="transparent" points="425.5,-908.7 425.5,-927.7 498.5,-927.7 498.5,-908.7 425.5,-908.7"/>
+<polygon fill="none" stroke="#000000" points="425.5,-908.7 425.5,-927.7 498.5,-927.7 498.5,-908.7 425.5,-908.7"/>
+<text text-anchor="start" x="463.1105" y="-914.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="498.5,-908.7 498.5,-927.7 546.5,-927.7 546.5,-908.7 498.5,-908.7"/>
+<polygon fill="none" stroke="#000000" points="498.5,-908.7 498.5,-927.7 546.5,-927.7 546.5,-908.7 498.5,-908.7"/>
+<text text-anchor="start" x="537.3862" y="-914.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
 </a>
 </g>
 </g>
 <!-- cg_cohort_summary_stats&#45;&gt;database_meta_data -->
-<g id="edge12" class="edge">
+<g id="edge11" class="edge">
 <title>cg_cohort_summary_stats:w&#45;&gt;database_meta_data:e</title>
-<path fill="none" stroke="#000000" d="M320.1653,-1021.4019C306.3896,-1027.6363 302.8975,-1043.9384 294,-1062.7 266.6836,-1120.3006 317.2496,-1346.7 253.5,-1346.7"/>
-<polygon fill="#000000" stroke="#000000" points="326.6384,-1020.1819 335.1668,-1022.2377 330.5692,-1019.4409 334.5,-1018.7 334.5,-1018.7 334.5,-1018.7 330.5692,-1019.4409 333.8332,-1015.1623 326.6384,-1020.1819 326.6384,-1020.1819"/>
-<ellipse fill="none" stroke="#000000" cx="323.4938" cy="-1020.7746" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M320.1228,-939.3822C306.2601,-945.5761 302.6014,-961.8008 294,-980.7 260.1031,-1055.1789 335.3298,-1346.7 253.5,-1346.7"/>
+<polygon fill="#000000" stroke="#000000" points="326.6357,-938.1672 335.1602,-940.2389 330.5678,-937.4336 334.5,-936.7 334.5,-936.7 334.5,-936.7 330.5678,-937.4336 333.8398,-933.1611 326.6357,-938.1672 326.6357,-938.1672"/>
+<ellipse fill="none" stroke="#000000" cx="323.49" cy="-938.7541" rx="3.2" ry="3.2"/>
 </g>
 <!-- cg_cohort_summary_stats&#45;&gt;cg_cohort_definition -->
-<g id="edge11" class="edge">
+<g id="edge10" class="edge">
 <title>cg_cohort_summary_stats:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M320.059,-1017.062C272.5715,-1005.5049 276.3337,-936.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="326.551,-1017.7983 334.0942,-1022.2771 330.5255,-1018.2492 334.5,-1018.7 334.5,-1018.7 334.5,-1018.7 330.5255,-1018.2492 334.9058,-1015.1229 326.551,-1017.7983 326.551,-1017.7983"/>
-<ellipse fill="none" stroke="#000000" cx="323.3714" cy="-1017.4377" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M320.0364,-935.6453C278.1083,-929.2279 267.948,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="326.5212,-936.1181 334.2382,-940.2905 330.5106,-936.4091 334.5,-936.7 334.5,-936.7 334.5,-936.7 330.5106,-936.4091 334.7618,-933.1095 326.5212,-936.1181 326.5212,-936.1181"/>
+<ellipse fill="none" stroke="#000000" cx="323.3297" cy="-935.8854" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_incidence_summary -->
 <g id="node11" class="node">
@@ -444,18 +437,18 @@
 </g>
 </g>
 <!-- ci_incidence_summary&#45;&gt;database_meta_data -->
-<g id="edge14" class="edge">
+<g id="edge13" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M291.4803,-508.5018C224.2592,-588.4712 342.5996,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="297.4093,-505.4044 306.167,-504.8908 300.9547,-503.5522 304.5,-501.7 304.5,-501.7 304.5,-501.7 300.9547,-503.5522 302.833,-498.5092 297.4093,-505.4044 297.4093,-505.4044"/>
 <ellipse fill="none" stroke="#000000" cx="294.573" cy="-506.8861" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_incidence_summary&#45;&gt;cg_cohort_definition -->
-<g id="edge22" class="edge">
+<g id="edge21" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M292.6202,-91.9069C253.168,-151.4783 266.0278,-516.5946 261,-565.7 252.5477,-648.2521 301.4836,-936.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="297.9179,-88.2471 306.5462,-86.662 301.2089,-85.9735 304.5,-83.7 304.5,-83.7 304.5,-83.7 301.2089,-85.9735 302.4538,-80.738 297.9179,-88.2471 297.9179,-88.2471"/>
-<ellipse fill="none" stroke="#000000" cx="295.285" cy="-90.0659" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M291.6454,-90.2361C223.3228,-167.0825 304.4424,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="297.3689,-87.326 306.1317,-86.909 300.9344,-85.513 304.5,-83.7 304.5,-83.7 304.5,-83.7 300.9344,-85.513 302.8683,-80.491 297.3689,-87.326 297.3689,-87.326"/>
+<ellipse fill="none" stroke="#000000" cx="294.5164" cy="-88.7763" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_age_group_def -->
 <g id="node12" class="node">
@@ -487,61 +480,61 @@
 </g>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_age_group_def -->
-<g id="edge13" class="edge">
+<g id="edge12" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_age_group_def:e</title>
 <path fill="none" stroke="#000000" d="M289.7176,-523.5711C258.178,-522.9969 245.2403,-520.7 207.5,-520.7"/>
 <polygon fill="#000000" stroke="#000000" points="296.5003,-523.6302 304.4686,-527.2999 300.5002,-523.6651 304.5,-523.7 304.5,-523.7 304.5,-523.7 300.5002,-523.6651 304.5314,-520.1001 296.5003,-523.6302 296.5003,-523.6302"/>
 <ellipse fill="none" stroke="#000000" cx="293.3004" cy="-523.6023" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_age_group_def -->
-<g id="edge16" class="edge">
+<g id="edge15" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_age_group_def:e</title>
-<path fill="none" stroke="#000000" d="M290.8235,-199.4555C259.9765,-229.6466 276.923,-369.8943 261,-410.7 244.361,-453.3404 253.2718,-498.7 207.5,-498.7"/>
-<polygon fill="#000000" stroke="#000000" points="297.1263,-196.8031 305.8964,-197.0182 300.8132,-195.2516 304.5,-193.7 304.5,-193.7 304.5,-193.7 300.8132,-195.2516 303.1036,-190.3818 297.1263,-196.8031 297.1263,-196.8031"/>
-<ellipse fill="none" stroke="#000000" cx="294.1769" cy="-198.0444" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M290.7858,-199.3011C258.5765,-229.9422 278.5083,-377.4328 261,-419.7 244.7719,-458.8768 249.9049,-498.7 207.5,-498.7"/>
+<polygon fill="#000000" stroke="#000000" points="297.0939,-196.7248 305.8612,-197.0328 300.7969,-195.2124 304.5,-193.7 304.5,-193.7 304.5,-193.7 300.7969,-195.2124 303.1388,-190.3672 297.0939,-196.7248 297.0939,-196.7248"/>
+<ellipse fill="none" stroke="#000000" cx="294.1314" cy="-197.9347" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_outcome_def -->
 <g id="node13" class="node">
 <title>ci_outcome_def</title>
 <g id="a_node13"><a xlink:href="../../tables/ci_outcome_def.html" xlink:title="ci_outcome_def" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="20,-295.2 20,-400.2 241,-400.2 241,-295.2 20,-295.2"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="20.5,-376.7 20.5,-399.7 241.5,-399.7 241.5,-376.7 20.5,-376.7"/>
-<polygon fill="none" stroke="#000000" points="20.5,-376.7 20.5,-399.7 241.5,-399.7 241.5,-376.7 20.5,-376.7"/>
-<text text-anchor="start" x="25.5" y="-385.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">ci_outcome_def</text>
-<text text-anchor="start" x="206.5437" y="-384.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="20.5,-354.7 20.5,-376.7 241.5,-376.7 241.5,-354.7 20.5,-354.7"/>
-<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="25.5" y="-371.7"/>
-<text text-anchor="start" x="40.5" y="-361.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_id</text>
-<polygon fill="none" stroke="#000000" points="20.5,-332.7 20.5,-354.7 241.5,-354.7 241.5,-332.7 20.5,-332.7"/>
-<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="25.5" y="-349.7"/>
-<text text-anchor="start" x="40.5" y="-339.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">ref_id</text>
-<polygon fill="none" stroke="#000000" points="20.5,-313.7 20.5,-332.7 241.5,-332.7 241.5,-313.7 20.5,-313.7"/>
-<text text-anchor="start" x="23.5" y="-319.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="20.5,-294.7 20.5,-313.7 107.5,-313.7 107.5,-294.7 20.5,-294.7"/>
-<polygon fill="none" stroke="#000000" points="20.5,-294.7 20.5,-313.7 107.5,-313.7 107.5,-294.7 20.5,-294.7"/>
-<text text-anchor="start" x="23.5" y="-300.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
-<polygon fill="#ffffff" stroke="transparent" points="107.5,-294.7 107.5,-313.7 182.5,-313.7 182.5,-294.7 107.5,-294.7"/>
-<polygon fill="none" stroke="#000000" points="107.5,-294.7 107.5,-313.7 182.5,-313.7 182.5,-294.7 107.5,-294.7"/>
-<text text-anchor="start" x="147.1105" y="-300.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="182.5,-294.7 182.5,-313.7 241.5,-313.7 241.5,-294.7 182.5,-294.7"/>
-<polygon fill="none" stroke="#000000" points="182.5,-294.7 182.5,-313.7 241.5,-313.7 241.5,-294.7 182.5,-294.7"/>
-<text text-anchor="start" x="222.9053" y="-300.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">2 &gt;</text>
+<polygon fill="#ffffff" stroke="transparent" points="20,-304.2 20,-409.2 241,-409.2 241,-304.2 20,-304.2"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="20.5,-385.7 20.5,-408.7 241.5,-408.7 241.5,-385.7 20.5,-385.7"/>
+<polygon fill="none" stroke="#000000" points="20.5,-385.7 20.5,-408.7 241.5,-408.7 241.5,-385.7 20.5,-385.7"/>
+<text text-anchor="start" x="25.5" y="-394.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">ci_outcome_def</text>
+<text text-anchor="start" x="206.5437" y="-393.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="20.5,-363.7 20.5,-385.7 241.5,-385.7 241.5,-363.7 20.5,-363.7"/>
+<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="25.5" y="-380.7"/>
+<text text-anchor="start" x="40.5" y="-370.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_id</text>
+<polygon fill="none" stroke="#000000" points="20.5,-341.7 20.5,-363.7 241.5,-363.7 241.5,-341.7 20.5,-341.7"/>
+<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="25.5" y="-358.7"/>
+<text text-anchor="start" x="40.5" y="-348.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">ref_id</text>
+<polygon fill="none" stroke="#000000" points="20.5,-322.7 20.5,-341.7 241.5,-341.7 241.5,-322.7 20.5,-322.7"/>
+<text text-anchor="start" x="23.5" y="-328.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="20.5,-303.7 20.5,-322.7 107.5,-322.7 107.5,-303.7 20.5,-303.7"/>
+<polygon fill="none" stroke="#000000" points="20.5,-303.7 20.5,-322.7 107.5,-322.7 107.5,-303.7 20.5,-303.7"/>
+<text text-anchor="start" x="23.5" y="-309.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="107.5,-303.7 107.5,-322.7 182.5,-322.7 182.5,-303.7 107.5,-303.7"/>
+<polygon fill="none" stroke="#000000" points="107.5,-303.7 107.5,-322.7 182.5,-322.7 182.5,-303.7 107.5,-303.7"/>
+<text text-anchor="start" x="147.1105" y="-309.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="182.5,-303.7 182.5,-322.7 241.5,-322.7 241.5,-303.7 182.5,-303.7"/>
+<polygon fill="none" stroke="#000000" points="182.5,-303.7 182.5,-322.7 241.5,-322.7 241.5,-303.7 182.5,-303.7"/>
+<text text-anchor="start" x="222.9053" y="-309.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">2 &gt;</text>
 </a>
 </g>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_outcome_def -->
-<g id="edge15" class="edge">
+<g id="edge14" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_outcome_def:e</title>
-<path fill="none" stroke="#000000" d="M290.0336,-389.3006C272.3224,-382.8641 266.1113,-365.7 241.5,-365.7"/>
-<polygon fill="#000000" stroke="#000000" points="296.6078,-390.3909 303.9109,-395.2515 300.5539,-391.0455 304.5,-391.7 304.5,-391.7 304.5,-391.7 300.5539,-391.0455 305.0891,-388.1485 296.6078,-390.3909 296.6078,-390.3909"/>
-<ellipse fill="none" stroke="#000000" cx="293.4509" cy="-389.8673" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M290.1485,-390.07C272.7062,-385.815 264.9504,-374.7 241.5,-374.7"/>
+<polygon fill="#000000" stroke="#000000" points="296.5511,-390.7971 304.0937,-395.277 300.5256,-391.2486 304.5,-391.7 304.5,-391.7 304.5,-391.7 300.5256,-391.2486 304.9063,-388.123 296.5511,-390.7971 296.5511,-390.7971"/>
+<ellipse fill="none" stroke="#000000" cx="293.3715" cy="-390.436" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_outcome_def -->
-<g id="edge17" class="edge">
+<g id="edge16" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_outcome_def:e</title>
-<path fill="none" stroke="#000000" d="M290.2245,-196.3035C244.005,-216.222 308.1589,-343.7 241.5,-343.7"/>
-<polygon fill="#000000" stroke="#000000" points="296.6298,-195.1354 305.1459,-197.2416 300.5649,-194.4177 304.5,-193.7 304.5,-193.7 304.5,-193.7 300.5649,-194.4177 303.8541,-190.1584 296.6298,-195.1354 296.6298,-195.1354"/>
-<ellipse fill="none" stroke="#000000" cx="293.4817" cy="-195.7095" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M290.1678,-196.1975C240.7936,-216.4257 311.8702,-352.7 241.5,-352.7"/>
+<polygon fill="#000000" stroke="#000000" points="296.6188,-195.0734 305.118,-197.2466 300.5594,-194.3867 304.5,-193.7 304.5,-193.7 304.5,-193.7 300.5594,-194.3867 303.882,-190.1534 296.6188,-195.0734 296.6188,-195.0734"/>
+<ellipse fill="none" stroke="#000000" cx="293.4663" cy="-195.6228" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_subgroup_def -->
 <g id="node14" class="node">
@@ -573,14 +566,14 @@
 </g>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_subgroup_def -->
-<g id="edge18" class="edge">
+<g id="edge17" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_subgroup_def:e</title>
 <path fill="none" stroke="#000000" d="M289.9521,-194.4216C256.5385,-197.8922 244.438,-212.7 204.5,-212.7"/>
 <polygon fill="#000000" stroke="#000000" points="296.5098,-194.0964 304.6784,-197.2956 300.5049,-193.8982 304.5,-193.7 304.5,-193.7 304.5,-193.7 300.5049,-193.8982 304.3216,-190.1044 296.5098,-194.0964 296.5098,-194.0964"/>
 <ellipse fill="none" stroke="#000000" cx="293.3138" cy="-194.2549" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_subgroup_def -->
-<g id="edge20" class="edge">
+<g id="edge19" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_subgroup_def:e</title>
 <path fill="none" stroke="#000000" d="M290.1564,-129.5175C252.4043,-139.847 251.6941,-190.7 204.5,-190.7"/>
 <polygon fill="#000000" stroke="#000000" points="296.5635,-128.7057 304.9526,-131.2714 300.5317,-128.2029 304.5,-127.7 304.5,-127.7 304.5,-127.7 300.5317,-128.2029 304.0474,-124.1286 296.5635,-128.7057 296.5635,-128.7057"/>
@@ -613,14 +606,14 @@
 </g>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_tar_def -->
-<g id="edge19" class="edge">
+<g id="edge18" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_tar_def:e</title>
 <path fill="none" stroke="#000000" d="M290.4945,-190.2825C274.7204,-180.3534 280.7562,-150.9914 261,-131.7 235.2033,-106.5102 229.5555,-86.7 193.5,-86.7"/>
 <polygon fill="#000000" stroke="#000000" points="296.728,-191.8035 303.6466,-197.1974 300.614,-192.7518 304.5,-193.7 304.5,-193.7 304.5,-193.7 300.614,-192.7518 305.3534,-190.2026 296.728,-191.8035 296.728,-191.8035"/>
 <ellipse fill="none" stroke="#000000" cx="293.6192" cy="-191.0449" rx="3.2" ry="3.2"/>
 </g>
 <!-- ci_incidence_summary&#45;&gt;ci_tar_def -->
-<g id="edge21" class="edge">
+<g id="edge20" class="edge">
 <title>ci_incidence_summary:w&#45;&gt;ci_tar_def:e</title>
 <path fill="none" stroke="#000000" d="M289.8783,-105.1105C251.7148,-101.9035 238.272,-86.7 193.5,-86.7"/>
 <polygon fill="#000000" stroke="#000000" points="296.5065,-105.3777 304.355,-109.2971 300.5032,-105.5388 304.5,-105.7 304.5,-105.7 304.5,-105.7 300.5032,-105.5388 304.645,-102.1029 296.5065,-105.3777 296.5065,-105.3777"/>
@@ -650,7 +643,7 @@
 </g>
 </g>
 <!-- cm_covariate_balance&#45;&gt;database_meta_data -->
-<g id="edge23" class="edge">
+<g id="edge22" class="edge">
 <title>cm_covariate_balance:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M332.7715,-1346.7C302.5089,-1346.7 289.8924,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="339.5,-1346.7001 347.5,-1350.3 343.5,-1346.7 347.5,-1346.7 347.5,-1346.7 347.5,-1346.7 343.5,-1346.7 347.5,-1343.1 339.5,-1346.7001 339.5,-1346.7001"/>
@@ -680,48 +673,48 @@
 </g>
 </g>
 <!-- cm_diagnostics_summary&#45;&gt;database_meta_data -->
-<g id="edge24" class="edge">
+<g id="edge23" class="edge">
 <title>cm_diagnostics_summary:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M321.0046,-1267.4283C287.7024,-1281.6565 299.403,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="327.638,-1266.1798 336.1659,-1268.2379 331.569,-1265.4399 335.5,-1264.7 335.5,-1264.7 335.5,-1264.7 331.569,-1265.4399 334.8341,-1261.1621 327.638,-1266.1798 327.638,-1266.1798"/>
 <ellipse fill="none" stroke="#000000" cx="324.4933" cy="-1266.7717" rx="3.2" ry="3.2"/>
 </g>
 <!-- cm_diagnostics_summary&#45;&gt;cg_cohort_definition -->
-<g id="edge25" class="edge">
+<g id="edge24" class="edge">
 <title>cm_diagnostics_summary:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M320.8191,-1263.5766C193.4822,-1242.6613 367.9844,-936.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="327.5233,-1264.0896 335.2253,-1268.2895 331.5117,-1264.3948 335.5,-1264.7 335.5,-1264.7 335.5,-1264.7 331.5117,-1264.3948 335.7747,-1261.1105 327.5233,-1264.0896 327.5233,-1264.0896"/>
-<ellipse fill="none" stroke="#000000" cx="324.3326" cy="-1263.8454" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M320.9499,-1263.7059C176.8375,-1242.6964 385.3381,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="327.5186,-1264.1547 335.2546,-1268.2916 331.5093,-1264.4273 335.5,-1264.7 335.5,-1264.7 335.5,-1264.7 331.5093,-1264.4273 335.7454,-1261.1084 327.5186,-1264.1547 327.5186,-1264.1547"/>
+<ellipse fill="none" stroke="#000000" cx="324.326" cy="-1263.9365" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_cohorts -->
 <g id="node18" class="node">
 <title>plp_cohorts</title>
 <g id="a_node18"><a xlink:href="../../tables/plp_cohorts.html" xlink:title="plp_cohorts" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="382,-581.2 382,-642.2 499,-642.2 499,-581.2 382,-581.2"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="382.5,-618.7 382.5,-641.7 499.5,-641.7 499.5,-618.7 382.5,-618.7"/>
-<polygon fill="none" stroke="#000000" points="382.5,-618.7 382.5,-641.7 499.5,-641.7 499.5,-618.7 382.5,-618.7"/>
-<text text-anchor="start" x="387.5" y="-627.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">plp_cohorts</text>
-<text text-anchor="start" x="465.0219" y="-626.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="382.5,-599.7 382.5,-618.7 499.5,-618.7 499.5,-599.7 382.5,-599.7"/>
-<text text-anchor="start" x="385.5" y="-605.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="382.5,-580.7 382.5,-599.7 426.5,-599.7 426.5,-580.7 382.5,-580.7"/>
-<polygon fill="none" stroke="#000000" points="382.5,-580.7 382.5,-599.7 426.5,-599.7 426.5,-580.7 382.5,-580.7"/>
-<text text-anchor="start" x="385.5" y="-586.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 1</text>
-<polygon fill="#ffffff" stroke="transparent" points="426.5,-580.7 426.5,-599.7 475.5,-599.7 475.5,-580.7 426.5,-580.7"/>
-<polygon fill="none" stroke="#000000" points="426.5,-580.7 426.5,-599.7 475.5,-599.7 475.5,-580.7 426.5,-580.7"/>
-<text text-anchor="start" x="440.1105" y="-586.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="475.5,-580.7 475.5,-599.7 499.5,-599.7 499.5,-580.7 475.5,-580.7"/>
-<polygon fill="none" stroke="#000000" points="475.5,-580.7 475.5,-599.7 499.5,-599.7 499.5,-580.7 475.5,-580.7"/>
-<text text-anchor="start" x="490.3862" y="-586.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="382,-663.2 382,-724.2 499,-724.2 499,-663.2 382,-663.2"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="382.5,-700.7 382.5,-723.7 499.5,-723.7 499.5,-700.7 382.5,-700.7"/>
+<polygon fill="none" stroke="#000000" points="382.5,-700.7 382.5,-723.7 499.5,-723.7 499.5,-700.7 382.5,-700.7"/>
+<text text-anchor="start" x="387.5" y="-709.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">plp_cohorts</text>
+<text text-anchor="start" x="465.0219" y="-708.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="382.5,-681.7 382.5,-700.7 499.5,-700.7 499.5,-681.7 382.5,-681.7"/>
+<text text-anchor="start" x="385.5" y="-687.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="382.5,-662.7 382.5,-681.7 426.5,-681.7 426.5,-662.7 382.5,-662.7"/>
+<polygon fill="none" stroke="#000000" points="382.5,-662.7 382.5,-681.7 426.5,-681.7 426.5,-662.7 382.5,-662.7"/>
+<text text-anchor="start" x="385.5" y="-668.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 1</text>
+<polygon fill="#ffffff" stroke="transparent" points="426.5,-662.7 426.5,-681.7 475.5,-681.7 475.5,-662.7 426.5,-662.7"/>
+<polygon fill="none" stroke="#000000" points="426.5,-662.7 426.5,-681.7 475.5,-681.7 475.5,-662.7 426.5,-662.7"/>
+<text text-anchor="start" x="440.1105" y="-668.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="475.5,-662.7 475.5,-681.7 499.5,-681.7 499.5,-662.7 475.5,-662.7"/>
+<polygon fill="none" stroke="#000000" points="475.5,-662.7 475.5,-681.7 499.5,-681.7 499.5,-662.7 475.5,-662.7"/>
+<text text-anchor="start" x="490.3862" y="-668.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
 </a>
 </g>
 </g>
 <!-- plp_cohorts&#45;&gt;cg_cohort_definition -->
-<g id="edge26" class="edge">
+<g id="edge25" class="edge">
 <title>plp_cohorts:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M367.6682,-609.1637C334.3449,-611.4679 318.4145,-622.7926 294,-652.7 211.407,-753.8752 349.1064,-936.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="374.5039,-608.95 382.6125,-612.2982 378.502,-608.825 382.5,-608.7 382.5,-608.7 382.5,-608.7 378.502,-608.825 382.3875,-605.1018 374.5039,-608.95 374.5039,-608.95"/>
-<ellipse fill="none" stroke="#000000" cx="371.3055" cy="-609.0501" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M367.7813,-691.2648C334.9675,-694.0242 320.9852,-707.0899 294,-734.7 238.7586,-791.2205 297.5327,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="374.5059,-691.0068 382.6381,-694.2974 378.5029,-690.8534 382.5,-690.7 382.5,-690.7 382.5,-690.7 378.5029,-690.8534 382.3619,-687.1026 374.5059,-691.0068 374.5059,-691.0068"/>
+<ellipse fill="none" stroke="#000000" cx="371.3082" cy="-691.1295" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_diagnostics -->
 <g id="node19" class="node">
@@ -747,7 +740,7 @@
 </g>
 </g>
 <!-- plp_diagnostics&#45;&gt;database_meta_data -->
-<g id="edge27" class="edge">
+<g id="edge26" class="edge">
 <title>plp_diagnostics:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M652.0686,-1627.6976C611.5218,-1640.5195 636.019,-1711.5135 587,-1736.7 529.0863,-1766.4567 342.3599,-1780.2979 294,-1736.7 229.2841,-1678.3565 340.6327,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="658.5756,-1626.797 666.9936,-1629.266 662.5378,-1626.2485 666.5,-1625.7 666.5,-1625.7 666.5,-1625.7 662.5378,-1626.2485 666.0064,-1622.134 658.5756,-1626.797 658.5756,-1626.797"/>
@@ -777,25 +770,25 @@
 </g>
 </g>
 <!-- plp_diagnostics&#45;&gt;plp_model_designs -->
-<g id="edge28" class="edge">
+<g id="edge27" class="edge">
 <title>plp_diagnostics:w&#45;&gt;plp_model_designs:e</title>
 <path fill="none" stroke="#000000" d="M651.9723,-1624.7973C563.7531,-1612.9378 633.4244,-1486.5336 620,-1382.7 606.1772,-1275.7846 640.2347,-992.4445 587,-898.7 570.0451,-868.8429 557.8353,-854.7 523.5,-854.7"/>
 <polygon fill="#000000" stroke="#000000" points="658.5154,-1625.2038 666.2767,-1629.2931 662.5077,-1625.4519 666.5,-1625.7 666.5,-1625.7 666.5,-1625.7 662.5077,-1625.4519 666.7233,-1622.1069 658.5154,-1625.2038 658.5154,-1625.2038"/>
 <ellipse fill="none" stroke="#000000" cx="655.3216" cy="-1625.0053" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_model_designs&#45;&gt;cg_cohort_definition -->
-<g id="edge29" class="edge">
+<g id="edge28" class="edge">
 <title>plp_model_designs:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M343.0859,-854.716C286.0193,-860.1547 285.0431,-931.1336 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="349.5,-854.7089 357.504,-858.3 353.5,-854.7045 357.5,-854.7 357.5,-854.7 357.5,-854.7 353.5,-854.7045 357.496,-851.1 349.5,-854.7089 349.5,-854.7089"/>
-<ellipse fill="none" stroke="#000000" cx="346.3" cy="-854.7125" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M343.0142,-854.1206C291.1124,-855.042 277.7514,-890.1805 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="349.5064,-854.3802 357.3561,-858.2971 353.5032,-854.5401 357.5,-854.7 357.5,-854.7 357.5,-854.7 353.5032,-854.5401 357.6439,-851.1029 349.5064,-854.3802 349.5064,-854.3802"/>
+<ellipse fill="none" stroke="#000000" cx="346.3089" cy="-854.2523" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_model_designs&#45;&gt;cg_cohort_definition -->
-<g id="edge30" class="edge">
+<g id="edge29" class="edge">
 <title>plp_model_designs:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M343.0859,-857.3307C286.0193,-873.0868 285.0431,-943.1941 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="349.63,-856.1364 358.1464,-858.2415 353.565,-855.4182 357.5,-854.7 357.5,-854.7 357.5,-854.7 353.565,-855.4182 356.8536,-851.1585 349.63,-856.1364 349.63,-856.1364"/>
-<ellipse fill="none" stroke="#000000" cx="346.482" cy="-856.711" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M343.0142,-856.9936C291.1124,-867.9586 277.7514,-902.1395 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="349.5984,-855.9511 358.063,-858.2557 353.5492,-855.3256 357.5,-854.7 357.5,-854.7 357.5,-854.7 353.5492,-855.3256 356.937,-851.1443 349.5984,-855.9511 349.5984,-855.9511"/>
+<ellipse fill="none" stroke="#000000" cx="346.4378" cy="-856.4516" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_performances -->
 <g id="node21" class="node">
@@ -821,32 +814,32 @@
 </g>
 </g>
 <!-- plp_performances&#45;&gt;database_meta_data -->
-<g id="edge31" class="edge">
+<g id="edge30" class="edge">
 <title>plp_performances:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M347.1504,-1181.4324C322.5254,-1181.6372 312.6805,-1196.5961 294,-1220.7 259.5191,-1265.1917 309.7889,-1340.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="353.531,-1181.996 361.1832,-1186.286 357.5155,-1182.348 361.5,-1182.7 361.5,-1182.7 361.5,-1182.7 357.5155,-1182.348 361.8168,-1179.114 353.531,-1181.996 353.531,-1181.996"/>
 <ellipse fill="none" stroke="#000000" cx="350.3434" cy="-1181.7144" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_performances&#45;&gt;database_meta_data -->
-<g id="edge34" class="edge">
+<g id="edge33" class="edge">
 <title>plp_performances:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M347.4902,-1186.2918C322.6155,-1194.5001 312.7661,-1209.4855 294,-1233.7 259.5191,-1278.1917 309.7889,-1353.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="353.7506,-1184.6868 362.3941,-1186.1872 357.6253,-1183.6934 361.5,-1182.7 361.5,-1182.7 361.5,-1182.7 357.6253,-1183.6934 360.6059,-1179.2128 353.7506,-1184.6868 353.7506,-1184.6868"/>
 <ellipse fill="none" stroke="#000000" cx="350.6509" cy="-1185.4816" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_performances&#45;&gt;cg_cohort_definition -->
-<g id="edge32" class="edge">
+<g id="edge31" class="edge">
 <title>plp_performances:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M347.2859,-1179.5272C323.5128,-1172.7865 312.8695,-1160.9611 294,-1138.7 230.4091,-1063.679 316.8461,-930.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="353.6921,-1180.9571 360.7157,-1186.2135 357.5961,-1181.8286 361.5,-1182.7 361.5,-1182.7 361.5,-1182.7 357.5961,-1181.8286 362.2843,-1179.1865 353.6921,-1180.9571 353.6921,-1180.9571"/>
-<ellipse fill="none" stroke="#000000" cx="350.569" cy="-1180.26" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M347.2438,-1179.562C323.3283,-1172.9387 312.264,-1161.4605 294,-1138.7 221.6247,-1048.5063 334.1421,-889.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="353.687,-1180.9802 360.7261,-1186.2158 357.5935,-1181.8401 361.5,-1182.7 361.5,-1182.7 361.5,-1182.7 357.5935,-1181.8401 362.2739,-1179.1842 353.687,-1180.9802 353.687,-1180.9802"/>
+<ellipse fill="none" stroke="#000000" cx="350.5618" cy="-1180.2923" rx="3.2" ry="3.2"/>
 </g>
 <!-- plp_performances&#45;&gt;cg_cohort_definition -->
-<g id="edge33" class="edge">
+<g id="edge32" class="edge">
 <title>plp_performances:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M346.9581,-1184.6249C323.4145,-1185.6773 312.7825,-1173.8586 294,-1151.7 230.4091,-1076.679 316.8461,-943.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="353.5692,-1183.7499 361.9724,-1186.2689 357.5346,-1183.2249 361.5,-1182.7 361.5,-1182.7 361.5,-1182.7 357.5346,-1183.2249 361.0276,-1179.1311 353.5692,-1183.7499 353.5692,-1183.7499"/>
-<ellipse fill="none" stroke="#000000" cx="350.3969" cy="-1184.1698" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M346.914,-1184.6613C323.2262,-1185.8326 312.1799,-1174.3556 294,-1151.7 221.6247,-1061.5063 334.1421,-902.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="353.5714,-1183.7662 361.9798,-1186.2679 357.5357,-1183.2331 361.5,-1182.7 361.5,-1182.7 361.5,-1182.7 357.5357,-1183.2331 361.0202,-1179.1321 353.5714,-1183.7662 353.5714,-1183.7662"/>
+<ellipse fill="none" stroke="#000000" cx="350.3999" cy="-1184.1926" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_diagnostics_summary -->
 <g id="node22" class="node">
@@ -872,7 +865,7 @@
 </g>
 </g>
 <!-- sccs_diagnostics_summary&#45;&gt;database_meta_data -->
-<g id="edge35" class="edge">
+<g id="edge34" class="edge">
 <title>sccs_diagnostics_summary:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M614.3663,-1342.5711C556.6005,-1379.2664 646.1666,-1665.6432 587,-1718.7 562.7623,-1740.4348 318.234,-1740.4388 294,-1718.7 232.1002,-1663.1735 336.6551,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="620.7842,-1340.8133 629.451,-1342.1721 624.6421,-1339.7567 628.5,-1338.7 628.5,-1338.7 628.5,-1338.7 624.6421,-1339.7567 627.549,-1335.2279 620.7842,-1340.8133 620.7842,-1340.8133"/>
@@ -902,18 +895,18 @@
 </g>
 </g>
 <!-- sccs_diagnostics_summary&#45;&gt;sccs_exposures_outcome_set -->
-<g id="edge36" class="edge">
+<g id="edge35" class="edge">
 <title>sccs_diagnostics_summary:w&#45;&gt;sccs_exposures_outcome_set:e</title>
 <path fill="none" stroke="#000000" d="M616.5134,-1330.5673C575.5771,-1268.2386 604.6332,-867.3562 587,-816.7 579.2599,-794.4646 581.044,-772.7 557.5,-772.7"/>
 <polygon fill="#000000" stroke="#000000" points="621.8799,-1334.2083 626.4788,-1341.679 625.19,-1336.4542 628.5,-1338.7 628.5,-1338.7 628.5,-1338.7 625.19,-1336.4542 630.5212,-1335.721 621.8799,-1334.2083 621.8799,-1334.2083"/>
 <ellipse fill="none" stroke="#000000" cx="619.2319" cy="-1332.4117" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_exposures_outcome_set&#45;&gt;cg_cohort_definition -->
-<g id="edge37" class="edge">
+<g id="edge36" class="edge">
 <title>sccs_exposures_outcome_set:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M309.009,-774.5418C244.8599,-792.5594 299.6388,-936.7 218.5,-936.7"/>
-<polygon fill="#000000" stroke="#000000" points="315.5638,-773.7087 323.9539,-776.2713 319.5319,-773.2044 323.5,-772.7 323.5,-772.7 323.5,-772.7 319.5319,-773.2044 323.0461,-769.1287 315.5638,-773.7087 315.5638,-773.7087"/>
-<ellipse fill="none" stroke="#000000" cx="312.3894" cy="-774.1122" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M308.903,-774.7323C256.8854,-790.7246 284.9015,-895.7 218.5,-895.7"/>
+<polygon fill="#000000" stroke="#000000" points="315.5764,-773.8032 323.9964,-776.2656 319.5382,-773.2516 323.5,-772.7 323.5,-772.7 323.5,-772.7 319.5382,-773.2516 323.0036,-769.1344 315.5764,-773.8032 315.5764,-773.8032"/>
+<ellipse fill="none" stroke="#000000" cx="312.407" cy="-774.2445" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_result -->
 <g id="node24" class="node">
@@ -939,42 +932,42 @@
 </g>
 </g>
 <!-- sccs_result&#45;&gt;database_meta_data -->
-<g id="edge40" class="edge">
+<g id="edge39" class="edge">
 <title>sccs_result:w&#45;&gt;database_meta_data:e</title>
 <path fill="none" stroke="#000000" d="M882.4197,-1343.0215C833.4838,-1378.1253 898.4608,-1616.5854 855,-1669.7 775.0432,-1767.4174 387.5351,-1844.5114 294,-1759.7 225.6841,-1697.7557 345.718,-1346.7 253.5,-1346.7"/>
 <polygon fill="#000000" stroke="#000000" points="888.8521,-1341.0473 897.5563,-1342.1416 892.676,-1339.8737 896.5,-1338.7 896.5,-1338.7 896.5,-1338.7 892.676,-1339.8737 895.4437,-1335.2584 888.8521,-1341.0473 888.8521,-1341.0473"/>
 <ellipse fill="none" stroke="#000000" cx="885.7929" cy="-1341.9862" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_result&#45;&gt;sccs_diagnostics_summary -->
-<g id="edge38" class="edge">
+<g id="edge37" class="edge">
 <title>sccs_result:w&#45;&gt;sccs_diagnostics_summary:e</title>
 <path fill="none" stroke="#000000" d="M884.9771,-1329.4737C871.8365,-1320.4839 864.8542,-1323.5594 847.5,-1338.7"/>
 <polygon fill="#000000" stroke="#000000" points="890.2552,-1333.6998 894.2499,-1341.5102 893.3776,-1336.1999 896.5,-1338.7 896.5,-1338.7 896.5,-1338.7 893.3776,-1336.1999 898.7501,-1335.8898 890.2552,-1333.6998 890.2552,-1333.6998"/>
 <ellipse fill="none" stroke="#000000" cx="887.7572" cy="-1331.6997" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_result&#45;&gt;sccs_diagnostics_summary -->
-<g id="edge39" class="edge">
+<g id="edge38" class="edge">
 <title>sccs_result:w&#45;&gt;sccs_diagnostics_summary:e</title>
 <path fill="none" stroke="#000000" d="M882.3534,-1335.2558C870.8293,-1333.0988 863.6632,-1334.2469 847.5,-1338.7"/>
 <polygon fill="#000000" stroke="#000000" points="888.7271,-1336.8075 895.6484,-1342.1978 892.6135,-1337.7538 896.5,-1338.7 896.5,-1338.7 896.5,-1338.7 892.6135,-1337.7538 897.3516,-1335.2022 888.7271,-1336.8075 888.7271,-1336.8075"/>
 <ellipse fill="none" stroke="#000000" cx="885.6179" cy="-1336.0505" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_result&#45;&gt;sccs_diagnostics_summary -->
-<g id="edge41" class="edge">
+<g id="edge40" class="edge">
 <title>sccs_result:w&#45;&gt;sccs_diagnostics_summary:e</title>
 <path fill="none" stroke="#000000" d="M882.3534,-1342.7182C870.8293,-1345.2347 863.6632,-1343.8953 847.5,-1338.7"/>
 <polygon fill="#000000" stroke="#000000" points="888.8044,-1340.8859 897.4837,-1342.163 892.6522,-1339.793 896.5,-1338.7 896.5,-1338.7 896.5,-1338.7 892.6522,-1339.793 895.5163,-1335.237 888.8044,-1340.8859 888.8044,-1340.8859"/>
 <ellipse fill="none" stroke="#000000" cx="885.7262" cy="-1341.7603" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_result&#45;&gt;sccs_diagnostics_summary -->
-<g id="edge42" class="edge">
+<g id="edge41" class="edge">
 <title>sccs_result:w&#45;&gt;sccs_diagnostics_summary:e</title>
 <path fill="none" stroke="#000000" d="M885.3654,-1348.1299C871.9724,-1357.9371 865.0243,-1354.7938 847.5,-1338.7"/>
 <polygon fill="#000000" stroke="#000000" points="890.3952,-1343.8702 898.8266,-1341.4472 893.4476,-1341.2851 896.5,-1338.7 896.5,-1338.7 896.5,-1338.7 893.4476,-1341.2851 894.1734,-1335.9528 890.3952,-1343.8702 890.3952,-1343.8702"/>
 <ellipse fill="none" stroke="#000000" cx="887.9532" cy="-1345.9383" rx="3.2" ry="3.2"/>
 </g>
 <!-- sccs_result&#45;&gt;sccs_exposures_outcome_set -->
-<g id="edge43" class="edge">
+<g id="edge42" class="edge">
 <title>sccs_result:w&#45;&gt;sccs_exposures_outcome_set:e</title>
 <path fill="none" stroke="#000000" d="M884.7413,-1329.8095C821.6697,-1257.8021 591.4327,-772.7 557.5,-772.7"/>
 <polygon fill="#000000" stroke="#000000" points="890.1187,-1333.8752 894.3288,-1341.5716 893.3093,-1336.2876 896.5,-1338.7 896.5,-1338.7 896.5,-1338.7 893.3093,-1336.2876 898.6712,-1335.8284 890.1187,-1333.8752 890.1187,-1333.8752"/>

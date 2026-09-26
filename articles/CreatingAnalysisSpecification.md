@@ -23,6 +23,7 @@ the renv.lock file to your machine, install `renv` and restore the R
 environment:
 
 ``` r
+
 download.file("https://github.com/ohdsi-studies/StrategusStudyRepoTemplate/blob/main/renv.lock")
 install.packages("renv")
 renv::restore()
@@ -37,6 +38,7 @@ example and the code below will load them for use when assembling the
 analysis specification.
 
 ``` r
+
 cohortDefinitionSet <- CohortGenerator::getCohortDefinitionSet(
   settingsFileName = "testdata/Cohorts.csv",
   jsonFolder = "testdata/cohorts",
@@ -78,6 +80,7 @@ functions of the CohortGenerator module. In addition, we will use the
 settings.
 
 ``` r
+
 cgModule <- CohortGeneratorModule$new()
 
 # Create the cohort definition shared resource element for the analysis specification
@@ -104,6 +107,7 @@ The following code creates the `cohortDiagnosticsModuleSpecifications`
 to run cohort diagnostics on the cohorts in the study.
 
 ``` r
+
 cdModule <- CohortDiagnosticsModule$new()
 cohortDiagnosticsModuleSpecifications <- cdModule$createModuleSpecifications(
   runInclusionStatistics = TRUE,
@@ -125,6 +129,7 @@ perform an incidence rate analysis for the target cohorts and outcome in
 this study.
 
 ``` r
+
 ciModule <- CohortIncidenceModule$new()
 targets <- list(
   CohortIncidence::createCohortRef(id = 1, name = "Celecoxib"),
@@ -167,6 +172,7 @@ perform an characterization analysis for the target cohorts and outcome
 in this study.
 
 ``` r
+
 cModule <- CharacterizationModule$new()
 characterizationModuleSpecifications <- cModule$createModuleSpecifications(
   targetIds = c(1, 2),
@@ -180,6 +186,7 @@ The following code creates the `cohortMethodModuleSpecifications` to
 perform a comparative cohort analysis for this study.
 
 ``` r
+
 cmModule <- CohortMethodModule$new()
 negativeControlOutcomes <- lapply(
   X = ncoCohortSet$cohortId,
@@ -282,6 +289,7 @@ The following code creates the `sccsModuleSpecifications` to perform a
 self-controlled case series analysis for this study.
 
 ``` r
+
 sccsModule <- SelfControlledCaseSeriesModule$new()
 
 # Exposures-outcomes -----------------------------------------------------------
@@ -394,6 +402,7 @@ The following code creates the `plpModuleSpecifications` to perform a
 patient-level prediction analysis for this study.
 
 ``` r
+
 plpModule <- PatientLevelPredictionModule$new()
 
 makeModelDesignSettings <- function(targetId, outcomeId, popSettings, covarSettings) {
@@ -448,6 +457,7 @@ specifications to construct the full set of analysis specifications and
 save it to the file system in JSON format.
 
 ``` r
+
 analysisSpecifications <- createEmptyAnalysisSpecificiations() %>%
   addSharedResources(cohortDefinitionSharedResource) %>%
   addSharedResources(ncoSharedResource) %>%

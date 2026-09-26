@@ -78,7 +78,7 @@
                         <div class="col-md-12">
                             <div class="callout callout-info">
                                 <h4>SchemaSpy Analysis of strategus.results</h4>
-                                <p>Generated on Thu Mar 19 18:30 UTC 2026</p>
+                                <p>Generated on Sat Sep 26 16:44 UTC 2026</p>
                             </div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@
                                 <span class="info-box-icon bg-aqua"><i class="fa fa-table"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">TABLES</span>
-                                    <span class="info-box-number">153</span>
+                                    <span class="info-box-number">167</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -127,7 +127,7 @@
                                 <span class="info-box-icon bg-green"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">COLUMNS</span>
-                                    <span class="info-box-number">1251</span>
+                                    <span class="info-box-number">1398</span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
@@ -177,7 +177,7 @@
                             <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <p>Database Type: PostgreSQL - 18.3 (Debian 18.3-1.pgdg13+1)</p>
+                            <p>Database Type: PostgreSQL - 18.6 (Debian 18.6-1.pgdg13+2)</p>
                         </div><!-- /.box-body -->
                     </div>
                     <div class="box box-primary">
@@ -308,7 +308,7 @@
                                         <td class="detail"><a href="tables/c_rechallenge_fail_case_series.html">c_rechallenge_fail_case_series</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">17</td>
+                                        <td class="detail" align="right">18</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Rechallenge fail case series</p></td>
@@ -366,6 +366,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: Year counts</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_incidence_summary.html">c_incidence_summary</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">22</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds incidence counts and incidence estimates for each target outcome time-at-risk and demographic stratum.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_kaplan_meier_dist.html">cm_kaplan_meier_dist</a></td>
@@ -431,6 +440,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Cohort generation times</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_target_outcome_ref.html">c_target_outcome_ref</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Maps target cohorts to the outcome cohorts evaluated in incidence analyses.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_cohort_count.html">cd_cohort_count</a></td>
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">1</td>
@@ -456,6 +474,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Negative control outcome cohort counts</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_time_to_event_settings.html">c_time_to_event_settings</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Identifies the target and outcome cohort combinations included in each time-to-event analysis.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_temporal_covariate_value.html">cd_temporal_covariate_value</a></td>
@@ -487,7 +514,7 @@
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_dechallenge_rechallenge.html">c_dechallenge_rechallenge</a></td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">20</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
@@ -495,7 +522,7 @@
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cg_cohort_definition.html">cg_cohort_definition</a></td>
-                                        <td class="detail" align="right">13</td>
+                                        <td class="detail" align="right">12</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">9</td>
                                         <td class="detail" align="right">0</td>
@@ -641,7 +668,7 @@
                                         <td class="detail"><a href="tables/plp_diagnostic_predictors.html">plp_diagnostic_predictors</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">6</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Diagnostic predictors</p></td>
@@ -672,6 +699,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Covariate reference</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_age_group_def.html">c_age_group_def</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds age-group definitions used to stratify incidence analyses.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_target_comparator_outcome.html">cm_target_comparator_outcome</a></td>
@@ -726,6 +762,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: Treatment pathways</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/pv_algorithm_performance_results.html">pv_algorithm_performance_results</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">41</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PheValuatorModule: Holds estimated performance metrics and supporting counts for each evaluated phenotype algorithm.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/tp_attrition.html">tp_attrition</a></td>
@@ -821,7 +866,7 @@
                                         <td class="detail"><a href="tables/c_target_settings.html">c_target_settings</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">18</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the settings that are used to characterize the target cohorts.</p></td>
@@ -852,6 +897,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: Vocabulary information</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/pv_cohort_definition_set.html">pv_cohort_definition_set</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>PheValuatorModule: Holds the cohort definitions and SQL for phenotype algorithms evaluated by PheValuator.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_cm_result.html">es_cm_result</a></td>
@@ -899,6 +953,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Attrition table</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_subgroup_def.html">c_subgroup_def</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds subgroup definitions used to stratify incidence analyses.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_database.html">cd_database</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
@@ -906,6 +969,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortDiagnosticsModule: CDM database information for Cohort Diagnostics</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_dechallenge_rechallenge_settings.html">c_dechallenge_rechallenge_settings</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Identifies the target and outcome cohort combinations included in each dechallenge-rechallenge analysis.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/plp_diagnostic_outcomes.html">plp_diagnostic_outcomes</a></td>
@@ -924,15 +996,6 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CohortMethodModule: Covariate balance</p></td>
-                                    </tr>
-                                    <tr class="tbl even" valign="top">
-                                        <td class="detail"><a href="tables/c_attrition.html">c_attrition</a></td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">5</td>
-                                        <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">Table</td>
-                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the attrition of the characterization cohorts.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_subset_definition.html">cd_subset_definition</a></td>
@@ -960,6 +1023,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: Holds the analysis cohorts for the treatment patterns module.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_target_attrition.html">c_target_attrition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds attrition counts for each characterization target population.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_preference_score_dist.html">cm_preference_score_dist</a></td>
@@ -1043,6 +1115,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: Metadata</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_outcome_def.html">c_outcome_def</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds outcome cohort definitions and outcome-specific settings used in incidence analyses.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/es_cm_shared_covariate_balance.html">es_cm_shared_covariate_balance</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
@@ -1124,6 +1205,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>CohortGeneratorModule: Holds the attrition of the subsetted cohorts.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_tar_def.html">c_tar_def</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds time-at-risk definitions used in incidence analyses.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_target_covariates_continuous.html">c_target_covariates_continuous</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
@@ -1196,6 +1286,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Tidy covariate settings</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_target_counts.html">c_target_counts</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds event and person counts for each characterization target cohort.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cd_temporal_time_ref.html">cd_temporal_time_ref</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
@@ -1253,7 +1352,7 @@
                                         <td class="detail"><a href="tables/c_case_settings.html">c_case_settings</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">12</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the settings that are used to characterize the case cohorts.</p></td>
@@ -1298,7 +1397,7 @@
                                         <td class="detail"><a href="tables/c_execution_settings.html">c_execution_settings</a></td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">0</td>
-                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">9</td>
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds the settings that are used to execute the characterization module.</p></td>
@@ -1439,6 +1538,15 @@
                                         <td class="comment detail" style="display: table-cell;"><p>SelfControlledCaseSeriesModule: Results</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_target_def.html">c_target_def</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds target cohort definitions used in incidence analyses.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/ci_outcome_def.html">ci_outcome_def</a></td>
                                         <td class="detail" align="right">2</td>
                                         <td class="detail" align="right">0</td>
@@ -1455,6 +1563,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>PatientLevelPredictionModule: Split settings</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_case_counts.html">c_case_counts</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds event and person counts for the case and non-case populations used in characterization analyses.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/c_covariate_ref.html">c_covariate_ref</a></td>
@@ -1536,6 +1653,15 @@
                                         <td class="detail" align="right">0</td>
                                         <td class="detail" align="right">Table</td>
                                         <td class="comment detail" style="display: table-cell;"><p>TreatmentPatternsModule: List of analysis arguments</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/c_case_attrition.html">c_case_attrition</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>CharacterizationModule: Holds attrition counts for each characterization case population.</p></td>
                                     </tr>
                                     <tr class="tbl even" valign="top">
                                         <td class="detail"><a href="tables/cm_target_comparator.html">cm_target_comparator</a></td>

@@ -2,8 +2,8 @@
 
 This function creates the results data model in the specified schema
 within the results database. The results data model is used to hold the
-study results and must be created before using \[@seealso
-[`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)\]
+study results and must be created before using
+[`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md).
 
 ## Usage
 
@@ -24,8 +24,8 @@ createResultDataModel(
 
 - resultsDataModelSettings:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 - resultsConnectionDetails:
 

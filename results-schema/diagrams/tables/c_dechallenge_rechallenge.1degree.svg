@@ -20,91 +20,90 @@
 <text text-anchor="start" x="309" y="-507.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">c_dechallenge_rechallenge</text>
 <text text-anchor="start" x="569.0437" y="-507.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
 <polygon fill="none" stroke="#000000" points="304,-477.2 304,-499.2 542,-499.2 542,-477.2 304,-477.2"/>
-<image xlink:href="../../images/foreignKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="309" y="-494.2"/>
-<text text-anchor="start" x="324" y="-484.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">database_id</text>
+<text text-anchor="start" x="324" y="-484.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">characterization_target_id</text>
 <polygon fill="none" stroke="#000000" points="542,-477.2 542,-499.2 604,-499.2 604,-477.2 542,-477.2"/>
 <text text-anchor="start" x="544.878" y="-484.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-455.2 304,-477.2 542,-477.2 542,-455.2 304,-455.2"/>
-<text text-anchor="start" x="324" y="-462.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_attempt</text>
+<image xlink:href="../../images/foreignKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="309" y="-472.2"/>
+<text text-anchor="start" x="324" y="-462.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">database_id</text>
 <polygon fill="none" stroke="#000000" points="542,-455.2 542,-477.2 604,-477.2 604,-455.2 542,-455.2"/>
 <text text-anchor="start" x="544.878" y="-462.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-433.2 304,-455.2 542,-455.2 542,-433.2 304,-433.2"/>
-<text text-anchor="start" x="324" y="-440.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_evaluation_window</text>
+<text text-anchor="start" x="324" y="-440.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_attempt</text>
 <polygon fill="none" stroke="#000000" points="542,-433.2 542,-455.2 604,-455.2 604,-433.2 542,-433.2"/>
 <text text-anchor="start" x="544.878" y="-440.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-411.2 304,-433.2 542,-433.2 542,-411.2 304,-411.2"/>
-<text text-anchor="start" x="324" y="-418.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_fail</text>
+<text text-anchor="start" x="324" y="-418.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_evaluation_window</text>
 <polygon fill="none" stroke="#000000" points="542,-411.2 542,-433.2 604,-433.2 604,-411.2 542,-411.2"/>
 <text text-anchor="start" x="544.878" y="-418.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-389.2 304,-411.2 542,-411.2 542,-389.2 304,-389.2"/>
-<text text-anchor="start" x="324" y="-396.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_stop_interval</text>
+<text text-anchor="start" x="324" y="-396.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_fail</text>
 <polygon fill="none" stroke="#000000" points="542,-389.2 542,-411.2 604,-411.2 604,-389.2 542,-389.2"/>
 <text text-anchor="start" x="544.878" y="-396.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-367.2 304,-389.2 542,-389.2 542,-367.2 304,-367.2"/>
-<text text-anchor="start" x="324" y="-374.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_success</text>
+<text text-anchor="start" x="324" y="-374.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_stop_interval</text>
 <polygon fill="none" stroke="#000000" points="542,-367.2 542,-389.2 604,-389.2 604,-367.2 542,-367.2"/>
 <text text-anchor="start" x="544.878" y="-374.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-345.2 304,-367.2 542,-367.2 542,-345.2 304,-345.2"/>
-<text text-anchor="start" x="324" y="-352.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_cases</text>
+<text text-anchor="start" x="324" y="-352.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">dechallenge_success</text>
 <polygon fill="none" stroke="#000000" points="542,-345.2 542,-367.2 604,-367.2 604,-345.2 542,-345.2"/>
 <text text-anchor="start" x="544.878" y="-352.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-323.2 304,-345.2 542,-345.2 542,-323.2 304,-323.2"/>
-<text text-anchor="start" x="324" y="-330.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_exposure_eras</text>
+<text text-anchor="start" x="324" y="-330.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_cases</text>
 <polygon fill="none" stroke="#000000" points="542,-323.2 542,-345.2 604,-345.2 604,-323.2 542,-323.2"/>
 <text text-anchor="start" x="544.878" y="-330.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-301.2 304,-323.2 542,-323.2 542,-301.2 304,-301.2"/>
-<text text-anchor="start" x="324" y="-308.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_persons_exposed</text>
+<text text-anchor="start" x="324" y="-308.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_exposure_eras</text>
 <polygon fill="none" stroke="#000000" points="542,-301.2 542,-323.2 604,-323.2 604,-301.2 542,-301.2"/>
 <text text-anchor="start" x="544.878" y="-308.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-279.2 304,-301.2 542,-301.2 542,-279.2 304,-279.2"/>
-<image xlink:href="../../images/foreignKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="309" y="-296.2"/>
-<text text-anchor="start" x="324" y="-286.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_cohort_definition_id</text>
+<text text-anchor="start" x="324" y="-286.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_persons_exposed</text>
 <polygon fill="none" stroke="#000000" points="542,-279.2 542,-301.2 604,-301.2 604,-279.2 542,-279.2"/>
 <text text-anchor="start" x="544.878" y="-286.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-257.2 304,-279.2 542,-279.2 542,-257.2 304,-257.2"/>
-<text text-anchor="start" x="324" y="-264.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_dechallenge_attempt</text>
+<image xlink:href="../../images/foreignKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="309" y="-274.2"/>
+<text text-anchor="start" x="324" y="-264.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_cohort_definition_id</text>
 <polygon fill="none" stroke="#000000" points="542,-257.2 542,-279.2 604,-279.2 604,-257.2 542,-257.2"/>
 <text text-anchor="start" x="544.878" y="-264.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-235.2 304,-257.2 542,-257.2 542,-235.2 304,-235.2"/>
-<text text-anchor="start" x="324" y="-242.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_dechallenge_fail</text>
+<text text-anchor="start" x="324" y="-242.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_dechallenge_attempt</text>
 <polygon fill="none" stroke="#000000" points="542,-235.2 542,-257.2 604,-257.2 604,-235.2 542,-235.2"/>
 <text text-anchor="start" x="544.878" y="-242.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-213.2 304,-235.2 542,-235.2 542,-213.2 304,-213.2"/>
-<text text-anchor="start" x="324" y="-220.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_dechallenge_success</text>
+<text text-anchor="start" x="324" y="-220.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_dechallenge_fail</text>
 <polygon fill="none" stroke="#000000" points="542,-213.2 542,-235.2 604,-235.2 604,-213.2 542,-213.2"/>
 <text text-anchor="start" x="544.878" y="-220.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-191.2 304,-213.2 542,-213.2 542,-191.2 304,-191.2"/>
-<text text-anchor="start" x="324" y="-198.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_rechallenge_attempt</text>
+<text text-anchor="start" x="324" y="-198.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_dechallenge_success</text>
 <polygon fill="none" stroke="#000000" points="542,-191.2 542,-213.2 604,-213.2 604,-191.2 542,-191.2"/>
 <text text-anchor="start" x="544.878" y="-198.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-169.2 304,-191.2 542,-191.2 542,-169.2 304,-169.2"/>
-<text text-anchor="start" x="324" y="-176.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_rechallenge_fail</text>
+<text text-anchor="start" x="324" y="-176.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_rechallenge_attempt</text>
 <polygon fill="none" stroke="#000000" points="542,-169.2 542,-191.2 604,-191.2 604,-169.2 542,-169.2"/>
 <text text-anchor="start" x="544.878" y="-176.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-147.2 304,-169.2 542,-169.2 542,-147.2 304,-147.2"/>
-<text text-anchor="start" x="324" y="-154.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_rechallenge_success</text>
+<text text-anchor="start" x="324" y="-154.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_rechallenge_fail</text>
 <polygon fill="none" stroke="#000000" points="542,-147.2 542,-169.2 604,-169.2 604,-147.2 542,-147.2"/>
 <text text-anchor="start" x="544.878" y="-154.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-125.2 304,-147.2 542,-147.2 542,-125.2 304,-125.2"/>
-<text text-anchor="start" x="324" y="-132.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">rechallenge_attempt</text>
+<text text-anchor="start" x="324" y="-132.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">pct_rechallenge_success</text>
 <polygon fill="none" stroke="#000000" points="542,-125.2 542,-147.2 604,-147.2 604,-125.2 542,-125.2"/>
 <text text-anchor="start" x="544.878" y="-132.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-103.2 304,-125.2 542,-125.2 542,-103.2 304,-103.2"/>
-<text text-anchor="start" x="324" y="-110.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">rechallenge_fail</text>
+<text text-anchor="start" x="324" y="-110.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">rechallenge_attempt</text>
 <polygon fill="none" stroke="#000000" points="542,-103.2 542,-125.2 604,-125.2 604,-103.2 542,-103.2"/>
 <text text-anchor="start" x="544.878" y="-110.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-81.2 304,-103.2 542,-103.2 542,-81.2 304,-81.2"/>
-<text text-anchor="start" x="324" y="-88.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">rechallenge_success</text>
+<text text-anchor="start" x="324" y="-88.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">rechallenge_fail</text>
 <polygon fill="none" stroke="#000000" points="542,-81.2 542,-103.2 604,-103.2 604,-81.2 542,-81.2"/>
 <text text-anchor="start" x="544.878" y="-88.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304,-59.2 304,-81.2 542,-81.2 542,-59.2 304,-59.2"/>
-<image xlink:href="../../images/foreignKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="309" y="-76.2"/>
-<text text-anchor="start" x="324" y="-66.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">target_cohort_definition_id</text>
+<text text-anchor="start" x="324" y="-66.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">rechallenge_success</text>
 <polygon fill="none" stroke="#000000" points="542,-59.2 542,-81.2 604,-81.2 604,-59.2 542,-59.2"/>
 <text text-anchor="start" x="544.878" y="-66.9" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="#ffffff" stroke="transparent" points="304,-40.2 304,-59.2 414,-59.2 414,-40.2 304,-40.2"/>
 <polygon fill="none" stroke="#000000" points="304,-40.2 304,-59.2 414,-59.2 414,-40.2 304,-40.2"/>
-<text text-anchor="start" x="307" y="-46.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 3</text>
+<text text-anchor="start" x="307" y="-46.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
 <polygon fill="#ffffff" stroke="transparent" points="414,-40.2 414,-59.2 542,-59.2 542,-40.2 414,-40.2"/>
 <polygon fill="none" stroke="#000000" points="414,-40.2 414,-59.2 542,-59.2 542,-40.2 414,-40.2"/>
 <text text-anchor="start" x="506.6105" y="-46.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
@@ -119,74 +118,67 @@
 <g id="node2" class="node">
 <title>database_meta_data</title>
 <g id="a_node2"><a xlink:href="../../tables/database_meta_data.html" xlink:title="database_meta_data" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="8,-439.7 8,-522.7 253,-522.7 253,-439.7 8,-439.7"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="8.5,-499.2 8.5,-522.2 253.5,-522.2 253.5,-499.2 8.5,-499.2"/>
-<polygon fill="none" stroke="#000000" points="8.5,-499.2 8.5,-522.2 253.5,-522.2 253.5,-499.2 8.5,-499.2"/>
-<text text-anchor="start" x="13.5" y="-507.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">database_meta_data</text>
-<text text-anchor="start" x="218.5437" y="-507.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="8.5,-477.2 8.5,-499.2 253.5,-499.2 253.5,-477.2 8.5,-477.2"/>
-<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="13.5" y="-494.2"/>
-<text text-anchor="start" x="28.5" y="-484.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">database_id</text>
-<polygon fill="none" stroke="#000000" points="8.5,-458.2 8.5,-477.2 253.5,-477.2 253.5,-458.2 8.5,-458.2"/>
-<text text-anchor="start" x="11.5" y="-464.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="8.5,-439.2 8.5,-458.2 104.5,-458.2 104.5,-439.2 8.5,-439.2"/>
-<polygon fill="none" stroke="#000000" points="8.5,-439.2 8.5,-458.2 104.5,-458.2 104.5,-439.2 8.5,-439.2"/>
-<text text-anchor="start" x="11.5" y="-445.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
-<polygon fill="#ffffff" stroke="transparent" points="104.5,-439.2 104.5,-458.2 184.5,-458.2 184.5,-439.2 104.5,-439.2"/>
-<polygon fill="none" stroke="#000000" points="104.5,-439.2 104.5,-458.2 184.5,-458.2 184.5,-439.2 104.5,-439.2"/>
-<text text-anchor="start" x="149.1105" y="-445.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="184.5,-439.2 184.5,-458.2 253.5,-458.2 253.5,-439.2 184.5,-439.2"/>
-<polygon fill="none" stroke="#000000" points="184.5,-439.2 184.5,-458.2 253.5,-458.2 253.5,-439.2 184.5,-439.2"/>
-<text text-anchor="start" x="228.7904" y="-445.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">15 &gt;</text>
+<polygon fill="#ffffff" stroke="transparent" points="8,-417.7 8,-500.7 253,-500.7 253,-417.7 8,-417.7"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="8.5,-477.2 8.5,-500.2 253.5,-500.2 253.5,-477.2 8.5,-477.2"/>
+<polygon fill="none" stroke="#000000" points="8.5,-477.2 8.5,-500.2 253.5,-500.2 253.5,-477.2 8.5,-477.2"/>
+<text text-anchor="start" x="13.5" y="-485.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">database_meta_data</text>
+<text text-anchor="start" x="218.5437" y="-485.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="8.5,-455.2 8.5,-477.2 253.5,-477.2 253.5,-455.2 8.5,-455.2"/>
+<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="13.5" y="-472.2"/>
+<text text-anchor="start" x="28.5" y="-462.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">database_id</text>
+<polygon fill="none" stroke="#000000" points="8.5,-436.2 8.5,-455.2 253.5,-455.2 253.5,-436.2 8.5,-436.2"/>
+<text text-anchor="start" x="11.5" y="-442.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="8.5,-417.2 8.5,-436.2 104.5,-436.2 104.5,-417.2 8.5,-417.2"/>
+<polygon fill="none" stroke="#000000" points="8.5,-417.2 8.5,-436.2 104.5,-436.2 104.5,-417.2 8.5,-417.2"/>
+<text text-anchor="start" x="11.5" y="-423.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="104.5,-417.2 104.5,-436.2 184.5,-436.2 184.5,-417.2 104.5,-417.2"/>
+<polygon fill="none" stroke="#000000" points="104.5,-417.2 104.5,-436.2 184.5,-436.2 184.5,-417.2 104.5,-417.2"/>
+<text text-anchor="start" x="149.1105" y="-423.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="184.5,-417.2 184.5,-436.2 253.5,-436.2 253.5,-417.2 184.5,-417.2"/>
+<polygon fill="none" stroke="#000000" points="184.5,-417.2 184.5,-436.2 253.5,-436.2 253.5,-417.2 184.5,-417.2"/>
+<text text-anchor="start" x="228.7904" y="-423.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">15 &gt;</text>
 </a>
 </g>
 </g>
 <!-- c_dechallenge_rechallenge&#45;&gt;database_meta_data -->
 <g id="edge1" class="edge">
 <title>c_dechallenge_rechallenge:w&#45;&gt;database_meta_data:e</title>
-<path fill="none" stroke="#000000" d="M289.4203,-488.2C277.5435,-488.2 270.158,-488.2 253.5,-488.2"/>
-<polygon fill="#000000" stroke="#000000" points="296,-488.2001 304,-491.8 300,-488.2 304,-488.2 304,-488.2 304,-488.2 300,-488.2 304,-484.6 296,-488.2001 296,-488.2001"/>
-<ellipse fill="none" stroke="#000000" cx="292.8" cy="-488.2001" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M289.4203,-466.2C277.5435,-466.2 270.158,-466.2 253.5,-466.2"/>
+<polygon fill="#000000" stroke="#000000" points="296,-466.2001 304,-469.8 300,-466.2 304,-466.2 304,-466.2 304,-466.2 300,-466.2 304,-462.6 296,-466.2001 296,-466.2001"/>
+<ellipse fill="none" stroke="#000000" cx="292.8" cy="-466.2001" rx="3.2" ry="3.2"/>
 </g>
 <!-- cg_cohort_definition -->
 <g id="node3" class="node">
 <title>cg_cohort_definition</title>
 <g id="a_node3"><a xlink:href="../../tables/cg_cohort_definition.html" xlink:title="cg_cohort_definition" target="_top">
-<polygon fill="#ffffff" stroke="transparent" points="43,-131.7 43,-214.7 218,-214.7 218,-131.7 43,-131.7"/>
-<polygon fill="#f5f5f5" stroke="transparent" points="43.5,-191.2 43.5,-214.2 218.5,-214.2 218.5,-191.2 43.5,-191.2"/>
-<polygon fill="none" stroke="#000000" points="43.5,-191.2 43.5,-214.2 218.5,-214.2 218.5,-191.2 43.5,-191.2"/>
-<text text-anchor="start" x="48.5" y="-199.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_definition</text>
-<text text-anchor="start" x="184.0219" y="-199.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
-<polygon fill="none" stroke="#000000" points="43.5,-169.2 43.5,-191.2 218.5,-191.2 218.5,-169.2 43.5,-169.2"/>
-<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="48.5" y="-186.2"/>
-<text text-anchor="start" x="72.5" y="-176.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">cohort_definition_id</text>
-<polygon fill="none" stroke="#000000" points="43.5,-150.2 43.5,-169.2 218.5,-169.2 218.5,-150.2 43.5,-150.2"/>
-<text text-anchor="start" x="46.5" y="-156.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
-<polygon fill="#ffffff" stroke="transparent" points="43.5,-131.2 43.5,-150.2 104.5,-150.2 104.5,-131.2 43.5,-131.2"/>
-<polygon fill="none" stroke="#000000" points="43.5,-131.2 43.5,-150.2 104.5,-150.2 104.5,-131.2 43.5,-131.2"/>
-<text text-anchor="start" x="46.5" y="-137.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
-<polygon fill="#ffffff" stroke="transparent" points="104.5,-131.2 104.5,-150.2 166.5,-150.2 166.5,-131.2 104.5,-131.2"/>
-<polygon fill="none" stroke="#000000" points="104.5,-131.2 104.5,-150.2 166.5,-150.2 166.5,-131.2 104.5,-131.2"/>
-<text text-anchor="start" x="131.1105" y="-137.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
-<polygon fill="#ffffff" stroke="transparent" points="166.5,-131.2 166.5,-150.2 218.5,-150.2 218.5,-131.2 166.5,-131.2"/>
-<polygon fill="none" stroke="#000000" points="166.5,-131.2 166.5,-150.2 218.5,-150.2 218.5,-131.2 166.5,-131.2"/>
-<text text-anchor="start" x="193.7904" y="-137.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">13 &gt;</text>
+<polygon fill="#ffffff" stroke="transparent" points="43,-219.7 43,-302.7 218,-302.7 218,-219.7 43,-219.7"/>
+<polygon fill="#f5f5f5" stroke="transparent" points="43.5,-279.2 43.5,-302.2 218.5,-302.2 218.5,-279.2 43.5,-279.2"/>
+<polygon fill="none" stroke="#000000" points="43.5,-279.2 43.5,-302.2 218.5,-302.2 218.5,-279.2 43.5,-279.2"/>
+<text text-anchor="start" x="48.5" y="-287.8" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">cg_cohort_definition</text>
+<text text-anchor="start" x="184.0219" y="-287.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
+<polygon fill="none" stroke="#000000" points="43.5,-257.2 43.5,-279.2 218.5,-279.2 218.5,-257.2 43.5,-257.2"/>
+<image xlink:href="../../images/primaryKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="48.5" y="-274.2"/>
+<text text-anchor="start" x="72.5" y="-264.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">cohort_definition_id</text>
+<polygon fill="none" stroke="#000000" points="43.5,-238.2 43.5,-257.2 218.5,-257.2 218.5,-238.2 43.5,-238.2"/>
+<text text-anchor="start" x="46.5" y="-244.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
+<polygon fill="#ffffff" stroke="transparent" points="43.5,-219.2 43.5,-238.2 104.5,-238.2 104.5,-219.2 43.5,-219.2"/>
+<polygon fill="none" stroke="#000000" points="43.5,-219.2 43.5,-238.2 104.5,-238.2 104.5,-219.2 43.5,-219.2"/>
+<text text-anchor="start" x="46.5" y="-225.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000"> &#160;</text>
+<polygon fill="#ffffff" stroke="transparent" points="104.5,-219.2 104.5,-238.2 166.5,-238.2 166.5,-219.2 104.5,-219.2"/>
+<polygon fill="none" stroke="#000000" points="104.5,-219.2 104.5,-238.2 166.5,-238.2 166.5,-219.2 104.5,-219.2"/>
+<text text-anchor="start" x="131.1105" y="-225.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
+<polygon fill="#ffffff" stroke="transparent" points="166.5,-219.2 166.5,-238.2 218.5,-238.2 218.5,-219.2 166.5,-219.2"/>
+<polygon fill="none" stroke="#000000" points="166.5,-219.2 166.5,-238.2 218.5,-238.2 218.5,-219.2 166.5,-219.2"/>
+<text text-anchor="start" x="193.7904" y="-225.3" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">12 &gt;</text>
 </a>
 </g>
 </g>
 <!-- c_dechallenge_rechallenge&#45;&gt;cg_cohort_definition -->
 <g id="edge2" class="edge">
 <title>c_dechallenge_rechallenge:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M289.593,-287.6958C248.1597,-271.3223 274.8571,-180.2 218.5,-180.2"/>
-<polygon fill="#000000" stroke="#000000" points="296.1182,-288.83 303.3835,-293.7468 300.0591,-289.515 304,-290.2 304,-290.2 304,-290.2 300.0591,-289.515 304.6165,-286.6532 296.1182,-288.83 296.1182,-288.83"/>
-<ellipse fill="none" stroke="#000000" cx="292.9654" cy="-288.2819" rx="3.2" ry="3.2"/>
-</g>
-<!-- c_dechallenge_rechallenge&#45;&gt;cg_cohort_definition -->
-<g id="edge3" class="edge">
-<title>c_dechallenge_rechallenge:w&#45;&gt;cg_cohort_definition:e</title>
-<path fill="none" stroke="#000000" d="M289.593,-72.7042C248.1597,-89.0777 274.8571,-180.2 218.5,-180.2"/>
-<polygon fill="#000000" stroke="#000000" points="296.1182,-71.57 304.6165,-73.7468 300.0591,-70.885 304,-70.2 304,-70.2 304,-70.2 300.0591,-70.885 303.3835,-66.6532 296.1182,-71.57 296.1182,-71.57"/>
-<ellipse fill="none" stroke="#000000" cx="292.9654" cy="-72.1181" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M289.501,-268.2C262.7645,-268.2 251.1563,-268.2 218.5,-268.2"/>
+<polygon fill="#000000" stroke="#000000" points="296,-268.2001 304,-271.8 300,-268.2 304,-268.2 304,-268.2 304,-268.2 300,-268.2 304,-264.6 296,-268.2001 296,-268.2001"/>
+<ellipse fill="none" stroke="#000000" cx="292.8" cy="-268.2001" rx="3.2" ry="3.2"/>
 </g>
 </g>
 </svg>

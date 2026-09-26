@@ -33,6 +33,7 @@ CDM. Please see the
 package documentation for more details.
 
 ``` r
+
 library(Strategus)
 library(Eunomia)
 connectionDetails <- getEunomiaConnectionDetails()
@@ -43,6 +44,7 @@ connectionDetails <- getEunomiaConnectionDetails()
 Next, we will use `Strategus` to create the CDM execution settings:
 
 ``` r
+
 outputFolder <- tempfile("vignetteFolder")
 dir.create(outputFolder)
 executionSettings <- createCdmExecutionSettings(
@@ -59,6 +61,7 @@ Finally, we can write out the execution settings to the file system to
 capture this information.
 
 ``` r
+
 ParallelLogger::saveSettingsToJson(
   object = executionSettings,
   file.path(outputFolder, "eunomiaExecutionSettings.json")
@@ -71,6 +74,7 @@ For this study, we will use an analysis specifications created for
 testing `Strategus`, and the execution settings we created earlier:
 
 ``` r
+
 analysisSpecifications <- ParallelLogger::loadSettingsFromJson(
   fileName = system.file("testdata/cdmModulesAnalysisSpecifications.json",
     package = "Strategus"
@@ -85,6 +89,7 @@ executionSettings <- ParallelLogger::loadSettingsFromJson(
 And finally we execute the study:
 
 ``` r
+
 execute(
   connectionDetails = connectionDetails,
   analysisSpecifications = analysisSpecifications,

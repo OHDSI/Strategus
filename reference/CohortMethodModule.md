@@ -5,14 +5,14 @@ Data Model
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `CohortMethodModule`
 
 ## Methods
 
 ### Public methods
 
-- [`CohortMethodModule$new()`](#method-CohortMethodModule-new)
+- [`CohortMethodModule$new()`](#method-CohortMethodModule-initialize)
 
 - [`CohortMethodModule$execute()`](#method-CohortMethodModule-execute)
 
@@ -30,12 +30,13 @@ Data Model
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `CohortMethodModule$new()`
 
 Initialize the module
 
@@ -45,7 +46,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `CohortMethodModule$execute()`
 
 Executes the CohortMethod package
 
@@ -78,7 +79,7 @@ Executes the CohortMethod package
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `CohortMethodModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -120,7 +121,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `CohortMethodModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -140,7 +141,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `CohortMethodModule$uploadResults()`
 
 Upload the results for the module
 
@@ -175,12 +176,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `CohortMethodModule$createModuleSpecifications()`
 
 Creates the CohortMethod Module Specifications
 
@@ -262,7 +263,7 @@ be a data frame with at least one of the following columns:
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `CohortMethodModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -278,7 +279,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `CohortMethodModule$clone()`
 
 The objects of this class are cloneable with this method.
 

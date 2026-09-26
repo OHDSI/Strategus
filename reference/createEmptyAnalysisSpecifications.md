@@ -10,4 +10,6 @@ createEmptyAnalysisSpecifications()
 
 ## Value
 
-An object of type `AnalysisSpecifications`.
+An object of type `AnalysisSpecifications`. The object records the
+installed Strategus version and an renv-compatible hash of the package
+DESCRIPTION.

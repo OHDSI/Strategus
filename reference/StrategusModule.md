@@ -32,7 +32,9 @@ components within the Strategus pipeline.
 
 ### Public methods
 
-- [`StrategusModule$new()`](#method-StrategusModule-new)
+- [`StrategusModule$new()`](#method-StrategusModule-initialize)
+
+- [`StrategusModule$getPackageInformation()`](#method-StrategusModule-getPackageInformation)
 
 - [`StrategusModule$execute()`](#method-StrategusModule-execute)
 
@@ -54,7 +56,7 @@ components within the Strategus pipeline.
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `StrategusModule$new()`
 
 Initialize the module
 
@@ -64,7 +66,22 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `StrategusModule$getPackageInformation()`
+
+Get the package identity associated with the module.
+
+#### Usage
+
+    StrategusModule$getPackageInformation()
+
+#### Returns
+
+A list containing the module package name, version, and an
+renv-compatible DESCRIPTION hash.
+
+------------------------------------------------------------------------
+
+### `StrategusModule$execute()`
 
 Executes the module
 
@@ -103,7 +120,7 @@ Executes the module
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `StrategusModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -145,7 +162,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `StrategusModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -165,7 +182,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `StrategusModule$uploadResults()`
 
 Upload the results for the module
 
@@ -205,12 +222,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `StrategusModule$createModuleSpecifications()`
 
 Base function for creating the module settings object. Each module will
 have its own implementation and this base class method will be used to
@@ -232,7 +249,7 @@ ensure the class of the specifications is set properly.
 
 ------------------------------------------------------------------------
 
-### Method `createSharedResourcesSpecifications()`
+### `StrategusModule$createSharedResourcesSpecifications()`
 
 Base function for creating the shared resources settings object. Each
 module will have its own implementation if it needs to create a shared
@@ -257,7 +274,7 @@ resource.
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `StrategusModule$validateModuleSpecifications()`
 
 Base function for validating the module settings object. Each module
 will have its own implementation and this base class method will be used
@@ -279,7 +296,7 @@ to ensure the module specifications are valid ahead of execution
 
 ------------------------------------------------------------------------
 
-### Method `validateSharedResourcesSpecifications()`
+### `StrategusModule$validateSharedResourcesSpecifications()`
 
 Base function for validating the shared resources specification settings
 object. Each module will have its own implementation and this base class
@@ -305,7 +322,7 @@ of execution
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `StrategusModule$clone()`
 
 The objects of this class are cloneable with this method.
 

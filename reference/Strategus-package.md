@@ -21,6 +21,9 @@ Useful links:
 
 Authors:
 
+- Anthony Sena <sena@ohdsi.org>
+  ([ORCID](https://orcid.org/0000-0001-8630-5347))
+
 - Martijn Schuemie <schuemie@ohdsi.org>
 
 - Jamie Gilbert

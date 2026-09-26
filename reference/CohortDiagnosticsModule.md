@@ -5,7 +5,7 @@ Common Data Model.
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `CohortDiagnosticsModule`
 
 ## Public fields
@@ -18,7 +18,7 @@ Common Data Model.
 
 ### Public methods
 
-- [`CohortDiagnosticsModule$new()`](#method-CohortDiagnosticsModule-new)
+- [`CohortDiagnosticsModule$new()`](#method-CohortDiagnosticsModule-initialize)
 
 - [`CohortDiagnosticsModule$execute()`](#method-CohortDiagnosticsModule-execute)
 
@@ -36,12 +36,13 @@ Common Data Model.
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `CohortDiagnosticsModule$new()`
 
 Initialize the module
 
@@ -51,7 +52,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `CohortDiagnosticsModule$execute()`
 
 Executes the CohortDiagnostics package
 
@@ -90,7 +91,7 @@ Executes the CohortDiagnostics package
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `CohortDiagnosticsModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -132,7 +133,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `CohortDiagnosticsModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -152,7 +153,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `CohortDiagnosticsModule$uploadResults()`
 
 Upload the results for the module
 
@@ -192,12 +193,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `CohortDiagnosticsModule$createModuleSpecifications()`
 
 Creates the CohortDiagnostics Module Specifications
 
@@ -285,7 +286,7 @@ Creates the CohortDiagnostics Module Specifications
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `CohortDiagnosticsModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -301,7 +302,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `CohortDiagnosticsModule$clone()`
 
 The objects of this class are cloneable with this method.
 

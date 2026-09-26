@@ -10,7 +10,8 @@ createResultsDataModelSettings(
   resultsDatabaseSchema,
   resultsFolder,
   logFileName = file.path(resultsFolder, "strategus-results-data-model-log.txt"),
-  modulesToExecute = c()
+  modulesToExecute = c(),
+  skipCompletedUploads = FALSE
 )
 ```
 
@@ -33,6 +34,12 @@ createResultsDataModelSettings(
   (Optional) A vector with the list of modules to execute. When an empty
   vector/NULL is supplied (default), all modules in the analysis
   specification are executed.
+
+- skipCompletedUploads:
+
+  When `TRUE`, module uploads with a matching completed
+  `upload_status.json` record are skipped. Upload status is persisted
+  regardless of this value.
 
 ## Value
 

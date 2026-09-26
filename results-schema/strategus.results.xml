@@ -1,5 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><database name="strategus" schema="results" type="PostgreSQL - 18.3 (Debian 18.3-1.pgdg13+1)">
+<?xml version="1.0" encoding="UTF-8"?><database name="strategus" schema="results" type="PostgreSQL - 18.6 (Debian 18.6-1.pgdg13+2)">
    <tables>
+      <table catalog="strategus" name="c_age_group_def" numRows="0" remarks="CharacterizationModule: Holds age-group definitions used to stratify incidence analyses." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="age_group_id" nullable="false" remarks="Age group identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="age_group_name" nullable="false" remarks="Age group name" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="max_age" nullable="false" remarks="Maximum age" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_age" nullable="false" remarks="Minimum age" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+      </table>
       <table catalog="strategus" name="c_analysis_ref" numRows="0" remarks="CharacterizationModule: Analysis reference" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="The analysis identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_name" nullable="false" remarks="The analysis name" size="0" type="Unknown" typeCode="12"/>
@@ -11,11 +19,21 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="start_day" nullable="false" remarks="The start day" size="0" type="Unknown" typeCode="12"/>
       </table>
-      <table catalog="strategus" name="c_attrition" numRows="0" remarks="CharacterizationModule: Holds the attrition of the characterization cohorts." schema="results" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="attr_reason" nullable="false" remarks="Description of cohort or removal" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_definition_id" nullable="false" remarks="The characterization cohort id" size="0" type="Unknown" typeCode="12"/>
+      <table catalog="strategus" name="c_case_attrition" numRows="0" remarks="CharacterizationModule: Holds attrition counts for each characterization case population." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="attr_order" nullable="false" remarks="The attrition order" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="attr_reason" nullable="false" remarks="Description of removal rule" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_case_id" nullable="false" remarks="The characterization case id" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n" nullable="false" remarks="The number of people remaining or removed" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_events" nullable="false" remarks="The number of events remaining" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_people" nullable="false" remarks="The number of people remaining" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_case_counts" numRows="0" remarks="CharacterizationModule: Holds event and person counts for the case and non-case populations used in characterization analyses." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_case_id" nullable="false" remarks="The characterization case id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_type" nullable="false" remarks="Whether the count is a case or non-case" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_events" nullable="false" remarks="The number of events" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_people" nullable="false" remarks="The number of people" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="c_case_series_covariates" numRows="0" remarks="CharacterizationModule: Holds the covariates that are used to characterize the case series cohorts." schema="results" type="TABLE">
@@ -71,15 +89,16 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="c_case_settings" numRows="0" remarks="CharacterizationModule: Holds the settings that are used to characterize the case cohorts." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="case_series_settings" nullable="false" remarks="Whether this case was used in case-series" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_case_id" nullable="false" remarks="The case cohort id that is unique per characterization_target_id, outcome_id, outcome_washout_days and time-at-risk settings" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The target cohort id after inclusion criteria used internally by characterization" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="end_anchor" nullable="false" remarks="The end anchor" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_id" nullable="false" remarks="The outcome cohort id" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_washout_days" nullable="false" remarks="Outcome exposures with &lt; outcome_washout_days days after the last outcome exposure are excluded" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="risk_factor_settings" nullable="false" remarks="Whether this case was used in risk-factor" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="risk_window_end" nullable="false" remarks="The risk window end" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="risk_window_start" nullable="false" remarks="The risk window start" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="runtype" nullable="false" remarks="Whether this case was used in risk-factor and/or case-series" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="start_anchor" nullable="false" remarks="The start anchor" size="0" type="Unknown" typeCode="12"/>
       </table>
@@ -94,6 +113,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="value_as_concept_id" nullable="false" remarks="The value as concept_id for features created from observation or measurement values" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="c_dechallenge_rechallenge" numRows="0" remarks="CharacterizationModule: Dechallenge rechallenge" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The characterization cohort definition id for the target cohort" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
          </column>
@@ -117,20 +137,59 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rechallenge_attempt" nullable="false" remarks="The rechallenge attempt count" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rechallenge_fail" nullable="false" remarks="The rechallenge fail count" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rechallenge_success" nullable="false" remarks="The rechallenge success count" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_definition_id" nullable="false" remarks="The cohort definition id for the target cohort" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_definition"/>
-         </column>
+      </table>
+      <table catalog="strategus" name="c_dechallenge_rechallenge_settings" numRows="0" remarks="CharacterizationModule: Identifies the target and outcome cohort combinations included in each dechallenge-rechallenge analysis." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The characterization cohort id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_id" nullable="false" remarks="The outcome cohort id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="c_execution_settings" numRows="0" remarks="CharacterizationModule: Holds the settings that are used to execute the characterization module." schema="results" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_hash" nullable="false" remarks="NA" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_hash" nullable="false" remarks="The hash of the database identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_case_size" nullable="false" remarks="The minimum case cohort size to be included in risk factor and case series results" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_characterization_mean" nullable="false" remarks="The minimum fraction of patients who have a covariate for the covariate to be included in results" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_covariate_count" nullable="false" remarks="The minimum number of patients who have a covariate for the covariate to be included in results (useful if cohorts are small)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_smd" nullable="false" remarks="The minimum standardized mean value a risk factor must have to be included in results" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_target_size" nullable="false" remarks="The minimum target cohort size to be included in target baseline, risk factor and case series results" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mode" nullable="false" remarks="Whether Efficient/CohortIncidence/PatientLevelPrediction mode was used for risk factor non-cases" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
       </table>
+      <table catalog="strategus" name="c_incidence_summary" numRows="0" remarks="CharacterizationModule: Holds incidence counts and incidence estimates for each target outcome time-at-risk and demographic stratum." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="age_group_id" nullable="false" remarks="Age group identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="Target cohort identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="gender_id" nullable="false" remarks="Gender identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="gender_name" nullable="false" remarks="Gender name" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="incidence_proportion_p_100p" nullable="false" remarks="Incidence proportion (person_outcomes / persons_at_risk) per 100 people" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="incidence_rate_p_100py" nullable="false" remarks="Incidence rate (outcomes / time_at_risk) per 100 person years" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_id" nullable="false" remarks="Outcome cohort identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcomes" nullable="false" remarks="Outcomes" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcomes_pe" nullable="false" remarks="Outcomes pre-exclude (counts before excluding time at risk)" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="person_days" nullable="false" remarks="Person days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="person_days_pe" nullable="false" remarks="Person days pre-exclude (counts before excluding time at risk)" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="person_outcomes" nullable="false" remarks="Person outcomes" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="person_outcomes_pe" nullable="false" remarks="Person outcomes pre-exclude (counts before excluding time at risk)" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk" nullable="false" remarks="Persons at risk" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk_pe" nullable="false" remarks="Persons at risk pre-exclude (counts before excluding time at risk)" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="source_name" nullable="false" remarks="The source name for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="start_year" nullable="false" remarks="Start year" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="subgroup_id" nullable="false" remarks="Subgroup identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tar_id" nullable="false" remarks="Time-at-risk identifier" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_outcome_def" numRows="0" remarks="CharacterizationModule: Holds outcome cohort definitions and outcome-specific settings used in incidence analyses." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="clean_window" nullable="false" remarks="Clean window" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="excluded_cohort_definition_id" nullable="false" remarks="Excluded cohort identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_cohort_definition_id" nullable="false" remarks="Outcome cohort identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_id" nullable="false" remarks="Outcome identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_name" nullable="false" remarks="Outcome name" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+      </table>
       <table catalog="strategus" name="c_rechallenge_fail_case_series" numRows="0" remarks="CharacterizationModule: Rechallenge fail case series" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The cohort definition id for the target cohort" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="dechallenge_evaluation_window" nullable="false" remarks="The time period that É" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="dechallenge_exposure_end_date_offset" nullable="false" remarks="The offset for the dechallenge end (number of days after index)" size="0" type="Unknown" typeCode="12"/>
@@ -139,6 +198,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="dechallenge_outcome_number" nullable="false" remarks="The number of times an outcome has occurred during the dechallenge" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="dechallenge_outcome_start_date_offset" nullable="false" remarks="The offset for the outcome start (number of days after index)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="dechallenge_stop_interval" nullable="false" remarks="The time period that É" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="included" nullable="false" remarks="Whether this was included in the study population settings eras" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_cohort_definition_id" nullable="false" remarks="The cohort definition id for the outcome cohort" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="person_key" nullable="false" remarks="The dense rank for the patient (an identifier that is not the same as the database)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rechallenge_exposure_end_date_offset" nullable="false" remarks="The offset for the rechallenge end (number of days after index)" size="0" type="Unknown" typeCode="12"/>
@@ -147,7 +207,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rechallenge_outcome_number" nullable="false" remarks="The number of times the outcome has occurred during the rechallenge" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rechallenge_outcome_start_date_offset" nullable="false" remarks="The offset for the outcome start (number of days after index)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="subject_id" nullable="false" remarks="The person identifier for the failed case series (optional)" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_definition_id" nullable="false" remarks="The cohort definition id for the target cohort" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="c_risk_factor_covariates" numRows="0" remarks="CharacterizationModule: Holds the covariates that are used to characterize the risk factors." schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="case_average_value" nullable="false" remarks="The average value of the cases" size="0" type="Unknown" typeCode="12"/>
@@ -187,6 +246,37 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="standardized_mean_difference" nullable="false" remarks="The standardized mean difference for the covariate" size="0" type="Unknown" typeCode="12"/>
       </table>
+      <table catalog="strategus" name="c_subgroup_def" numRows="0" remarks="CharacterizationModule: Holds subgroup definitions used to stratify incidence analyses." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="subgroup_id" nullable="false" remarks="The subgroup identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="subgroup_name" nullable="false" remarks="The subgroup name" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_tar_def" numRows="0" remarks="CharacterizationModule: Holds time-at-risk definitions used in incidence analyses." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tar_end_offset" nullable="false" remarks="Time-at-risk end offset in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tar_end_with" nullable="false" remarks="Time-at-risk end anchor" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tar_id" nullable="false" remarks="Time-at-risk identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tar_start_offset" nullable="false" remarks="Time-at-risk start offset in days" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tar_start_with" nullable="false" remarks="Time-at-risk start anchor" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_target_attrition" numRows="0" remarks="CharacterizationModule: Holds attrition counts for each characterization target population." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="attr_order" nullable="false" remarks="The attrition order" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="attr_reason" nullable="false" remarks="Description of removal rule" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The characterization cohort id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_events" nullable="false" remarks="The number of events remaining" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_people" nullable="false" remarks="The number of people remaining" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_target_counts" numRows="0" remarks="CharacterizationModule: Holds event and person counts for each characterization target cohort." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The characterization cohort definition id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_events" nullable="false" remarks="The number of events" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="n_people" nullable="false" remarks="The number of people" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+      </table>
       <table catalog="strategus" name="c_target_covariates" numRows="0" remarks="CharacterizationModule: Holds the covariates that are used to characterize the target cohort." schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="average_value" nullable="false" remarks="The average value" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The characteriation target id" size="0" type="Unknown" typeCode="12"/>
@@ -211,25 +301,55 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="standard_deviation" nullable="false" remarks="The standard devidation" size="0" type="Unknown" typeCode="12"/>
       </table>
-      <table catalog="strategus" name="c_target_settings" numRows="0" remarks="CharacterizationModule: Holds the settings that are used to characterize the target cohorts." schema="results" type="TABLE">
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The target cohort id after inclusion criteria used internally by characterization" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="limit_to_first_in_n_days" nullable="false" remarks="Target exposures are only included if they occur &gt;= first_in_n_days days after the last exposure" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_prior_observation" nullable="false" remarks="Target exposures with &lt; min_prior_obs days observation before exposure are excluded" size="0" type="Unknown" typeCode="12"/>
+      <table catalog="strategus" name="c_target_def" numRows="0" remarks="CharacterizationModule: Holds target cohort definitions used in incidence analyses." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="Target cohort identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_name" nullable="false" remarks="Target cohort name" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_target_outcome_ref" numRows="0" remarks="CharacterizationModule: Maps target cohorts to the outcome cohorts evaluated in incidence analyses." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The target cohort identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_cohort_id" nullable="false" remarks="The outcome cohort identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_target_settings" numRows="0" remarks="CharacterizationModule: Holds the settings that are used to characterize the target cohorts." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="case_series_settings" nullable="false" remarks="Whether used in case series" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The target cohort id after inclusion criteria used internally by characterization" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_incidence_settings" nullable="false" remarks="Whether used in cohort incidence" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="dechallenge_rechallenge_settings" nullable="false" remarks="Whether used in dechal-rechal" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="gender_concept_ids" nullable="false" remarks="The gender conept ids to be included for the popualtion of interest" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="limit_to_first_in_n_days" nullable="false" remarks="Target exposures are only included if they occur &gt;= first_in_n_days days after the last exposure" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="max_age" nullable="false" remarks="The max age to be includedfor the popualtion of interest" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_age" nullable="false" remarks="The min age to be includedfor the popualtion of interest" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="min_prior_observation" nullable="false" remarks="Target exposures with &lt; min_prior_obs days observation before exposure are excluded" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="nesting_cohort_id" nullable="false" remarks="The nesting id for the popualtion of interest" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="risk_factor_settings" nullable="false" remarks="Whether used in risk factor" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="study_end" nullable="false" remarks="The latest date to be included for the popualtion of interest" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="study_start" nullable="false" remarks="The earliest date to be included for the popualtion of interest" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_baseline_settings" nullable="false" remarks="Whether used in target baseline" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_id" nullable="false" remarks="The target cohort id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_to_event_settings" nullable="false" remarks="Whether used in time to event" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="c_time_to_event" numRows="0" remarks="CharacterizationModule: Time to event" schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The characterization cohort definition id for the target cohort" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="num_events" nullable="false" remarks="Number of events that occur during the specified time to event" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_cohort_definition_id" nullable="false" remarks="The cohort definition id for the outcome cohort" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_type" nullable="false" remarks="Is the outvome a first occurrence or repeat" size="0" type="Unknown" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_cohort_definition_id" nullable="false" remarks="The cohort definition id for the target cohort" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="target_outcome_type" nullable="false" remarks="When does the outcome occur relative to target" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_scale" nullable="false" remarks="time scale for the number of events" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="time_to_event" nullable="false" remarks="The time (in days) from target index to outcome start" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="c_time_to_event_settings" numRows="0" remarks="CharacterizationModule: Identifies the target and outcome cohort combinations included in each time-to-event analysis." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="characterization_target_id" nullable="false" remarks="The characterization cohort id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="The database identifier" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_id" nullable="false" remarks="The outcome cohort id" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="setting_id" nullable="false" remarks="The run identifier" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="cd_cohort" numRows="0" remarks="CohortDiagnosticsModule: Cohort details" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_id" nullable="false" remarks="cohort id" size="0" type="Unknown" typeCode="12"/>
@@ -540,7 +660,6 @@
       <table catalog="strategus" name="cg_cohort_definition" numRows="0" remarks="CohortGeneratorModule: Cohort definitions" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_definition_id" nullable="false" remarks="The unique identifier for the cohort definition" size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="outcome_cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_dechallenge_rechallenge"/>
-            <child catalog="strategus" column="target_cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="c_dechallenge_rechallenge"/>
             <child catalog="strategus" column="cohort_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_count"/>
             <child catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_inclusion"/>
             <child catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_summary_stats"/>
@@ -684,10 +803,10 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk" nullable="false" remarks="Persons at risk" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="persons_at_risk_pe" nullable="false" remarks="Persons at risk pre-exclude (counts before excluding time at risk)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ref_id" nullable="false" remarks="The reference identifier for the analysis" size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_tar_def"/>
+            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_age_group_def"/>
             <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_outcome_def"/>
             <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_subgroup_def"/>
-            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_age_group_def"/>
+            <parent catalog="strategus" column="ref_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="ci_tar_def"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="source_name" nullable="false" remarks="The source name for the database" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="start_year" nullable="false" remarks="Start year" size="0" type="Unknown" typeCode="12"/>
@@ -984,8 +1103,8 @@
       </table>
       <table catalog="strategus" name="cm_shared_covariate_balance" numRows="0" remarks="CohortMethodModule: Shared covariate balance" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the cm_analysis table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate_analysis"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cm_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="balanced_after" nullable="false" remarks="Is the covariate balanced after propensity score adjustment? (1 = yes, 0 = no)" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="balanced_before" nullable="false" remarks="Is the covariate balanced before propensity score adjustment? (1 = yes, 0 = no)" size="0" type="Unknown" typeCode="12"/>
@@ -1311,6 +1430,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="input_type" nullable="false" remarks="the setting id the results are for" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="observed_at_start_of_day" nullable="false" remarks="the number of people observed up to the day of interest" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="outcome_at_time" nullable="false" remarks="the number of outcomes on the day of interest" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="probast_id" nullable="false" remarks="the corresponding probast id" size="0" type="Unknown" typeCode="12"/>
       </table>
       <table catalog="strategus" name="plp_diagnostic_summary" numRows="0" remarks="PatientLevelPredictionModule: Diagnostic summary" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="diagnostic_id" nullable="false" remarks="the identifier for the diagnostics" size="0" type="Unknown" typeCode="12">
@@ -1484,6 +1604,58 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tidy_covariates_setting_id" nullable="false" remarks="a unique identifier for the tidy covariates settings" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="tidy_covariates_settings_json" nullable="false" remarks="the json with the settings" size="0" type="Unknown" typeCode="12"/>
       </table>
+      <table catalog="strategus" name="pv_algorithm_performance_results" numRows="0" remarks="PheValuatorModule: Holds estimated performance metrics and supporting counts for each evaluated phenotype algorithm." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id_results" nullable="false" remarks="Analysis identifier from PheValuator" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_name" nullable="false" remarks="Name of the PheValuator analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_id" nullable="false" remarks="The cohort definition ID of the phenotype algorithm evaluated" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cut_point" nullable="false" remarks="The prediction threshold cut point used for evaluation" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="description" nullable="false" remarks="Description of the PheValuator analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="estimated_cases" nullable="false" remarks="Estimated number of true cases" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="estimated_prevalence" nullable="false" remarks="Estimated prevalence percentage" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="estimated_prevalence_rate" nullable="false" remarks="Estimated prevalence rate per 100 person-years" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="estimated_tar" nullable="false" remarks="Estimated time at risk in person-years" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="f_1_score" nullable="false" remarks="F1 score" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="false_negatives" nullable="false" remarks="Number of false negatives" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="false_positives" nullable="false" remarks="Number of false positives" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="npv" nullable="false" remarks="Negative predictive value" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="npv_95_ci" nullable="false" remarks="Negative predictive value with 95% confidence interval" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="npv_ci_95_lb" nullable="false" remarks="NPV 95% CI lower bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="npv_ci_95_ub" nullable="false" remarks="NPV 95% CI upper bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="phenotype" nullable="false" remarks="Name of the phenotype evaluated" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ppv" nullable="false" remarks="Positive predictive value" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ppv_95_ci" nullable="false" remarks="Positive predictive value with 95% confidence interval" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ppv_ci_95_lb" nullable="false" remarks="PPV 95% CI lower bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="ppv_ci_95_ub" nullable="false" remarks="PPV 95% CI upper bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="raw_cases" nullable="false" remarks="Raw number of cases in the evaluation cohort" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="raw_prevalence" nullable="false" remarks="Raw prevalence percentage" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="raw_prevalence_rate" nullable="false" remarks="Raw prevalence rate per 100 person-years" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="raw_tar" nullable="false" remarks="Raw time at risk in person-years" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="run_date_time" nullable="false" remarks="Date and time of the PheValuator run" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sensitivity" nullable="false" remarks="Sensitivity" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sensitivity_95_ci" nullable="false" remarks="Sensitivity with 95% confidence interval" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sensitivity_ci_95_lb" nullable="false" remarks="Sensitivity 95% CI lower bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sensitivity_ci_95_ub" nullable="false" remarks="Sensitivity 95% CI upper bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="specificity" nullable="false" remarks="Specificity" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="specificity_95_ci" nullable="false" remarks="Specificity with 95% confidence interval" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="specificity_ci_95_lb" nullable="false" remarks="Specificity 95% CI lower bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="specificity_ci_95_ub" nullable="false" remarks="Specificity 95% CI upper bound" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="splay_post" nullable="false" remarks="Days post splay" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="splay_prior" nullable="false" remarks="Days prior splay" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="total_subjects" nullable="false" remarks="Total subjects in the evaluation cohort" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="true_negatives" nullable="false" remarks="Number of true negatives" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="true_positives" nullable="false" remarks="Number of true positives" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="washout_period" nullable="false" remarks="Washout period in days" size="0" type="Unknown" typeCode="12"/>
+      </table>
+      <table catalog="strategus" name="pv_cohort_definition_set" numRows="0" remarks="PheValuatorModule: Holds the cohort definitions and SQL for phenotype algorithms evaluated by PheValuator." schema="results" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_name" nullable="false" remarks="Name of the analysis" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_id" nullable="false" remarks="The cohort definition ID" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="cohort_name" nullable="false" remarks="The cohort name" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Unique identifier for the database" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="phenotype" nullable="false" remarks="Name of the phenotype" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="run_date_time" nullable="false" remarks="Date and time of the run" size="0" type="Unknown" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="sql" nullable="false" remarks="The SQL for the cohort definition" size="0" type="Unknown" typeCode="12"/>
+      </table>
       <table catalog="strategus" name="sccs_age_spanning" numRows="0" remarks="SelfControlledCaseSeriesModule: Age spanning diagnostic" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="age_month" nullable="false" remarks="Age in months since birth." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12"/>
@@ -1583,12 +1755,12 @@
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_era"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_era"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="rr" nullable="false" remarks="The estimated relative risk (i.e. the incidence rate ratio)." size="0" type="Unknown" typeCode="12"/>
@@ -1618,8 +1790,8 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="event_observation_ub" nullable="false" remarks="Upper bound of the 95% CI for the end of observation probe estimate" size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_result"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mdrr" nullable="false" remarks="The minimum detectable relative risk." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="mdrr_diagnostic" nullable="false" remarks="Pass / warning / fail / not evaluated classification of the MDRR diagnostic." size="0" type="Unknown" typeCode="12"/>
@@ -1686,8 +1858,8 @@
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_spline"/>
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_time_to_event"/>
             <child catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_time_trend"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="nesting_cohort_id" nullable="false" remarks="A cohort ID." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="cohort_definition_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="cg_cohort_definition"/>
@@ -1707,8 +1879,8 @@
       <table catalog="strategus" name="sccs_result" numRows="0" remarks="SelfControlledCaseSeriesModule: Results" schema="results" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="analysis_id" nullable="false" remarks="A foreign key referencing the sccs_analysis table." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
-            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_analysis"/>
             <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="analysis_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_analysis"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="calibrated_ci_95_lb" nullable="false" remarks="The lower bound of the calibrated 95% confidence interval of the relative risk." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="calibrated_ci_95_ub" nullable="false" remarks="The upper bound of the calibrated 95% confidence interval of the relative risk." size="0" type="Unknown" typeCode="12"/>
@@ -1722,21 +1894,21 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_days" nullable="false" remarks="The total covariate time in days." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_eras" nullable="false" remarks="The number of continuous eras of the covariate." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_id" nullable="false" remarks="A foreign key referencing the sccs_covariate table. The identifier for the covariate of interest." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
             <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="covariate_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_outcomes" nullable="false" remarks="The number of outcomes observed during the covariate time." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="covariate_subjects" nullable="false" remarks="The number of subjects having the covariate." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="database_id" nullable="false" remarks="Foreign key referencing the database." size="0" type="Unknown" typeCode="12">
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
-            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="database_meta_data"/>
+            <parent catalog="strategus" column="database_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="exposures_outcome_set_id" nullable="false" remarks="A foreign key referencing the sccs_exposures_outcome_set table." size="0" type="Unknown" typeCode="12">
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
-            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_diagnostics_summary"/>
             <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposures_outcome_set"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_covariate"/>
+            <parent catalog="strategus" column="exposures_outcome_set_id" foreignKey="Defined in XML" implied="false" onDeleteCascade="false" schema="results" table="sccs_exposure"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="llr" nullable="false" remarks="The log of the likelihood ratio (of the MLE vs the null hypothesis of no effect)." size="0" type="Unknown" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="null" name="log_rr" nullable="false" remarks="The log of the relative risk." size="0" type="Unknown" typeCode="12"/>

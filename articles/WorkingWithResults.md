@@ -37,6 +37,7 @@ will detail which module’s results tables to include in the results data
 model.
 
 ``` r
+
 resultsConnectionDetails <- DatabaseConnector::createConnectionDetails(
   dbms = "postgresql",
   user = "user",
@@ -72,6 +73,7 @@ We will use the same inputs from the `createResultDataModel` to call the
 `uploadResults` function to upload the results to the results database.
 
 ``` r
+
 Strategus::uploadResults(
   analysisSpecifications = analysisSpecifications,
   resultsDataModelSettings = resultsDataModelSettings,
@@ -92,6 +94,7 @@ the `resultsConnectionDetails` and display the results stored in the
 `study_results` schema.
 
 ``` r
+
 library(ShinyAppBuilder)
 library(OhdsiShinyModules)
 

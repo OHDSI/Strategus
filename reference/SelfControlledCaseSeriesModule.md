@@ -5,7 +5,7 @@ against the OMOP Common Data Model.
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `SelfControlledCaseSeriesModule`
 
 ## Public fields
@@ -18,7 +18,7 @@ against the OMOP Common Data Model.
 
 ### Public methods
 
-- [`SelfControlledCaseSeriesModule$new()`](#method-SelfControlledCaseSeriesModule-new)
+- [`SelfControlledCaseSeriesModule$new()`](#method-SelfControlledCaseSeriesModule-initialize)
 
 - [`SelfControlledCaseSeriesModule$execute()`](#method-SelfControlledCaseSeriesModule-execute)
 
@@ -36,12 +36,13 @@ against the OMOP Common Data Model.
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `SelfControlledCaseSeriesModule$new()`
 
 Initialize the module
 
@@ -51,7 +52,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `SelfControlledCaseSeriesModule$execute()`
 
 Executes the SelfControlledCaseSeries package
 
@@ -90,7 +91,7 @@ Executes the SelfControlledCaseSeries package
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `SelfControlledCaseSeriesModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -132,7 +133,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `SelfControlledCaseSeriesModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -154,7 +155,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `SelfControlledCaseSeriesModule$uploadResults()`
 
 Upload the results for the module
 
@@ -194,12 +195,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `SelfControlledCaseSeriesModule$createModuleSpecifications()`
 
 Creates the SelfControlledCaseSeries Module Specifications
 
@@ -248,7 +249,7 @@ Creates the SelfControlledCaseSeries Module Specifications
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `SelfControlledCaseSeriesModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -266,7 +267,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `SelfControlledCaseSeriesModule$clone()`
 
 The objects of this class are cloneable with this method.
 

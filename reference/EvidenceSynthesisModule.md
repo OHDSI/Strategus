@@ -6,14 +6,14 @@ functions for performing meta-analysis and forest plots
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `EvidenceSynthesisModule`
 
 ## Methods
 
 ### Public methods
 
-- [`EvidenceSynthesisModule$new()`](#method-EvidenceSynthesisModule-new)
+- [`EvidenceSynthesisModule$new()`](#method-EvidenceSynthesisModule-initialize)
 
 - [`EvidenceSynthesisModule$execute()`](#method-EvidenceSynthesisModule-execute)
 
@@ -41,12 +41,13 @@ functions for performing meta-analysis and forest plots
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `EvidenceSynthesisModule$new()`
 
 Initialize the module
 
@@ -56,7 +57,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `EvidenceSynthesisModule$execute()`
 
 Executes the EvidenceSynthesis package
 
@@ -95,7 +96,7 @@ Executes the EvidenceSynthesis package
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `EvidenceSynthesisModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -137,7 +138,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `EvidenceSynthesisModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -157,7 +158,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `EvidenceSynthesisModule$uploadResults()`
 
 Upload the results for the module
 
@@ -197,12 +198,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `EvidenceSynthesisModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -219,7 +220,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `createEvidenceSynthesisSource()`
+### `EvidenceSynthesisModule$createEvidenceSynthesisSource()`
 
 #### Usage
 
@@ -259,7 +260,7 @@ random-effects meta-analysis
 
 ------------------------------------------------------------------------
 
-### Method `createRandomEffectsMetaAnalysis()`
+### `EvidenceSynthesisModule$createRandomEffectsMetaAnalysis()`
 
 #### Usage
 
@@ -300,7 +301,7 @@ Use DerSimonian-Laird meta-analysis
 
 ------------------------------------------------------------------------
 
-### Method `createFixedEffectsMetaAnalysis()`
+### `EvidenceSynthesisModule$createFixedEffectsMetaAnalysis()`
 
 #### Usage
 
@@ -341,7 +342,7 @@ Create an object defining the parameter values.
 
 ------------------------------------------------------------------------
 
-### Method `createBayesianMetaAnalysis()`
+### `EvidenceSynthesisModule$createBayesianMetaAnalysis()`
 
 #### Usage
 
@@ -417,7 +418,7 @@ Create an object defining the parameter values.
 
 ------------------------------------------------------------------------
 
-### Method `createEsDiagnosticThresholds()`
+### `EvidenceSynthesisModule$createEsDiagnosticThresholds()`
 
 Threshold used to determine if we pass or fail diagnostics.
 
@@ -473,7 +474,7 @@ An object of type `EsDiagnosticThresholds`.
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `EvidenceSynthesisModule$createModuleSpecifications()`
 
 Creates the module Specifications
 
@@ -503,7 +504,7 @@ Creates the module Specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `EvidenceSynthesisModule$clone()`
 
 The objects of this class are cloneable with this method.
 

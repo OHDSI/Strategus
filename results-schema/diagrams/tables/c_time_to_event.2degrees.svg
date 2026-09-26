@@ -23,7 +23,7 @@
 <text text-anchor="start" x="338.5" y="-1236.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">...</text>
 <polygon fill="#ffffff" stroke="transparent" points="335.5,-1211.7 335.5,-1230.7 430.5,-1230.7 430.5,-1211.7 335.5,-1211.7"/>
 <polygon fill="none" stroke="#000000" points="335.5,-1211.7 335.5,-1230.7 430.5,-1230.7 430.5,-1211.7 335.5,-1211.7"/>
-<text text-anchor="start" x="338.5" y="-1217.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 3</text>
+<text text-anchor="start" x="338.5" y="-1217.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">&lt; 2</text>
 <polygon fill="#ffffff" stroke="transparent" points="430.5,-1211.7 430.5,-1230.7 505.5,-1230.7 505.5,-1211.7 430.5,-1211.7"/>
 <polygon fill="none" stroke="#000000" points="430.5,-1211.7 430.5,-1230.7 505.5,-1230.7 505.5,-1211.7 430.5,-1211.7"/>
 <text text-anchor="start" x="470.1105" y="-1217.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">0 rows</text>
@@ -76,24 +76,24 @@
 <text text-anchor="start" x="309.5" y="-1174.3" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" fill="#000000">c_time_to_event</text>
 <text text-anchor="start" x="550.5437" y="-1173.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">[table]</text>
 <polygon fill="none" stroke="#000000" points="304.5,-1143.7 304.5,-1165.7 523.5,-1165.7 523.5,-1143.7 304.5,-1143.7"/>
-<image xlink:href="../../images/foreignKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="309.5" y="-1160.7"/>
-<text text-anchor="start" x="324.5" y="-1150.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">database_id</text>
+<text text-anchor="start" x="324.5" y="-1150.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">characterization_target_id</text>
 <polygon fill="none" stroke="#000000" points="523.5,-1143.7 523.5,-1165.7 585.5,-1165.7 585.5,-1143.7 523.5,-1143.7"/>
 <text text-anchor="start" x="526.378" y="-1151.4" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304.5,-1121.7 304.5,-1143.7 523.5,-1143.7 523.5,-1121.7 304.5,-1121.7"/>
-<text text-anchor="start" x="324.5" y="-1128.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_events</text>
+<image xlink:href="../../images/foreignKeys.png" width="11px" height="12px" preserveAspectRatio="xMinYMin meet" x="309.5" y="-1138.7"/>
+<text text-anchor="start" x="324.5" y="-1128.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">database_id</text>
 <polygon fill="none" stroke="#000000" points="523.5,-1121.7 523.5,-1143.7 585.5,-1143.7 585.5,-1121.7 523.5,-1121.7"/>
 <text text-anchor="start" x="526.378" y="-1129.4" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304.5,-1099.7 304.5,-1121.7 523.5,-1121.7 523.5,-1099.7 304.5,-1099.7"/>
-<text text-anchor="start" x="324.5" y="-1106.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_cohort_definition_id</text>
+<text text-anchor="start" x="324.5" y="-1106.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">num_events</text>
 <polygon fill="none" stroke="#000000" points="523.5,-1099.7 523.5,-1121.7 585.5,-1121.7 585.5,-1099.7 523.5,-1099.7"/>
 <text text-anchor="start" x="526.378" y="-1107.4" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304.5,-1077.7 304.5,-1099.7 523.5,-1099.7 523.5,-1077.7 304.5,-1077.7"/>
-<text text-anchor="start" x="324.5" y="-1084.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_type</text>
+<text text-anchor="start" x="324.5" y="-1084.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_cohort_definition_id</text>
 <polygon fill="none" stroke="#000000" points="523.5,-1077.7 523.5,-1099.7 585.5,-1099.7 585.5,-1077.7 523.5,-1077.7"/>
 <text text-anchor="start" x="526.378" y="-1085.4" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304.5,-1055.7 304.5,-1077.7 523.5,-1077.7 523.5,-1055.7 304.5,-1055.7"/>
-<text text-anchor="start" x="324.5" y="-1062.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">target_cohort_definition_id</text>
+<text text-anchor="start" x="324.5" y="-1062.8" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">outcome_type</text>
 <polygon fill="none" stroke="#000000" points="523.5,-1055.7 523.5,-1077.7 585.5,-1077.7 585.5,-1055.7 523.5,-1055.7"/>
 <text text-anchor="start" x="526.378" y="-1063.4" font-family="Helvetica,sans-Serif" font-size="11.00" fill="#000000">unknown[0]</text>
 <polygon fill="none" stroke="#000000" points="304.5,-1033.7 304.5,-1055.7 523.5,-1055.7 523.5,-1033.7 304.5,-1033.7"/>
@@ -124,9 +124,9 @@
 <!-- c_time_to_event&#45;&gt;database_meta_data -->
 <g id="edge2" class="edge">
 <title>c_time_to_event:w&#45;&gt;database_meta_data:e</title>
-<path fill="none" stroke="#000000" d="M292.153,-1146.469C243.7091,-1071.1098 321.2369,-503.7 253.5,-503.7"/>
-<polygon fill="#000000" stroke="#000000" points="297.8435,-1150.2625 302.5031,-1157.6954 301.1718,-1152.4812 304.5,-1154.7 304.5,-1154.7 304.5,-1154.7 301.1718,-1152.4812 306.4969,-1151.7046 297.8435,-1150.2625 297.8435,-1150.2625"/>
-<ellipse fill="none" stroke="#000000" cx="295.1809" cy="-1148.4875" rx="3.2" ry="3.2"/>
+<path fill="none" stroke="#000000" d="M292.2525,-1124.2839C245.8374,-1049.6432 318.825,-503.7 253.5,-503.7"/>
+<polygon fill="#000000" stroke="#000000" points="297.9066,-1128.1692 302.4612,-1135.667 301.2033,-1130.4346 304.5,-1132.7 304.5,-1132.7 304.5,-1132.7 301.2033,-1130.4346 306.5388,-1129.733 297.9066,-1128.1692 297.9066,-1128.1692"/>
+<ellipse fill="none" stroke="#000000" cx="295.2693" cy="-1126.3569" rx="3.2" ry="3.2"/>
 </g>
 <!-- cd_cohort_count -->
 <g id="node4" class="node">

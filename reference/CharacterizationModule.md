@@ -5,7 +5,7 @@ Data Model
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `CharacterizationModule`
 
 ## Public fields
@@ -18,7 +18,7 @@ Data Model
 
 ### Public methods
 
-- [`CharacterizationModule$new()`](#method-CharacterizationModule-new)
+- [`CharacterizationModule$new()`](#method-CharacterizationModule-initialize)
 
 - [`CharacterizationModule$execute()`](#method-CharacterizationModule-execute)
 
@@ -34,13 +34,14 @@ Data Model
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateModuleSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateModuleSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateModuleSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateModuleSpecifications)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `CharacterizationModule$new()`
 
 Initialize the module
 
@@ -50,7 +51,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `CharacterizationModule$execute()`
 
 Execute characterization
 
@@ -89,7 +90,7 @@ Execute characterization
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `CharacterizationModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -131,7 +132,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `CharacterizationModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -151,7 +152,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `CharacterizationModule$uploadResults()`
 
 Upload the results for the module
 
@@ -191,117 +192,154 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `CharacterizationModule$createModuleSpecifications()`
 
 Creates the CharacterizationModule Specifications
 
 #### Usage
 
     CharacterizationModule$createModuleSpecifications(
-      targetIds,
-      limitToFirstInNDays = rep(99999, length(targetIds)),
-      minPriorObservation = 365,
-      outcomeIds,
-      outcomeWashoutDays = c(365),
-      riskWindowStart = c(1, 1),
-      startAnchor = c("cohort start", "cohort start"),
-      riskWindowEnd = c(0, 365),
-      endAnchor = c("cohort end", "cohort end"),
-      dechallengeStopInterval = 30,
-      dechallengeEvaluationWindow = 30,
+      characterizationSettings = NULL,
+      targetIds = NULL,
+      limitToFirstInNDays = NULL,
+      minPriorObservation = NULL,
+      outcomeIds = NULL,
+      outcomeWashoutDays = NULL,
+      riskWindowStart = NULL,
+      startAnchor = NULL,
+      riskWindowEnd = NULL,
+      endAnchor = NULL,
+      dechallengeStopInterval = NULL,
+      dechallengeEvaluationWindow = NULL,
+      covariateSettings = NULL,
+      caseCovariateSettings = NULL,
+      casePreTargetDuration = NULL,
+      casePostOutcomeDuration = NULL,
+      includeTimeToEvent = NULL,
+      includeDechallengeRechallenge = NULL,
+      includeTargetBaseline = NULL,
+      includeRiskFactors = NULL,
+      includeCaseSeries = NULL,
       mode = "CohortIncidence",
-      minSMD = 0.01,
-      minCharacterizationMean = 0.01,
-      minCovariateCount = 5,
-      covariateSettings = FeatureExtraction::createCovariateSettings(useDemographicsGender =
-        T, useDemographicsAge = T, useDemographicsAgeGroup = T, useDemographicsRace = T,
-        useDemographicsEthnicity = T, useDemographicsIndexYear = T, useDemographicsIndexMonth
-        = T, useDemographicsTimeInCohort = T, useDemographicsPriorObservationTime = T,
-        useDemographicsPostObservationTime = T, useConditionGroupEraLongTerm = T,
-        useDrugGroupEraOverlapping = T, useDrugGroupEraLongTerm = T,
-        useProcedureOccurrenceLongTerm = T, useMeasurementLongTerm = T,
-
-        useObservationLongTerm = T, useDeviceExposureLongTerm = T,
-        useVisitConceptCountLongTerm = T, useConditionGroupEraShortTerm = T,
-        useDrugGroupEraShortTerm = T, useProcedureOccurrenceShortTerm = T,
-        useMeasurementShortTerm = T, useObservationShortTerm = T, useDeviceExposureShortTerm
-        = T, useVisitConceptCountShortTerm = T, endDays = 0, longTermStartDays = -365,
-        shortTermStartDays = -30),
-      caseCovariateSettings =
-        Characterization::createDuringCovariateSettings(useConditionGroupEraDuring = T,
-        useDrugGroupEraDuring = T, useProcedureOccurrenceDuring = T, useDeviceExposureDuring
-        = T, useMeasurementDuring = T, useObservationDuring = T, useVisitConceptCountDuring =
-        T),
-      casePreTargetDuration = 365,
-      casePostOutcomeDuration = 365,
-      includeTimeToEvent = TRUE,
-      includeDechallengeRechallenge = TRUE,
-      includeTargetBaseline = TRUE,
-      includeRiskFactors = TRUE,
-      includeCaseSeries = TRUE,
+      minSMD = 0,
+      minCharacterizationMean = 0,
+      minCovariateCount = 0,
+      minTargetSize = 0,
+      minCaseSize = 0,
       outputTable = "characterization_cohorts"
     )
 
 #### Arguments
 
+- `characterizationSettings`:
+
+  The settings defined using
+  Characterization::createCharacterizationSettings
+
 - `targetIds`:
 
-  A vector of cohort IDs to use as the target(s) for the
-  characterization
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `limitToFirstInNDays`:
 
-  A vector of number of days of minimum between target exposures for
-  each target (same length as the targetIds) - use 99999 to restrict to
-  first exposure per person in target cohort
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `minPriorObservation`:
 
-  The number of days of minimum observation a patient in the target
-  populations must have
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `outcomeIds`:
 
-  A vector of cohort IDs to use as the outcome(s) for the
-  characterization
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `outcomeWashoutDays`:
 
-  A vector of integers specifying the washout days for each outcome
-  (same length as the outcomeIds)
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `riskWindowStart`:
 
-  The number of days after start anchor to start the time-at-risk (can
-  be a vector for multiple TARS)
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `startAnchor`:
 
-  The TAR starts relative to this either cohort start or cohort end (can
-  be a vector for multiple TARS)
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `riskWindowEnd`:
 
-  The number of days after end anchor to end the time-at-risk (can be a
-  vector for multiple TARS)
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `endAnchor`:
 
-  The TAR ends relative to this either cohort start or cohort end (can
-  be a vector for multiple TARS)
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `dechallengeStopInterval`:
 
-  description
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `dechallengeEvaluationWindow`:
 
-  description
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `covariateSettings`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `caseCovariateSettings`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `casePreTargetDuration`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `casePostOutcomeDuration`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `includeTimeToEvent`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `includeDechallengeRechallenge`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `includeTargetBaseline`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `includeRiskFactors`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
+
+- `includeCaseSeries`:
+
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `mode`:
 
@@ -322,42 +360,15 @@ Creates the CharacterizationModule Specifications
   The minimum number of patients in the analysis to have a covariate for
   it to be included
 
-- `covariateSettings`:
+- `minTargetSize`:
 
-  Covariates for the database, cohort and risk factor characterization
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
-- `caseCovariateSettings`:
+- `minCaseSize`:
 
-  Covariates for the case-series characterization
-
-- `casePreTargetDuration`:
-
-  The number of days before target start to use for case-series
-
-- `casePostOutcomeDuration`:
-
-  The number of days after outcome start to use for case-series
-
-- `includeTimeToEvent`:
-
-  Lets you skip running a time to event analyses when set to FALSE
-
-- `includeDechallengeRechallenge`:
-
-  Lets you skip running a dechallenge-rechallenge analyses when set to
-  FALSE
-
-- `includeTargetBaseline`:
-
-  Lets you skip running the target baseline analyses when set to FALSE
-
-- `includeRiskFactors`:
-
-  Lets you skip running the risk factor analyses when set to FALSE
-
-- `includeCaseSeries`:
-
-  Lets you skip running the case series analyses when set to FALSE
+  Deprecated. Use Characterization v4 settings objects via
+  `characterizationSettings`.
 
 - `outputTable`:
 
@@ -368,7 +379,7 @@ Creates the CharacterizationModule Specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `CharacterizationModule$clone()`
 
 The objects of this class are cloneable with this method.
 

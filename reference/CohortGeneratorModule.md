@@ -4,7 +4,7 @@ Generates cohorts against the OMOP Common Data Model
 
 ## Super class
 
-[`Strategus::StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
+[`StrategusModule`](https://ohdsi.github.io/Strategus/reference/StrategusModule.md)
 -\> `CohortGeneratorModule`
 
 ## Public fields
@@ -23,7 +23,7 @@ Generates cohorts against the OMOP Common Data Model
 
 ### Public methods
 
-- [`CohortGeneratorModule$new()`](#method-CohortGeneratorModule-new)
+- [`CohortGeneratorModule$new()`](#method-CohortGeneratorModule-initialize)
 
 - [`CohortGeneratorModule$execute()`](#method-CohortGeneratorModule-execute)
 
@@ -49,12 +49,13 @@ Generates cohorts against the OMOP Common Data Model
 
 Inherited methods
 
-- [`Strategus::StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
-- [`Strategus::StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
+- [`StrategusModule$createSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-createSharedResourcesSpecifications)
+- [`StrategusModule$getPackageInformation()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-getPackageInformation)
+- [`StrategusModule$validateSharedResourcesSpecifications()`](https://ohdsi.github.io/Strategus/reference/StrategusModule.html#method-validateSharedResourcesSpecifications)
 
 ------------------------------------------------------------------------
 
-### Method `new()`
+### `CohortGeneratorModule$new()`
 
 Initialize the module
 
@@ -64,7 +65,7 @@ Initialize the module
 
 ------------------------------------------------------------------------
 
-### Method [`execute()`](https://ohdsi.github.io/Strategus/reference/execute.md)
+### `CohortGeneratorModule$execute()`
 
 Generates the cohorts
 
@@ -103,7 +104,7 @@ Generates the cohorts
 
 ------------------------------------------------------------------------
 
-### Method `createResultsDataModel()`
+### `CohortGeneratorModule$createResultsDataModel()`
 
 Create the results data model for the module
 
@@ -145,7 +146,7 @@ Create the results data model for the module
 
 ------------------------------------------------------------------------
 
-### Method `getResultsDataModelSpecification()`
+### `CohortGeneratorModule$getResultsDataModelSpecification()`
 
 Get the results data model specification for the module
 
@@ -165,7 +166,7 @@ Get the results data model specification for the module
 
 ------------------------------------------------------------------------
 
-### Method [`uploadResults()`](https://ohdsi.github.io/Strategus/reference/uploadResults.md)
+### `CohortGeneratorModule$uploadResults()`
 
 Upload the results for the module
 
@@ -205,12 +206,12 @@ Upload the results for the module
 
 - `resultsDataModelSettings`:
 
-  The results data model settings as created using \[@seealso
-  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md)\]
+  The results data model settings as created using
+  [`createResultsDataModelSettings()`](https://ohdsi.github.io/Strategus/reference/createResultsDataModelSettings.md).
 
 ------------------------------------------------------------------------
 
-### Method `createModuleSpecifications()`
+### `CohortGeneratorModule$createModuleSpecifications()`
 
 Creates the CohortGenerator Module Specifications
 
@@ -227,7 +228,7 @@ Creates the CohortGenerator Module Specifications
 
 ------------------------------------------------------------------------
 
-### Method `createCohortSharedResourceSpecifications()`
+### `CohortGeneratorModule$createCohortSharedResourceSpecifications()`
 
 Create shared specifications for the cohort definition set
 
@@ -246,7 +247,7 @@ Create shared specifications for the cohort definition set
 
 ------------------------------------------------------------------------
 
-### Method `createNegativeControlOutcomeCohortSharedResourceSpecifications()`
+### `CohortGeneratorModule$createNegativeControlOutcomeCohortSharedResourceSpecifications()`
 
 Create shared specifications for the negative control outcomes cohort
 set
@@ -279,7 +280,7 @@ set
 
 ------------------------------------------------------------------------
 
-### Method `validateModuleSpecifications()`
+### `CohortGeneratorModule$validateModuleSpecifications()`
 
 Validate the module specifications
 
@@ -295,7 +296,7 @@ Validate the module specifications
 
 ------------------------------------------------------------------------
 
-### Method `validateCohortSharedResourceSpecifications()`
+### `CohortGeneratorModule$validateCohortSharedResourceSpecifications()`
 
 Validate the cohort shared resource specifications
 
@@ -313,7 +314,7 @@ Validate the cohort shared resource specifications
 
 ------------------------------------------------------------------------
 
-### Method `validateNegativeControlOutcomeCohortSharedResourceSpecifications()`
+### `CohortGeneratorModule$validateNegativeControlOutcomeCohortSharedResourceSpecifications()`
 
 Validate the cohort shared resource specifications
 
@@ -331,7 +332,7 @@ Validate the cohort shared resource specifications
 
 ------------------------------------------------------------------------
 
-### Method `clone()`
+### `CohortGeneratorModule$clone()`
 
 The objects of this class are cloneable with this method.
 
