@@ -830,7 +830,7 @@ EvidenceSynthesisModule <- R6::R6Class(
                     )
                 },
                 error = function(e) {
-                    warning(sprintf(
+                    ParallelLogger::logError(sprintf(
                         "Random-effects meta-analysis failed to converge: %s. Returning NA estimates.",
                         e$message
                     ))
