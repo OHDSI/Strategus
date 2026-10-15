@@ -137,11 +137,14 @@ TreatmentPatternsModule <- R6::R6Class(
                 concatTargets = analysis$concatTargets
               )
 
+              # NOTE: TreatmentPatterns export requires
+              # minCellCount >= 1 so the max() call is defensive
+              # in case someone passes a minCellCount <= 0
               result <- TreatmentPatterns::export(
                 andromeda = outputEnv,
                 outputPath = NULL,
                 ageWindow = analysis$ageWindow,
-                minCellCount = executionSettings$minCellCount,
+                minCellCount = max(executionSettings$minCellCount, 1),
                 censorType = analysis$censorType,
                 stratify = analysis$stratify,
                 archiveName = NULL
