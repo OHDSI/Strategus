@@ -268,6 +268,51 @@ test_that("module execution persists state and optionally reuses completion", {
   expect_identical(calls$count, 1L)
 })
 
+test_that("execute skips CDM metadata when every module is completed", {
+  analysisSpecifications <- createExecutionStatusTestSpecifications()
+  resultsFolder <- tempfile("completed-execution-")
+  executionSettings <- createCdmExecutionSettings(
+    workDatabaseSchema = "main",
+    cdmDatabaseSchema = "main",
+    cohortTableNames = list(),
+    workFolder = tempfile("work-"),
+    resultsFolder = resultsFolder,
+    skipCompletedTasks = TRUE
+  )
+  connectionDetails <- DatabaseConnector::createConnectionDetails(dbms = "sqlite")
+  calls <- new.env(parent = emptyenv())
+  calls$metadata <- 0L
+  calls$module <- 0L
+  fakeModule <- R6::R6Class(
+    "CohortGeneratorModule",
+    public = list(
+      execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+        calls$module <- calls$module + 1L
+        invisible(NULL)
+      }
+    )
+  )
+  testthat::local_mocked_bindings(
+    getCdmDatabaseMetaData = function(cdmExecutionSettings, connectionDetails) {
+      calls$metadata <- calls$metadata + 1L
+      list(databaseId = "test")
+    },
+    .writeDatabaseMetaData = function(databaseMetaData, executionSettings) invisible(NULL),
+    CohortGeneratorModule = fakeModule,
+    .package = "Strategus"
+  )
+
+  firstResult <- execute(analysisSpecifications, executionSettings, connectionDetails)
+  expect_identical(firstResult[[1]]$status, "SUCCESS")
+  expect_identical(calls$metadata, 1L)
+  expect_identical(calls$module, 1L)
+
+  secondResult <- execute(analysisSpecifications, executionSettings, connectionDetails)
+  expect_identical(secondResult[[1]]$status, "SKIPPED")
+  expect_identical(calls$metadata, 1L)
+  expect_identical(calls$module, 1L)
+})
+
 test_that("module failures persist sanitized failure state", {
   analysisSpecifications <- createExecutionStatusTestSpecifications()
   resultsFolder <- tempfile("execution-status-")

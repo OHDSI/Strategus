@@ -57,19 +57,17 @@ execute <- function(analysisSpecifications,
     )
   }
 
+  executionPlan <- NULL
   if (isTRUE(executionSettings$skipCompletedTasks)) {
-    .printOperationPlan(
-      getExecutionStatus(
-        analysisSpecifications = analysisSpecifications,
-        resultsFolder = executionSettings$resultsFolder
-      )
+    executionPlan <- getExecutionStatus(
+      analysisSpecifications = analysisSpecifications,
+      resultsFolder = executionSettings$resultsFolder
     )
+    .printOperationPlan(executionPlan)
   }
 
   # Validate the execution settings
   if (is(executionSettings, "CdmExecutionSettings")) {
-    message("Collecting OMOP CDM Metadata")
-
     # Assert that the temp emulation schema is set if required for the dbms
     # specified by the executionSettings
     DatabaseConnector::assertTempEmulationSchemaSet(
@@ -111,20 +109,23 @@ execute <- function(analysisSpecifications,
       stop("Your cohort table names are too long for Oracle. Please update your executionSettings to use shorter cohort table names and try again.")
     }
 
-    # Obtain the database metadata for this CDM
-    executionResult <- .safeExecution(
-      fn = getCdmDatabaseMetaData,
-      cdmExecutionSettings = executionSettings,
-      connectionDetails = connectionDetails
-    )
-    databaseMetaDataSuccessful <- ifelse(executionResult$status == "SUCCESS", TRUE, FALSE)
-    if (isTRUE(databaseMetaDataSuccessful)) {
-      cdmDatabaseMetaData <- executionResult$result
-      executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
-      .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
-    } else {
-      errorMsg <- paste0("COULD NOT OBTAIN OMOP CDM Metadata! ERROR: ", executionResult$error)
-      stop(errorMsg)
+    # Metadata is only needed when at least one module will execute.
+    if (is.null(executionPlan) || executionPlan$status != "COMPLETED") {
+      message("Collecting OMOP CDM Metadata")
+      executionResult <- .safeExecution(
+        fn = getCdmDatabaseMetaData,
+        cdmExecutionSettings = executionSettings,
+        connectionDetails = connectionDetails
+      )
+      databaseMetaDataSuccessful <- ifelse(executionResult$status == "SUCCESS", TRUE, FALSE)
+      if (isTRUE(databaseMetaDataSuccessful)) {
+        cdmDatabaseMetaData <- executionResult$result
+        executionSettings$cdmDatabaseMetaData <- cdmDatabaseMetaData
+        .writeDatabaseMetaData(cdmDatabaseMetaData, executionSettings)
+      } else {
+        errorMsg <- paste0("COULD NOT OBTAIN OMOP CDM Metadata! ERROR: ", executionResult$error)
+        stop(errorMsg)
+      }
     }
   }
 
