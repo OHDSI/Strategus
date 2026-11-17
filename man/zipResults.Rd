@@ -23,4 +23,13 @@ Creates a \code{.zip} file of the \code{.csv} files found in the
 \code{resultsFolder}. The resulting \code{.zip} file will have
 relative paths to the root of the \code{resultsFolder}
 which is generally found in \code{executionSettings$resultsFolder}.
+
+The \code{.zip} file also contains an \code{execution_summary.json} file that
+summarizes the \code{execution_status.json} record of each module found in the
+\code{resultsFolder}: the module state, task checksum, package versions, timing
+and, for completed modules, the path, SHA-256 checksum and size of each
+\code{.csv} file the module wrote. A study coordinator can use it to confirm
+which modules completed and that the shared files are the ones each
+completed module produced. Error messages are not included because they
+may contain server names or file paths; only the error class is kept.
 }
