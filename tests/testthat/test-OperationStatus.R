@@ -460,3 +460,42 @@ test_that("failed module execution does not record output files", {
   expect_identical(record$state, "FAILED")
   expect_null(record$outputFiles)
 })
+
+test_that("module execution completes with a warning when output checksums fail", {
+  analysisSpecifications <- createExecutionStatusTestSpecifications()
+  resultsFolder <- tempfile("execution-status-")
+  on.exit(unlink(resultsFolder, recursive = TRUE), add = TRUE)
+  fakeModule <- R6::R6Class(
+    "CohortGeneratorModule",
+    public = list(
+      execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+        invisible(NULL)
+      }
+    )
+  )
+  testthat::local_mocked_bindings(
+    CohortGeneratorModule = fakeModule,
+    .computeOutputFiles = function(resultsFolder, moduleName) stop("checksum failure"),
+    .package = "Strategus"
+  )
+  executionSettings <- structure(
+    list(resultsFolder = resultsFolder, skipCompletedTasks = FALSE),
+    class = "ExecutionSettings"
+  )
+
+  expect_warning(
+    result <- Strategus:::.executeModule(
+      moduleName = "CohortGeneratorModule",
+      connectionDetails = NULL,
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings
+    ),
+    "Could not compute output file checksums for CohortGeneratorModule: checksum failure"
+  )
+  expect_identical(result[[1]]$status, "SUCCESS")
+
+  recordPath <- Strategus:::.operationStatusPath(resultsFolder, "CohortGeneratorModule", "EXECUTION")
+  record <- Strategus:::.readOperationStatus(recordPath)
+  expect_identical(record$state, "COMPLETED")
+  expect_null(record$outputFiles)
+})
