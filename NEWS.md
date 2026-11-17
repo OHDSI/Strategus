@@ -1,3 +1,12 @@
+Strategus (development version)
+===============
+
+New Features
+
+- `zipResults()` adds an `execution_summary.json` with each module's execution state, task checksum and package versions, without error messages (#308)
+- Completed module executions record the path, SHA-256 checksum and size of each output `.csv` file in `execution_status.json` (#308)
+
+
 Strategus 1.6.0
 ===============
 

@@ -386,3 +386,116 @@ test_that("module upload persists status and optionally reuses completion", {
   expect_identical(secondResult[[1]]$status, "SKIPPED")
   expect_identical(calls$count, 1L)
 })
+
+test_that("completed module execution records output file checksums", {
+  analysisSpecifications <- createExecutionStatusTestSpecifications()
+  resultsFolder <- tempfile("execution-status-")
+  on.exit(unlink(resultsFolder, recursive = TRUE), add = TRUE)
+  fakeModule <- R6::R6Class(
+    "CohortGeneratorModule",
+    public = list(
+      execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+        moduleFolder <- file.path(executionSettings$resultsFolder, "CohortGeneratorModule")
+        dir.create(file.path(moduleFolder, "sub"), recursive = TRUE, showWarnings = FALSE)
+        writeLines("a,b\n1,2", file.path(moduleFolder, "cohort.csv"))
+        writeLines("c\n3", file.path(moduleFolder, "sub", "nested.csv"))
+        writeLines("not shared", file.path(moduleFolder, "log.txt"))
+        invisible(NULL)
+      }
+    )
+  )
+  testthat::local_mocked_bindings(CohortGeneratorModule = fakeModule, .package = "Strategus")
+  executionSettings <- structure(
+    list(resultsFolder = resultsFolder, skipCompletedTasks = FALSE),
+    class = "ExecutionSettings"
+  )
+
+  Strategus:::.executeModule(
+    moduleName = "CohortGeneratorModule",
+    connectionDetails = NULL,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
+  )
+
+  recordPath <- Strategus:::.operationStatusPath(resultsFolder, "CohortGeneratorModule", "EXECUTION")
+  record <- Strategus:::.readOperationStatus(recordPath)
+  paths <- vapply(record$outputFiles, `[[`, character(1), "path")
+  expect_identical(paths, c("CohortGeneratorModule/cohort.csv", "CohortGeneratorModule/sub/nested.csv"))
+  cohortFile <- file.path(resultsFolder, "CohortGeneratorModule", "cohort.csv")
+  expect_identical(
+    record$outputFiles[[1]]$sha256,
+    digest::digest(cohortFile, algo = "sha256", file = TRUE)
+  )
+  expect_equal(record$outputFiles[[1]]$sizeBytes, file.size(cohortFile))
+  expect_identical(getExecutionStatus(analysisSpecifications, resultsFolder)$modules$state, "COMPLETED")
+})
+
+test_that("failed module execution does not record output files", {
+  analysisSpecifications <- createExecutionStatusTestSpecifications()
+  resultsFolder <- tempfile("execution-status-")
+  on.exit(unlink(resultsFolder, recursive = TRUE), add = TRUE)
+  fakeModule <- R6::R6Class(
+    "CohortGeneratorModule",
+    public = list(
+      execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+        stop("module failed")
+      }
+    )
+  )
+  testthat::local_mocked_bindings(CohortGeneratorModule = fakeModule, .package = "Strategus")
+  executionSettings <- structure(
+    list(resultsFolder = resultsFolder, skipCompletedTasks = FALSE),
+    class = "ExecutionSettings"
+  )
+
+  suppressMessages(Strategus:::.executeModule(
+    moduleName = "CohortGeneratorModule",
+    connectionDetails = NULL,
+    analysisSpecifications = analysisSpecifications,
+    executionSettings = executionSettings
+  ))
+
+  recordPath <- Strategus:::.operationStatusPath(resultsFolder, "CohortGeneratorModule", "EXECUTION")
+  record <- Strategus:::.readOperationStatus(recordPath)
+  expect_identical(record$state, "FAILED")
+  expect_null(record$outputFiles)
+})
+
+test_that("module execution completes with a warning when output checksums fail", {
+  analysisSpecifications <- createExecutionStatusTestSpecifications()
+  resultsFolder <- tempfile("execution-status-")
+  on.exit(unlink(resultsFolder, recursive = TRUE), add = TRUE)
+  fakeModule <- R6::R6Class(
+    "CohortGeneratorModule",
+    public = list(
+      execute = function(connectionDetails, analysisSpecifications, executionSettings) {
+        invisible(NULL)
+      }
+    )
+  )
+  testthat::local_mocked_bindings(
+    CohortGeneratorModule = fakeModule,
+    .computeOutputFiles = function(resultsFolder, moduleName) stop("checksum failure"),
+    .package = "Strategus"
+  )
+  executionSettings <- structure(
+    list(resultsFolder = resultsFolder, skipCompletedTasks = FALSE),
+    class = "ExecutionSettings"
+  )
+
+  expect_warning(
+    result <- Strategus:::.executeModule(
+      moduleName = "CohortGeneratorModule",
+      connectionDetails = NULL,
+      analysisSpecifications = analysisSpecifications,
+      executionSettings = executionSettings
+    ),
+    "Could not compute output file checksums for CohortGeneratorModule: checksum failure"
+  )
+  expect_identical(result[[1]]$status, "SUCCESS")
+
+  recordPath <- Strategus:::.operationStatusPath(resultsFolder, "CohortGeneratorModule", "EXECUTION")
+  record <- Strategus:::.readOperationStatus(recordPath)
+  expect_identical(record$state, "COMPLETED")
+  expect_null(record$outputFiles)
+})

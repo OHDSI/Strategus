@@ -113,8 +113,31 @@
   if (is.null(value) || is.na(value)) NULL else format(value, tz = "UTC", usetz = TRUE)
 }
 
+.OUTPUT_FILE_CHECKSUM_ALGORITHM <- "sha256"
+
+# Describe the CSV files a module wrote to its results sub folder. Paths are
+# relative to the results folder and use "/" so they match the entries that
+# zipResults() writes, which lets a coordinator compare the two directly.
+.computeOutputFiles <- function(resultsFolder, moduleName) {
+  moduleFolder <- file.path(resultsFolder, moduleName)
+  relativePaths <- sort(list.files(
+    path = moduleFolder,
+    pattern = "\\.csv$",
+    recursive = TRUE
+  ))
+  lapply(relativePaths, function(relativePath) {
+    filePath <- file.path(moduleFolder, relativePath)
+    list(
+      path = paste(moduleName, relativePath, sep = "/"),
+      sha256 = digest::digest(filePath, algo = .OUTPUT_FILE_CHECKSUM_ALGORITHM, file = TRUE),
+      sizeBytes = unname(file.size(filePath))
+    )
+  })
+}
+
 .writeOperationStatus <- function(recordPath, operationInformation, state, startTime,
-                                  endTime = NULL, elapsedSeconds = NULL, error = NULL) {
+                                  endTime = NULL, elapsedSeconds = NULL, error = NULL,
+                                  outputFiles = NULL) {
   checkmate::assertChoice(state, c("RUNNING", "COMPLETED", "FAILED"))
   dir.create(dirname(recordPath), recursive = TRUE, showWarnings = FALSE)
   record <- list(
@@ -134,6 +157,11 @@
     errorClass = if (is.null(error)) NULL else class(error)[[1]],
     errorMessage = if (is.null(error)) NULL else conditionMessage(error)
   )
+  # outputFiles is optional so records written before it existed remain valid
+  # and do not cause completed modules to be executed again.
+  if (!is.null(outputFiles)) {
+    record$outputFiles <- outputFiles
+  }
   class(record) <- "OperationStatusRecord"
   temporaryPath <- tempfile(pattern = "operation-status-", tmpdir = dirname(recordPath), fileext = ".json")
   on.exit(unlink(temporaryPath), add = TRUE)

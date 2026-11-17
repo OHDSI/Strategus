@@ -260,6 +260,19 @@ execute <- function(analysisSpecifications,
     endTime <- Sys.time()
     elapsedSeconds <- as.numeric(difftime(endTime, startTime, units = "secs"))
     recordState <- if (executionResult$status == "SUCCESS") "COMPLETED" else "FAILED"
+    outputFiles <- NULL
+    if (recordState == "COMPLETED") {
+      outputFiles <- tryCatch(
+        .computeOutputFiles(
+          resultsFolder = executionSettings$resultsFolder,
+          moduleName = moduleName
+        ),
+        error = function(error) {
+          warning("Could not compute output file checksums for ", moduleName, ": ", conditionMessage(error), call. = FALSE)
+          NULL
+        }
+      )
+    }
     .writeOperationStatus(
       recordPath = recordPath,
       operationInformation = operationInformation,
@@ -267,7 +280,8 @@ execute <- function(analysisSpecifications,
       startTime = startTime,
       endTime = endTime,
       elapsedSeconds = elapsedSeconds,
-      error = executionResult$error
+      error = executionResult$error,
+      outputFiles = outputFiles
     )
     if (executionResult$status == "FAILED") {
       .printErrorMessage(executionResult$error$message)
