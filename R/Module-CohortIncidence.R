@@ -23,10 +23,11 @@ CohortIncidenceModule <- R6::R6Class(
 
       refId <- 1 # this should be part of execution settings
       resultsFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
+      workFolder <- private$jobContext$moduleExecutionSettings$workSubFolder
 
       # Establish the connection and ensure the cleanup is performed
       connection <- DatabaseConnector::connect(connectionDetails)
-      on.exit(DatabaseConnector::disconnect(connection))
+      on.exit(DatabaseConnector::disconnect(connection), add = TRUE)
 
       # extract CohortIncidence design from jobContext
       irDesign <- CohortIncidence::IncidenceDesign$new(private$jobContext$settings$irDesign)
@@ -44,11 +45,20 @@ CohortIncidenceModule <- R6::R6Class(
         refId = refId
       )
 
-      executeResults <- CohortIncidence::executeAnalysis(
-        connection = connection,
-        incidenceDesign = irDesignJSON,
-        buildOptions = buildOptions
+      # CohortIncidence uses the Andromeda temp folder option when creating its
+      # disk-backed result. Keep the intermediate data in the Strategus work
+      # folder instead of the system temp folder.
+      oldOptions <- options(andromedaTempFolder = workFolder)
+      executeResults <- tryCatch(
+        CohortIncidence::executeAnalysis(
+          connection = connection,
+          incidenceDesign = irDesignJSON,
+          buildOptions = buildOptions,
+          resultType = "andromeda"
+        ),
+        finally = options(oldOptions)
       )
+      on.exit(Andromeda::close(executeResults), add = TRUE)
 
       # Export the results
       exportFolder <- private$jobContext$moduleExecutionSettings$resultsSubFolder
@@ -58,30 +68,13 @@ CohortIncidenceModule <- R6::R6Class(
 
       private$.message("Export data")
 
-      # apply minCellCount to  executeResults
-      colnames(executeResults$incidence_summary) <- toupper(colnames(executeResults$incidence_summary))
       minCellCount <- private$jobContext$moduleExecutionSettings$minCellCount
-      if (minCellCount > 0) {
-        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSONS_AT_RISK_PE", minCellCount)
-        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSONS_AT_RISK", minCellCount)
-        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSON_OUTCOMES_PE", minCellCount)
-        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "PERSON_OUTCOMES", minCellCount)
-        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "OUTCOMES_PE", minCellCount)
-        executeResults$incidence_summary <- private$.enforceMinCellValue(executeResults$incidence_summary, "OUTCOMES", minCellCount)
-        executeResults$incidence_summary <- private$.enforceMinCellStats(executeResults$incidence_summary)
-      }
-
-      for (tableName in names(executeResults)) {
-        tableData <- executeResults[[tableName]]
-        if (tableName == "incidence_summary") {
-          if (nrow(tableData) > 0) {
-            tableData$database_id <- private$jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
-          } else {
-            tableData$database_id <- character(0)
-          }
-        }
-        readr::write_csv(tableData, file.path(exportFolder, paste0(self$tablePrefix, tableName, ".csv")))
-      }
+      private$.exportAndromedaResults(
+        executeResults = executeResults,
+        exportFolder = exportFolder,
+        minCellCount = minCellCount,
+        databaseId = private$jobContext$moduleExecutionSettings$cdmDatabaseMetaData$databaseId
+      )
 
       # in addition to the output of the module, we will produce a T-O lookup table that can be used to filter results
       # to either 'Outcomes for T' or 'Targets for Outcomes'
@@ -179,6 +172,60 @@ CohortIncidenceModule <- R6::R6Class(
     }
   ),
   private = list(
+    .exportAndromedaResults = function(executeResults,
+                                       exportFolder,
+                                       minCellCount,
+                                       databaseId,
+                                       batchSize = 100000) {
+      for (tableName in names(executeResults)) {
+        tableData <- executeResults[[tableName]]
+        fileName <- file.path(exportFolder, paste0(self$tablePrefix, tableName, ".csv"))
+
+        # Write the header separately. This also creates a valid CSV for an
+        # empty Andromeda table without retrieving any result rows.
+        emptyData <- dplyr::collect(utils::head(tableData, 0))
+        if (tableName == "incidence_summary") {
+          colnames(emptyData) <- toupper(colnames(emptyData))
+          emptyData$database_id <- character(0)
+        }
+        readr::write_csv(emptyData, fileName)
+
+        Andromeda::batchApply(
+          tableData,
+          function(batch) {
+            if (tableName == "incidence_summary") {
+              colnames(batch) <- toupper(colnames(batch))
+              if (minCellCount > 0) {
+                for (fieldName in c(
+                  "PERSONS_AT_RISK_PE",
+                  "PERSONS_AT_RISK",
+                  "PERSON_OUTCOMES_PE",
+                  "PERSON_OUTCOMES",
+                  "OUTCOMES_PE",
+                  "OUTCOMES"
+                )) {
+                  batch <- private$.enforceMinCellValue(
+                    batch,
+                    fieldName,
+                    minCellCount,
+                    silent = TRUE
+                  )
+                }
+                batch <- private$.enforceMinCellStats(batch)
+              }
+              batch$database_id <- databaseId
+            }
+            readr::write_csv(batch, fileName, append = TRUE)
+
+            # batchApply retains callback return values. Returning the batch
+            # (as write_csv does invisibly) would rebuild the full result in
+            # memory while exporting it.
+            invisible(NULL)
+          },
+          batchSize = batchSize
+        )
+      }
+    },
     .enforceMinCellValue = function(data, fieldName, minValues, silent = FALSE) {
       toCensor <- !is.na(data[, fieldName]) & data[, fieldName] < minValues & data[, fieldName] != 0
       if (!silent) {

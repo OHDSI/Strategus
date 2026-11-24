@@ -36,10 +36,11 @@ Imports:
   rlang,
   SqlRender (>= 1.18.0)
 Suggests:
+  Andromeda (>= 1.0.0),
   Characterization (>= 4.0.0),
   CirceR,
   CohortDiagnostics (>= 3.4.0),
-  CohortIncidence (>= 4.2.0),
+  CohortIncidence (>= 4.3.0),
   CohortMethod (>= 6.0.0),
   Cyclops (>= 3.6.0),
   Eunomia,
@@ -59,7 +60,9 @@ Suggests:
   TreatmentPatterns (>= 3.1.0),
   withr
 Remotes:
+  ohdsi/Characterization@ci-issue-86,
   ohdsi/CohortDiagnostics,
+  ohdsi/CohortIncidence@large-results-86,
   ohdsi/PheValuator
 License: Apache License 2.0
 VignetteBuilder: knitr
